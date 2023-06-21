@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33712.159
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{58A0190A-DD9E-467F-80CC-5DE1BAC06B9E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Connectors", "Connectors", "{301A99E3-1DAB-433F-9595-4784586F17F5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core\Core.csproj", "{A802DD88-7EF0-40B6-A224-1C1BB3926863}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConnectorRevit2023", "ConnectorRevit\ConnectorRevit2023\ConnectorRevit2023.csproj", "{0617539A-EE12-442E-A501-21D0FC484ED4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.TestIntegration", "Core\Core.TestIntegration\Core.TestIntegration.csproj", "{11AEDF81-B638-4114-BCCA-872F15EBB0CA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A802DD88-7EF0-40B6-A224-1C1BB3926863}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A802DD88-7EF0-40B6-A224-1C1BB3926863}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A802DD88-7EF0-40B6-A224-1C1BB3926863}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A802DD88-7EF0-40B6-A224-1C1BB3926863}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0617539A-EE12-442E-A501-21D0FC484ED4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0617539A-EE12-442E-A501-21D0FC484ED4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0617539A-EE12-442E-A501-21D0FC484ED4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0617539A-EE12-442E-A501-21D0FC484ED4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11AEDF81-B638-4114-BCCA-872F15EBB0CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11AEDF81-B638-4114-BCCA-872F15EBB0CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11AEDF81-B638-4114-BCCA-872F15EBB0CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11AEDF81-B638-4114-BCCA-872F15EBB0CA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A802DD88-7EF0-40B6-A224-1C1BB3926863} = {58A0190A-DD9E-467F-80CC-5DE1BAC06B9E}
+		{0617539A-EE12-442E-A501-21D0FC484ED4} = {301A99E3-1DAB-433F-9595-4784586F17F5}
+		{11AEDF81-B638-4114-BCCA-872F15EBB0CA} = {58A0190A-DD9E-467F-80CC-5DE1BAC06B9E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {08F04A72-7110-40A0-935B-06B0A87363FE}
+	EndGlobalSection
+EndGlobal

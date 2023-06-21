@@ -1,0 +1,82 @@
+﻿<Window x:Class="Calc.ConnectorRevit.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Calc.ConnectorRevit" d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
+        mc:Ignorable="d" 
+        Background="White"
+        Height="450" Width="600">
+
+    <Window.Resources>
+        <local:HostTemplateSelector x:Key="HostTemplateSelector" />
+        
+        <DataTemplate x:Key="BranchTemplate">
+            <StackPanel>
+                <Label Content="Assign Buildup:" />
+                <ComboBox SelectedItem="{Binding Buildup}" ItemsSource="{x:Static local:MockData.AllBuildups}" DisplayMemberPath="Name" />
+                <Label Content="Preview:" />
+                <DataGrid
+                    ItemsSource="{Binding Buildup.Components}"
+                    AutoGenerateColumns="False"
+                    Margin="10">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" />
+                        <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" IsReadOnly="True" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+        </DataTemplate>
+        
+        <DataTemplate x:Key="TreeTemplate">
+            <StackPanel>
+                <Label Content="Roots:" />
+                <DataGrid
+                    ItemsSource="{Binding Roots}"
+                    AutoGenerateColumns="False"
+                    Margin="10">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Parameter" Binding="{Binding Parameter}" />
+                        <DataGridTextColumn Header="Value" Binding="{Binding Value}" IsReadOnly="True" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <ContentControl Content="{Binding}" ContentTemplate="{StaticResource BranchTemplate}" />
+            </StackPanel>
+        </DataTemplate>
+        
+
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20*"/>
+        </Grid.ColumnDefinitions>
+
+        <TreeView x:Name="treeView"
+                  Grid.Column="0"
+                  ItemsSource="{Binding Items}"
+                  SelectedItemChanged="TreeView_SelectedItemChanged">
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate DataType="local:TreeViewItem" ItemsSource="{Binding Children}">
+                    <TextBlock Text="{Binding NameString}" />
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+        <DockPanel Grid.Column="2">
+            <Button Content="Reset Visualization"
+                    Height="30"
+                    DockPanel.Dock="Bottom"
+                    Click="ResetVisualization_Click" />
+            <Button Content="Calculate"
+                    Height="30"
+                    DockPanel.Dock="Bottom"
+                    Click="Calculate_Click" />
+            <ContentControl Content ="{Binding SelectedItem.Host}"
+                            DockPanel.Dock="Top"
+                            ContentTemplateSelector="{StaticResource HostTemplateSelector}"
+                            BorderThickness="1"/>
+        </DockPanel>
+    </Grid>
+</Window>
