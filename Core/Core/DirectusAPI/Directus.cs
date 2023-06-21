@@ -26,7 +26,7 @@ namespace Calc.Core.DirectusAPI
 
         public Directus(string configPath="")
         {
-            var settings = new ConfigLoader().Load(configPath);
+            var settings = ConfigLoader.Load(configPath);
             // check if variables are in settings
             if (!settings.ContainsKey("DIRECTUS_URL") || !settings.ContainsKey("DIRECTUS_TOKEN"))
             {
