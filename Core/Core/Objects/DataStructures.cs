@@ -95,7 +95,7 @@ namespace Calc.Core.Objects
         }
     }
 
-    public class Component
+    public class BuildupComponent
     {
         [JsonProperty("lca_materials_id")]
         public Material Material { get; set; }
@@ -115,9 +115,9 @@ namespace Calc.Core.Objects
         [JsonProperty("buildup_name")]
         public string Name { get; set; }
         [JsonProperty("group_id")]
-        public Group Group { get; set; }
+        public MaterialGroup Group { get; set; }
         [JsonProperty("components")]
-        public List<Component> Components { get; set; }
+        public List<BuildupComponent> Components { get; set; }
         [JsonProperty("unit")]
         public string Unit { get; set; }
 
@@ -127,7 +127,7 @@ namespace Calc.Core.Objects
         }
     }
 
-    public class Group
+    public class MaterialGroup
     {
         [JsonProperty("group_name")]
         public string Name { get; set; }

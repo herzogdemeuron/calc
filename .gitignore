@@ -374,3 +374,6 @@ ConnectorNavisworks/ConnectorNavisworks/Sample Models
 ConnectorArchicad/AddOn/Build*
 ConnectorArchicad/ConnectorArchicad/Properties
 **/dist/
+
+
+Core/Core.TestIntegration/Directus/config.json

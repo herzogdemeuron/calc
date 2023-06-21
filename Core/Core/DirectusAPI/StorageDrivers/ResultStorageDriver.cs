@@ -12,9 +12,9 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
     {
         private readonly Directus directus;
 
-        public ResultStorageDriver()
+        public ResultStorageDriver(Directus directus)
         {
-            directus = new Directus();
+            this.directus = directus;
         }
 
         /// <summary>
@@ -22,17 +22,16 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
         /// </summary>
         /// <param name="results">List of CalculationResult objects</param>
         /// <param name="snapshot">[Optional] Snapshot object. If not provided, an unnamed snapshot will be created.</param>
-        public static async Task<List<IdResponse>> SaveResultsToDirectus(List<CalculationResult> results, Snapshot snapshot = default)
+        public async Task<List<IdResponse>> SaveResultsToDirectus(List<CalculationResult> results, Snapshot snapshot = default)
         {
-            var driver = new ResultStorageDriver();
-            var createdSnapshot = await driver.CreateSnapshotItem(snapshot);
+            var createdSnapshot = await CreateSnapshotItem(snapshot);
             // add snapshot id to results
             foreach (var result in results)
             {
                 result.Snapshot = createdSnapshot;
             }
 
-            return await driver.CreateResultItems(results);
+            return await CreateResultItems(results);
         }
 
         private async Task<List<IdResponse>> CreateResultItems(List<CalculationResult> results)

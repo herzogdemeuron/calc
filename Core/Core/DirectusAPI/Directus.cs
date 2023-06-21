@@ -24,9 +24,9 @@ namespace Calc.Core.DirectusAPI
         private readonly string _token;
         private readonly string _url;
 
-        public Directus()
+        public Directus(string configPath="")
         {
-            var settings = new ConfigLoader().Load();
+            var settings = new ConfigLoader().Load(configPath);
             // check if variables are in settings
             if (!settings.ContainsKey("DIRECTUS_URL") || !settings.ContainsKey("DIRECTUS_TOKEN"))
             {

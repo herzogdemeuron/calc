@@ -11,9 +11,9 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
     {
         private readonly Directus directus;
 
-        public ForestStorageDriver()
+        public ForestStorageDriver(Directus directus)
         {
-            directus = new Directus();
+            this.directus = directus;
         }
 
         /// <summary>

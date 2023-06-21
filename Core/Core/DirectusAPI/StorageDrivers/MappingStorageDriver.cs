@@ -11,9 +11,9 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
     public class MappingStorageDriver
     {
         private readonly Directus directus;
-        public MappingStorageDriver()
+        public MappingStorageDriver(Directus directus)
         {
-            directus = new Directus();
+            this.directus = directus;
         }
 
         public async Task<IdResponse> SaveMappingToDirectus(Mapping mapping)

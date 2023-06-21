@@ -51,7 +51,7 @@ namespace Calc.Core.Calculations
             return results;
         }
 
-        public static decimal CalculateGwpA123(CalcElement element, Component component, string unit)
+        public static decimal CalculateGwpA123(CalcElement element, BuildupComponent component, string unit)
         {
             var material = component.Material;
             return unit switch

@@ -18,7 +18,7 @@ namespace Calc.ConnectorRevit
         public static List<Buildup> AllBuildups { get; set; }
         public static void Initiate()
         {
-            Component component1 = new Component()
+            BuildupComponent component1 = new BuildupComponent()
             {
                 Material = new Material()
                 {
@@ -27,7 +27,7 @@ namespace Calc.ConnectorRevit
                 },
                 Amount = 10,
             };
-            Component component2 = new Component()
+            BuildupComponent component2 = new BuildupComponent()
             {
                 Material = new Material()
                 {
@@ -36,7 +36,7 @@ namespace Calc.ConnectorRevit
                 },
                 Amount = 33,
             };
-            Component component3 = new Component()
+            BuildupComponent component3 = new BuildupComponent()
             {
                 Material = new Material()
                 {
@@ -52,24 +52,24 @@ namespace Calc.ConnectorRevit
                 {
                     Id = 001,
                     Name = "Buildup 1",
-                    Group = new Group() { Name = "Group a" },
-                    Components = new List<Component>() { component1, component2 }
+                    Group = new MaterialGroup() { Name = "Group a" },
+                    Components = new List<BuildupComponent>() { component1, component2 }
                 },
 
                 new Buildup()
                 {
                     Id = 002,
                     Name = "Buildup 2",
-                    Group = new Group() { Name = "Group b" },
-                    Components = new List<Component>() { component3, component1 }
+                    Group = new MaterialGroup() { Name = "Group b" },
+                    Components = new List<BuildupComponent>() { component3, component1 }
                 },
 
                 new Buildup()
                 {
                     Id = 003,
                     Name = "Buildup 3",
-                    Group = new Group() { Name = "Group c" },
-                    Components = new List<Component>() { component2, component3, component1 }
+                    Group = new MaterialGroup() { Name = "Group c" },
+                    Components = new List<BuildupComponent>() { component2, component3, component1 }
                 }
             };
 

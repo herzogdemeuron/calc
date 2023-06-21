@@ -9,9 +9,9 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
     {
         private readonly Directus directus;
 
-        public BuildupStorageDriver()
+        public BuildupStorageDriver(Directus directus)
         {
-            directus = new Directus();
+            this.directus = directus;
         }
 
         public async Task<List<Buildup>> GetAllBuildupsFromDirectus()

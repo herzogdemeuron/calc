@@ -6,9 +6,14 @@ namespace Calc.Core
 {
     public class ConfigLoader
     {
-        public Dictionary<string, string> Load()
+        public Dictionary<string, string> Load(string configPath="C:/Program Files/Autodesk/Revit 2023/AddIns/CalcRevit/config.json")
         {
-            var configFile = File.ReadAllText("C:/Program Files/Autodesk/Revit 2023/AddIns/CalcRevit/config.json");
+            // check if config path is valid
+            if (!File.Exists(configPath))
+            {
+                throw new FileNotFoundException("Config file not found at " + configPath);
+            }
+            var configFile = File.ReadAllText(configPath);
             return JsonConvert.DeserializeObject<Dictionary<string, string>>(configFile);
         }
     }
