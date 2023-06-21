@@ -2,7 +2,7 @@
 
 namespace Calc.ConnectorRevit
 {
-    public class MainApp : IExternalApplication
+    public class Application : IExternalApplication
     {
         public Result OnStartup(UIControlledApplication application)
         {

@@ -7,7 +7,7 @@ using Autodesk.Revit.Attributes;
 namespace Calc.ConnectorRevit
 {
     [Transaction(TransactionMode.Manual)]
-    public class LcaCommand : IExternalCommand
+    public class StartCommand : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
