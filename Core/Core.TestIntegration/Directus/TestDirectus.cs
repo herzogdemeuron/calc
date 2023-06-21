@@ -6,7 +6,7 @@ namespace Calc.Core.IntegrationTests
     [TestClass]
     public class DirectusApiTests
     {
-        public readonly string _configPath = "Directus/config.json";
+        public static readonly string ConfigPath = "Directus/config.json";
         private string? _token;
         private string? _url;
 
@@ -16,12 +16,12 @@ namespace Calc.Core.IntegrationTests
             //Arrange
             // print current working directory
             Console.WriteLine(Directory.GetCurrentDirectory());
-            var settings = ConfigLoader.Load(_configPath);
+            var settings = ConfigLoader.Load(ConfigPath);
             this._token = settings["DIRECTUS_TOKEN"];
             this._url = settings["DIRECTUS_URL"];
 
             // Act
-            var directus = new Directus(_configPath);
+            var directus = new Directus(ConfigPath);
 
             // Assert
             Assert.AreEqual(_token, directus.Token);
