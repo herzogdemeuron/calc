@@ -6,11 +6,12 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Calc.Core.Objects;
 using Calc.Core.DirectusAPI.StorageDrivers;
+using Calc.ConnectorRevit.EventHandlers;
+using Calc.ConnectorRevit.Revit;
 
-namespace Calc.ConnectorRevit
+namespace Calc.ConnectorRevit.Views
 {
-
-    public class MainViewModel : INotifyPropertyChanged
+    public class ViewModel : INotifyPropertyChanged
     {
 
         private List<TreeViewItem> _items;
@@ -57,10 +58,10 @@ namespace Calc.ConnectorRevit
         private ExternalEvent _externalCalculateEvent;
         private ExternalEvent _externalResetVisualizationEvent;
 
-        public MainViewModel(Document doc)
+        public ViewModel()
         {
             AddEventHandlers();
-            this.Items = CreateTrees(doc);
+            this.Items = CreateTrees();
         }
 
         protected void OnPropertyChanged(string propertyName)
@@ -106,8 +107,9 @@ namespace Calc.ConnectorRevit
             this.AllMappings = await new MappingStorageDriver().GetAllMappingsFromDirectus();
         }
 
-        private List<TreeViewItem> CreateTrees(Document doc)
+        private List<TreeViewItem> CreateTrees()
         {
+            Document doc = App.CurrentDoc;
             var root1 = new Root("Type", "Parameter Contains Value", "WAND");
             var root2 = new Root("Type", "Parameter Contains Value", "STB");
             var root3 = new Root("Type", "Parameter Contains Value", "BODN");
@@ -122,7 +124,7 @@ namespace Calc.ConnectorRevit
             var _treeViewItems = new List<TreeViewItem>();
             foreach (List<Root> roots in rootLists)
             {
-                List<CalcElement> elements = ElementFilter.GetElements(doc, roots);
+                List<CalcElement> elements = ElementFilter.GetCalcElements(doc, roots);
 
                 //combine values of roots of into a name string
                 string name = "";
@@ -156,13 +158,13 @@ namespace Calc.ConnectorRevit
 
         private void AddEventHandlers()
         {
-            VisualizeEventHandler visualizeEventHandler = new VisualizeEventHandler(this);
+            ViewSetEventHandler visualizeEventHandler = new ViewSetEventHandler(this);
             this._externalVisualizeEvent = ExternalEvent.Create(visualizeEventHandler);
 
-            CalculateEventHandler calculateEventHandler = new CalculateEventHandler(this);
-            this._externalCalculateEvent = ExternalEvent.Create(calculateEventHandler);
+            //CalculateEventHandler calculateEventHandler = new CalculateEventHandler(this);
+            //this._externalCalculateEvent = ExternalEvent.Create(calculateEventHandler);
 
-            ResetVisualizetionEventHandler resetVisualizationEventHandler = new ResetVisualizetionEventHandler(this);
+            ViewResetEventHandler resetVisualizationEventHandler = new ViewResetEventHandler(this);
             this._externalResetVisualizationEvent = ExternalEvent.Create(resetVisualizationEventHandler);
         }
     }

@@ -6,37 +6,36 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Autodesk.Revit.DB;
+using Calc.ConnectorRevit.Revit;
+using Calc.ConnectorRevit.Views;
 
 
-namespace Calc.ConnectorRevit
+namespace Calc.ConnectorRevit.Views
 {
     public partial class MainView : Window
     {
-        private readonly MainViewModel _mainViewModel;
-
-        public MainView(Document doc)
+        private readonly ViewModel _viewModel;
+        public MainView()
         {
-            _mainViewModel = new MainViewModel(doc);
-
-            //_mainViewModel.GetAllBuildups();
-            DataContext = _mainViewModel;
+            _viewModel = App.ViewModel;
+            DataContext = _viewModel;
             InitializeComponent();
         }
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            _mainViewModel.SelectedItem = e.NewValue as TreeViewItem;
-            _mainViewModel.Visualize();
+            _viewModel.SelectedItem = e.NewValue as TreeViewItem;
+            _viewModel.Visualize();
         }
 
         private void Calculate_Click(object sender, RoutedEventArgs e)
         {
-            _mainViewModel.Calculate();
+            _viewModel.Calculate();
         }
 
         private void ResetVisualization_Click(object sender, RoutedEventArgs e)
         {
-            _mainViewModel.ResetVisualization();
+            _viewModel.ResetVisualization();
         }
     }
 }

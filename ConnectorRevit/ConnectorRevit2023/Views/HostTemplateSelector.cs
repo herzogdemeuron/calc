@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Diagnostics;
 using Calc.Core.Objects;
 
-namespace Calc.ConnectorRevit
+namespace Calc.ConnectorRevit.Views
 {
     public class HostTemplateSelector : DataTemplateSelector
     {

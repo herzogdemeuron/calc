@@ -3,8 +3,9 @@ using System.Diagnostics;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.Attributes;
+using Calc.ConnectorRevit.Views;
 
-namespace Calc.ConnectorRevit
+namespace Calc.ConnectorRevit.Revit
 {
     [Transaction(TransactionMode.Manual)]
     public class StartCommand : IExternalCommand
@@ -13,10 +14,11 @@ namespace Calc.ConnectorRevit
         {
             try
             {
-                Document doc = commandData.Application.ActiveUIDocument.Document;
                 MockData.Initiate();
-                MainView mainWindow = new MainView(doc);
-                mainWindow.Show();
+                App.CurrentDoc = commandData.Application.ActiveUIDocument.Document;
+                App.ViewModel = new ViewModel();
+                MainView mainView = new MainView();
+                mainView.Show();
                 return Result.Succeeded;
             }
             catch (Exception ex)

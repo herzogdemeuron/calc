@@ -7,65 +7,34 @@ namespace Calc.ConnectorRevit
 {
     public class ElementFilter
         //filters revit objtcts in revit using roots
-        //and outputs a list of directuslca elements
+        //and outputs a list of calc elements
     {
-        static public List<CalcElement> GetElements(Document doc, List<Root> roots)
+        static public List<CalcElement> GetCalcElements(Document doc, List<Root> roots)
         {
-            List<CalcElement> elements = new List<CalcElement>();
-
-            IEnumerable<Element> collector = new FilteredElementCollector(doc).WhereElementIsNotElementType().WhereElementIsViewIndependent();
+            IEnumerable<Element> collector = new FilteredElementCollector(doc)
+                .WhereElementIsNotElementType()
+                .WhereElementIsViewIndependent();
             foreach (Root root in roots)
             {
                 collector = collector.Where(e => CheckContains(e, root.Parameter, root.Value));
             }
-            
-            foreach (Element element in collector)
-            {
-                elements.Add(CreateElement(element));
-            }
-            return elements;
+            List<CalcElement> calcElements = collector.Select(CreateCalcElement).ToList();
+            return calcElements;
         }
 
         static private bool CheckContains(Element element, string parameter, string value)
         {
-
-
-            //Debug.WriteLine($"checking {element.Id.IntegerValue} parameter {parameter} contains {value}");
             Parameter param = element.LookupParameter(parameter);
-            if (param!=null)
-            {
-                string paramValue = param.AsValueString();
-                if (paramValue!=null)
-                {
-                    if (paramValue.Contains(value))
-                    {
-                        return true;
-                    }
-
-                }
-                //else { Debug.WriteLine($"parameter {parameter} has no value"); }
-          
-            }
-            //else { Debug.WriteLine($"parameter {parameter} does not exist"); }
-            //Debug.WriteLine("false");
-            return false;
+            return param?.AsValueString()?.Contains(value) ?? false;    
         }
 
-        static private CalcElement CreateElement(Element revitElem)
-            ///creats a directuslca element from a revit object
+        static private CalcElement CreateCalcElement(Element elem)
         {
-            ParameterSet parameters = revitElem.Parameters;
-            Dictionary<string, object> parameterDictionary = new Dictionary<string, object>();
-            foreach (Parameter parameter in parameters)
-            {
-                string name = parameter.Definition.Name;
-                if (!parameterDictionary.ContainsKey(name))
-                {
-                      parameterDictionary.Add(name, parameter.AsValueString());
-                }
-                
-            }
-            return new CalcElement(revitElem.Id.ToString(), parameterDictionary);
+            var parameterDictionary = elem.Parameters
+                .Cast<Parameter>()
+                .GroupBy(parameter => parameter.Definition.Name)
+                .ToDictionary(group => group.Key, group => group.First().AsValueString() as object);
+            return new CalcElement(elem.Id.ToString(), parameterDictionary);
         }
 
     }

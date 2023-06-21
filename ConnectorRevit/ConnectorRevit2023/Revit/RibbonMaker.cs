@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using Autodesk.Revit.UI;
 
-namespace Calc.ConnectorRevit
+namespace Calc.ConnectorRevit.Revit
 {
     public class RibbonMaker
     {
@@ -16,16 +16,16 @@ namespace Calc.ConnectorRevit
         public void Create(UIControlledApplication uiCtrlApp)
         {
             RibbonPanel panel = uiCtrlApp.GetRibbonPanels()
-                ?.FirstOrDefault(p => p.Name == this.PanelName);
+                ?.FirstOrDefault(p => p.Name == PanelName);
 
             if (panel == null)
             {
-                panel = uiCtrlApp.CreateRibbonPanel(this.PanelName);
+                panel = uiCtrlApp.CreateRibbonPanel(PanelName);
             }
 
             PushButtonData buttonData = new PushButtonData(
                 "LCAButton",
-                this.PanelName,
+                PanelName,
                 Assembly.GetExecutingAssembly().Location,
                 "RevitLca.LcaCommand");
 

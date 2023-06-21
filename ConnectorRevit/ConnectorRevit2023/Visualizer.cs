@@ -7,29 +7,30 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.Attributes;
 using Calc.Core.Color;
 using Calc.Core.Objects;
+using Calc.ConnectorRevit.Revit;
 
 namespace Calc.ConnectorRevit
 {
     [Transaction(TransactionMode.Manual)]
-    public class Visualizer
+    public static class Visualizer
     {
-        private readonly Document Doc;
-        public Branch SelectedBranch { get; set; }
-        public MainViewModel ViewModel { get; set; }
-
-        public Visualizer(UIApplication uiapp, Branch selectedBranch)
+        private static Branch SelectedBranch
         {
-            Doc = uiapp.ActiveUIDocument.Document;
-            SelectedBranch = selectedBranch;
+            get
+            {
+                return App.ViewModel.SelectedBranch;
+            }
         }
 
-        public Visualizer(UIApplication uiapp, MainViewModel model)
+        private static Document Doc
         {
-            Doc = uiapp.ActiveUIDocument.Document;
-            ViewModel = model;
+            get
+            {
+                return App.CurrentDoc;
+            }
         }
 
-        public void ShowAll()
+        public static void ShowAll()
         {
             Debug.WriteLine("ShowAll");
             using (Transaction t = new Transaction(Doc, "ShowAll"))
@@ -40,7 +41,7 @@ namespace Calc.ConnectorRevit
                 currentView.TemporaryViewModes.DeactivateAllModes();
                 var overrideGraphicSettings = new OverrideGraphicSettings();
 
-                foreach (var tree in ViewModel.Items)
+                foreach (var tree in App.ViewModel.Items)
                 {
                     var elements = StringsToElementIds(tree.Host.ElementIds);
                     foreach (var element in elements)
@@ -53,7 +54,7 @@ namespace Calc.ConnectorRevit
             }
         }
 
-        public void IsolateAndColor()
+        public static void IsolateAndColor()
         {
             using (Transaction t = new Transaction(Doc, "Isolate and Color"))
             {

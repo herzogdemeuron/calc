@@ -3,7 +3,8 @@ using System.Diagnostics;
 using System.Linq;
 using Calc.Core.Objects;
 
-namespace Calc.ConnectorRevit
+namespace Calc.ConnectorRevit.Views
+
 {
     public class TreeViewItem
     {
