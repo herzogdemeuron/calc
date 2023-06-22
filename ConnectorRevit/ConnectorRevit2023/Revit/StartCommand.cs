@@ -4,6 +4,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.Attributes;
 using Calc.ConnectorRevit.Views;
+using Calc.Core.DirectusAPI;
 
 namespace Calc.ConnectorRevit.Revit
 {
@@ -14,6 +15,7 @@ namespace Calc.ConnectorRevit.Revit
         {
             try
             {
+                App.Directus = new Directus();
                 MockData.Initiate();
                 App.CurrentDoc = commandData.Application.ActiveUIDocument.Document;
                 App.ViewModel = new ViewModel();

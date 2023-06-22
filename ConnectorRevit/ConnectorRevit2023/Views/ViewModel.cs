@@ -99,12 +99,12 @@ namespace Calc.ConnectorRevit.Views
 
         public async void GetAllForests()
         {
-            this.AllForests = await new ForestStorageDriver().GetAllForestsFromDirectus();
+            this.AllForests = await new ForestStorageDriver(App.Directus).GetAllForestsFromDirectus();
         }
 
         public async void GetAllMappings()
         {
-            this.AllMappings = await new MappingStorageDriver().GetAllMappingsFromDirectus();
+            this.AllMappings = await new MappingStorageDriver(App.Directus).GetAllMappingsFromDirectus();
         }
 
         private List<TreeViewItem> CreateTrees()
