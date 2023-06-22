@@ -7,7 +7,6 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.Attributes;
 using Calc.Core.Color;
 using Calc.Core.Objects;
-using Calc.ConnectorRevit.Revit;
 
 namespace Calc.ConnectorRevit
 {
@@ -30,7 +29,7 @@ namespace Calc.ConnectorRevit
             }
         }
 
-        public static void ShowAll()
+        public static void Reset()
         {
             Debug.WriteLine("ShowAll");
             using (Transaction t = new Transaction(Doc, "ShowAll"))

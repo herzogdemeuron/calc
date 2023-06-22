@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Autodesk.Revit.DB;
-using Calc.ConnectorRevit.Revit;
 using Calc.ConnectorRevit.Views;
 
 
@@ -25,17 +24,17 @@ namespace Calc.ConnectorRevit.Views
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             _viewModel.SelectedItem = e.NewValue as TreeViewItem;
-            _viewModel.Visualize();
+            _viewModel.SetView();
         }
 
         private void Calculate_Click(object sender, RoutedEventArgs e)
         {
-            _viewModel.Calculate();
+            //_viewModel.Calculate();
         }
 
         private void ResetVisualization_Click(object sender, RoutedEventArgs e)
         {
-            _viewModel.ResetVisualization();
+            _viewModel.ResetView();
         }
     }
 }

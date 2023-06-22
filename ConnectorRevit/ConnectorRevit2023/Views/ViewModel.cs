@@ -7,7 +7,6 @@ using Autodesk.Revit.UI;
 using Calc.Core.Objects;
 using Calc.Core.DirectusAPI.StorageDrivers;
 using Calc.ConnectorRevit.EventHandlers;
-using Calc.ConnectorRevit.Revit;
 
 namespace Calc.ConnectorRevit.Views
 {
@@ -47,49 +46,38 @@ namespace Calc.ConnectorRevit.Views
                 return SelectedItem.Host;
             }
         }
+        private EventHandler EventHandler { get; set; }
+
+        public ViewModel()
+        {
+            EventHandler = new EventHandler();
+            this.Items = CreateTrees();
+        }
+
+        public void SetView()
+        {
+            EventHandler.Raise(Visualizer.IsolateAndColor);
+        }
+
+
+        public void ResetView()
+        {
+            EventHandler.Raise(Visualizer.Reset);
+        }
 
         public List<Buildup> AllBuildups { get; set; }
         public List<Forest> AllForests { get; set; }
         public List<Mapping> AllMappings { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-        private ExternalEvent _externalVisualizeEvent;
-        private ExternalEvent _externalCalculateEvent;
-        private ExternalEvent _externalResetVisualizationEvent;
-
-        public ViewModel()
-        {
-            AddEventHandlers();
-            this.Items = CreateTrees();
-        }
-
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void Visualize()
-        {
-            _externalVisualizeEvent.Raise();
-        }
 
-        public void Calculate()
-        {
-            try 
-            {                 
-                _externalCalculateEvent.Raise();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-        }
 
-        public void ResetVisualization()
-        {
-            _externalResetVisualizationEvent.Raise();
-        }
+
 
         //public async void GetAllBuildups()
         //{
@@ -156,16 +144,5 @@ namespace Calc.ConnectorRevit.Views
             return _treeViewItems;
         }
 
-        private void AddEventHandlers()
-        {
-            ViewSetEventHandler visualizeEventHandler = new ViewSetEventHandler(this);
-            this._externalVisualizeEvent = ExternalEvent.Create(visualizeEventHandler);
-
-            //CalculateEventHandler calculateEventHandler = new CalculateEventHandler(this);
-            //this._externalCalculateEvent = ExternalEvent.Create(calculateEventHandler);
-
-            ViewResetEventHandler resetVisualizationEventHandler = new ViewResetEventHandler(this);
-            this._externalResetVisualizationEvent = ExternalEvent.Create(resetVisualizationEventHandler);
-        }
     }
 }

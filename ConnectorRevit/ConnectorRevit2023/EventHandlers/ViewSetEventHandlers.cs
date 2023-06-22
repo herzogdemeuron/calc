@@ -12,20 +12,11 @@ namespace Calc.ConnectorRevit.EventHandlers
     [Transaction(TransactionMode.Manual)]
     public class ViewSetEventHandler : IExternalEventHandler
     {
-        private readonly ViewModel _viewModel;
-        private readonly ExternalEvent _exEvent;
-        public Branch SelectedBranch
-        {
-            get
-            {
-                return _viewModel.SelectedBranch;
-            }
-        }
+        private readonly ExternalEvent exEvent;
 
-        public ViewSetEventHandler(ViewModel viewModel)
+        public ViewSetEventHandler()
         {
-            _viewModel = viewModel;
-            _exEvent = ExternalEvent.Create(this);
+            exEvent = ExternalEvent.Create(this);
         }
 
         public void Execute(UIApplication uiapp)
@@ -42,7 +33,7 @@ namespace Calc.ConnectorRevit.EventHandlers
 
         public void Raise()
         {
-            _exEvent.Raise();
+            exEvent.Raise();
         }
 
         public string GetName()
