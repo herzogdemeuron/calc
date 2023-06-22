@@ -15,8 +15,11 @@ namespace Calc.ConnectorRevit.Revit
         {
             try
             {
-                App.Directus = new Directus();
                 MockData.Initiate();
+
+
+                App.DirectusManager = new DirectusManager();
+                
                 App.CurrentDoc = commandData.Application.ActiveUIDocument.Document;
                 App.ViewModel = new ViewModel();
                 MainView mainView = new MainView();

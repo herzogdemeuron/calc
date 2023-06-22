@@ -7,15 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Calc.ConnectorRevit
+namespace Calc.ConnectorRevit.Revit
 {
     [Transaction(TransactionMode.Manual)]
-    public class EventHandler : IExternalEventHandler
+    public class ExternalEventHandler : IExternalEventHandler
     {
         private readonly ExternalEvent exEvent;
-        private Action ActionToExecute { get; set;}
+        private Action ActionToExecute { get; set; }
 
-        public EventHandler()
+        public ExternalEventHandler()
         {
             exEvent = ExternalEvent.Create(this);
         }

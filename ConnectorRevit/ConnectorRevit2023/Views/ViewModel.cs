@@ -2,35 +2,38 @@
 using System.Diagnostics;
 using System.ComponentModel;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Calc.Core.Objects;
 using Calc.Core.DirectusAPI.StorageDrivers;
 using Calc.ConnectorRevit.EventHandlers;
+using Calc.ConnectorRevit.Revit;
+using System.Linq;
 
 namespace Calc.ConnectorRevit.Views
 {
     public class ViewModel : INotifyPropertyChanged
     {
 
-        private List<TreeViewItem> _items;
+        private List<TreeViewItem> items;
         public List<TreeViewItem> Items
         {
-            get { return _items; }
+            get { return items; }
             set
             {
-                _items = value;
+                items = value;
                 OnPropertyChanged("Items");
             }
         }
 
-        private TreeViewItem _selectedItem;
+        private TreeViewItem selectedItem;
         public TreeViewItem SelectedItem
         {
-            get { return _selectedItem; }
+            get { return selectedItem; }
             set
             {
-                _selectedItem = value;
+                selectedItem = value;
                 OnPropertyChanged("SelectedItem");
             }
         }
@@ -46,28 +49,53 @@ namespace Calc.ConnectorRevit.Views
                 return SelectedItem.Host;
             }
         }
-        private EventHandler EventHandler { get; set; }
 
+        public List<Buildup> AllBuildups { get; set; }
+        public List<Forest> AllForests { get; set; }
+        public List<Mapping> AllMappings { get; set; }
+        private ExternalEventHandler EventHandler { get; set; }
+        private readonly DirectusManager DirectusManager;
         public ViewModel()
         {
-            EventHandler = new EventHandler();
-            this.Items = CreateTrees();
+            EventHandler = new ExternalEventHandler();
+            DirectusManager = new DirectusManager();
+        }
+        public async Task InitializeAsync()
+        {
+            Debug.WriteLine("initiating DirectusManager");
+            await DirectusManager.Initiate();
+            AllBuildups = DirectusManager.AllBuildups;
+            AllForests = DirectusManager.AllForests;
+            AllMappings = DirectusManager.AllMappings;
+            Debug.WriteLine($"AllBuildups.Count: {AllBuildups.Count}");
+            Debug.WriteLine($"AllForests.Count: {AllForests.Count}");
+            Debug.WriteLine($"AllMappings.Count: {AllMappings.Count}");
+            CreateTreeViewItems();
         }
 
+
+
+        private void CreateTreeViewItems()
+        {
+            Forest forest = AllForests.Where(f => f.Name == "RevitTestForest").FirstOrDefault();
+            Items = forest.Trees.Select(t =>
+            {
+                t.Plant(ElementFilter.GetCalcElements(t));
+                t.GrowBranches();
+                return new TreeViewItem(t);
+            }
+            ).ToList();
+        }
         public void SetView()
         {
             EventHandler.Raise(Visualizer.IsolateAndColor);
         }
-
 
         public void ResetView()
         {
             EventHandler.Raise(Visualizer.Reset);
         }
 
-        public List<Buildup> AllBuildups { get; set; }
-        public List<Forest> AllForests { get; set; }
-        public List<Mapping> AllMappings { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
@@ -75,74 +103,7 @@ namespace Calc.ConnectorRevit.Views
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-
-
-
-
-        //public async void GetAllBuildups()
-        //{
-        //    var driver = new BuildupStorageDriver();
-        //    this.AllBuildups = await driver.GetAllBuildupsFromDirectus();
-        //}
-
-        public async void GetAllForests()
-        {
-            this.AllForests = await new ForestStorageDriver(App.Directus).GetAllForestsFromDirectus();
-        }
-
-        public async void GetAllMappings()
-        {
-            this.AllMappings = await new MappingStorageDriver(App.Directus).GetAllMappingsFromDirectus();
-        }
-
-        private List<TreeViewItem> CreateTrees()
-        {
-            Document doc = App.CurrentDoc;
-            var root1 = new Root("Type", "Parameter Contains Value", "WAND");
-            var root2 = new Root("Type", "Parameter Contains Value", "STB");
-            var root3 = new Root("Type", "Parameter Contains Value", "BODN");
-            var root4 = new Root("Type", "Parameter Contains Value", "HOB");
-
-            List<Root> roots1 = new List<Root>() { root1, root2 };
-            List<Root> roots2 = new List<Root>() { root3, root4 };
-
-            List<List<Root>> rootLists = new List<List<Root>>() { roots1, roots2 };
-            var branchConfig = new List<string>() { "Type", "Comments" };
-
-            var _treeViewItems = new List<TreeViewItem>();
-            foreach (List<Root> roots in rootLists)
-            {
-                List<CalcElement> elements = ElementFilter.GetCalcElements(doc, roots);
-
-                //combine values of roots of into a name string
-                string name = "";
-                foreach (Root root in roots)
-                {
-                    if (name == "")
-                    {
-                        name = root.Value;
-                    }
-                    else
-                    {
-                        name = name + " - " + root.Value;
-                    }
-                }
-
-                Tree tree = new Tree(roots)
-                {
-                    Name = name
-                };
-
-                Debug.WriteLine(elements.Count);
-
-                tree.Plant(elements);
-                tree.BranchConfig = branchConfig;
-                tree.GrowBranches();
-                TreeViewItem treeViewItem = new TreeViewItem(tree);
-                _treeViewItems.Add(treeViewItem);
-            }
-            return _treeViewItems;
-        }
+        
 
     }
 }

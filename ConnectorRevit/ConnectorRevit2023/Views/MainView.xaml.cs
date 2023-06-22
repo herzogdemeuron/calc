@@ -1,40 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using Autodesk.Revit.DB;
-using Calc.ConnectorRevit.Views;
+﻿using System.Windows;
+using Autodesk.Revit.UI;
 
 
 namespace Calc.ConnectorRevit.Views
 {
     public partial class MainView : Window
     {
-        private readonly ViewModel _viewModel;
+        private readonly ViewModel viewModel;
         public MainView()
         {
-            _viewModel = App.ViewModel;
-            DataContext = _viewModel;
+            viewModel = App.ViewModel;
+            DataContext = viewModel;
             InitializeComponent();
         }
-
-        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            _viewModel.SelectedItem = e.NewValue as TreeViewItem;
-            _viewModel.SetView();
+            await viewModel.InitializeAsync();
+
+            // Hide the loading overlay
+            LoadingOverlay.Visibility = Visibility.Collapsed;
         }
 
-        private void Calculate_Click(object sender, RoutedEventArgs e)
+        private void TreeViewSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            viewModel.SelectedItem = e.NewValue as TreeViewItem;
+            viewModel.SetView();
+        }
+
+
+        private void CalculateClicked(object sender, RoutedEventArgs e)
         {
             //_viewModel.Calculate();
         }
 
-        private void ResetVisualization_Click(object sender, RoutedEventArgs e)
+        private void ResetViewClicked(object sender, RoutedEventArgs e)
         {
-            _viewModel.ResetView();
+            viewModel.ResetView();
         }
     }
 }
