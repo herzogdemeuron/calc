@@ -12,7 +12,7 @@ using Autodesk.Revit.UI;
 
 namespace Calc.ConnectorRevit
 {
-    public class DirectusManager
+    public class StorageManager
     {
         private readonly Directus Directus;
         private readonly BuildupStorageDriver buildupStorageDriver;
@@ -24,7 +24,7 @@ namespace Calc.ConnectorRevit
         public List<Mapping> AllMappings { get; set; }
 
 
-        public DirectusManager() 
+        public StorageManager() 
         {
             Directus = new Directus();
             buildupStorageDriver = new BuildupStorageDriver(Directus);

@@ -10,7 +10,7 @@ namespace Calc.ConnectorRevit
     {
         public static ViewModel ViewModel { get; set; }
         public static Document CurrentDoc { get; set; }
-        public static DirectusManager DirectusManager { get; set; }
+        public static StorageManager DirectusManager { get; set; }
         public Result OnStartup(UIControlledApplication application)
         {
             RibbonMaker ribbonMaker = new RibbonMaker();

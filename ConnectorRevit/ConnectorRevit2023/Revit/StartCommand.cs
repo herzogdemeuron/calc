@@ -18,7 +18,7 @@ namespace Calc.ConnectorRevit.Revit
                 MockData.Initiate();
 
 
-                App.DirectusManager = new DirectusManager();
+                App.DirectusManager = new StorageManager();
                 
                 App.CurrentDoc = commandData.Application.ActiveUIDocument.Document;
                 App.ViewModel = new ViewModel();

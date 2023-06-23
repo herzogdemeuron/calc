@@ -10,14 +10,15 @@ using Calc.Core.DirectusAPI.StorageDrivers;
 using Calc.ConnectorRevit.EventHandlers;
 using Calc.ConnectorRevit.Revit;
 using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace Calc.ConnectorRevit.Views
 {
     public class ViewModel : INotifyPropertyChanged
     {
 
-        private List<Branch> items;
-        public List<Branch> Items
+        private List<Tree> items;
+        public List<Tree> Items
         {
             get { return items; }
             set
@@ -42,44 +43,33 @@ namespace Calc.ConnectorRevit.Views
         public List<Forest> AllForests { get; set; }
         public List<Mapping> AllMappings { get; set; }
         private ExternalEventHandler EventHandler { get; set; }
-        private readonly DirectusManager DirectusManager;
+        private readonly StorageManager DirectusManager;
         public ViewModel()
         {
             EventHandler = new ExternalEventHandler();
-            DirectusManager = new DirectusManager();
+            DirectusManager = new StorageManager();
         }
         public async Task InitializeAsync()
         {
-            Debug.WriteLine("initiating DirectusManager");
+
             await DirectusManager.Initiate();
             AllBuildups = DirectusManager.AllBuildups;
+            OnPropertyChanged("AllBuildups");
             AllForests = DirectusManager.AllForests;
+            OnPropertyChanged("AllForests");
             AllMappings = DirectusManager.AllMappings;
-            Debug.WriteLine($"AllBuildups.Count: {AllBuildups.Count}");
-            Debug.WriteLine($"AllForests.Count: {AllForests.Count}");
-            Debug.WriteLine($"AllMappings.Count: {AllMappings.Count}");
+            OnPropertyChanged("AllMappings");
             CreateTreeViewItems();
         }
-
-
 
         private void CreateTreeViewItems()
         {
             Forest forest = AllForests.Where(f => f.Name == "RevitTestForest").FirstOrDefault();
-
-            //Items = forest.Trees.Select(t =>
-            //{
-            //    t.Plant(ElementFilter.GetCalcElements(t));
-            //    t.GrowBranches();
-            //    return new TreeViewItem(t);
-            //}
-            //).ToList();
-            
             Items = forest.Trees.Select(t=>
             {
                 t.Plant(ElementFilter.GetCalcElements(t));
                 t.GrowBranches();
-                return t as Branch;
+                return t;
             }
             ).ToList();
         }
@@ -99,8 +89,5 @@ namespace Calc.ConnectorRevit.Views
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        
-
     }
 }

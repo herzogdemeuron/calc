@@ -1,6 +1,9 @@
 ﻿using System.Windows;
+using System.Windows.Input;
+using System.Windows.Media;
 using Autodesk.Revit.UI;
 using Calc.Core.Objects;
+using System.Windows.Controls;
 
 
 namespace Calc.ConnectorRevit.Views
@@ -28,15 +31,15 @@ namespace Calc.ConnectorRevit.Views
             viewModel.SetView();
         }
 
+        private void MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            viewModel.ResetView();
+        }
+
 
         private void CalculateClicked(object sender, RoutedEventArgs e)
         {
             //_viewModel.Calculate();
-        }
-
-        private void ResetViewClicked(object sender, RoutedEventArgs e)
-        {
-            viewModel.ResetView();
         }
     }
 }
