@@ -16,8 +16,8 @@ namespace Calc.ConnectorRevit.Views
     public class ViewModel : INotifyPropertyChanged
     {
 
-        private List<TreeViewItem> items;
-        public List<TreeViewItem> Items
+        private List<Branch> items;
+        public List<Branch> Items
         {
             get { return items; }
             set
@@ -27,26 +27,14 @@ namespace Calc.ConnectorRevit.Views
             }
         }
 
-        private TreeViewItem selectedItem;
-        public TreeViewItem SelectedItem
-        {
-            get { return selectedItem; }
-            set
-            {
-                selectedItem = value;
-                OnPropertyChanged("SelectedItem");
-            }
-        }
-
+        private Branch selectedBranch;
         public Branch SelectedBranch
         {
-            get
+            get { return selectedBranch; }
+            set
             {
-                if (SelectedItem == null)
-                {
-                    return null;
-                }
-                return SelectedItem.Host;
+                selectedBranch = value;
+                OnPropertyChanged("SelectedBranch");
             }
         }
 
@@ -78,11 +66,20 @@ namespace Calc.ConnectorRevit.Views
         private void CreateTreeViewItems()
         {
             Forest forest = AllForests.Where(f => f.Name == "RevitTestForest").FirstOrDefault();
-            Items = forest.Trees.Select(t =>
+
+            //Items = forest.Trees.Select(t =>
+            //{
+            //    t.Plant(ElementFilter.GetCalcElements(t));
+            //    t.GrowBranches();
+            //    return new TreeViewItem(t);
+            //}
+            //).ToList();
+            
+            Items = forest.Trees.Select(t=>
             {
                 t.Plant(ElementFilter.GetCalcElements(t));
                 t.GrowBranches();
-                return new TreeViewItem(t);
+                return t as Branch;
             }
             ).ToList();
         }

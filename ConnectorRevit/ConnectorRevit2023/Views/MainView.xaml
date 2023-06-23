@@ -4,6 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Calc.ConnectorRevit.Views" 
+        xmlns:calc="clr-namespace:Calc.Core.Objects;assembly=CalcCore"
         d:DataContext="{d:DesignInstance Type=local:ViewModel}"
         Loaded="Window_Loaded"
         mc:Ignorable="d" 
@@ -92,8 +93,8 @@
                   ItemsSource="{Binding Items}"
                   SelectedItemChanged="TreeViewSelectedItemChanged">
                 <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate DataType="local:TreeViewItem" ItemsSource="{Binding Children}">
-                        <TextBlock Text="{Binding NameString}" />
+                    <HierarchicalDataTemplate DataType="calc:Branch" ItemsSource="{Binding SubBranches}">
+                        <TextBlock Text="{Binding Parameter}" />
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
@@ -117,7 +118,7 @@
                     Margin="0 0 0 10"
                     DockPanel.Dock="Bottom"
                     Click="CalculateClicked" />
-            <ContentControl Content ="{Binding SelectedItem.Host}"
+            <ContentControl Content ="{Binding SelectedBranch}"
                             DockPanel.Dock="Top"
                             ContentTemplateSelector="{StaticResource HostTemplateSelector}"
                             BorderThickness="1"/>

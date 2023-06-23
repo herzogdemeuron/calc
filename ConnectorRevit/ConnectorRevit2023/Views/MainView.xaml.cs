@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using Autodesk.Revit.UI;
+using Calc.Core.Objects;
 
 
 namespace Calc.ConnectorRevit.Views
@@ -23,7 +24,7 @@ namespace Calc.ConnectorRevit.Views
 
         private void TreeViewSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            viewModel.SelectedItem = e.NewValue as TreeViewItem;
+            viewModel.SelectedBranch = e.NewValue as Branch;
             viewModel.SetView();
         }
 

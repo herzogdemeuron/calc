@@ -42,7 +42,7 @@ namespace Calc.ConnectorRevit
 
                 foreach (var tree in App.ViewModel.Items)
                 {
-                    var elements = StringsToElementIds(tree.Host.ElementIds);
+                    var elements = StringsToElementIds(tree.ElementIds);
                     foreach (var element in elements)
                     {
                         currentView.SetElementOverrides(element, overrideGraphicSettings);
