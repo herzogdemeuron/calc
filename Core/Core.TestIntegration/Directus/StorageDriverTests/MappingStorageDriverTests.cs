@@ -1,32 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Calc.Core.Objects;
-using Calc.Core.DirectusAPI.StorageDrivers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Calc.Core.Objects;
+using Calc.Core.DirectusAPI.Drivers;
 using Calc.Core.DirectusAPI;
 
-namespace Calc.Core.IntegrationTests
+namespace Calc.Core.IntegrationTests.Drivers
 {
 
     [TestClass]
     public class MappingStorageDriverTests
     {
         private readonly int mappingId = 29;
-        private MappingStorageDriver driver;
-        private MockData mockData;
-        private List<Tree> trees;
+        private Directus? directus;
+        private MockData? mockData;
+        private Forest? forest;
 
         [TestInitialize]
         public void Initialize()
         {
-            var directus = new Directus(DirectusApiTests.ConfigPath);
-            this.driver = new MappingStorageDriver(directus);
+            this.directus = new Directus(DirectusApiTests.ConfigPath);
             this.mockData = new MockData();
-            this.trees = mockData.Trees;
-            foreach (var tree in this.trees)
+            this.forest = new Forest() { Trees = mockData.Trees };
+            foreach (var tree in this.forest.Trees)
             {
                 tree.Plant(mockData.Elements);
                 tree.GrowBranches();
@@ -38,61 +31,64 @@ namespace Calc.Core.IntegrationTests
         public async Task SaveMappingToDirectus_NoProject_IsIdResponse()
         {
             // Arrange
-            var mapping = new Mapping(this.trees, "test mapping name");
+            var mapping = new Mapping(this.forest, "test mapping name");
+            var directusManager = new DirectusManager<Mapping>(this.directus);
 
             // Act
-            var response = await this.driver.SaveMappingToDirectus(mapping);
-
+            var response = await directusManager.CreateSingle<MappingStorageDriver>(new MappingStorageDriver() { SendItem = mapping});
             // Assert
-            Assert.IsInstanceOfType(response, typeof(IdResponse));
-            Assert.IsInstanceOfType(response.Id, typeof(int));
+            Assert.IsInstanceOfType(response.CreatedItem, typeof(Mapping));
+            Assert.IsInstanceOfType(response.CreatedItem.Id, typeof(int));
         }
 
         [TestMethod]
         public async Task SaveMappingToDirectus_WithProject_IsIdResponse()
         {
             // Arrange
-            var mapping = new Mapping(this.trees, "test mapping name with project")
+            var mapping = new Mapping(this.forest, "test mapping name with project")
             {
                 Project = new Project { Id = 1 }
             };
+            var directusManager = new DirectusManager<Mapping>(this.directus);
 
             // Act
-            var response = await this.driver.SaveMappingToDirectus(mapping);
+            var response = await directusManager.CreateSingle<MappingStorageDriver>(new MappingStorageDriver() { SendItem = mapping });
 
             // Assert
-            Assert.IsInstanceOfType(response, typeof(IdResponse));
-            Assert.IsInstanceOfType(response.Id, typeof(int));
+            Assert.IsInstanceOfType(response.CreatedItem, typeof(Mapping));
+            Assert.IsInstanceOfType(response.CreatedItem.Id, typeof(int));
         }
 
         [TestMethod]
         public async Task UpdateMappingInDirectus_NoProject_IsIdResponse()
         {
             // Arrange
-            var mapping = new Mapping(this.trees, "updated mapping name")
+            var mapping = new Mapping(this.forest, "updated mapping name")
             {
                 Id = mappingId
             };
+            var directusManager = new DirectusManager<Mapping>(this.directus);
 
             // Act
-            var response = await this.driver.UpdateMappingInDirectus(mapping);
+            var response = await directusManager.UpdateSingle<MappingStorageDriver>(new MappingStorageDriver() { SendItem = mapping });
 
             // Assert
-            Assert.IsInstanceOfType(response, typeof(IdResponse));
-            Assert.IsInstanceOfType(response.Id, typeof(int));
+            Assert.IsInstanceOfType(response.UpdatedItem, typeof(Mapping));
+            Assert.IsInstanceOfType(response.UpdatedItem.Id, typeof(int));
         }
 
         [TestMethod]
         public async Task GetMappings_ByName_IsListOfMappings()
         {
             // Arrange
+            var directusManager = new DirectusManager<Mapping>(this.directus);
 
             // Act
-            var mappings = await this.driver.GetAllMappingsFromDirectus();
+            var response = await directusManager.GetMany<MappingStorageDriver>(new MappingStorageDriver());
 
             // Assert
-            Assert.IsInstanceOfType(mappings, typeof(List<Mapping>));
-            var mapping = mappings.First();
+            Assert.IsInstanceOfType(response.GotManyItems, typeof(List<Mapping>));
+            var mapping = response.GotManyItems.First();
             Assert.IsInstanceOfType(mapping.Id, typeof(int));
             Assert.IsInstanceOfType(mapping.Name, typeof(string));
             Assert.IsInstanceOfType(mapping.MappingItems, typeof(List<MappingItem>));

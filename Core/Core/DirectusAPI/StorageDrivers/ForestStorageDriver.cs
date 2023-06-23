@@ -1,83 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using GraphQL;
+﻿using Calc.Core.Objects;
 using Speckle.Newtonsoft.Json;
-using Calc.Core.Objects;
+using System.Collections.Generic;
 
-namespace Calc.Core.DirectusAPI.StorageDrivers
+namespace Calc.Core.DirectusAPI.Drivers
 {
-    public class ForestStorageDriver
+    public class ForestStorageDriver : IDriverCreateSingle<Forest>, IDriverUpdateSingle<Forest>, IDriverGetMany<Forest>
     {
-        private readonly Directus directus;
+        public Forest SendItem { get; set; }
 
-        public ForestStorageDriver(Directus directus)
-        {
-            this.directus = directus;
-        }
-
-        /// <summary>
-        /// Saves a list of trees to the database.
-        /// Specific information about the SubBranches is not saved.
-        /// Instead the BranchConfig is saved wich can be used to recreate the SubBranches.
-        /// </summary>
-        /// <param name="forest">The forest to save.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        public async Task<IdResponse> SaveForestToDirectus(Forest forest)
-        {
-            var request = new GraphQLRequest
-            {
-                Query = @"
-                    mutation ($forestName: String!, $trees: JSON!, $projectInput: create_architecture_projects_input) {
-                        create_lca_forests_item(data: {forest_name: $forestName, trees: $trees, project_id: $projectInput}) {
-                            id
-                        }   
-                    }",
-                Variables = CreateVariables(forest)
-            };
-
-            var response = await directus.Client.SendMutationAsync<CollectionResponse>(request);
-            if (response.Errors != null)
-            {
-                throw new Exception(JsonConvert.SerializeObject(response.Errors, Formatting.Indented));
-            }
-            return response.Data.CreateTreeSetResponse;
-        }
-
-        public async Task<IdResponse> UpdateForestInDirectus(Forest forest)
-        {
-            if (forest.Id < 0)
-            {
-                throw new Exception("forest.Id must be greater than 0");
-            }
-
-            var variables = CreateVariables(forest);
-
-            var request = new GraphQLRequest
-            {
-                Query = @"
-                    mutation ($forestName: String!, $trees: JSON!, $projectInput: update_architecture_projects_input, $forestId: ID!) {
-                        update_lca_forests_item(id: $forestId, data: {forest_name: $forestName, trees: $trees, project_id: $projectInput}) {
-                            id
-                        }   
-                    }",
-                Variables = variables
-            };
-
-            var response = await directus.Client.SendMutationAsync<CollectionResponse>(request);
-            if (response.Errors != null)
-            {
-                throw new Exception(JsonConvert.SerializeObject(response.Errors, Formatting.Indented));
-            }
-            return response.Data.UpdateTreeSetResponse;
-        }
-
-        public async Task<List<Forest>> GetAllForestsFromDirectus()
-        {
-            var request = new GraphQLRequest
-            {
-                Query = @"
+        public string QueryGetMany { get; } = @"
                     query GetAllForests {
                         lca_forests {
                         id
@@ -88,35 +19,48 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
                             project_number
                         }
                         }
-                    }"
-            };
+                    }";
+        public string QueryCreateSingle { get; } = @"
+                    mutation ($forestName: String!, $trees: JSON!, $projectInput: create_architecture_projects_input) {
+                        create_lca_forests_item(data: {forest_name: $forestName, trees: $trees, project_id: $projectInput}) {
+                            id
+                        }   
+                    }";
+        public string QueryUpdateSingle { get; } = @"
+                    mutation ($forestName: String!, $trees: JSON!, $projectInput: update_architecture_projects_input, $forestId: ID!) {
+                        update_lca_forests_item(id: $forestId, data: {forest_name: $forestName, trees: $trees, project_id: $projectInput}) {
+                            id
+                        }   
+                    }";
 
-            var response = await directus.Client.SendQueryAsync<CollectionResponse>(request);
+        [JsonProperty("lca_forests")]
+        public List<Forest> GotManyItems { get; set; }
+        [JsonProperty("create_lca_forests_item")]
+        public Forest CreatedItem { get; set; }
+        [JsonProperty("update_lca_forests_item")]
+        public Forest UpdatedItem { get; set; }
 
-            if (response.Errors != null)
+        public Dictionary<string, object> GetVariables()
+        {
+            if (this.SendItem == null)
             {
-                throw new Exception(JsonConvert.SerializeObject(response.Errors, Formatting.Indented));
+                return new Dictionary<string, object>();
             }
 
-            return response.Data.Forests;
-        }
-
-        private static Dictionary<string, object> CreateVariables(Forest forest)
-        {
             var variables = new Dictionary<string, object>
             {
-                { "forestName", forest.Name },
-                { "trees", forest.SerializeTrees() },
+                { "forestName", this.SendItem.Name },
+                { "trees", this.SendItem.SerializeTrees() },
             };
 
-            if (forest.Project.Id > 0)
+            if (this.SendItem.Project.Id > 0)
             {
-                variables["projectInput"] = new { id = forest.Project.Id };
+                variables["projectInput"] = new { id = this.SendItem.Project.Id };
             }
 
-            if (forest.Id > 0)
+            if (this.SendItem.Id > 0)
             {
-                variables["forestId"] = forest.Id;
+                variables["forestId"] = this.SendItem.Id;
             }
             return variables;
         }

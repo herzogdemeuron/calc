@@ -2,23 +2,13 @@
 using System.Collections.Generic;
 using GraphQL;
 using Calc.Core.Objects;
+using Speckle.Newtonsoft.Json;
 
-namespace Calc.Core.DirectusAPI.StorageDrivers
+namespace Calc.Core.DirectusAPI.Drivers
 {
-    public class BuildupStorageDriver
+    public class BuildupStorageDriver : IDriverGetMany<Buildup>
     {
-        private readonly Directus directus;
-
-        public BuildupStorageDriver(Directus directus)
-        {
-            this.directus = directus;
-        }
-
-        public async Task<List<Buildup>> GetAllBuildupsFromDirectus()
-        {
-            var request = new GraphQLRequest
-            {
-                Query = @"
+        public string QueryGetMany { get; } = @"
                     query GetBuildups {
                       lca_buildups {
                         id
@@ -38,10 +28,14 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
                         }
                         unit
                       }
-                    }"
-            };
-            var response = await directus.Client.SendQueryAsync<CollectionResponse>(request);
-            return response.Data.Buildups;
+                    }";
+
+        [JsonProperty("lca_buildups")]
+        public List<Buildup> GotManyItems { get; set; }
+
+        public Dictionary<string, object> GetVariables()
+        {
+            return new Dictionary<string, object>();
         }
     }
 }

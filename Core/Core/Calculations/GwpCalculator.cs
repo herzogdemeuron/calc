@@ -17,9 +17,9 @@ namespace Calc.Core.Calculations
         /// }
         /// var results = GwpCalculator.CalculateGwp(branches);
         /// </code>
-        public static List<CalculationResult> CalculateGwp(List<Branch> branches)
+        public static List<Result> CalculateGwp(List<Branch> branches)
         {
-            var results = new List<CalculationResult>();
+            var results = new List<Result>();
             foreach (var branch in branches)
             {
                 // check if branch has buildup (if not, skip)
@@ -32,7 +32,7 @@ namespace Calc.Core.Calculations
                     {
                         var material = component.Material;
                         var gwpA123 = CalculateGwpA123(element, component, buildup.Unit);
-                        var calculationResult = new CalculationResult
+                        var calculationResult = new Result
                         { 
                             ElementId = element.Id,
                             GlobalWarmingPotentialA1A2A3 = gwpA123,

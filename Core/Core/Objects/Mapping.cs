@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Calc.Core.Objects
 {
-    public class Mapping
+    public class Mapping : IHasProject
     {
         [JsonProperty("id")]
         public int Id { get; set; }
