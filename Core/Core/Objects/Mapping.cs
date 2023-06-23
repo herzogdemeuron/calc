@@ -23,10 +23,10 @@ namespace Calc.Core.Objects
             // empty constructor for deserialization
         }
 
-        public Mapping(List<Tree> trees, string mappingName)
+        public Mapping(Forest forest, string mappingName)
         {
             MappingItems = new List<MappingItem>();
-            foreach (var tree in trees)
+            foreach (var tree in forest.Trees)
             {
                 MappingItems.AddRange(ExtractMappingItems(tree.Flatten(), tree.Name));
             }
