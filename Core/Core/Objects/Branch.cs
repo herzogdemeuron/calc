@@ -23,7 +23,7 @@ namespace Calc.Core.Objects
         [JsonIgnore]
         public int BranchLevel = 0;
         [JsonIgnore]
-        public List<Branch> SubBranches = new();
+        public List<Branch> SubBranches { get; set; } = new List<Branch>();
         [JsonIgnore]
         public Buildup Buildup { get; set; }
         [JsonIgnore]
