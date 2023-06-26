@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Calc.Core.Color;
 using Speckle.Newtonsoft.Json;
 
@@ -65,7 +63,6 @@ namespace Calc.Core.Objects
                 subBranch.BranchLevel = BranchLevel + 1;
                 subBranch.CreateBranches(branchConfig);
             }
-
         }
 
         private void GroupByParameterValue(string parameter)
@@ -112,12 +109,12 @@ namespace Calc.Core.Objects
             }
         }
 
-        public void MatchMapping(string parameter, string value, Buildup buildup)
         /// <summary>
         /// This method matches a buildup to a branch.
         /// The intended use is to reconstruct the buildup assignments in a full tree from 
         /// a mapping stored in the database.
         /// </summary>
+        public void MatchMapping(string parameter, string value, Buildup buildup)
         {
             if (Parameter == parameter && Value == value)
             {
