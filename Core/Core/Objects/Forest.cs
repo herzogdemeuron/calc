@@ -18,7 +18,7 @@ namespace Calc.Core.Objects
         [JsonProperty("project_id")]
         public Project Project { get; set; }
 
-        public void ColorBranches(string method)
+        public void ColorBranchesBy(string method)
         {
             List<Branch> branches = this.Trees.ConvertAll(tree => (Branch)tree);
 
