@@ -4,84 +4,158 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Calc.ConnectorRevit.Views" 
-        xmlns:main="clr-namespace:Calc.ConnectorRevit"
         d:DataContext="{d:DesignInstance Type=local:ViewModel}"
+        Loaded="Window_Loaded"
         mc:Ignorable="d" 
         Background="White"
-        Height="450" Width="600">
+        Height="600" MinHeight="600"
+        Width="600" MinWidth="600"
+        WindowStartupLocation="CenterScreen"
+        Topmost="True">
 
     <Window.Resources>
-        <local:HostTemplateSelector x:Key="HostTemplateSelector" />
+        <local:ItemTemplateSelector x:Key="ItemTemplateSelector"/>
 
-        <DataTemplate x:Key="BranchTemplate">
-            <StackPanel>
-                <Label Content="Assign Buildup:" />
-                <ComboBox SelectedItem="{Binding Buildup}" ItemsSource="{x:Static main:MockData.AllBuildups}" DisplayMemberPath="Name" />
-                <Label Content="Preview:" />
-                <DataGrid
-                    ItemsSource="{Binding Buildup.Components}"
-                    AutoGenerateColumns="False"
-                    Margin="10">
+        <Style x:Key="TreeTextStyle" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="0,0,2,0"/>
+        </Style>
+
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Margin" Value="10,0,0,0"/>
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="Width" Value="50"/>
+            <Setter Property="DockPanel.Dock" Value="Right"/>
+        </Style>
+
+        <DataTemplate x:Key="BranchItemTemplate">
+            <TextBlock>
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0}: {1} ({2})">
+                        <Binding Path="Parameter" />
+                        <Binding Path="Value" />
+                        <Binding Path="Elements.Count" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </DataTemplate>
+
+        <DataTemplate x:Key="TreeItemTemplate">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Name}"
+                       Style="{StaticResource TreeTextStyle}" />
+                <TextBlock>
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}({0})">
+                            <Binding Path="Elements.Count" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="BuildupTemplate">
+            <DockPanel LastChildFill="True">
+                <Label Content="Assign Buildup:" DockPanel.Dock="Top"/>
+                <ComboBox SelectedItem="{Binding Buildup}" 
+                          ItemsSource="{Binding DataContext.AllBuildups, 
+                                                RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                          DisplayMemberPath="Name"
+                          DockPanel.Dock="Top"/>
+                <Label Content="Preview:" DockPanel.Dock="Top"/>
+                <DataGrid ItemsSource="{Binding Buildup.Components}"
+                          AutoGenerateColumns="False"
+                          VerticalAlignment="Top"
+                          MinHeight="100">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" />
                         <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" IsReadOnly="True" />
                     </DataGrid.Columns>
                 </DataGrid>
-            </StackPanel>
+            </DockPanel>
         </DataTemplate>
-        
-        <DataTemplate x:Key="TreeTemplate">
-            <StackPanel>
-                <Label Content="Roots:" />
-                <DataGrid
-                    ItemsSource="{Binding Roots}"
-                    AutoGenerateColumns="False"
-                    Margin="10">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Parameter" Binding="{Binding Parameter}" />
-                        <DataGridTextColumn Header="Value" Binding="{Binding Value}" IsReadOnly="True" />
-                    </DataGrid.Columns>
-                </DataGrid>
-                <ContentControl Content="{Binding}" ContentTemplate="{StaticResource BranchTemplate}" />
-            </StackPanel>
-        </DataTemplate>
-        
-
     </Window.Resources>
-
+    <Grid>
+    
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20*"/>
             <ColumnDefinition Width="20"/>
             <ColumnDefinition Width="20*"/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="0"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-        <TreeView x:Name="treeView"
-                  Grid.Column="0"
-                  Margin="10"
-                  ItemsSource="{Binding Items}"
-                  BorderThickness="0"
-                  SelectedItemChanged="TreeView_SelectedItemChanged">
-            <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate DataType="local:TreeViewItem" ItemsSource="{Binding Children}">
-                    <TextBlock Text="{Binding NameString}" />
-                </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-        </TreeView>
+            <DockPanel Grid.Column="0"
+                       Grid.Row="0"
+                       Margin="10"
+                       HorizontalAlignment="Stretch">
+                <Button Content="Load" Style= "{StaticResource ButtonStyle}"/>
+                <ComboBox ItemsSource="{Binding DataContext.AllForests, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                          DisplayMemberPath="Name"
+                          DockPanel.Dock="Left"
+                          Height="25"
+                          HorizontalAlignment="Stretch"/>
+            </DockPanel>
+
+            <DockPanel Grid.Column="2"
+                       Grid.Row="0"
+                       Margin="10"
+                       HorizontalAlignment="Stretch">
+                <Button Content="Save" Style= "{StaticResource ButtonStyle}"/>
+                <Button Content="Load" Style= "{StaticResource ButtonStyle}"/>
+                <ComboBox ItemsSource="{Binding DataContext.AllMappings, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                          DisplayMemberPath="Name"
+                          DockPanel.Dock="Left"
+                          Height="25"
+                          HorizontalAlignment="Stretch"/>
+            </DockPanel>
+
+
+            <Grid Grid.Column="0"
+                  Grid.Row="2"
+                  Margin="10">
+            <TreeView x:Name="treeView"
+                      ItemsSource="{Binding Items}"
+                      SelectedItemChanged="TreeViewSelectedItemChanged"
+                      MouseLeftButtonDown="MouseLeftButtonDown">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding SubBranches}">
+                        <ContentControl Content="{Binding}"
+                                        ContentTemplateSelector="{StaticResource ItemTemplateSelector}"/>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+        </Grid>
+
         <DockPanel Grid.Column="2"
-                   Margin="10">
-            <Button Content="Reset Visualization"
-                    Height="30"
-                    DockPanel.Dock="Bottom"
-                    Click="ResetVisualization_Click" />
+                    Grid.Row="2"
+                    Margin="10">
             <Button Content="Calculate"
-                    Height="30"
                     DockPanel.Dock="Bottom"
-                    Click="Calculate_Click" />
-            <ContentControl Content ="{Binding SelectedItem.Host}"
+                    Height="30"
+                    Click="CalculateClicked"/>
+            <ContentControl Content ="{Binding SelectedBranch}"
                             DockPanel.Dock="Top"
-                            ContentTemplateSelector="{StaticResource HostTemplateSelector}"
+                            ContentTemplate="{StaticResource BuildupTemplate}"
                             BorderThickness="1"/>
         </DockPanel>
+
     </Grid>
+
+
+    <Grid x:Name="LoadingOverlay"
+            Background="LightGray"
+          Margin="10">
+        <TextBlock HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Text="LOADING..."/>
+    </Grid>
+    
+    
+</Grid>
 </Window>

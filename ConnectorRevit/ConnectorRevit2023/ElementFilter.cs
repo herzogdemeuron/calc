@@ -9,11 +9,12 @@ namespace Calc.ConnectorRevit
         //filters revit objtcts in revit using roots
         //and outputs a list of calc elements
     {
-        static public List<CalcElement> GetCalcElements(Document doc, List<Root> roots)
+        static public List<CalcElement> GetCalcElements(Tree tree)
         {
-            IEnumerable<Element> collector = new FilteredElementCollector(doc)
+            IEnumerable<Element> collector = new FilteredElementCollector(App.CurrentDoc)
                 .WhereElementIsNotElementType()
                 .WhereElementIsViewIndependent();
+            List<Root> roots = tree.Roots;
             foreach (Root root in roots)
             {
                 collector = collector.Where(e => CheckContains(e, root.Parameter, root.Value));

@@ -1,14 +1,12 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.UI;
-using Calc.ConnectorRevit;
 using System;
 using System.Diagnostics;
 using Calc.Core.Objects;
 using Calc.ConnectorRevit.Views;
-using Calc.ConnectorRevit.Revit;
 
 namespace Calc.ConnectorRevit.EventHandlers
-{ 
+{
     [Transaction(TransactionMode.Manual)]
     public class ViewResetEventHandler : IExternalEventHandler
     {
@@ -30,7 +28,7 @@ namespace Calc.ConnectorRevit.EventHandlers
         {
             try
             {
-                Visualizer.ShowAll();
+                Visualizer.Reset();
             }
             catch (Exception ex)
             {
