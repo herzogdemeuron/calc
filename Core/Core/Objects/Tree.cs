@@ -1,11 +1,7 @@
-﻿using Speckle.Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Calc.Core.Objects
 {
@@ -25,21 +21,23 @@ namespace Calc.Core.Objects
             Roots = roots;
         }
 
-        public void Plant(List<CalcElement> searchElements)
         /// <summary>
-        /// Applies all 'root' filter to create a basic tree.
+        /// Creates a tree from a list of elements and a list of parameters to group by
         /// </summary>
+        public void Plant(List<CalcElement> searchElements)
         {
             // ensure roots is valid
             if (Roots == null || Roots.Count == 0)
             {
                 throw new Exception("Roots must be defined");
             }
+
             foreach (var root in Roots)
             {
                 root.Elements = searchElements;
                 root.CallFilterMethod(root.Method);
             }
+
             // perform boolean and operation for all element ids in roots and set as elements, go step by step
             // Get the list of element ids for each root
             List<List<string>> rootElementIds = Roots.Select(r => r.ElementIds).ToList();
@@ -51,17 +49,13 @@ namespace Calc.Core.Objects
             List<CalcElement> commonElements = searchElements.Where(e => commonElementIds.Contains(e.Id)).ToList();
 
             // Set the common elements as the elements of the tree
-            Elements = commonElements;
-        }
-
-        public void GrowBranches()
-        {
+            this.Elements = commonElements;
             // ensure branch config is valid
-            if (BranchConfig == null || BranchConfig.Count == 0)
+
+            if (BranchConfig != null && BranchConfig.Count > 0)
             {
-                throw new Exception("BranchConfig must be defined");
+                this.CreateBranches(BranchConfig);
             }
-            CreateBranches(BranchConfig);
         }
 
         public string Serialize()

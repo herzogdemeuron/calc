@@ -6,7 +6,6 @@ using Polly;
 using Calc.Core.DirectusAPI;
 using Calc.Core.DirectusAPI.Drivers;
 using Calc.Core.Objects;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Calc.Core
 {

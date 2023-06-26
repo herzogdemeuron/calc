@@ -1,9 +1,8 @@
 ﻿using Speckle.Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using Calc.Core.Color;
 
 namespace Calc.Core.Objects
 {
@@ -17,6 +16,23 @@ namespace Calc.Core.Objects
         public List<Tree> Trees { get; set; }
         [JsonProperty("project_id")]
         public Project Project { get; set; }
+
+        public void ColorBranchesBy(string method)
+        {
+            List<Branch> branches = this.Trees.ConvertAll(tree => (Branch)tree);
+
+            switch (method)
+            {
+                case "branches":
+                    BranchPainter.ColorBranchesByBranch(branches);
+                    break;
+                case "buildups":
+                    BranchPainter.ColorBranchesByBuildup(branches);
+                    break;
+                default:
+                    break;
+            }
+        }
 
         public string SerializeTrees()
         {

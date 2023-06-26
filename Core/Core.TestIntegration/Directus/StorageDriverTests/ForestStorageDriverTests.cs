@@ -2,7 +2,7 @@
 using Calc.Core.DirectusAPI;
 using Calc.Core.DirectusAPI.Drivers;
 
-namespace Calc.Core.IntegrationTests.Drivers
+namespace Calc.Core.TestIntegration.Drivers
 {
     [TestClass]
     public class ForestStorageDriverTests

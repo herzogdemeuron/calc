@@ -23,7 +23,13 @@ namespace Calc.Core.Objects
         [JsonIgnore]
         public List<Branch> SubBranches { get; set; } = new List<Branch>();
         [JsonIgnore]
-        public Buildup Buildup { get; set; }
+        private Buildup _buildup;
+        [JsonIgnore]
+        public Buildup Buildup
+        {
+            get => _buildup;
+            set => SetBuildup(value);
+        }
         [JsonIgnore]
         public HslColor HslColor { get; set; } // Use conversion methods from Calc.Core.Colors on this as needed
 
@@ -47,67 +53,53 @@ namespace Calc.Core.Objects
                 return;
             }
 
-            GroupByParameterValue(branchConfig[BranchLevel]);
+            var currentParameter = branchConfig[BranchLevel];
+            var groupedElements = GroupByParameterValue(currentParameter);
+            var methodName = nameof(GroupByParameterValue);
+
+            foreach (KeyValuePair<object, List<CalcElement>> group in groupedElements)
+            {
+                var branch = new Branch(group.Value)
+                {
+                    Parameter = currentParameter,
+                    Value = group.Key.ToString(),
+                    Method = methodName
+                };
+                SubBranches.Add(branch);
+            }
 
             if (SubBranches.Count == 0)
             {
                 return;
             }
 
-            var hslColors = new ColorGradient(SubBranches.Count).HslColors;
-
             for (int index = 0; index < SubBranches.Count; index++)
             {
                 var subBranch = SubBranches[index];
-                subBranch.HslColor = hslColors[index];
                 subBranch.BranchLevel = BranchLevel + 1;
                 subBranch.CreateBranches(branchConfig);
             }
         }
 
-        private void GroupByParameterValue(string parameter)
+        public void SetBuildup(Buildup buildup)
         {
-            var groupedElements = new Dictionary<object, List<CalcElement>>();
-            var nullKey = new object(); // Sentinel value for null
-
-            foreach (var element in Elements)
+            // set the buildup of the current branch. Also set the buildup of all subbranches to the same value if they have no buildup assigned yet or the buildup is the same.
+            var currentBuildup = _buildup;
+            _buildup = buildup;
+            if (SubBranches.Count == 0)
             {
-                if (element.Fields.TryGetValue(parameter, out object value))
-                {
-                    var key = value ?? nullKey;
+                return;
+            }
 
-                    if (groupedElements.ContainsKey(key))
-                    {
-                        groupedElements[key].Add(element);
-                    }
-                    else
-                    {
-                        groupedElements[key] = new List<CalcElement> { element };
-                    }
+            foreach (var subBranch in SubBranches)
+            {
+                if (subBranch.Buildup == null || subBranch.Buildup == currentBuildup)
+                {
+                    subBranch.SetBuildup(buildup);
                 }
             }
-
-            var methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            CreateSubBranches(groupedElements, parameter, methodName);
         }
 
-
-        private void CreateSubBranches(
-            Dictionary<object, List<CalcElement>> groupedElements,
-            string parameter,
-            string methodName)
-        {
-            foreach (KeyValuePair<object, List<CalcElement>> group in groupedElements)
-            {
-                var branch = new Branch(group.Value)
-                {
-                    Parameter = parameter,
-                    Value = group.Key.ToString(),
-                    Method = methodName
-                };
-                SubBranches.Add(branch);
-            }
-        }
 
         /// <summary>
         /// This method matches a buildup to a branch.
@@ -118,7 +110,7 @@ namespace Calc.Core.Objects
         {
             if (Parameter == parameter && Value == value)
             {
-                Buildup = buildup;
+                this._buildup = buildup;
             }
             else
             {
@@ -135,6 +127,9 @@ namespace Calc.Core.Objects
         }
 
         /// <summary>
+        /// WARNING: DESTRUCTIVE METHOD - USE ONLY ON A COPY OF THE TREE
+        /// The Intended use is right befor calculation.
+        /// 
         /// This method removes elements from the current branch that
         /// are also present in subbranches that have a buildup assigned.
         /// In the bigger picture, this allows to override buildups further down the tree.
@@ -228,6 +223,30 @@ namespace Calc.Core.Objects
             {
                 subBranch.PrintTree(indentLevel + 1);
             }
+        }
+
+        private Dictionary<object, List<CalcElement>> GroupByParameterValue(string parameter)
+        {
+            var groupedElements = new Dictionary<object, List<CalcElement>>();
+            var nullKey = new object(); // Sentinel value for null
+
+            foreach (var element in this.Elements)
+            {
+                if (element.Fields.TryGetValue(parameter, out object value))
+                {
+                    var key = value ?? nullKey;
+
+                    if (groupedElements.ContainsKey(key))
+                    {
+                        groupedElements[key].Add(element);
+                    }
+                    else
+                    {
+                        groupedElements[key] = new List<CalcElement> { element };
+                    }
+                }
+            }
+            return groupedElements;
         }
     }
 }

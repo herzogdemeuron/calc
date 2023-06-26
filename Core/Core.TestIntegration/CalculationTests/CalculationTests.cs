@@ -1,7 +1,7 @@
 ﻿using Calc.Core.Objects;
 using Calc.Core.Calculations;
 
-namespace Calc.Core.IntegrationTests
+namespace Calc.Core.TestIntegration
 {
     [TestClass]
     public class GwpCalculatorTests
@@ -15,7 +15,6 @@ namespace Calc.Core.IntegrationTests
             foreach (var tree in mockData.Trees)
             {
                 tree.Plant(mockData.Elements);
-                tree.GrowBranches();
                 mockData.AssignBuildups(tree);
                 tree.RemoveElementsByBuildupOverrides();
                 branches.AddRange(tree.Flatten());

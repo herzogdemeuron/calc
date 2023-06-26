@@ -39,8 +39,10 @@ namespace Calc.Core.Objects
     }
 
     public class Project
-    {        
+    {
+        [JsonProperty(PropertyName = "id", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public int Id { get; set; }
+        [JsonProperty(PropertyName = "project_number")]
         public string ProjectNumber { get; set; }
     }
 

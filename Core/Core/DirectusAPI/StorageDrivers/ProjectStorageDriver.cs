@@ -3,6 +3,7 @@ using Calc.Core.Objects;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Speckle.Newtonsoft.Json;
 
 namespace Calc.Core.DirectusAPI.Drivers
 {
@@ -10,17 +11,18 @@ namespace Calc.Core.DirectusAPI.Drivers
     {
         public string QueryGetMany { get; } = @"
                 query GetProjects { 
-                    lca_projects { 
+                    architecture_projects { 
                         id
-                        project_name
+                        project_number
                     }
                 }";
 
+        [JsonProperty("architecture_projects")]
         public List<Project> GotManyItems { get; set; }
 
         public Dictionary<string, object> GetVariables()
         {
-            throw new NotImplementedException();
+            return new Dictionary<string, object>();
         }
     }
 }

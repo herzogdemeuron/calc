@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Calc.Core.Objects;
+﻿using Calc.Core.Objects;
 
-namespace Calc.Core.IntegrationTests
+namespace Calc.Core.TestIntegration
 {
     public class MockData
     {

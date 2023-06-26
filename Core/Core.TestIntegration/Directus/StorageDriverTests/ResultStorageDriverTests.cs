@@ -3,7 +3,7 @@ using Calc.Core.Calculations;
 using Calc.Core.DirectusAPI.Drivers;
 using Calc.Core.DirectusAPI;
 
-namespace Calc.Core.IntegrationTests.Drivers
+namespace Calc.Core.TestIntegration.Drivers
 {
     [TestClass]
     public class ResultStorageDriverTests
@@ -25,7 +25,6 @@ namespace Calc.Core.IntegrationTests.Drivers
             foreach (var tree in mockData.Trees)
             {
                 tree.Plant(mockData.Elements);
-                tree.GrowBranches();
                 mockData.AssignBuildups(tree);
                 tree.RemoveElementsByBuildupOverrides();
                 branches.AddRange(tree.Flatten());

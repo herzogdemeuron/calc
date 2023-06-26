@@ -1,14 +1,19 @@
-﻿using Calc.Core.Objects;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Calc.Core.DirectusAPI;
 using Calc.Core.DirectusAPI.Drivers;
-
+using Calc.Core.Objects;
 
 namespace Calc.Core.TestIntegration.Drivers
 {
     [TestClass]
-    public class BuildupStorageDriverTests
+    public class ProjectStorageDriverTests
     {
         private Directus? directus;
+
         [TestInitialize]
         public void Initialize()
         {
@@ -16,16 +21,16 @@ namespace Calc.Core.TestIntegration.Drivers
         }
 
         [TestMethod]
-        public async Task GetAllBuildups_Default_SpecifyLater()
+        public async Task GetAllProjects_Default_SpecifyLater()
         {
-            var storageManager = new DirectusManager<Buildup>(this.directus);
+            var storageManager = new DirectusManager<Project>(this.directus);
 
             // Act
-            var response = await storageManager.GetMany<BuildupStorageDriver>(new BuildupStorageDriver());
+            var response = await storageManager.GetMany<ProjectStorageDriver>(new ProjectStorageDriver());
 
             // Assert
             Assert.IsNotNull(response.GotManyItems);
-            Assert.IsInstanceOfType(response.GotManyItems, typeof(List<Buildup>));
+            Assert.IsInstanceOfType(response.GotManyItems, typeof(List<Project>));
             Assert.IsTrue(response.GotManyItems.Count > 0);
 
             // serialize buildups to console using System.Text.Json, indent
@@ -35,3 +40,4 @@ namespace Calc.Core.TestIntegration.Drivers
         }
     }
 }
+

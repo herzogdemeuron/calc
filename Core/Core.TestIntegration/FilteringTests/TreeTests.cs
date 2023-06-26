@@ -1,4 +1,4 @@
-﻿namespace Calc.Core.IntegrationTests
+﻿namespace Calc.Core.TestIntegration
 {
     [TestClass]
     public class TreeTests
@@ -25,27 +25,7 @@
                        Console.WriteLine(field);
                    }
                 }
-            }
-        }
 
-        [TestMethod]
-        public void GrowBranches_DefaultScenario_IsNotNull()
-        {
-            // Arrange
-            var mockData = new MockData();
-
-            // Act
-            foreach (var tree in mockData.Trees)
-            {
-                tree.Plant(mockData.Elements);
-                Console.WriteLine(tree.Name);
-                foreach (var param in tree.BranchConfig)
-                {
-                    Console.WriteLine(param);
-                }
-                tree.GrowBranches();
-
-                // Assert
                 Assert.IsNotNull(tree.SubBranches);
                 tree.PrintTree();
             }
