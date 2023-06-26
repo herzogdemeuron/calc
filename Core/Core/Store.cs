@@ -12,13 +12,7 @@ namespace Calc.Core
 {
     public class Store
     {
-        public List<Project> ProjectsAll 
-        { 
-            get 
-            {
-                return this.ProjectDriver.GotManyItems;
-            }
-        }
+        public List<Project> ProjectsAll { get { return this.ProjectDriver.GotManyItems; } }
         public Project ProjectSelected { get; set; } // the current project
 
         public List<Buildup> BuildupsAll { get { return this.BuildupDriver.GotManyItems; } }
