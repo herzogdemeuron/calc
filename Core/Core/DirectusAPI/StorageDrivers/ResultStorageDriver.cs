@@ -1,137 +1,50 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Collections.Generic;
-using GraphQL;
 using Speckle.Newtonsoft.Json;
 using Calc.Core.Objects;
 
-namespace Calc.Core.DirectusAPI.StorageDrivers
+namespace Calc.Core.DirectusAPI.Drivers
 {
-    public class ResultStorageDriver
+    public class ResultStorageDriver : IDriverCreateMany<Result>
     {
-        private readonly Directus directus;
+        public List<Result> SendItems { get; set; }
 
-        public ResultStorageDriver(Directus directus)
-        {
-            this.directus = directus;
-        }
-
-        /// <summary>
-        /// Save results to Directus.
-        /// </summary>
-        /// <param name="results">List of CalculationResult objects</param>
-        /// <param name="snapshot">[Optional] Snapshot object. If not provided, an unnamed snapshot will be created.</param>
-        public async Task<List<IdResponse>> SaveResultsToDirectus(List<CalculationResult> results, Snapshot snapshot = default)
-        {
-            var createdSnapshot = await CreateSnapshotItem(snapshot);
-            // add snapshot id to results
-            foreach (var result in results)
-            {
-                result.Snapshot = createdSnapshot;
-            }
-
-            return await CreateResultItems(results);
-        }
-
-        private async Task<List<IdResponse>> CreateResultItems(List<CalculationResult> results)
-        {
-            var mutation = @"
+        public string QueryCreateMany { get; } = @"
                 mutation CreateCalculationResults($data: [create_lca_calculation_results_input!]!) {
                     create_lca_calculation_results_items(data: $data) {
                         id
                     }
-                }
-            ";
+                }";
 
-            var variables = new
-            {
-                data = results.Select(result => new
-                {
-                    snapshot_id = new
-                    {
-                        id = result.Snapshot.Id
-                    },
-                    element_id = result.ElementId,
-                    global_warming_potential_a1_a2_a3 = result.GlobalWarmingPotentialA1A2A3,
-                    unit = result.Unit,
-                    material_amount = result.MaterialAmount,
-                    material_name = result.MaterialName,
-                    material_category = result.MaterialCategory,
-                    buildup_name = result.BuildupName,
-                    group_name = result.GroupName
-                }).ToList()
-            };
+        [JsonProperty("create_lca_calculation_results_items")]
+        public List<Result> CreatedManyItems { get; set; }
 
-            var request = new GraphQLRequest
-            {
-                Query = mutation,
-                Variables = variables
-            };
-
-
-            var response = await directus.Client.SendMutationAsync<CollectionResponse>(request);
-            if (response.Errors != null && response.Errors.Any())
-            {
-                throw new Exception(mutation + " " + JsonConvert.SerializeObject(variables, Formatting.Indented) + " " + JsonConvert.SerializeObject(response.Errors, Formatting.Indented));
-            }
-            return response.Data.CreateCalculationResultsResponse;
-        }
-
-        private async Task<IdResponse> CreateSnapshotItem(Snapshot snapshot = default)
+        public Dictionary<string, object> GetVariables()
         {
-            // check for all kinds of conditions to ensure the query will not fail
-            if (snapshot == default)
+            if (this.SendItems == null)
             {
-                snapshot = new Snapshot
-                {
-                    Name = "unnamed",
-                    Project = new Project
-                    {
-                        Id = 0,
-                        ProjectNumber = ""
-                    }
-                };
+                return new Dictionary<string, object>();
             }
-            else
+            Console.WriteLine(JsonConvert.SerializeObject(this.SendItems, Formatting.Indented));
+            var variables = new Dictionary<string, object>
             {
-                if (snapshot.Project == default)
-                {
-                    snapshot.Project = new Project
+                { "data", this.SendItems.Select(r => new Dictionary<string, object>
                     {
-                        Id = 0,
-                        ProjectNumber = ""
-                    };
-                }
-                else if (snapshot.Project.ProjectNumber == default)
-                {
-                    snapshot.Project.ProjectNumber = "";
-                    snapshot.Project.Id = 0;
-                }
-                else if (snapshot.Project.Id == default)
-                {
-                    snapshot.Project.Id = 0;
-                }
-            }
-
-            var request = new GraphQLRequest
-            {
-                Query = @"
-                    mutation($snapshotName: String!, $projectId: ID!, $projectNumber: String!) {
-                        create_lca_snapshots_item(data: {snapshot_name: $snapshotName, project_id: {id: $projectId, project_number: $projectNumber}}) {
-                            id
-                          }
-                        }",
-                Variables = new
-                {
-                    snapshotName = snapshot.Name,
-                    projectId = snapshot.Project.Id,
-                    projectNumber = snapshot.Project.ProjectNumber
+                        { "snapshot_name", r.SnapshotName },
+                        { "element_id", r.ElementId },
+                        { "global_warming_potential_a1_a2_a3", r.GlobalWarmingPotentialA1A2A3 },
+                        { "unit", r.Unit },
+                        { "material_amount", r.MaterialAmount },
+                        { "material_name", r.MaterialName },
+                        { "material_category", r.MaterialCategory },
+                        { "buildup_name", r.BuildupName },
+                        { "group_name", r.GroupName },
+                        { "project_id", new Dictionary<string, object> { { "id", r.Project.Id } } }
+                    }).ToList()
                 }
             };
-
-            var response = await directus.Client.SendMutationAsync<CollectionResponse>(request);
-            return response.Data.CreateSnapshotResponse;
+            return variables;
         }
     }
 }

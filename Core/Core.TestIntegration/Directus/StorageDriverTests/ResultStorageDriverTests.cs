@@ -1,24 +1,23 @@
 ﻿using Calc.Core.Objects;
 using Calc.Core.Calculations;
-using Calc.Core.DirectusAPI.StorageDrivers;
+using Calc.Core.DirectusAPI.Drivers;
 using Calc.Core.DirectusAPI;
 
-namespace Calc.Core.IntegrationTests
+namespace Calc.Core.IntegrationTests.Drivers
 {
     [TestClass]
     public class ResultStorageDriverTests
     {
-        private ResultStorageDriver driver;
+        private Directus? directus;
 
         [TestInitialize]
         public void Initialize()
         {
-            var directus = new Directus(DirectusApiTests.ConfigPath);
-            this.driver = new ResultStorageDriver(directus);
+            this.directus = new Directus(DirectusApiTests.ConfigPath);
         }
 
         [TestMethod]
-        public async Task SaveResultsToDirectus_NoSnapshot_SpecifyLater()
+        public async Task SaveResultsToDirectus_NoProject_ReturnsItems()
         {
             // Arrange
             var mockData = new MockData();
@@ -31,49 +30,22 @@ namespace Calc.Core.IntegrationTests
                 tree.RemoveElementsByBuildupOverrides();
                 branches.AddRange(tree.Flatten());
             }
-           
+
             var results = GwpCalculator.CalculateGwp(branches);
+            foreach (var result in results)
+            {
+                result.SnapshotName = "test snapshot name";
+                result.Project = new Project { Id = 1 };
+            }
+            var storageManager = new DirectusManager<Result>(this.directus);
 
             // Act
-            var ids = await driver.SaveResultsToDirectus(results);
-            foreach (var id in ids)
-            {  Console.WriteLine(id); }
+            var response = await storageManager.CreateMany<ResultStorageDriver>(new ResultStorageDriver() { SendItems = results });
+            foreach (var result in response.CreatedManyItems)
+            { Console.WriteLine(result.Id); }
 
             // Assert
-            Assert.IsNotNull(ids);
-        }
- 
-        [TestMethod]
-        public void SaveResultsToDirectus_WithSnapshot_SpecifyLater()
-        {
-            // Arrange
-            var mockData = new MockData();
-            var branches = new List<Branch>();
-            foreach (var tree in mockData.Trees)
-            {
-                tree.Plant(mockData.Elements);
-                tree.GrowBranches();
-                mockData.AssignBuildups(tree);
-                tree.RemoveElementsByBuildupOverrides();
-                branches.AddRange(tree.Flatten());
-            }
-            foreach (var branch in branches)
-            {
-                Console.WriteLine(branch.Buildup);
-            }
-            var results = GwpCalculator.CalculateGwp(branches);
-            var snapshot = new Snapshot
-            {
-                Name = "Test",
-                Project = new Project
-                { ProjectNumber = "test project" },
-            };
-
-            // Act
-            var ids = driver.SaveResultsToDirectus(results, snapshot);
-
-            // Assert
-            Assert.IsNotNull(ids);
+            Assert.IsTrue(response.CreatedManyItems.Count > 0);
         }
     }
 }

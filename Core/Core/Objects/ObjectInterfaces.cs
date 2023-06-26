@@ -14,4 +14,9 @@ namespace Calc.Core.Objects
         string Method { get; set; }
         string Value { get; set; }
     }
+
+    public interface IHasProject
+    {
+        Project Project { get; set; }
+    }
 }

@@ -1,24 +1,22 @@
 ﻿using System.Text.Json;
 using Calc.Core.Objects;
-using Calc.Core.DirectusAPI.StorageDrivers;
+using Calc.Core.DirectusAPI.Drivers;
 using Calc.Core.DirectusAPI;
 
-namespace Calc.Core.IntegrationTests
+namespace Calc.Core.IntegrationTests.Drivers
 {
     [TestClass]
     public class MappingsTests
     {
         private readonly int mappingId = 29;
-        private MappingStorageDriver driver;
-        private MockData mockData;
-        private List<Tree> trees;
-        private Directus directus;
+        private Directus? directus;
+        private MockData? mockData;
+        private List<Tree>? trees;
 
         [TestInitialize]
         public void Initialize()
         {
             this.directus = new Directus(DirectusApiTests.ConfigPath);
-            this.driver = new MappingStorageDriver(directus);
             this.mockData = new MockData();
             this.trees = mockData.Trees;
 
@@ -34,8 +32,9 @@ namespace Calc.Core.IntegrationTests
         {
             {
                 // WARINING: This test requires the Buildup Ids and Names in the mockdata to match some buildups in the database.
-                
                 // Arrange
+                Assert.IsNotNull(this.trees);
+                Assert.IsNotNull(this.mockData);
 
                 // copy the trees so we can compare them later
                 var treesCopy = new List<Tree>(this.trees);
@@ -43,15 +42,19 @@ namespace Calc.Core.IntegrationTests
                 {
                     mockData.AssignBuildups(tree);
                 }
+                var mappingManager = new DirectusManager<Mapping>(this.directus);
+                var response = await mappingManager.GetMany<MappingStorageDriver>(new MappingStorageDriver());
+                var mappings = response.GotManyItems;
 
-                var mappings = await driver.GetAllMappingsFromDirectus();
                 // pretty print mappings
                 var mappingJson = JsonSerializer.Serialize(mappings, new JsonSerializerOptions { WriteIndented = true });
                 Console.WriteLine(mappingJson);
+                var buildupManager = new DirectusManager<Buildup>(this.directus);
+                var buildupResponse = await buildupManager.GetMany<BuildupStorageDriver>(new BuildupStorageDriver());
+                var buildups = buildupResponse.GotManyItems;
 
-                var buildupStorageDriver = new BuildupStorageDriver(this.directus);
-                var buildups = await buildupStorageDriver.GetAllBuildupsFromDirectus();
                 var selectedMapping = mappings.SingleOrDefault(m => m.Id == mappingId);
+                Assert.IsNotNull(selectedMapping);
 
                 // Act
                 foreach (var tree in trees)

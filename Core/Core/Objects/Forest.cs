@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Calc.Core.Objects
 {
-    public class Forest
+    public class Forest : IHasProject
     {
         [JsonProperty("id")]
         public int Id { get; set; }

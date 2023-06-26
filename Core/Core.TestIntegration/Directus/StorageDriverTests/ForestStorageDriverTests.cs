@@ -1,35 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Calc.Core.Objects;
 using Calc.Core.DirectusAPI;
-using Calc.Core.DirectusAPI.StorageDrivers;
-using Calc.Core.IntegrationTests;
-using Calc.Core.Objects;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Calc.Core.DirectusAPI.Drivers;
 
-namespace Calc.Core.IntegrationTests
+namespace Calc.Core.IntegrationTests.Drivers
 {
     [TestClass]
     public class ForestStorageDriverTests
     {
         // WARNING: set the treeSetId to an existing tree set id in your directus project
-        private int forestId = 5;
-        private ForestStorageDriver driver;
+        private readonly int forestId = 10;
+        private Directus? directus;
 
         [TestInitialize]
         public void Initialize()
         {
-            var directus = new Directus(DirectusApiTests.ConfigPath);
-            driver = new ForestStorageDriver(directus);
-
+            this.directus = new Directus(DirectusApiTests.ConfigPath);
         }
 
         [TestMethod]
-        public async Task SaveForest_WithProject_ReturnIdGreaterZero()
+        public async Task SaveForest_WithProject_ReturnValidId()
         {
-            // Arrange
+              // Arrange
             var mockData = new MockData();
             var trees = mockData.Trees;
             foreach (var tree in trees)
@@ -42,18 +33,18 @@ namespace Calc.Core.IntegrationTests
                 Trees = trees,
                 Project = new Project { Id = 1 }
             };
+            var storageManager = new DirectusManager<Forest>(this.directus);
 
             // Act
-            var response = await this.driver.SaveForestToDirectus(forest);
+            var response = await storageManager.CreateSingle<ForestStorageDriver>(new ForestStorageDriver() { SendItem = forest });
 
             // Assert
-            Assert.IsTrue(response.Id > 0);
-            Console.WriteLine(response.Id);
-            forestId = response.Id;
+            Assert.IsTrue(response.CreatedItem.Id > 0);
+            Console.WriteLine(response.CreatedItem.Id);
         }
 
         [TestMethod]
-        public async Task UpdateForest_WithoutProject_ReturnIdGreaterZero()
+        public async Task UpdateForest_WithProject_ReturnValidId()
         {
             // Arrange
             var mockData = new MockData();
@@ -69,23 +60,25 @@ namespace Calc.Core.IntegrationTests
                 Project = new Project { Id = 1 },
                 Id = this.forestId
             };
+            var storageManager = new DirectusManager<Forest>(this.directus);
 
             // Act
-            var response = await this.driver.UpdateForestInDirectus(forest);
+            var response = await storageManager.UpdateSingle<ForestStorageDriver>(new ForestStorageDriver() { SendItem = forest });
 
             // Assert
-            Assert.IsTrue(response.Id > 0);
-            Console.WriteLine(response.Id);
+            Assert.IsTrue(response.UpdatedItem.Id > 0);
+            Console.WriteLine(response.UpdatedItem.Id);
         }
 
         [TestMethod]
-        public async Task GetAllForests_Default_ReturnCountGreaterZero()
+        public async Task GetAllForests_Default_ReturnMultipleItems()
         {
+            var storageManager = new DirectusManager<Forest>(this.directus);
             // Act
-            var response = await this.driver.GetAllForestsFromDirectus();
+            var response = await storageManager.GetMany<ForestStorageDriver>(new ForestStorageDriver());
 
             // Assert
-            Assert.IsTrue(response.Count > 0);
+            Assert.IsTrue(response.GotManyItems.Count > 0);
         }
     }
 }

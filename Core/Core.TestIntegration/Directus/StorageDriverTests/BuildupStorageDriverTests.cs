@@ -1,36 +1,35 @@
 ﻿using Calc.Core.Objects;
 using Calc.Core.DirectusAPI;
-using Calc.Core.DirectusAPI.StorageDrivers;
+using Calc.Core.DirectusAPI.Drivers;
 
 
-namespace Calc.Core.IntegrationTests
+namespace Calc.Core.IntegrationTests.Drivers
 {
     [TestClass]
     public class BuildupStorageDriverTests
     {
-        private BuildupStorageDriver driver;
-
+        private Directus? directus;
         [TestInitialize]
         public void Initialize()
         {
-            var directus = new Directus(DirectusApiTests.ConfigPath);
-            this.driver = new BuildupStorageDriver(directus);
-
+            this.directus = new Directus(DirectusApiTests.ConfigPath);
         }
 
         [TestMethod]
         public async Task GetAllBuildups_Default_SpecifyLater()
         {
+            var storageManager = new DirectusManager<Buildup>(this.directus);
+
             // Act
-            var buildups = await this.driver.GetAllBuildupsFromDirectus();
+            var response = await storageManager.GetMany<BuildupStorageDriver>(new BuildupStorageDriver());
 
             // Assert
-            Assert.IsNotNull(buildups);
-            Assert.IsInstanceOfType(buildups, typeof(List<Buildup>));
-            Assert.IsTrue(buildups.Count > 0);
+            Assert.IsNotNull(response.GotManyItems);
+            Assert.IsInstanceOfType(response.GotManyItems, typeof(List<Buildup>));
+            Assert.IsTrue(response.GotManyItems.Count > 0);
 
             // serialize buildups to console using System.Text.Json, indent
-            var buildupsJson = System.Text.Json.JsonSerializer.Serialize(buildups, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+            var buildupsJson = System.Text.Json.JsonSerializer.Serialize(response, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
             Console.WriteLine(buildupsJson);
 
         }
