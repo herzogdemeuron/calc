@@ -1,6 +1,6 @@
 ﻿using Calc.Core.Color;
 
-namespace Calc.Core.IntegrationTests
+namespace Calc.Core.TestIntegration.ColorTests
 {
     [TestClass]
     public class ColorTests
