@@ -1,5 +1,4 @@
-﻿using Speckle.Newtonsoft.Json;
-using Calc.Core.Color;
+﻿using Calc.Core.Color;
 using Calc.Core.Objects;
 
 namespace Calc.Core.TestIntegration.ColorTests
