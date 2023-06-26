@@ -1,7 +1,7 @@
 ﻿using GraphQL.Client.Http;
 using Calc.Core.DirectusAPI;
 
-namespace Calc.Core.IntegrationTests
+namespace Calc.Core.TestIntegration
 {
     [TestClass]
     public class DirectusApiTests

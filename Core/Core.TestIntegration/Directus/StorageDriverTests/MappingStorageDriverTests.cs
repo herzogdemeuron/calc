@@ -2,7 +2,7 @@
 using Calc.Core.DirectusAPI.Drivers;
 using Calc.Core.DirectusAPI;
 
-namespace Calc.Core.IntegrationTests.Drivers
+namespace Calc.Core.TestIntegration.Drivers
 {
 
     [TestClass]
@@ -22,7 +22,6 @@ namespace Calc.Core.IntegrationTests.Drivers
             foreach (var tree in this.forest.Trees)
             {
                 tree.Plant(mockData.Elements);
-                tree.GrowBranches();
                 mockData.AssignBuildups(tree);
             }
         }

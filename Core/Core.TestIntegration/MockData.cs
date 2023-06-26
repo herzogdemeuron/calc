@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Calc.Core.Objects;
 
-namespace Calc.Core.IntegrationTests
+namespace Calc.Core.TestIntegration
 {
     public class MockData
     {
