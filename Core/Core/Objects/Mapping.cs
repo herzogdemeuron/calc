@@ -51,6 +51,7 @@ namespace Calc.Core.Objects
         /// <returns></returns>
         public Tree ApplyMappingToTree(Tree tree, List<Buildup> buildups)
         {
+            tree.ResetBuildups();
             // search through the list of mappings for the mapping with the same tree name
             var mappingItems = MappingItems.Where(mappingItem => mappingItem.TreeName == tree.Name);
             if (!mappingItems.Any())

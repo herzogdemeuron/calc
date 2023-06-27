@@ -377,3 +377,6 @@ ConnectorArchicad/ConnectorArchicad/Properties
 
 
 Core/Core.TestIntegration/Directus/config.json
+
+directus/database
+directus/uploads

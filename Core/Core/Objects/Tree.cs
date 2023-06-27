@@ -52,6 +52,9 @@ namespace Calc.Core.Objects
             this.Elements = commonElements;
             // ensure branch config is valid
 
+            // clear subbranches
+            this.SubBranches = new List<Branch>();
+
             if (BranchConfig != null && BranchConfig.Count > 0)
             {
                 this.CreateBranches(BranchConfig);

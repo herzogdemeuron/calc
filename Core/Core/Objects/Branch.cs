@@ -102,6 +102,19 @@ namespace Calc.Core.Objects
             }
         }
 
+        public void ResetBuildups()
+        {
+            _buildup = null;
+            if (SubBranches.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var subBranch in SubBranches)
+            {
+                subBranch.ResetBuildups();
+            }
+        }
 
         /// <summary>
         /// This method matches a buildup to a branch.
