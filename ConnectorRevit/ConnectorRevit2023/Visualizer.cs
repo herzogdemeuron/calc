@@ -17,7 +17,7 @@ namespace Calc.ConnectorRevit
         {
             get
             {
-                return App.ViewModel.SelectedBranch;
+                return App.ViewModel.SelectedBranchItem.Branch;
             }
         }
 
@@ -40,8 +40,9 @@ namespace Calc.ConnectorRevit
                 currentView.TemporaryViewModes.DeactivateAllModes();
                 var overrideGraphicSettings = new OverrideGraphicSettings();
 
-                foreach (var tree in App.ViewModel.Items)
+                foreach (var branchItem in App.ViewModel.BranchItems)
                 {
+                    Tree tree = branchItem.Branch as Tree;
                     var elements = StringsToElementIds(tree.ElementIds);
                     foreach (var element in elements)
                     {
@@ -65,6 +66,7 @@ namespace Calc.ConnectorRevit
 
                 var currentView = Doc.ActiveView;
                 IsolateElements(SelectedBranch, currentView);
+                BranchPainter.ColorBranchesByBranch(SelectedBranch.SubBranches);
                 ColorElements(SelectedBranch, currentView, patternId);
 
                 t.Commit();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Calc.Core.Color;
 using Speckle.Newtonsoft.Json;
@@ -83,6 +84,7 @@ namespace Calc.Core.Objects
 
         public void SetBuildup(Buildup buildup)
         {
+            Debug.WriteLine($"Setting buildup for branch {Parameter} {Value} to {buildup}");
             // set the buildup of the current branch. Also set the buildup of all subbranches to the same value if they have no buildup assigned yet or the buildup is the same.
             var currentBuildup = _buildup;
             _buildup = buildup;
@@ -110,7 +112,7 @@ namespace Calc.Core.Objects
         {
             if (Parameter == parameter && Value == value)
             {
-                this._buildup = buildup;
+                this.Buildup = buildup;
             }
             else
             {

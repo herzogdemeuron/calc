@@ -1,10 +1,9 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using Autodesk.Revit.UI;
 using Calc.Core.Objects;
 using System.Windows.Controls;
-
+using System.Threading.Tasks;
 
 namespace Calc.ConnectorRevit.Views
 {
@@ -14,27 +13,43 @@ namespace Calc.ConnectorRevit.Views
         public MainView()
         {
             viewModel = App.ViewModel;
-            DataContext = viewModel;
+            this.DataContext = viewModel;
             InitializeComponent();
         }
-        private async void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            await viewModel.InitializeAsync();
 
-            // Hide the loading overlay
+        private async void WindowLoaded(object sender, RoutedEventArgs e)
+        {
+            await viewModel.HandleLoadingAsync();
+            LoadingOverlay.Visibility  = Visibility.Collapsed;
+        }
+        private async void ProjectOKClicked(object sender, RoutedEventArgs e)
+        {
+            LoadingOverlay.Visibility = Visibility.Visible;
+            await viewModel.HandleProjectSelectedAsync(ProjectsComboBox.SelectedItem as Project);
             LoadingOverlay.Visibility = Visibility.Collapsed;
+            SelectProjectOverlay.Visibility = Visibility.Collapsed;
+        }
+        
+        private void ForestSelectionChanged (object sender, SelectionChangedEventArgs e)
+        {
+            viewModel.HandleForestSelectionChanged(ForestsComboBox.SelectedItem as Forest);
         }
 
-        private void TreeViewSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void MappingSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            viewModel.SelectedBranch = e.NewValue as Branch;
-            viewModel.SetView();
+            viewModel.HandleMappingSelectionChanged(MappingsComboBox.SelectedItem as Mapping);
         }
 
-        private void MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void TreeViewSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            viewModel.ResetView();
+            viewModel.HandleBranchSelectionChanged(e.NewValue as BranchViewModel);
         }
+
+        private void SideClickDown(object sender, MouseButtonEventArgs e)
+        {
+            viewModel.HandleSideClick();
+        }
+
 
 
         private void CalculateClicked(object sender, RoutedEventArgs e)
