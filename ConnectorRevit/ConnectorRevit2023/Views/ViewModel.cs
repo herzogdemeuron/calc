@@ -1,88 +1,162 @@
-﻿using System;
-using System.Diagnostics;
-using System.ComponentModel;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
+﻿using Calc.ConnectorRevit.Revit;
+using Calc.Core;
 using Calc.Core.Objects;
-using Calc.Core.DirectusAPI.Drivers;
-using Calc.ConnectorRevit.EventHandlers;
-using Calc.ConnectorRevit.Revit;
-using System.Linq;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Calc.ConnectorRevit.Views
 {
     public class ViewModel : INotifyPropertyChanged
     {
 
-        private List<Tree> items;
-        public List<Tree> Items
+        private List<Project> projects;
+        public List<Project> Projects
         {
-            get { return items; }
+            get { return projects; }
             set
             {
-                items = value;
-                OnPropertyChanged("Items");
+                projects = value;
+                OnPropertyChanged("Projects");
             }
         }
 
-        private Branch selectedBranch;
-        public Branch SelectedBranch
+        private List<Buildup> allBuildups;
+        public List<Buildup> AllBuildups
         {
-            get { return selectedBranch; }
+            get { return allBuildups; }
             set
             {
-                selectedBranch = value;
-                OnPropertyChanged("SelectedBranch");
+                allBuildups = value;
+                OnPropertyChanged("AllBuildups");
             }
         }
 
-        public List<Buildup> AllBuildups { get; set; }
-        public List<Forest> AllForests { get; set; }
-        public List<Mapping> AllMappings { get; set; }
-        private ExternalEventHandler EventHandler { get; set; }
-        private readonly StorageManager DirectusManager;
+        private List<Forest> forests;
+        public List<Forest> Forests
+        {
+            get { return forests; }
+            set
+            {
+                forests = value;
+                OnPropertyChanged("Forests");
+            }
+        }
+
+        private List<Mapping> allMappings;
+        public List<Mapping> AllMappings
+        {
+            get { return allMappings; }
+            set
+            {
+                allMappings = value;
+                OnPropertyChanged("AllMappings");
+            }
+        }
+
+        private ObservableCollection<BranchViewModel> branchItems;
+        public ObservableCollection<BranchViewModel> BranchItems
+        {
+            get { return branchItems; }
+            set
+            {
+                branchItems = value;
+                OnPropertyChanged("BranchItems");
+            }
+        }
+
+        private List<Branch> currentTrees;
+
+        private BranchViewModel selectedBranchItem;
+        public BranchViewModel SelectedBranchItem
+        {
+            get { return selectedBranchItem; }
+            set
+            {
+                selectedBranchItem = value;
+                OnPropertyChanged("SelectedBranchItem");
+            }
+        }
+
+        private Forest selectedForest;
+        public Forest SelectedForest
+        {
+            get { return selectedForest; }
+            set
+            {
+                selectedForest = value;
+                OnPropertyChanged("SelectedForest");
+            }
+        }
+
+        private Store store;
+        private readonly ExternalEventHandler eventHandler;
+        private Mapping selectedMapping;
+
         public ViewModel()
         {
-            EventHandler = new ExternalEventHandler();
-            DirectusManager = new StorageManager();
+            eventHandler = new ExternalEventHandler();
         }
-        public async Task InitializeAsync()
+        public async Task HandleLoadingAsync()
         {
-
-            await DirectusManager.Initiate();
-            AllBuildups = DirectusManager.AllBuildups;
-            OnPropertyChanged("AllBuildups");
-            AllForests = DirectusManager.AllForests;
-            OnPropertyChanged("AllForests");
-            AllMappings = DirectusManager.AllMappings;
-            OnPropertyChanged("AllMappings");
-            CreateTreeViewItems();
+            store = new Store();
+            await store.GetProjects();
+            Projects = store.ProjectsAll; 
         }
 
-        private void CreateTreeViewItems()
+        public async Task HandleProjectSelectedAsync(Project project)
         {
-            Forest forest = AllForests.Where(f => f.Name == "RevitTestForest").FirstOrDefault();
-            Items = forest.Trees.Select(t=>
+            store.ProjectSelected = project;
+            await store.GetOtherData();
+            AllBuildups = store.BuildupsAll;
+            Forests = store.Forests;
+            AllMappings = store.MappingsAll;
+        }
+
+        public void HandleForestSelectionChanged(Forest forest)
+        {
+            if (forest == null)
+                return;
+            SelectedForest = forest;
+
+            var newBranchItems = new ObservableCollection<BranchViewModel>();
+            foreach (var t in forest.Trees)
             {
                 t.Plant(ElementFilter.GetCalcElements(t));
-                t.GrowBranches();
-                return t;
+                newBranchItems.Add(new BranchViewModel(t));
             }
-            ).ToList();
-        }
-        public void SetView()
-        {
-            EventHandler.Raise(Visualizer.IsolateAndColor);
+
+            BranchItems = newBranchItems;
         }
 
-        public void ResetView()
+        public void HandleMappingSelectionChanged(Mapping mapping)
         {
-            EventHandler.Raise(Visualizer.Reset);
+            if (mapping == null)
+                return;
+            selectedMapping = mapping;
+            foreach (BranchViewModel branchItem in BranchItems)
+            {
+                Tree tree = branchItem.Branch as Tree;
+                mapping.ApplyMappingToTree(tree, AllBuildups);
+                branchItem.UpdateBuildups();
+                Debug.WriteLine($"Set mappings to tree: {tree.Name}");
+            };           
+        }
+        public void HandleBranchSelectionChanged(BranchViewModel branchItem)
+        {
+            if (branchItem == null)
+                return;
+            SelectedBranchItem = branchItem;
+            eventHandler.Raise(Visualizer.IsolateAndColor);
         }
 
+        public void HandleSideClick()
+        {
+            eventHandler.Raise(Visualizer.Reset);
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)

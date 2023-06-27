@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Calc.ConnectorRevit.Views" 
         d:DataContext="{d:DesignInstance Type=local:ViewModel}"
-        Loaded="Window_Loaded"
+        Loaded="WindowLoaded"
         mc:Ignorable="d" 
         Background="White"
         Height="600" MinHeight="600"
@@ -57,13 +57,13 @@
         <DataTemplate x:Key="BuildupTemplate">
             <DockPanel LastChildFill="True">
                 <Label Content="Assign Buildup:" DockPanel.Dock="Top"/>
-                <ComboBox SelectedItem="{Binding Buildup}" 
-                          ItemsSource="{Binding DataContext.AllBuildups, 
-                                                RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                <ComboBox x:Name="BuildupsComboBox"
+                          ItemsSource="{Binding DataContext.AllBuildups, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                          SelectedItem="{Binding DataContext.SelectedBranchItem.Buildup, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                           DisplayMemberPath="Name"
                           DockPanel.Dock="Top"/>
                 <Label Content="Preview:" DockPanel.Dock="Top"/>
-                <DataGrid ItemsSource="{Binding Buildup.Components}"
+                <DataGrid ItemsSource="{Binding SelectedItem.Components, ElementName=BuildupsComboBox}"
                           AutoGenerateColumns="False"
                           VerticalAlignment="Top"
                           MinHeight="100">
@@ -84,21 +84,24 @@
             <ColumnDefinition Width="20"/>
             <ColumnDefinition Width="20*"/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
+        
+            <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition Height="0"/>
             <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+            </Grid.RowDefinitions>
 
             <DockPanel Grid.Column="0"
                        Grid.Row="0"
                        Margin="10"
                        HorizontalAlignment="Stretch">
                 <Button Content="Load" Style= "{StaticResource ButtonStyle}"/>
-                <ComboBox ItemsSource="{Binding DataContext.AllForests, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                <ComboBox x:Name="ForestsComboBox"
+                            ItemsSource="{Binding DataContext.Forests, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                           DisplayMemberPath="Name"
                           DockPanel.Dock="Left"
                           Height="25"
+                          SelectionChanged="ForestSelectionChanged"
                           HorizontalAlignment="Stretch"/>
             </DockPanel>
 
@@ -108,10 +111,12 @@
                        HorizontalAlignment="Stretch">
                 <Button Content="Save" Style= "{StaticResource ButtonStyle}"/>
                 <Button Content="Load" Style= "{StaticResource ButtonStyle}"/>
-                <ComboBox ItemsSource="{Binding DataContext.AllMappings, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                <ComboBox x:Name="MappingsComboBox"
+                          ItemsSource="{Binding DataContext.AllMappings, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                           DisplayMemberPath="Name"
                           DockPanel.Dock="Left"
                           Height="25"
+                          SelectionChanged="MappingSelectionChanged"
                           HorizontalAlignment="Stretch"/>
             </DockPanel>
 
@@ -120,12 +125,12 @@
                   Grid.Row="2"
                   Margin="10">
             <TreeView x:Name="treeView"
-                      ItemsSource="{Binding Items}"
-                      SelectedItemChanged="TreeViewSelectedItemChanged"
-                      MouseLeftButtonDown="MouseLeftButtonDown">
+                      ItemsSource="{Binding BranchItems}"
+                      SelectedItemChanged="TreeViewSelectionChanged"
+                      MouseLeftButtonDown="SideClickDown">
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding SubBranches}">
-                        <ContentControl Content="{Binding}"
+                        <ContentControl Content="{Binding Branch}"
                                         ContentTemplateSelector="{StaticResource ItemTemplateSelector}"/>
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
@@ -139,23 +144,39 @@
                     DockPanel.Dock="Bottom"
                     Height="30"
                     Click="CalculateClicked"/>
-            <ContentControl Content ="{Binding SelectedBranch}"
-                            DockPanel.Dock="Top"
+            <ContentControl DockPanel.Dock="Top"
                             ContentTemplate="{StaticResource BuildupTemplate}"
                             BorderThickness="1"/>
         </DockPanel>
 
     </Grid>
-
-
-    <Grid x:Name="LoadingOverlay"
-            Background="LightGray"
+        <Grid x:Name="SelectProjectOverlay"
+          Background="White"
           Margin="10">
-        <TextBlock HorizontalAlignment="Center"
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock HorizontalAlignment="Center"
+                            Text="CHOOSE PROJECT:"
+                           Margin="10"/>
+                <ComboBox x:Name="ProjectsComboBox"
+                          HorizontalAlignment="Center"
+                          ItemsSource= "{Binding Projects}"
+                          DisplayMemberPath="ProjectNumber"
+                          Width="90"/>
+                <Button Content="OK" 
+                        HorizontalAlignment="Center"
+                        Width="90"
+                        Margin="10"
+                        Click="ProjectOKClicked"/>
+            </StackPanel>
+        </Grid>
+        
+        <Grid x:Name="LoadingOverlay"
+          Background="LightGray"
+          Margin="10">
+            <TextBlock HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Text="LOADING..."/>
+        </Grid>
+
     </Grid>
-    
-    
-</Grid>
 </Window>
