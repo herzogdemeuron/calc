@@ -102,7 +102,7 @@ namespace Calc.Core.Objects
             }
         }
 
-        public void ClearMapping()
+        public void ResetBuildups()
         {
             _buildup = null;
             if (SubBranches.Count == 0)
@@ -112,7 +112,7 @@ namespace Calc.Core.Objects
 
             foreach (var subBranch in SubBranches)
             {
-                subBranch.ClearMapping();
+                subBranch.ResetBuildups();
             }
         }
 
