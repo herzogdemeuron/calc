@@ -100,6 +100,19 @@ namespace Calc.Core.Objects
             }
         }
 
+        public void ClearMapping()
+        {
+            _buildup = null;
+            if (SubBranches.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var subBranch in SubBranches)
+            {
+                subBranch.ClearMapping();
+            }
+        }
 
         /// <summary>
         /// This method matches a buildup to a branch.
