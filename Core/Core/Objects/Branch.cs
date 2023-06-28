@@ -45,7 +45,7 @@ namespace Calc.Core.Objects
                 OnPropertyChanged(nameof(HslColor));
             }
         }
-        public event Action ColorChanged;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public Branch()
@@ -119,6 +119,7 @@ namespace Calc.Core.Objects
                     subBranch.SetBuildup(buildup);
                 }
             }
+            OnPropertyChanged(nameof(Buildup));
         }
 
         public void ResetBuildups()
