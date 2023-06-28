@@ -1,42 +1,25 @@
-﻿using System;
-using System.Linq;
-using System.Diagnostics;
-using System.Collections.Generic;
+﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
-using Autodesk.Revit.Attributes;
 using Calc.Core.Color;
 using Calc.Core.Objects;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 
 namespace Calc.ConnectorRevit
 {
     [Transaction(TransactionMode.Manual)]
     public static class Visualizer
     {
-        private static Branch SelectedBranch
-        {
-            get
-            {
-                return App.ViewModel.SelectedBranchItem.Branch;
-            }
-        }
-
-        private static Document Doc
-        {
-            get
-            {
-                return App.CurrentDoc;
-            }
-        }
-
         public static void Reset()
         {
             Debug.WriteLine("ShowAll");
-            using (Transaction t = new Transaction(Doc, "ShowAll"))
+            using (Transaction t = new Transaction(App.CurrentDoc, "ShowAll"))
             {
                 t.Start();
 
-                var currentView = Doc.ActiveView;
+                var currentView = App.CurrentDoc.ActiveView;
                 currentView.TemporaryViewModes.DeactivateAllModes();
                 var overrideGraphicSettings = new OverrideGraphicSettings();
 
@@ -56,18 +39,18 @@ namespace Calc.ConnectorRevit
 
         public static void IsolateAndColor()
         {
-            using (Transaction t = new Transaction(Doc, "Isolate and Color"))
+            using (Transaction t = new Transaction(App.CurrentDoc, "Isolate and Color"))
             {
-                FilteredElementCollector collector = new FilteredElementCollector(Doc);
+                FilteredElementCollector collector = new FilteredElementCollector(App.CurrentDoc);
                 ICollection<Element> patterns = collector.OfClass(typeof(FillPatternElement)).ToElements();
                 var patternId = patterns.FirstOrDefault().Id;
-
+                Branch selectedBranch = App.ViewModel.SelectedBranchItem.Branch;
                 t.Start();
 
-                var currentView = Doc.ActiveView;
-                IsolateElements(SelectedBranch, currentView);
-                BranchPainter.ColorBranchesByBranch(SelectedBranch.SubBranches);
-                ColorElements(SelectedBranch, currentView, patternId);
+                var currentView = App.CurrentDoc.ActiveView;
+                IsolateElements(selectedBranch, currentView);
+                
+                ColorElements(selectedBranch, currentView, patternId);
 
                 t.Commit();
             }
@@ -87,8 +70,8 @@ namespace Calc.ConnectorRevit
                     subBranch.HslColor.Saturation,
                     (int)(subBranch.HslColor.Lightness * 0.6));
 
-                var rgbColor = ColorConverter.HslToRgb(subBranch.HslColor);
-                var rgbColorDarker = ColorConverter.HslToRgb(hslColorDarker);
+                var rgbColor = CalcColorConverter.HslToRgb(subBranch.HslColor);
+                var rgbColorDarker = CalcColorConverter.HslToRgb(hslColorDarker);
 
                 var color = new Color(rgbColor.Red, rgbColor.Green, rgbColor.Blue);
                 var colorDarker = new Color(rgbColorDarker.Red, rgbColorDarker.Green, rgbColorDarker.Blue);

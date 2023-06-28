@@ -8,7 +8,10 @@
 
   <ItemGroup>
     <None Remove="Resources\icon.png" />
+    <None Remove="ToggleButtonTemplate.xaml" />
     <None Remove="Views\MainView.xaml" />
+    <None Remove="Views\MainViewResources.xaml" />
+    <None Remove="Views\ToggleButtonResource.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,6 +21,12 @@
   <ItemGroup>
     <Page Include="Views\MainView.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainViewResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ToggleButtonResource.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

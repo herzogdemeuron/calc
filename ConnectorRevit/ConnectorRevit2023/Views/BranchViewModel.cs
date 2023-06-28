@@ -1,39 +1,66 @@
 ﻿using Calc.Core.Objects;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Media;
+using Calc.Core.Color;
 
 namespace Calc.ConnectorRevit.Views
 {
     public class BranchViewModel : INotifyPropertyChanged
     {
         public Branch Branch { get;}
-        public ObservableCollection<BranchViewModel> SubBranches { get; }
+        public string Name { get => GetName();}
+        public ObservableCollection<BranchViewModel> SubBranchItems { get; }
         public BranchViewModel(Branch branch)
         {
             this.Branch = branch;
-            SubBranches = new ObservableCollection<BranchViewModel>();
+            SubBranchItems = new ObservableCollection<BranchViewModel>();
+
             foreach (var subBranch in branch.SubBranches)
             {
-                SubBranches.Add(new BranchViewModel(subBranch));
+                SubBranchItems.Add(new BranchViewModel(subBranch));
             }
         }
 
-        public Buildup Buildup
+
+        public Color Color
         {
-            get => Branch.Buildup;
-            set
+            get
             {
-                if (Branch.Buildup != value)
+                if (DisplayColor)
                 {
-                    Branch.Buildup = value;
-                    NotifyPropertyChanged("Buildup");
+                    var hsl = Branch.HslColor;
+                    var rgb = CalcColorConverter.HslToRgb(hsl);
+                    return Color.FromArgb(150, rgb.Red, rgb.Green, rgb.Blue);
+                }
+                else
+                {
+                    return Color.FromArgb(100, 220, 220, 220);
                 }
             }
+        }
+
+        private bool displayColor;
+        public bool DisplayColor
+        {
+            get => displayColor;
+            set
+            {
+                if (displayColor != value)
+                {
+                    displayColor = value;
+                    //NotifyPropertyChanged("DisplayColor");
+                    NotifyPropertyChanged("Color");
+                }
+            }
+        }
+
+        public string GetName()
+        {
+            if (Branch.Name == null)
+            return $"{Branch.Parameter}:{Branch.Value}";
+
+            return Branch.Name;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -42,14 +69,8 @@ namespace Calc.ConnectorRevit.Views
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void UpdateBuildups()
-        {
-            Buildup = Branch.Buildup;
-            foreach (BranchViewModel subBranch in SubBranches)
-            {
-                subBranch.UpdateBuildups();
-            }
-            
-        }
+
+
+
     }
 }

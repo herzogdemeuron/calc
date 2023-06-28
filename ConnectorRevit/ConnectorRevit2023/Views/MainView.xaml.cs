@@ -4,6 +4,9 @@ using System.Windows.Media;
 using Calc.Core.Objects;
 using System.Windows.Controls;
 using System.Threading.Tasks;
+using Calc.Core.Color;
+using Calc.Core;
+using System.Diagnostics;
 
 namespace Calc.ConnectorRevit.Views
 {
@@ -40,21 +43,32 @@ namespace Calc.ConnectorRevit.Views
             viewModel.HandleMappingSelectionChanged(MappingsComboBox.SelectedItem as Mapping);
         }
 
-        private void TreeViewSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void TreeViewItemSelected(object sender, RoutedEventArgs e)
         {
-            viewModel.HandleBranchSelectionChanged(e.NewValue as BranchViewModel);
+            if (TreeView.SelectedItem is BranchViewModel selectedBranch)
+            {
+                viewModel.HandleBranchSelectionChanged(selectedBranch);
+                TreeView.Tag = e.OriginalSource;
+                e.Handled = true;
+            }
         }
 
         private void SideClickDown(object sender, MouseButtonEventArgs e)
         {
             viewModel.HandleSideClick();
+            if (TreeView.SelectedItem != null)
+            {
+                if (TreeView.Tag is TreeViewItem selectedTreeViewItem)
+                {
+                    selectedTreeViewItem.IsSelected = false;
+                }
+            }
         }
-
-
 
         private void CalculateClicked(object sender, RoutedEventArgs e)
         {
             //_viewModel.Calculate();
         }
+
     }
 }
