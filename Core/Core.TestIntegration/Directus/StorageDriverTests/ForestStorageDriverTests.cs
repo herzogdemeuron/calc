@@ -81,6 +81,17 @@ namespace Calc.Core.TestIntegration.Drivers
 
             // Assert
             Assert.IsTrue(response.GotManyItems.Count > 0);
+            foreach (Forest forest in response.GotManyItems)
+            {
+                foreach (Tree tree in forest.Trees)
+                {
+                    var mockData = new MockData();
+                    tree.Plant(mockData.Elements);
+                    Console.WriteLine(tree.Name);
+                    tree.PrintTree();
+                }
+                Console.WriteLine("-----------------");
+            }
         }
     }
 }
