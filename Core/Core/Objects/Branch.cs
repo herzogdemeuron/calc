@@ -11,8 +11,6 @@ namespace Calc.Core.Objects
     public class Branch : IFilter, INotifyPropertyChanged
     {
         [JsonIgnore]
-        public string Name { get; set; }
-        [JsonIgnore]
         public List<CalcElement> Elements { get; set; }
         [JsonIgnore]
         public List<string> ElementIds => Elements.Select(e => e.Id).ToList();
