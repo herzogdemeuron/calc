@@ -34,6 +34,7 @@ namespace Calc.Core.Objects
         }
         [JsonIgnore]
         private HslColor _hslColor;
+        [JsonIgnore]
         public HslColor HslColor
         {
             get { return _hslColor; }
