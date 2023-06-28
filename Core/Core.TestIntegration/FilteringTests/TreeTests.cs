@@ -1,4 +1,6 @@
-﻿namespace Calc.Core.TestIntegration
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+namespace Calc.Core.TestIntegration
 {
     [TestClass]
     public class TreeTests

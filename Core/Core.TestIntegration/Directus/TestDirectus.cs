@@ -1,5 +1,7 @@
 ﻿using GraphQL.Client.Http;
 using Calc.Core.DirectusAPI;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 
 namespace Calc.Core.TestIntegration
 {
