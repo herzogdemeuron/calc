@@ -1,25 +1,21 @@
 ﻿using Calc.Core.Objects;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace Calc.ConnectorRevit.Views
 {
     public class BranchViewModel : INotifyPropertyChanged
     {
         public Branch Branch { get;}
-        public ObservableCollection<BranchViewModel> SubBranches { get; }
+        public ObservableCollection<BranchViewModel> SubBranchItems { get; }
         public BranchViewModel(Branch branch)
         {
             this.Branch = branch;
-            SubBranches = new ObservableCollection<BranchViewModel>();
+            SubBranchItems = new ObservableCollection<BranchViewModel>();
             foreach (var subBranch in branch.SubBranches)
             {
-                SubBranches.Add(new BranchViewModel(subBranch));
+                SubBranchItems.Add(new BranchViewModel(subBranch));
             }
         }
 
@@ -36,6 +32,39 @@ namespace Calc.ConnectorRevit.Views
             }
         }
 
+        public Color Color
+        {
+            get
+            {
+                if (DisplayColor)
+                {
+                    var hsl = Branch.HslColor;
+                    var rgb = Core.Color.ColorConverter.HslToRgb(hsl);
+                    return Color.FromArgb(150, rgb.Red, rgb.Green, rgb.Blue);
+                }
+                else
+                {
+                    //light gray color
+                    return Color.FromArgb(100, 220, 220, 220);
+                }
+            }
+        }
+
+        private bool displayColor;
+        public bool DisplayColor
+        {
+            get => displayColor;
+            set
+            {
+                if (displayColor != value)
+                {
+                    displayColor = value;
+                    //NotifyPropertyChanged("DisplayColor");
+                    NotifyPropertyChanged("Color");
+                }
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected void NotifyPropertyChanged(string propertyName)
         {
@@ -45,7 +74,7 @@ namespace Calc.ConnectorRevit.Views
         public void UpdateBuildups()
         {
             Buildup = Branch.Buildup;
-            foreach (BranchViewModel subBranch in SubBranches)
+            foreach (BranchViewModel subBranch in SubBranchItems)
             {
                 subBranch.UpdateBuildups();
             }

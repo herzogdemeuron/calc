@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Calc.ConnectorRevit.Views
@@ -13,38 +12,17 @@ namespace Calc.ConnectorRevit.Views
     public class ViewModel : INotifyPropertyChanged
     {
 
-        private List<Project> projects;
-        public List<Project> Projects
-        {
-            get { return projects; }
-            set
-            {
-                projects = value;
-                OnPropertyChanged("Projects");
-            }
-        }
+        
+        private Forest selectedForest;
+        private Store store;
+        private Mapping selectedMapping;
+        
+        public List<Project> AllProjects { get; set; }
+        public List<Buildup> AllBuildups { get; set; }
+        public List<Forest> AllForests { get; set; }
 
-        private List<Buildup> allBuildups;
-        public List<Buildup> AllBuildups
-        {
-            get { return allBuildups; }
-            set
-            {
-                allBuildups = value;
-                OnPropertyChanged("AllBuildups");
-            }
-        }
+        private readonly ExternalEventHandler eventHandler;
 
-        private List<Forest> forests;
-        public List<Forest> Forests
-        {
-            get { return forests; }
-            set
-            {
-                forests = value;
-                OnPropertyChanged("Forests");
-            }
-        }
 
         private List<Mapping> allMappings;
         public List<Mapping> AllMappings
@@ -68,8 +46,6 @@ namespace Calc.ConnectorRevit.Views
             }
         }
 
-        private List<Branch> currentTrees;
-
         private BranchViewModel selectedBranchItem;
         public BranchViewModel SelectedBranchItem
         {
@@ -81,21 +57,6 @@ namespace Calc.ConnectorRevit.Views
             }
         }
 
-        private Forest selectedForest;
-        public Forest SelectedForest
-        {
-            get { return selectedForest; }
-            set
-            {
-                selectedForest = value;
-                OnPropertyChanged("SelectedForest");
-            }
-        }
-
-        private Store store;
-        private readonly ExternalEventHandler eventHandler;
-        private Mapping selectedMapping;
-
         public ViewModel()
         {
             eventHandler = new ExternalEventHandler();
@@ -104,7 +65,8 @@ namespace Calc.ConnectorRevit.Views
         {
             store = new Store();
             await store.GetProjects();
-            Projects = store.ProjectsAll; 
+            AllProjects = store.ProjectsAll;
+            OnPropertyChanged("AllProjects");
         }
 
         public async Task HandleProjectSelectedAsync(Project project)
@@ -112,15 +74,18 @@ namespace Calc.ConnectorRevit.Views
             store.ProjectSelected = project;
             await store.GetOtherData();
             AllBuildups = store.BuildupsAll;
-            Forests = store.Forests;
+            OnPropertyChanged("AllBuildups");
+            AllForests = store.Forests;
+            OnPropertyChanged("AllForests");
             AllMappings = store.MappingsAll;
+            OnPropertyChanged("AllMappings");
         }
 
         public void HandleForestSelectionChanged(Forest forest)
         {
             if (forest == null)
                 return;
-            SelectedForest = forest;
+            selectedForest = forest;
 
             var newBranchItems = new ObservableCollection<BranchViewModel>();
             foreach (var t in forest.Trees)
@@ -128,7 +93,6 @@ namespace Calc.ConnectorRevit.Views
                 t.Plant(ElementFilter.GetCalcElements(t));
                 newBranchItems.Add(new BranchViewModel(t));
             }
-
             BranchItems = newBranchItems;
         }
 
@@ -145,17 +109,47 @@ namespace Calc.ConnectorRevit.Views
                 Debug.WriteLine($"Set mappings to tree: {tree.Name}");
             };           
         }
-        public void HandleBranchSelectionChanged(BranchViewModel branchItem)
-        {
-            if (branchItem == null)
-                return;
-            SelectedBranchItem = branchItem;
-            eventHandler.Raise(Visualizer.IsolateAndColor);
-        }
 
         public void HandleSideClick()
         {
             eventHandler.Raise(Visualizer.Reset);
+            foreach (BranchViewModel item in BranchItems)
+            {
+                RemoveDisplayColor(item);
+            }
+        }
+
+        public void HandleBranchSelectionChanged(BranchViewModel branchItem)
+        {
+            if (branchItem == null)
+                return;
+
+            foreach (BranchViewModel item in BranchItems)
+            {
+                RemoveDisplayColor(item);
+            }
+
+            SelectedBranchItem = branchItem;
+            eventHandler.Raise(Visualizer.IsolateAndColor);
+            ResetDisplayColor(branchItem);
+        }
+
+        private void RemoveDisplayColor(BranchViewModel branchItem)
+        {
+            branchItem.DisplayColor = false;
+
+            foreach (BranchViewModel childBranchItem in branchItem.SubBranchItems)
+            {
+                RemoveDisplayColor(childBranchItem);
+            }
+        }
+
+        private void ResetDisplayColor(BranchViewModel branchItem)
+        {
+            foreach (BranchViewModel childBranchItem in branchItem.SubBranchItems)
+            {
+                childBranchItem.DisplayColor = true;
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -1,7 +1,6 @@
-﻿using System.Windows;
+﻿using Calc.Core.Objects;
+using System.Windows;
 using System.Windows.Controls;
-using System.Diagnostics;
-using Calc.Core.Objects;
 
 namespace Calc.ConnectorRevit.Views
 {
@@ -10,19 +9,19 @@ namespace Calc.ConnectorRevit.Views
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            if (container is FrameworkElement element && item != null)
+            if (container is FrameworkElement element && item != null && item is BranchViewModel branchViewModel)
             {
-                if (item is Tree)
+                if (branchViewModel.Branch is Tree)
                 {
                     return element.FindResource("TreeItemTemplate") as DataTemplate;
                 }
-                if (item is Branch)
+                if (branchViewModel.Branch is Branch)
                 {
                     return element.FindResource("BranchItemTemplate") as DataTemplate;
                 }
 
             }
-                return null;
+            return null;
         }
     }
 }
