@@ -7,7 +7,6 @@ namespace Calc.Core.Objects
 {
     public class Tree : Branch
     {
-        public string Name { get; set; }
         public List<Root> Roots { get; set; }
         private List<string> _branchConfig;
         public List<string> BranchConfig // List of parameters to group by
