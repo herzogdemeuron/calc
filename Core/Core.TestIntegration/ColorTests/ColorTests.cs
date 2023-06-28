@@ -28,7 +28,7 @@ namespace Calc.Core.TestIntegration.ColorTests
             var hslColor = new HslColor(0, 100, 50);
 
             // Act
-            var rgbColor = ColorConverter.HslToRgb(hslColor);
+            var rgbColor = CalcColorConverter.HslToRgb(hslColor);
 
             // Assert
             Assert.AreEqual(255, rgbColor.Red);
@@ -43,7 +43,7 @@ namespace Calc.Core.TestIntegration.ColorTests
             var rgbColor = new RgbColor(255, 0, 0);
 
             // Act
-            var hexColor = ColorConverter.RgbToHex(rgbColor);
+            var hexColor = CalcColorConverter.RgbToHex(rgbColor);
 
             // Assert
             Assert.AreEqual("#FF0000", hexColor.Hex);
