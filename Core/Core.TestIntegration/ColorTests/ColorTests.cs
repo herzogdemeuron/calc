@@ -1,4 +1,6 @@
 ﻿using Calc.Core.Color;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 
 namespace Calc.Core.TestIntegration.ColorTests
 {

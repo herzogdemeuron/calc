@@ -1,5 +1,7 @@
 ﻿using Calc.Core.Objects;
 using Calc.Core.Calculations;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 
 namespace Calc.Core.TestIntegration
 {

@@ -1,10 +1,11 @@
 ﻿using Calc.Core.Color;
 using Calc.Core.Objects;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Calc.Core.TestIntegration.ColorTests
 {
     [TestClass]
-    public class BranchColorizerTests
+    public class BranchPainterTests
     {
         List<Tree>? Trees { get; set; }
 
@@ -32,7 +33,7 @@ namespace Calc.Core.TestIntegration.ColorTests
 
             // Act
             List<Branch> branches = this.Trees.ConvertAll(tree => (Branch)tree);
-            BranchColorizer.ColorBranchesByBranch(branches);
+            BranchPainter.ColorBranchesByBranch(branches);
 
             // Assert
             foreach (var tree in this.Trees)
@@ -61,7 +62,7 @@ namespace Calc.Core.TestIntegration.ColorTests
 
             // Act
             List<Branch> branches = this.Trees.ConvertAll(tree => (Branch)tree);
-            BranchColorizer.ColorBranchesByBuildup(branches);
+            BranchPainter.ColorBranchesByBuildup(branches);
 
             // Assert
             foreach (var tree in this.Trees)
