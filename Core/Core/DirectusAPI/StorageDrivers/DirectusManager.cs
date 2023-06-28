@@ -70,7 +70,7 @@ namespace Calc.Core.DirectusAPI.Drivers
             {
                 throw new Exception(JsonConvert.SerializeObject(response.Errors, Formatting.Indented));
             }
-            Console.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
+            //Console.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
         }
     }
 }
