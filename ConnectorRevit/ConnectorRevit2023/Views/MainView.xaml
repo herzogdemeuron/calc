@@ -76,7 +76,7 @@
                     <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding SubBranchItems}">
                         <ContentControl Content="{Binding}"
-                                        ContentTemplateSelector="{StaticResource ItemTemplateSelector}"/>
+                                        ContentTemplate="{StaticResource BranchItemTemplate}"/>
                     </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
                 </TreeView>

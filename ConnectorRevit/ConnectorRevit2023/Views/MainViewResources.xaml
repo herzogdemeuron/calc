@@ -2,7 +2,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Calc.ConnectorRevit.Views">
 
-    <local:ItemTemplateSelector x:Key="ItemTemplateSelector"/>
 
     <Style x:Key="ButtonStyle" TargetType="Button">
         <Setter Property="Margin" Value="10,0,0,0"/>
@@ -28,47 +27,12 @@
             <Border.Background>
                 <SolidColorBrush Color="{Binding Color}"/>
             </Border.Background>
-            <TextBlock>
-                <TextBlock.Text>
-                    <MultiBinding StringFormat="{}{0}: {1} ({2})">
-                        <Binding Path="Branch.Parameter" />
-                        <Binding Path="Branch.Value" />
-                        <Binding Path="Branch.Elements.Count" />
-                    </MultiBinding>
-                </TextBlock.Text>
-            </TextBlock>
-        </Border>
-        <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True">
-                <Setter TargetName="Border" Property="Background" Value="LightGray"/>
-
-                <Setter TargetName="Border" Property="BorderThickness" Value="0"/>
-                <Setter TargetName="Border" Property="BorderBrush" Value="Black"/>
-            </DataTrigger>
-        </DataTemplate.Triggers>
-    </DataTemplate>
-
-
-    <DataTemplate x:Key="TreeItemTemplate">
-        <Border x:Name="Border"
-                Padding="4,2,4,3"
-                Margin="2"
-                CornerRadius="4">
-            <Border.Background>
-                <SolidColorBrush Color="{Binding Color}"/>
-            </Border.Background>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Branch.Name}"
-                           FontWeight="DemiBold"
-                           Margin="0,0,2,0"/>
-                <TextBlock>
-                    <TextBlock.Text>
-                        <MultiBinding StringFormat="{}({0})">
-                            <Binding Path="Branch.Elements.Count" />
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
+                <TextBlock Text="{Binding Name}"/>
+                <TextBlock Text=": "/>
+                <TextBlock Text="{Binding Branch.Elements.Count}"/>
             </StackPanel>
+           
         </Border>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True">
@@ -78,15 +42,14 @@
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
-    
-  
+
 
     <DataTemplate x:Key="BuildupTemplate">
         <DockPanel LastChildFill="True">
             <Label Content="Assign Buildup:" DockPanel.Dock="Top"/>
             <ComboBox x:Name="BuildupsComboBox"
                           ItemsSource="{Binding DataContext.AllBuildups, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                          SelectedItem="{Binding DataContext.SelectedBranchItem.Buildup, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          SelectedItem="{Binding DataContext.SelectedBranchItem.Branch.Buildup, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           DisplayMemberPath="Name"
                           DockPanel.Dock="Top"/>
             <Label Content="Preview:" DockPanel.Dock="Top"/>

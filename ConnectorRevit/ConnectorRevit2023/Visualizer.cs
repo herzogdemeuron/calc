@@ -49,7 +49,7 @@ namespace Calc.ConnectorRevit
 
                 var currentView = App.CurrentDoc.ActiveView;
                 IsolateElements(selectedBranch, currentView);
-                BranchPainter.ColorBranchesByBranch(selectedBranch.SubBranches);
+                
                 ColorElements(selectedBranch, currentView, patternId);
 
                 t.Commit();
@@ -70,8 +70,8 @@ namespace Calc.ConnectorRevit
                     subBranch.HslColor.Saturation,
                     (int)(subBranch.HslColor.Lightness * 0.6));
 
-                var rgbColor = ColorConverter.HslToRgb(subBranch.HslColor);
-                var rgbColorDarker = ColorConverter.HslToRgb(hslColorDarker);
+                var rgbColor = CalcColorConverter.HslToRgb(subBranch.HslColor);
+                var rgbColorDarker = CalcColorConverter.HslToRgb(hslColorDarker);
 
                 var color = new Color(rgbColor.Red, rgbColor.Green, rgbColor.Blue);
                 var colorDarker = new Color(rgbColorDarker.Red, rgbColorDarker.Green, rgbColorDarker.Blue);

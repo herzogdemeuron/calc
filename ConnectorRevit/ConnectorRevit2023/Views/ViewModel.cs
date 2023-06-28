@@ -1,5 +1,6 @@
 ﻿using Calc.ConnectorRevit.Revit;
 using Calc.Core;
+using Calc.Core.Color;
 using Calc.Core.Objects;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,28 +13,17 @@ namespace Calc.ConnectorRevit.Views
     public class ViewModel : INotifyPropertyChanged
     {
 
-        
-        private Forest selectedForest;
         private Store store;
+        private Forest selectedForest;
         private Mapping selectedMapping;
         
         public List<Project> AllProjects { get; set; }
         public List<Buildup> AllBuildups { get; set; }
         public List<Forest> AllForests { get; set; }
+        public List<Mapping> AllMappings { get; set; }
 
         private readonly ExternalEventHandler eventHandler;
 
-
-        private List<Mapping> allMappings;
-        public List<Mapping> AllMappings
-        {
-            get { return allMappings; }
-            set
-            {
-                allMappings = value;
-                OnPropertyChanged("AllMappings");
-            }
-        }
 
         private ObservableCollection<BranchViewModel> branchItems;
         public ObservableCollection<BranchViewModel> BranchItems
@@ -105,7 +95,7 @@ namespace Calc.ConnectorRevit.Views
             {
                 Tree tree = branchItem.Branch as Tree;
                 mapping.ApplyMappingToTree(tree, AllBuildups);
-                branchItem.UpdateBuildups();
+                BranchPainter.ColorBranchesByBranch(tree.SubBranches);
                 Debug.WriteLine($"Set mappings to tree: {tree.Name}");
             };           
         }
