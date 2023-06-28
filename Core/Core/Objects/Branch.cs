@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using Calc.Core.Color;
@@ -7,8 +8,10 @@ using Speckle.Newtonsoft.Json;
 
 namespace Calc.Core.Objects
 {
-    public class Branch : IFilter
+    public class Branch : IFilter, INotifyPropertyChanged
     {
+        [JsonIgnore]
+        public string Name { get; set; }
         [JsonIgnore]
         public List<CalcElement> Elements { get; set; }
         [JsonIgnore]
@@ -32,19 +35,35 @@ namespace Calc.Core.Objects
             set => SetBuildup(value);
         }
         [JsonIgnore]
-        public HslColor HslColor { get; set; } // Use conversion methods from Calc.Core.Colors on this as needed
+        private HslColor _hslColor;
+        public HslColor HslColor
+        {
+            get { return _hslColor; }
+            set
+            {
+                _hslColor = value;
+                OnPropertyChanged(nameof(HslColor));
+            }
+        }
+        public event Action ColorChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public Branch()
         {
             Parameter = "No Parameter";
             Method = "No Method";
             Value = "No Value";
-            HslColor = new HslColor(42, 42, 42);
+            HslColor = new HslColor(0, 0, 85);
         }
 
         public Branch(List<CalcElement> elements) : this()
         {
             Elements = elements;
+        }
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public void CreateBranches(List<string> branchConfig)
