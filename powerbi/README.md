@@ -12,7 +12,7 @@ You need to make a few adjustments to the template to make it work for you.
 - Requests
 - Pandas ("pip install pandas")
 - Matplotlib? not sure about this one.
-- A Directus user with read permissions to `lca_calculation_results`
+- A Directus user with read permissions to `calc_calculation_results`
 - An API token for that user
 
 ## Authentication
@@ -23,10 +23,10 @@ Follow these steps:
     * [powerbi_results_query](powerbi_results_query.py)
     * [powerbi_projects_query](powerbi_projects_query.py)
 2. Open the Query Editor by clicking on `Transform Data` in the `Home` tab.
-3. Select the `lca_calculation_results` query on the left.
+3. Select the `calc_calculation_results` query on the left.
 4. In the `APPLIED STEPS` section on the right, click on the cogwheel next to `Source`.
 5. Copy the code from the [powerbi_results_query](powerbi_results_query.py) that you just edited.
-6. Repeat steps 3-5 for the [powerbi_projects_query](powerbi_projects_query.py) on the `architecture_projects` query.
+6. Repeat steps 3-5 for the [powerbi_projects_query](powerbi_projects_query.py) on the `calc_architecture_projects` query.
 
 ## Load Limit
 
@@ -35,5 +35,5 @@ Complete the steps outlines in [Authentication](#authentication) first, then fol
 
 1. Open the Query Editor by clicking on `Transform Data` in the `Home` tab.
 2. In the `APPLIED STEPS` section, click on the cogwheel next to `Source`.
-3. Select the `lca_calculation_results` query on the left.
+3. Select the `calc_calculation_results` query on the left.
 4. Look for `params={"limit": 300, "sort": "-date_created"}` and change the `limit` to the amount of items you want to load. `-date_created` means that it will start loading from the most recently added item.

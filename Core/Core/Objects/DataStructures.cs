@@ -93,7 +93,7 @@ namespace Calc.Core.Objects
 
     public class BuildupComponent
     {
-        [JsonProperty("lca_materials_id")]
+        [JsonProperty("calc_materials_id")]
         public Material Material { get; set; }
         [JsonProperty("amount")]
         public decimal Amount { get; set; }

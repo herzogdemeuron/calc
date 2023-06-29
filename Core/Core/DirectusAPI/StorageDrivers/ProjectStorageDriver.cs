@@ -11,13 +11,13 @@ namespace Calc.Core.DirectusAPI.Drivers
     {
         public string QueryGetMany { get; } = @"
                 query GetProjects { 
-                    architecture_projects { 
+                    calc_architecture_projects { 
                         id
                         project_number
                     }
                 }";
 
-        [JsonProperty("architecture_projects")]
+        [JsonProperty("calc_architecture_projects")]
         public List<Project> GotManyItems { get; set; }
 
         public Dictionary<string, object> GetVariables()

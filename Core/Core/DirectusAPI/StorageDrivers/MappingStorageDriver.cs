@@ -10,21 +10,21 @@ namespace Calc.Core.DirectusAPI.Drivers
 
         public string QueryGetMany { get; } = @"
                     query GetAllMappings {
-                        lca_mappings {
+                        calc_mappings {
                             id
                             mapping_name
                             mappings
                         }
                     }";
         public string QueryCreateSingle { get; } = @"
-                mutation ($mappingName: String!, $mappings: JSON!, $projectInput: create_architecture_projects_input) {
-                    create_lca_mappings_item(data: {mapping_name: $mappingName, mappings: $mappings, project_id: $projectInput}) {
+                mutation ($mappingName: String!, $mappings: JSON!, $projectInput: create_calc_architecture_projects_input) {
+                    create_calc_mappings_item(data: {mapping_name: $mappingName, mappings: $mappings, project_id: $projectInput}) {
                         id
                     }
                 }";
         public string QueryUpdateSingle { get; } = @"
-                mutation ($id: ID!, $mappingName: String!, $mappings: JSON!, $projectInput: update_architecture_projects_input) {
-                    update_lca_mappings_item(id: $id, data: {
+                mutation ($id: ID!, $mappingName: String!, $mappings: JSON!, $projectInput: update_calc_architecture_projects_input) {
+                    update_calc_mappings_item(id: $id, data: {
                         mapping_name: $mappingName,
                         mappings: $mappings,
                         project_id: $projectInput
@@ -33,11 +33,11 @@ namespace Calc.Core.DirectusAPI.Drivers
                     }
                 }";
 
-        [JsonProperty("lca_mappings")]
+        [JsonProperty("calc_mappings")]
         public List<Mapping> GotManyItems { get; set; }
-        [JsonProperty("create_lca_mappings_item")]
+        [JsonProperty("create_calc_mappings_item")]
         public Mapping CreatedItem { get; set; }
-        [JsonProperty("update_lca_mappings_item")]
+        [JsonProperty("update_calc_mappings_item")]
         public Mapping UpdatedItem { get; set; }
 
         public Dictionary<string, object> GetVariables()

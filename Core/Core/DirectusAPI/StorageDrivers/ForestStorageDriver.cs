@@ -10,7 +10,7 @@ namespace Calc.Core.DirectusAPI.Drivers
 
         public string QueryGetMany { get; } = @"
                     query GetAllForests {
-                        lca_forests {
+                        calc_forests {
                         id
                         forest_name
                         trees
@@ -21,23 +21,23 @@ namespace Calc.Core.DirectusAPI.Drivers
                         }
                     }";
         public string QueryCreateSingle { get; } = @"
-                    mutation ($forestName: String!, $trees: JSON!, $projectInput: create_architecture_projects_input) {
-                        create_lca_forests_item(data: {forest_name: $forestName, trees: $trees, project_id: $projectInput}) {
+                    mutation ($forestName: String!, $trees: JSON!, $projectInput: create_calc_architecture_projects_input) {
+                        create_calc_forests_item(data: {forest_name: $forestName, trees: $trees, project_id: $projectInput}) {
                             id
                         }   
                     }";
         public string QueryUpdateSingle { get; } = @"
-                    mutation ($forestName: String!, $trees: JSON!, $projectInput: update_architecture_projects_input, $forestId: ID!) {
-                        update_lca_forests_item(id: $forestId, data: {forest_name: $forestName, trees: $trees, project_id: $projectInput}) {
+                    mutation ($forestName: String!, $trees: JSON!, $projectInput: update_calc_architecture_projects_input, $forestId: ID!) {
+                        update_calc_forests_item(id: $forestId, data: {forest_name: $forestName, trees: $trees, project_id: $projectInput}) {
                             id
                         }   
                     }";
 
-        [JsonProperty("lca_forests")]
+        [JsonProperty("calc_forests")]
         public List<Forest> GotManyItems { get; set; }
-        [JsonProperty("create_lca_forests_item")]
+        [JsonProperty("create_calc_forests_item")]
         public Forest CreatedItem { get; set; }
-        [JsonProperty("update_lca_forests_item")]
+        [JsonProperty("update_calc_forests_item")]
         public Forest UpdatedItem { get; set; }
 
         public Dictionary<string, object> GetVariables()
