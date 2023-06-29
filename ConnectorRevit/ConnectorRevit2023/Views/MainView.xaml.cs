@@ -1,12 +1,7 @@
-﻿using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
-using Calc.Core.Objects;
+﻿using Calc.Core.Objects;
+using System.Windows;
 using System.Windows.Controls;
-using System.Threading.Tasks;
-using Calc.Core.Color;
-using Calc.Core;
-using System.Diagnostics;
+using System.Windows.Input;
 
 namespace Calc.ConnectorRevit.Views
 {
@@ -28,6 +23,10 @@ namespace Calc.ConnectorRevit.Views
         }
         private async void ProjectOKClicked(object sender, RoutedEventArgs e)
         {
+            if (ProjectsComboBox.SelectedItem == null)
+            {
+                return;
+            }
             LoadingOverlay.Visibility = Visibility.Visible;
             await viewModel.HandleProjectSelectedAsync(ProjectsComboBox.SelectedItem as Project);
             LoadingOverlay.Visibility = Visibility.Collapsed;
@@ -59,6 +58,12 @@ namespace Calc.ConnectorRevit.Views
             viewModel.HandleSideClick();
         }
 
+        private void BuildupSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            viewModel.HandleBuildupSelectionChanged();
+        }
+
+
         private void MessageFromViewModelReceived(string message)
         {
             if (message == "DeselectTreeView")
@@ -81,6 +86,11 @@ namespace Calc.ConnectorRevit.Views
         private void ViewToggleButtonUnchecked(object sender, RoutedEventArgs e)
         {
             viewModel.HandleViewToggleToBranch();
+        }
+
+        private void UpdateClicked(object sender, RoutedEventArgs e)
+        {
+            viewModel.HandleUpdateCalcElements();
         }
         private void CalculateClicked(object sender, RoutedEventArgs e)
         {

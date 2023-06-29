@@ -8,8 +8,45 @@ namespace Calc.ConnectorRevit.Views
 {
     public class BranchViewModel : INotifyPropertyChanged
     {
-        public Branch Branch { get;}
+        private Branch _branch;
+        public Branch Branch
+        {
+            get { return _branch; }
+            set
+            {
+                if (_branch != value)
+                {
+                    _branch = value;
+                    NotifyPropertyChanged(nameof(Branch));
+                    NotifyPropertyChanged(nameof(Buildup));
+                    NotifyPropertyChanged(nameof(ToolTipText));
+                }
+            }
+        }
+        private Buildup buildup;
+        public Buildup Buildup
+        {
+              get { return Branch.Buildup; }
+            set
+            {
+                    if (buildup != value)
+                {
+                        Branch.Buildup = value;
+                        NotifyPropertyChanged(nameof(Buildup));
+                        NotifyPropertyChanged(nameof(ToolTipText));
+                    }
+                }
+        }
+
+        public string ToolTipText
+        {
+            get { return Buildup.Name; }
+        }
+
+
+
         public string Name { get => GetName();}
+        private string ProjectName;
         public ObservableCollection<BranchViewModel> SubBranchItems { get; }
         public BranchViewModel(Branch branch)
         {
@@ -20,6 +57,13 @@ namespace Calc.ConnectorRevit.Views
             {
                 SubBranchItems.Add(new BranchViewModel(subBranch));
             }
+        }
+
+        public BranchViewModel(string projectName, ObservableCollection<BranchViewModel> branchItems)
+        {
+            ProjectName = projectName;
+            this.Branch = new Branch();
+            SubBranchItems = branchItems;
         }
 
         private bool showLabelColor;
@@ -55,6 +99,8 @@ namespace Calc.ConnectorRevit.Views
 
         public string GetName()
         {
+            if(ProjectName != null)
+                return ProjectName;
             if (Branch is Tree tree)
                 return tree.Name;
             else

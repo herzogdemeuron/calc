@@ -6,7 +6,6 @@
     <Style x:Key="ButtonStyle" TargetType="Button">
         <Setter Property="Margin" Value="10,0,0,0"/>
         <Setter Property="Height" Value="25"/>
-        <Setter Property="Width" Value="50"/>
         <Setter Property="DockPanel.Dock" Value="Right"/>
     </Style>
 
@@ -23,7 +22,9 @@
         <Border x:Name="Border"
             Padding="4,2,4,3"
             Margin="2"
-            CornerRadius="4">
+            CornerRadius="4"
+            
+            ToolTip="{Binding ToolTipText}">
             <Border.Background>
                 <SolidColorBrush Color="{Binding LabelColor}"/>
             </Border.Background>
@@ -45,27 +46,5 @@
                 <TextBlock Text=")"/>
             </StackPanel>
         </Border>
-    </DataTemplate>
-
-
-    <DataTemplate x:Key="BuildupTemplate">
-        <DockPanel LastChildFill="True">
-            <Label Content="Assign Buildup:" DockPanel.Dock="Top"/>
-            <ComboBox x:Name="BuildupsComboBox"
-                          ItemsSource="{Binding DataContext.AllBuildups, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                          SelectedItem="{Binding DataContext.SelectedBranchItem.Branch.Buildup, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                          DisplayMemberPath="Name"
-                          DockPanel.Dock="Top"/>
-            <Label Content="Preview:" DockPanel.Dock="Top"/>
-            <DataGrid ItemsSource="{Binding SelectedItem.Components, ElementName=BuildupsComboBox}"
-                          AutoGenerateColumns="False"
-                          VerticalAlignment="Top"
-                          MinHeight="100">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" />
-                    <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" IsReadOnly="True" />
-                </DataGrid.Columns>
-            </DataGrid>
-        </DockPanel>
     </DataTemplate>
 </ResourceDictionary>

@@ -52,6 +52,7 @@ namespace Calc.ConnectorRevit
             {
                 var patternId = GetPatternId();
                 Branch selectedBranch = App.ViewModel.SelectedBranchItem.Branch;
+                Forest selectedForest = App.ViewModel.SelectedForest;
                 t.Start();
                 View currentView = App.CurrentDoc.ActiveView;
                 IsolateElements(selectedBranch, currentView);
@@ -63,12 +64,18 @@ namespace Calc.ConnectorRevit
         private static void IsolateElements(Branch branch, View view)
         {
             view.TemporaryViewModes.DeactivateMode(TemporaryViewMode.TemporaryHideIsolate);
-            view.IsolateElementsTemporary(StringsToElementIds(branch.ElementIds));
+            List<string> elementIds = branch.ElementIds;
+            if (elementIds.Count > 0)
+            {
+                view.IsolateElementsTemporary(StringsToElementIds(branch.ElementIds));
+            }
         }
 
 
         private static void ColorSubbranchElements(Branch branch, View view, ElementId patternId)
         {
+            ColorBranchElements(branch, view, patternId);
+
             foreach (var subBranch in branch.SubBranches)
             {
                 ColorBranchElements(subBranch, view, patternId);
@@ -77,6 +84,11 @@ namespace Calc.ConnectorRevit
 
         private static void ColorBottomBranchElements(Branch branch, View view, ElementId patternId)
         {
+            if (branch.SubBranches.Count == 0)
+            {
+                ColorBranchElements(branch, view, patternId);
+            }
+
             foreach (var subBranch in branch.SubBranches)
             {
                 if (subBranch.SubBranches.Count == 0)
