@@ -21,26 +21,30 @@
 
     <DataTemplate x:Key="BranchItemTemplate">
         <Border x:Name="Border"
-                Padding="4,2,4,3"
-                Margin="2"
-                CornerRadius="4">
+            Padding="4,2,4,3"
+            Margin="2"
+            CornerRadius="4">
             <Border.Background>
-                <SolidColorBrush Color="{Binding Color}"/>
+                <SolidColorBrush Color="{Binding LabelColor}"/>
             </Border.Background>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Name}"/>
-                <TextBlock Text=" - "/>
+                <TextBlock x:Name="txtName">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Text" Value="{Binding Name}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True">
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBlock Text=" ("/>
                 <TextBlock Text="{Binding Branch.Elements.Count}"/>
+                <TextBlock Text=")"/>
             </StackPanel>
-           
         </Border>
-        <DataTemplate.Triggers>
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True">
-                <Setter TargetName="Border" Property="Background" Value="LightGray"/>
-                <Setter TargetName="Border" Property="BorderThickness" Value="0"/>
-                <Setter TargetName="Border" Property="BorderBrush" Value="Black"/>
-            </DataTrigger>
-        </DataTemplate.Triggers>
     </DataTemplate>
 
 

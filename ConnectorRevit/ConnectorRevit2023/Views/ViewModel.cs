@@ -51,6 +51,7 @@ namespace Calc.ConnectorRevit.Views
         {
             eventHandler = new ExternalEventHandler();
         }
+
         public async Task HandleLoadingAsync()
         {
             store = new Store();
@@ -63,11 +64,13 @@ namespace Calc.ConnectorRevit.Views
         {
             store.ProjectSelected = project;
             await store.GetOtherData();
+
             AllBuildups = store.BuildupsAll;
-            OnPropertyChanged("AllBuildups");
             AllForests = store.Forests;
-            OnPropertyChanged("AllForests");
             AllMappings = store.MappingsAll;
+            
+            OnPropertyChanged("AllBuildups");
+            OnPropertyChanged("AllForests");
             OnPropertyChanged("AllMappings");
         }
 
@@ -104,30 +107,25 @@ namespace Calc.ConnectorRevit.Views
             if (branchItem == null)
                 return;
 
-            foreach (BranchViewModel item in BranchItems)
-            {
-                RemoveDisplayColor(item);
-            }
+            HideAllLabelColor();
             SelectedBranchItem = branchItem;
+
             if (showBranches)
             {
                 eventHandler.Raise(Visualizer.IsolateAndColorSubbranchElements);
-                ResetSubDisplayColor(branchItem);
+                ShowSubLabelColor(branchItem);
             }
             else
             {
                 eventHandler.Raise(Visualizer.IsolateAndColorBottomBranchElements);
-                ResetAllDisplayColor(branchItem);
+                ShowAllSubLabelColor(branchItem);
             }
 
         }
         public void HandleSideClick()
         {
             eventHandler.Raise(Visualizer.Reset);
-            foreach (BranchViewModel item in BranchItems)
-            {
-                RemoveDisplayColor(item);
-            }
+            HideAllLabelColor();
             EventMessenger.SendMessage("DeselectTreeView");
         }
 
@@ -138,7 +136,7 @@ namespace Calc.ConnectorRevit.Views
             {
                 Tree tree = branchItem.Branch as Tree;
                 BranchPainter.ColorBranchesByBuildup(tree.SubBranches);
-                branchItem.UpdateColor();
+                branchItem.NotifyLabelColorChange();
             };
             HandleSideClick();
         }
@@ -150,38 +148,44 @@ namespace Calc.ConnectorRevit.Views
             {
                 Tree tree = branchItem.Branch as Tree;
                 BranchPainter.ColorBranchesByBranch(tree.SubBranches);
-                branchItem.UpdateColor();
+                branchItem.NotifyLabelColorChange();
             };
             HandleSideClick();
         }
 
 
-
-        private void RemoveDisplayColor(BranchViewModel branchItem)
+        private void HideAllLabelColor()
         {
-            branchItem.DisplayColor = false;
+            foreach (BranchViewModel item in BranchItems)
+            {
+                HideBranchLabelColor(item);
+            }
+        }
+        private void HideBranchLabelColor(BranchViewModel branchItem)
+        {
+            branchItem.ShowLabelColor = false;
 
             foreach (BranchViewModel childBranchItem in branchItem.SubBranchItems)
             {
-                RemoveDisplayColor(childBranchItem);
+                HideBranchLabelColor(childBranchItem);
             }
         }
 
-        private void ResetSubDisplayColor(BranchViewModel branchItem)
+        private void ShowSubLabelColor(BranchViewModel branchItem)
         {
             foreach (BranchViewModel childBranchItem in branchItem.SubBranchItems)
             {
-                childBranchItem.DisplayColor = true;
+                childBranchItem.ShowLabelColor = true;
             }
         }
 
-        private void ResetAllDisplayColor(BranchViewModel branchItem)
+        private void ShowAllSubLabelColor(BranchViewModel branchItem)
         {
-            branchItem.DisplayColor = true;
+            branchItem.ShowLabelColor = true;
             foreach (BranchViewModel childBranchItem in branchItem.SubBranchItems)
             {
-                childBranchItem.DisplayColor = true;
-                ResetAllDisplayColor(childBranchItem);
+                childBranchItem.ShowLabelColor = true;
+                ShowAllSubLabelColor(childBranchItem);
             }
         }
 

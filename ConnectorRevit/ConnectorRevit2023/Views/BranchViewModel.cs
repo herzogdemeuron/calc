@@ -1,8 +1,8 @@
-﻿using Calc.Core.Objects;
+﻿using Calc.Core.Color;
+using Calc.Core.Objects;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Media;
-using Calc.Core.Color;
 
 namespace Calc.ConnectorRevit.Views
 {
@@ -22,35 +22,33 @@ namespace Calc.ConnectorRevit.Views
             }
         }
 
-
-        public Color Color
+        private bool showLabelColor;
+        public bool ShowLabelColor
+        {
+            get => showLabelColor;
+            set
+            {
+                if (showLabelColor != value)
+                {
+                    showLabelColor = value;
+                    //NotifyPropertyChanged("DisplayColor");
+                    NotifyPropertyChanged("LabelColor");
+                }
+            }
+        }
+        public Color LabelColor
         {
             get
             {
-                if (DisplayColor)
+                if (ShowLabelColor)
                 {
                     var hsl = Branch.HslColor;
                     var rgb = CalcColorConverter.HslToRgb(hsl);
-                    return Color.FromArgb(100, rgb.Red, rgb.Green, rgb.Blue);
+                    return Color.FromArgb(255, rgb.Red, rgb.Green, rgb.Blue);
                 }
                 else
                 {
                     return Color.FromArgb(100, 220, 220, 220);
-                }
-            }
-        }
-
-        private bool displayColor;
-        public bool DisplayColor
-        {
-            get => displayColor;
-            set
-            {
-                if (displayColor != value)
-                {
-                    displayColor = value;
-                    //NotifyPropertyChanged("DisplayColor");
-                    NotifyPropertyChanged("Color");
                 }
             }
         }
@@ -63,12 +61,12 @@ namespace Calc.ConnectorRevit.Views
                 return $"{Branch.Parameter}:{Branch.Value}";
         }
 
-        public void UpdateColor()
+        public void NotifyLabelColorChange()
         {
-            NotifyPropertyChanged("Color");
+            NotifyPropertyChanged("LabelColor");
             foreach (var subBranch in SubBranchItems)
             {
-                subBranch.UpdateColor();
+                subBranch.NotifyLabelColorChange();
             }
         }
 
