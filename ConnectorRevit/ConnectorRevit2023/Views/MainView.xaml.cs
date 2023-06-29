@@ -18,6 +18,7 @@ namespace Calc.ConnectorRevit.Views
             viewModel = App.ViewModel;
             this.DataContext = viewModel;
             InitializeComponent();
+            EventMessenger.OnMessageReceived += MessageFromViewModelReceived;
         }
 
         private async void WindowLoaded(object sender, RoutedEventArgs e)
@@ -56,15 +57,31 @@ namespace Calc.ConnectorRevit.Views
         private void SideClickDown(object sender, MouseButtonEventArgs e)
         {
             viewModel.HandleSideClick();
-            if (TreeView.SelectedItem != null)
+        }
+
+        private void MessageFromViewModelReceived(string message)
+        {
+            if (message == "DeselectTreeView")
             {
-                if (TreeView.Tag is TreeViewItem selectedTreeViewItem)
+                if (TreeView.SelectedItem != null)
                 {
-                    selectedTreeViewItem.IsSelected = false;
+                    if (TreeView.Tag is TreeViewItem selectedTreeViewItem)
+                    {
+                        selectedTreeViewItem.IsSelected = false;
+                    }
                 }
             }
         }
 
+        private void ViewToggleButtonChecked(object sender, RoutedEventArgs e)
+        {
+            viewModel.HandleViewToggleToBuildup();
+        }
+
+        private void ViewToggleButtonUnchecked(object sender, RoutedEventArgs e)
+        {
+            viewModel.HandleViewToggleToBranch();
+        }
         private void CalculateClicked(object sender, RoutedEventArgs e)
         {
             //_viewModel.Calculate();

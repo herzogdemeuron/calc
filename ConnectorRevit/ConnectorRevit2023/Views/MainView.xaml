@@ -86,7 +86,10 @@
                             HorizontalAlignment="Right"
                             Margin="0,0,10,20">
                     <TextBlock Text="Branch" FontSize="10"/>
-                    <ToggleButton Style="{StaticResource ToggleButtonStyle}" Margin="4,-2,4,0"/>
+                    <ToggleButton x:Name="ViewToggleButton"
+                                  Style="{StaticResource ToggleButtonStyle}" Margin="4,-2,4,0"
+                                  Checked="ViewToggleButtonChecked"
+                                  Unchecked="ViewToggleButtonUnchecked"/>
                     <TextBlock Text="Buildup" FontSize="10"/>
                 </StackPanel>
                 

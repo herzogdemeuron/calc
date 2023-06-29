@@ -1,8 +1,8 @@
-﻿using Calc.Core.Objects;
+﻿using Calc.Core.Color;
+using Calc.Core.Objects;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Media;
-using Calc.Core.Color;
 
 namespace Calc.ConnectorRevit.Views
 {
@@ -22,16 +22,29 @@ namespace Calc.ConnectorRevit.Views
             }
         }
 
-
-        public Color Color
+        private bool showLabelColor;
+        public bool ShowLabelColor
+        {
+            get => showLabelColor;
+            set
+            {
+                if (showLabelColor != value)
+                {
+                    showLabelColor = value;
+                    //NotifyPropertyChanged("DisplayColor");
+                    NotifyPropertyChanged("LabelColor");
+                }
+            }
+        }
+        public Color LabelColor
         {
             get
             {
-                if (DisplayColor)
+                if (ShowLabelColor)
                 {
                     var hsl = Branch.HslColor;
                     var rgb = CalcColorConverter.HslToRgb(hsl);
-                    return Color.FromArgb(150, rgb.Red, rgb.Green, rgb.Blue);
+                    return Color.FromArgb(255, rgb.Red, rgb.Green, rgb.Blue);
                 }
                 else
                 {
@@ -40,36 +53,30 @@ namespace Calc.ConnectorRevit.Views
             }
         }
 
-        private bool displayColor;
-        public bool DisplayColor
+        public string GetName()
         {
-            get => displayColor;
-            set
+            if (Branch is Tree tree)
+                return tree.Name;
+            else
+                return $"{Branch.Parameter}:{Branch.Value}";
+        }
+
+        public void NotifyLabelColorChange()
+        {
+            NotifyPropertyChanged("LabelColor");
+            foreach (var subBranch in SubBranchItems)
             {
-                if (displayColor != value)
-                {
-                    displayColor = value;
-                    //NotifyPropertyChanged("DisplayColor");
-                    NotifyPropertyChanged("Color");
-                }
+                subBranch.NotifyLabelColorChange();
             }
         }
 
-        public string GetName()
-        {
-            if (Branch.Name == null)
-            return $"{Branch.Parameter}:{Branch.Value}";
-
-            return Branch.Name;
-        }
+        
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void NotifyPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-
 
 
     }
