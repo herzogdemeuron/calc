@@ -4,17 +4,17 @@
     "vendor": "sqlite",
     "collections": [
         {
-            "collection": "architecture_projects",
+            "collection": "calc_architecture_projects",
             "meta": {
                 "accountability": "all",
                 "archive_app_filter": true,
                 "archive_field": null,
                 "archive_value": null,
                 "collapse": "open",
-                "collection": "architecture_projects",
+                "collection": "calc_architecture_projects",
                 "color": "#FFFFFF",
                 "display_template": null,
-                "group": null,
+                "group": "calc",
                 "hidden": false,
                 "icon": null,
                 "item_duplication_fields": null,
@@ -27,21 +27,21 @@
                 "unarchive_value": null
             },
             "schema": {
-                "name": "architecture_projects"
+                "name": "calc_architecture_projects"
             }
         },
         {
-            "collection": "lca_buildups",
+            "collection": "calc_buildups",
             "meta": {
                 "accountability": "all",
                 "archive_app_filter": true,
                 "archive_field": null,
                 "archive_value": null,
                 "collapse": "open",
-                "collection": "lca_buildups",
+                "collection": "calc_buildups",
                 "color": "#16A70C",
-                "display_template": "{{buildup_name}} {{group_id.group_name}} {{components.id}} {{unit}} {{components.lca_materials_id.source_db}}",
-                "group": "lca_source_data",
+                "display_template": "{{buildup_name}} {{group_id.group_name}} {{components.id}} {{unit}} {{components.calc_materials_id.source_db}}",
+                "group": "calc_source_data",
                 "hidden": false,
                 "icon": null,
                 "item_duplication_fields": null,
@@ -54,21 +54,21 @@
                 "unarchive_value": null
             },
             "schema": {
-                "name": "lca_buildups"
+                "name": "calc_buildups"
             }
         },
         {
-            "collection": "lca_buildups_lca_materials",
+            "collection": "calc_buildups_calc_materials",
             "meta": {
                 "accountability": "all",
                 "archive_app_filter": true,
                 "archive_field": null,
                 "archive_value": null,
                 "collapse": "open",
-                "collection": "lca_buildups_lca_materials",
+                "collection": "calc_buildups_calc_materials",
                 "color": null,
                 "display_template": null,
-                "group": "lca_source_data",
+                "group": "calc_source_data",
                 "hidden": true,
                 "icon": "import_export",
                 "item_duplication_fields": null,
@@ -81,21 +81,21 @@
                 "unarchive_value": null
             },
             "schema": {
-                "name": "lca_buildups_lca_materials"
+                "name": "calc_buildups_calc_materials"
             }
         },
         {
-            "collection": "lca_calculation_results",
+            "collection": "calc_calculation_results",
             "meta": {
                 "accountability": "all",
                 "archive_app_filter": true,
                 "archive_field": null,
                 "archive_value": null,
                 "collapse": "open",
-                "collection": "lca_calculation_results",
+                "collection": "calc_calculation_results",
                 "color": "#36960D",
                 "display_template": null,
-                "group": "lca_results",
+                "group": "calc_results",
                 "hidden": false,
                 "icon": null,
                 "item_duplication_fields": null,
@@ -108,21 +108,21 @@
                 "unarchive_value": null
             },
             "schema": {
-                "name": "lca_calculation_results"
+                "name": "calc_calculation_results"
             }
         },
         {
-            "collection": "lca_forests",
+            "collection": "calc_forests",
             "meta": {
                 "accountability": "all",
                 "archive_app_filter": true,
                 "archive_field": null,
                 "archive_value": null,
                 "collapse": "open",
-                "collection": "lca_forests",
+                "collection": "calc_forests",
                 "color": "#12AF3A",
                 "display_template": null,
-                "group": "lca_source_data",
+                "group": "calc_source_data",
                 "hidden": false,
                 "icon": null,
                 "item_duplication_fields": null,
@@ -135,21 +135,21 @@
                 "unarchive_value": null
             },
             "schema": {
-                "name": "lca_forests"
+                "name": "calc_forests"
             }
         },
         {
-            "collection": "lca_groups",
+            "collection": "calc_groups",
             "meta": {
                 "accountability": "all",
                 "archive_app_filter": true,
                 "archive_field": null,
                 "archive_value": null,
                 "collapse": "open",
-                "collection": "lca_groups",
+                "collection": "calc_groups",
                 "color": "#158A17",
                 "display_template": null,
-                "group": "lca_source_data",
+                "group": "calc_source_data",
                 "hidden": false,
                 "icon": null,
                 "item_duplication_fields": null,
@@ -162,21 +162,21 @@
                 "unarchive_value": null
             },
             "schema": {
-                "name": "lca_groups"
+                "name": "calc_groups"
             }
         },
         {
-            "collection": "lca_mappings",
+            "collection": "calc_mappings",
             "meta": {
                 "accountability": "all",
                 "archive_app_filter": true,
                 "archive_field": null,
                 "archive_value": null,
                 "collapse": "open",
-                "collection": "lca_mappings",
+                "collection": "calc_mappings",
                 "color": "#6DCC2E",
                 "display_template": null,
-                "group": "lca_source_data",
+                "group": "calc_source_data",
                 "hidden": false,
                 "icon": null,
                 "item_duplication_fields": null,
@@ -189,21 +189,21 @@
                 "unarchive_value": null
             },
             "schema": {
-                "name": "lca_mappings"
+                "name": "calc_mappings"
             }
         },
         {
-            "collection": "lca_materials",
+            "collection": "calc_materials",
             "meta": {
                 "accountability": "all",
                 "archive_app_filter": true,
                 "archive_field": null,
                 "archive_value": null,
                 "collapse": "open",
-                "collection": "lca_materials",
+                "collection": "calc_materials",
                 "color": "#329D0C",
                 "display_template": null,
-                "group": "lca_source_data",
+                "group": "calc_source_data",
                 "hidden": false,
                 "icon": null,
                 "item_duplication_fields": null,
@@ -216,21 +216,21 @@
                 "unarchive_value": null
             },
             "schema": {
-                "name": "lca_materials"
+                "name": "calc_materials"
             }
         },
         {
-            "collection": "lca_results",
+            "collection": "calc_results",
             "meta": {
                 "accountability": "all",
                 "archive_app_filter": true,
                 "archive_field": null,
                 "archive_value": null,
                 "collapse": "open",
-                "collection": "lca_results",
+                "collection": "calc_results",
                 "color": "#406C13",
                 "display_template": null,
-                "group": "life_cycle_assessment",
+                "group": "calc",
                 "hidden": false,
                 "icon": "folder",
                 "item_duplication_fields": null,
@@ -244,17 +244,17 @@
             }
         },
         {
-            "collection": "lca_source_data",
+            "collection": "calc_source_data",
             "meta": {
                 "accountability": "all",
                 "archive_app_filter": true,
                 "archive_field": null,
                 "archive_value": null,
                 "collapse": "open",
-                "collection": "lca_source_data",
+                "collection": "calc_source_data",
                 "color": "#58AC20",
                 "display_template": null,
-                "group": "life_cycle_assessment",
+                "group": "calc",
                 "hidden": false,
                 "icon": "folder",
                 "item_duplication_fields": null,
@@ -268,14 +268,14 @@
             }
         },
         {
-            "collection": "life_cycle_assessment",
+            "collection": "calc",
             "meta": {
                 "accountability": "all",
                 "archive_app_filter": true,
                 "archive_field": null,
                 "archive_value": null,
                 "collapse": "open",
-                "collection": "life_cycle_assessment",
+                "collection": "calc",
                 "color": "#2B8D07",
                 "display_template": null,
                 "group": null,
@@ -290,42 +290,15 @@
                 "translations": null,
                 "unarchive_value": null
             }
-        },
-        {
-            "collection": "unit_tests",
-            "meta": {
-                "accountability": "all",
-                "archive_app_filter": true,
-                "archive_field": null,
-                "archive_value": null,
-                "collapse": "open",
-                "collection": "unit_tests",
-                "color": "#18222F",
-                "display_template": null,
-                "group": null,
-                "hidden": false,
-                "icon": null,
-                "item_duplication_fields": null,
-                "note": null,
-                "preview_url": null,
-                "singleton": false,
-                "sort": 5,
-                "sort_field": null,
-                "translations": null,
-                "unarchive_value": null
-            },
-            "schema": {
-                "name": "unit_tests"
-            }
         }
     ],
     "fields": [
         {
-            "collection": "architecture_projects",
+            "collection": "calc_architecture_projects",
             "field": "id",
             "type": "integer",
             "meta": {
-                "collection": "architecture_projects",
+                "collection": "calc_architecture_projects",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -346,7 +319,7 @@
             },
             "schema": {
                 "name": "id",
-                "table": "architecture_projects",
+                "table": "calc_architecture_projects",
                 "data_type": "integer",
                 "default_value": null,
                 "max_length": null,
@@ -363,11 +336,11 @@
             }
         },
         {
-            "collection": "architecture_projects",
+            "collection": "calc_architecture_projects",
             "field": "project_number",
             "type": "string",
             "meta": {
-                "collection": "architecture_projects",
+                "collection": "calc_architecture_projects",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -388,7 +361,7 @@
             },
             "schema": {
                 "name": "project_number",
-                "table": "architecture_projects",
+                "table": "calc_architecture_projects",
                 "data_type": "varchar",
                 "default_value": null,
                 "max_length": 255,
@@ -405,11 +378,11 @@
             }
         },
         {
-            "collection": "lca_buildups",
+            "collection": "calc_buildups",
             "field": "buildup_name",
             "type": "string",
             "meta": {
-                "collection": "lca_buildups",
+                "collection": "calc_buildups",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -430,7 +403,7 @@
             },
             "schema": {
                 "name": "buildup_name",
-                "table": "lca_buildups",
+                "table": "calc_buildups",
                 "data_type": "varchar",
                 "default_value": null,
                 "max_length": 255,
@@ -447,15 +420,15 @@
             }
         },
         {
-            "collection": "lca_buildups",
+            "collection": "calc_buildups",
             "field": "components",
             "type": "alias",
             "meta": {
-                "collection": "lca_buildups",
+                "collection": "calc_buildups",
                 "conditions": null,
                 "display": "related-values",
                 "display_options": {
-                    "template": "{{lca_materials_id.id}}"
+                    "template": "{{calc_materials_id.id}}"
                 },
                 "field": "components",
                 "group": null,
@@ -467,9 +440,9 @@
                     "enableCreate": false,
                     "fields": [
                         "amount",
-                        "lca_materials_id.global_warming_potential_a1_a2_a3",
-                        "lca_materials_id.material_name",
-                        "lca_materials_id.unit"
+                        "calc_materials_id.global_warming_potential_a1_a2_a3",
+                        "calc_materials_id.material_name",
+                        "calc_materials_id.unit"
                     ],
                     "layout": "table",
                     "tableSpacing": "compact"
@@ -487,11 +460,11 @@
             }
         },
         {
-            "collection": "lca_buildups",
+            "collection": "calc_buildups",
             "field": "description",
             "type": "text",
             "meta": {
-                "collection": "lca_buildups",
+                "collection": "calc_buildups",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -526,7 +499,7 @@
             },
             "schema": {
                 "name": "description",
-                "table": "lca_buildups",
+                "table": "calc_buildups",
                 "data_type": "text",
                 "default_value": null,
                 "max_length": null,
@@ -543,11 +516,11 @@
             }
         },
         {
-            "collection": "lca_buildups",
+            "collection": "calc_buildups",
             "field": "group_id",
             "type": "integer",
             "meta": {
-                "collection": "lca_buildups",
+                "collection": "calc_buildups",
                 "conditions": null,
                 "display": "related-values",
                 "display_options": {
@@ -574,7 +547,7 @@
             },
             "schema": {
                 "name": "group_id",
-                "table": "lca_buildups",
+                "table": "calc_buildups",
                 "data_type": "integer",
                 "default_value": null,
                 "max_length": null,
@@ -586,16 +559,16 @@
                 "is_generated": false,
                 "generation_expression": null,
                 "has_auto_increment": false,
-                "foreign_key_table": "lca_groups",
+                "foreign_key_table": "calc_groups",
                 "foreign_key_column": "id"
             }
         },
         {
-            "collection": "lca_buildups",
+            "collection": "calc_buildups",
             "field": "id",
             "type": "integer",
             "meta": {
-                "collection": "lca_buildups",
+                "collection": "calc_buildups",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -616,7 +589,7 @@
             },
             "schema": {
                 "name": "id",
-                "table": "lca_buildups",
+                "table": "calc_buildups",
                 "data_type": "integer",
                 "default_value": null,
                 "max_length": null,
@@ -633,11 +606,11 @@
             }
         },
         {
-            "collection": "lca_buildups",
+            "collection": "calc_buildups",
             "field": "image",
             "type": "uuid",
             "meta": {
-                "collection": "lca_buildups",
+                "collection": "calc_buildups",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -662,7 +635,7 @@
             },
             "schema": {
                 "name": "image",
-                "table": "lca_buildups",
+                "table": "calc_buildups",
                 "data_type": "char",
                 "default_value": null,
                 "max_length": 36,
@@ -679,11 +652,11 @@
             }
         },
         {
-            "collection": "lca_buildups",
+            "collection": "calc_buildups",
             "field": "unit",
             "type": "string",
             "meta": {
-                "collection": "lca_buildups",
+                "collection": "calc_buildups",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -723,7 +696,7 @@
             },
             "schema": {
                 "name": "unit",
-                "table": "lca_buildups",
+                "table": "calc_buildups",
                 "data_type": "varchar",
                 "default_value": "m3",
                 "max_length": 255,
@@ -740,11 +713,11 @@
             }
         },
         {
-            "collection": "lca_buildups_lca_materials",
+            "collection": "calc_buildups_calc_materials",
             "field": "amount",
             "type": "float",
             "meta": {
-                "collection": "lca_buildups_lca_materials",
+                "collection": "calc_buildups_calc_materials",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -765,7 +738,7 @@
             },
             "schema": {
                 "name": "amount",
-                "table": "lca_buildups_lca_materials",
+                "table": "calc_buildups_calc_materials",
                 "data_type": "float",
                 "default_value": 1,
                 "max_length": null,
@@ -782,11 +755,11 @@
             }
         },
         {
-            "collection": "lca_buildups_lca_materials",
+            "collection": "calc_buildups_calc_materials",
             "field": "id",
             "type": "integer",
             "meta": {
-                "collection": "lca_buildups_lca_materials",
+                "collection": "calc_buildups_calc_materials",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -807,7 +780,7 @@
             },
             "schema": {
                 "name": "id",
-                "table": "lca_buildups_lca_materials",
+                "table": "calc_buildups_calc_materials",
                 "data_type": "integer",
                 "default_value": null,
                 "max_length": null,
@@ -824,15 +797,15 @@
             }
         },
         {
-            "collection": "lca_buildups_lca_materials",
-            "field": "lca_buildups_id",
+            "collection": "calc_buildups_calc_materials",
+            "field": "calc_buildups_id",
             "type": "integer",
             "meta": {
-                "collection": "lca_buildups_lca_materials",
+                "collection": "calc_buildups_calc_materials",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
-                "field": "lca_buildups_id",
+                "field": "calc_buildups_id",
                 "group": null,
                 "hidden": true,
                 "interface": null,
@@ -848,8 +821,8 @@
                 "width": "full"
             },
             "schema": {
-                "name": "lca_buildups_id",
-                "table": "lca_buildups_lca_materials",
+                "name": "calc_buildups_id",
+                "table": "calc_buildups_calc_materials",
                 "data_type": "integer",
                 "default_value": null,
                 "max_length": null,
@@ -861,20 +834,20 @@
                 "is_generated": false,
                 "generation_expression": null,
                 "has_auto_increment": false,
-                "foreign_key_table": "lca_buildups",
+                "foreign_key_table": "calc_buildups",
                 "foreign_key_column": "id"
             }
         },
         {
-            "collection": "lca_buildups_lca_materials",
-            "field": "lca_materials_id",
+            "collection": "calc_buildups_calc_materials",
+            "field": "calc_materials_id",
             "type": "integer",
             "meta": {
-                "collection": "lca_buildups_lca_materials",
+                "collection": "calc_buildups_calc_materials",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
-                "field": "lca_materials_id",
+                "field": "calc_materials_id",
                 "group": null,
                 "hidden": true,
                 "interface": null,
@@ -890,8 +863,8 @@
                 "width": "full"
             },
             "schema": {
-                "name": "lca_materials_id",
-                "table": "lca_buildups_lca_materials",
+                "name": "calc_materials_id",
+                "table": "calc_buildups_calc_materials",
                 "data_type": "integer",
                 "default_value": null,
                 "max_length": null,
@@ -903,16 +876,16 @@
                 "is_generated": false,
                 "generation_expression": null,
                 "has_auto_increment": false,
-                "foreign_key_table": "lca_materials",
+                "foreign_key_table": "calc_materials",
                 "foreign_key_column": "id"
             }
         },
         {
-            "collection": "lca_calculation_results",
+            "collection": "calc_calculation_results",
             "field": "buildup_name",
             "type": "string",
             "meta": {
-                "collection": "lca_calculation_results",
+                "collection": "calc_calculation_results",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -933,7 +906,7 @@
             },
             "schema": {
                 "name": "buildup_name",
-                "table": "lca_calculation_results",
+                "table": "calc_calculation_results",
                 "data_type": "varchar",
                 "default_value": null,
                 "max_length": 255,
@@ -950,11 +923,11 @@
             }
         },
         {
-            "collection": "lca_calculation_results",
+            "collection": "calc_calculation_results",
             "field": "date_created",
             "type": "timestamp",
             "meta": {
-                "collection": "lca_calculation_results",
+                "collection": "calc_calculation_results",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -978,7 +951,7 @@
             },
             "schema": {
                 "name": "date_created",
-                "table": "lca_calculation_results",
+                "table": "calc_calculation_results",
                 "data_type": "datetime",
                 "default_value": null,
                 "max_length": null,
@@ -995,11 +968,11 @@
             }
         },
         {
-            "collection": "lca_calculation_results",
+            "collection": "calc_calculation_results",
             "field": "date_updated",
             "type": "timestamp",
             "meta": {
-                "collection": "lca_calculation_results",
+                "collection": "calc_calculation_results",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -1023,7 +996,7 @@
             },
             "schema": {
                 "name": "date_updated",
-                "table": "lca_calculation_results",
+                "table": "calc_calculation_results",
                 "data_type": "datetime",
                 "default_value": null,
                 "max_length": null,
@@ -1040,11 +1013,11 @@
             }
         },
         {
-            "collection": "lca_calculation_results",
+            "collection": "calc_calculation_results",
             "field": "element_id",
             "type": "string",
             "meta": {
-                "collection": "lca_calculation_results",
+                "collection": "calc_calculation_results",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -1065,7 +1038,7 @@
             },
             "schema": {
                 "name": "element_id",
-                "table": "lca_calculation_results",
+                "table": "calc_calculation_results",
                 "data_type": "varchar",
                 "default_value": null,
                 "max_length": 255,
@@ -1082,11 +1055,11 @@
             }
         },
         {
-            "collection": "lca_calculation_results",
+            "collection": "calc_calculation_results",
             "field": "global_warming_potential_a1_a2_a3",
             "type": "float",
             "meta": {
-                "collection": "lca_calculation_results",
+                "collection": "calc_calculation_results",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -1107,7 +1080,7 @@
             },
             "schema": {
                 "name": "global_warming_potential_a1_a2_a3",
-                "table": "lca_calculation_results",
+                "table": "calc_calculation_results",
                 "data_type": "float",
                 "default_value": null,
                 "max_length": null,
@@ -1124,11 +1097,11 @@
             }
         },
         {
-            "collection": "lca_calculation_results",
+            "collection": "calc_calculation_results",
             "field": "group_name",
             "type": "string",
             "meta": {
-                "collection": "lca_calculation_results",
+                "collection": "calc_calculation_results",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -1149,7 +1122,7 @@
             },
             "schema": {
                 "name": "group_name",
-                "table": "lca_calculation_results",
+                "table": "calc_calculation_results",
                 "data_type": "varchar",
                 "default_value": null,
                 "max_length": 255,
@@ -1166,11 +1139,11 @@
             }
         },
         {
-            "collection": "lca_calculation_results",
+            "collection": "calc_calculation_results",
             "field": "id",
             "type": "integer",
             "meta": {
-                "collection": "lca_calculation_results",
+                "collection": "calc_calculation_results",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -1191,7 +1164,7 @@
             },
             "schema": {
                 "name": "id",
-                "table": "lca_calculation_results",
+                "table": "calc_calculation_results",
                 "data_type": "integer",
                 "default_value": null,
                 "max_length": null,
@@ -1208,11 +1181,11 @@
             }
         },
         {
-            "collection": "lca_calculation_results",
+            "collection": "calc_calculation_results",
             "field": "material_amount",
             "type": "float",
             "meta": {
-                "collection": "lca_calculation_results",
+                "collection": "calc_calculation_results",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -1233,7 +1206,7 @@
             },
             "schema": {
                 "name": "material_amount",
-                "table": "lca_calculation_results",
+                "table": "calc_calculation_results",
                 "data_type": "float",
                 "default_value": null,
                 "max_length": null,
@@ -1250,11 +1223,11 @@
             }
         },
         {
-            "collection": "lca_calculation_results",
+            "collection": "calc_calculation_results",
             "field": "material_category",
             "type": "string",
             "meta": {
-                "collection": "lca_calculation_results",
+                "collection": "calc_calculation_results",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -1275,7 +1248,7 @@
             },
             "schema": {
                 "name": "material_category",
-                "table": "lca_calculation_results",
+                "table": "calc_calculation_results",
                 "data_type": "varchar",
                 "default_value": null,
                 "max_length": 255,
@@ -1292,11 +1265,11 @@
             }
         },
         {
-            "collection": "lca_calculation_results",
+            "collection": "calc_calculation_results",
             "field": "material_name",
             "type": "string",
             "meta": {
-                "collection": "lca_calculation_results",
+                "collection": "calc_calculation_results",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -1317,7 +1290,7 @@
             },
             "schema": {
                 "name": "material_name",
-                "table": "lca_calculation_results",
+                "table": "calc_calculation_results",
                 "data_type": "varchar",
                 "default_value": null,
                 "max_length": 255,
@@ -1334,11 +1307,11 @@
             }
         },
         {
-            "collection": "lca_calculation_results",
+            "collection": "calc_calculation_results",
             "field": "project_id",
             "type": "integer",
             "meta": {
-                "collection": "lca_calculation_results",
+                "collection": "calc_calculation_results",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -1361,7 +1334,7 @@
             },
             "schema": {
                 "name": "project_id",
-                "table": "lca_calculation_results",
+                "table": "calc_calculation_results",
                 "data_type": "integer",
                 "default_value": null,
                 "max_length": null,
@@ -1373,16 +1346,16 @@
                 "is_generated": false,
                 "generation_expression": null,
                 "has_auto_increment": false,
-                "foreign_key_table": "architecture_projects",
+                "foreign_key_table": "calc_architecture_projects",
                 "foreign_key_column": "id"
             }
         },
         {
-            "collection": "lca_calculation_results",
+            "collection": "calc_calculation_results",
             "field": "snapshot_name",
             "type": "string",
             "meta": {
-                "collection": "lca_calculation_results",
+                "collection": "calc_calculation_results",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -1403,7 +1376,7 @@
             },
             "schema": {
                 "name": "snapshot_name",
-                "table": "lca_calculation_results",
+                "table": "calc_calculation_results",
                 "data_type": "varchar",
                 "default_value": null,
                 "max_length": 255,
@@ -1420,11 +1393,11 @@
             }
         },
         {
-            "collection": "lca_calculation_results",
+            "collection": "calc_calculation_results",
             "field": "unit",
             "type": "string",
             "meta": {
-                "collection": "lca_calculation_results",
+                "collection": "calc_calculation_results",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -1445,7 +1418,7 @@
             },
             "schema": {
                 "name": "unit",
-                "table": "lca_calculation_results",
+                "table": "calc_calculation_results",
                 "data_type": "varchar",
                 "default_value": null,
                 "max_length": 255,
@@ -1462,11 +1435,11 @@
             }
         },
         {
-            "collection": "lca_forests",
+            "collection": "calc_forests",
             "field": "date_created",
             "type": "timestamp",
             "meta": {
-                "collection": "lca_forests",
+                "collection": "calc_forests",
                 "conditions": null,
                 "display": "datetime",
                 "display_options": {
@@ -1492,7 +1465,7 @@
             },
             "schema": {
                 "name": "date_created",
-                "table": "lca_forests",
+                "table": "calc_forests",
                 "data_type": "datetime",
                 "default_value": null,
                 "max_length": null,
@@ -1509,11 +1482,11 @@
             }
         },
         {
-            "collection": "lca_forests",
+            "collection": "calc_forests",
             "field": "date_updated",
             "type": "timestamp",
             "meta": {
-                "collection": "lca_forests",
+                "collection": "calc_forests",
                 "conditions": null,
                 "display": "datetime",
                 "display_options": {
@@ -1539,7 +1512,7 @@
             },
             "schema": {
                 "name": "date_updated",
-                "table": "lca_forests",
+                "table": "calc_forests",
                 "data_type": "datetime",
                 "default_value": null,
                 "max_length": null,
@@ -1556,11 +1529,11 @@
             }
         },
         {
-            "collection": "lca_forests",
+            "collection": "calc_forests",
             "field": "forest_name",
             "type": "string",
             "meta": {
-                "collection": "lca_forests",
+                "collection": "calc_forests",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -1581,7 +1554,7 @@
             },
             "schema": {
                 "name": "forest_name",
-                "table": "lca_forests",
+                "table": "calc_forests",
                 "data_type": "varchar",
                 "default_value": null,
                 "max_length": 255,
@@ -1598,11 +1571,11 @@
             }
         },
         {
-            "collection": "lca_forests",
+            "collection": "calc_forests",
             "field": "id",
             "type": "integer",
             "meta": {
-                "collection": "lca_forests",
+                "collection": "calc_forests",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -1623,7 +1596,7 @@
             },
             "schema": {
                 "name": "id",
-                "table": "lca_forests",
+                "table": "calc_forests",
                 "data_type": "integer",
                 "default_value": null,
                 "max_length": null,
@@ -1640,11 +1613,11 @@
             }
         },
         {
-            "collection": "lca_forests",
+            "collection": "calc_forests",
             "field": "project_id",
             "type": "integer",
             "meta": {
-                "collection": "lca_forests",
+                "collection": "calc_forests",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -1667,7 +1640,7 @@
             },
             "schema": {
                 "name": "project_id",
-                "table": "lca_forests",
+                "table": "calc_forests",
                 "data_type": "integer",
                 "default_value": null,
                 "max_length": null,
@@ -1679,16 +1652,16 @@
                 "is_generated": false,
                 "generation_expression": null,
                 "has_auto_increment": false,
-                "foreign_key_table": "architecture_projects",
+                "foreign_key_table": "calc_architecture_projects",
                 "foreign_key_column": "id"
             }
         },
         {
-            "collection": "lca_forests",
+            "collection": "calc_forests",
             "field": "trees",
             "type": "json",
             "meta": {
-                "collection": "lca_forests",
+                "collection": "calc_forests",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -1711,7 +1684,7 @@
             },
             "schema": {
                 "name": "trees",
-                "table": "lca_forests",
+                "table": "calc_forests",
                 "data_type": "json",
                 "default_value": null,
                 "max_length": null,
@@ -1728,11 +1701,11 @@
             }
         },
         {
-            "collection": "lca_groups",
+            "collection": "calc_groups",
             "field": "cost_group_din_276",
             "type": "string",
             "meta": {
-                "collection": "lca_groups",
+                "collection": "calc_groups",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -1776,7 +1749,7 @@
             },
             "schema": {
                 "name": "cost_group_din_276",
-                "table": "lca_groups",
+                "table": "calc_groups",
                 "data_type": "varchar",
                 "default_value": null,
                 "max_length": 255,
@@ -1793,11 +1766,11 @@
             }
         },
         {
-            "collection": "lca_groups",
+            "collection": "calc_groups",
             "field": "group_name",
             "type": "string",
             "meta": {
-                "collection": "lca_groups",
+                "collection": "calc_groups",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -1818,7 +1791,7 @@
             },
             "schema": {
                 "name": "group_name",
-                "table": "lca_groups",
+                "table": "calc_groups",
                 "data_type": "varchar",
                 "default_value": null,
                 "max_length": 255,
@@ -1835,11 +1808,11 @@
             }
         },
         {
-            "collection": "lca_groups",
+            "collection": "calc_groups",
             "field": "id",
             "type": "integer",
             "meta": {
-                "collection": "lca_groups",
+                "collection": "calc_groups",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -1860,7 +1833,7 @@
             },
             "schema": {
                 "name": "id",
-                "table": "lca_groups",
+                "table": "calc_groups",
                 "data_type": "integer",
                 "default_value": null,
                 "max_length": null,
@@ -1877,11 +1850,11 @@
             }
         },
         {
-            "collection": "lca_mappings",
+            "collection": "calc_mappings",
             "field": "date_created",
             "type": "timestamp",
             "meta": {
-                "collection": "lca_mappings",
+                "collection": "calc_mappings",
                 "conditions": null,
                 "display": "datetime",
                 "display_options": {
@@ -1907,7 +1880,7 @@
             },
             "schema": {
                 "name": "date_created",
-                "table": "lca_mappings",
+                "table": "calc_mappings",
                 "data_type": "datetime",
                 "default_value": null,
                 "max_length": null,
@@ -1924,11 +1897,11 @@
             }
         },
         {
-            "collection": "lca_mappings",
+            "collection": "calc_mappings",
             "field": "date_updated",
             "type": "timestamp",
             "meta": {
-                "collection": "lca_mappings",
+                "collection": "calc_mappings",
                 "conditions": null,
                 "display": "datetime",
                 "display_options": {
@@ -1954,7 +1927,7 @@
             },
             "schema": {
                 "name": "date_updated",
-                "table": "lca_mappings",
+                "table": "calc_mappings",
                 "data_type": "datetime",
                 "default_value": null,
                 "max_length": null,
@@ -1971,11 +1944,11 @@
             }
         },
         {
-            "collection": "lca_mappings",
+            "collection": "calc_mappings",
             "field": "id",
             "type": "integer",
             "meta": {
-                "collection": "lca_mappings",
+                "collection": "calc_mappings",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -1996,7 +1969,7 @@
             },
             "schema": {
                 "name": "id",
-                "table": "lca_mappings",
+                "table": "calc_mappings",
                 "data_type": "integer",
                 "default_value": null,
                 "max_length": null,
@@ -2013,11 +1986,11 @@
             }
         },
         {
-            "collection": "lca_mappings",
+            "collection": "calc_mappings",
             "field": "mapping_name",
             "type": "string",
             "meta": {
-                "collection": "lca_mappings",
+                "collection": "calc_mappings",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -2038,7 +2011,7 @@
             },
             "schema": {
                 "name": "mapping_name",
-                "table": "lca_mappings",
+                "table": "calc_mappings",
                 "data_type": "varchar",
                 "default_value": null,
                 "max_length": 255,
@@ -2055,11 +2028,11 @@
             }
         },
         {
-            "collection": "lca_mappings",
+            "collection": "calc_mappings",
             "field": "mappings",
             "type": "json",
             "meta": {
-                "collection": "lca_mappings",
+                "collection": "calc_mappings",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -2082,7 +2055,7 @@
             },
             "schema": {
                 "name": "mappings",
-                "table": "lca_mappings",
+                "table": "calc_mappings",
                 "data_type": "json",
                 "default_value": null,
                 "max_length": null,
@@ -2099,11 +2072,11 @@
             }
         },
         {
-            "collection": "lca_mappings",
+            "collection": "calc_mappings",
             "field": "project_id",
             "type": "integer",
             "meta": {
-                "collection": "lca_mappings",
+                "collection": "calc_mappings",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -2126,7 +2099,7 @@
             },
             "schema": {
                 "name": "project_id",
-                "table": "lca_mappings",
+                "table": "calc_mappings",
                 "data_type": "integer",
                 "default_value": null,
                 "max_length": null,
@@ -2138,16 +2111,16 @@
                 "is_generated": false,
                 "generation_expression": null,
                 "has_auto_increment": false,
-                "foreign_key_table": "architecture_projects",
+                "foreign_key_table": "calc_architecture_projects",
                 "foreign_key_column": "id"
             }
         },
         {
-            "collection": "lca_materials",
+            "collection": "calc_materials",
             "field": "description",
             "type": "text",
             "meta": {
-                "collection": "lca_materials",
+                "collection": "calc_materials",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -2170,7 +2143,7 @@
             },
             "schema": {
                 "name": "description",
-                "table": "lca_materials",
+                "table": "calc_materials",
                 "data_type": "text",
                 "default_value": null,
                 "max_length": null,
@@ -2187,11 +2160,11 @@
             }
         },
         {
-            "collection": "lca_materials",
+            "collection": "calc_materials",
             "field": "global_warming_potential_a1_a2_a3",
             "type": "float",
             "meta": {
-                "collection": "lca_materials",
+                "collection": "calc_materials",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -2212,7 +2185,7 @@
             },
             "schema": {
                 "name": "global_warming_potential_a1_a2_a3",
-                "table": "lca_materials",
+                "table": "calc_materials",
                 "data_type": "float",
                 "default_value": null,
                 "max_length": null,
@@ -2229,11 +2202,11 @@
             }
         },
         {
-            "collection": "lca_materials",
+            "collection": "calc_materials",
             "field": "id",
             "type": "integer",
             "meta": {
-                "collection": "lca_materials",
+                "collection": "calc_materials",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -2254,7 +2227,7 @@
             },
             "schema": {
                 "name": "id",
-                "table": "lca_materials",
+                "table": "calc_materials",
                 "data_type": "integer",
                 "default_value": null,
                 "max_length": null,
@@ -2271,11 +2244,11 @@
             }
         },
         {
-            "collection": "lca_materials",
+            "collection": "calc_materials",
             "field": "material_category",
             "type": "string",
             "meta": {
-                "collection": "lca_materials",
+                "collection": "calc_materials",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -2335,7 +2308,7 @@
             },
             "schema": {
                 "name": "material_category",
-                "table": "lca_materials",
+                "table": "calc_materials",
                 "data_type": "varchar",
                 "default_value": null,
                 "max_length": 255,
@@ -2352,11 +2325,11 @@
             }
         },
         {
-            "collection": "lca_materials",
+            "collection": "calc_materials",
             "field": "material_name",
             "type": "string",
             "meta": {
-                "collection": "lca_materials",
+                "collection": "calc_materials",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -2377,7 +2350,7 @@
             },
             "schema": {
                 "name": "material_name",
-                "table": "lca_materials",
+                "table": "calc_materials",
                 "data_type": "varchar",
                 "default_value": null,
                 "max_length": 255,
@@ -2394,11 +2367,11 @@
             }
         },
         {
-            "collection": "lca_materials",
+            "collection": "calc_materials",
             "field": "source_db",
             "type": "string",
             "meta": {
-                "collection": "lca_materials",
+                "collection": "calc_materials",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -2435,7 +2408,7 @@
             },
             "schema": {
                 "name": "source_db",
-                "table": "lca_materials",
+                "table": "calc_materials",
                 "data_type": "varchar",
                 "default_value": null,
                 "max_length": 255,
@@ -2452,11 +2425,11 @@
             }
         },
         {
-            "collection": "lca_materials",
+            "collection": "calc_materials",
             "field": "source_db_identifier",
             "type": "string",
             "meta": {
-                "collection": "lca_materials",
+                "collection": "calc_materials",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -2477,7 +2450,7 @@
             },
             "schema": {
                 "name": "source_db_identifier",
-                "table": "lca_materials",
+                "table": "calc_materials",
                 "data_type": "varchar",
                 "default_value": null,
                 "max_length": 255,
@@ -2494,11 +2467,11 @@
             }
         },
         {
-            "collection": "lca_materials",
+            "collection": "calc_materials",
             "field": "unit",
             "type": "string",
             "meta": {
-                "collection": "lca_materials",
+                "collection": "calc_materials",
                 "conditions": null,
                 "display": null,
                 "display_options": null,
@@ -2538,93 +2511,9 @@
             },
             "schema": {
                 "name": "unit",
-                "table": "lca_materials",
+                "table": "calc_materials",
                 "data_type": "varchar",
                 "default_value": "m3",
-                "max_length": 255,
-                "numeric_precision": null,
-                "numeric_scale": null,
-                "is_nullable": true,
-                "is_unique": false,
-                "is_primary_key": false,
-                "is_generated": false,
-                "generation_expression": null,
-                "has_auto_increment": false,
-                "foreign_key_table": null,
-                "foreign_key_column": null
-            }
-        },
-        {
-            "collection": "unit_tests",
-            "field": "id",
-            "type": "integer",
-            "meta": {
-                "collection": "unit_tests",
-                "conditions": null,
-                "display": null,
-                "display_options": null,
-                "field": "id",
-                "group": null,
-                "hidden": true,
-                "interface": "input",
-                "note": null,
-                "options": null,
-                "readonly": true,
-                "required": false,
-                "sort": null,
-                "special": null,
-                "translations": null,
-                "validation": null,
-                "validation_message": null,
-                "width": "full"
-            },
-            "schema": {
-                "name": "id",
-                "table": "unit_tests",
-                "data_type": "integer",
-                "default_value": null,
-                "max_length": null,
-                "numeric_precision": null,
-                "numeric_scale": null,
-                "is_nullable": false,
-                "is_unique": false,
-                "is_primary_key": true,
-                "is_generated": false,
-                "generation_expression": null,
-                "has_auto_increment": true,
-                "foreign_key_table": null,
-                "foreign_key_column": null
-            }
-        },
-        {
-            "collection": "unit_tests",
-            "field": "test_field",
-            "type": "string",
-            "meta": {
-                "collection": "unit_tests",
-                "conditions": null,
-                "display": null,
-                "display_options": null,
-                "field": "test_field",
-                "group": null,
-                "hidden": false,
-                "interface": "input",
-                "note": null,
-                "options": null,
-                "readonly": false,
-                "required": false,
-                "sort": null,
-                "special": null,
-                "translations": null,
-                "validation": null,
-                "validation_message": null,
-                "width": "full"
-            },
-            "schema": {
-                "name": "test_field",
-                "table": "unit_tests",
-                "data_type": "varchar",
-                "default_value": null,
                 "max_length": 255,
                 "numeric_precision": null,
                 "numeric_scale": null,
@@ -2641,24 +2530,24 @@
     ],
     "relations": [
         {
-            "collection": "lca_buildups",
+            "collection": "calc_buildups",
             "field": "group_id",
-            "related_collection": "lca_groups",
+            "related_collection": "calc_groups",
             "meta": {
                 "junction_field": null,
-                "many_collection": "lca_buildups",
+                "many_collection": "calc_buildups",
                 "many_field": "group_id",
                 "one_allowed_collections": null,
-                "one_collection": "lca_groups",
+                "one_collection": "calc_groups",
                 "one_collection_field": null,
                 "one_deselect_action": "nullify",
                 "one_field": null,
                 "sort_field": null
             },
             "schema": {
-                "table": "lca_buildups",
+                "table": "calc_buildups",
                 "column": "group_id",
-                "foreign_key_table": "lca_groups",
+                "foreign_key_table": "calc_groups",
                 "foreign_key_column": "id",
                 "constraint_name": null,
                 "on_update": "NO ACTION",
@@ -2666,12 +2555,12 @@
             }
         },
         {
-            "collection": "lca_buildups",
+            "collection": "calc_buildups",
             "field": "image",
             "related_collection": "directus_files",
             "meta": {
                 "junction_field": null,
-                "many_collection": "lca_buildups",
+                "many_collection": "calc_buildups",
                 "many_field": "image",
                 "one_allowed_collections": null,
                 "one_collection": "directus_files",
@@ -2681,7 +2570,7 @@
                 "sort_field": null
             },
             "schema": {
-                "table": "lca_buildups",
+                "table": "calc_buildups",
                 "column": "image",
                 "foreign_key_table": "directus_files",
                 "foreign_key_column": "id",
@@ -2691,24 +2580,24 @@
             }
         },
         {
-            "collection": "lca_buildups_lca_materials",
-            "field": "lca_buildups_id",
-            "related_collection": "lca_buildups",
+            "collection": "calc_buildups_calc_materials",
+            "field": "calc_buildups_id",
+            "related_collection": "calc_buildups",
             "meta": {
-                "junction_field": "lca_materials_id",
-                "many_collection": "lca_buildups_lca_materials",
-                "many_field": "lca_buildups_id",
+                "junction_field": "calc_materials_id",
+                "many_collection": "calc_buildups_calc_materials",
+                "many_field": "calc_buildups_id",
                 "one_allowed_collections": null,
-                "one_collection": "lca_buildups",
+                "one_collection": "calc_buildups",
                 "one_collection_field": null,
                 "one_deselect_action": "nullify",
                 "one_field": "components",
                 "sort_field": null
             },
             "schema": {
-                "table": "lca_buildups_lca_materials",
-                "column": "lca_buildups_id",
-                "foreign_key_table": "lca_buildups",
+                "table": "calc_buildups_calc_materials",
+                "column": "calc_buildups_id",
+                "foreign_key_table": "calc_buildups",
                 "foreign_key_column": "id",
                 "constraint_name": null,
                 "on_update": "NO ACTION",
@@ -2716,24 +2605,24 @@
             }
         },
         {
-            "collection": "lca_buildups_lca_materials",
-            "field": "lca_materials_id",
-            "related_collection": "lca_materials",
+            "collection": "calc_buildups_calc_materials",
+            "field": "calc_materials_id",
+            "related_collection": "calc_materials",
             "meta": {
-                "junction_field": "lca_buildups_id",
-                "many_collection": "lca_buildups_lca_materials",
-                "many_field": "lca_materials_id",
+                "junction_field": "calc_buildups_id",
+                "many_collection": "calc_buildups_calc_materials",
+                "many_field": "calc_materials_id",
                 "one_allowed_collections": null,
-                "one_collection": "lca_materials",
+                "one_collection": "calc_materials",
                 "one_collection_field": null,
                 "one_deselect_action": "nullify",
                 "one_field": null,
                 "sort_field": null
             },
             "schema": {
-                "table": "lca_buildups_lca_materials",
-                "column": "lca_materials_id",
-                "foreign_key_table": "lca_materials",
+                "table": "calc_buildups_calc_materials",
+                "column": "calc_materials_id",
+                "foreign_key_table": "calc_materials",
                 "foreign_key_column": "id",
                 "constraint_name": null,
                 "on_update": "NO ACTION",
@@ -2741,24 +2630,24 @@
             }
         },
         {
-            "collection": "lca_calculation_results",
+            "collection": "calc_calculation_results",
             "field": "project_id",
-            "related_collection": "architecture_projects",
+            "related_collection": "calc_architecture_projects",
             "meta": {
                 "junction_field": null,
-                "many_collection": "lca_calculation_results",
+                "many_collection": "calc_calculation_results",
                 "many_field": "project_id",
                 "one_allowed_collections": null,
-                "one_collection": "architecture_projects",
+                "one_collection": "calc_architecture_projects",
                 "one_collection_field": null,
                 "one_deselect_action": "nullify",
                 "one_field": null,
                 "sort_field": null
             },
             "schema": {
-                "table": "lca_calculation_results",
+                "table": "calc_calculation_results",
                 "column": "project_id",
-                "foreign_key_table": "architecture_projects",
+                "foreign_key_table": "calc_architecture_projects",
                 "foreign_key_column": "id",
                 "constraint_name": null,
                 "on_update": "NO ACTION",
@@ -2766,24 +2655,24 @@
             }
         },
         {
-            "collection": "lca_forests",
+            "collection": "calc_forests",
             "field": "project_id",
-            "related_collection": "architecture_projects",
+            "related_collection": "calc_architecture_projects",
             "meta": {
                 "junction_field": null,
-                "many_collection": "lca_forests",
+                "many_collection": "calc_forests",
                 "many_field": "project_id",
                 "one_allowed_collections": null,
-                "one_collection": "architecture_projects",
+                "one_collection": "calc_architecture_projects",
                 "one_collection_field": null,
                 "one_deselect_action": "nullify",
                 "one_field": null,
                 "sort_field": null
             },
             "schema": {
-                "table": "lca_forests",
+                "table": "calc_forests",
                 "column": "project_id",
-                "foreign_key_table": "architecture_projects",
+                "foreign_key_table": "calc_architecture_projects",
                 "foreign_key_column": "id",
                 "constraint_name": null,
                 "on_update": "NO ACTION",
@@ -2791,24 +2680,24 @@
             }
         },
         {
-            "collection": "lca_mappings",
+            "collection": "calc_mappings",
             "field": "project_id",
-            "related_collection": "architecture_projects",
+            "related_collection": "calc_architecture_projects",
             "meta": {
                 "junction_field": null,
-                "many_collection": "lca_mappings",
+                "many_collection": "calc_mappings",
                 "many_field": "project_id",
                 "one_allowed_collections": null,
-                "one_collection": "architecture_projects",
+                "one_collection": "calc_architecture_projects",
                 "one_collection_field": null,
                 "one_deselect_action": "nullify",
                 "one_field": null,
                 "sort_field": null
             },
             "schema": {
-                "table": "lca_mappings",
+                "table": "calc_mappings",
                 "column": "project_id",
-                "foreign_key_table": "architecture_projects",
+                "foreign_key_table": "calc_architecture_projects",
                 "foreign_key_column": "id",
                 "constraint_name": null,
                 "on_update": "NO ACTION",
