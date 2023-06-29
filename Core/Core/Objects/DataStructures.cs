@@ -119,7 +119,7 @@ namespace Calc.Core.Objects
 
         public override string ToString()
         {
-            return $"Id: {Id}, Buildup Name: {Name}, Group Name: {Group.Name}, Unit: {Unit}";
+            return $"{Name}";
         }
     }
 
