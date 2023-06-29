@@ -31,7 +31,7 @@ namespace Calc.ConnectorRevit.Views
                 {
                     var hsl = Branch.HslColor;
                     var rgb = CalcColorConverter.HslToRgb(hsl);
-                    return Color.FromArgb(150, rgb.Red, rgb.Green, rgb.Blue);
+                    return Color.FromArgb(100, rgb.Red, rgb.Green, rgb.Blue);
                 }
                 else
                 {
@@ -57,19 +57,28 @@ namespace Calc.ConnectorRevit.Views
 
         public string GetName()
         {
-            if (Branch.Name == null)
-            return $"{Branch.Parameter}:{Branch.Value}";
-
-            return Branch.Name;
+            if (Branch is Tree tree)
+                return tree.Name;
+            else
+                return $"{Branch.Parameter}:{Branch.Value}";
         }
+
+        public void UpdateColor()
+        {
+            NotifyPropertyChanged("Color");
+            foreach (var subBranch in SubBranchItems)
+            {
+                subBranch.UpdateColor();
+            }
+        }
+
+        
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void NotifyPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-
 
 
     }

@@ -16,7 +16,7 @@ namespace Calc.ConnectorRevit.Views
         private Store store;
         private Forest selectedForest;
         private Mapping selectedMapping;
-        
+        private bool showBranches = true;
         public List<Project> AllProjects { get; set; }
         public List<Buildup> AllBuildups { get; set; }
         public List<Forest> AllForests { get; set; }
@@ -99,16 +99,6 @@ namespace Calc.ConnectorRevit.Views
                 Debug.WriteLine($"Set mappings to tree: {tree.Name}");
             };           
         }
-
-        public void HandleSideClick()
-        {
-            eventHandler.Raise(Visualizer.Reset);
-            foreach (BranchViewModel item in BranchItems)
-            {
-                RemoveDisplayColor(item);
-            }
-        }
-
         public void HandleBranchSelectionChanged(BranchViewModel branchItem)
         {
             if (branchItem == null)
@@ -118,11 +108,54 @@ namespace Calc.ConnectorRevit.Views
             {
                 RemoveDisplayColor(item);
             }
-
             SelectedBranchItem = branchItem;
-            eventHandler.Raise(Visualizer.IsolateAndColor);
-            ResetDisplayColor(branchItem);
+            if (showBranches)
+            {
+                eventHandler.Raise(Visualizer.IsolateAndColorSubbranchElements);
+                ResetSubDisplayColor(branchItem);
+            }
+            else
+            {
+                eventHandler.Raise(Visualizer.IsolateAndColorBottomBranchElements);
+                ResetAllDisplayColor(branchItem);
+            }
+
         }
+        public void HandleSideClick()
+        {
+            eventHandler.Raise(Visualizer.Reset);
+            foreach (BranchViewModel item in BranchItems)
+            {
+                RemoveDisplayColor(item);
+            }
+            EventMessenger.SendMessage("DeselectTreeView");
+        }
+
+        public void HandleViewToggleToBuildup()
+        {
+            showBranches = false;
+            foreach (BranchViewModel branchItem in BranchItems)
+            {
+                Tree tree = branchItem.Branch as Tree;
+                BranchPainter.ColorBranchesByBuildup(tree.SubBranches);
+                branchItem.UpdateColor();
+            };
+            HandleSideClick();
+        }
+
+        public void HandleViewToggleToBranch()
+        {
+            showBranches = true;
+            foreach (BranchViewModel branchItem in BranchItems)
+            {
+                Tree tree = branchItem.Branch as Tree;
+                BranchPainter.ColorBranchesByBranch(tree.SubBranches);
+                branchItem.UpdateColor();
+            };
+            HandleSideClick();
+        }
+
+
 
         private void RemoveDisplayColor(BranchViewModel branchItem)
         {
@@ -134,11 +167,21 @@ namespace Calc.ConnectorRevit.Views
             }
         }
 
-        private void ResetDisplayColor(BranchViewModel branchItem)
+        private void ResetSubDisplayColor(BranchViewModel branchItem)
         {
             foreach (BranchViewModel childBranchItem in branchItem.SubBranchItems)
             {
                 childBranchItem.DisplayColor = true;
+            }
+        }
+
+        private void ResetAllDisplayColor(BranchViewModel branchItem)
+        {
+            branchItem.DisplayColor = true;
+            foreach (BranchViewModel childBranchItem in branchItem.SubBranchItems)
+            {
+                childBranchItem.DisplayColor = true;
+                ResetAllDisplayColor(childBranchItem);
             }
         }
 

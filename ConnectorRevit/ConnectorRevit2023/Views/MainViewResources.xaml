@@ -29,7 +29,7 @@
             </Border.Background>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding Name}"/>
-                <TextBlock Text=": "/>
+                <TextBlock Text=" - "/>
                 <TextBlock Text="{Binding Branch.Elements.Count}"/>
             </StackPanel>
            

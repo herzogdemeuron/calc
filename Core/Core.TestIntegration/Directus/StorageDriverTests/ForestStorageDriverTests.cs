@@ -85,9 +85,9 @@ namespace Calc.Core.TestIntegration.Drivers
             {
                 foreach (Tree tree in forest.Trees)
                 {
+                    Console.WriteLine(tree.Name);
                     var mockData = new MockData();
                     tree.Plant(mockData.Elements);
-                    Console.WriteLine(tree.Name);
                     tree.PrintTree();
                 }
                 Console.WriteLine("-----------------");

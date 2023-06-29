@@ -10,8 +10,8 @@ namespace Calc.Core.Color
         public ColorGradient(int colorCount)
         {
             this._hslColors = new List<HslColor>();
-            var saturation = 50;
-            var lightness = 50;
+            var saturation = 30;
+            var lightness = 60;
             var hueStep = 360 / colorCount;
             for (int i = 0; i < colorCount; i++)
             {
