@@ -7,7 +7,7 @@ using Speckle.Newtonsoft.Json;
 
 namespace Calc.Core.Objects
 {
-    public class Root : IFilter
+    public class Root
     {
         [JsonIgnore]
         public List<CalcElement> Elements { get; set; }

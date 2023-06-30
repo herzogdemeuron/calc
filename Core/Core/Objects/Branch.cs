@@ -8,7 +8,7 @@ using Speckle.Newtonsoft.Json;
 
 namespace Calc.Core.Objects
 {
-    public class Branch : IFilter, INotifyPropertyChanged
+    public class Branch : IGraphNode, INotifyPropertyChanged
     {
         [JsonIgnore]
         public List<CalcElement> Elements { get; set; }

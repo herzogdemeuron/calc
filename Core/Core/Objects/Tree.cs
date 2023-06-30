@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Calc.Core.Objects
 {
-    public class Tree : Branch
+    public class Tree : Branch, IGraphNode
     {
         public string Name { get; set; }
         public List<Root> Roots { get; set; }
