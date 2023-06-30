@@ -17,6 +17,7 @@ namespace Calc.ConnectorRevit.Views
     {
 
         private Store store;
+        private CalcWebSocketServer server;
         private Mapping selectedMapping;
         private bool BranchesSwitch = true;
         private readonly ExternalEventHandler eventHandler = new ExternalEventHandler();
@@ -206,7 +207,7 @@ namespace Calc.ConnectorRevit.Views
             HandleSideClick();
         }
 
-        public void HandleCalculate()
+        public async void HandleCalculate()
         {
             if (CurrentForestItem == null)
                 return;
@@ -225,6 +226,18 @@ namespace Calc.ConnectorRevit.Views
 
             List<Result> results = GwpCalculator.CalculateGwp(branchesToCalc);
             Debug.WriteLine("GWP calculated");
+
+            if (this.server == null)
+            {
+                this.server = new CalcWebSocketServer("http://127.0.0.1:8184/"); // Update the URL to use "http://" instead of "ws://"
+            }
+
+            if (!this.server.IsRunning)
+            {
+                await Task.Run(() => this.server.Start()); // Start the server asynchronously
+            }
+
+            await this.server.SendResults(results); // Call SendResults asynchronously using await
         }
 
         private Mapping GetCurrentMapping()
