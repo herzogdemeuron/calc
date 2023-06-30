@@ -9,6 +9,33 @@
         <Setter Property="DockPanel.Dock" Value="Right"/>
     </Style>
 
+    <Style x:Key="CalculateButtonStyle" TargetType="Button">
+        <Setter Property="Margin" Value="10,0,10,10"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Calculate "/>
+                        <TextBlock>
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Text" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.SelectedBranchItem.Name}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.SelectedBranchItem}" Value="{x:Null}">
+                                            <Setter Property="Text" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.ForestItem.Name}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
     <Style x:Key="TreeViewItemStyle" TargetType="TreeViewItem">
         <Style.Resources>
             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
@@ -22,9 +49,7 @@
         <Border x:Name="Border"
             Padding="4,2,4,3"
             Margin="2"
-            CornerRadius="4"
-            
-            ToolTip="{Binding Branch.Buildup}">
+            CornerRadius="4">
             <Border.Background>
                 <SolidColorBrush Color="{Binding LabelColor}"/>
             </Border.Background>

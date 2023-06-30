@@ -94,7 +94,7 @@ namespace Calc.ConnectorRevit.Views
         }
         private void CalculateClicked(object sender, RoutedEventArgs e)
         {
-            //_viewModel.Calculate();
+            viewModel.HandleCalculate();
         }
 
     }

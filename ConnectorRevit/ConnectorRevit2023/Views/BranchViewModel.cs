@@ -21,8 +21,8 @@ namespace Calc.ConnectorRevit.Views
                 if (_branch != value)
                 {
                     _branch = value;
-                    NotifyPropertyChanged(nameof(Branch));
-                    NotifyPropertyChanged(nameof(Buildup));
+                    OnPropertyChanged(nameof(Branch));
+                    OnPropertyChanged(nameof(Buildup));
                 }
             }
         }
@@ -54,7 +54,7 @@ namespace Calc.ConnectorRevit.Views
                 if (showLabelColor != value)
                 {
                     showLabelColor = value;
-                    NotifyPropertyChanged("LabelColor");
+                    OnPropertyChanged("LabelColor");
                 }
             }
         }
@@ -87,7 +87,7 @@ namespace Calc.ConnectorRevit.Views
 
         public void NotifyLabelColorChange()
         {
-            NotifyPropertyChanged("LabelColor");
+            OnPropertyChanged("LabelColor");
             foreach (var subBranch in SubBranchItems)
             {
                 subBranch.NotifyLabelColorChange();
@@ -95,7 +95,7 @@ namespace Calc.ConnectorRevit.Views
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void NotifyPropertyChanged(string propertyName)
+        protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

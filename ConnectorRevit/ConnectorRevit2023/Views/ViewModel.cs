@@ -1,5 +1,6 @@
 ﻿using Calc.ConnectorRevit.Revit;
 using Calc.Core;
+using Calc.Core.Calculations;
 using Calc.Core.Color;
 using Calc.Core.Objects;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace Calc.ConnectorRevit.Views
     {
 
         private Store store;
-        private Project selectedProject;
+        public Project SelectedProject;
         public Forest SelectedForest { get; set; }
         private Mapping selectedMapping;
         private bool showBranches = true;
@@ -90,7 +91,7 @@ namespace Calc.ConnectorRevit.Views
             }
             BranchItems = newBranchItems;
             
-            ForestItem = new BranchViewModel(selectedProject.ProjectNumber, BranchItems);
+            ForestItem = new BranchViewModel(SelectedProject.ProjectNumber, BranchItems);
         }
 
         public async Task HandleLoadingAsync()
@@ -104,7 +105,8 @@ namespace Calc.ConnectorRevit.Views
         public async Task HandleProjectSelectedAsync(Project project)
         {
             store.ProjectSelected = project;
-            selectedProject = project;
+            SelectedProject = project;
+            OnPropertyChanged("SelectedProject");
             await store.GetOtherData();
 
             AllBuildups = store.BuildupsAll;
@@ -130,6 +132,11 @@ namespace Calc.ConnectorRevit.Views
             Debug.WriteLine("Mapping applied");
             
         }
+        public void HandleMappingSelectionChanged(Mapping mapping)
+        {
+            ApplyMapping(mapping);
+            selectedMapping = mapping;
+        }
 
         private void ApplyMapping(Mapping mapping)
         {
@@ -144,12 +151,6 @@ namespace Calc.ConnectorRevit.Views
             HandleBuildupSelectionChanged();
         }
 
-        public void HandleMappingSelectionChanged(Mapping mapping)
-        {
-            ApplyMapping(mapping);
-            selectedMapping = mapping;
-        }
-
         public void HandleBuildupSelectionChanged()
         {
             if (showBranches == false)
@@ -162,12 +163,11 @@ namespace Calc.ConnectorRevit.Views
 
         public void HandleBranchSelectionChanged(BranchViewModel branchItem)
         {
+            
             if (branchItem == null)
                 return;
-
-            HideAllLabelColor();
             SelectedBranchItem = branchItem;
-
+            HideAllLabelColor();
             if (showBranches)
             {
                 eventHandler.Raise(Visualizer.IsolateAndColorSubbranchElements);
@@ -185,6 +185,7 @@ namespace Calc.ConnectorRevit.Views
             eventHandler.Raise(Visualizer.Reset);
             HideAllLabelColor();
             EventMessenger.SendMessage("DeselectTreeView");
+            SelectedBranchItem = null;
         }
 
 
@@ -213,6 +214,15 @@ namespace Calc.ConnectorRevit.Views
             HandleSideClick();
         }
             
+        public void HandleCalculate()
+        {
+            if (SelectedForest == null)
+                return;
+            if (SelectedBranchItem == null)
+                return;
+            List<Result> result = GwpCalculator.CalculateGwp(new List<Branch> { SelectedBranchItem.Branch });
+            Debug.WriteLine("GWP calculated");
+        }
 
         private Mapping GetCurrentMapping()
         {
