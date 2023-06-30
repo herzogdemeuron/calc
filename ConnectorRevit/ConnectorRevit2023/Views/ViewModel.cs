@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Calc.ConnectorRevit.Views
 {
@@ -16,82 +17,50 @@ namespace Calc.ConnectorRevit.Views
     {
 
         private Store store;
-        public Project SelectedProject;
-        public Forest SelectedForest { get; set; }
         private Mapping selectedMapping;
-        private bool showBranches = true;
-        
-        public ObservableCollection<BranchViewModel> ForestList
-        {
-            get
-            {
-                return ForestItem != null
-                    ? new ObservableCollection<BranchViewModel> { ForestItem }
-                    : null;
-            }
-        }
-
+        private bool BranchesSwitch = true;
+        private readonly ExternalEventHandler eventHandler = new ExternalEventHandler();
         public List<Project> AllProjects { get; set; }
         public List<Buildup> AllBuildups { get; set; }
         public List<Forest> AllForests { get; set; }
         public List<Mapping> AllMappings { get; set; }
 
-        private readonly ExternalEventHandler eventHandler;
+        public ObservableCollection<NodeViewModel> NodeSource { get=>GetSourceNode(); }
 
-        private BranchViewModel forestItem;
-        public BranchViewModel ForestItem
+        private NodeViewModel currentForestItem;
+        public NodeViewModel CurrentForestItem
         {
-            get { return forestItem; }
+            get { return currentForestItem; }
             set
             {
-                forestItem = value;
-                OnPropertyChanged("ForestItem");
-                OnPropertyChanged("ForestList");
+                currentForestItem = value;
+                OnPropertyChanged("CurrentForestItem");
             }
         }
 
-        private ObservableCollection<BranchViewModel> branchItems;
-        public ObservableCollection<BranchViewModel> BranchItems
+        private NodeViewModel selectedNodeItem;
+        public NodeViewModel SelectedNodeItem
         {
-            get { return branchItems; }
+            get { return selectedNodeItem; }
             set
             {
-                branchItems = value;
-                OnPropertyChanged("BranchItems");
+                selectedNodeItem = value;
+                OnPropertyChanged("SelectedNodeItem");
             }
         }
 
-        private BranchViewModel selectedBranchItem;
-        public BranchViewModel SelectedBranchItem
-        {
-            get { return selectedBranchItem; }
-            set
-            {
-                selectedBranchItem = value;
-                OnPropertyChanged("SelectedBranchItem");
-            }
-        }
+        public Window Window { get; set; }
 
-        public ViewModel()
+        private void PlantTrees(Forest forest)
         {
-            eventHandler = new ExternalEventHandler();
-            
-        }
-
-        private void PlantTrees()
-        {
-            if (SelectedForest == null)
+            if (forest == null)
                 return;
-            
-            var newBranchItems = new ObservableCollection<BranchViewModel>();
-            foreach (var t in SelectedForest.Trees)
+
+            foreach (var t in forest.Trees)
             {
                 t.Plant(ElementFilter.GetCalcElements(t));
-                newBranchItems.Add(new BranchViewModel(t));
             }
-            BranchItems = newBranchItems;
-            
-            ForestItem = new BranchViewModel(SelectedProject.ProjectNumber, BranchItems);
+            CurrentForestItem = new NodeViewModel(forest);
         }
 
         public async Task HandleLoadingAsync()
@@ -105,14 +74,12 @@ namespace Calc.ConnectorRevit.Views
         public async Task HandleProjectSelectedAsync(Project project)
         {
             store.ProjectSelected = project;
-            SelectedProject = project;
-            OnPropertyChanged("SelectedProject");
             await store.GetOtherData();
 
             AllBuildups = store.BuildupsAll;
             AllForests = store.Forests;
             AllMappings = store.MappingsAll;
-            
+
             OnPropertyChanged("AllBuildups");
             OnPropertyChanged("AllForests");
             OnPropertyChanged("AllMappings");
@@ -120,18 +87,17 @@ namespace Calc.ConnectorRevit.Views
 
         public void HandleForestSelectionChanged(Forest forest)
         {
-            
+
             if (forest == null)
                 return;
-            HandleSideClick();
+
             Debug.WriteLine("Forest selected: " + forest.Name);
-            SelectedForest = forest;
-            PlantTrees();
-            Debug.WriteLine("Trees planted");
+            PlantTrees(forest);
+            HandleSideClick();
+            OnPropertyChanged("NodeSource");
             ApplyMapping(selectedMapping);
-            Debug.WriteLine("Mapping applied");
-            
         }
+
         public void HandleMappingSelectionChanged(Mapping mapping)
         {
             ApplyMapping(mapping);
@@ -142,9 +108,9 @@ namespace Calc.ConnectorRevit.Views
         {
             if (mapping == null)
                 return;
-            foreach (BranchViewModel branchItem in BranchItems)
+            foreach (NodeViewModel nodeItem in CurrentForestItem.SubNodeItems)
             {
-                Tree tree = branchItem.Branch as Tree;
+                Tree tree = nodeItem.Host as Tree;
                 mapping.ApplyMappingToTree(tree, AllBuildups);
                 BranchPainter.ColorBranchesByBranch(tree.SubBranches);
             };
@@ -153,125 +119,171 @@ namespace Calc.ConnectorRevit.Views
 
         public void HandleBuildupSelectionChanged()
         {
-            if (showBranches == false)
+            if (BranchesSwitch == false)
             {
-                SelectedForest.SetBranchColorsBy("buildups");
-                ForestItem.NotifyLabelColorChange();
+                if (CurrentForestItem == null)
+                    return;
+                Forest currentForest = CurrentForestItem.Host as Forest;
+                currentForest.SetBranchColorsBy("buildups");
+                CurrentForestItem.NotifyLabelColorChange();
                 eventHandler.Raise(Visualizer.IsolateAndColorBottomBranchElements);
             }
         }
 
-        public void HandleBranchSelectionChanged(BranchViewModel branchItem)
+        public void HandleInherit()
         {
-            
-            if (branchItem == null)
+            if (SelectedNodeItem == null)
                 return;
-            SelectedBranchItem = branchItem;
+            IGraphNode host = SelectedNodeItem.Host;
+            //if host is not branch, return
+            if (!(host is Branch branch))
+                return;
+            //if host is branch, inherit
+
+        }
+        public void HandleNodeItemSelectionChanged(NodeViewModel nodeItem)
+        {
+
+            if (nodeItem == null)
+                return;
+            SelectedNodeItem = nodeItem;
             HideAllLabelColor();
-            if (showBranches)
+            if (BranchesSwitch)
             {
                 eventHandler.Raise(Visualizer.IsolateAndColorSubbranchElements);
-                ShowSubLabelColor(branchItem);
+                ShowSubLabelColor(nodeItem);
             }
             else
             {
                 eventHandler.Raise(Visualizer.IsolateAndColorBottomBranchElements);
-                ShowAllSubLabelColor(branchItem);
+                ShowAllSubLabelColor(nodeItem);
             }
+            CurrentForestItem.NotifyLabelColorChange();
 
         }
         public void HandleSideClick()
         {
+            if (CurrentForestItem == null)
+                return;
             eventHandler.Raise(Visualizer.Reset);
             HideAllLabelColor();
             EventMessenger.SendMessage("DeselectTreeView");
-            SelectedBranchItem = null;
+            SelectedNodeItem = null;
+            CurrentForestItem.NotifyLabelColorChange();
         }
-
 
         public void HandleViewToggleToBranch()
         {
-            showBranches = true;
-            SelectedForest.SetBranchColorsBy("branches");
-            ForestItem.NotifyLabelColorChange();
+            if (CurrentForestItem == null)
+                return;
+            Forest currentForest = CurrentForestItem.Host as Forest;
+            BranchesSwitch = true;
+            currentForest.SetBranchColorsBy("branches");
+            CurrentForestItem.NotifyLabelColorChange();
             HandleSideClick();
         }
 
 
         public void HandleViewToggleToBuildup()
         {
-            showBranches = false;
-            SelectedForest.SetBranchColorsBy("buildups");
-            ForestItem.NotifyLabelColorChange();
+            if (CurrentForestItem == null)
+                return;
+            Forest currentForest = CurrentForestItem.Host as Forest;
+            BranchesSwitch = false;
+            currentForest.SetBranchColorsBy("buildups");
+            CurrentForestItem.NotifyLabelColorChange();
             HandleSideClick();
         }
 
         public void HandleUpdateCalcElements()
         {
+            if (CurrentForestItem == null)
+                return;
+            Forest currentForest = CurrentForestItem.Host as Forest;
             Mapping currentMapping = GetCurrentMapping();
-            PlantTrees();
+            PlantTrees(currentForest);
             ApplyMapping(currentMapping);
             HandleSideClick();
         }
-            
+
         public void HandleCalculate()
         {
-            if (SelectedForest == null)
+            if (CurrentForestItem == null)
                 return;
-            if (SelectedBranchItem == null)
-                return;
-            List<Result> result = GwpCalculator.CalculateGwp(new List<Branch> { SelectedBranchItem.Branch });
+            List<Branch> branchesToCalc = new List<Branch>();
+            if (SelectedNodeItem?.Host is Branch branch)
+            {
+                branchesToCalc.Add(branch);
+            }
+            else
+            {
+                foreach (NodeViewModel nodeItem in CurrentForestItem.SubNodeItems)
+                {
+                    branchesToCalc.Add(nodeItem.Host as Branch);
+                }
+            }
+
+            List<Result> results = GwpCalculator.CalculateGwp(branchesToCalc);
             Debug.WriteLine("GWP calculated");
         }
 
         private Mapping GetCurrentMapping()
         {
-            if (SelectedForest == null)
+            if (CurrentForestItem == null)
                 return null;
-            return new Mapping(SelectedForest, "CurrentMapping");
+            Forest currentForest = CurrentForestItem.Host as Forest;
+            return new Mapping(currentForest, "CurrentMapping");
         }
 
 
         private void HideAllLabelColor()
         {
-            if (BranchItems == null)
+            if (CurrentForestItem == null)
                 return;
-            foreach (BranchViewModel item in BranchItems)
+            foreach (NodeViewModel nodeItem in CurrentForestItem.SubNodeItems)
             {
-                HideBranchLabelColor(item);
+                HideNodeLabelColor(nodeItem);
             }
         }
-        private void HideBranchLabelColor(BranchViewModel branchItem)
+        private void HideNodeLabelColor(NodeViewModel nodeItem)
         {
-            branchItem.ShowLabelColor = false;
+            nodeItem.LabelColorVisible = false;
 
-            foreach (BranchViewModel childBranchItem in branchItem.SubBranchItems)
+            foreach (NodeViewModel subNodeItem in nodeItem.SubNodeItems)
             {
-                HideBranchLabelColor(childBranchItem);
+                HideNodeLabelColor(subNodeItem);
             }
         }
 
-        private void ShowSubLabelColor(BranchViewModel branchItem)
+        private void ShowSubLabelColor(NodeViewModel nodeItem)
         {
-            foreach (BranchViewModel childBranchItem in branchItem.SubBranchItems)
+            foreach (NodeViewModel subNodeItem in nodeItem.SubNodeItems)
             {
-                childBranchItem.ShowLabelColor = true;
+                subNodeItem.LabelColorVisible = true;
             }
         }
 
-        private void ShowAllSubLabelColor(BranchViewModel branchItem)
+        private void ShowAllSubLabelColor(NodeViewModel nodeItem)
         {
-            branchItem.ShowLabelColor = true;
-            foreach (BranchViewModel childBranchItem in branchItem.SubBranchItems)
+            nodeItem.LabelColorVisible = true;
+            foreach (NodeViewModel subNodeItem in nodeItem.SubNodeItems)
             {
-                childBranchItem.ShowLabelColor = true;
-                ShowAllSubLabelColor(childBranchItem);
+                subNodeItem.LabelColorVisible = true;
+                ShowAllSubLabelColor(subNodeItem);
             }
         }
 
 
+        private ObservableCollection<NodeViewModel> GetSourceNode()
+         {
+            if (CurrentForestItem == null)
+                return new ObservableCollection<NodeViewModel> { };
+            return new ObservableCollection<NodeViewModel> { CurrentForestItem };
+    }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+
+
+public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

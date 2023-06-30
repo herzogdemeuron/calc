@@ -14,6 +14,7 @@ namespace Calc.ConnectorRevit.Views
             this.DataContext = viewModel;
             InitializeComponent();
             EventMessenger.OnMessageReceived += MessageFromViewModelReceived;
+            viewModel.Window = this;
         }
 
         private async void WindowLoaded(object sender, RoutedEventArgs e)
@@ -45,9 +46,9 @@ namespace Calc.ConnectorRevit.Views
 
         private void TreeViewItemSelected(object sender, RoutedEventArgs e)
         {
-            if (TreeView.SelectedItem is BranchViewModel selectedBranch)
+            if (TreeView.SelectedItem is NodeViewModel selectedBranch)
             {
-                viewModel.HandleBranchSelectionChanged(selectedBranch);
+                viewModel.HandleNodeItemSelectionChanged(selectedBranch);
                 TreeView.Tag = e.OriginalSource;
                 e.Handled = true;
             }
@@ -61,6 +62,11 @@ namespace Calc.ConnectorRevit.Views
         private void BuildupSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             viewModel.HandleBuildupSelectionChanged();
+        }
+
+        private void InheritClicked(object sender, RoutedEventArgs e)
+        {
+            viewModel.HandleInherit();
         }
 
 

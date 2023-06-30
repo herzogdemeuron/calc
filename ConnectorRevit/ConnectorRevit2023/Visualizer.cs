@@ -13,7 +13,7 @@ namespace Calc.ConnectorRevit
     [Transaction(TransactionMode.Manual)]
     public static class Visualizer
     {
-        private static Action<Branch, View, ElementId> colorBranchAction;
+        private static Action<IGraphNode, View, ElementId> colorBranchAction;
 
         public static void Reset()
         {
@@ -22,9 +22,9 @@ namespace Calc.ConnectorRevit
                 t.Start();
                 View currentView = App.CurrentDoc.ActiveView;
                 currentView.TemporaryViewModes.DeactivateAllModes();
-                foreach (BranchViewModel branchItem in App.ViewModel.BranchItems)
+                foreach (NodeViewModel nodeItem in App.ViewModel.CurrentForestItem.SubNodeItems)
                 {
-                    List<ElementId> elementIds = StringsToElementIds(branchItem.Branch.ElementIds);
+                    List<ElementId> elementIds = StringsToElementIds(nodeItem.Host.ElementIds);
                     foreach (ElementId elementId in elementIds)
                     {
                         currentView.SetElementOverrides(elementId, new OverrideGraphicSettings());
@@ -51,45 +51,44 @@ namespace Calc.ConnectorRevit
             using (Transaction t = new Transaction(App.CurrentDoc, "Isolate and Color"))
             {
                 var patternId = GetPatternId();
-                Branch selectedBranch = App.ViewModel.SelectedBranchItem.Branch;
-                Forest selectedForest = App.ViewModel.SelectedForest;
+                IGraphNode selectedNode = App.ViewModel.SelectedNodeItem.Host;
                 t.Start();
                 View currentView = App.CurrentDoc.ActiveView;
-                IsolateElements(selectedBranch, currentView);
-                colorBranchAction(selectedBranch, currentView, patternId);
+                IsolateElements(selectedNode, currentView);
+                colorBranchAction(selectedNode, currentView, patternId);
                 t.Commit();
             }
         }
 
-        private static void IsolateElements(Branch branch, View view)
+        private static void IsolateElements(IGraphNode node, View view)
         {
             view.TemporaryViewModes.DeactivateMode(TemporaryViewMode.TemporaryHideIsolate);
-            List<string> elementIds = branch.ElementIds;
+            List<string> elementIds = node.ElementIds;
             if (elementIds.Count > 0)
             {
-                view.IsolateElementsTemporary(StringsToElementIds(branch.ElementIds));
+                view.IsolateElementsTemporary(StringsToElementIds(node.ElementIds));
             }
         }
 
 
-        private static void ColorSubbranchElements(Branch branch, View view, ElementId patternId)
+        private static void ColorSubbranchElements(IGraphNode node, View view, ElementId patternId)
         {
-            ColorBranchElements(branch, view, patternId);
+            ColorBranchElements(node, view, patternId);
 
-            foreach (var subBranch in branch.SubBranches)
+            foreach (var subBranch in node.SubBranches)
             {
                 ColorBranchElements(subBranch, view, patternId);
             }
         }
 
-        private static void ColorBottomBranchElements(Branch branch, View view, ElementId patternId)
+        private static void ColorBottomBranchElements(IGraphNode node, View view, ElementId patternId)
         {
-            if (branch.SubBranches.Count == 0)
+            if (node.SubBranches.Count == 0)
             {
-                ColorBranchElements(branch, view, patternId);
+                ColorBranchElements(node, view, patternId);
             }
 
-            foreach (var subBranch in branch.SubBranches)
+            foreach (var subBranch in node.SubBranches)
             {
                 if (subBranch.SubBranches.Count == 0)
                 {
@@ -102,9 +101,9 @@ namespace Calc.ConnectorRevit
             }
         }
 
-        private static void ColorBranchElements(Branch branch, View view, ElementId patternId)
+        private static void ColorBranchElements(IGraphNode node, View view, ElementId patternId)
         {
-            HslColor hslColor = branch.HslColor;
+            HslColor hslColor = node.HslColor;
             HslColor hslColorDarker = new HslColor(hslColor.Hue, hslColor.Saturation, (int)(hslColor.Lightness * 0.6));
             RgbColor rgbColor = CalcColorConverter.HslToRgb(hslColor);
             RgbColor rgbColorDarker = CalcColorConverter.HslToRgb(hslColorDarker);
@@ -116,7 +115,7 @@ namespace Calc.ConnectorRevit
             overrideSettings.SetSurfaceForegroundPatternId(patternId);
             overrideSettings.SetSurfaceForegroundPatternColor(color);
 
-            foreach (ElementId elementId in StringsToElementIds(branch.ElementIds))
+            foreach (ElementId elementId in StringsToElementIds(node.ElementIds))
             {
                 view.SetElementOverrides(elementId, overrideSettings);
             }
