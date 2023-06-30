@@ -15,6 +15,7 @@ namespace Calc.Core.Objects
     public interface IGraphNode
     {
         List<CalcElement> Elements { get; }
+        List<string> ElementIds { get; }
         List<Branch> SubBranches { get; }
         HslColor HslColor { get; set; }
 
