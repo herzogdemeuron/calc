@@ -19,13 +19,24 @@ namespace Calc.Core.Calculations
         /// </code>
         public static List<Result> CalculateGwp(List<Branch> branches)
         {
-            var results = new List<Result>();
+            var flatBranches = new List<Branch>();
             foreach (var branch in branches)
             {
-                // check if branch has buildup (if not, skip)
+                // make a copy of the branch and remove all elements that are overridden by a buildup
+                var branchCopy = branch.Copy();
+                branchCopy.RemoveElementsByBuildupOverrides();
+                flatBranches.AddRange(branchCopy.Flatten());
+            }
+
+            var results = new List<Result>();
+            foreach (var branch in flatBranches)
+            {
                 if (branch.Buildup == null) continue;
 
                 var buildup = branch.Buildup;
+
+                if (buildup.Components == null) continue;
+
                 foreach (var element in branch.Elements)
                 {
                     foreach (var component in buildup.Components)
@@ -51,16 +62,16 @@ namespace Calc.Core.Calculations
             return results;
         }
 
-        public static decimal CalculateGwpA123(CalcElement element, BuildupComponent component, string unit)
+        public static decimal CalculateGwpA123(CalcElement element, BuildupComponent component, Unit unit)
         {
             var material = component.Material;
             return unit switch
             {
-                "each" => material.GwpA123 * component.Amount,
-                "m" => material.GwpA123 * component.Amount * element.Length,
-                "m2" => material.GwpA123 * component.Amount * element.Area,
-                "m3" => material.GwpA123 * component.Amount * element.Volume,
-                _ => throw new Exception("Unit not recognized"),
+                Unit.each => material.GwpA123 * component.Amount,
+                Unit.m => material.GwpA123 * component.Amount * element.Length,
+                Unit.m2 => material.GwpA123 * component.Amount * element.Area,
+                Unit.m3 => material.GwpA123 * component.Amount * element.Volume,
+                _ => throw new Exception($"Unit not recognized: {unit}"),
             };
         }
     }
