@@ -11,13 +11,13 @@ namespace Calc.Core.DirectusAPI.Drivers
         public List<Result> SendItems { get; set; }
 
         public string QueryCreateMany { get; } = @"
-                mutation CreateCalculationResults($data: [create_lca_calculation_results_input!]!) {
-                    create_lca_calculation_results_items(data: $data) {
+                mutation CreateCalculationResults($data: [create_calc_calculation_results_input!]!) {
+                    create_calc_calculation_results_items(data: $data) {
                         id
                     }
                 }";
 
-        [JsonProperty("create_lca_calculation_results_items")]
+        [JsonProperty("create_calc_calculation_results_items")]
         public List<Result> CreatedManyItems { get; set; }
 
         public Dictionary<string, object> GetVariables()

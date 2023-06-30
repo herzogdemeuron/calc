@@ -1,5 +1,6 @@
 """
-This is just a helper script to get the schema from Directus and save it to a file. It's not needed for applying a schema to Directus.
+This is just a helper script to get the schema from Directus and save it to a file. It's not needed for updating Directus with the calc-directus-schema.
+Use it for setting up a local Directus instance for testing.
 """
 
 import requests
