@@ -6,8 +6,16 @@ using Calc.Core.Color;
 
 namespace Calc.Core.Objects
 {
-    public class Forest : IHasProject
+    public class Forest : IHasProject, IGraphNode
     {
+        [JsonIgnore]
+        public List<CalcElement> Elements { get => GetElements(); }
+        [JsonIgnore]
+        public List<string> ElementIds => Elements.Select(e => e.Id).ToList();
+        [JsonIgnore]
+        public List<Branch> SubBranches => Trees.ConvertAll(tree => (Branch)tree);
+        [JsonIgnore]
+        public HslColor HslColor { get; set; }
         [JsonProperty("id")]
         public int Id { get; set; }
         [JsonProperty("forest_name")]
@@ -39,6 +47,18 @@ namespace Calc.Core.Objects
             var treesJson = new StringBuilder();
             treesJson.Append($"[{string.Join(",", Trees.Select(t => t.Serialize()))}]");
             return treesJson.ToString();
+        }
+
+        public List<CalcElement> GetElements()
+        {
+            List<CalcElement> elements = new();
+
+            foreach (Tree tree in Trees)
+            {
+                elements.AddRange(tree.Elements);
+            }
+
+            return elements;
         }
     }
 }
