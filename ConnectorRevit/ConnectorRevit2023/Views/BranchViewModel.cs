@@ -8,6 +8,10 @@ namespace Calc.ConnectorRevit.Views
 {
     public class BranchViewModel : INotifyPropertyChanged
     {
+        public string Name { get => GetName(); }
+        private string ProjectName;
+        public ObservableCollection<BranchViewModel> SubBranchItems { get; }
+
         private Branch _branch;
         public Branch Branch
         {
@@ -19,35 +23,10 @@ namespace Calc.ConnectorRevit.Views
                     _branch = value;
                     NotifyPropertyChanged(nameof(Branch));
                     NotifyPropertyChanged(nameof(Buildup));
-                    NotifyPropertyChanged(nameof(ToolTipText));
                 }
             }
         }
-        private Buildup buildup;
-        public Buildup Buildup
-        {
-              get { return Branch.Buildup; }
-            set
-            {
-                    if (buildup != value)
-                {
-                        Branch.Buildup = value;
-                        NotifyPropertyChanged(nameof(Buildup));
-                        NotifyPropertyChanged(nameof(ToolTipText));
-                    }
-                }
-        }
 
-        public string ToolTipText
-        {
-            get { return Buildup.Name; }
-        }
-
-
-
-        public string Name { get => GetName();}
-        private string ProjectName;
-        public ObservableCollection<BranchViewModel> SubBranchItems { get; }
         public BranchViewModel(Branch branch)
         {
             this.Branch = branch;
@@ -75,7 +54,6 @@ namespace Calc.ConnectorRevit.Views
                 if (showLabelColor != value)
                 {
                     showLabelColor = value;
-                    //NotifyPropertyChanged("DisplayColor");
                     NotifyPropertyChanged("LabelColor");
                 }
             }
@@ -115,8 +93,6 @@ namespace Calc.ConnectorRevit.Views
                 subBranch.NotifyLabelColorChange();
             }
         }
-
-        
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void NotifyPropertyChanged(string propertyName)

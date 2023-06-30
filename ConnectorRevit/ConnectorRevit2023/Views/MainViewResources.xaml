@@ -24,7 +24,7 @@
             Margin="2"
             CornerRadius="4"
             
-            ToolTip="{Binding ToolTipText}">
+            ToolTip="{Binding Branch.Buildup}">
             <Border.Background>
                 <SolidColorBrush Color="{Binding LabelColor}"/>
             </Border.Background>

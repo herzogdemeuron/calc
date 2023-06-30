@@ -91,7 +91,7 @@
                 <Label Content="Assigned Buildup:" DockPanel.Dock="Top"/>
                 <ComboBox x:Name="BuildupsComboBox"
                         ItemsSource="{Binding DataContext.AllBuildups, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                        SelectedItem="{Binding DataContext.SelectedBranchItem.Buildup, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding DataContext.SelectedBranchItem.Branch.Buildup, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=TwoWay}"
                         DisplayMemberPath="Name"
                         DockPanel.Dock="Top"
                         SelectionChanged="BuildupSelectionChanged"/>

@@ -118,12 +118,17 @@ namespace Calc.ConnectorRevit.Views
 
         public void HandleForestSelectionChanged(Forest forest)
         {
+            
             if (forest == null)
                 return;
+            HandleSideClick();
+            Debug.WriteLine("Forest selected: " + forest.Name);
             SelectedForest = forest;
             PlantTrees();
+            Debug.WriteLine("Trees planted");
             ApplyMapping(selectedMapping);
-            HandleSideClick();
+            Debug.WriteLine("Mapping applied");
+            
         }
 
         private void ApplyMapping(Mapping mapping)
@@ -219,6 +224,8 @@ namespace Calc.ConnectorRevit.Views
 
         private void HideAllLabelColor()
         {
+            if (BranchItems == null)
+                return;
             foreach (BranchViewModel item in BranchItems)
             {
                 HideBranchLabelColor(item);
