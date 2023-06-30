@@ -15,7 +15,7 @@ namespace Calc.Core.Objects
         [JsonIgnore]
         public List<Branch> SubBranches => Trees.ConvertAll(tree => (Branch)tree);
         [JsonIgnore]
-        public HslColor HslColor { get; set; }
+        public HslColor HslColor { get; set; } = new HslColor(0, 0, 85);
         [JsonProperty("id")]
         public int Id { get; set; }
         [JsonProperty("forest_name")]
