@@ -5,14 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using Speckle.Newtonsoft.Json;
 using Calc.Core.DirectusAPI;
+using Speckle.Newtonsoft.Json.Linq;
+using System.Runtime.Serialization;
 
 namespace Calc.Core.Objects
 {
     public enum Unit
     {
+        [EnumMember(Value = "each")]
         each,
+        [EnumMember(Value = "m")]
         m,
+        [EnumMember(Value = "m2")]
         m2,
+        [EnumMember(Value = "m3")]
         m3
     }
 
@@ -57,7 +63,7 @@ namespace Calc.Core.Objects
         [JsonProperty(PropertyName = "global_warming_potential_a1_a2_a3")]
         public decimal GlobalWarmingPotentialA1A2A3 { get; set; }
         [JsonProperty(PropertyName = "unit")]
-        public string Unit { get; set; }
+        public Unit Unit { get; set; }
         [JsonProperty(PropertyName = "material_amount")]
         public decimal MaterialAmount { get; set; }
         [JsonProperty(PropertyName = "material_name")]
@@ -81,7 +87,7 @@ namespace Calc.Core.Objects
         [JsonProperty("global_warming_potential_a1_a2_a3")]
         public decimal GwpA123 { get;  set; }
         [JsonProperty("unit")]
-        public string Unit { get;  set; }
+        public Unit Unit { get;  set; }
         [JsonProperty("material_category")]
         public string Category { get;  set; }
 
@@ -115,7 +121,7 @@ namespace Calc.Core.Objects
         [JsonProperty("components")]
         public List<BuildupComponent> Components { get; set; }
         [JsonProperty("unit")]
-        public string Unit { get; set; }
+        public Unit Unit { get; set; }
 
         public override string ToString()
         {
