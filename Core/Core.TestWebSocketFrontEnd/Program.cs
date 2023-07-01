@@ -1,4 +1,5 @@
 ﻿using Calc.Core.Objects;
+using System.Diagnostics;
 
 public class Program
 {
@@ -6,6 +7,9 @@ public class Program
 
     static async Task Main(string[] args)
     {
+        // Add ConsoleTraceListener to redirect Debug.WriteLine output to the console
+        Trace.Listeners.Add(new ConsoleTraceListener());
+
         server = new CalcWebSocketServer("http://127.0.0.1:8184/"); // Update the URL to use "http://" instead of "ws://"
 
         Task serverTask = server.Start(); // Start the server asynchronously
