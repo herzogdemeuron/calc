@@ -9,8 +9,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 
 namespace Calc.ConnectorRevit.Views
 {
@@ -225,6 +228,12 @@ namespace Calc.ConnectorRevit.Views
 
         public void HandleCalculate()
         {
+            if (this.server.ConnectedClients == 0)
+            {
+                Process.Start("C:\\HdM-DT\\calc\\Core\\calc-vis-interactive\\dist\\index.html");
+            }
+            Debug.WriteLine(this.server.ConnectedSockets);    
+
             if (CurrentForestItem == null)
                 return;
             List<Branch> branchesToCalc = new List<Branch>();

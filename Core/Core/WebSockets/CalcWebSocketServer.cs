@@ -16,6 +16,8 @@ public class CalcWebSocketServer
     private List<WebSocket> connectedSockets;
 
     public bool IsRunning { get => httpListener.IsListening; }
+    public int ConnectedClients { get => connectedSockets.Count; }
+    public List<WebSocket> ConnectedSockets { get => connectedSockets; }
 
     public CalcWebSocketServer(string url)
     {
