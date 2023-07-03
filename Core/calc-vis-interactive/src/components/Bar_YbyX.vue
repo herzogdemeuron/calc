@@ -1,9 +1,16 @@
 <template>
-    <Bar 
-      :data="chartData" 
-      :options="chartOptions"
-    />
-  </template>
+  <div>
+    <div v-if="data && data.length === 0">
+      No Data to Show - Try Reloading the Page
+    </div>
+    <div v-else>
+      <Bar 
+        :data="chartData" 
+        :options="chartOptions"
+      />
+    </div>
+  </div>
+</template>
   
   <script>
   import { Bar } from 'vue-chartjs'
