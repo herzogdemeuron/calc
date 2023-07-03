@@ -106,13 +106,15 @@ namespace Calc.ConnectorRevit.Views
 
         private void ApplyMapping(Mapping mapping)
         {
-            if (mapping == null)
-                return;
+            
             foreach (NodeViewModel nodeItem in CurrentForestItem.SubNodeItems)
             {
                 Tree tree = nodeItem.Host as Tree;
-                mapping.ApplyMappingToTree(tree, AllBuildups);
                 BranchPainter.ColorBranchesByBranch(tree.SubBranches);
+
+                if (mapping == null)
+                    continue;
+                mapping.ApplyMappingToTree(tree, AllBuildups);
             };
             HandleBuildupSelectionChanged();
         }
