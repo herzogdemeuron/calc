@@ -35,7 +35,33 @@ namespace Calc.ConnectorRevit
                 .Cast<Parameter>()
                 .GroupBy(parameter => parameter.Definition.Name)
                 .ToDictionary(group => group.Key, group => group.First().AsValueString() as object);
-            return new CalcElement(elem.Id.ToString(), parameterDictionary);
+
+            decimal _area = (decimal)GetBasicValue(elem, "Area");
+            decimal _volume = (decimal)GetBasicValue(elem, "Volume");
+            decimal _length = (decimal)GetBasicValue(elem, "Length");
+
+            return new CalcElement(elem.Id.ToString(), parameterDictionary, _length, _area, _volume);
+        }
+
+        static private double GetBasicValue(Element elem, string parameterName)
+        {
+            double parameterValue = elem.LookupParameter(parameterName)?.AsDouble() ?? 0;
+            return ConvertToMetric(parameterValue, parameterName);
+        }
+
+        static private double ConvertToMetric(double value, string unitType)
+        {
+            switch (unitType)
+            {
+                case "Length":
+                    return UnitUtils.ConvertFromInternalUnits(value, UnitTypeId.Meters);
+                case "Area":
+                    return UnitUtils.ConvertFromInternalUnits(value, UnitTypeId.SquareMeters);
+                case "Volume":
+                    return UnitUtils.ConvertFromInternalUnits(value, UnitTypeId.CubicMeters);
+                default:
+                    return value;      
+            }
         }
 
     }
