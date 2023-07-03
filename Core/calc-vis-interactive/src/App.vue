@@ -1,34 +1,23 @@
 <template>
   <div>
     <p>Parent Component</p>
-    <ChildComponent :data="dataset" labelKey="buildup_name" valueKey="global_warming_potential_a1_a2_a3" />
+    <Bar_YbyX :data="dataset" labelKey="buildup_name" valueKey="global_warming_potential_a1_a2_a3" />
+    <Bar_YbyX :data="dataset" labelKey="group_name" valueKey="global_warming_potential_a1_a2_a3" />
   </div>
 </template>
 
 <script>
-import ChildComponent from './/components/ChildComponent.vue';
+import Bar_YbyX from './/components/Bar_YbyX.vue';
 import { reactive } from 'vue';
 
 export default {
   components: {
-    ChildComponent
+    Bar_YbyX
   },
   data() {
     return {
       // dataset: reactive([]),
-      dataset: reactive([
-        {
-          buildup_name: 'a',
-          global_warming_potential_a1_a2_a3: 10
-        },
-        {
-          buildup_name: 'b',
-          global_warming_potential_a1_a2_a3: 20
-        },
-        {
-          buildup_name: 'c',
-          global_warming_potential_a1_a2_a3: 30
-        }]),
+      dataset: reactive([]),
       socket: null
     };
   },

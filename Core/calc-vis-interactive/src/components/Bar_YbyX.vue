@@ -12,7 +12,7 @@
   ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
   
   export default {
-    name: 'BarChart',
+    name: 'Bar_YbyX',
     components: { Bar },
     props: {
       data: {
@@ -37,8 +37,10 @@
     },
     computed: {
       chartData() {
-        const labels = this.data.map((data) => data[this.labelKey]);
-        const values = this.data.map((data) => data[this.valueKey]);
+        const processedData = this.preprocessData(this.data);
+        const labels = processedData.map((data) => data[this.labelKey]);
+        const values = processedData.map((data) => data[this.valueKey]);
+
         return {
           labels: labels,
           datasets: [
@@ -49,17 +51,34 @@
         };
       },
     },
-    // watch: {
-    //   data() {
-    //     // Trigger chart update/re-render when data changes
-    //     this.$nextTick(() => {
-    //       this.renderChart(this.chartData, this.chartOptions);
-    //     });
-    //   }
-    // },
     mounted() {
       console.log(this.data)
+    },
+    methods: {
+      preprocessData(data) {
+        const groupedData = {};
+
+        // Group data by key
+        data.forEach((item) => {
+          const key = item[this.labelKey];
+          const value = item[this.valueKey];
+
+          if (Object.prototype.hasOwnProperty.call(groupedData, key)) {
+            groupedData[key] += value;
+          } else {
+            groupedData[key] = value;
+          }
+        });
+
+        // Convert grouped data into an array of objects
+        const processedData = Object.entries(groupedData).map(([key, value]) => ({
+          [this.labelKey]: key,
+          [this.valueKey]: value
+        }));
+
+        return processedData;
+      }
     }
-  }
+  };
   </script>
   
