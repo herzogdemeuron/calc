@@ -7,6 +7,7 @@ using Speckle.Newtonsoft.Json;
 using Calc.Core.DirectusAPI;
 using Speckle.Newtonsoft.Json.Linq;
 using System.Runtime.Serialization;
+using Calc.Core.Color;
 
 namespace Calc.Core.Objects
 {
@@ -76,6 +77,8 @@ namespace Calc.Core.Objects
         public string GroupName { get; set; }
         [JsonProperty(PropertyName = "project_id", NullValueHandling = NullValueHandling.Ignore)]
         public Project Project { get; set; }
+        [JsonProperty(PropertyName = "color")]
+        public HslColor Color { get; set; }
     }
 
     public class Material
