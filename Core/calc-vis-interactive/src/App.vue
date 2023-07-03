@@ -15,32 +15,48 @@ export default {
   },
   data() {
     return {
-      dataset: reactive([]),
+      // dataset: reactive([]),
+      dataset: reactive([
+        {
+          buildup_name: 'a',
+          global_warming_potential_a1_a2_a3: 10
+        },
+        {
+          buildup_name: 'b',
+          global_warming_potential_a1_a2_a3: 20
+        },
+        {
+          buildup_name: 'c',
+          global_warming_potential_a1_a2_a3: 30
+        }]),
       socket: null
     };
   },
   mounted() {
-    this.socket = new WebSocket('ws://127.0.0.1:8184');
+   if (this.socket == null) {
+     this.socket = new WebSocket('ws://127.0.0.1:8184')
+   }
+
     this.socket.onopen = () => {
-      alert("[open] Connection established");
-      alert("Sending to server");
-      this.socket.send("Vue app says hello");
+      let time = new Date().toLocaleTimeString();
+      this.socket.send(`${time} cal-viz-interactive connected`);
     };
 
     this.socket.onmessage = (event) => {
+      console.log('Message received from server');
       this.handleWebSocketMessage(event.data);
     };
 
     this.socket.onclose = (event) => {
       if (event.wasClean) {
-        alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+        console.log(`Connection closed cleanly, code=${event.code} reason=${event.reason}`);
       } else {
-        alert('[close] Connection died');
+        console.log('Connection died');
       }
     };
 
     this.socket.onerror = (error) => {
-      alert(`WebSocket Error: ${error.message}`);
+      console.log(`WebSocket Error: ${error.message}`);
     };
   },
   methods: {

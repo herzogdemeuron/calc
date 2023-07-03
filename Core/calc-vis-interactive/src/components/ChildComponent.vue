@@ -1,9 +1,11 @@
 <template>
-    <Bar :data="chartData" :options="chartOptions" />
+    <Bar 
+      :data="chartData" 
+      :options="chartOptions"
+    />
   </template>
   
   <script>
-  // DataPage.vue
   import { Bar } from 'vue-chartjs'
   import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
   
@@ -26,38 +28,37 @@
         default: 'value'
       }
     },
+    data() {
+      return {
+        chartOptions: {
+          responsive: true
+        }
+      };
+    },
     computed: {
       chartData() {
         const labels = this.data.map((data) => data[this.labelKey]);
         const values = this.data.map((data) => data[this.valueKey]);
-  
         return {
           labels: labels,
           datasets: [
             {
-              label: 'Chart Data',
-              data: values
+              data: values,
             }
           ]
         };
       },
-      chartOptions() {
-        return {
-          responsive: true,
-          maintainAspectRatio: false
-        };
-      }
     },
-    watch: {
-      data() {
-        // Trigger chart update/re-render when data changes
-        this.$nextTick(() => {
-          this.renderChart(this.chartData, this.chartOptions);
-        });
-      }
-    },
+    // watch: {
+    //   data() {
+    //     // Trigger chart update/re-render when data changes
+    //     this.$nextTick(() => {
+    //       this.renderChart(this.chartData, this.chartOptions);
+    //     });
+    //   }
+    // },
     mounted() {
-      this.renderChart(this.chartData, this.chartOptions);
+      console.log(this.data)
     }
   }
   </script>
