@@ -62,7 +62,7 @@ namespace Calc.ConnectorRevit.Views
         public void Dispose()
         {
             Debug.WriteLine("ViewModel dispose is called.");
-            this.server.Stop();
+            _ = Task.Run(async () => await this.server.Stop());
         }
 
         private void PlantTrees(Forest forest)
