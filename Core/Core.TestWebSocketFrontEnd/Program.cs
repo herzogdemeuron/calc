@@ -25,9 +25,9 @@ public class Program
             {
                 await server.SendResults(new List<Result>()
                 {
-                    new Result() { GlobalWarmingPotentialA1A2A3 = 10 + sendCounter, BuildupName = "Buildup 1", GroupName = "Group 1"},
-                    new Result() { GlobalWarmingPotentialA1A2A3 = 20 + sendCounter, BuildupName = "Buildup 2", GroupName = "Group 2"},
-                    new Result() { GlobalWarmingPotentialA1A2A3 = 30 + sendCounter, BuildupName = "Buildup 3", GroupName = "Group 2"},
+                    new Result() { GlobalWarmingPotentialA1A2A3 = 10 + sendCounter, BuildupName = "Buildup 1", GroupName = "Group 1", Color = new Calc.Core.Color.HslColor(80, 40, 60) },
+                    new Result() { GlobalWarmingPotentialA1A2A3 = 20 + sendCounter, BuildupName = "Buildup 2", GroupName = "Group 2", Color = new Calc.Core.Color.HslColor(90, 40, 60) },
+                    new Result() { GlobalWarmingPotentialA1A2A3 = 30 + sendCounter, BuildupName = "Buildup 3", GroupName = "Group 2", Color = new Calc.Core.Color.HslColor(100, 40, 60) }
                 });
                 sendCounter++;
             }
