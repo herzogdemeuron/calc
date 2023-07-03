@@ -52,15 +52,24 @@ public class CalcWebSocketServer
         }
     }
 
-    public void Stop()
+    public async Task Stop()
     {
         this.httpListener.Stop();
         this.cancellationTokenSource.Cancel();
+
+        List<Task> closeTasks = new List<Task>();
+
         foreach (var socket in connectedSockets)
         {
-            socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Server is shutting down", CancellationToken.None).Wait();
+            closeTasks.Add(socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Server is shutting down", CancellationToken.None));
         }
+
+        await Task.WhenAll(closeTasks);
+
+        Debug.WriteLine("WebSocket server stopped.");
     }
+
+
 
     public async Task SendResults(List<Result> results)
     {
