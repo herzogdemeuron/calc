@@ -22,6 +22,12 @@ namespace Calc.ConnectorRevit.Views
             await viewModel.HandleLoadingAsync();
             LoadingOverlay.Visibility  = Visibility.Collapsed;
         }
+
+        private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            viewModel.Dispose();
+        }
+
         private async void ProjectOKClicked(object sender, RoutedEventArgs e)
         {
             if (ProjectsComboBox.SelectedItem == null)

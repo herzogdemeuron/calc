@@ -3,6 +3,7 @@ using Calc.Core;
 using Calc.Core.Calculations;
 using Calc.Core.Color;
 using Calc.Core.Objects;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -13,7 +14,7 @@ using System.Windows;
 
 namespace Calc.ConnectorRevit.Views
 {
-    public class ViewModel : INotifyPropertyChanged
+    public class ViewModel : INotifyPropertyChanged, IDisposable
     {
 
         private Store store;
@@ -52,6 +53,18 @@ namespace Calc.ConnectorRevit.Views
 
         public Window Window { get; set; }
 
+        public ViewModel()
+        {
+            this.server = new CalcWebSocketServer("http://127.0.0.1:8184/");
+            _ = this.server.Start();
+        }
+
+        public void Dispose()
+        {
+            Debug.WriteLine("ViewModel dispose is called.");
+            this.server.Stop();
+        }
+
         private void PlantTrees(Forest forest)
         {
             if (forest == null)
@@ -63,6 +76,7 @@ namespace Calc.ConnectorRevit.Views
             }
             CurrentForestItem = new NodeViewModel(forest);
         }
+
 
         public async Task HandleLoadingAsync()
         {
@@ -209,7 +223,7 @@ namespace Calc.ConnectorRevit.Views
             HandleSideClick();
         }
 
-        public async void HandleCalculate()
+        public void HandleCalculate()
         {
             if (CurrentForestItem == null)
                 return;
@@ -228,18 +242,7 @@ namespace Calc.ConnectorRevit.Views
 
             List<Result> results = GwpCalculator.CalculateGwp(branchesToCalc);
             Debug.WriteLine("GWP calculated");
-
-            if (this.server == null)
-            {
-                this.server = new CalcWebSocketServer("http://127.0.0.1:8184/"); // Update the URL to use "http://" instead of "ws://"
-            }
-
-            if (!this.server.IsRunning)
-            {
-                await Task.Run(() => this.server.Start()); // Start the server asynchronously
-            }
-
-            await this.server.SendResults(results); // Call SendResults asynchronously using await
+            _ = Task.Run(async () => await this.server.SendResults(results));
         }
 
         private Mapping GetCurrentMapping()
