@@ -52,7 +52,8 @@ namespace Calc.Core.Calculations
                             MaterialName = material.Name,
                             MaterialCategory = material.Category,
                             BuildupName = buildup.Name,
-                            GroupName = buildup.Group.Name
+                            GroupName = buildup.Group.Name,
+                            Color = branch.HslColor
                         };
 
                         results.Add(calculationResult);

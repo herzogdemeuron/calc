@@ -1,23 +1,59 @@
 <template>
-  <div>
-    <p>Parent Component</p>
-    <Bar_YbyX :data="dataset" labelKey="buildup_name" valueKey="global_warming_potential_a1_a2_a3" />
-    <Bar_YbyX :data="dataset" labelKey="group_name" valueKey="global_warming_potential_a1_a2_a3" />
+  <div class="app">
+    <h1 class="header">CALC Live Visualization</h1>
+    <div class="grid-container">
+      <div class="grid-item">
+        <div class="chart-grid">
+          <TotalGWP :data="dataset" valueKey="global_warming_potential_a1_a2_a3" />
+          <Bar_YbyX
+            v-for="(chart, index) in barChartList"
+            :key="index"
+            :data="dataset"
+            :labelKey="chart.labelKey"
+            :valueKey="chart.valueKey"
+          />
+        </div>
+      </div>
+      <div class="grid-item">
+        <div class="chart-grid">
+          <Donut_YbyX
+            v-for="(chart, index) in donutChartList"
+            :key="index"
+            :data="dataset"
+            :labelKey="chart.labelKey"
+            :valueKey="chart.valueKey"
+          />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
+
 <script>
 import Bar_YbyX from './components/Bar_YbyX.vue';
+import TotalGWP from './components/TotalGWP.vue';
+import Donut_YbyX from './components/Donut_YbyX.vue';
 import { reactive } from 'vue';
 
 export default {
   components: {
-    Bar_YbyX
+    TotalGWP,
+    Bar_YbyX,
+    Donut_YbyX
   },
   data() {
     return {
       dataset: reactive([]),
-      socket: null
+      socket: null,
+      barChartList: [
+        { labelKey: 'buildup_name', valueKey: 'global_warming_potential_a1_a2_a3' },
+        { labelKey: 'element_id', valueKey: 'global_warming_potential_a1_a2_a3' }
+      ],
+      donutChartList: [
+        { labelKey: 'group_name', valueKey: 'global_warming_potential_a1_a2_a3' },
+        { labelKey: 'material_category', valueKey: 'global_warming_potential_a1_a2_a3' }
+      ]
     };
   },
   mounted() {
@@ -79,3 +115,29 @@ handleWebSocketMessage(data) {
   }
 };
 </script>
+
+<style scoped>
+
+.grid-container {
+  display: flex;
+  grid-template-columns: 1fr 1fr 1fr; /* Three equal-width columns */
+  grid-gap: 20px; /* Spacing between columns */
+  padding: 20px;
+  justify-content: center;
+}
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(700px, 1fr));
+  grid-gap: 20px;
+  text-align: center;
+}
+
+.header {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+</style>

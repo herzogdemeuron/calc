@@ -6,7 +6,7 @@
     <div v-else>
         <div class="card">
           <h1 class="card-header">by {{ formatTitle(labelKey) }}</h1>
-          <Bar 
+          <Doughnut 
           :data="chartData" 
           :options="chartOptions"
           />
@@ -16,14 +16,14 @@
 </template>
   
   <script>
-  import { Bar } from 'vue-chartjs'
-  import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
+  import { Doughnut } from 'vue-chartjs'
+  import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 
-  ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
+  ChartJS.register(ArcElement, Tooltip, Legend)
   
   export default {
-    name: 'Bar_YbyX',
-    components: { Bar },
+    name: 'Donut_YbyX',
+    components: { Doughnut },
     props: {
       data: {
         type: Array,
