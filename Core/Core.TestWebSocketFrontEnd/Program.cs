@@ -25,9 +25,9 @@ public class Program
             {
                 await server.SendResults(new List<Result>()
                 {
-                    new Result() { GlobalWarmingPotentialA1A2A3 = 10 + sendCounter, BuildupName = "Buildup 1" },
-                    new Result() { GlobalWarmingPotentialA1A2A3 = 20 + sendCounter, BuildupName = "Buildup 2" },
-                    new Result() { GlobalWarmingPotentialA1A2A3 = 30 + sendCounter, BuildupName = "Buildup 3" },
+                    new Result() { GlobalWarmingPotentialA1A2A3 = 10 + sendCounter, BuildupName = "Buildup 1", GroupName = "Group 1"},
+                    new Result() { GlobalWarmingPotentialA1A2A3 = 20 + sendCounter, BuildupName = "Buildup 2", GroupName = "Group 2"},
+                    new Result() { GlobalWarmingPotentialA1A2A3 = 30 + sendCounter, BuildupName = "Buildup 3", GroupName = "Group 2"},
                 });
                 sendCounter++;
             }
