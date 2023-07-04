@@ -119,7 +119,7 @@ handleWebSocketMessage(data) {
   font-size: 2.5rem;
   font-weight: bold;
   margin: 1rem;
-  background: linear-gradient(to right, #6cc, #254993);
+  background: linear-gradient(to right, #6cc, #0b2a69);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

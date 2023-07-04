@@ -1,7 +1,7 @@
 <template>
     <div class="card">
       <h1 class="card-header">{{ cardTitle }}</h1>
-      <Line class="chart" :data="chartData" :options="chartOptions"/>
+      <Line id="gwpChart" class="chart" :data="chartData" :options="chartOptions"/>
     </div>
   </template>
     
@@ -23,7 +23,7 @@
         // BorderRadius
         } from 'chart.js'
 
-ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale, PointElement, Filler)
+    ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale, PointElement, Filler)
 
     export default {
       name: 'Line_YbyX',
@@ -99,8 +99,16 @@ ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale
                 data: params.snapshotTotals,
                 label: 'Total',
                 fill: true,
-                backgroundColor: 'rgba(0, 0, 0, 0.1)', // Set the fill color
-                borderColor: '#323232', // Set the line color
+                backgroundColor: (ctx) => {
+                    const canvas = ctx.chart.ctx;
+                    const gradient = canvas.createLinearGradient(0,0,0,180);
+
+                    gradient.addColorStop(0.2, 'rgba(55, 158, 210, 0.72)');
+                    gradient.addColorStop(1, 'rgba(112, 194, 194, 0.2)');
+
+                    return gradient;
+                },
+                borderColor: 'rgba(65, 133, 200, 1)', // Set the line color
                 tension: 0.3,
             }
             ]
