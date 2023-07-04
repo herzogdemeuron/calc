@@ -9,7 +9,7 @@
       <Line_YbyX :data="dataHistory" valueKey="global_warming_potential_a1_a2_a3" />
       <Bar_YbyX :data="dataset" labelKey="buildup_name" valueKey="global_warming_potential_a1_a2_a3" />
       <Donut_YbyX :data="dataset" labelKey="group_name" valueKey="global_warming_potential_a1_a2_a3" />
-      <Bar_YbyX :data="dataset" labelKey="element_id" valueKey="global_warming_potential_a1_a2_a3" />
+      <Bar_YbyX :data="dataset" labelKey="material_name" valueKey="global_warming_potential_a1_a2_a3" />
       <Donut_YbyX :data="dataset" labelKey="material_category" valueKey="global_warming_potential_a1_a2_a3" />
     </div>
   </div>

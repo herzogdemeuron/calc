@@ -44,7 +44,7 @@ ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale
       },
       data() {
         return {
-          cardTitle: formatTitle("gwp a123 total"),
+          cardTitle: formatTitle("gwp a123"),
           chartOptions: {
             responsive: true,
             aspectRatio: 1.5,

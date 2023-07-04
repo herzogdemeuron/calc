@@ -74,6 +74,7 @@ export function getChartHistoryData(historyData, valueKey) {
         fill: true,
         backgroundColor: 'rgba(0, 0, 0, 0.1)', // Set the fill color
         borderColor: '#323232', // Set the line color
+        tension: 0.1,
       }
     ]
   }

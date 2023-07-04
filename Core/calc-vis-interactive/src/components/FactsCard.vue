@@ -2,16 +2,16 @@
 <div class="card">
     <h1 class="card-header">Quick Facts</h1>
     <div class="grid-container">
-        <div class="grid-item">{{ total }}</div>
-        <div class="grid-item">kgCO2e (Gwp A123)</div>
+        <div class="grid-item">{{ total }} </div>
+        <div class="grid-item">Gwp A123 (kgCO2e)</div>
         <div class="grid-item">{{ buildupCount }}</div>
         <div class="grid-item">Buildups</div>
-        <div class="grid-item">{{ elementCount }}</div>
-        <div class="grid-item">Elements</div>
         <div class="grid-item">{{ groupCount }}</div>
-        <div class="grid-item">Groups</div>
+        <div class="grid-item">Groups (Buildups)</div>
         <div class="grid-item">{{ materialCount }}</div>
         <div class="grid-item">Materials</div>
+        <div class="grid-item">{{ materialCategoryCount }}</div>
+        <div class="grid-item">Material Categories</div>
     </div>
 </div>
 </template>
@@ -41,14 +41,6 @@ export default {
             });
             return buildups.size;
         },
-        elementCount() {
-            // count unique element_id
-            const elements = new Set();
-            this.data.forEach((item) => {
-                elements.add(item.element_id);
-            });
-            return elements.size;
-        },
         groupCount() {
             // count unique group_id
             const groups = new Set();
@@ -65,6 +57,14 @@ export default {
             });
             return materials.size;
         },
+        materialCategoryCount() {
+            // count unique material_category_id
+            const materialCategories = new Set();
+            this.data.forEach((item) => {
+                materialCategories.add(item.material_category);
+            });
+            return materialCategories.size;
+        }
     }
 }
 </script>
@@ -72,9 +72,9 @@ export default {
 <style scoped>
 .grid-container {
   display: grid;
-  grid-template-columns: 10% auto; /* Set the width of the columns */
+  grid-template-columns: 0.6fr 1fr; /* Set the width of the columns */
   grid-gap: 10px; /* Adjust the gap between grid items as per your preference */
-  margin-left: 1.5rem;
+  margin: 3rem;
   align-items: baseline;
 }
 
@@ -87,7 +87,7 @@ export default {
 .grid-item:nth-child(2n) {
     text-align: left; /* Align items in the second column to the left */
     font-size: 1rem;
-    color: #868686;
-    font-weight: lighter;
+    color: #b2b2b2;
 }
+
 </style>
