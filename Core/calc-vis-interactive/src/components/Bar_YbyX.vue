@@ -47,7 +47,7 @@
                 display: false
               },
               ticks: {
-                color: '#d9dbda',
+                color: '#323232',
                 font: {
                   size: 14,
                 },
@@ -82,9 +82,6 @@
         return getChartData(this.data, this.labelKey, this.valueKey)
       },
     },
-    mounted() {
-      console.log(this.data)
-    }
   };
 </script>
   

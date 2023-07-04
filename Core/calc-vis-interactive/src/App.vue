@@ -5,7 +5,8 @@
       No Data - Send again
     </div>
     <div v-else class="card-grid">
-      <TotalGWP :data="dataset" valueKey="global_warming_potential_a1_a2_a3" />
+      <FactsCard :data="dataset" valueKey="global_warming_potential_a1_a2_a3" />
+      <Line_YbyX :data="dataHistory" valueKey="global_warming_potential_a1_a2_a3" />
       <Bar_YbyX :data="dataset" labelKey="buildup_name" valueKey="global_warming_potential_a1_a2_a3" />
       <Donut_YbyX :data="dataset" labelKey="group_name" valueKey="global_warming_potential_a1_a2_a3" />
       <Bar_YbyX :data="dataset" labelKey="element_id" valueKey="global_warming_potential_a1_a2_a3" />
@@ -17,19 +18,22 @@
 
 <script>
 import Bar_YbyX from './components/Bar_YbyX.vue';
-import TotalGWP from './components/TotalGWP.vue';
+import FactsCard from './components/FactsCard.vue';
 import Donut_YbyX from './components/Donut_YbyX.vue';
+import Line_YbyX from './components/Line_YbyX.vue';
 import { reactive } from 'vue';
 
 export default {
   components: {
-    TotalGWP,
+    FactsCard,
     Bar_YbyX,
-    Donut_YbyX
+    Donut_YbyX,
+    Line_YbyX
   },
   data() {
     return {
       dataset: reactive([]),
+      dataHistory: reactive([]),
       socket: null
     };
   },
@@ -87,6 +91,9 @@ handleWebSocketMessage(data) {
   // Assuming the received data is in JSON format
   const receivedData = JSON.parse(data);
   this.dataset = reactive(receivedData);
+  // create history object with timestamp and data
+  const time = new Date().toLocaleTimeString();
+  this.dataHistory.push({ time, data: receivedData });
 }
 
   }

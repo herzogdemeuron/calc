@@ -1,6 +1,6 @@
 import { getHslColor, createHslGradient } from './colors.js';
 
-export function preprocessData(data, labelKey, valueKey) {
+function preprocessData(data, labelKey, valueKey) {
     const groupedData = {};
 
     // Group data by key
@@ -26,6 +26,7 @@ export function preprocessData(data, labelKey, valueKey) {
 
 export function getChartData(data, labelKey, valueKey) {
   const processedData = preprocessData(data, labelKey, valueKey);
+  processedData.sort((a, b) => b[valueKey] - a[valueKey]);
   const labels = processedData.map((item) => item[labelKey]);
   const values = processedData.map((item) => item[valueKey]);
   let colors = [];
@@ -48,4 +49,32 @@ export function getChartData(data, labelKey, valueKey) {
       }
     ]
   };
+}
+
+export function getChartHistoryData(historyData, valueKey) {
+  const snapshotTotals = [];
+  const labels = new Set();
+  for (let snapshot of historyData) {
+    // iterate over list of objects
+    const data = snapshot.data;
+    console.log(snapshot.time)
+    console.log(data);
+    const snapshotTotal = data.reduce((total, item) => total + item[valueKey], 0);
+    snapshotTotals.push(snapshotTotal);
+    labels.add(snapshot.time);
+
+  }
+
+  return {
+    labels: Array.from(labels),
+    datasets: [
+      {
+        data: snapshotTotals,
+        label: 'Total',
+        fill: true,
+        backgroundColor: 'rgba(0, 0, 0, 0.1)', // Set the fill color
+        borderColor: '#323232', // Set the line color
+      }
+    ]
+  }
 }

@@ -2,7 +2,6 @@ export function getHslColor(label, data, labelKey) {
     const item = data.find((item) => item[labelKey] === label);
     const color = item.color;
     const hslColor = `hsl(${color.Hue}, ${color.Saturation + 5}%, ${color.Lightness - 5}%)`;
-    console.log(hslColor);
     return hslColor;
   }
 
