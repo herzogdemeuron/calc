@@ -1,30 +1,15 @@
 <template>
-  <div class="app">
-    <h1 class="header">CALC Live Visualization</h1>
-    <div class="grid-container">
-      <div class="grid-item">
-        <div class="chart-grid">
-          <TotalGWP :data="dataset" valueKey="global_warming_potential_a1_a2_a3" />
-          <Bar_YbyX
-            v-for="(chart, index) in barChartList"
-            :key="index"
-            :data="dataset"
-            :labelKey="chart.labelKey"
-            :valueKey="chart.valueKey"
-          />
-        </div>
-      </div>
-      <div class="grid-item">
-        <div class="chart-grid">
-          <Donut_YbyX
-            v-for="(chart, index) in donutChartList"
-            :key="index"
-            :data="dataset"
-            :labelKey="chart.labelKey"
-            :valueKey="chart.valueKey"
-          />
-        </div>
-      </div>
+  <div class="content">
+    <h1 class="header">Calc Live</h1>
+    <div v-if="dataset.length === 0" class="card">
+      No Data - Send again
+    </div>
+    <div v-else class="card-grid">
+      <TotalGWP :data="dataset" valueKey="global_warming_potential_a1_a2_a3" />
+      <Bar_YbyX :data="dataset" labelKey="buildup_name" valueKey="global_warming_potential_a1_a2_a3" />
+      <Donut_YbyX :data="dataset" labelKey="group_name" valueKey="global_warming_potential_a1_a2_a3" />
+      <Bar_YbyX :data="dataset" labelKey="element_id" valueKey="global_warming_potential_a1_a2_a3" />
+      <Donut_YbyX :data="dataset" labelKey="material_category" valueKey="global_warming_potential_a1_a2_a3" />
     </div>
   </div>
 </template>
@@ -45,15 +30,7 @@ export default {
   data() {
     return {
       dataset: reactive([]),
-      socket: null,
-      barChartList: [
-        { labelKey: 'buildup_name', valueKey: 'global_warming_potential_a1_a2_a3' },
-        { labelKey: 'element_id', valueKey: 'global_warming_potential_a1_a2_a3' }
-      ],
-      donutChartList: [
-        { labelKey: 'group_name', valueKey: 'global_warming_potential_a1_a2_a3' },
-        { labelKey: 'material_category', valueKey: 'global_warming_potential_a1_a2_a3' }
-      ]
+      socket: null
     };
   },
   mounted() {
@@ -118,26 +95,25 @@ handleWebSocketMessage(data) {
 
 <style scoped>
 
-.grid-container {
-  display: flex;
-  grid-template-columns: 1fr 1fr 1fr; /* Three equal-width columns */
-  grid-gap: 20px; /* Spacing between columns */
-  padding: 20px;
-  justify-content: center;
+.content {
+  margin: 1rem auto;
+  max-width: 1600px;
+  padding-bottom: 2rem;
 }
-
-.chart-grid {
+.card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(700px, 1fr));
-  grid-gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  grid-gap: 1rem;
   text-align: center;
 }
 
 .header {
-  text-align: center;
-  font-size: 2rem;
+  text-align: left;
+  font-size: 2.5rem;
   font-weight: bold;
-  margin-bottom: 10px;
-  margin-top: 20px;
+  margin: 1rem;
+  background: linear-gradient(to right, #96db00, #0c4b02);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 </style>
