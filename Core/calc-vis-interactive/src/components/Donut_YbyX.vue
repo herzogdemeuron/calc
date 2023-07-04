@@ -11,7 +11,6 @@
   import { getChartData } from '../utils/data.js';
   import { formatTitle } from '../utils/text.js';
 
-
   ChartJS.register(ArcElement, Tooltip, Legend)
   
   export default {

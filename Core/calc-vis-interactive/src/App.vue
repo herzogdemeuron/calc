@@ -1,8 +1,8 @@
 <template>
   <div class="content">
     <h1 class="header">Calc Live</h1>
-    <div v-if="dataset.length === 0" class="card">
-      No Data - Send again
+    <div v-if="dataset.length === 0" class="no-data">
+      No Data - Click on something else
     </div>
     <div v-else class="card-grid">
       <FactsCard :data="dataset" />
@@ -128,5 +128,12 @@ export default {
   background: linear-gradient(to right, #6cc, #0b2a69);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.no-data {
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 1rem;
+  color: #b2b2b2
 }
 </style>

@@ -103,12 +103,12 @@
                     const canvas = ctx.chart.ctx;
                     const gradient = canvas.createLinearGradient(0,0,0,180);
 
-                    gradient.addColorStop(0.2, 'rgba(55, 158, 210, 0.72)');
-                    gradient.addColorStop(1, 'rgba(112, 194, 194, 0.2)');
+                    gradient.addColorStop(0, 'rgba(112, 122, 194, 0.7)');
+                    gradient.addColorStop(1, 'rgba(112, 194, 180, 0.2)');
 
                     return gradient;
                 },
-                borderColor: 'rgba(65, 133, 200, 1)', // Set the line color
+                borderColor: 'rgba(106, 117, 200, 1)', // Set the line color
                 tension: 0.3,
             }
             ]

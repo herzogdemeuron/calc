@@ -10,7 +10,7 @@ export function createHslGradient(count) {
     const lightness = 60;
     // create random start angle between 330 and 380
     const startAngle = 180;
-    const endAngle = 240;
+    const endAngle = 300;
     const angleRange = endAngle - startAngle;
     const angleIncrement = angleRange / count;
     const hslColors = [];

@@ -1,6 +1,7 @@
 <template>
 <div class="card">
     <h1 class="card-header">Quick Facts</h1>
+    <p class="sub-header">Your current selection holds:</p>
     <div class="grid-container">
         <div class="grid-item">{{ total }} </div>
         <div class="grid-item">Gwp A123 (kgCO2e)</div>
@@ -17,6 +18,8 @@
 </template>
 
 <script>
+import { formatNumber } from '@/utils/text';
+
 export default {
     name: 'FactsCard',
     props: {
@@ -28,7 +31,7 @@ export default {
     computed: {
         total() {
             const gwp = this.data.reduce((acc, cur) => acc + cur.global_warming_potential_a1_a2_a3, 0);
-            return Math.round(gwp);
+            return formatNumber(Math.round(gwp));
         },
         buildupCount() {
             // count unique buildups
@@ -76,9 +79,10 @@ export default {
 }
 
 .grid-item {
-  text-align: right; /* Align items in the first column to the right */
-  font-size: 1.5rem;
-  font-weight: bold;
+    text-align: right; /* Align items in the first column to the right */
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding-bottom: 10px;
 }
 
 .grid-item:nth-child(2n) {
@@ -86,6 +90,14 @@ export default {
     font-size: 1rem;
     color: #b2b2b2;
     font-weight: lighter;
+}
+
+.sub-header {
+    font-size: 1rem;
+    color: #b2b2b2;
+    text-align: left;
+    font-weight: lighter;
+    margin-left: 1.5rem;
 }
 
 </style>
