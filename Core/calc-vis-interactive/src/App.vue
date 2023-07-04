@@ -42,62 +42,68 @@ export default {
   },
   methods: {
     connectWebSocket() {
-  if (this.socket !== null && this.socket.readyState === WebSocket.OPEN) {
-    // WebSocket is already open, no need to reconnect
-    return;
-  }
+      if (this.socket !== null && this.socket.readyState === WebSocket.OPEN) {
+        // WebSocket is already open, no need to reconnect
+        return;
+      }
 
-  this.socket = new WebSocket('ws://127.0.0.1:8184');
+      this.socket = new WebSocket('ws://127.0.0.1:8184');
 
-  this.socket.onopen = () => {
-    let time = new Date().toLocaleTimeString();
-    this.socket.send(`${time} cal-viz-interactive connected`);
-  };
+      this.socket.onopen = () => {
+        let time = new Date().toLocaleTimeString();
+        this.socket.send(`${time} cal-viz-interactive connected`);
+      };
 
-  this.socket.onmessage = (event) => {
-    console.log('Message received from server');
-    this.handleWebSocketMessage(event.data);
-  };
+      this.socket.onmessage = (event) => {
+        console.log('Message received from server');
+        this.handleWebSocketMessage(event.data);
+      };
 
-  this.socket.onclose = (event) => {
-    if (event.wasClean) {
-      console.log(`Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-    } else {
-      console.log('Connection died');
+      this.socket.onclose = (event) => {
+        if (event.wasClean) {
+          console.log(`Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+        } else {
+          console.log('Connection died');
+        }
+
+        // Attempt to reconnect after a delay (e.g., 5 seconds)
+        setTimeout(() => {
+          this.connectWebSocket();
+        }, 5000);
+      };
+
+      this.socket.onerror = (error) => {
+        console.log(`WebSocket Error: ${error.message}`);
+        // Handle the error as needed
+      };
+
+      // Add event listener for beforeunload event
+      window.addEventListener('beforeunload', () => {
+        if (this.socket.readyState === WebSocket.OPEN) {
+          // WebSocket is still open, send disconnection message to the server
+          this.socket.send('calc-viz-interactive disconnected');
+          this.socket.close();
+        }
+      });
+    },
+
+    handleWebSocketMessage(data) {
+      // Assuming the received data is in JSON format
+      const receivedData = JSON.parse(data);
+      this.dataset = reactive(receivedData);
+      // create history object with timestamp and data
+      const time = new Date().toLocaleTimeString();
+      // check if dataHistory is longer than 4 entries, if so drop the first entry
+      if (this.dataHistory.length > 4) {
+        this.dataHistory.shift();
+        this.dataHistory.push({ time, data: receivedData });
+      } else {
+      this.dataHistory.push({ time, data: receivedData });
+      }
     }
-
-    // Attempt to reconnect after a delay (e.g., 5 seconds)
-    setTimeout(() => {
-      this.connectWebSocket();
-    }, 5000);
-  };
-
-  this.socket.onerror = (error) => {
-    console.log(`WebSocket Error: ${error.message}`);
-    // Handle the error as needed
-  };
-
-  // Add event listener for beforeunload event
-  window.addEventListener('beforeunload', () => {
-    if (this.socket.readyState === WebSocket.OPEN) {
-      // WebSocket is still open, send disconnection message to the server
-      this.socket.send('calc-viz-interactive disconnected');
-      this.socket.close();
-    }
-  });
-},
-
-handleWebSocketMessage(data) {
-  // Assuming the received data is in JSON format
-  const receivedData = JSON.parse(data);
-  this.dataset = reactive(receivedData);
-  // create history object with timestamp and data
-  const time = new Date().toLocaleTimeString();
-  this.dataHistory.push({ time, data: receivedData });
-}
-
   }
 };
+
 </script>
 
 <style scoped>
