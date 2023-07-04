@@ -163,9 +163,8 @@ namespace Calc.ConnectorRevit.Views
         }
         public void HandleNodeItemSelectionChanged(NodeViewModel nodeItem)
         {
+            if (nodeItem == null) return;
 
-            if (nodeItem == null)
-                return;
             SelectedNodeItem = nodeItem;
             HideAllLabelColor();
             if (BranchesSwitch)
@@ -180,7 +179,9 @@ namespace Calc.ConnectorRevit.Views
             }
             CurrentForestItem.NotifyLabelColorChange();
 
+            this.UpdateLiveVisualization();
         }
+
         public void HandleSideClick()
         {
             if (CurrentForestItem == null)
@@ -234,9 +235,16 @@ namespace Calc.ConnectorRevit.Views
             }
             Debug.WriteLine(this.server.ConnectedSockets);    
 
-            if (CurrentForestItem == null)
-                return;
+        }
+
+        private void UpdateLiveVisualization()
+        {   
+            if (this.server == null) return;
+            if (this.server.ConnectedClients == 0) return;
+            if (CurrentForestItem == null) return;
+
             List<Branch> branchesToCalc = new List<Branch>();
+
             if (SelectedNodeItem?.Host is Branch branch)
             {
                 branchesToCalc.Add(branch);
@@ -251,6 +259,7 @@ namespace Calc.ConnectorRevit.Views
 
             List<Result> results = GwpCalculator.CalculateGwp(branchesToCalc);
             Debug.WriteLine("GWP calculated");
+
             _ = Task.Run(async () => await this.server.SendResults(results));
         }
 
