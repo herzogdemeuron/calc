@@ -5,9 +5,9 @@
       No Data - Send again
     </div>
     <div v-else class="card-grid">
-      <FactsCard :data="dataset" valueKey="global_warming_potential_a1_a2_a3" />
+      <FactsCard :data="dataset" />
       <Line_YbyX :data="dataHistory" valueKey="global_warming_potential_a1_a2_a3" />
-      <Bar_YbyX :data="dataset" labelKey="buildup_name" valueKey="global_warming_potential_a1_a2_a3" />
+      <Bar_YbyX :data="dataset" labelKey="buildup_name" valueKey="global_warming_potential_a1_a2_a3" sortValue="false"/>
       <Donut_YbyX :data="dataset" labelKey="group_name" valueKey="global_warming_potential_a1_a2_a3" />
       <Bar_YbyX :data="dataset" labelKey="material_name" valueKey="global_warming_potential_a1_a2_a3" />
       <Donut_YbyX :data="dataset" labelKey="material_category" valueKey="global_warming_potential_a1_a2_a3" />
@@ -110,7 +110,7 @@ handleWebSocketMessage(data) {
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-  grid-gap: 1rem;
+  grid-gap: 1.5rem;
   text-align: center;
 }
 
@@ -119,7 +119,7 @@ handleWebSocketMessage(data) {
   font-size: 2.5rem;
   font-weight: bold;
   margin: 1rem;
-  background: linear-gradient(to right, #96db00, #0c4b02);
+  background: linear-gradient(to right, #6cc, #254993);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

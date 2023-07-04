@@ -54,7 +54,18 @@
     },
     computed: {
       chartData() {
-        return getChartData(this.data, this.labelKey, this.valueKey)
+        const params =  getChartData(this.data, this.labelKey, this.valueKey, true)
+        return {
+          labels: params.labels,
+          datasets: [
+            {
+              data: params.values,
+              backgroundColor: params.colors,
+              borderSkipped: false,
+              borderRadius: 10,
+            },
+          ],
+        }
       },
     },
   };

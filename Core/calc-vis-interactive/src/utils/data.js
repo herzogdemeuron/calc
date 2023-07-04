@@ -1,4 +1,5 @@
-import { getHslColor, createHslGradient } from './colors.js';
+import { getHslColor, createHslGradient, extractHueFromHslColor } from './colors.js';
+
 
 function preprocessData(data, labelKey, valueKey) {
     const groupedData = {};
@@ -24,31 +25,37 @@ function preprocessData(data, labelKey, valueKey) {
     return processedData;
   }
 
-export function getChartData(data, labelKey, valueKey) {
+export function getChartData(data, labelKey, valueKey, sort) {
   const processedData = preprocessData(data, labelKey, valueKey);
-  processedData.sort((a, b) => b[valueKey] - a[valueKey]);
-  const labels = processedData.map((item) => item[labelKey]);
-  const values = processedData.map((item) => item[valueKey]);
+  if (sort === true){
+    processedData.sort((a, b) => b[valueKey] - a[valueKey]);
+  }
+  let labels = processedData.map((item) => item[labelKey]);
+  let values = processedData.map((item) => item[valueKey]);
   let colors = [];
   // get HslColor for each label
   if (labelKey === 'buildup_name') {
-    colors = labels.map((label) => getHslColor(label, data, labelKey));
+    for (let label of labels) {
+      const hslColor = getHslColor(label, data, labelKey);
+      colors.push(hslColor);
+    }
+    // sort colors by hue, sort labels and values in parallel use
+    const sortedColors = colors.sort((a, b) => extractHueFromHslColor(a) - extractHueFromHslColor(b));
+    const sortedLabels = [];
+    const sortedValues = [];
+    for (let color of sortedColors) {
+      const index = colors.indexOf(color);
+      sortedLabels.push(labels[index]);
+      sortedValues.push(values[index]);
+    }
+    labels = sortedLabels;
+    values = sortedValues;
   }
   else {
     colors = createHslGradient(labels.length);
   }
   
-  return {
-    labels: labels,
-    datasets: [
-      {
-        data: values,
-        backgroundColor: colors,
-        borderRadius: 10,
-        borderSkipped: false,
-      }
-    ]
-  };
+  return { labels, values, colors };
 }
 
 export function getChartHistoryData(historyData, valueKey) {
@@ -62,20 +69,7 @@ export function getChartHistoryData(historyData, valueKey) {
     const snapshotTotal = data.reduce((total, item) => total + item[valueKey], 0);
     snapshotTotals.push(snapshotTotal);
     labels.add(snapshot.time);
-
   }
 
-  return {
-    labels: Array.from(labels),
-    datasets: [
-      {
-        data: snapshotTotals,
-        label: 'Total',
-        fill: true,
-        backgroundColor: 'rgba(0, 0, 0, 0.1)', // Set the fill color
-        borderColor: '#323232', // Set the line color
-        tension: 0.1,
-      }
-    ]
-  }
+  return { labels: Array.from(labels), snapshotTotals };
 }

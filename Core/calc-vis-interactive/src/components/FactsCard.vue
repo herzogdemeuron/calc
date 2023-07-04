@@ -23,15 +23,12 @@ export default {
         data: {
             type: Array,
             required: true,
-        },
-        valueKey: {
-            type: String,
-            default: 'value'
         }
     },
     computed: {
         total() {
-            return this.data.reduce((acc, cur) => acc + cur[this.valueKey], 0);
+            const gwp = this.data.reduce((acc, cur) => acc + cur.global_warming_potential_a1_a2_a3, 0);
+            return Math.round(gwp);
         },
         buildupCount() {
             // count unique buildups
@@ -88,6 +85,7 @@ export default {
     text-align: left; /* Align items in the second column to the left */
     font-size: 1rem;
     color: #b2b2b2;
+    font-weight: lighter;
 }
 
 </style>

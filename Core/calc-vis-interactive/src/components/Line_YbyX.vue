@@ -91,7 +91,20 @@ ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale
       },
       computed: {
         chartData() {
-          return getChartHistoryData(this.data, this.valueKey)
+          const params = getChartHistoryData(this.data, this.valueKey)
+          return {
+            labels: params.labels,
+            datasets: [
+            {
+                data: params.snapshotTotals,
+                label: 'Total',
+                fill: true,
+                backgroundColor: 'rgba(0, 0, 0, 0.1)', // Set the fill color
+                borderColor: '#323232', // Set the line color
+                tension: 0.3,
+            }
+            ]
+        }
         },
       },
     };

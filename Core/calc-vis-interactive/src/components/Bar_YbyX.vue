@@ -28,6 +28,10 @@
       valueKey: {
         type: String,
         default: 'value'
+      },
+      sortValue: {
+        type: Boolean,
+        default: true
       }
     },
     data() {
@@ -47,6 +51,13 @@
                 display: false
               },
               ticks: {
+                callback: function(value) {
+                  const label =  this.getLabelForValue(value)
+                  if (label.length > 10) {
+                     return label.substr(0, 10) + '...';
+                  }
+                  return label;
+                },
                 color: '#323232',
                 font: {
                   size: 14,
@@ -79,7 +90,18 @@
     },
     computed: {
       chartData() {
-        return getChartData(this.data, this.labelKey, this.valueKey)
+        const params =  getChartData(this.data, this.labelKey, this.valueKey, this.sortValue)
+        return {
+          labels: params.labels,
+          datasets: [
+            {
+              data: params.values,
+              backgroundColor: params.colors,
+              borderSkipped: false,
+              borderRadius: 10,
+            },
+          ],
+        }
       },
     },
   };
