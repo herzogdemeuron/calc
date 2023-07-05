@@ -32,7 +32,7 @@ namespace Calc.Core.TestIntegration.Drivers
                 branches.AddRange(tree.Flatten());
             }
 
-            var results = GwpCalculator.CalculateGwp(branches);
+            var results = Calculator.Calculate(branches);
             foreach (var result in results)
             {
                 result.SnapshotName = "test snapshot name";

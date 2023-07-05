@@ -257,7 +257,7 @@ namespace Calc.ConnectorRevit.Views
                 }
             }
 
-            List<Result> results = GwpCalculator.CalculateGwp(branchesToCalc);
+            List<Result> results = Calculator.Calculate(branchesToCalc);
             Debug.WriteLine("GWP calculated");
 
             _ = Task.Run(async () => await this.server.SendResults(results));

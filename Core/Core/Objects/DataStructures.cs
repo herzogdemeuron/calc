@@ -63,6 +63,8 @@ namespace Calc.Core.Objects
         public string ElementId { get; set; }
         [JsonProperty(PropertyName = "global_warming_potential_a1_a2_a3")]
         public decimal GlobalWarmingPotentialA1A2A3 { get; set; }
+        [JsonProperty(PropertyName = "cost")]
+        public decimal Cost { get; set; }
         [JsonProperty(PropertyName = "unit")]
         public Unit Unit { get; set; }
         [JsonProperty(PropertyName = "material_amount")]
@@ -89,6 +91,8 @@ namespace Calc.Core.Objects
         public string Name { get;  set; }
         [JsonProperty("global_warming_potential_a1_a2_a3")]
         public decimal GwpA123 { get;  set; }
+        [JsonProperty("cost")]
+        public decimal Cost { get; set; }
         [JsonProperty("unit")]
         public Unit Unit { get;  set; }
         [JsonProperty("material_category")]

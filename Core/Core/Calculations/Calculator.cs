@@ -4,7 +4,7 @@ using Calc.Core.Objects;
 
 namespace Calc.Core.Calculations
 {
-    public class GwpCalculator
+    public class Calculator
     {
         /// <summary>
         /// Intended use:
@@ -17,7 +17,7 @@ namespace Calc.Core.Calculations
         /// }
         /// var results = GwpCalculator.CalculateGwp(branches);
         /// </code>
-        public static List<Result> CalculateGwp(List<Branch> branches)
+        public static List<Result> Calculate(List<Branch> branches)
         {
             var flatBranches = new List<Branch>();
             foreach (var branch in branches)
@@ -43,10 +43,12 @@ namespace Calc.Core.Calculations
                     {
                         var material = component.Material;
                         var gwpA123 = CalculateGwpA123(element, component, buildup.Unit);
+                        var cost = CalculateCost(element, component, buildup.Unit);
                         var calculationResult = new Result
                         { 
                             ElementId = element.Id,
                             GlobalWarmingPotentialA1A2A3 = gwpA123,
+                            Cost = cost,
                             Unit = buildup.Unit,
                             MaterialAmount = component.Amount,
                             MaterialName = material.Name,
@@ -63,7 +65,7 @@ namespace Calc.Core.Calculations
             return results;
         }
 
-        public static decimal CalculateGwpA123(CalcElement element, BuildupComponent component, Unit unit)
+        private static decimal CalculateGwpA123(CalcElement element, BuildupComponent component, Unit unit)
         {
             var material = component.Material;
             return unit switch
@@ -72,6 +74,23 @@ namespace Calc.Core.Calculations
                 Unit.m => material.GwpA123 * component.Amount * element.Length,
                 Unit.m2 => material.GwpA123 * component.Amount * element.Area,
                 Unit.m3 => material.GwpA123 * component.Amount * element.Volume,
+                _ => throw new Exception($"Unit not recognized: {unit}"),
+            };
+        }
+
+        private static decimal CalculateCost(CalcElement element, BuildupComponent component, Unit unit)
+        {
+            var material = component.Material;
+            // generate random cost for testing between 1 and 100
+            //var random = new Random();
+            //material.Cost = random.Next(1, 100);
+
+            return unit switch
+            {
+                Unit.each => material.Cost * component.Amount,
+                Unit.m => material.Cost * component.Amount * element.Length,
+                Unit.m2 => material.Cost * component.Amount * element.Area,
+                Unit.m3 => material.Cost * component.Amount * element.Volume,
                 _ => throw new Exception($"Unit not recognized: {unit}"),
             };
         }
