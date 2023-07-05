@@ -28,6 +28,36 @@ namespace Calc.Core.Calculations
                 flatBranches.AddRange(branchCopy.Flatten());
             }
 
+            // add cost for testing ------------------------------------------
+            // loop through branches, for each branch, loop through elements, for each element, loop through components
+            // add a random cost to each component.Material.Cost
+            // make dictionary of material id and cost
+            // reuse cost if material id is already in dictionary
+            //var materialCosts = new Dictionary<int, decimal>();
+            //var random = new Random();
+            //foreach (var branch in flatBranches)
+            //{
+            //    if (branch.Buildup == null) continue;
+
+            //    var buildup = branch.Buildup;
+
+            //    if (buildup.Components == null) continue;
+
+            //    foreach (var element in branch.Elements)
+            //    {
+            //        foreach (var component in buildup.Components)
+            //        {
+            //            var material = component.Material;
+            //            if (!materialCosts.ContainsKey(material.Id))
+            //            {
+            //                materialCosts.Add(material.Id, (decimal)random.NextDouble() * 100);
+            //            }
+            //            material.Cost = materialCosts[material.Id];
+            //        }
+            //    }
+            //}
+            // add cost for testing ------------------------------------------
+
             var results = new List<Result>();
             foreach (var branch in flatBranches)
             {
@@ -81,10 +111,6 @@ namespace Calc.Core.Calculations
         private static decimal CalculateCost(CalcElement element, BuildupComponent component, Unit unit)
         {
             var material = component.Material;
-            // generate random cost for testing between 1 and 100
-            //var random = new Random();
-            //material.Cost = random.Next(1, 100);
-
             return unit switch
             {
                 Unit.each => material.Cost * component.Amount,
