@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <h1 class="card-header">{{ cardTitle }}</h1>
+    <h1 class="card-header">{{ cardTitle }} <span> {{ cardSubtitle }}</span></h1>
     <Bar class="chart" :data="chartData" :options="chartOptions"/>
   </div>
 </template>
@@ -32,11 +32,16 @@
       sortValue: {
         type: Boolean,
         default: true
-      }
+      },
+      title: {
+        type: String,
+        default: 'Title'
+      },
     },
     data() {
       return {
-        cardTitle: formatTitle(this.labelKey),
+        cardTitle: formatTitle(this.title),
+        cardSubtitle: formatTitle(this.valueKey),
         chartOptions: {
           responsive: true,
           aspectRatio: 1.5,

@@ -1,18 +1,31 @@
 <template>
 <div class="card">
-    <h1 class="card-header">Quick Facts</h1>
-    <p class="sub-header">Your current selection holds:</p>
     <div class="grid-container">
-        <div class="grid-item">{{ total }} </div>
-        <div class="grid-item">Gwp A123 (kgCO2e)</div>
-        <div class="grid-item">{{ buildupCount }}</div>
-        <div class="grid-item">Buildups</div>
-        <div class="grid-item">{{ groupCount }}</div>
-        <div class="grid-item">Groups (Buildups)</div>
-        <div class="grid-item">{{ materialCount }}</div>
-        <div class="grid-item">Materials</div>
-        <div class="grid-item">{{ materialCategoryCount }}</div>
-        <div class="grid-item">Material Categories</div>
+    <div>
+        <h1 class="fact">{{ totalGwp }} </h1>
+        <span>GwpA123 (KgCO2e)</span>
+    </div>
+    <div>
+        <h1 class="fact">{{ buildupCount }} </h1>
+        <span>Buildups</span>
+    </div>
+    <div>
+        <h1 class="fact">{{ groupCount }} </h1>
+        <span>Buildup Groups</span>
+    </div>
+    <div>
+        <h1 class="fact">{{ totalCost }} </h1>
+        <span>Cost</span>
+    </div>
+    <div>
+        <h1 class="fact">{{ materialCount }} </h1>
+        <span>Materials</span>
+    </div>
+    <div>
+        <h1 class="fact">{{ materialCategoryCount }} </h1>
+        <span>Material Categories</span>
+    </div>
+
     </div>
 </div>
 </template>
@@ -29,9 +42,13 @@ export default {
         }
     },
     computed: {
-        total() {
+        totalGwp() {
             const gwp = this.data.reduce((acc, cur) => acc + cur.global_warming_potential_a1_a2_a3, 0);
             return formatNumber(Math.round(gwp));
+        },
+        totalCost() {
+            const cost = this.data.reduce((acc, cur) => acc + cur.cost, 0);
+            return formatNumber(Math.round(cost));
         },
         buildupCount() {
             // count unique buildups
@@ -72,32 +89,21 @@ export default {
 <style scoped>
 .grid-container {
   display: grid;
-  grid-template-columns: 0.6fr 1fr; /* Set the width of the columns */
-  grid-gap: 10px; /* Adjust the gap between grid items as per your preference */
-  margin: 3rem;
-  align-items: baseline;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 0.5rem;
+  padding: 1.5rem;
 }
 
-.grid-item {
-    text-align: right; /* Align items in the first column to the right */
+.fact {
     font-size: 1.5rem;
     font-weight: bold;
-    padding-bottom: 10px;
-}
-
-.grid-item:nth-child(2n) {
-    text-align: left; /* Align items in the second column to the left */
+    color: #323232;
+    margin: 0;
+  }
+  
+  span {
     font-size: 1rem;
-    color: #b2b2b2;
-    font-weight: lighter;
-}
-
-.sub-header {
-    font-size: 1rem;
-    color: #b2b2b2;
-    text-align: left;
-    font-weight: lighter;
-    margin-left: 1.5rem;
-}
+    color: #ababab;
+  }
 
 </style>

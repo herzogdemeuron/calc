@@ -64,8 +64,6 @@ export function getChartHistoryData(historyData, valueKey) {
   for (let snapshot of historyData) {
     // iterate over list of objects
     const data = snapshot.data;
-    console.log(snapshot.time)
-    console.log(data);
     const snapshotTotal = data.reduce((total, item) => total + item[valueKey], 0);
     snapshotTotals.push(snapshotTotal);
     labels.add(snapshot.time);

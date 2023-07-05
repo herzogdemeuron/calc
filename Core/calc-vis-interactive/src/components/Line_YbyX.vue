@@ -1,6 +1,6 @@
 <template>
     <div class="card">
-      <h1 class="card-header">{{ cardTitle }}</h1>
+      <h1 class="card-header">{{ cardTitle }} <span> {{ cardSubtitle }}</span></h1>
       <Line id="gwpChart" class="chart" :data="chartData" :options="chartOptions"/>
     </div>
   </template>
@@ -40,11 +40,16 @@
         valueKey: {
           type: String,
           default: 'value'
-        }
+        },
+        title: {
+          type: String,
+          default: 'Title'
+        },
       },
       data() {
         return {
-          cardTitle: formatTitle("gwp a123"),
+          cardTitle: formatTitle(this.title),
+          cardSubtitle: formatTitle(this.valueKey),
           chartOptions: {
             responsive: true,
             aspectRatio: 1.5,
@@ -117,4 +122,6 @@
       },
     };
   </script>
+
+  
     

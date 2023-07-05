@@ -11,12 +11,21 @@ body {
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   }
 
-.card-header {
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
     font-size: 1.5rem;
     font-weight: bold;
     color: #323232;
     text-align: left;
     padding-left: 1.5rem;
+  }
+  
+  .card-header span {
+    font-size: 1rem;
+    color: #ababab;
+    padding-right: 1.5rem;
   }
 
 .chart {

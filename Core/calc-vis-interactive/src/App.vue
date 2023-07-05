@@ -1,17 +1,36 @@
 <template>
   <div class="content">
-    <h1 class="header">Calc Live</h1>
+    <div class="header">
+      <h1><span>Calc</span>Live</h1>
+      <h2><span>C</span>ost <span>a</span>nd <span>l</span>ca <span>c</span>alculation</h2>
+    </div>
     <div v-if="dataset.length === 0" class="no-data">
       No Data - Click on something else
     </div>
-    <div v-else class="card-grid">
-      <FactsCard :data="dataset" />
-      <Line_YbyX :data="dataHistory" valueKey="global_warming_potential_a1_a2_a3" />
-      <Bar_YbyX :data="dataset" labelKey="buildup_name" valueKey="global_warming_potential_a1_a2_a3" sortValue="false"/>
-      <Donut_YbyX :data="dataset" labelKey="group_name" valueKey="global_warming_potential_a1_a2_a3" />
-      <Bar_YbyX :data="dataset" labelKey="material_name" valueKey="global_warming_potential_a1_a2_a3" />
-      <Donut_YbyX :data="dataset" labelKey="material_category" valueKey="global_warming_potential_a1_a2_a3" />
+    <div v-else class="card-container">
+      <div class="card-grid">
+        <FactsCard :data="dataset" />
+      </div>
+      <hr class="line" color="#b2b2b2" width="75%">
+      <div class="card-grid">
+        <Line_YbyX :data="dataHistory" valueKey="global_warming_potential_a1_a2_a3" title="timeline"/>
+        <Bar_YbyX :data="dataset" labelKey="buildup_name" valueKey="global_warming_potential_a1_a2_a3" :sortValue="false" title="Buildup"/>
+        <Donut_YbyX :data="dataset" labelKey="group_name" valueKey="global_warming_potential_a1_a2_a3" title="Buildup Group"/>
+        <Bar_YbyX :data="dataset" labelKey="material_name" valueKey="global_warming_potential_a1_a2_a3" title="Material"/>
+        <Donut_YbyX :data="dataset" labelKey="material_category" valueKey="global_warming_potential_a1_a2_a3" title="Material Category"/>
+        <Bar_YbyX :data="dataset" labelKey="element_id" valueKey="global_warming_potential_a1_a2_a3" title="Element"/>
+      </div>
+      <hr class="line" color="#b2b2b2" width="75%">
+      <div class="card-grid">
+        <Line_YbyX :data="dataHistory" valueKey="cost" title="timeline"/>
+        <Bar_YbyX :data="dataset" labelKey="buildup_name" valueKey="cost" :sortValue="false" title="Buildup"/>
+        <Donut_YbyX :data="dataset" labelKey="group_name" valueKey="cost" title="Buildup Group"/>
+        <Bar_YbyX :data="dataset" labelKey="material_name" valueKey="cost" title="Material"/>
+        <Donut_YbyX :data="dataset" labelKey="material_category" valueKey="cost" title="Material Category"/>
+        <Bar_YbyX :data="dataset" labelKey="element_id" valueKey="cost" title="Element"/>
+      </div>
     </div>
+    <a href="https://github.com/herzogdemeuron/calc" class="link">GitHub</a>
   </div>
 </template>
 
@@ -25,8 +44,8 @@ import { reactive } from 'vue';
 
 export default {
   components: {
-    FactsCard,
     Bar_YbyX,
+    FactsCard,
     Donut_YbyX,
     Line_YbyX
   },
@@ -91,6 +110,7 @@ export default {
       // Assuming the received data is in JSON format
       const receivedData = JSON.parse(data);
       this.dataset = reactive(receivedData);
+      console.log(this.dataset);
       // create history object with timestamp and data
       const time = new Date().toLocaleTimeString();
       // check if dataHistory is longer than 4 entries, if so drop the first entry
@@ -103,37 +123,77 @@ export default {
     }
   }
 };
-
 </script>
+
 
 <style scoped>
 
 .content {
-  margin: 1rem auto;
+  margin: 0 auto;
   max-width: 1600px;
-  padding-bottom: 2rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+.header h1 {
+  text-align: left;
+  font-size: 2.5rem;
+  padding-top: 1rem;
+  margin: 0;
+  font-weight: 500;
+  background: linear-gradient(to right, #6cc, #237ca8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header h1 span {
+  font-weight: 700;
+}
+
+.header h2 {
+  text-align: right;
+  color: #b2b2b2;
+}
+
+.header h2 span {
+  color: #6cc;
 }
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   grid-gap: 1.5rem;
-  text-align: center;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
 }
 
-.header {
-  text-align: left;
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin: 1rem;
-  background: linear-gradient(to right, #6cc, #0b2a69);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.card-container {
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
+
+.line {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 
 .no-data {
   font-size: 1rem;
   font-weight: bold;
-  margin: 1rem;
+  padding: 2rem;
   color: #b2b2b2
+}
+
+.link {
+  color: #b2b2b2;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: normal;
+  padding: 2rem;
 }
 </style>
