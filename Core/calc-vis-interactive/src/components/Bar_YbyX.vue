@@ -98,10 +98,11 @@
 
           var style = getComputedStyle(document.body);
           var chartScaleColor = style.getPropertyValue('--chart-scale-color');
+          var textSubColor = style.getPropertyValue('--text-sub-color');
 
           x.grid.color = chartScaleColor;
           y.grid.color = chartScaleColor;
-          x.ticks.color = chartScaleColor;
+          x.ticks.color = textSubColor;
           y.ticks.color = chartScaleColor;
         });
       },

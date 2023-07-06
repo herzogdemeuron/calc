@@ -57,11 +57,10 @@
     },
     mounted() { 
         this.$nextTick(() => {
-          var chartInstance = this.$refs.donut.chart;
           var style = getComputedStyle(document.body);
-          var chartScaleColor = style.getPropertyValue('--chart-scale-color');
+          var textSubColor = style.getPropertyValue('--text-sub-color');
           
-          chartInstance.config.options.plugins.legend.labels.color = chartScaleColor;
+          ChartJS.defaults.color = textSubColor;
         });
       },
       computed: {

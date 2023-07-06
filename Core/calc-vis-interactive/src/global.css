@@ -48,6 +48,7 @@ body {
   
   .card-header span {
     font-size: 1rem;
+    font-weight: normal;
     color: var(--text-sub-color);
     padding-right: 1.5rem;
   }
