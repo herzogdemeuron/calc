@@ -149,6 +149,7 @@ export default {
 .content {
   margin: 0 auto;
   max-width: 1700px;
+  min-width: 600px;
 }
 
 .header {
@@ -180,7 +181,7 @@ export default {
 }
 
 .header h2 span {
-  color: var(--color-highlight-light);
+  color: var(--color-highlight-dark);
 }
 
 .header-small {
