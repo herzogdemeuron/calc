@@ -97,13 +97,13 @@ export default {
 .fact {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #323232;
+    color: var(--text-main-color);
     margin: 0;
   }
   
   span {
     font-size: 1rem;
-    color: #ababab;
+    color: var(--text-sub-color);
   }
 
 </style>

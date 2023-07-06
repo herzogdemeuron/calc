@@ -146,7 +146,7 @@ export default {
   padding-top: 1rem;
   margin: 0;
   font-weight: 500;
-  background: linear-gradient(to right, #6cc, #237ca8);
+  background: linear-gradient(to right, var(--color-highlight-light), var(--color-highlight-dark));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -157,11 +157,11 @@ export default {
 
 .header h2 {
   text-align: right;
-  color: #b2b2b2;
+  color: var(--text-sub-color);
 }
 
 .header h2 span {
-  color: #6cc;
+  color: var(--color-highlight-light);
 }
 .card-grid {
   display: grid;
@@ -186,11 +186,11 @@ export default {
   font-size: 1rem;
   font-weight: bold;
   padding: 2rem;
-  color: #b2b2b2
+  color: var(--text-sub-color)
 }
 
 .link {
-  color: #b2b2b2;
+  color: var(--text-sub-color);
   text-decoration: none;
   font-size: 1rem;
   font-weight: normal;

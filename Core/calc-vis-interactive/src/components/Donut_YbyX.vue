@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <h1 class="card-header">{{ cardTitle }} <span> {{ cardSubtitle }}</span></h1>
-    <Doughnut class="chart" :data="chartData" :options="chartOptions"/>
+    <Doughnut ref="donut" class="chart" :data="chartData" :options="chartOptions"/>
   </div>
 </template>
   
@@ -46,7 +46,6 @@
               display: true,
               position: 'bottom',
               labels: {
-                color: '#323232',
                 font: {
                   size: 14,
                 },
@@ -56,17 +55,30 @@
         }
       };
     },
-    computed: {
-      chartData() {
-        const params =  getChartData(this.data, this.labelKey, this.valueKey, true)
+    mounted() { 
+        this.$nextTick(() => {
+          var chartInstance = this.$refs.donut.chart;
+          var style = getComputedStyle(document.body);
+          var chartScaleColor = style.getPropertyValue('--chart-scale-color');
+          
+          chartInstance.config.options.plugins.legend.labels.color = chartScaleColor;
+        });
+      },
+      computed: {
+        chartData() {
+          var style = getComputedStyle(document.body);
+          var cardColor = style.getPropertyValue('--card-background-color');
+          
+          const params =  getChartData(this.data, this.labelKey, this.valueKey, true)
         return {
           labels: params.labels,
           datasets: [
             {
               data: params.values,
               backgroundColor: params.colors,
-              borderSkipped: false,
               borderRadius: 10,
+              borderWidth: 3,
+              borderColor: cardColor,
             },
           ],
         }

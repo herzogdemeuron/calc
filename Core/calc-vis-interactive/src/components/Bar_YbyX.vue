@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <h1 class="card-header">{{ cardTitle }} <span> {{ cardSubtitle }}</span></h1>
-    <Bar class="chart" :data="chartData" :options="chartOptions"/>
+    <Bar ref="bar" class="chart" :data="chartData" :options="chartOptions"/>
   </div>
 </template>
   
@@ -63,7 +63,6 @@
                   }
                   return label;
                 },
-                color: '#323232',
                 font: {
                   size: 14,
                 },
@@ -78,14 +77,12 @@
                 dash: [1, 4],
               },
               ticks: {
-                color: '#d9dbda',
                 font: {
                   size: 14,
                 },
               },
               grid: {
                 display: true,
-                color: '#d9dbda',
                 drawTicks: false,
               },
             },
@@ -93,6 +90,21 @@
         }
       };
     },
+    mounted() { 
+        this.$nextTick(() => {
+          var chartInstance = this.$refs.bar.chart;
+          var x = chartInstance.config.options.scales.x;
+          var y = chartInstance.config.options.scales.y;
+
+          var style = getComputedStyle(document.body);
+          var chartScaleColor = style.getPropertyValue('--chart-scale-color');
+
+          x.grid.color = chartScaleColor;
+          y.grid.color = chartScaleColor;
+          x.ticks.color = chartScaleColor;
+          y.ticks.color = chartScaleColor;
+        });
+      },
     computed: {
       chartData() {
         const params =  getChartData(this.data, this.labelKey, this.valueKey, this.sortValue)

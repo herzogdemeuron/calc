@@ -1,7 +1,7 @@
 <template>
     <div class="card">
       <h1 class="card-header">{{ cardTitle }} <span> {{ cardSubtitle }}</span></h1>
-      <Line id="gwpChart" class="chart" :data="chartData" :options="chartOptions"/>
+      <Line ref="line" class="chart" :data="chartData" :options="chartOptions"/>
     </div>
   </template>
     
@@ -64,7 +64,6 @@
                   display: false
                 },
                 ticks: {
-                  color: '#323232',
                   font: {
                     size: 14,
                   },
@@ -79,20 +78,33 @@
                   dash: [1, 4],
                 },
                 ticks: {
-                  color: '#d9dbda',
                   font: {
                     size: 14,
                   },
                 },
                 grid: {
                   display: true,
-                  color: '#d9dbda',
                   drawTicks: false,
                 },
               },
             }
           }
         };
+      },
+      mounted() { 
+        this.$nextTick(() => {
+          var chartInstance = this.$refs.line.chart;
+          var x = chartInstance.config.options.scales.x;
+          var y = chartInstance.config.options.scales.y;
+
+          var style = getComputedStyle(document.body);
+          var chartScaleColor = style.getPropertyValue('--chart-scale-color');
+
+          x.grid.color = chartScaleColor;
+          y.grid.color = chartScaleColor;
+          x.ticks.color = chartScaleColor;
+          y.ticks.color = chartScaleColor;
+        });
       },
       computed: {
         chartData() {
