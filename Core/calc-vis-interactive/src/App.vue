@@ -11,25 +11,41 @@
       <div class="card-grid">
         <FactsCard :data="dataset" />
       </div>
-      <hr class="line" color="#b2b2b2" width="75%">
-      <div class="card-grid">
-        <Line_YbyX :data="dataHistory" valueKey="global_warming_potential_a1_a2_a3" title="timeline"/>
-        <Bar_YbyX :data="dataset" labelKey="buildup_name" valueKey="global_warming_potential_a1_a2_a3" :sortValue="false" title="Buildup"/>
-        <Donut_YbyX :data="dataset" labelKey="group_name" valueKey="global_warming_potential_a1_a2_a3" title="Buildup Group"/>
-        <Bar_YbyX :data="dataset" labelKey="material_name" valueKey="global_warming_potential_a1_a2_a3" title="Material"/>
-        <Donut_YbyX :data="dataset" labelKey="material_category" valueKey="global_warming_potential_a1_a2_a3" title="Material Category"/>
-        <Bar_YbyX :data="dataset" labelKey="element_id" valueKey="global_warming_potential_a1_a2_a3" title="Element"/>
-      </div>
-      <hr class="line" color="#b2b2b2" width="75%">
-      <div class="card-grid">
-        <Line_YbyX :data="dataHistory" valueKey="cost" title="timeline"/>
-        <Bar_YbyX :data="dataset" labelKey="buildup_name" valueKey="cost" :sortValue="false" title="Buildup"/>
-        <Donut_YbyX :data="dataset" labelKey="group_name" valueKey="cost" title="Buildup Group"/>
-        <Bar_YbyX :data="dataset" labelKey="material_name" valueKey="cost" title="Material"/>
-        <Donut_YbyX :data="dataset" labelKey="material_category" valueKey="cost" title="Material Category"/>
-        <Bar_YbyX :data="dataset" labelKey="element_id" valueKey="cost" title="Element"/>
-      </div>
-    </div>
+      <vue-collapsible-panel class="collapse-panel" :expanded="false">
+        <template #title>
+            <div class="header header-small">
+              <h1>Global Warming Potential</h1>
+            </div>
+        </template>
+        <template #content>
+          <div class="card-grid">
+            <Line_YbyX :data="dataHistory" valueKey="global_warming_potential_a1_a2_a3" title="timeline"/>
+            <Bar_YbyX :data="dataset" labelKey="buildup_name" valueKey="global_warming_potential_a1_a2_a3" :sortValue="false" title="Buildup"/>
+            <Donut_YbyX :data="dataset" labelKey="group_name" valueKey="global_warming_potential_a1_a2_a3" title="Buildup Group"/>
+            <Bar_YbyX :data="dataset" labelKey="material_name" valueKey="global_warming_potential_a1_a2_a3" title="Material"/>
+            <Donut_YbyX :data="dataset" labelKey="material_category" valueKey="global_warming_potential_a1_a2_a3" title="Material Category"/>
+            <Bar_YbyX :data="dataset" labelKey="element_id" valueKey="global_warming_potential_a1_a2_a3" title="Element"/>
+          </div>
+        </template>
+      </vue-collapsible-panel>
+      <vue-collapsible-panel class="collapse-panel" :expanded="false">
+        <template #title>
+          <div class="header header-small">
+            <h1>Cost</h1>
+          </div>
+        </template>
+        <template #content>
+          <div class="card-grid">
+            <Line_YbyX :data="dataHistory" valueKey="cost" title="timeline"/>
+            <Bar_YbyX :data="dataset" labelKey="buildup_name" valueKey="cost" :sortValue="false" title="Buildup"/>
+            <Donut_YbyX :data="dataset" labelKey="group_name" valueKey="cost" title="Buildup Group"/>
+            <Bar_YbyX :data="dataset" labelKey="material_name" valueKey="cost" title="Material"/>
+            <Donut_YbyX :data="dataset" labelKey="material_category" valueKey="cost" title="Material Category"/>
+            <Bar_YbyX :data="dataset" labelKey="element_id" valueKey="cost" title="Element"/>
+         </div>
+        </template>
+        </vue-collapsible-panel>
+  </div>
     <a href="https://github.com/herzogdemeuron/calc" class="link">GitHub</a>
   </div>
 </template>
@@ -41,13 +57,16 @@ import FactsCard from './components/FactsCard.vue';
 import Donut_YbyX from './components/Donut_YbyX.vue';
 import Line_YbyX from './components/Line_YbyX.vue';
 import { reactive } from 'vue';
+import { VueCollapsiblePanel } from '@dafcoe/vue-collapsible-panel'
+import '@dafcoe/vue-collapsible-panel/dist/vue-collapsible-panel.css'
 
 export default {
   components: {
     Bar_YbyX,
     FactsCard,
     Donut_YbyX,
-    Line_YbyX
+    Line_YbyX,
+    VueCollapsiblePanel
   },
   data() {
     return {
@@ -128,6 +147,10 @@ export default {
 
 <style scoped>
 
+.vcp__header-icon {
+  color: var(--color-highlight-dark);
+}
+
 .content {
   margin: 0 auto;
   max-width: 1700px;
@@ -151,6 +174,7 @@ export default {
   -webkit-text-fill-color: transparent;
 }
 
+
 .header h1 span {
   font-weight: 700;
 }
@@ -163,24 +187,35 @@ export default {
 .header h2 span {
   color: var(--color-highlight-light);
 }
+
+.header-small {
+  padding-left: 0.3rem;
+}
+
+.header-small h1 {
+  font-size: 1.5rem;
+  padding-top: 0;
+}
+
+.collapse-panel {
+
+  border-radius: 1rem;
+  border-width: 3px;
+  border-color: var(--card-background-color);
+  border-style: solid;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-  grid-gap: 1.5rem;
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
+  grid-gap: 1rem;
 }
 
 .card-container {
   padding-left: 1rem;
   padding-right: 1rem;
 }
-
-.line {
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
 
 .no-data {
   font-size: 1rem;
