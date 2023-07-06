@@ -130,7 +130,7 @@ export default {
 
 .content {
   margin: 0 auto;
-  max-width: 1600px;
+  max-width: 1700px;
 }
 
 .header {
