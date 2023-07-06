@@ -129,7 +129,6 @@ export default {
       // Assuming the received data is in JSON format
       const receivedData = JSON.parse(data);
       this.dataset = reactive(receivedData);
-      console.log(this.dataset);
       // create history object with timestamp and data
       const time = new Date().toLocaleTimeString();
       // check if dataHistory is longer than 4 entries, if so drop the first entry
@@ -146,10 +145,6 @@ export default {
 
 
 <style scoped>
-
-.vcp__header-icon {
-  color: var(--color-highlight-dark);
-}
 
 .content {
   margin: 0 auto;
