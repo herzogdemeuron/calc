@@ -3,17 +3,17 @@ using Calc.Core.DirectusAPI;
 using Calc.Core.DirectusAPI.Drivers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-
 namespace Calc.Core.TestIntegration.Drivers
 {
     [TestClass]
     public class BuildupStorageDriverTests
     {
         private Directus? directus;
+
         [TestInitialize]
-        public void Initialize()
+        public async Task Initialize()
         {
-            this.directus = new Directus(DirectusApiTests.ConfigPath);
+            this.directus = await TestUtils.GetAuthenticatedDirectus();
         }
 
         [TestMethod]

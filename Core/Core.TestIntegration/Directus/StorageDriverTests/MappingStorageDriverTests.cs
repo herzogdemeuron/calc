@@ -10,15 +10,15 @@ namespace Calc.Core.TestIntegration.Drivers
     [TestClass]
     public class MappingStorageDriverTests
     {
-        private readonly int mappingId = 29;
+        private readonly int mappingId = 3;
         private Directus? directus;
         private MockData? mockData;
         private Forest? forest;
 
         [TestInitialize]
-        public void Initialize()
+        public async Task Initialize()
         {
-            this.directus = new Directus(DirectusApiTests.ConfigPath);
+            this.directus = await TestUtils.GetAuthenticatedDirectus();
             this.mockData = new MockData();
             this.forest = new Forest() { Trees = mockData.Trees };
             foreach (var tree in this.forest.Trees)

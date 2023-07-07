@@ -1,26 +1,24 @@
-﻿using Calc.ConnectorRevit.Revit;
-using Calc.Core;
-using Calc.Core.Calculations;
-using Calc.Core.Color;
-using Calc.Core.Objects;
-using System;
+﻿using System;
+using System.Windows;
+using System.Windows.Forms;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Documents;
+using Calc.Core;
+using Calc.Core.Color;
+using Calc.Core.Objects;
+using Calc.Core.DirectusAPI;
+using Calc.Core.Calculations;
+using Calc.ConnectorRevit.Revit;
+
 
 namespace Calc.ConnectorRevit.Views
 {
     public class ViewModel : INotifyPropertyChanged, IDisposable
     {
-
-        private Store store;
+        private DirectusStore store;
         private CalcWebSocketServer server;
         private Mapping selectedMapping;
         private bool BranchesSwitch = true;
@@ -83,8 +81,28 @@ namespace Calc.ConnectorRevit.Views
 
         public async Task HandleLoadingAsync()
         {
-            store = new Store();
+            var directus = null as Directus;
+            try
+            {
+                var authenticator = new DirectusAuthenticator();
+                directus = await authenticator.ShowLoginWindowAsync();
+            }
+             catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+            if (directus == null)
+            {
+                Window.Close();
+                return;
+            }
+
+            store = new DirectusStore(directus);
+            Debug.WriteLine("Created DirectusStore");
+
             await store.GetProjects();
+            Debug.WriteLine("Got all projects");
+
             AllProjects = store.ProjectsAll;
             OnPropertyChanged("AllProjects");
         }
@@ -93,6 +111,7 @@ namespace Calc.ConnectorRevit.Views
         {
             store.ProjectSelected = project;
             await store.GetOtherData();
+            Debug.WriteLine("Got all other data");
 
             AllBuildups = store.BuildupsAll;
             AllForests = store.Forests;

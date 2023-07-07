@@ -2,12 +2,14 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Threading.Tasks;
 
 namespace Calc.ConnectorRevit.Views
 {
     public partial class MainView : Window
     {
         private readonly ViewModel viewModel;
+
         public MainView()
         {
             viewModel = App.ViewModel;
@@ -20,11 +22,12 @@ namespace Calc.ConnectorRevit.Views
         private async void WindowLoaded(object sender, RoutedEventArgs e)
         {
             await viewModel.HandleLoadingAsync();
-            LoadingOverlay.Visibility  = Visibility.Collapsed;
+            LoadingOverlay.Visibility = Visibility.Collapsed;
         }
 
         private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            // This will make sure the WebSocket server is shut down when the window is closed.
             viewModel.Dispose();
         }
 
@@ -109,5 +112,9 @@ namespace Calc.ConnectorRevit.Views
             viewModel.HandleCalculate();
         }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
