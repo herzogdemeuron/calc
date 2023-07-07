@@ -112,5 +112,9 @@ namespace Calc.ConnectorRevit.Views
             viewModel.HandleCalculate();
         }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

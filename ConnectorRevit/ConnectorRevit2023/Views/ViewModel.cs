@@ -81,37 +81,12 @@ namespace Calc.ConnectorRevit.Views
 
         public async Task HandleLoadingAsync()
         {
-            string url = "";
-            string email = "";
-            string password = "";
-
-            var directus = new Directus();
-
-            while (!directus.Authenticated)
+            var authenticator = new DirectusAuthenticator();
+            var directus = await authenticator.ShowLoginWindowAsync();
+            
+            if (directus == null)
             {
-                using (var inputDialog = new StringInputDialog())
-                {
-                    if (inputDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        url = inputDialog.DirectusUrl;
-                        email = inputDialog.Email;
-                        password = inputDialog.Password;
-
-                        Debug.WriteLine("Directus URL: " + url);
-                        Debug.WriteLine("Directus Email: " + email);
-                        Debug.WriteLine("Directus Password: " + password);
-                    } 
-                    if (inputDialog.DialogResult == DialogResult.Cancel)
-                    {
-                        Debug.WriteLine("Directus login cancelled");
-                        return;
-                    }
-                }
-                await directus.Authenticate(url, email, password);
-            }
-
-            if (!directus.Authenticated)
-            {
+                Window.Close();
                 return;
             }
 
