@@ -57,7 +57,18 @@ namespace Calc.Core.DirectusAPI
             HttpClient httpClient = new();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var response = await httpClient.PostAsync($"{this._url}/auth/login", content);
+            var response = new HttpResponseMessage();
+            try
+            {
+                response = await httpClient.PostAsync($"{this._url}/auth/login", content);
+            }
+            catch (Exception e)
+            {
+                this.Authenticated = false;
+                Debug.WriteLine($"Authentication aborted, error: {e.Message}");
+                return;
+            }
+
             var responseContent = await response.Content.ReadAsStringAsync();
 
             // Deserialize the response content into the custom class

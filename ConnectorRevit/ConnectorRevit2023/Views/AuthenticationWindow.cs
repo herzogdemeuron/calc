@@ -15,9 +15,13 @@ namespace Calc.ConnectorRevit.Views
 
         private bool userClosing = false;
 
-        public StringInputDialog()
+        public StringInputDialog(string defaultDirectusUrl = "", string defaultEmail = "", string defaultPassword = "")
         {
             InitializeComponent();
+
+            txtDirectusUrl.Text = defaultDirectusUrl;
+            txtEmail.Text = defaultEmail;
+            txtPassword.Text = defaultPassword;
         }
 
         private void btnOK_Click(object sender, EventArgs e)

@@ -14,15 +14,16 @@ namespace Calc.ConnectorRevit
     {
         public async Task<Directus> ShowLoginWindowAsync()
         {
-            string url = "";
-            string email = "";
-            string password = "";
+
+            var url = Properties.Settings.Default.DirectusUrl;
+            var email = Properties.Settings.Default.DirectusEmail;
+            var password = Properties.Settings.Default.DirectusPassword;
 
             var directus = new Directus();
 
             while (!directus.Authenticated)
             {
-                using (var inputDialog = new StringInputDialog())
+                using (var inputDialog = new StringInputDialog(url, email, password))
                 {
                     if (inputDialog.ShowDialog() == DialogResult.OK)
                     {
@@ -44,7 +45,14 @@ namespace Calc.ConnectorRevit
                 return null;
             }
 
+            Properties.Settings.Default.DirectusUrl = url;
+            Properties.Settings.Default.DirectusEmail = email;
+            Properties.Settings.Default.DirectusPassword = password;
+
+            Properties.Settings.Default.Save();
+
             return directus;
         }
     }
+
 }

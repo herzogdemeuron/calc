@@ -81,9 +81,16 @@ namespace Calc.ConnectorRevit.Views
 
         public async Task HandleLoadingAsync()
         {
-            var authenticator = new DirectusAuthenticator();
-            var directus = await authenticator.ShowLoginWindowAsync();
-            
+            var directus = null as Directus;
+            try
+            {
+                var authenticator = new DirectusAuthenticator();
+                directus = await authenticator.ShowLoginWindowAsync();
+            }
+             catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
             if (directus == null)
             {
                 Window.Close();
