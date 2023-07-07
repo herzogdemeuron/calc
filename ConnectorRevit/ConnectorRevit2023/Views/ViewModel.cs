@@ -87,8 +87,7 @@ namespace Calc.ConnectorRevit.Views
 
             var directus = new Directus();
 
-            bool authenticated = false;
-            while (!authenticated)
+            while (!directus.Authenticated)
             {
                 using (var inputDialog = new StringInputDialog())
                 {
@@ -97,28 +96,32 @@ namespace Calc.ConnectorRevit.Views
                         url = inputDialog.DirectusUrl;
                         email = inputDialog.Email;
                         password = inputDialog.Password;
+
+                        Debug.WriteLine("Directus URL: " + url);
+                        Debug.WriteLine("Directus Email: " + email);
+                        Debug.WriteLine("Directus Password: " + password);
+                    } 
+                    if (inputDialog.DialogResult == DialogResult.Cancel)
+                    {
+                        Debug.WriteLine("Directus login cancelled");
+                        return;
                     }
                 }
                 await directus.Authenticate(url, email, password);
-                authenticated = directus.Authenticated;
-                Debug.WriteLine(directus.Authenticated);
             }
-            Debug.WriteLine("directus authenticated");
 
-            // log url and email and password to debug
-            Debug.WriteLine("url: " + url);
-            Debug.WriteLine("email: " + email);
-            Debug.WriteLine("password: " + password);
+            if (!directus.Authenticated)
+            {
+                return;
+            }
 
             store = new DirectusStore(directus);
-            Debug.WriteLine("store created");
+            Debug.WriteLine("Created DirectusStore");
 
             await store.GetProjects();
-            Debug.WriteLine("projects got");
+            Debug.WriteLine("Got all projects");
 
             AllProjects = store.ProjectsAll;
-            Debug.WriteLine("all projects got from store");
-
             OnPropertyChanged("AllProjects");
         }
 
@@ -126,6 +129,7 @@ namespace Calc.ConnectorRevit.Views
         {
             store.ProjectSelected = project;
             await store.GetOtherData();
+            Debug.WriteLine("Got all other data");
 
             AllBuildups = store.BuildupsAll;
             AllForests = store.Forests;

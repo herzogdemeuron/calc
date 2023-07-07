@@ -13,6 +13,8 @@ namespace Calc.ConnectorRevit.Views
         public string Email { get; private set; }
         public string Password { get; private set; }
 
+        private bool userClosing = false;
+
         public StringInputDialog()
         {
             InitializeComponent();
@@ -34,6 +36,15 @@ namespace Calc.ConnectorRevit.Views
             Password = txtPassword.Text;
 
             DialogResult = DialogResult.OK;
+        }
+
+        private void StringInputDialog_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing && !userClosing)
+            {
+                // Handle the user closing the form
+                DialogResult = DialogResult.Cancel;
+            }
         }
 
         private void InitializeComponent()
@@ -98,6 +109,9 @@ namespace Calc.ConnectorRevit.Views
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+
+            // formClosing
+            this.FormClosing += StringInputDialog_FormClosing;
 
             // StringInputDialog
             this.TopMost = true;
