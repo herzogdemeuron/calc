@@ -10,6 +10,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Directus\StorageDriverTests\BuildupStorageDriverTests.cs" />
+    <Compile Remove="Directus\StorageDriverTests\ForestStorageDriverTests.cs" />
+    <Compile Remove="Directus\StorageDriverTests\MappingStorageDriverTests.cs" />
+    <Compile Remove="Directus\StorageDriverTests\ProjectStorageDriverTests.cs" />
+    <Compile Remove="Directus\StorageDriverTests\ResultStorageDriverTests.cs" />
+    <Compile Remove="FilteringTests\MappingsTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
     <PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
@@ -24,6 +33,10 @@
     <None Update="Directus\config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Directus\StorageDriverTests\" />
   </ItemGroup>
 
 </Project>

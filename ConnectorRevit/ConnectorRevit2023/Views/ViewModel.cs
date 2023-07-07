@@ -20,7 +20,7 @@ namespace Calc.ConnectorRevit.Views
     public class ViewModel : INotifyPropertyChanged, IDisposable
     {
 
-        private Store store;
+        private DirectusStore store;
         private CalcWebSocketServer server;
         private Mapping selectedMapping;
         private bool BranchesSwitch = true;
@@ -83,7 +83,7 @@ namespace Calc.ConnectorRevit.Views
 
         public async Task HandleLoadingAsync()
         {
-            store = new Store();
+            store = new DirectusStore();
             await store.GetProjects();
             AllProjects = store.ProjectsAll;
             OnPropertyChanged("AllProjects");
