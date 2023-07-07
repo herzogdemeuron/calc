@@ -24,8 +24,8 @@ namespace Calc.Core.TestIntegration
             Console.WriteLine($"url: {_url}");
 
             // Act
-            var directus = new Directus(_url);
-            await directus.Authenticate(_email, _password);
+            var directus = new Directus();
+            await directus.Authenticate(_url, _email, _password);
 
             // Assert
             Assert.IsTrue(directus.Authenticated);

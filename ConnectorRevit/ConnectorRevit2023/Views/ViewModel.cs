@@ -1,25 +1,23 @@
-﻿using Calc.ConnectorRevit.Revit;
-using Calc.Core;
-using Calc.Core.Calculations;
-using Calc.Core.Color;
-using Calc.Core.Objects;
-using System;
+﻿using System;
+using System.Windows;
+using System.Windows.Forms;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Documents;
+using Calc.Core;
+using Calc.Core.Color;
+using Calc.Core.Objects;
+using Calc.Core.DirectusAPI;
+using Calc.Core.Calculations;
+using Calc.ConnectorRevit.Revit;
+
 
 namespace Calc.ConnectorRevit.Views
 {
     public class ViewModel : INotifyPropertyChanged, IDisposable
     {
-
         private DirectusStore store;
         private CalcWebSocketServer server;
         private Mapping selectedMapping;
@@ -83,9 +81,44 @@ namespace Calc.ConnectorRevit.Views
 
         public async Task HandleLoadingAsync()
         {
-            store = new DirectusStore();
+            string url = "";
+            string email = "";
+            string password = "";
+
+            var directus = new Directus();
+
+            bool authenticated = false;
+            while (!authenticated)
+            {
+                using (var inputDialog = new StringInputDialog())
+                {
+                    if (inputDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        url = inputDialog.DirectusUrl;
+                        email = inputDialog.Email;
+                        password = inputDialog.Password;
+                    }
+                }
+                await directus.Authenticate(url, email, password);
+                authenticated = directus.Authenticated;
+                Debug.WriteLine(directus.Authenticated);
+            }
+            Debug.WriteLine("directus authenticated");
+
+            // log url and email and password to debug
+            Debug.WriteLine("url: " + url);
+            Debug.WriteLine("email: " + email);
+            Debug.WriteLine("password: " + password);
+
+            store = new DirectusStore(directus);
+            Debug.WriteLine("store created");
+
             await store.GetProjects();
+            Debug.WriteLine("projects got");
+
             AllProjects = store.ProjectsAll;
+            Debug.WriteLine("all projects got from store");
+
             OnPropertyChanged("AllProjects");
         }
 

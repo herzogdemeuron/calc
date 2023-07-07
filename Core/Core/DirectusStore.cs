@@ -83,6 +83,11 @@ namespace Calc.Core
 
         public DirectusStore(Directus directus)
         {
+            if (directus.Authenticated == false)
+            {
+                throw new Exception("DirectusStore: Directus not authenticated");
+            }
+
             this.Directus = directus;
 
             this.ProjectManager = new DirectusManager<Project>(this.Directus);
