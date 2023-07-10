@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+    <RevitAddIns>
+    <AddIn Type="Command">
+        <Name>CalcRevit</Name>
+        <FullClassName>Calc.ConnectorRevit2023</FullClassName>
+        <Text>CalcRevit</Text>
+        <Description>Take control over cost and lca calculations with Calc.</Description>
+        <VisibilityMode>AlwaysVisible</VisibilityMode>
+        <Assembly>C:\ProgramData\Autodesk\Revit\Addins\2023\CalcRevit\CalcConnectorRevit2023.dll</Assembly>
+        <AddInId>13a87ff4-7632-4d80-bc4a-be175e64e70b</AddInId>
+        <VendorId>Calc</VendorId>
+        <VendorDescription>https://github.com/herzogdemeuron/calc</VendorDescription>
+      </AddIn>
+    </RevitAddIns>
