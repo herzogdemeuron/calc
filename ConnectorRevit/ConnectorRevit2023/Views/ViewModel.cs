@@ -250,7 +250,7 @@ namespace Calc.ConnectorRevit.Views
         {
             if (this.server.ConnectedClients == 0)
             {
-                Process.Start("C:\\HdM-DT\\calc\\Core\\calc-vis-interactive\\dist\\index.html");
+                Process.Start("https://herzogdemeuron.github.io/calc/");
             }
             Debug.WriteLine(this.server.ConnectedSockets);    
 
