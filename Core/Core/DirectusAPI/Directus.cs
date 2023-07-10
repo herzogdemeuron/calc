@@ -5,7 +5,6 @@ using System.Net.Http.Headers;
 using GraphQL.Client.Http;
 using Calc.Core.GraphQL.Serializer;
 using System.Threading.Tasks;
-using GraphQL;
 using Speckle.Newtonsoft.Json;
 using System.Text;
 using System.Diagnostics;
