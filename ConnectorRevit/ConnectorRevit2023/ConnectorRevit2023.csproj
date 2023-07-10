@@ -4,6 +4,7 @@
     <TargetFramework>net48</TargetFramework>
     <AssemblyName>CalcConnectorRevit</AssemblyName>
     <RootNamespace>Calc.ConnectorRevit</RootNamespace>
+    <BaseOutputPath>C:\ProgramData\Autodesk\Revit\Addins\2023\CalcRevit2023\</BaseOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -68,5 +69,10 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+
+<PropertyGroup>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+</PropertyGroup>
 
 </Project>
