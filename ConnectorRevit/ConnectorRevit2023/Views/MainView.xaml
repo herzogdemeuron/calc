@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Calc.ConnectorRevit.Views" 
         d:DataContext="{d:DesignInstance Type=local:ViewModel}"
         Loaded="WindowLoaded"
+        Closing="WindowClosing"
         mc:Ignorable="d" 
         Background="White"
         Height="600" MinHeight="600"

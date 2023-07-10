@@ -160,6 +160,25 @@ namespace Calc.Core.Objects
             }
         }
 
+        public Branch Copy()
+        {
+            var branch = new Branch
+            {
+                Parameter = Parameter,
+                Method = Method,
+                Value = Value,
+                BranchLevel = BranchLevel,
+                Buildup = Buildup,
+                HslColor = HslColor,
+                Elements = this.Elements
+            };
+            if (SubBranches != null)
+            {
+                branch.SubBranches = SubBranches.Select(sb => sb.Copy()).ToList();
+            }
+            return branch;
+        }
+
         /// <summary>
         /// WARNING: DESTRUCTIVE METHOD - USE ONLY ON A COPY OF THE TREE
         /// The Intended use is right befor calculation.

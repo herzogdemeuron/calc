@@ -9,15 +9,15 @@ namespace Calc.Core.TestIntegration.Drivers
     [TestClass]
     public class MappingsTests
     {
-        private readonly int mappingId = 29;
+        private readonly int mappingId = 3;
         private Directus? directus;
         private MockData? mockData;
         private List<Tree>? trees;
 
         [TestInitialize]
-        public void Initialize()
+        public async Task Initialize()
         {
-            this.directus = new Directus(DirectusApiTests.ConfigPath);
+            this.directus = await TestUtils.GetAuthenticatedDirectus();
             this.mockData = new MockData();
             this.trees = mockData.Trees;
 

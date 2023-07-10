@@ -1,0 +1,82 @@
+:root {
+  --color-highlight-light: #6cc;
+  --color-highlight-dark: #237ca8;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --text-main-color: #333;
+    --text-sub-color: #a3a3a3;
+    --background-color: #fcfcfc;
+    --card-background-color: #fff;
+    --chart-scale-color: #c3c3c3;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-main-color: #fff;
+    --text-sub-color: #9a9a9a;
+    --background-color: #262a2e;
+    --card-background-color: #2f343a;
+    --chart-scale-color: #676767;
+  }
+}
+
+
+body {
+    height: 100vh;
+    font-family: 'Varela Round', sans-serif;
+    background-color: var(--background-color);
+  }
+
+.card {
+    border-radius: 10px;
+    background: var(--card-background-color);
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-main-color);
+    text-align: left;
+    padding-left: 1.5rem;
+  }
+  
+  .card-header span {
+    font-size: 1rem;
+    font-weight: normal;
+    color: var(--text-sub-color);
+    padding-right: 1.5rem;
+  }
+
+.chart {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+::-webkit-scrollbar {
+    width: 0.75rem;
+  }
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0);
+  }
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #00798c35, #02334b2a);
+    border-radius: 1rem;
+  }
+
+.material-symbols-rounded {
+  font-variation-settings:
+  'FILL' 1,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 48;
+  font-size: 45px;
+}

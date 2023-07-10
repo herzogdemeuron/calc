@@ -9,7 +9,7 @@ using Calc.Core.Objects;
 
 namespace Calc.Core
 {
-    public class Store
+    public class DirectusStore
     {
         public List<Project> ProjectsAll { get { return this.ProjectDriver.GotManyItems; } }
         public Project ProjectSelected { get; set; } // the current project
@@ -81,9 +81,14 @@ namespace Calc.Core
                     }
                 });
 
-        public Store()
+        public DirectusStore(Directus directus)
         {
-            this.Directus = new Directus();
+            if (directus.Authenticated == false)
+            {
+                throw new Exception("DirectusStore: Directus not authenticated");
+            }
+
+            this.Directus = directus;
 
             this.ProjectManager = new DirectusManager<Project>(this.Directus);
             this.BuildupManager = new DirectusManager<Buildup>(this.Directus);

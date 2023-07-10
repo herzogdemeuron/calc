@@ -1,22 +1,25 @@
-﻿using Calc.ConnectorRevit.Revit;
-using Calc.Core;
-using Calc.Core.Calculations;
-using Calc.Core.Color;
-using Calc.Core.Objects;
+﻿using System;
+using System.Windows;
+using System.Windows.Forms;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+using Calc.Core;
+using Calc.Core.Color;
+using Calc.Core.Objects;
+using Calc.Core.DirectusAPI;
+using Calc.Core.Calculations;
+using Calc.ConnectorRevit.Revit;
+
 
 namespace Calc.ConnectorRevit.Views
 {
-    public class ViewModel : INotifyPropertyChanged
+    public class ViewModel : INotifyPropertyChanged, IDisposable
     {
-
-        private Store store;
+        private DirectusStore store;
+        private CalcWebSocketServer server;
         private Mapping selectedMapping;
         private bool BranchesSwitch = true;
         private readonly ExternalEventHandler eventHandler = new ExternalEventHandler();
@@ -51,6 +54,18 @@ namespace Calc.ConnectorRevit.Views
 
         public Window Window { get; set; }
 
+        public ViewModel()
+        {
+            this.server = new CalcWebSocketServer("http://127.0.0.1:8184/");
+            _ = this.server.Start();
+        }
+
+        public void Dispose()
+        {
+            Debug.WriteLine("ViewModel dispose is called.");
+            _ = Task.Run(async () => await this.server.Stop());
+        }
+
         private void PlantTrees(Forest forest)
         {
             if (forest == null)
@@ -63,10 +78,31 @@ namespace Calc.ConnectorRevit.Views
             CurrentForestItem = new NodeViewModel(forest);
         }
 
+
         public async Task HandleLoadingAsync()
         {
-            store = new Store();
+            var directus = null as Directus;
+            try
+            {
+                var authenticator = new DirectusAuthenticator();
+                directus = await authenticator.ShowLoginWindowAsync();
+            }
+             catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+            if (directus == null)
+            {
+                Window.Close();
+                return;
+            }
+
+            store = new DirectusStore(directus);
+            Debug.WriteLine("Created DirectusStore");
+
             await store.GetProjects();
+            Debug.WriteLine("Got all projects");
+
             AllProjects = store.ProjectsAll;
             OnPropertyChanged("AllProjects");
         }
@@ -75,6 +111,7 @@ namespace Calc.ConnectorRevit.Views
         {
             store.ProjectSelected = project;
             await store.GetOtherData();
+            Debug.WriteLine("Got all other data");
 
             AllBuildups = store.BuildupsAll;
             AllForests = store.Forests;
@@ -145,9 +182,8 @@ namespace Calc.ConnectorRevit.Views
         }
         public void HandleNodeItemSelectionChanged(NodeViewModel nodeItem)
         {
+            if (nodeItem == null) return;
 
-            if (nodeItem == null)
-                return;
             SelectedNodeItem = nodeItem;
             HideAllLabelColor();
             if (BranchesSwitch)
@@ -162,7 +198,9 @@ namespace Calc.ConnectorRevit.Views
             }
             CurrentForestItem.NotifyLabelColorChange();
 
+            this.UpdateLiveVisualization();
         }
+
         public void HandleSideClick()
         {
             if (CurrentForestItem == null)
@@ -210,9 +248,22 @@ namespace Calc.ConnectorRevit.Views
 
         public void HandleCalculate()
         {
-            if (CurrentForestItem == null)
-                return;
+            if (this.server.ConnectedClients == 0)
+            {
+                Process.Start("C:\\HdM-DT\\calc\\Core\\calc-vis-interactive\\dist\\index.html");
+            }
+            Debug.WriteLine(this.server.ConnectedSockets);    
+
+        }
+
+        private void UpdateLiveVisualization()
+        {   
+            if (this.server == null) return;
+            if (this.server.ConnectedClients == 0) return;
+            if (CurrentForestItem == null) return;
+
             List<Branch> branchesToCalc = new List<Branch>();
+
             if (SelectedNodeItem?.Host is Branch branch)
             {
                 branchesToCalc.Add(branch);
@@ -225,8 +276,10 @@ namespace Calc.ConnectorRevit.Views
                 }
             }
 
-            List<Result> results = GwpCalculator.CalculateGwp(branchesToCalc);
+            List<Result> results = Calculator.Calculate(branchesToCalc);
             Debug.WriteLine("GWP calculated");
+
+            _ = Task.Run(async () => await this.server.SendResults(results));
         }
 
         private Mapping GetCurrentMapping()

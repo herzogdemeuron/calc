@@ -27,7 +27,7 @@ namespace Calc.Core.TestIntegration
             }
 
             // Act
-            var results = GwpCalculator.CalculateGwp(branches);
+            var results = Calculator.Calculate(branches);
 
             // Assert
             foreach (var result in results)

@@ -1,63 +1,128 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Calc.Core.Objects;
 using Speckle.Newtonsoft.Json;
-using Fleck;
-using Calc.Core.Objects;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net;
+using System.Net.WebSockets;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Calc.Core.WebSockets
+public class CalcWebSocketServer
 {
-    public class CalcWebSocketServer
+    private HttpListener httpListener;
+    private CancellationTokenSource cancellationTokenSource;
+    private List<WebSocket> connectedSockets;
+
+    public bool IsRunning { get => httpListener.IsListening; }
+    public int ConnectedClients { get => connectedSockets.Count; }
+    public List<WebSocket> ConnectedSockets { get => connectedSockets; }
+
+    public CalcWebSocketServer(string url)
     {
-        private WebSocketServer server;
+        this.httpListener = new HttpListener();
+        this.httpListener.Prefixes.Add(url);
+        this.connectedSockets = new List<WebSocket>();
+    }
 
-        public CalcWebSocketServer(string url)
+    public async Task Start()
+    {
+        try
         {
-            server = new WebSocketServer(url);
-            server.Start(HandleWebSocketConnection);
+            this.httpListener.Start();
+            Debug.WriteLine("WebSocket server is running.");
+
+            this.cancellationTokenSource = new CancellationTokenSource();
+            while (!cancellationTokenSource.Token.IsCancellationRequested)
+            {
+                var context = await this.httpListener.GetContextAsync();
+                if (context.Request.IsWebSocketRequest)
+                {
+                    ProcessWebSocketRequest(context);
+                }
+                else
+                {
+                    context.Response.StatusCode = 400;
+                    context.Response.Close();
+                }
+            }
         }
-
-        private void HandleWebSocketConnection(IWebSocketConnection connection)
+        catch (Exception ex)
         {
-            // Handle incoming WebSocket connections
-            connection.OnOpen = () =>
-            {
-                // Perform any initialization tasks when a new connection is established
-                Console.WriteLine("WebSocket connection opened");
-            };
-
-            connection.OnClose = () =>
-            {
-                // Handle WebSocket connection close event
-                Console.WriteLine("WebSocket connection closed");
-            };
-
-            // Other WebSocket event handlers can be added as needed
-
-            // Example: Send initial data to the client when the connection is established
-            connection.Send("Welcome to the WebSocket server!");
-
-            // Example: Subscribe to the OnDataUpdated event
-            ResultManager.OnResultsUpdated += (results) =>
-            {
-                // Send updated data to the client whenever the OnDataUpdated event is raised
-                var json = JsonConvert.SerializeObject(results);
-                connection.Send(json);
-            };
+            Debug.WriteLine($"WebSocket server encountered an error: {ex.Message}");
         }
     }
 
-    public class ResultManager
+    public async Task Stop()
     {
-        public static event Action<List<Result>> OnResultsUpdated;
-        private static List<Result> Results;
+        this.httpListener.Stop();
+        this.cancellationTokenSource.Cancel();
 
-        public static void UpdateData(List<Result> results)
+        List<Task> closeTasks = new List<Task>();
+
+        foreach (var socket in connectedSockets)
         {
-            // Update the data as needed
-            Results = results;
+            closeTasks.Add(socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Server is shutting down", CancellationToken.None));
+        }
 
-            // Example: Raise the OnDataUpdated event
-            OnResultsUpdated?.Invoke(Results);
+        await Task.WhenAll(closeTasks);
+
+        Debug.WriteLine("WebSocket server stopped.");
+    }
+
+
+
+    public async Task SendResults(List<Result> results)
+    {
+        var serializedData = JsonConvert.SerializeObject(results);
+        var buffer = Encoding.UTF8.GetBytes(serializedData);
+        var segment = new ArraySegment<byte>(buffer);
+
+        foreach (var socket in connectedSockets)
+        {
+            await socket.SendAsync(segment, WebSocketMessageType.Text, true, CancellationToken.None);
+        }
+
+        Debug.WriteLine("Results sent to clients");
+    }
+
+    private async void ProcessWebSocketRequest(HttpListenerContext context)
+    {
+        try
+        {
+            HttpListenerWebSocketContext webSocketContext = await context.AcceptWebSocketAsync(null);
+            WebSocket socket = webSocketContext.WebSocket;
+
+            connectedSockets.Add(socket);
+
+            // Handle the WebSocket connection in a separate task
+            Task.Run(async () => await HandleWebSocketConnection(socket));
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error while accepting WebSocket connection: {ex.Message}");
+        }
+    }
+
+    private async Task HandleWebSocketConnection(WebSocket socket)
+    {
+        byte[] buffer = new byte[1024];
+        while (socket.State == WebSocketState.Open)
+        {
+            var result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+
+            if (result.MessageType == WebSocketMessageType.Text)
+            {
+                var message = Encoding.UTF8.GetString(buffer, 0, result.Count);
+                Debug.WriteLine($"Received message: {message}");
+            }
+            else if (result.MessageType == WebSocketMessageType.Close)
+            {
+                await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "WebSocket connection closed", CancellationToken.None);
+                connectedSockets.Remove(socket);
+                break;
+            }
         }
     }
 }

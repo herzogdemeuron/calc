@@ -140,7 +140,7 @@ namespace Calc.Core.TestIntegration
             {
                 Id = 9,
                 Name = "Flat Concrete Slab",
-                Unit = "m2"
+                Unit = Unit.m2
             };
 
             var group1 = new MaterialGroup

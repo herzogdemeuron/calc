@@ -13,9 +13,9 @@ namespace Calc.Core.TestIntegration.Drivers
         private Directus? directus;
 
         [TestInitialize]
-        public void Initialize()
+        public async Task Initialize()
         {
-            this.directus = new Directus(DirectusApiTests.ConfigPath);
+            this.directus = await TestUtils.GetAuthenticatedDirectus();
         }
 
         [TestMethod]
@@ -32,7 +32,7 @@ namespace Calc.Core.TestIntegration.Drivers
                 branches.AddRange(tree.Flatten());
             }
 
-            var results = GwpCalculator.CalculateGwp(branches);
+            var results = Calculator.Calculate(branches);
             foreach (var result in results)
             {
                 result.SnapshotName = "test snapshot name";
