@@ -26,36 +26,36 @@ namespace Calc.ConnectorRevit.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DirectusUrl {
+        public string Config1 {
             get {
-                return ((string)(this["DirectusUrl"]));
+                return ((string)(this["Config1"]));
             }
             set {
-                this["DirectusUrl"] = value;
+                this["Config1"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DirectusEmail {
+        public string Config2 {
             get {
-                return ((string)(this["DirectusEmail"]));
+                return ((string)(this["Config2"]));
             }
             set {
-                this["DirectusEmail"] = value;
+                this["Config2"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DirectusPassword {
+        public string Config3 {
             get {
-                return ((string)(this["DirectusPassword"]));
+                return ((string)(this["Config3"]));
             }
             set {
-                this["DirectusPassword"] = value;
+                this["Config3"] = value;
             }
         }
     }

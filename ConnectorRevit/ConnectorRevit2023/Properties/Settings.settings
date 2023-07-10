@@ -2,13 +2,13 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Calc.ConnectorRevit.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="DirectusUrl" Type="System.String" Scope="User">
+    <Setting Name="Config1" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="DirectusEmail" Type="System.String" Scope="User">
+    <Setting Name="Config2" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="DirectusPassword" Type="System.String" Scope="User">
+    <Setting Name="Config3" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>
