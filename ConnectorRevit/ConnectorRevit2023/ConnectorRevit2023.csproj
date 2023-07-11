@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <None Remove="Resources\icon-01.png" />
-    <None Remove="Resources\icon.png" />
     <None Remove="ToggleButtonTemplate.xaml" />
     <None Remove="Views\MainView.xaml" />
     <None Remove="Views\MainViewResources.xaml" />
@@ -54,7 +53,6 @@
 
   <ItemGroup>
     <Resource Include="Resources\icon-01.png" />
-    <Resource Include="Resources\icon.png" />
   </ItemGroup>
 
   <ItemGroup>

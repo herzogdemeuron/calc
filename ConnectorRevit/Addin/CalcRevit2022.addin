@@ -2,7 +2,7 @@
 <RevitAddIns>
 	<AddIn Type="Application">
 		<Name>CalcRevit</Name>
-		<Assembly>C:\ProgramData\Autodesk\Revit\Addins\2023\CalcRevit\Release\CalcConnectorRevit2023.dll</Assembly>
+		<Assembly>C:\ProgramData\Autodesk\Revit\Addins\2022\CalcRevit\CalcConnectorRevit2023.dll</Assembly>
 		<AddInId>13a87ff4-7632-4d80-bc4a-be175e64e70b</AddInId>
 		<FullClassName>Calc.ConnectorRevit.App</FullClassName>
 		<Description>Take control over cost and lca calculations with Calc.</Description>
