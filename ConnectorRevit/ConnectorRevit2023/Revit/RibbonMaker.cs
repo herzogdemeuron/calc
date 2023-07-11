@@ -17,7 +17,7 @@ namespace Calc.ConnectorRevit.Revit
                 Assembly.GetExecutingAssembly().Location,
                 "Calc.ConnectorRevit.Revit.StartCommand");
             PushButton button = panel.AddItem(buttonData) as PushButton;
-            Uri uriImage = new Uri("pack://application:,,,/CalcConnectorRevit2023;component/Resources/icon.png", UriKind.Absolute);
+            Uri uriImage = new Uri("pack://application:,,,/CalcConnectorRevit2023;component/Resources/icon-01.png", UriKind.Absolute);
                 button.LargeImage = new BitmapImage(uriImage);
         }
     }
