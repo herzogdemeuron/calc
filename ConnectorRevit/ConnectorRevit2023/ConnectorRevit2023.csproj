@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
-    <AssemblyName>CalcConnectorRevit</AssemblyName>
+    <AssemblyName>CalcConnectorRevit2023</AssemblyName>
     <RootNamespace>Calc.ConnectorRevit</RootNamespace>
-    <BaseOutputPath>C:\ProgramData\Autodesk\Revit\Addins\2023\CalcRevit2023\</BaseOutputPath>
+    <BaseOutputPath>bin\</BaseOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -74,5 +74,9 @@
 	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 </PropertyGroup>
+
+<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+  <Exec Command="call &quot;$(SolutionDir)ConnectorRevit\copyOutput.bat&quot; " />
+</Target>
 
 </Project>

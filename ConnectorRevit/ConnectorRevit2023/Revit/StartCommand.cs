@@ -33,7 +33,7 @@ namespace Calc.ConnectorRevit.Revit
 
         private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            string assemblyFolder = @"C:\ProgramData\Autodesk\Revit\Addins\2023\CalcRevit2023\Release"; // Specify the directory where your DLLs are located
+            string assemblyFolder = @"C:\ProgramData\Autodesk\Revit\Addins\2023\CalcRevit\Release"; // Specify the directory where your DLLs are located
 
             string assemblyName = new AssemblyName(args.Name).Name;
             string assemblyPath = Path.Combine(assemblyFolder, assemblyName + ".dll");

@@ -2,8 +2,7 @@
 using Autodesk.Revit.UI;
 using Calc.ConnectorRevit.Revit;
 using Calc.ConnectorRevit.Views;
-using Calc.Core.DirectusAPI;
-using Calc.Core;
+
 
 namespace Calc.ConnectorRevit
 {
@@ -13,8 +12,7 @@ namespace Calc.ConnectorRevit
         public static Document CurrentDoc { get; set; }
         public Result OnStartup(UIControlledApplication application)
         {
-            RibbonMaker ribbonMaker = new RibbonMaker();
-            ribbonMaker.Create(application);
+            RibbonMaker.Create(application);
             return Result.Succeeded;
         }
         public Result OnShutdown(UIControlledApplication application)

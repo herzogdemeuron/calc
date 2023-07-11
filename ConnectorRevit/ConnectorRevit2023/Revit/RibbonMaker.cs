@@ -1,39 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using Autodesk.Revit.UI;
+
 
 namespace Calc.ConnectorRevit.Revit
 {
     public class RibbonMaker
     {
-        private readonly string PanelName = "LCA";
-
-        public void Create(UIControlledApplication uiCtrlApp)
+        public static void Create(UIControlledApplication uiCtrlApp)
         {
-            RibbonPanel panel = uiCtrlApp.GetRibbonPanels()
-                ?.FirstOrDefault(p => p.Name == PanelName);
-
-            if (panel == null)
-            {
-                panel = uiCtrlApp.CreateRibbonPanel(PanelName);
-            }
-
+            RibbonPanel panel = uiCtrlApp.CreateRibbonPanel("Calc");
             PushButtonData buttonData = new PushButtonData(
-                "LCAButton",
-                PanelName,
+                "CalcButton",
+                "Start Calc",
                 Assembly.GetExecutingAssembly().Location,
-                "RevitLca.LcaCommand");
-
+                "Calc.ConnectorRevit.Revit.StartCommand");
             PushButton button = panel.AddItem(buttonData) as PushButton;
-            Uri uriImage = new Uri("pack://application:,,,/RevitLca;component/Resources/icon.png");
-            button.LargeImage = new BitmapImage(uriImage);
+            Uri uriImage = new Uri("pack://application:,,,/CalcConnectorRevit2023;component/Resources/icon.png", UriKind.Absolute);
+                button.LargeImage = new BitmapImage(uriImage);
         }
     }
-
-
 }
+
+
