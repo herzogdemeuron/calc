@@ -43,7 +43,7 @@
                        HorizontalAlignment="Stretch">
                 <Button Content="Load" Width="50" Style= "{StaticResource ButtonStyle}"/>
                 <ComboBox x:Name="ForestsComboBox"
-                            ItemsSource="{Binding DataContext.AllForests, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                            ItemsSource="{Binding DataContext.Forests, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                           DisplayMemberPath="Name"
                           DockPanel.Dock="Left"
                           Height="25"
@@ -63,7 +63,7 @@
                         Width="50" 
                         Style= "{StaticResource ButtonStyle}"/>
                 <ComboBox x:Name="MappingsComboBox"
-                          ItemsSource="{Binding DataContext.AllMappings, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                          ItemsSource="{Binding DataContext.Mappings, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                           DisplayMemberPath="Name"
                           DockPanel.Dock="Left"
                           Height="25"

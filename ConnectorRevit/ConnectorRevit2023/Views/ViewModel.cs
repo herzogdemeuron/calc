@@ -24,9 +24,24 @@ namespace Calc.ConnectorRevit.Views
         private readonly ExternalEventHandler eventHandler = new ExternalEventHandler();
         public List<Project> AllProjects { get; set; }
         public List<Buildup> AllBuildups { get; set; }
-        public List<Forest> AllForests { get; set; }
-        public List<Mapping> AllMappings { get; set; }
+        public List<Forest> Forests
+        {
+            get => store.ForestProjectRelated;
+        }
+        public List<Mapping> Mappings
+        {
+            get => store.MappingsAll;
+        }
 
+        public Mapping MappingSelected
+        {
+            get => store.MappingSelected;
+            set
+            {
+                store.MappingSelected = value;
+                OnPropertyChanged("MappingSelected");
+            }
+        }
         public ObservableCollection<NodeViewModel> NodeSource { get=>GetSourceNode(); }
 
         private NodeViewModel currentForestItem;
@@ -113,12 +128,15 @@ namespace Calc.ConnectorRevit.Views
             Debug.WriteLine("Got all other data");
 
             AllBuildups = store.BuildupsAll;
-            AllForests = store.Forests;
-            AllMappings = store.MappingsAll;
+            //Forests = store.ForestProjectRelated;
+            List<Mapping> allmappings = store.MappingsAll;
+            List<Mapping> projectmappings = store.MappingsProjectUnrelated;
 
+            Debug.WriteLine($"Got {allmappings.Count} all mappings");
+            Debug.WriteLine($"Got {projectmappings.Count} project mappings");
             OnPropertyChanged("AllBuildups");
-            OnPropertyChanged("AllForests");
-            OnPropertyChanged("AllMappings");
+            OnPropertyChanged("Forests");
+            OnPropertyChanged("Mappings");
         }
 
         public void HandleForestSelectionChanged(Forest forest)
@@ -127,18 +145,17 @@ namespace Calc.ConnectorRevit.Views
             if (forest == null)
                 return;
 
-            Debug.WriteLine("Forest selected: " + forest.Name);
             PlantTrees(forest);
             HandleSideClick();
             OnPropertyChanged("NodeSource");
-            ApplyMapping(this.store.MappingSelected);
+            ApplyMapping(MappingSelected);
             store.ForestSelected = forest;
         }
 
         public void HandleMappingSelectionChanged(Mapping mapping)
         {
             ApplyMapping(mapping);
-            this.store.MappingSelected = mapping;
+            MappingSelected = mapping;
         }
 
         private void ApplyMapping(Mapping mapping)
