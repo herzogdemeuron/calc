@@ -179,6 +179,7 @@ namespace Calc.ConnectorRevit.Views
             //if host is branch, inherit
 
         }
+
         public void HandleNodeItemSelectionChanged(NodeViewModel nodeItem)
         {
             if (nodeItem == null) return;

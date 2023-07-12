@@ -79,7 +79,6 @@ namespace Calc.ConnectorRevit.Views
             viewModel.HandleInherit();
         }
 
-
         private void MessageFromViewModelReceived(string message)
         {
             if (message == "DeselectTreeView")

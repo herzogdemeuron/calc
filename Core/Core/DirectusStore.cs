@@ -17,7 +17,7 @@ namespace Calc.Core
         public List<Buildup> BuildupsAll { get { return this.BuildupDriver.GotManyItems; } }
 
         public List<Mapping> MappingsAll { get { return this.MappingDriver.GotManyItems; } }
-        private Mapping _mappingSelected;
+        private Mapping _mappingSelected = null;
         public Mapping MappingSelected
         {
             get => _mappingSelected;
