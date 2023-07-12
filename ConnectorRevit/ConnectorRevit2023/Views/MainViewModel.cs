@@ -14,6 +14,8 @@ using Calc.Core.Calculations;
 using Calc.ConnectorRevit.Revit;
 using Calc.Core.DirectusAPI.Drivers;
 
+
+
 namespace Calc.ConnectorRevit.Views
 {
     public class MainViewModel : INotifyPropertyChanged, IDisposable
@@ -158,6 +160,7 @@ namespace Calc.ConnectorRevit.Views
             ApplyMapping(mapping);
         }
 
+
         public void HandleNewMapping()
         {
             Window newMappingWindow = new NewMappingView(store);
@@ -283,6 +286,7 @@ namespace Calc.ConnectorRevit.Views
             };
             HandleBuildupSelectionChanged();
         }
+
 
         private void UpdateLiveVisualization()
         {   

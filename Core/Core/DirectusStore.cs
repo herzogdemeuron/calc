@@ -53,9 +53,10 @@ namespace Calc.Core
         }
 
         public string SnapshotName { get; set; }
+        private List<Result> _results;
         public List<Result> Results
         {
-            get => Results;
+            get => _results;
             set => SetResults(value);
         }
 
@@ -96,11 +97,13 @@ namespace Calc.Core
             this.BuildupManager = new DirectusManager<Buildup>(this.Directus);
             this.MappingManager = new DirectusManager<Mapping>(this.Directus);
             this.ForestManager = new DirectusManager<Forest>(this.Directus);
+            this.ResultManager = new DirectusManager<Result>(this.Directus);
 
             this.ProjectDriver = new ProjectStorageDriver();
             this.BuildupDriver = new BuildupStorageDriver();
             this.MappingDriver = new MappingStorageDriver();
             this.ForestDriver = new ForestStorageDriver();
+            this.ResultDriver = new ResultStorageDriver();
         }
 
         public async Task GetProjects()
@@ -252,7 +255,7 @@ namespace Calc.Core
                 result.SnapshotName = this.SnapshotName;
             }
 
-            this.Results = results;
+            this._results = results;
         }
 
         public async Task SaveResults()
