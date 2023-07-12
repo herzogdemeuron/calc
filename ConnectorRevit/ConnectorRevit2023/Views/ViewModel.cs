@@ -16,7 +16,7 @@ using Calc.Core.DirectusAPI.Drivers;
 
 namespace Calc.ConnectorRevit.Views
 {
-    public class ViewModel : INotifyPropertyChanged, IDisposable
+    public class MainViewModel : INotifyPropertyChanged, IDisposable
     {
         private DirectusStore store;
         private CalcWebSocketServer server;
@@ -24,8 +24,24 @@ namespace Calc.ConnectorRevit.Views
         private readonly ExternalEventHandler eventHandler = new ExternalEventHandler();
         public List<Project> AllProjects { get; set; }
         public List<Buildup> AllBuildups { get; set; }
-        public List<Forest> AllForests { get; set; }
-        public List<Mapping> AllMappings { get; set; }
+        public List<Forest> Forests
+        {
+            get => store?.ForestProjectRelated;
+        }
+        public List<Mapping> Mappings
+        {
+            get => store?.MappingsProjectRelated;
+        }
+
+        public Mapping MappingSelected
+        {
+            get => store.MappingSelected;
+            set
+            {
+                store.MappingSelected = value;
+                OnPropertyChanged("MappingSelected");
+            }
+        }
 
         public ObservableCollection<NodeViewModel> NodeSource { get=>GetSourceNode(); }
 
@@ -53,7 +69,7 @@ namespace Calc.ConnectorRevit.Views
 
         public Window Window { get; set; }
 
-        public ViewModel()
+        public MainViewModel()
         {
             this.server = new CalcWebSocketServer("http://127.0.0.1:8184/");
             _ = this.server.Start();
@@ -113,12 +129,15 @@ namespace Calc.ConnectorRevit.Views
             Debug.WriteLine("Got all other data");
 
             AllBuildups = store.BuildupsAll;
-            AllForests = store.Forests;
-            AllMappings = store.MappingsAll;
+            List<Mapping> allmappings = store.MappingsAll;
+            List<Mapping> projectmappings = store.MappingsProjectUnrelated;
+
+            Debug.WriteLine($"Got {allmappings.Count} all mappings");
+            Debug.WriteLine($"Got {projectmappings.Count} project mappings");
 
             OnPropertyChanged("AllBuildups");
-            OnPropertyChanged("AllForests");
-            OnPropertyChanged("AllMappings");
+            OnPropertyChanged("Forests");
+            OnPropertyChanged("Mappings");
         }
 
         public void HandleForestSelectionChanged(Forest forest)
@@ -126,35 +145,21 @@ namespace Calc.ConnectorRevit.Views
 
             if (forest == null)
                 return;
-
-            Debug.WriteLine("Forest selected: " + forest.Name);
             PlantTrees(forest);
             HandleSideClick();
             OnPropertyChanged("NodeSource");
-            ApplyMapping(this.store.MappingSelected);
+            ApplyMapping(MappingSelected);
             store.ForestSelected = forest;
         }
 
         public void HandleMappingSelectionChanged(Mapping mapping)
         {
+            MappingSelected = mapping;
+            if (CurrentForestItem == null)
+                return;
             ApplyMapping(mapping);
-            this.store.MappingSelected = mapping;
         }
 
-        private void ApplyMapping(Mapping mapping)
-        {
-            
-            foreach (NodeViewModel nodeItem in CurrentForestItem.SubNodeItems)
-            {
-                Tree tree = nodeItem.Host as Tree;
-                BranchPainter.ColorBranchesByBranch(tree.SubBranches);
-
-                if (mapping == null)
-                    continue;
-                mapping.ApplyMappingToTree(tree, AllBuildups);
-            };
-            HandleBuildupSelectionChanged();
-        }
 
         public void HandleBuildupSelectionChanged()
         {
@@ -259,6 +264,21 @@ namespace Calc.ConnectorRevit.Views
         public void HandleUpdateMapping()
         {
             _ = Task.Run(async () => await this.store.UpdateSelectedMapping());
+        }
+
+        private void ApplyMapping(Mapping mapping)
+        {
+
+            foreach (NodeViewModel nodeItem in CurrentForestItem.SubNodeItems)
+            {
+                Tree tree = nodeItem.Host as Tree;
+                BranchPainter.ColorBranchesByBranch(tree.SubBranches);
+
+                if (mapping == null)
+                    continue;
+                mapping.ApplyMappingToTree(tree, AllBuildups);
+            };
+            HandleBuildupSelectionChanged();
         }
 
         public void HandleSaveResults()
