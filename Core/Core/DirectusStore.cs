@@ -142,15 +142,6 @@ namespace Calc.Core
             this._mappingSelected = mapping;
         }
 
-        public bool DoesMappingExist(string name)
-        {
-            if (this.MappingsProjectRelated == null)
-            {
-                return false;
-            }
-            return this.MappingsProjectRelated.Exists(m => m.Name == name);
-        }
-
         public async Task UpdateSelectedMapping()
         {             
             if (this.MappingSelected == null)
@@ -171,7 +162,7 @@ namespace Calc.Core
             }
         }
 
-        public async Task SaveSelectedMapping()
+        public async Task<int?> SaveSelectedMapping()
         {
             if (this.MappingSelected == null)
             {
@@ -184,6 +175,7 @@ namespace Calc.Core
             {
                 await _graphqlRetry.ExecuteAsync(() =>
                         this.MappingManager.CreateSingle<MappingStorageDriver>(this.MappingDriver));
+                return this.MappingDriver.CreatedItem?.Id;
             }
             catch (Exception e)
             {
@@ -196,11 +188,6 @@ namespace Calc.Core
             CheckIfProjectSelected();
             forest.Project = this.ProjectSelected;
             this._forestSelected = forest;
-        }
-
-        public bool DoesForestExist(string name)
-        {
-            return this.Forests.Exists(f => f.Name == name);
         }
 
         public async Task UpdateSelectedForest()
@@ -223,7 +210,7 @@ namespace Calc.Core
             }
         }
 
-        public async Task SaveSelectedForest()
+        public async Task<int?> SaveSelectedForest()
         {
             if (this.ForestSelected == null)
             {
@@ -236,6 +223,7 @@ namespace Calc.Core
             {
                 await _graphqlRetry.ExecuteAsync(() =>
                         this.ForestManager.CreateSingle<ForestStorageDriver>(this.ForestDriver));
+                return this.ForestDriver.CreatedItem?.Id;
             }
             catch (Exception e)
             {
