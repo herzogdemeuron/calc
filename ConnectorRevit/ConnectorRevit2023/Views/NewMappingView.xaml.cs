@@ -6,12 +6,14 @@ using System.Diagnostics;
 using System.Windows;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Calc.ConnectorRevit.Views
 {
     public partial class NewMappingView : Window
     {
         private DirectusStore store;
+        private NewMappingViewModel viewModel;
         private List<string> currentNames
         {
             get => store.MappingsProjectRelated.Select(m => m.Name).ToList();
@@ -20,7 +22,7 @@ namespace Calc.ConnectorRevit.Views
         {
             store = directusStore;
             InitializeComponent();
-            NewMappingViewModel viewModel = new NewMappingViewModel(store);
+            viewModel = new NewMappingViewModel(store);
             DataContext = viewModel;
         }
 
@@ -44,15 +46,9 @@ namespace Calc.ConnectorRevit.Views
             }
         }
 
-        private void ListSelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private async Task CreateButtonClicked(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void CreateButtonClicked(object sender, RoutedEventArgs e)
-        {
-            //string selectedItemName = this.selectedItemText.Text;
-            //MessageBox.Show($"Saved item: {selectedItemName}");
+            await viewModel.HandelNewMappingCreate();
         }
 
     }

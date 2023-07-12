@@ -12,7 +12,7 @@ using Calc.Core.Objects;
 using Calc.Core.DirectusAPI;
 using Calc.Core.Calculations;
 using Calc.ConnectorRevit.Revit;
-
+using Calc.Core.DirectusAPI.Drivers;
 
 namespace Calc.ConnectorRevit.Views
 {
@@ -42,6 +42,7 @@ namespace Calc.ConnectorRevit.Views
                 OnPropertyChanged("MappingSelected");
             }
         }
+
         public ObservableCollection<NodeViewModel> NodeSource { get=>GetSourceNode(); }
 
         private NodeViewModel currentForestItem;
@@ -159,13 +160,11 @@ namespace Calc.ConnectorRevit.Views
             ApplyMapping(mapping);
         }
 
-
         public void HandleNewMapping()
         {
             Window newMappingWindow = new NewMappingView(store);
             newMappingWindow.ShowDialog();
         }
-
 
         public void HandleBuildupSelectionChanged()
         {
@@ -293,6 +292,24 @@ namespace Calc.ConnectorRevit.Views
             if (this.server.ConnectedClients == 0) return;
             if (CurrentForestItem == null) return;
 
+            var results = PrepareCalculation();
+
+            _ = Task.Run(async () => await this.server.SendResults(results));
+        }
+
+        public void HandleSaveResults()
+        {
+            if (CurrentForestItem == null) return;
+            // create resultManager
+            var results = PrepareCalculation();
+            string snapshotName = "test_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+            this.store.SnapshotName = snapshotName;
+            this.store.Results = results;
+            _ = Task.Run(async () => await this.store.SaveResults());
+        }
+
+        private List<Result> PrepareCalculation()
+        {
             List<Branch> branchesToCalc = new List<Branch>();
 
             if (SelectedNodeItem?.Host is Branch branch)
@@ -308,9 +325,8 @@ namespace Calc.ConnectorRevit.Views
             }
 
             List<Result> results = Calculator.Calculate(branchesToCalc);
-            Debug.WriteLine("GWP calculated");
-
-            _ = Task.Run(async () => await this.server.SendResults(results));
+            Debug.WriteLine("Calculated");
+            return results;
         }
 
         private Mapping GetCurrentMapping()

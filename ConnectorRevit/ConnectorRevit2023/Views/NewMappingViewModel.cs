@@ -10,6 +10,7 @@ namespace Calc.ConnectorRevit.Views
 {
     public class NewMappingViewModel : INotifyPropertyChanged
     {
+        private DirectusStore Store;
         private ObservableCollection<Mapping> allMappings;
         public ObservableCollection<Mapping> AllMappings
         {
@@ -43,13 +44,18 @@ namespace Calc.ConnectorRevit.Views
             }
         }
 
-        public NewMappingViewModel(DirectusStore store)
+        public NewMappingViewModel(DirectusStore directusStore)
         {
-            AllMappings = new ObservableCollection<Mapping>(store.MappingsAll);
+            AllMappings = new ObservableCollection<Mapping>(directusStore.MappingsAll);
             MappingsView = CollectionViewSource.GetDefaultView(AllMappings);
             MappingsView.GroupDescriptions?.Add(new PropertyGroupDescription("Project.ProjectNumber"));
 
-            Debug.WriteLine(AllMappings.First().Project.ProjectNumber);
+            //Debug.WriteLine(AllMappings.First().Project.ProjectNumber);
+        }
+
+        public void HandelNewMappingCreate(string name)
+        {
+            DirectusStore.
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
