@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
@@ -12,6 +12,7 @@
     <None Remove="ToggleButtonTemplate.xaml" />
     <None Remove="Views\MainView.xaml" />
     <None Remove="Views\MainViewResources.xaml" />
+    <None Remove="Views\NewMappingView.xaml" />
     <None Remove="Views\ToggleButtonResource.xaml" />
   </ItemGroup>
 
@@ -20,6 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Include="Views\NewMappingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

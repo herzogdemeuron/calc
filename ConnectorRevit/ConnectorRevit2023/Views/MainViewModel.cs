@@ -16,7 +16,7 @@ using Calc.ConnectorRevit.Revit;
 
 namespace Calc.ConnectorRevit.Views
 {
-    public class ViewModel : INotifyPropertyChanged, IDisposable
+    public class MainViewModel : INotifyPropertyChanged, IDisposable
     {
         private DirectusStore store;
         private CalcWebSocketServer server;
@@ -26,11 +26,11 @@ namespace Calc.ConnectorRevit.Views
         public List<Buildup> AllBuildups { get; set; }
         public List<Forest> Forests
         {
-            get => store.ForestProjectRelated;
+            get => store?.ForestProjectRelated;
         }
         public List<Mapping> Mappings
         {
-            get => store.MappingsAll;
+            get => store?.MappingsProjectRelated;
         }
 
         public Mapping MappingSelected
@@ -68,7 +68,7 @@ namespace Calc.ConnectorRevit.Views
 
         public Window Window { get; set; }
 
-        public ViewModel()
+        public MainViewModel()
         {
             this.server = new CalcWebSocketServer("http://127.0.0.1:8184/");
             _ = this.server.Start();
@@ -128,12 +128,12 @@ namespace Calc.ConnectorRevit.Views
             Debug.WriteLine("Got all other data");
 
             AllBuildups = store.BuildupsAll;
-            //Forests = store.ForestProjectRelated;
             List<Mapping> allmappings = store.MappingsAll;
             List<Mapping> projectmappings = store.MappingsProjectUnrelated;
 
             Debug.WriteLine($"Got {allmappings.Count} all mappings");
             Debug.WriteLine($"Got {projectmappings.Count} project mappings");
+
             OnPropertyChanged("AllBuildups");
             OnPropertyChanged("Forests");
             OnPropertyChanged("Mappings");
@@ -144,7 +144,6 @@ namespace Calc.ConnectorRevit.Views
 
             if (forest == null)
                 return;
-
             PlantTrees(forest);
             HandleSideClick();
             OnPropertyChanged("NodeSource");
@@ -154,24 +153,19 @@ namespace Calc.ConnectorRevit.Views
 
         public void HandleMappingSelectionChanged(Mapping mapping)
         {
-            ApplyMapping(mapping);
             MappingSelected = mapping;
+            if (CurrentForestItem == null)
+                return;
+            ApplyMapping(mapping);
         }
 
-        private void ApplyMapping(Mapping mapping)
+
+        public void HandleNewMapping()
         {
-            
-            foreach (NodeViewModel nodeItem in CurrentForestItem.SubNodeItems)
-            {
-                Tree tree = nodeItem.Host as Tree;
-                BranchPainter.ColorBranchesByBranch(tree.SubBranches);
-
-                if (mapping == null)
-                    continue;
-                mapping.ApplyMappingToTree(tree, AllBuildups);
-            };
-            HandleBuildupSelectionChanged();
+            Window newMappingWindow = new NewMappingView(store);
+            newMappingWindow.ShowDialog();
         }
+
 
         public void HandleBuildupSelectionChanged()
         {
@@ -276,6 +270,21 @@ namespace Calc.ConnectorRevit.Views
         public void HandleUpdateMapping()
         {
             _ = Task.Run(async () => await this.store.UpdateSelectedMapping());
+        }
+
+        private void ApplyMapping(Mapping mapping)
+        {
+
+            foreach (NodeViewModel nodeItem in CurrentForestItem.SubNodeItems)
+            {
+                Tree tree = nodeItem.Host as Tree;
+                BranchPainter.ColorBranchesByBranch(tree.SubBranches);
+
+                if (mapping == null)
+                    continue;
+                mapping.ApplyMappingToTree(tree, AllBuildups);
+            };
+            HandleBuildupSelectionChanged();
         }
 
         private void UpdateLiveVisualization()

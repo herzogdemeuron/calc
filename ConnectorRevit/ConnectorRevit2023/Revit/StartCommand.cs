@@ -21,7 +21,7 @@ namespace Calc.ConnectorRevit.Revit
                 AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
 
                 App.CurrentDoc = commandData.Application.ActiveUIDocument.Document;
-                App.ViewModel = new ViewModel();
+                App.ViewModel = new MainViewModel();
                 MainView mainView = new MainView();
                 mainView.Show();
                 return Result.Succeeded;

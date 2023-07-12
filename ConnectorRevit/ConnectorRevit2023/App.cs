@@ -9,7 +9,7 @@ namespace Calc.ConnectorRevit
 {
     public class App : IExternalApplication
     {
-        public static ViewModel ViewModel { get; set; }
+        public static MainViewModel ViewModel { get; set; }
         public static Document CurrentDoc { get; set; }
         public static string RevitVersion { get; set; }
         public Result OnStartup(UIControlledApplication application)
