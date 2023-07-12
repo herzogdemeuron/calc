@@ -20,7 +20,6 @@ namespace Calc.ConnectorRevit.Views
     {
         private DirectusStore store;
         private CalcWebSocketServer server;
-        private Mapping selectedMapping;
         private bool BranchesSwitch = true;
         private readonly ExternalEventHandler eventHandler = new ExternalEventHandler();
         public List<Project> AllProjects { get; set; }
@@ -132,13 +131,13 @@ namespace Calc.ConnectorRevit.Views
             PlantTrees(forest);
             HandleSideClick();
             OnPropertyChanged("NodeSource");
-            ApplyMapping(selectedMapping);
+            ApplyMapping(this.store.MappingSelected);
         }
 
         public void HandleMappingSelectionChanged(Mapping mapping)
         {
             ApplyMapping(mapping);
-            selectedMapping = mapping;
+            this.store.MappingSelected = mapping;
         }
 
         private void ApplyMapping(Mapping mapping)
@@ -180,6 +179,7 @@ namespace Calc.ConnectorRevit.Views
             //if host is branch, inherit
 
         }
+
         public void HandleNodeItemSelectionChanged(NodeViewModel nodeItem)
         {
             if (nodeItem == null) return;
@@ -246,14 +246,33 @@ namespace Calc.ConnectorRevit.Views
             HandleSideClick();
         }
 
-        public void HandleCalculate()
+        public void HandleStartCalcLive()
         {
             if (this.server.ConnectedClients == 0)
             {
-                Process.Start("C:\\HdM-DT\\calc\\Core\\calc-vis-interactive\\dist\\index.html");
+                Process.Start("https://herzogdemeuron.github.io/calc/");
             }
             Debug.WriteLine(this.server.ConnectedSockets);    
+        }
 
+        public void HandleSaveMapping()
+        {
+            try
+            {
+                bool mappingExists = store.DoesMappingExist(this.store.MappingSelected.Name);
+                if (mappingExists)
+                {
+                    _ = Task.Run(async () => await this.store.UpdateSelectedMapping());
+                }
+                else
+                {
+                    _ = Task.Run(async () => await this.store.SaveSelectedMapping());
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         private void UpdateLiveVisualization()

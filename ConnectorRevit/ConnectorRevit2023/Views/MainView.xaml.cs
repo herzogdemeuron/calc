@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Calc.ConnectorRevit.Views
 {
@@ -78,7 +79,6 @@ namespace Calc.ConnectorRevit.Views
             viewModel.HandleInherit();
         }
 
-
         private void MessageFromViewModelReceived(string message)
         {
             if (message == "DeselectTreeView")
@@ -107,14 +107,15 @@ namespace Calc.ConnectorRevit.Views
         {
             viewModel.HandleUpdateCalcElements();
         }
-        private void CalculateClicked(object sender, RoutedEventArgs e)
+        private void StartCalcLiveClicked(object sender, RoutedEventArgs e)
         {
-            viewModel.HandleCalculate();
+            viewModel.HandleStartCalcLive();
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void SaveMappingClicked(object sender, RoutedEventArgs e)
         {
-
+            Debug.WriteLine("SaveMappingClicked");
+            viewModel.HandleSaveMapping();
         }
     }
 }

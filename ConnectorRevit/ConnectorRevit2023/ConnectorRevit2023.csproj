@@ -2,12 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
-    <AssemblyName>CalcConnectorRevit</AssemblyName>
+    <AssemblyName>CalcConnectorRevit2023</AssemblyName>
     <RootNamespace>Calc.ConnectorRevit</RootNamespace>
+    <BaseOutputPath>bin\</BaseOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\icon.png" />
+    <None Remove="Resources\icon-01.png" />
     <None Remove="ToggleButtonTemplate.xaml" />
     <None Remove="Views\MainView.xaml" />
     <None Remove="Views\MainViewResources.xaml" />
@@ -51,7 +52,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\icon.png" />
+    <Resource Include="Resources\icon-01.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -68,5 +69,10 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+
+<PropertyGroup>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+</PropertyGroup>
 
 </Project>

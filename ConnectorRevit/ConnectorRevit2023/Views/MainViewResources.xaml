@@ -7,26 +7,14 @@
         <Setter Property="DockPanel.Dock" Value="Right"/>
     </Style>
 
-    <Style x:Key="CalculateButtonStyle" TargetType="Button">
+    <Style x:Key="StartCalcLiveButtonStyle" TargetType="Button">
         <Setter Property="Margin" Value="10,0,10,10"/>
         <Setter Property="Height" Value="25"/>
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Calculate "/>
-                        <TextBlock>
-                            <TextBlock.Style>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="Text" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.SelectedNodeItem.Name}"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.SelectedNodeItem}" Value="{x:Null}">
-                                            <Setter Property="Text" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.CurrentForestItem.Name}"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
+                        <TextBlock Text="Start CalcLive "/>
                     </StackPanel>
                 </DataTemplate>
             </Setter.Value>

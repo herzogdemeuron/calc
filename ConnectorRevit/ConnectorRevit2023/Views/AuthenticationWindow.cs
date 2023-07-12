@@ -132,7 +132,7 @@ namespace Calc.ConnectorRevit.Views
             this.MinimizeBox = false;
             this.Name = "StringInputDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "String Input Dialog";
+            this.Text = "Directus Login";
             this.ResumeLayout(false);
             this.PerformLayout();
         }
