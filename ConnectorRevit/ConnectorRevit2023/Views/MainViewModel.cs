@@ -67,8 +67,6 @@ namespace Calc.ConnectorRevit.Views
             }
         }
 
-        public Window Window { get; set; }
-
         public MainViewModel()
         {
             this.server = new CalcWebSocketServer("http://127.0.0.1:8184/");
@@ -108,7 +106,7 @@ namespace Calc.ConnectorRevit.Views
             }
             if (directus == null)
             {
-                Window.Close();
+                EventMessenger.SendMessage("CloseWindow");
                 return;
             }
 
