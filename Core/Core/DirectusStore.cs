@@ -135,20 +135,11 @@ namespace Calc.Core
             }
         }
 
-        public void SetSelectedMapping(Mapping mapping)
+        private void SetSelectedMapping(Mapping mapping)
         {
             CheckIfProjectSelected();
             mapping.Project = this.ProjectSelected;
             this._mappingSelected = mapping;
-        }
-
-        public bool DoesMappingExist(string name)
-        {
-            if (this.MappingsProjectRelated == null)
-            {
-                return false;
-            }
-            return this.MappingsProjectRelated.Exists(m => m.Name == name);
         }
 
         public async Task UpdateSelectedMapping()
@@ -158,7 +149,14 @@ namespace Calc.Core
                 throw new Exception("No mapping selected");
             }
 
-            this.MappingDriver.SendItem = this.MappingSelected;
+            // refresh the mapping with the selected forest
+            var sendMapping = new Mapping(this.ForestSelected, this.MappingSelected.Name)
+            {
+                Project = this.ProjectSelected,
+                Id = this.MappingSelected.Id
+            };
+
+            this.MappingDriver.SendItem = sendMapping;
 
             try
             {
@@ -171,7 +169,7 @@ namespace Calc.Core
             }
         }
 
-        public async Task SaveSelectedMapping()
+        public async Task<int?> SaveSelectedMapping()
         {
             if (this.MappingSelected == null)
             {
@@ -184,6 +182,7 @@ namespace Calc.Core
             {
                 await _graphqlRetry.ExecuteAsync(() =>
                         this.MappingManager.CreateSingle<MappingStorageDriver>(this.MappingDriver));
+                return this.MappingDriver.CreatedItem?.Id;
             }
             catch (Exception e)
             {
@@ -191,16 +190,11 @@ namespace Calc.Core
             }
         }
 
-        public void SetSelectedForest(Forest forest)
+        private void SetSelectedForest(Forest forest)
         {
             CheckIfProjectSelected();
             forest.Project = this.ProjectSelected;
             this._forestSelected = forest;
-        }
-
-        public bool DoesForestExist(string name)
-        {
-            return this.Forests.Exists(f => f.Name == name);
         }
 
         public async Task UpdateSelectedForest()
@@ -223,7 +217,7 @@ namespace Calc.Core
             }
         }
 
-        public async Task SaveSelectedForest()
+        public async Task<int?> SaveSelectedForest()
         {
             if (this.ForestSelected == null)
             {
@@ -236,6 +230,7 @@ namespace Calc.Core
             {
                 await _graphqlRetry.ExecuteAsync(() =>
                         this.ForestManager.CreateSingle<ForestStorageDriver>(this.ForestDriver));
+                return this.ForestDriver.CreatedItem?.Id;
             }
             catch (Exception e)
             {
@@ -243,7 +238,7 @@ namespace Calc.Core
             }
         }
 
-        public void SetResults(List<Result> results)
+        private void SetResults(List<Result> results)
         {
             CheckIfProjectSelected();
             if (this.SnapshotName == null)
@@ -259,6 +254,7 @@ namespace Calc.Core
 
             this.Results = results;
         }
+
         public async Task SaveResults()
         {
             if (this.Results == null)

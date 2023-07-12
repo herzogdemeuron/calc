@@ -132,6 +132,7 @@ namespace Calc.ConnectorRevit.Views
             HandleSideClick();
             OnPropertyChanged("NodeSource");
             ApplyMapping(this.store.MappingSelected);
+            store.ForestSelected = forest;
         }
 
         public void HandleMappingSelectionChanged(Mapping mapping)
@@ -255,24 +256,9 @@ namespace Calc.ConnectorRevit.Views
             Debug.WriteLine(this.server.ConnectedSockets);    
         }
 
-        public void HandleSaveMapping()
+        public void HandleUpdateMapping()
         {
-            try
-            {
-                bool mappingExists = store.DoesMappingExist(this.store.MappingSelected.Name);
-                if (mappingExists)
-                {
-                    _ = Task.Run(async () => await this.store.UpdateSelectedMapping());
-                }
-                else
-                {
-                    _ = Task.Run(async () => await this.store.SaveSelectedMapping());
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            _ = Task.Run(async () => await this.store.UpdateSelectedMapping());
         }
 
         private void UpdateLiveVisualization()
