@@ -135,7 +135,7 @@ namespace Calc.Core
             }
         }
 
-        public void SetSelectedMapping(Mapping mapping)
+        private void SetSelectedMapping(Mapping mapping)
         {
             CheckIfProjectSelected();
             mapping.Project = this.ProjectSelected;
@@ -149,7 +149,14 @@ namespace Calc.Core
                 throw new Exception("No mapping selected");
             }
 
-            this.MappingDriver.SendItem = this.MappingSelected;
+            // refresh the mapping with the selected forest
+            var sendMapping = new Mapping(this.ForestSelected, this.MappingSelected.Name)
+            {
+                Project = this.ProjectSelected,
+                Id = this.MappingSelected.Id
+            };
+
+            this.MappingDriver.SendItem = sendMapping;
 
             try
             {
@@ -183,7 +190,7 @@ namespace Calc.Core
             }
         }
 
-        public void SetSelectedForest(Forest forest)
+        private void SetSelectedForest(Forest forest)
         {
             CheckIfProjectSelected();
             forest.Project = this.ProjectSelected;
@@ -231,7 +238,7 @@ namespace Calc.Core
             }
         }
 
-        public void SetResults(List<Result> results)
+        private void SetResults(List<Result> results)
         {
             CheckIfProjectSelected();
             if (this.SnapshotName == null)
@@ -247,6 +254,7 @@ namespace Calc.Core
 
             this.Results = results;
         }
+
         public async Task SaveResults()
         {
             if (this.Results == null)

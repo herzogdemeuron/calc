@@ -55,9 +55,9 @@
                        Grid.Row="0"
                        Margin="10"
                        HorizontalAlignment="Stretch">
-                <Button Content="Save" 
+                <Button Content="Update" 
                         Width="50" 
-                        Click="SaveMappingClicked"
+                        Click="UpdateMappingClicked"
                         Style= "{StaticResource ButtonStyle}"/>
                 <Button Content="Load" 
                         Width="50" 
