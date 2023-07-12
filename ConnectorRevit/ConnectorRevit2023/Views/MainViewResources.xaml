@@ -7,21 +7,6 @@
         <Setter Property="DockPanel.Dock" Value="Right"/>
     </Style>
 
-    <Style x:Key="StartCalcLiveButtonStyle" TargetType="Button">
-        <Setter Property="Margin" Value="10,0,10,10"/>
-        <Setter Property="Height" Value="25"/>
-        <Setter Property="ContentTemplate">
-            <Setter.Value>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Start CalcLive "/>
-                    </StackPanel>
-                </DataTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-
     <Style x:Key="TreeViewItemStyle" TargetType="TreeViewItem">
         <Style.Resources>
             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />

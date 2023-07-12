@@ -112,6 +112,11 @@ namespace Calc.ConnectorRevit.Views
             viewModel.HandleStartCalcLive();
         }
 
+        private void SaveResultsClicked(object sender, RoutedEventArgs e)
+        {
+            viewModel.HandleSaveResults();
+        }
+
         private void UpdateMappingClicked(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("SaveMappingClicked");
