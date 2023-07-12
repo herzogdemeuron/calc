@@ -75,8 +75,4 @@
 	<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 </PropertyGroup>
 
-<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-  <Exec Command="call &quot;$(SolutionDir)ConnectorRevit\copyOutput.bat&quot; " />
-</Target>
-
 </Project>

@@ -17,9 +17,10 @@ namespace Calc.Core
         public List<Buildup> BuildupsAll { get { return this.BuildupDriver.GotManyItems; } }
 
         public List<Mapping> MappingsAll { get { return this.MappingDriver.GotManyItems; } }
+        private Mapping _mappingSelected;
         public Mapping MappingSelected
         {
-            get => MappingSelected;
+            get => _mappingSelected;
             set => SetSelectedMapping(value);
         }
         public List<Mapping> MappingsProjectRelated
@@ -34,9 +35,10 @@ namespace Calc.Core
         }
 
         public List<Forest> Forests { get { return this.ForestDriver.GotManyItems; } }
+        private Forest _forestSelected;
         public Forest ForestSelected
         {
-            get => ForestSelected;
+            get => _forestSelected;
             set => SetSelectedForest(value);
         }
         public List<Forest> ForestProjectRelated
@@ -133,16 +135,19 @@ namespace Calc.Core
             }
         }
 
-        // make method for setting Selected Mapping, change Mapping.Project to ProjectSelected
         public void SetSelectedMapping(Mapping mapping)
         {
             CheckIfProjectSelected();
             mapping.Project = this.ProjectSelected;
-            this.MappingSelected = mapping;
+            this._mappingSelected = mapping;
         }
 
         public bool DoesMappingExist(string name)
         {
+            if (this.MappingsProjectRelated == null)
+            {
+                return false;
+            }
             return this.MappingsProjectRelated.Exists(m => m.Name == name);
         }
 
@@ -190,7 +195,7 @@ namespace Calc.Core
         {
             CheckIfProjectSelected();
             forest.Project = this.ProjectSelected;
-            this.ForestSelected = forest;
+            this._forestSelected = forest;
         }
 
         public bool DoesForestExist(string name)
@@ -289,7 +294,7 @@ namespace Calc.Core
                 throw new Exception("No project selected");
             }
 
-            return driver.GotManyItems.FindAll(m => m.Project.Id == this.ProjectSelected.Id);
+            return driver.GotManyItems.FindAll(m => m.Project?.Id == this.ProjectSelected.Id);
         }
 
         private List<T> GetProjectUnrelated<T>(IDriverGetMany<T> driver) where T : IHasProject
@@ -299,7 +304,7 @@ namespace Calc.Core
                 throw new Exception("No project selected");
             }
 
-            return driver.GotManyItems.FindAll(m => m.Project.Id != this.ProjectSelected.Id);
+            return driver.GotManyItems.FindAll(m => m.Project?.Id != this.ProjectSelected.Id);
         }
 
         private void CheckIfProjectSelected()

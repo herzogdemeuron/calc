@@ -55,8 +55,13 @@
                        Grid.Row="0"
                        Margin="10"
                        HorizontalAlignment="Stretch">
-                <Button Content="Save" Width="50" Style= "{StaticResource ButtonStyle}"/>
-                <Button Content="Load" Width="50" Style= "{StaticResource ButtonStyle}"/>
+                <Button Content="Save" 
+                        Width="50" 
+                        Click="SaveMappingClicked"
+                        Style= "{StaticResource ButtonStyle}"/>
+                <Button Content="Load" 
+                        Width="50" 
+                        Style= "{StaticResource ButtonStyle}"/>
                 <ComboBox x:Name="MappingsComboBox"
                           ItemsSource="{Binding DataContext.AllMappings, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                           DisplayMemberPath="Name"
@@ -150,16 +155,17 @@
 
             <Button Grid.Column="2"
                     Grid.Row="2"
-                    Style="{StaticResource CalculateButtonStyle}" 
-                    Click="CalculateClicked" />
+                    Style="{StaticResource StartCalcLiveButtonStyle}" 
+                    Click="StartCalcLiveClicked" />
         </Grid>
         
         <Grid x:Name="SelectProjectOverlay"
+              d:IsHidden="true"
           Background="White"
           Margin="10">
             <StackPanel VerticalAlignment="Center">
                 <TextBlock HorizontalAlignment="Center"
-                            Text="CHOOSE PROJECT:"
+                            Text="Choose Project:"
                            Margin="10"/>
                 <ComboBox x:Name="ProjectsComboBox"
                           HorizontalAlignment="Center"
@@ -175,11 +181,12 @@
         </Grid>
         
         <Grid x:Name="LoadingOverlay"
+              d:IsHidden="true" 
           Background="LightGray"
           Margin="10">
             <TextBlock HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Text="LOADING..."/>
+                    Text="Loading..."/>
         </Grid>
 
     </Grid>
