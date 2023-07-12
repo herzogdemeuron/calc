@@ -9,7 +9,7 @@ namespace Calc.ConnectorRevit.Views
 {
     public partial class MainView : Window
     {
-        private readonly ViewModel viewModel;
+        private readonly MainViewModel viewModel;
 
         public MainView()
         {
@@ -52,6 +52,11 @@ namespace Calc.ConnectorRevit.Views
         private void MappingSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             viewModel.HandleMappingSelectionChanged(MappingsComboBox.SelectedItem as Mapping);
+        }
+
+        private void NewMappingClicked(object sender, RoutedEventArgs e)
+        {
+            viewModel.HandleNewMapping();
         }
 
         private void TreeViewItemSelected(object sender, RoutedEventArgs e)

@@ -4,7 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Calc.ConnectorRevit.Views" 
-        d:DataContext="{d:DesignInstance Type=local:ViewModel}"
+        d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
         Loaded="WindowLoaded"
         Closing="WindowClosing"
         mc:Ignorable="d" 
@@ -43,7 +43,7 @@
                        HorizontalAlignment="Stretch">
                 <Button Content="Load" Width="50" Style= "{StaticResource ButtonStyle}"/>
                 <ComboBox x:Name="ForestsComboBox"
-                            ItemsSource="{Binding DataContext.AllForests, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                            ItemsSource="{Binding DataContext.Forests, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                           DisplayMemberPath="Name"
                           DockPanel.Dock="Left"
                           Height="25"
@@ -59,11 +59,12 @@
                         Width="50" 
                         Click="UpdateMappingClicked"
                         Style= "{StaticResource ButtonStyle}"/>
-                <Button Content="Load" 
+                <Button Content="New" 
                         Width="50" 
+                        Click="NewMappingClicked"
                         Style= "{StaticResource ButtonStyle}"/>
                 <ComboBox x:Name="MappingsComboBox"
-                          ItemsSource="{Binding DataContext.AllMappings, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                          ItemsSource="{Binding DataContext.Mappings, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                           DisplayMemberPath="Name"
                           DockPanel.Dock="Left"
                           Height="25"
@@ -104,7 +105,7 @@
                             DockPanel.Dock="Top"
                            LastChildFill="True"
                             >
-                    <Button Content="Inherit"
+                    <Button Content="From Parent"
                             Width="50"
                             Style= "{StaticResource ButtonStyle}"
                             Click="InheritClicked"/>

@@ -12,7 +12,9 @@ using Calc.Core.Objects;
 using Calc.Core.DirectusAPI;
 using Calc.Core.Calculations;
 using Calc.ConnectorRevit.Revit;
+
 using Calc.Core.DirectusAPI.Drivers;
+
 
 namespace Calc.ConnectorRevit.Views
 {
@@ -161,6 +163,14 @@ namespace Calc.ConnectorRevit.Views
         }
 
 
+
+        public void HandleNewMapping()
+        {
+            Window newMappingWindow = new NewMappingView(store);
+            newMappingWindow.ShowDialog();
+        }
+
+
         public void HandleBuildupSelectionChanged()
         {
             if (BranchesSwitch == false)
@@ -281,6 +291,18 @@ namespace Calc.ConnectorRevit.Views
             HandleBuildupSelectionChanged();
         }
 
+
+        private void UpdateLiveVisualization()
+        {   
+            if (this.server == null) return;
+            if (this.server.ConnectedClients == 0) return;
+            if (CurrentForestItem == null) return;
+
+            var results = PrepareCalculation();
+
+            _ = Task.Run(async () => await this.server.SendResults(results));
+        }
+
         public void HandleSaveResults()
         {
             if (CurrentForestItem == null) return;
@@ -311,17 +333,6 @@ namespace Calc.ConnectorRevit.Views
             List<Result> results = Calculator.Calculate(branchesToCalc);
             Debug.WriteLine("Calculated");
             return results;
-        }
-
-        private void UpdateLiveVisualization()
-        {   
-            if (this.server == null) return;
-            if (this.server.ConnectedClients == 0) return;
-            if (CurrentForestItem == null) return;
-
-            var results = PrepareCalculation();
-
-            _ = Task.Run(async () => await this.server.SendResults(results));
         }
 
         private Mapping GetCurrentMapping()
