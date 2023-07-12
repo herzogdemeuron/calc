@@ -14,6 +14,10 @@ namespace Calc.Core.DirectusAPI.Drivers
                             id
                             mapping_name
                             mappings
+                            project_id {
+                                id
+                                project_number
+                            }
                         }
                     }";
         public string QueryCreateSingle { get; } = @"
