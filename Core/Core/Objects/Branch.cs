@@ -25,6 +25,8 @@ namespace Calc.Core.Objects
         [JsonIgnore]
         public List<Branch> SubBranches { get; set; } = new List<Branch>();
         [JsonIgnore]
+        private Branch _parentBranch;
+        [JsonIgnore]
         private Buildup _buildup;
         [JsonIgnore]
         public Buildup Buildup
@@ -82,7 +84,8 @@ namespace Calc.Core.Objects
                 {
                     Parameter = currentParameter,
                     Value = group.Key.ToString(),
-                    Method = methodName
+                    Method = methodName,
+                    _parentBranch = this
                 };
                 SubBranches.Add(branch);
             }
@@ -157,6 +160,18 @@ namespace Calc.Core.Objects
                 {
                     subBranch.MatchMapping(parameter, value, buildup);
                 }
+            }
+        }
+
+        public void InheritMapping()
+        {
+            if (_parentBranch == null)
+            {
+                return;
+            }
+            if (_parentBranch.Buildup != null)
+            {
+                this.Buildup = _parentBranch.Buildup;
             }
         }
 
