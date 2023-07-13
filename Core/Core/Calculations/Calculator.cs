@@ -100,10 +100,10 @@ namespace Calc.Core.Calculations
             var material = component.Material;
             return unit switch
             {
-                Unit.each => material.GwpA123 * component.Amount,
-                Unit.m => material.GwpA123 * component.Amount * element.Length,
-                Unit.m2 => material.GwpA123 * component.Amount * element.Area,
-                Unit.m3 => material.GwpA123 * component.Amount * element.Volume,
+                Unit.each => material.KgCO2eA123 * component.Amount,
+                Unit.m => material.KgCO2eA123 * component.Amount * element.Length,
+                Unit.m2 => material.KgCO2eA123 * component.Amount * element.Area,
+                Unit.m3 => material.KgCO2eA123 * component.Amount * element.Volume,
                 _ => throw new Exception($"Unit not recognized: {unit}"),
             };
         }

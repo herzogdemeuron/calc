@@ -126,7 +126,7 @@ namespace Calc.Core.TestIntegration
             {
                 Id = 1,
                 Name = "Material1",
-                GwpA123 = this.gwp123,
+                KgCO2eA123 = this.gwp123,
                 Category = "Category1"
             };
 

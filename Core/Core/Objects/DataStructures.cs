@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Speckle.Newtonsoft.Json;
-using Calc.Core.DirectusAPI;
-using Speckle.Newtonsoft.Json.Linq;
 using System.Runtime.Serialization;
 using Calc.Core.Color;
+using System;
 
 namespace Calc.Core.Objects
 {
@@ -90,7 +85,7 @@ namespace Calc.Core.Objects
         [JsonProperty("material_name")]
         public string Name { get;  set; }
         [JsonProperty("global_warming_potential_a1_a2_a3")]
-        public decimal GwpA123 { get;  set; }
+        public decimal KgCO2eA123 { get;  set; }
         [JsonProperty("cost")]
         public decimal Cost { get; set; }
         [JsonProperty("unit")]
@@ -100,7 +95,7 @@ namespace Calc.Core.Objects
 
         public override string ToString()
         {
-            return $"Material Id: {Id}, Material Name: {Name}, GWP: {GwpA123}, Category: {Category}";
+            return $"Material Id: {Id}, Material Name: {Name}, KgCO2eA123: {KgCO2eA123}, Category: {Category}";
         }
     }
 
@@ -110,11 +105,12 @@ namespace Calc.Core.Objects
         public Material Material { get; set; }
         [JsonProperty("amount")]
         public decimal Amount { get; set; }
-
-        public override string ToString()
-        {
-            return $"Amount: {Amount}";
-        }
+        [JsonIgnore]
+        public string FormattedAmount { get => Math.Round(Amount, 1).ToString() + Material.Unit; }
+        [JsonIgnore]
+        public string FormattedKgCO2eA123 { get => Math.Round(Amount * Material.KgCO2eA123, 1).ToString() + "Kg"; }
+        [JsonIgnore]
+        public string FormattedCost { get => Math.Round(Amount * Material.Cost, 1).ToString(); }
     }
 
     public class Buildup
