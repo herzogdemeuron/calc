@@ -172,7 +172,7 @@ namespace Calc.Core
             }
         }
 
-        public async Task<int> SaveSelectedMapping()
+        public async Task SaveSelectedMapping()
         {
             if (this.MappingSelected == null)
             {
@@ -185,7 +185,8 @@ namespace Calc.Core
             {
                 await _graphqlRetry.ExecuteAsync(() =>
                         this.MappingManager.CreateSingle<MappingStorageDriver>(this.MappingDriver));
-                return this.MappingDriver.CreatedItem.Id;
+                this.MappingSelected.Id = this.MappingDriver.CreatedItem.Id;
+                this.MappingDriver.GotManyItems.Add(this.MappingSelected);
             }
             catch (Exception e)
             {
