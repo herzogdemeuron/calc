@@ -106,9 +106,9 @@ namespace Calc.Core.Objects
         [JsonProperty("amount")]
         public decimal Amount { get; set; }
         [JsonIgnore]
-        public string FormattedAmount { get => Math.Round(Amount, 1).ToString() + Material.Unit; }
+        public string FormattedAmount { get => Math.Round(Amount, 1).ToString() + " " + Material.Unit; }
         [JsonIgnore]
-        public string FormattedKgCO2eA123 { get => Math.Round(Amount * Material.KgCO2eA123, 1).ToString() + "Kg"; }
+        public string FormattedKgCO2eA123 { get => Math.Round(Amount * Material.KgCO2eA123, 1).ToString() + " Kg"; }
         [JsonIgnore]
         public string FormattedCost { get => Math.Round(Amount * Material.Cost, 1).ToString(); }
     }

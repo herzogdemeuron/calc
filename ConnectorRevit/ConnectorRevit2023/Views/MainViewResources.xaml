@@ -16,6 +16,10 @@
         </Style.Resources>
     </Style>
 
+    <Style x:Key="NumberColumn" TargetType="TextBlock">
+        <Setter Property="HorizontalAlignment" Value="Right" />
+    </Style>
+
     <DataTemplate x:Key="BranchItemTemplate">
         <Border x:Name="Border"
             Padding="4,2,4,3"
