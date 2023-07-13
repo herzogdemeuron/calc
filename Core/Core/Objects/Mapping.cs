@@ -80,11 +80,10 @@ namespace Calc.Core.Objects
             return mappingsJson.ToString();
         }
 
-        public Mapping Copy(int newId, string newName)
+        public Mapping Copy(string newName)
         {
             return new Mapping()
             {   
-                Id = newId,
                 Name = newName,
                 Project = Project,
                 MappingItems = MappingItems
