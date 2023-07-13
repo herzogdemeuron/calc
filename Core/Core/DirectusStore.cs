@@ -183,9 +183,9 @@ namespace Calc.Core
 
             try
             {
-                await _graphqlRetry.ExecuteAsync(() =>
+                var mappingDriver = await _graphqlRetry.ExecuteAsync(() =>
                         this.MappingManager.CreateSingle<MappingStorageDriver>(this.MappingDriver));
-                this.MappingSelected.Id = this.MappingDriver.CreatedItem.Id;
+                this.MappingSelected.Id = mappingDriver.CreatedItem.Id;
                 this.MappingDriver.GotManyItems.Add(this.MappingSelected);
             }
             catch (Exception e)
