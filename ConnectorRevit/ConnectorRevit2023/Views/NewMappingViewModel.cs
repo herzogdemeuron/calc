@@ -54,18 +54,18 @@ namespace Calc.ConnectorRevit.Views
             //Debug.WriteLine(AllMappings.First().Project.ProjectNumber);
         }
 
-        public async Task HandelNewMappingCreate()
+        public void HandelNewMappingCreate()
         {
-            int? id = await store.SaveSelectedMapping();
-            if (id != null)
+            //int? id = await store.SaveSelectedMapping();
+            //if (id != null)
             {
                 Mapping newMapping = new Mapping()
                 {
-                    Id = (int)id,
+                    // = (int)id,
                     Name = NewName,
-                    Project = store.SelectedProject,
+                    //Project = store.SelectedProject,
                 };
-                store.MappingsProjectRelated.Add(store.MappingsAll.First(m => m.Id == id));
+                //store.MappingsProjectRelated.Add(store.MappingsAll.First(m => m.Id == id));
             }
         }
 

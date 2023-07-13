@@ -274,7 +274,6 @@ namespace Calc.ConnectorRevit.Views
 
         private void ApplyMapping(Mapping mapping)
         {
-
             foreach (NodeViewModel nodeItem in CurrentForestItem.SubNodeItems)
             {
                 Tree tree = nodeItem.Host as Tree;
@@ -286,7 +285,6 @@ namespace Calc.ConnectorRevit.Views
             };
             HandleBuildupSelectionChanged();
         }
-
 
         private void UpdateLiveVisualization()
         {   

@@ -46,9 +46,9 @@ namespace Calc.ConnectorRevit.Views
             }
         }
 
-        private async Task CreateButtonClicked(object sender, RoutedEventArgs e)
+        private void CreateButtonClicked(object sender, RoutedEventArgs e)
         {
-            await viewModel.HandelNewMappingCreate();
+            viewModel.HandelNewMappingCreate();
         }
 
     }
