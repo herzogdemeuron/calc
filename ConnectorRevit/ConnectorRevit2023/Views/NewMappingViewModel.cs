@@ -4,12 +4,14 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace Calc.ConnectorRevit.Views
 {
     public class NewMappingViewModel : INotifyPropertyChanged
     {
+        private DirectusStore store;
         private ObservableCollection<Mapping> allMappings;
         public ObservableCollection<Mapping> AllMappings
         {
@@ -43,13 +45,20 @@ namespace Calc.ConnectorRevit.Views
             }
         }
 
-        public NewMappingViewModel(DirectusStore store)
+        public NewMappingViewModel(DirectusStore directusStore)
         {
-            AllMappings = new ObservableCollection<Mapping>(store.MappingsAll);
+            store = directusStore;
+            AllMappings = new ObservableCollection<Mapping>(directusStore.MappingsAll);
             MappingsView = CollectionViewSource.GetDefaultView(AllMappings);
             MappingsView.GroupDescriptions?.Add(new PropertyGroupDescription("Project.ProjectNumber"));
+            //Debug.WriteLine(AllMappings.First().Project.ProjectNumber);
+        }
 
-            Debug.WriteLine(AllMappings.First().Project.ProjectNumber);
+        public async Task HandelNewMappingCreate(Mapping selectedMapping, string newName)
+        {
+            Mapping newMapping = selectedMapping.Copy(newName);
+            store.MappingSelected = newMapping;
+            await store.SaveSelectedMapping();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

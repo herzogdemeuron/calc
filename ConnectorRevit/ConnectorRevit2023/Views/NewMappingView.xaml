@@ -17,7 +17,7 @@
             <RowDefinition Height="20"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="20"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
@@ -26,7 +26,8 @@
 
         <ListBox Grid.Row="1"
                  x:Name="MappingListBox"
-                 ScrollViewer.VerticalScrollBarVisibility="Auto"         
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                 SelectionChanged="MappingSelectionChanged"
                  ItemsSource="{Binding MappingsView}">
             <ListBox.GroupStyle>
                 <GroupStyle>
@@ -48,12 +49,14 @@
         <TextBlock Grid.Row="2"
                      Text="New mapping name:"/>
         <TextBox Grid.Row="3"
+                 Margin="0,0,0,10"
                  x:Name="NewNameText" 
                  TextChanged="NewNameTextChanged"
                  Text="{Binding NewName, Mode=TwoWay}"/>
         <Button Grid.Row="4"
                 x:Name="CreateButton" 
-                Content="Create" 
+                IsEnabled="False"
+                Content="Please enter a name" 
                 Click="CreateButtonClicked" />
     </Grid>
 </Window>

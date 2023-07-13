@@ -17,7 +17,6 @@ namespace Calc.ConnectorRevit.Views
             this.DataContext = viewModel;
             InitializeComponent();
             EventMessenger.OnMessageReceived += MessageFromViewModelReceived;
-            viewModel.Window = this;
         }
 
         private async void WindowLoaded(object sender, RoutedEventArgs e)
@@ -95,6 +94,10 @@ namespace Calc.ConnectorRevit.Views
                         selectedTreeViewItem.IsSelected = false;
                     }
                 }
+            }
+            else if (message == "CloseWindow")
+            {
+                this.Close();
             }
         }
 

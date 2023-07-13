@@ -12,8 +12,8 @@ using Calc.Core.Objects;
 using Calc.Core.DirectusAPI;
 using Calc.Core.Calculations;
 using Calc.ConnectorRevit.Revit;
-
 using Calc.Core.DirectusAPI.Drivers;
+
 
 
 namespace Calc.ConnectorRevit.Views
@@ -69,8 +69,6 @@ namespace Calc.ConnectorRevit.Views
             }
         }
 
-        public Window Window { get; set; }
-
         public MainViewModel()
         {
             this.server = new CalcWebSocketServer("http://127.0.0.1:8184/");
@@ -110,7 +108,7 @@ namespace Calc.ConnectorRevit.Views
             }
             if (directus == null)
             {
-                Window.Close();
+                EventMessenger.SendMessage("CloseWindow");
                 return;
             }
 
@@ -156,20 +154,21 @@ namespace Calc.ConnectorRevit.Views
 
         public void HandleMappingSelectionChanged(Mapping mapping)
         {
-            MappingSelected = mapping;
+            //MappingSelected = mapping;
             if (CurrentForestItem == null)
                 return;
             ApplyMapping(mapping);
         }
 
 
-
         public void HandleNewMapping()
         {
             Window newMappingWindow = new NewMappingView(store);
             newMappingWindow.ShowDialog();
-        }
+            OnPropertyChanged("Mappings");
+            OnPropertyChanged("MappingSelected");
 
+        }
 
         public void HandleBuildupSelectionChanged()
         {
@@ -279,7 +278,6 @@ namespace Calc.ConnectorRevit.Views
 
         private void ApplyMapping(Mapping mapping)
         {
-
             foreach (NodeViewModel nodeItem in CurrentForestItem.SubNodeItems)
             {
                 Tree tree = nodeItem.Host as Tree;
@@ -291,7 +289,6 @@ namespace Calc.ConnectorRevit.Views
             };
             HandleBuildupSelectionChanged();
         }
-
 
         private void UpdateLiveVisualization()
         {   

@@ -1,17 +1,17 @@
 ﻿using Calc.Core;
 using Calc.Core.Objects;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Windows;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace Calc.ConnectorRevit.Views
 {
     public partial class NewMappingView : Window
     {
         private DirectusStore store;
+        private NewMappingViewModel viewModel;
+        
         private List<string> currentNames
         {
             get => store.MappingsProjectRelated.Select(m => m.Name).ToList();
@@ -20,14 +20,24 @@ namespace Calc.ConnectorRevit.Views
         {
             store = directusStore;
             InitializeComponent();
-            NewMappingViewModel viewModel = new NewMappingViewModel(store);
+            viewModel = new NewMappingViewModel(store);
             DataContext = viewModel;
         }
 
-        private void NewNameTextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void NewNameTextChanged(object sender, TextChangedEventArgs e)
+        {
+            CheckCreateEnable();
+        }
+
+        private void MappingSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            CheckCreateEnable();
+        }
+
+        private void CheckCreateEnable()
         {
             string newName = this.NewNameText.Text.Trim();
-            if(newName == "")
+            if (newName == "")
             {
                 this.CreateButton.IsEnabled = false;
                 this.CreateButton.Content = "Please enter a name";
@@ -37,22 +47,25 @@ namespace Calc.ConnectorRevit.Views
                 this.CreateButton.IsEnabled = false;
                 this.CreateButton.Content = "Name already exists";
             }
+            else if (this.MappingListBox.SelectedItem == null)
+            {
+                this.CreateButton.IsEnabled = false;
+                this.CreateButton.Content = "Please select a mapping";
+            }
             else
             {
                 this.CreateButton.IsEnabled = true;
                 this.CreateButton.Content = "Create";
             }
-        }
-
-        private void ListSelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
 
         }
 
-        private void CreateButtonClicked(object sender, RoutedEventArgs e)
+        private async void CreateButtonClicked(object sender, RoutedEventArgs e)
         {
-            //string selectedItemName = this.selectedItemText.Text;
-            //MessageBox.Show($"Saved item: {selectedItemName}");
+            Mapping selectedMapping = this.MappingListBox.SelectedItem as Mapping;
+            string newName = this.NewNameText.Text.Trim();
+            await viewModel.HandelNewMappingCreate(selectedMapping, newName);
+            this.Close();
         }
 
     }
