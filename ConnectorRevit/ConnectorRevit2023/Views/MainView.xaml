@@ -10,7 +10,7 @@
         mc:Ignorable="d" 
         Background="White"
         Height="600" MinHeight="600"
-        Width="600" MinWidth="600"
+        Width="600" MinWidth="700"
         WindowStartupLocation="CenterScreen"
         Topmost="True">
 
@@ -27,8 +27,7 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20*"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="20*"/>
+                <ColumnDefinition Width="30*"/>
             </Grid.ColumnDefinitions>
             
             <Grid.RowDefinitions>
@@ -100,13 +99,14 @@
                         Margin="10"
                         LastChildFill="True"
                         DockPanel.Dock="Top">
-                <Label Content="Assigned Buildup:" DockPanel.Dock="Top"/>
+                <Label Content="Buildup:" DockPanel.Dock="Top" FontWeight="Bold"/>
                 <DockPanel HorizontalAlignment="Stretch"
-                            DockPanel.Dock="Top"
+                           DockPanel.Dock="Top"
                            LastChildFill="True"
+                           Margin="0,0,0,20"
                             >
-                    <Button Content="From Parent"
-                            Width="50"
+                    <Button Content="Use Parent"
+                            Width="110"
                             Style= "{StaticResource ButtonStyle}"
                             Click="InheritClicked"/>
                     <ComboBox x:Name="BuildupsComboBox"
@@ -118,18 +118,43 @@
                     
 
                 </DockPanel>
+
+                    <DataGrid ItemsSource="{Binding SelectedItem.Components, ElementName=BuildupsComboBox}"
+                            AutoGenerateColumns="False"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Stretch"
+                            MinHeight="100"
+                            HorizontalGridLinesBrush="LightGray"
+                            VerticalGridLinesBrush="LightGray">
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="FontWeight" Value="Medium"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        </Style>
+                        </DataGrid.ColumnHeaderStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" />
+                            <DataGridTextColumn Binding="{Binding FormattedAmount}" IsReadOnly="True" >
+                            <DataGridTextColumn.Header>
+                                <TextBlock Text="Amount" HorizontalAlignment="Right" Margin="0,0,0,0"/>
+                            </DataGridTextColumn.Header>
+                            <DataGridTextColumn.ElementStyle>
+                                    <StaticResource ResourceKey="NumberColumn"/>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="CO2e A123" Binding="{Binding FormattedKgCO2eA123}" IsReadOnly="True" >
+                                <DataGridTextColumn.ElementStyle>
+                                    <StaticResource ResourceKey="NumberColumn"/>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Cost" Binding="{Binding FormattedCost}" IsReadOnly="True" >
+                                <DataGridTextColumn.ElementStyle>
+                                    <StaticResource ResourceKey="NumberColumn"/>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 
-                <Label Content="Buildup Preview:" DockPanel.Dock="Top"/>
-                <DataGrid ItemsSource="{Binding SelectedItem.Components, ElementName=BuildupsComboBox}"
-                        AutoGenerateColumns="False"
-                        VerticalAlignment="Top"
-                        HorizontalAlignment="Stretch"
-                        MinHeight="100">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" />
-                        <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" IsReadOnly="True" />
-                    </DataGrid.Columns>
-                </DataGrid>
             </DockPanel>
             <StackPanel Grid.Column="0"
                         Grid.Row="2"
