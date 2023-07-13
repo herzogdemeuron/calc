@@ -154,7 +154,7 @@ namespace Calc.ConnectorRevit.Views
 
         public void HandleMappingSelectionChanged(Mapping mapping)
         {
-            MappingSelected = mapping;
+            //MappingSelected = mapping;
             if (CurrentForestItem == null)
                 return;
             ApplyMapping(mapping);
@@ -165,6 +165,9 @@ namespace Calc.ConnectorRevit.Views
         {
             Window newMappingWindow = new NewMappingView(store);
             newMappingWindow.ShowDialog();
+            OnPropertyChanged("Mappings");
+            OnPropertyChanged("MappingSelected");
+
         }
 
         public void HandleBuildupSelectionChanged()
