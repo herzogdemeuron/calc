@@ -80,6 +80,17 @@ namespace Calc.Core.Objects
             return mappingsJson.ToString();
         }
 
+        public Mapping Copy(int newId, string newName)
+        {
+            return new Mapping()
+            {   
+                Id = newId,
+                Name = newName,
+                Project = Project,
+                MappingItems = MappingItems
+            };
+        }
+
         private static List<MappingItem> ExtractMappingItems(List<Branch> branches, string treeName)
         {
             var mappingItems = new List<MappingItem>();

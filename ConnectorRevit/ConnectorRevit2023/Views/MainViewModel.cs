@@ -189,6 +189,7 @@ namespace Calc.ConnectorRevit.Views
             if (!(host is Branch branch))
                 return;
             //if host is branch, inherit
+            branch.InheritMapping();
 
         }
 
