@@ -26,7 +26,7 @@ namespace Calc.ConnectorRevit.Revit
                 App.CurrentDoc = commandData.Application.ActiveUIDocument.Document;
                 _ = Authenticate();
 
-                MainView mainView = new MainView(new MainViewModel());
+                MainView mainView = new MainView(new ViewModelDepot());
                 mainView.Show();
                 return Result.Succeeded;
             }
