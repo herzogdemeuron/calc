@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using Calc.ConnectorRevit.Views;
 using Calc.Core.DirectusAPI;
 
-namespace Calc.ConnectorRevit
+namespace Calc.ConnectorRevit.Services
 {
     public class DirectusAuthenticator
     {

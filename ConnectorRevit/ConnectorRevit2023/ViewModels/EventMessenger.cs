@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Calc.ConnectorRevit.Views
+namespace Calc.ConnectorRevit.ViewModels
 {
     public static class EventMessenger
     {

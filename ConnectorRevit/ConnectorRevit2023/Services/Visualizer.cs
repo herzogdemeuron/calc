@@ -1,6 +1,6 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
-using Calc.ConnectorRevit.Views;
+using Calc.ConnectorRevit.ViewModels;
 using Calc.Core.Color;
 using Calc.Core.Objects;
 using System;
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Calc.ConnectorRevit
+namespace Calc.ConnectorRevit.Services
 {
     [Transaction(TransactionMode.Manual)]
     public static class Visualizer
@@ -129,8 +129,8 @@ namespace Calc.ConnectorRevit
             return patterns.FirstOrDefault().Id;
         }
         private static List<ElementId> StringsToElementIds(List<string> elememtIdStrings)
-        {             
-            List<ElementId> elementIds = new List<ElementId>();  
+        {
+            List<ElementId> elementIds = new List<ElementId>();
             foreach (string elementIdString in elememtIdStrings)
             {
                 elementIds.Add(new ElementId(Convert.ToInt32(elementIdString)));

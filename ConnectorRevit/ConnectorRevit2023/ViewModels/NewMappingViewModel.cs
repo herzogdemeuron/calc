@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace Calc.ConnectorRevit.Views
+namespace Calc.ConnectorRevit.ViewModels
 {
     public class NewMappingViewModel : INotifyPropertyChanged
     {

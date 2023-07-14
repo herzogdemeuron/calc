@@ -1,4 +1,5 @@
-﻿using Calc.Core;
+﻿using Calc.ConnectorRevit.ViewModels;
+using Calc.Core;
 using Calc.Core.Objects;
 using System.Collections.Generic;
 using System.Linq;

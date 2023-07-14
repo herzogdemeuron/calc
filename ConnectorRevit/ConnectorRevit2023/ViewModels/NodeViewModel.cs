@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Media;
 
-namespace Calc.ConnectorRevit.Views
+namespace Calc.ConnectorRevit.ViewModels
 {
     public class NodeViewModel : INotifyPropertyChanged
     {
@@ -28,7 +28,7 @@ namespace Calc.ConnectorRevit.Views
 
         public NodeViewModel(IGraphNode node)
         {
-            this.Host = node;
+            Host = node;
             SubNodeItems = new ObservableCollection<NodeViewModel>();
 
             foreach (var subNode in node.SubBranches)
@@ -71,9 +71,9 @@ namespace Calc.ConnectorRevit.Views
         {
             if (Host is Tree tree)
                 return tree.Name;
-            else if(Host is Branch branch)
+            else if (Host is Branch branch)
                 return $"{branch.Parameter}:{branch.Value}";
-            else if(Host is Forest forest)
+            else if (Host is Forest forest)
                 return forest.Name;
             else
                 return "Unknown";

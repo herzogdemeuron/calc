@@ -3,11 +3,11 @@ using System.Linq;
 using Autodesk.Revit.DB;
 using Calc.Core.Objects;
 
-namespace Calc.ConnectorRevit
+namespace Calc.ConnectorRevit.Services
 {
     public class ElementFilter
-        //filters revit objtcts in revit using roots
-        //and outputs a list of calc elements
+    //filters revit objtcts in revit using roots
+    //and outputs a list of calc elements
     {
         static public List<CalcElement> GetCalcElements(Tree tree)
         {
@@ -26,7 +26,7 @@ namespace Calc.ConnectorRevit
         static private bool CheckContains(Element element, string parameter, string value)
         {
             Parameter param = element.LookupParameter(parameter);
-            return param?.AsValueString()?.Contains(value) ?? false;    
+            return param?.AsValueString()?.Contains(value) ?? false;
         }
 
         static private CalcElement CreateCalcElement(Element elem)
@@ -60,7 +60,7 @@ namespace Calc.ConnectorRevit
                 case "Volume":
                     return UnitUtils.ConvertFromInternalUnits(value, UnitTypeId.CubicMeters);
                 default:
-                    return value;      
+                    return value;
             }
         }
 

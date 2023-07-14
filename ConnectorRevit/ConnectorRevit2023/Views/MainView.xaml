@@ -75,7 +75,7 @@
                   Grid.Row="1"
                   Margin="10">
                 <TreeView x:Name="TreeView"
-                      ItemsSource="{Binding NodeSource}"
+                      ItemsSource="{Binding ForestVM.NodeSource}"
                       TreeViewItem.Selected="TreeViewItemSelected"
                       MouseLeftButtonDown="SideClickDown"
                       ItemContainerStyle="{StaticResource TreeViewItemStyle}">
@@ -201,7 +201,7 @@
                            Margin="10"/>
                 <ComboBox x:Name="ProjectsComboBox"
                           HorizontalAlignment="Center"
-                          ItemsSource= "{Binding AllProjects}"
+                          ItemsSource= "{Binding LoadingVM.AllProjects}"
                           DisplayMemberPath="ProjectNumber"
                           Width="90"/>
                 <Button Content="OK" 

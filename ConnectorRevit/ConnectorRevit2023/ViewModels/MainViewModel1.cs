@@ -1,41 +1,37 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Forms;
-using System.Diagnostics;
-using System.ComponentModel;
-using System.Threading.Tasks;
+﻿using Calc.ConnectorRevit.Revit;
+using Calc.ConnectorRevit.Services;
+using Calc.Core;
+using Calc.Core.Calculations;
+using Calc.Core.Color;
+using Calc.Core.DirectusAPI;
+using Calc.Core.Objects;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Calc.Core;
-using Calc.Core.Color;
-using Calc.Core.Objects;
-using Calc.Core.DirectusAPI;
-using Calc.Core.Calculations;
-using Calc.ConnectorRevit.Revit;
-using Calc.Core.DirectusAPI.Drivers;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
-
-
-namespace Calc.ConnectorRevit.Views
+namespace Calc.ConnectorRevit.ViewModels
 {
-    public class MainViewModel : INotifyPropertyChanged, IDisposable
+    public class MainViewModel1 : INotifyPropertyChanged, IDisposable
     {
         private DirectusStore store;
         private CalcWebSocketServer server;
         private bool BranchesSwitch = true;
         private readonly ExternalEventHandler eventHandler = new ExternalEventHandler();
-        public List<Project> AllProjects { get; set; }
+        /*public List<Project> AllProjects { get; set; }*/
         public List<Buildup> AllBuildups { get; set; }
         public List<Forest> Forests
         {
             get => store?.ForestProjectRelated;
         }
-        public List<Mapping> Mappings
-        {
-            get => store?.MappingsProjectRelated;
-        }
+        /*        public List<Mapping> Mappings
+                {
+                    get => store?.MappingsProjectRelated;
+                }*/
 
-        public Mapping MappingSelected
+/*        public Mapping MappingSelected
         {
             get => store.MappingSelected;
             set
@@ -43,9 +39,9 @@ namespace Calc.ConnectorRevit.Views
                 store.MappingSelected = value;
                 OnPropertyChanged("MappingSelected");
             }
-        }
+        }*/
 
-        public ObservableCollection<NodeViewModel> NodeSource { get=>GetSourceNode(); }
+        public ObservableCollection<NodeViewModel> NodeSource { get => GetSourceNode(); }
 
         private NodeViewModel currentForestItem;
         public NodeViewModel CurrentForestItem
@@ -69,16 +65,16 @@ namespace Calc.ConnectorRevit.Views
             }
         }
 
-        public MainViewModel()
+        public MainViewModel1()
         {
-            this.server = new CalcWebSocketServer("http://127.0.0.1:8184/");
-            _ = this.server.Start();
+            server = new CalcWebSocketServer("http://127.0.0.1:8184/");
+            _ = server.Start();
         }
 
         public void Dispose()
         {
             Debug.WriteLine("ViewModel dispose is called.");
-            _ = Task.Run(async () => await this.server.Stop());
+            _ = Task.Run(async () => await server.Stop());
         }
 
         private void PlantTrees(Forest forest)
@@ -94,7 +90,7 @@ namespace Calc.ConnectorRevit.Views
         }
 
 
-        public async Task HandleLoadingAsync()
+/*        public async Task HandleLoadingAsync()
         {
             var directus = null as Directus;
             try
@@ -102,7 +98,7 @@ namespace Calc.ConnectorRevit.Views
                 var authenticator = new DirectusAuthenticator();
                 directus = await authenticator.ShowLoginWindowAsync();
             }
-             catch (Exception ex)
+            catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
             }
@@ -120,9 +116,9 @@ namespace Calc.ConnectorRevit.Views
 
             AllProjects = store.ProjectsAll;
             OnPropertyChanged("AllProjects");
-        }
+        }*/
 
-        public async Task HandleProjectSelectedAsync(Project project)
+/*        public async Task HandleProjectSelectedAsync(Project project)
         {
             store.ProjectSelected = project;
             await store.GetOtherData();
@@ -138,9 +134,9 @@ namespace Calc.ConnectorRevit.Views
             OnPropertyChanged("AllBuildups");
             OnPropertyChanged("Forests");
             OnPropertyChanged("Mappings");
-        }
+        }*/
 
-        public void HandleForestSelectionChanged(Forest forest)
+/*        public void HandleForestSelectionChanged(Forest forest)
         {
 
             if (forest == null)
@@ -150,25 +146,25 @@ namespace Calc.ConnectorRevit.Views
             OnPropertyChanged("NodeSource");
             ApplyMapping(MappingSelected);
             store.ForestSelected = forest;
-        }
+        }*/
 
-        public void HandleMappingSelectionChanged(Mapping mapping)
+      /*  public void HandleMappingSelectionChanged(Mapping mapping)
         {
             //MappingSelected = mapping;
             if (CurrentForestItem == null)
                 return;
             ApplyMapping(mapping);
-        }
+        }*/
 
 
-        public void HandleNewMapping()
+/*        public void HandleNewMapping()
         {
             Window newMappingWindow = new NewMappingView(store);
             newMappingWindow.ShowDialog();
             OnPropertyChanged("Mappings");
             OnPropertyChanged("MappingSelected");
 
-        }
+        }*/
 
         public void HandleBuildupSelectionChanged()
         {
@@ -214,7 +210,7 @@ namespace Calc.ConnectorRevit.Views
             }
             CurrentForestItem.NotifyLabelColorChange();
 
-            this.UpdateLiveVisualization();
+            UpdateLiveVisualization();
         }
 
         public void HandleSideClick()
@@ -264,17 +260,17 @@ namespace Calc.ConnectorRevit.Views
 
         public void HandleStartCalcLive()
         {
-            if (this.server.ConnectedClients == 0)
+            if (server.ConnectedClients == 0)
             {
                 Process.Start("https://herzogdemeuron.github.io/calc/");
             }
-            Debug.WriteLine(this.server.ConnectedSockets);    
+            Debug.WriteLine(server.ConnectedSockets);
         }
 
-        public void HandleUpdateMapping()
+        /*public void HandleUpdateMapping()
         {
-            _ = Task.Run(async () => await this.store.UpdateSelectedMapping());
-        }
+            _ = Task.Run(async () => await store.UpdateSelectedMapping());
+        }*/
 
         private void ApplyMapping(Mapping mapping)
         {
@@ -291,14 +287,14 @@ namespace Calc.ConnectorRevit.Views
         }
 
         private void UpdateLiveVisualization()
-        {   
-            if (this.server == null) return;
-            if (this.server.ConnectedClients == 0) return;
+        {
+            if (server == null) return;
+            if (server.ConnectedClients == 0) return;
             if (CurrentForestItem == null) return;
 
             var results = PrepareCalculation();
 
-            _ = Task.Run(async () => await this.server.SendResults(results));
+            _ = Task.Run(async () => await server.SendResults(results));
         }
 
         public void HandleSaveResults()
@@ -307,9 +303,9 @@ namespace Calc.ConnectorRevit.Views
             // create resultManager
             var results = PrepareCalculation();
             string snapshotName = "test_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-            this.store.SnapshotName = snapshotName;
-            this.store.Results = results;
-            _ = Task.Run(async () => await this.store.SaveResults());
+            store.SnapshotName = snapshotName;
+            store.Results = results;
+            _ = Task.Run(async () => await store.SaveResults());
         }
 
         private List<Result> PrepareCalculation()
@@ -381,15 +377,15 @@ namespace Calc.ConnectorRevit.Views
 
 
         private ObservableCollection<NodeViewModel> GetSourceNode()
-         {
+        {
             if (CurrentForestItem == null)
                 return new ObservableCollection<NodeViewModel> { };
             return new ObservableCollection<NodeViewModel> { CurrentForestItem };
-    }
+        }
 
 
 
-public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

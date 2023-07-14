@@ -3,6 +3,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Calc.ConnectorRevit.Revit;
 using Calc.ConnectorRevit.Views;
+using Calc.ConnectorRevit.ViewModels;
 
 
 namespace Calc.ConnectorRevit

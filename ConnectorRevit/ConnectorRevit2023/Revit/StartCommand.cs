@@ -7,6 +7,10 @@ using Autodesk.Revit.Attributes;
 using Calc.ConnectorRevit.Views;
 using Calc.Core;
 using System.Reflection;
+using Calc.ConnectorRevit.ViewModels;
+using Calc.ConnectorRevit.Services;
+using Calc.Core.DirectusAPI;
+using System.Threading.Tasks;
 
 namespace Calc.ConnectorRevit.Revit
 {
@@ -19,10 +23,10 @@ namespace Calc.ConnectorRevit.Revit
             {
                 App.RevitVersion = commandData.Application.Application.VersionNumber;
                 AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-
                 App.CurrentDoc = commandData.Application.ActiveUIDocument.Document;
-                App.ViewModel = new MainViewModel();
-                MainView mainView = new MainView();
+                _ = Authenticate();
+
+                MainView mainView = new MainView(new MainViewModel());
                 mainView.Show();
                 return Result.Succeeded;
             }
@@ -31,6 +35,31 @@ namespace Calc.ConnectorRevit.Revit
                 Debug.WriteLine(ex);
                 return Result.Failed;
             }
+        }
+
+        private async Task Authenticate()
+        {
+            var directus = null as Directus;
+            try
+            {
+                var authenticator = new DirectusAuthenticator();
+                directus = await authenticator.ShowLoginWindowAsync();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+
+            if (directus == null)
+            {
+                // end application
+                System.Windows.Application.Current.Shutdown();
+            }
+            else
+            {
+                App.Directus = directus;
+            }
+
         }
 
         private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
