@@ -263,14 +263,3 @@ Saving a mapping will include the following information, where evey item in the 
 > Note that the tree name is included for the relationship. This prevents errors when loading an existing mapping where you have e.g:   
 > - "Firerating: 90min = Buildup A" for "Structural Floors"
 > - "Firerating: 90min = Buildup B" for "Interior Walls"
-
-# Directus
-Class library for LCA tools that use [Directus](https://directus.io/) as a headless CMS
-
-## Authentication
-directus-lca uses environment variables for authentication with directus. There's two ways of doing this that come to my mind:
-
-1. They are provided by the UI applications that use this class library. I'd say this is the default way. See [revit-lca](https://github.com/herzogdemeuron/revit-lca#readme) for reference.
-2. They are present on a system-wide basis, aka you create them manually or your IT rolls them out to all machines in your company.
-
-The names of the environment variables are `DIRECTUS_LCA_TOKEN` and `DIRECTUS_LCA_URL`. Note that the url is the graphql endpoint of your directus project.
