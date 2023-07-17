@@ -18,13 +18,31 @@ namespace Calc.ConnectorRevit.ViewModels
         public ForestViewModel(DirectusStore directusStore)
         {
             store = directusStore;
+            Mediator.Register("ProjectSelected", _ => HandleForestSelectionChanged());
         }
-        public void HandleForestSelectionChanged(Forest forest)
+        public void HandleForestSelectionChanged(Forest forest = null)
         {
-            store.ForestSelected = forest;
+            if (forest != null)
+            {
+                // if a forest is given, plant it and set it as the current forest
+                store.ForestSelected = forest;
+                
+            }
+            else if (store.ForestSelected != null)
+            {
+                // if no forest is given, replant the current forest
+                forest = store.ForestSelected;
+            }
+            else
+            {
+                return;
+            }
+
             ForestHelper.PlantTrees(forest);
             Mediator.Broadcast("ForestSelectionChanged");
         }
+
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)

@@ -5,16 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
+
 namespace Calc.ConnectorRevit.Helpers
 {
-    public class AsyncRelayCommand : ICommand
+    public class AsyncRelayCommand<T> : ICommand
     {
-        private readonly Func<Task> execute;
-        private readonly Func<bool> canExecute;
+        private readonly Func<T, Task> execute;
+        private readonly Func<T, bool> canExecute;
 
         public event EventHandler CanExecuteChanged;
 
-        public AsyncRelayCommand(Func<Task> execute, Func<bool> canExecute = null)
+        public AsyncRelayCommand(Func<T, Task> execute, Func<T, bool> canExecute = null)
         {
             this.execute = execute;
             this.canExecute = canExecute;
@@ -22,12 +23,12 @@ namespace Calc.ConnectorRevit.Helpers
 
         public bool CanExecute(object parameter)
         {
-            return canExecute == null || canExecute();
+            return canExecute == null || canExecute((T)parameter);
         }
 
         public async void Execute(object parameter)
         {
-            await execute();
+            await execute((T)parameter);
         }
 
         public void RaiseCanExecuteChanged()
@@ -36,3 +37,4 @@ namespace Calc.ConnectorRevit.Helpers
         }
     }
 }
+

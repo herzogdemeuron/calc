@@ -1,4 +1,6 @@
-﻿using Calc.Core;
+﻿using Calc.ConnectorRevit.Helpers;
+using Calc.ConnectorRevit.Views;
+using Calc.Core;
 using Calc.Core.Objects;
 using System;
 using System.Collections.Generic;
@@ -6,6 +8,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Calc.ConnectorRevit.ViewModels
 {
@@ -18,7 +21,7 @@ namespace Calc.ConnectorRevit.ViewModels
         }
         public Mapping SelectedMapping
         {
-            get => store.MappingSelected;
+            get => store?.MappingSelected;
             set
             {
                 store.MappingSelected = value;
@@ -26,12 +29,22 @@ namespace Calc.ConnectorRevit.ViewModels
             }
         }
 
+        public MappingViewModel(DirectusStore directusStore)
+        {
+            store = directusStore;
+        }
+        public void HandleNewMapping()
+        {
+            Window newMappingWindow = new NewMappingView(store);
+            newMappingWindow.ShowDialog();
+            OnPropertyChanged(nameof(CurrentMappings));
+            OnPropertyChanged(nameof(SelectedMapping));//needed?
+
+        }
         public void HandleMappingSelectionChanged(Mapping mapping)
         {
-            //MappingSelected = mapping;
-            if (CurrentForestItem == null)
-                return;
-            ApplyMapping(mapping);
+            //store.MappingSelected = mapping;
+            Mediator.Broadcast("MappingSelectionChanged");
         }
 
         public void HandleUpdateMapping()

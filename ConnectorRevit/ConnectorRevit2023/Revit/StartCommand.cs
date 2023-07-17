@@ -17,6 +17,7 @@ namespace Calc.ConnectorRevit.Revit
     [Transaction(TransactionMode.Manual)]
     public class StartCommand : IExternalCommand
     {
+        private Directus directusInstance;
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             try
@@ -24,9 +25,15 @@ namespace Calc.ConnectorRevit.Revit
                 App.RevitVersion = commandData.Application.Application.VersionNumber;
                 AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
                 App.CurrentDoc = commandData.Application.ActiveUIDocument.Document;
-                _ = Authenticate();
-
-                MainView mainView = new MainView(new ViewModelDepot());
+                Task.Run(() => Authenticate()).Wait();
+                if (directusInstance == null)
+                {
+                    Debug.WriteLine("Failed to get directus.");
+                    return Result.Cancelled;
+                }
+                DirectusStore store = new DirectusStore(directusInstance);
+                MainView mainView = new MainView(new ViewModel(store));
+                App.View = mainView;
                 mainView.Show();
                 return Result.Succeeded;
             }
@@ -43,7 +50,7 @@ namespace Calc.ConnectorRevit.Revit
             try
             {
                 var authenticator = new DirectusAuthenticator();
-                directus = await authenticator.ShowLoginWindowAsync();
+                directus = await authenticator.ShowLoginWindowAsync().ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -57,7 +64,7 @@ namespace Calc.ConnectorRevit.Revit
             }
             else
             {
-                App.Directus = directus;
+                directusInstance = directus;
             }
 
         }

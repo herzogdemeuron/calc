@@ -4,15 +4,20 @@ using Autodesk.Revit.UI;
 using Calc.ConnectorRevit.Revit;
 using Calc.ConnectorRevit.Views;
 using Calc.ConnectorRevit.ViewModels;
-
+using Calc.Core.DirectusAPI;
+using Calc.Core;
 
 namespace Calc.ConnectorRevit
 {
     public class App : IExternalApplication
     {
-        public static MainViewModel ViewModel { get; set; }
+        //public static ViewModelDepot ViewModel { get; set; }
         public static Document CurrentDoc { get; set; }
         public static string RevitVersion { get; set; }
+        //public static DirectusStore Store { get; set; }
+
+        public static MainView View { get; set; }
+        public static NodeTreeViewModel NodeTreeVM { get; set; }
         public Result OnStartup(UIControlledApplication application)
         {
             RibbonMaker.Create(application);

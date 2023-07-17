@@ -22,7 +22,7 @@ namespace Calc.ConnectorRevit.Services
                 t.Start();
                 View currentView = App.CurrentDoc.ActiveView;
                 currentView.TemporaryViewModes.DeactivateAllModes();
-                foreach (NodeViewModel nodeItem in App.ViewModel.CurrentForestItem.SubNodeItems)
+                foreach (NodeViewModel nodeItem in App.NodeTreeVM.CurrentForestItem.SubNodeItems)
                 {
                     List<ElementId> elementIds = StringsToElementIds(nodeItem.Host.ElementIds);
                     foreach (ElementId elementId in elementIds)
@@ -51,7 +51,7 @@ namespace Calc.ConnectorRevit.Services
             using (Transaction t = new Transaction(App.CurrentDoc, "Isolate and Color"))
             {
                 var patternId = GetPatternId();
-                IGraphNode selectedNode = App.ViewModel.SelectedNodeItem.Host;
+                IGraphNode selectedNode = App.NodeTreeVM.SelectedNodeItem.Host;
                 t.Start();
                 View currentView = App.CurrentDoc.ActiveView;
                 IsolateElements(selectedNode, currentView);

@@ -5,65 +5,77 @@ using System.Windows.Input;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using Calc.ConnectorRevit.ViewModels;
+using Calc.ConnectorRevit.Helpers;
 
 namespace Calc.ConnectorRevit.Views
 {
     public partial class MainView : Window
     {
-        private readonly MainViewModel viewModel;
+        private readonly ViewModel MainVM;
 
-        public MainView()
+        public MainView(ViewModel mvm)
         {
-            viewModel = App.ViewModel;
-            this.DataContext = viewModel;
+            MainVM = mvm;
+            this.DataContext = MainVM;
             InitializeComponent();
             EventMessenger.OnMessageReceived += MessageFromViewModelReceived;
         }
 
         private async void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            await viewModel.HandleLoadingAsync();
+            await MainVM.LoadingVM.HandleLoadingAsync();
             LoadingOverlay.Visibility = Visibility.Collapsed;
         }
 
         private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             // This will make sure the WebSocket server is shut down when the window is closed.
-            viewModel.Dispose();
+            //viewModel.Dispose();
         }
 
         private async void ProjectOKClicked(object sender, RoutedEventArgs e)
         {
-            if (ProjectsComboBox.SelectedItem == null)
+            var project = ProjectsComboBox.SelectedItem;
+            if (project == null)
             {
                 return;
             }
             LoadingOverlay.Visibility = Visibility.Visible;
-            await viewModel.HandleProjectSelectedAsync(ProjectsComboBox.SelectedItem as Project);
+            await MainVM.LoadingVM.HandleProjectSelectedAsync(project as Project);
             LoadingOverlay.Visibility = Visibility.Collapsed;
             SelectProjectOverlay.Visibility = Visibility.Collapsed;
         }
         
         private void ForestSelectionChanged (object sender, SelectionChangedEventArgs e)
         {
-            viewModel.HandleForestSelectionChanged(ForestsComboBox.SelectedItem as Forest);
+            var forest = ForestsComboBox.SelectedItem;
+            if (forest == null)
+            {
+                return;
+            }
+            MainVM.ForestVM.HandleForestSelectionChanged(forest as Forest);
         }
 
         private void MappingSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            viewModel.HandleMappingSelectionChanged(MappingsComboBox.SelectedItem as Mapping);
+            var forest = ForestsComboBox.SelectedItem;
+            if (forest == null)
+            {
+                return;
+            }
+            MainVM.MappingVM.HandleMappingSelectionChanged(MappingsComboBox.SelectedItem as Mapping);
         }
 
         private void NewMappingClicked(object sender, RoutedEventArgs e)
         {
-            viewModel.HandleNewMapping();
+            MainVM.MappingVM.HandleNewMapping();
         }
 
         private void TreeViewItemSelected(object sender, RoutedEventArgs e)
         {
             if (TreeView.SelectedItem is NodeViewModel selectedBranch)
             {
-                viewModel.HandleNodeItemSelectionChanged(selectedBranch);
+                MainVM.NodeTreeVM.HandleNodeItemSelectionChanged(selectedBranch);
                 TreeView.Tag = e.OriginalSource;
                 e.Handled = true;
             }
@@ -71,17 +83,17 @@ namespace Calc.ConnectorRevit.Views
 
         private void SideClickDown(object sender, MouseButtonEventArgs e)
         {
-            viewModel.HandleSideClick();
+            MainVM.NodeTreeVM.DeselectNodes();
         }
 
         private void BuildupSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            viewModel.HandleBuildupSelectionChanged();
+            MainVM.BuildupVM.HandleBuildupSelectionChanged();
         }
 
         private void InheritClicked(object sender, RoutedEventArgs e)
         {
-            viewModel.HandleInherit();
+            MainVM.BuildupVM.HandleInherit();
         }
 
         private void MessageFromViewModelReceived(string message)
@@ -104,32 +116,32 @@ namespace Calc.ConnectorRevit.Views
 
         private void ViewToggleButtonChecked(object sender, RoutedEventArgs e)
         {
-            viewModel.HandleViewToggleToBuildup();
+            MainVM.HandleViewToggleToBuildup();
         }
 
         private void ViewToggleButtonUnchecked(object sender, RoutedEventArgs e)
         {
-            viewModel.HandleViewToggleToBranch();
+            MainVM.HandleViewToggleToBranch();
         }
 
         private void UpdateClicked(object sender, RoutedEventArgs e)
         {
-            viewModel.HandleUpdateCalcElements();
+            MainVM.HandleUpdateCalcElements();
         }
         private void StartCalcLiveClicked(object sender, RoutedEventArgs e)
         {
-            viewModel.HandleStartCalcLive();
+            //VMDepot.HandleStartCalcLive();
         }
 
         private void SaveResultsClicked(object sender, RoutedEventArgs e)
         {
-            viewModel.HandleSaveResults();
+            //VMDepot.HandleSaveResults();
         }
 
         private void UpdateMappingClicked(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("SaveMappingClicked");
-            viewModel.HandleUpdateMapping();
+            //Debug.WriteLine("SaveMappingClicked");
+            //VMDepot.HandleUpdateMapping();
         }
     }
 }
