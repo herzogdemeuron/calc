@@ -49,7 +49,7 @@ namespace Calc.Core.Objects
             return treesJson.ToString();
         }
 
-        public List<CalcElement> GetElements()
+        private List<CalcElement> GetElements()
         {
             List<CalcElement> elements = new();
 
