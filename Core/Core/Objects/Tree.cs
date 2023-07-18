@@ -20,7 +20,7 @@ public class Tree : Branch, IGraphNode
     /// <summary>
     /// Creates a tree from a list of elements and a list of parameters to group by
     /// </summary>
-    public void Plant(List<CalcElement> searchElements)
+    public List<CalcElement> Plant(List<CalcElement> searchElements)
     {
         this.Elements = new ElementFilter().FilterElements(searchElements, this.FilterConfig);
 
@@ -31,7 +31,13 @@ public class Tree : Branch, IGraphNode
         {
             this.CreateBranches(BranchConfig);
         }
+
+        // remove this.Elements from searchElements using RemoveAll method
+        searchElements.RemoveAll(e => this.Elements.Contains(e));
+
+        return searchElements;
     }
+
 
     public string Serialize()
     {
