@@ -18,13 +18,13 @@ namespace Calc.Core.Objects
         m3
     }
 
-    public readonly struct CalcElement
+    public  struct CalcElement
     {
-        public readonly string Id;
-        public readonly decimal Length;
-        public readonly decimal Area;
-        public readonly decimal Volume;
-        public readonly Dictionary<string, object> Fields;
+        public string Id;
+        public decimal Length;
+        public decimal Area;
+        public decimal Volume;
+        public Dictionary<string, object> Fields;
 
         public CalcElement(string id,
             Dictionary<string, object> fields,
@@ -106,11 +106,11 @@ namespace Calc.Core.Objects
         [JsonProperty("amount")]
         public decimal Amount { get; set; }
         [JsonIgnore]
-        public string FormattedAmount { get => Math.Round(Amount, 1).ToString() + " " + Material.Unit; }
+        public string FormattedAmount { get => Math.Round(Amount, 2).ToString() + " " + Material.Unit; }
         [JsonIgnore]
-        public string FormattedKgCO2eA123 { get => Math.Round(Amount * Material.KgCO2eA123, 1).ToString() + " Kg"; }
+        public string FormattedKgCO2eA123 { get => Math.Round(Amount * Material.KgCO2eA123, 2).ToString() + " Kg"; }
         [JsonIgnore]
-        public string FormattedCost { get => Math.Round(Amount * Material.Cost, 1).ToString(); }
+        public string FormattedCost { get => Math.Round(Amount * Material.Cost, 2).ToString(); }
     }
 
     public class Buildup

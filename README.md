@@ -137,7 +137,7 @@ flowchart BT
 ```
 
 A forest can be **saved** and **loaded**, this is the included information:
-```
+```json
 [
     {
         "Name": "Tree1",
@@ -192,6 +192,116 @@ flowchart BT
     f(Forest)-->|Type Name Contains|tn('XYZ')
 ```
 
+### FilterConfig
+
+The JSON configuration follows a specific structure to define the filter conditions:
+
+```json
+{
+    "operator": "and",
+    "conditions": [
+        {
+            "type": "GroupCondition",
+            "operator": "or",
+            "conditions": [
+                {
+                    "type": "SimpleCondition",
+                    "condition": {
+                        "parameter": "<Parameter Name>",
+                        "method": "<Comparison Method>",
+                        "value": "<Comparison Value>"
+                    }
+                },
+                {
+                    "type": "SimpleCondition",
+                    "condition": {
+                        "parameter": "<Parameter Name>",
+                        "method": "<Comparison Method>",
+                        "value": "<Comparison Value>"
+                    }
+                }
+                // Add more SimpleConditions or GroupConditions if needed
+            ]
+        },
+        {
+            "type": "SimpleCondition",
+            "condition": {
+                "parameter": "<Parameter Name>",
+                "method": "<Comparison Method>",
+                "value": "<Comparison Value>"
+            }
+        }
+        // Add more SimpleConditions or GroupConditions if needed
+    ]
+}
+```
+
+Explanation:
+
+- **type:** Indicates whether the condition is a "SimpleCondition" or a "GroupCondition". SimpleCondition represents a single condition on a parameter, while GroupCondition allows grouping multiple conditions together with either "and" or "or" logical operators.
+- **conditions:** Represents a list of conditions that are either SimpleConditions or GroupConditions. Each condition can be a standalone condition or part of a group of conditions.
+- **operator:** Specifies the logical operator used to combine conditions within a group (e.g., "and" or "or"). For example, conditions inside a GroupCondition with the "or" operator will be satisfied if at least one of them evaluates to true.
+- **parameter:** The name of the parameter on which the condition will be evaluated.
+- **method:** The comparison method used to evaluate the parameter against the specified value. 
+- **value:** The value used for the comparison.
+
+*Filter Methods*
+The following is a list of available filter methods that can be used in the Method property of the filter configuration:
+
+- **Equals:** Check if the field value is equal to the specified value.
+- **NotEquals:** Check if the field value is not equal to the specified value.
+- **Contains:** Check if the field value contains the specified value (as a substring).
+- **NotContains:** Check if the field value does not contain the specified value (as a substring).
+- **StartsWith:** Check if the field value starts with the specified value.
+- **NotStartsWith:** Check if the field value does not start with the specified value.
+- **EndsWith:** Check if the field value ends with the specified value.
+- **NotEndsWith:** Check if the field value does not end with the specified value.
+- **GreaterThan:** Check if the field value is greater than the specified value (numeric comparison).
+- **GreaterThanOrEqualTo:** Check if the field value is greater than or equal to the specified value (numeric comparison).
+- **LessThan:** Check if the field value is less than the specified value (numeric comparison).
+- **LessThanOrEqualTo:** Check if the field value is less than or equal to the specified value (numeric comparison).
+
+Please note that the availability of these filter methods depends on the data type of the parameter value being filtered. Ensure that the correct method is used based on the data type and desired filtering behavior.
+
+Example use:
+```json
+{
+    "operator": "and",
+    "conditions": [
+        {
+            "type": "GroupCondition",
+            "operator": "or",
+            "conditions": [
+                {
+                    "type": "SimpleCondition",
+                    "condition": {
+                        "parameter": "Foo",
+                        "method": "contains",
+                        "value": "a"
+                    }
+                },
+                {
+                    "type": "SimpleCondition",
+                    "condition": {
+                        "parameter": "Foo",
+                        "method": "equals",
+                        "value": "b"
+                    }
+                }
+            ]
+        },
+        {
+            "type": "SimpleCondition",
+            "condition": {
+                "parameter": "Bar",
+                "method": "equals",
+                "value": "c"
+            }
+        }
+    ]
+}
+```
+
 ### Branches
 
 A tree can also define (optionally) by what property the alike element should be sub-grouped. The resulting sub-groups are called **Branches**.
@@ -243,7 +353,7 @@ flowchart BT
 The **relationship** branch <--> buildup can be **saved** and **loaded**.  
 Saving a mapping will include the following information, where evey item in the list is one Branch <--> buildup relationship.
 
-```
+```json
 [
     {
         "tree_name": "Structural Floors",
@@ -263,3 +373,5 @@ Saving a mapping will include the following information, where evey item in the 
 > Note that the tree name is included for the relationship. This prevents errors when loading an existing mapping where you have e.g:   
 > - "Firerating: 90min = Buildup A" for "Structural Floors"
 > - "Firerating: 90min = Buildup B" for "Interior Walls"
+
+
