@@ -16,8 +16,7 @@ namespace Calc.ConnectorRevit
         public static string RevitVersion { get; set; }
         //public static DirectusStore Store { get; set; }
 
-        public static MainView View { get; set; }
-        public static NodeTreeViewModel NodeTreeVM { get; set; }
+        public static ExternalEventHandler EventHandler;
         public Result OnStartup(UIControlledApplication application)
         {
             RibbonMaker.Create(application);

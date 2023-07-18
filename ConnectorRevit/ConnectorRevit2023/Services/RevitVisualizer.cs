@@ -1,5 +1,7 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
+using Calc.ConnectorRevit.Helpers;
+using Calc.ConnectorRevit.Revit;
 using Calc.ConnectorRevit.ViewModels;
 using Calc.Core.Color;
 using Calc.Core.Objects;
@@ -11,18 +13,41 @@ using System.Linq;
 namespace Calc.ConnectorRevit.Services
 {
     [Transaction(TransactionMode.Manual)]
-    public static class Visualizer
+    public class RevitVisualizer
     {
-        private static Action<IGraphNode, View, ElementId> colorBranchAction;
+        private Action<IGraphNode, View, ElementId> colorBranchAction;
+        //private NodeTreeViewModel nodeTreeVM;
+        private NodeViewModel currentForestItem;
+        private NodeViewModel selectedNodeItem;
+        
 
-        public static void Reset()
+        public RevitVisualizer()
+        { 
+            Mediator.Register("TreeViewDeselected", 
+                forestItem => ResetView((NodeViewModel)forestItem));
+            Mediator.Register("AllNodesRecolored", 
+                selectedItem => IsolateAndColorBottomBranchElements((NodeViewModel)selectedItem));
+            Mediator.Register("OnBuildupItemSelectionChanged",
+                selectedItem => IsolateAndColorBottomBranchElements((NodeViewModel)selectedItem));
+            Mediator.Register("OnBranchItemSelectionChanged", 
+                selectedItem => IsolateAndColorSubbranchElements((NodeViewModel)selectedItem));
+            
+        }
+
+        private void ResetView(NodeViewModel forestItem)
+        {
+            currentForestItem = forestItem;
+            App.EventHandler.Raise(Reset);
+        }
+
+        private void Reset()
         {
             using (Transaction t = new Transaction(App.CurrentDoc, "Reset View"))
             {
                 t.Start();
                 View currentView = App.CurrentDoc.ActiveView;
                 currentView.TemporaryViewModes.DeactivateAllModes();
-                foreach (NodeViewModel nodeItem in App.NodeTreeVM.CurrentForestItem.SubNodeItems)
+                foreach (NodeViewModel nodeItem in currentForestItem.SubNodeItems)
                 {
                     List<ElementId> elementIds = StringsToElementIds(nodeItem.Host.ElementIds);
                     foreach (ElementId elementId in elementIds)
@@ -34,24 +59,28 @@ namespace Calc.ConnectorRevit.Services
             }
         }
 
-        public static void IsolateAndColorSubbranchElements()
+        public void IsolateAndColorSubbranchElements(NodeViewModel nodeItem)
         {
             colorBranchAction = ColorSubbranchElements;
-            IsolateAndColor();
+            selectedNodeItem = nodeItem;
+            App.EventHandler.Raise(IsolateAndColor);
         }
 
-        public static void IsolateAndColorBottomBranchElements()
+        private void IsolateAndColorBottomBranchElements(NodeViewModel nodeItem)
         {
             colorBranchAction = ColorBottomBranchElements;
-            IsolateAndColor();
+            selectedNodeItem = nodeItem;
+            App.EventHandler.Raise(IsolateAndColor);
         }
 
-        public static void IsolateAndColor()
+        public void IsolateAndColor()
         {
+            if (selectedNodeItem == null) return;
+            
             using (Transaction t = new Transaction(App.CurrentDoc, "Isolate and Color"))
             {
                 var patternId = GetPatternId();
-                IGraphNode selectedNode = App.NodeTreeVM.SelectedNodeItem.Host;
+                IGraphNode selectedNode = selectedNodeItem.Host;
                 t.Start();
                 View currentView = App.CurrentDoc.ActiveView;
                 IsolateElements(selectedNode, currentView);
@@ -60,7 +89,7 @@ namespace Calc.ConnectorRevit.Services
             }
         }
 
-        private static void IsolateElements(IGraphNode node, View view)
+        private void IsolateElements(IGraphNode node, View view)
         {
             view.TemporaryViewModes.DeactivateMode(TemporaryViewMode.TemporaryHideIsolate);
             List<string> elementIds = node.ElementIds;
@@ -71,18 +100,18 @@ namespace Calc.ConnectorRevit.Services
         }
 
 
-        private static void ColorSubbranchElements(IGraphNode node, View view, ElementId patternId)
+        private void ColorSubbranchElements(IGraphNode node, View view, ElementId patternId)
         {
-            ColorBranchElements(node, view, patternId);
-
             foreach (var subBranch in node.SubBranches)
             {
                 ColorBranchElements(subBranch, view, patternId);
             }
         }
 
-        private static void ColorBottomBranchElements(IGraphNode node, View view, ElementId patternId)
+        private void ColorBottomBranchElements(IGraphNode node, View view, ElementId patternId)
         {
+            ColorBranchElements(node, view, patternId);
+
             if (node.SubBranches.Count == 0)
             {
                 ColorBranchElements(node, view, patternId);
@@ -101,7 +130,7 @@ namespace Calc.ConnectorRevit.Services
             }
         }
 
-        private static void ColorBranchElements(IGraphNode node, View view, ElementId patternId)
+        private void ColorBranchElements(IGraphNode node, View view, ElementId patternId)
         {
             HslColor hslColor = node.HslColor;
             HslColor hslColorDarker = new HslColor(hslColor.Hue, hslColor.Saturation, (int)(hslColor.Lightness * 0.6));
@@ -122,13 +151,13 @@ namespace Calc.ConnectorRevit.Services
 
         }
 
-        private static ElementId GetPatternId()
+        private ElementId GetPatternId()
         {
             FilteredElementCollector collector = new FilteredElementCollector(App.CurrentDoc);
             ICollection<Element> patterns = collector.OfClass(typeof(FillPatternElement)).ToElements();
             return patterns.FirstOrDefault().Id;
         }
-        private static List<ElementId> StringsToElementIds(List<string> elememtIdStrings)
+        private List<ElementId> StringsToElementIds(List<string> elememtIdStrings)
         {
             List<ElementId> elementIds = new List<ElementId>();
             foreach (string elementIdString in elememtIdStrings)

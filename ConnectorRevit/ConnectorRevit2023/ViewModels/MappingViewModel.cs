@@ -39,11 +39,11 @@ namespace Calc.ConnectorRevit.ViewModels
             newMappingWindow.ShowDialog();
             OnPropertyChanged(nameof(CurrentMappings));
             OnPropertyChanged(nameof(SelectedMapping));//needed?
+            Mediator.Broadcast("MappingSelectionChanged");
 
         }
         public void HandleMappingSelectionChanged(Mapping mapping)
         {
-            //store.MappingSelected = mapping;
             Mediator.Broadcast("MappingSelectionChanged");
         }
 

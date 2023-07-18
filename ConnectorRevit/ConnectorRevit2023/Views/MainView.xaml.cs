@@ -11,9 +11,9 @@ namespace Calc.ConnectorRevit.Views
 {
     public partial class MainView : Window
     {
-        private readonly ViewModel MainVM;
+        private readonly MainViewModel MainVM;
 
-        public MainView(ViewModel mvm)
+        public MainView(MainViewModel mvm)
         {
             MainVM = mvm;
             this.DataContext = MainVM;
@@ -42,6 +42,7 @@ namespace Calc.ConnectorRevit.Views
             }
             LoadingOverlay.Visibility = Visibility.Visible;
             await MainVM.LoadingVM.HandleProjectSelectedAsync(project as Project);
+            MainVM.NotifyStoreChange();
             LoadingOverlay.Visibility = Visibility.Collapsed;
             SelectProjectOverlay.Visibility = Visibility.Collapsed;
         }

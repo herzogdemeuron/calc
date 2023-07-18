@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Calc.ConnectorRevit.Services;
+using System.Diagnostics;
 
 namespace Calc.ConnectorRevit.ViewModels
 {
@@ -18,6 +19,7 @@ namespace Calc.ConnectorRevit.ViewModels
         public void HandleBuildupSelectionChanged()
         {
             Mediator.Broadcast("BuildupSelectionChanged");
+            Debug.WriteLine("BuildupSelectionChanged broadcasted");
         }
 
         public void HandleInherit()

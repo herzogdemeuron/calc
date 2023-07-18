@@ -25,6 +25,7 @@ namespace Calc.ConnectorRevit.Revit
                 App.RevitVersion = commandData.Application.Application.VersionNumber;
                 AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
                 App.CurrentDoc = commandData.Application.ActiveUIDocument.Document;
+                App.EventHandler = new ExternalEventHandler();
                 Task.Run(() => Authenticate()).Wait();
                 if (directusInstance == null)
                 {
@@ -32,8 +33,7 @@ namespace Calc.ConnectorRevit.Revit
                     return Result.Cancelled;
                 }
                 DirectusStore store = new DirectusStore(directusInstance);
-                MainView mainView = new MainView(new ViewModel(store));
-                App.View = mainView;
+                MainView mainView = new MainView(new MainViewModel(store));
                 mainView.Show();
                 return Result.Succeeded;
             }
@@ -59,7 +59,6 @@ namespace Calc.ConnectorRevit.Revit
 
             if (directus == null)
             {
-                // end application
                 System.Windows.Application.Current.Shutdown();
             }
             else

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Calc.ConnectorRevit.Helpers;
 using System.Collections.ObjectModel;
+using Calc.ConnectorRevit.Services;
 
 namespace Calc.ConnectorRevit.ViewModels
 {
@@ -18,7 +19,7 @@ namespace Calc.ConnectorRevit.ViewModels
         public ForestViewModel(DirectusStore directusStore)
         {
             store = directusStore;
-            Mediator.Register("ProjectSelected", _ => HandleForestSelectionChanged());
+            //Mediator.Register("ProjectSelected", _ => HandleForestSelectionChanged());
         }
         public void HandleForestSelectionChanged(Forest forest = null)
         {
@@ -38,7 +39,14 @@ namespace Calc.ConnectorRevit.ViewModels
                 return;
             }
 
-            ForestHelper.PlantTrees(forest);
+            foreach (var t in forest.Trees)
+            {
+                t.Plant(ElementFilter.GetCalcElements(t));
+                //take out t.Elements from the baket
+
+            }
+
+            //ForestHelper.PlantTrees(forest);
             Mediator.Broadcast("ForestSelectionChanged");
         }
 

@@ -8,6 +8,10 @@ namespace Calc.ConnectorRevit.Helpers
 {
     public class Mediator
     {
+        /// <summary>
+        /// Broadcasts messages
+        /// ViewModels => NodeTreeViewModel(triggered) => RevitVisualizer(triggered) 
+        /// </summary>
         private static IDictionary<string, List<Action<object>>> dictionary = new Dictionary<string, List<Action<object>>>();
 
         public static void Register(string token, Action<object> callback)

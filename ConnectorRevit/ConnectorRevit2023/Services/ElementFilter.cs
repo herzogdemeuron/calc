@@ -11,6 +11,7 @@ namespace Calc.ConnectorRevit.Services
     {
         static public List<CalcElement> GetCalcElements(Tree tree)
         {
+            //create calc elements using only the necessary parameters of the forest
             IEnumerable<Element> collector = new FilteredElementCollector(App.CurrentDoc)
                 .WhereElementIsNotElementType()
                 .WhereElementIsViewIndependent();

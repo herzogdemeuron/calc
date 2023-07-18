@@ -24,18 +24,16 @@ namespace Calc.ConnectorRevit.ViewModels
             store = directusStore;
         }
 
+        public async Task HandleLoadingAsync()
+        {
+            await store.GetProjects();
+            OnPropertyChanged(nameof(AllProjects));
+        }
+
         public async Task HandleProjectSelectedAsync(Project project)
         {
             store.ProjectSelected = project;
             await store.GetOtherData();
-            Mediator.Broadcast("ProjectSelected");
-        }
-
-        public async Task HandleLoadingAsync()
-        {
-
-            await store.GetProjects();
-            OnPropertyChanged(nameof(AllProjects));
         }
 
 

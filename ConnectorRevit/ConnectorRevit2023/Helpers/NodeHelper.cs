@@ -39,7 +39,6 @@ namespace Calc.ConnectorRevit.Helpers
             nodeItem.LabelColorVisible = true;
             foreach (NodeViewModel subNodeItem in nodeItem.SubNodeItems)
             {
-                subNodeItem.LabelColorVisible = true;
                 ShowAllSubLabelColor(subNodeItem);
             }
         }
