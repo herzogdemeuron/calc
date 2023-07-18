@@ -139,40 +139,66 @@ A forest can be **saved** and **loaded**, this is the included information:
 [
     {
         "Name": "Tree1",
-        "Roots": [
-            {
-                "Parameter": "Type Name",
-                "Method": "Parameter Contains Value",
-                "Value": "WAND"
-            },
-            {
-                "Parameter": "Type Name",
-                "Method": "Parameter Contains Value",
-                "Value": "ROH"
-            }
-        ],
+        "FilterConfig": {
+            "operator": "and",
+            "conditions": [
+                {
+                    "type": "SimpleCondition",
+                    "operator": null,
+                    "conditions": null,
+                    "condition": {
+                        "parameter": "Type Name",
+                        "method": "contains",
+                        "value": "WAND"
+                    }
+                },
+                {
+                    "type": "SimpleCondition",
+                    "operator": null,
+                    "conditions": null,
+                    "condition": {
+                        "parameter": "Type Name",
+                        "method": "contains",
+                        "value": "ROH"
+                    }
+                }
+            ]
+        },
         "BranchConfig": [
-            "Firerating",
-            "Comments"
+            "Grouping",
+            "SubGrouping"
         ]
     },
     {
         "Name": "Tree2",
-        "Roots": [
-            {
-                "Parameter": "Type Name",
-                "Method": "Parameter Contains Value",
-                "Value": "DECK"
-            },
-            {
-                "Parameter": "Type Name",
-                "Method": "Parameter Contains Value",
-                "Value": "ROH"
-            }
-        ],
+        "FilterConfig": {
+            "operator": "and",
+            "conditions": [
+                {
+                    "type": "SimpleCondition",
+                    "operator": null,
+                    "conditions": null,
+                    "condition": {
+                        "parameter": "Type Name",
+                        "method": "contains",
+                        "value": "DECK"
+                    }
+                },
+                {
+                    "type": "SimpleCondition",
+                    "operator": null,
+                    "conditions": null,
+                    "condition": {
+                        "parameter": "Type Name",
+                        "method": "contains",
+                        "value": "ROH"
+                    }
+                }
+            ]
+        },
         "BranchConfig": [
-            "Firerating",
-            "Comments"
+            "Grouping",
+            "SubGrouping"
         ]
     }
 ]
