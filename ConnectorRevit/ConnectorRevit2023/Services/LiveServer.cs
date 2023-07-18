@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Calc.ConnectorRevit.Helpers;
+using Calc.ConnectorRevit.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -16,6 +18,20 @@ namespace Calc.ConnectorRevit.Services
         {
             Server = new CalcWebSocketServer("http://127.0.0.1:8184/");
             _ = Server.Start();
+
+            Mediator.Register("OnBuildupItemSelectionChanged",
+                selectedItem => IsolateAndColorBottomBranchElements((NodeViewModel)selectedItem));
+        }
+
+        private void UpdateLiveVisualization()
+        {
+            if (this.server == null) return;
+            if (this.server.ConnectedClients == 0) return;
+            if (CurrentForestItem == null) return;
+
+            var results = PrepareCalculation();
+
+            _ = Task.Run(async () => await Server.SendResults(results));
         }
 
         public void Start()
