@@ -20,17 +20,16 @@ namespace Calc.ConnectorRevit.Services
             _ = Server.Start();
 
             Mediator.Register("OnBuildupItemSelectionChanged",
-                selectedItem => IsolateAndColorBottomBranchElements((NodeViewModel)selectedItem));
+                selectedItem => UpdateLiveVisualization((NodeViewModel)selectedItem));
         }
 
-        private void UpdateLiveVisualization()
+        private void UpdateLiveVisualization(NodeViewModel nodeItem)
         {
-            if (this.server == null) return;
-            if (this.server.ConnectedClients == 0) return;
-            if (CurrentForestItem == null) return;
+            if (Server == null) return;
+            if (Server.ConnectedClients == 0) return;
+            if (nodeItem == null) return;
 
-            var results = PrepareCalculation();
-
+            var results = CalculationHelper.Calculate(nodeItem);
             _ = Task.Run(async () => await Server.SendResults(results));
         }
 
@@ -44,6 +43,7 @@ namespace Calc.ConnectorRevit.Services
         public void Stop()
         {
             _ = Task.Run(async () => await Server.Stop());
+            Debug.WriteLine("Server stopped");
         }
     }
 }
