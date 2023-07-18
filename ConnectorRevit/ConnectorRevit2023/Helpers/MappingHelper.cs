@@ -12,24 +12,19 @@ namespace Calc.ConnectorRevit.Helpers
 {
     public class MappingHelper
     {
-        public static void ApplySelectedMapping(NodeViewModel ForestItem,DirectusStore store)
+        public static void ApplyMappingToForestItem(NodeViewModel ForestItem,DirectusStore store, Mapping newMapping)
         {
-            Mapping mapping = store.MappingSelected;
             foreach (NodeViewModel nodeItem in ForestItem.SubNodeItems)
             {
                 Tree tree = nodeItem.Host as Tree;
-                BranchPainter.ColorBranchesByBranch(tree.SubBranches);
-
-                if (mapping == null)
-                    continue;
-                mapping.ApplyMappingToTree(tree, store.BuildupsAll);
+                if (newMapping == null) continue;
+                newMapping.ApplyMappingToTree(tree, store.BuildupsAll);
             };
             
         }
 
         public static Mapping CopyCurrentMapping(DirectusStore store)
         {
-            string name = store.MappingSelected.Name;
             return new Mapping(store.ForestSelected, "CurrentMapping");
         }
 

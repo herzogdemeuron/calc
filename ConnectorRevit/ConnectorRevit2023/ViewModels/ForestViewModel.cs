@@ -21,33 +21,39 @@ namespace Calc.ConnectorRevit.ViewModels
             store = directusStore;
             //Mediator.Register("ProjectSelected", _ => HandleForestSelectionChanged());
         }
-        public void HandleForestSelectionChanged(Forest forest = null)
+        public void HandleForestSelectionChanged(Forest forest)
         {
             if (forest != null)
             {
-                // if a forest is given, plant it and set it as the current forest
-                store.ForestSelected = forest;
-                
+                Mapping mapping;
+                if (store.ForestSelected == forest)
+                      {
+                    // if the same forest is selected, update the current forest presering the mapping
+                    Mapping currentMapping = new Mapping(store.ForestSelected, "CurrentMapping");
+                    ForestHelper.PlantTrees(store.ForestSelected);
+                    mapping = currentMapping;
+                }
+                else
+                {
+                    // otherwise create new forest and reset mapping
+                    store.ForestSelected = forest;
+                    ForestHelper.PlantTrees(forest);
+                    mapping = store.MappingSelected;
+                }
+                Mediator.Broadcast("ForestSelectionChanged", mapping);
             }
-            else if (store.ForestSelected != null)
-            {
-                // if no forest is given, replant the current forest
-                forest = store.ForestSelected;
-            }
-            else
-            {
-                return;
-            }
+        }
 
-            foreach (var t in forest.Trees)
+        public void HandleUpdateCurrentForest(Forest forest)
+        {
+            if (forest != null)
             {
-                t.Plant(ElementFilter.GetCalcElements(t));
-                //take out t.Elements from the baket
-
+                bool a = store.ForestSelected == forest;
+                Mapping currentMapping = new Mapping(store.ForestSelected, "CurrentMapping");
+                ForestHelper.PlantTrees(store.ForestSelected);
+                store.MappingSelected = currentMapping;
+                Mediator.Broadcast("ForestSelectionChanged");
             }
-
-            //ForestHelper.PlantTrees(forest);
-            Mediator.Broadcast("ForestSelectionChanged");
         }
 
 

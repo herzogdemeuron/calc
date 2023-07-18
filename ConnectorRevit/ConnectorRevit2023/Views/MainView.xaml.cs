@@ -21,6 +21,24 @@ namespace Calc.ConnectorRevit.Views
             EventMessenger.OnMessageReceived += MessageFromViewModelReceived;
         }
 
+        private void MessageFromViewModelReceived(string message)
+        {
+            if (message == "DeselectTreeView")
+            {
+                if (TreeView.SelectedItem != null)
+                {
+                    if (TreeView.Tag is TreeViewItem selectedTreeViewItem)
+                    {
+                        selectedTreeViewItem.IsSelected = false;
+                    }
+                }
+            }
+            else if (message == "CloseWindow")
+            {
+                this.Close();
+            }
+        }
+
         private async void WindowLoaded(object sender, RoutedEventArgs e)
         {
             await MainVM.LoadingVM.HandleLoadingAsync();
@@ -29,7 +47,7 @@ namespace Calc.ConnectorRevit.Views
 
         private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            MainVM.HandleStopCalcLive();
+            MainVM.HandleWindowClosing();
         }
 
         private async void ProjectOKClicked(object sender, RoutedEventArgs e)
@@ -96,24 +114,6 @@ namespace Calc.ConnectorRevit.Views
             MainVM.BuildupVM.HandleInherit();
         }
 
-        private void MessageFromViewModelReceived(string message)
-        {
-            if (message == "DeselectTreeView")
-            {
-                if (TreeView.SelectedItem != null)
-                {
-                    if (TreeView.Tag is TreeViewItem selectedTreeViewItem)
-                    {
-                        selectedTreeViewItem.IsSelected = false;
-                    }
-                }
-            }
-            else if (message == "CloseWindow")
-            {
-                this.Close();
-            }
-        }
-
         private void ViewToggleButtonChecked(object sender, RoutedEventArgs e)
         {
             MainVM.HandleViewToggleToBuildup();
@@ -126,7 +126,13 @@ namespace Calc.ConnectorRevit.Views
 
         private void UpdateClicked(object sender, RoutedEventArgs e)
         {
-            MainVM.HandleUpdateCalcElements();
+            //MainVM.HandleUpdateCalcElements();
+            var forest = ForestsComboBox.SelectedItem;
+            if (forest == null)
+            {
+                return;
+            }
+            MainVM.ForestVM.HandleForestSelectionChanged(forest as Forest);
         }
         private void StartCalcLiveClicked(object sender, RoutedEventArgs e)
         {

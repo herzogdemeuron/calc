@@ -38,51 +38,48 @@ namespace Calc.ConnectorRevit.ViewModels
         {
             store = directusStore;
             BranchesSwitch = true;
-            Mediator.Register("ForestSelectionChanged", _ => UpdateNodeSource());
-            Mediator.Register("MappingSelectionChanged", _ => RemapAllNodes());
+            Mediator.Register("ForestSelectionChanged", mapping => UpdateNodeSource((Mapping)mapping));
+            Mediator.Register("MappingSelectionChanged", mapping => RemapAllNodes((Mapping)mapping));
             Mediator.Register("BuildupSelectionChanged", _ => RecolorAllNodes());
             Mediator.Register("BuildupInherited", _ => RecolorAllNodes());
-            Mediator.Register("UpdateCalcElements", _=> RemapAllNodes());
 
             Mediator.Register("ViewToggleToBuildup", _ => BranchesSwitch = false);
             Mediator.Register("ViewToggleToBuildup", _ => ColorNodesToBuildup());
 
             Mediator.Register("ViewToggleToBranch", _ => BranchesSwitch = true);
             Mediator.Register("ViewToggleToBranch", _ => ColorNodesToBranch());
-            Visualizer = new RevitVisualizer();
 
+            Visualizer = new RevitVisualizer();
             //changing priority:
             //Forest => Mapping => Buildup
-            //server = new CalcWebSocketServer("http://127.0.0.1:8184/"); // to be moved to separate class
-            //_ = server.Start(); // to be moved to separate class
         }
 
-        public void UpdateNodeSource()
+        public void UpdateNodeSource(Mapping mapping)
         {
             CurrentForestItem = new NodeViewModel(store.ForestSelected);
-           /* if (store.ForestSelected != null)
-            { 
-                Visualizer = new RevitVisualizer(); 
-            }*/
             OnPropertyChanged(nameof(NodeSource));
             DeselectNodes();
-            //Mediator.Broadcast("MappingSelectionChanged");
+            Mediator.Broadcast("MappingSelectionChanged", mapping);
         }
-        public void RemapAllNodes()
+        public void RemapAllNodes(Mapping mapping)
         {
-            MappingHelper.ApplySelectedMapping(CurrentForestItem, store);
-            //Mediator.Broadcast("BuildupSelectionChanged");
+            MappingHelper.ApplyMappingToForestItem(CurrentForestItem, store, mapping);
+            Mediator.Broadcast("BuildupSelectionChanged");
         }
 
         private void RecolorAllNodes()
         {
-            if (BranchesSwitch == false)
+            if (CurrentForestItem == null) return;
+            if (BranchesSwitch == true)
             {
-                if (CurrentForestItem == null) return;
-                store.ForestSelected.SetBranchColorsBy("buildups");
-                CurrentForestItem.NotifyLabelColorChange();
-                Mediator.Broadcast("AllNodesRecolored", SelectedNodeItem); // to visualizer
+                store.ForestSelected.SetBranchColorsBy("branches");
             }
+            else
+            {
+                store.ForestSelected.SetBranchColorsBy("buildups");
+            }
+            CurrentForestItem.NotifyLabelColorChange();
+            Mediator.Broadcast("AllNodesRecolored", SelectedNodeItem); // to visualizer
         }
 
         public void HandleNodeItemSelectionChanged(NodeViewModel nodeItem)

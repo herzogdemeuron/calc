@@ -44,7 +44,7 @@ namespace Calc.ConnectorRevit.ViewModels
         }
         public void HandleMappingSelectionChanged(Mapping mapping)
         {
-            Mediator.Broadcast("MappingSelectionChanged");
+            Mediator.Broadcast("MappingSelectionChanged", mapping);
         }
 
         public void HandleUpdateMapping()

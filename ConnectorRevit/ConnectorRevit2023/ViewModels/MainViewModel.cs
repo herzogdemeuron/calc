@@ -28,14 +28,12 @@ namespace Calc.ConnectorRevit.ViewModels
             MappingVM = new MappingViewModel(store);
             BuildupVM = new BuildupViewModel();
             NodeTreeVM = new NodeTreeViewModel(store);
-            
         }
 
         public void NotifyStoreChange()
         {
             OnPropertyChanged(nameof(Store));
         }
-
 
         public void HandleViewToggleToBuildup()
         {
@@ -47,21 +45,15 @@ namespace Calc.ConnectorRevit.ViewModels
             Mediator.Broadcast("ViewToggleToBranch");
         }
 
-        public void HandleUpdateCalcElements()
-        {
-            Mediator.Broadcast("UpdateCalcElements");
-        }
-
         public void HandleStartCalcLive()
         {
             Server.Start();
         }
 
-        public void HandleStopCalcLive()
+        public void HandleWindowClosing()
         {
             Server.Stop();
         }
-
 
          public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
