@@ -81,8 +81,7 @@ namespace Calc.ConnectorRevit.ViewModels
                 if (CurrentForestItem == null) return;
                 store.ForestSelected.SetBranchColorsBy("buildups");
                 CurrentForestItem.NotifyLabelColorChange();
-                Mediator.Broadcast("AllNodesRecolored", SelectedNodeItem);
-                //eventHandler.Raise(Visualizer.IsolateAndColorBottomBranchElements); //to be moved to visualizer class
+                Mediator.Broadcast("AllNodesRecolored", SelectedNodeItem); // to visualizer
             }
         }
 
@@ -97,14 +96,14 @@ namespace Calc.ConnectorRevit.ViewModels
             {
                 
                 NodeHelper.ShowSubLabelColor(nodeItem);
-                Mediator.Broadcast("OnBranchItemSelectionChanged", SelectedNodeItem);
+                Mediator.Broadcast("OnBranchItemSelectionChanged", SelectedNodeItem); // to visualizer
                 //eventHandler.Raise(Visualizer.IsolateAndColorSubbranchElements);
             }
             else
             {
                 
                 NodeHelper.ShowAllSubLabelColor(nodeItem);
-                Mediator.Broadcast("OnBuildupItemSelectionChanged", SelectedNodeItem);
+                Mediator.Broadcast("OnBuildupItemSelectionChanged", SelectedNodeItem); // to visualizer
                 //eventHandler.Raise(Visualizer.IsolateAndColorBottomBranchElements);
             }
             CurrentForestItem.NotifyLabelColorChange();
@@ -131,13 +130,11 @@ namespace Calc.ConnectorRevit.ViewModels
         public void DeselectNodes()
         {
             if (CurrentForestItem == null) return;
-            
-            
             NodeHelper.HideAllLabelColor(CurrentForestItem);
             EventMessenger.SendMessage("DeselectTreeView"); //send command to the view to deselect treeview
             SelectedNodeItem = null;
             CurrentForestItem.NotifyLabelColorChange(); //better ways to do this?
-            Mediator.Broadcast("TreeViewDeselected", CurrentForestItem); //broadcast to the visualizer to reset
+            Mediator.Broadcast("TreeViewDeselected", CurrentForestItem); // to the visualizer
         }
 
 

@@ -29,8 +29,7 @@ namespace Calc.ConnectorRevit.Views
 
         private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // This will make sure the WebSocket server is shut down when the window is closed.
-            //viewModel.Dispose();
+            MainVM.HandleStopCalcLive();
         }
 
         private async void ProjectOKClicked(object sender, RoutedEventArgs e)
@@ -131,7 +130,7 @@ namespace Calc.ConnectorRevit.Views
         }
         private void StartCalcLiveClicked(object sender, RoutedEventArgs e)
         {
-            //VMDepot.HandleStartCalcLive();
+            MainVM.HandleStartCalcLive();
         }
 
         private void SaveResultsClicked(object sender, RoutedEventArgs e)
