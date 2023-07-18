@@ -206,13 +206,12 @@ A forest can be **saved** and **loaded**, this is the included information:
 
 ### Trees
 
-A **Tree** defines a high level grouping of alike elements. It encapsulates the logic that unites these elements. That logic is called **Roots**. The Roots shown in the example above produce a forest like this:
+A **Tree** defines a high level grouping of alike elements. It encapsulates the logic that unites these elements. That logic is called **FilterConfig**. The FilterConfig shown in the example above produce a forest like this:
 
 ```mermaid
 flowchart BT
     f(Forest)-->|Type Name Contains| t1('WAND' and 'ROH')
     f(Forest)-->|Type Name Contains|t2('DECK' and 'ROH')
-    f(Forest)-->|Type Name Contains|tn('XYZ')
 ```
 
 ### FilterConfig
