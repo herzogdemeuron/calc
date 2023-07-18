@@ -87,6 +87,7 @@ namespace Calc.ConnectorRevit.Views
         private void NewMappingClicked(object sender, RoutedEventArgs e)
         {
             MainVM.MappingVM.HandleNewMapping();
+            MainVM.NotifyStoreChange();
         }
 
         private void TreeViewItemSelected(object sender, RoutedEventArgs e)
@@ -124,9 +125,8 @@ namespace Calc.ConnectorRevit.Views
             MainVM.HandleViewToggleToBranch();
         }
 
-        private void UpdateClicked(object sender, RoutedEventArgs e)
+        private void UpdateRevitClicked(object sender, RoutedEventArgs e)
         {
-            //MainVM.HandleUpdateCalcElements();
             var forest = ForestsComboBox.SelectedItem;
             if (forest == null)
             {
@@ -144,10 +144,9 @@ namespace Calc.ConnectorRevit.Views
             //VMDepot.HandleSaveResults();
         }
 
-        private void UpdateMappingClicked(object sender, RoutedEventArgs e)
+        private async void UpdateMappingClicked(object sender, RoutedEventArgs e)
         {
-            //Debug.WriteLine("SaveMappingClicked");
-            //VMDepot.HandleUpdateMapping();
+            await MainVM.MappingVM.HandleUpdateMapping();
         }
     }
 }

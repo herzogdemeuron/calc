@@ -1,4 +1,5 @@
-﻿using Calc.ConnectorRevit.Helpers;
+﻿using Autodesk.Revit.UI;
+using Calc.ConnectorRevit.Helpers;
 using Calc.ConnectorRevit.Views;
 using Calc.Core;
 using Calc.Core.Objects;
@@ -15,20 +16,6 @@ namespace Calc.ConnectorRevit.ViewModels
     public class MappingViewModel : INotifyPropertyChanged
     {
         private DirectusStore store;
-        public List<Mapping> CurrentMappings
-        {
-            get => store?.MappingsProjectRelated;
-        }
-        public Mapping SelectedMapping
-        {
-            get => store?.MappingSelected;
-            set
-            {
-                store.MappingSelected = value;
-                OnPropertyChanged(nameof(SelectedMapping));
-            }
-        }
-
         public MappingViewModel(DirectusStore directusStore)
         {
             store = directusStore;
@@ -37,21 +24,25 @@ namespace Calc.ConnectorRevit.ViewModels
         {
             Window newMappingWindow = new NewMappingView(store);
             newMappingWindow.ShowDialog();
-            OnPropertyChanged(nameof(CurrentMappings));
-            OnPropertyChanged(nameof(SelectedMapping));//needed?
-            Mediator.Broadcast("MappingSelectionChanged");
-
+            Mediator.Broadcast("MappingSelectionChanged",store.MappingSelected);
         }
         public void HandleMappingSelectionChanged(Mapping mapping)
         {
             Mediator.Broadcast("MappingSelectionChanged", mapping);
         }
 
-        public void HandleUpdateMapping()
+        public async Task HandleUpdateMapping()
         {
-            _ = Task.Run(async () => await store.UpdateSelectedMapping());
+            try
+            {
+                await store.UpdateSelectedMapping();
+                TaskDialog.Show("Update Mapping", "Mapping updated"); // not topmost, fix it
+            }
+            catch (Exception ex)
+            {
+                TaskDialog.Show("Update Mapping", ex.Message);
+            }
         }
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)

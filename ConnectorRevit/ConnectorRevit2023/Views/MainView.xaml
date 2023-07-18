@@ -175,7 +175,7 @@
                     Content="Update Revit"
                     Margin="0,0,10,10"
                     Width="90"
-                    Click="UpdateClicked"
+                    Click="UpdateRevitClicked"
                     HorizontalAlignment="Right"
                     Style= "{StaticResource ButtonStyle}"/>
 

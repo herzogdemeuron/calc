@@ -20,7 +20,6 @@ namespace Calc.ConnectorRevit.Helpers
                 if (newMapping == null) continue;
                 newMapping.ApplyMappingToTree(tree, store.BuildupsAll);
             };
-            
         }
 
         public static Mapping CopyCurrentMapping(DirectusStore store)

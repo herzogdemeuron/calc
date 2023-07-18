@@ -63,6 +63,7 @@ namespace Calc.ConnectorRevit.ViewModels
         }
         public void RemapAllNodes(Mapping mapping)
         {
+            if (CurrentForestItem == null) return;
             MappingHelper.ApplyMappingToForestItem(CurrentForestItem, store, mapping);
             Mediator.Broadcast("BuildupSelectionChanged");
         }
