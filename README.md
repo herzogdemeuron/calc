@@ -32,8 +32,8 @@ Designing a tool that works for modelling standards around the globe is a challe
 This method aims to be as simple as possible while mainaining maximum flexibility.
 To explain how it works, we need to introduce a few terms:
 - [Forest](#forest)
-- [Tree](#tree-and-roots)
-- [Roots](#tree-and-roots)
+- [Tree](#trees)
+- [FilterConfig](#trees)
 - [Branch](#branches)
 - [Buildup](#buildups)
 - [Mapping](#the-mapping)
@@ -51,8 +51,8 @@ The process is structured in two parts, where 1 is prerequisite to 2.
 stateDiagram-v2
     Materials --> Buildups
     Buildups --> Library_Data
-    Roots_1 --> Tree_1
-    Roots_2 --> Tree_2
+    FilterConfig_1 --> Tree_1
+    FilterConfig_2 --> Tree_2
     Tree_1 --> Forest
     Tree_2 --> Forest
     Forest--> Model_Breakdown
@@ -111,9 +111,7 @@ We chose the analogy of a forest full of trees with branches to make it easier t
 
 ```mermaid
 flowchart BT
-    r1(Root 1)-->t(Tree)
-    r2(Root 2)-->t
-    rn(Root n)-->t
+    f1(FilterConfig)-->t(Tree)
     t-->b10(Branch 1)
     t-->b20(Branch 2)
     t-->bn0(Branch n)
@@ -179,9 +177,8 @@ A forest can be **saved** and **loaded**, this is the included information:
     }
 ]
 ```
-> Note that "Parameter Contains Value" is currently the only supported method for roots.
 
-### Tree and Roots
+### Trees
 
 A **Tree** defines a high level grouping of alike elements. It encapsulates the logic that unites these elements. That logic is called **Roots**. The Roots shown in the example above produce a forest like this:
 
@@ -194,6 +191,7 @@ flowchart BT
 
 ### FilterConfig
 
+The filter config determines which elements will end up in a tree.
 The JSON configuration follows a specific structure to define the filter conditions:
 
 ```json
@@ -245,8 +243,7 @@ Explanation:
 - **method:** The comparison method used to evaluate the parameter against the specified value. 
 - **value:** The value used for the comparison.
 
-*Filter Methods*
-The following is a list of available filter methods that can be used in the Method property of the filter configuration:
+Filter Methods
 
 - **Equals:** Check if the field value is equal to the specified value.
 - **NotEquals:** Check if the field value is not equal to the specified value.
