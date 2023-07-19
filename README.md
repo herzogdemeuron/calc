@@ -32,8 +32,8 @@ Designing a tool that works for modelling standards around the globe is a challe
 This method aims to be as simple as possible while mainaining maximum flexibility.
 To explain how it works, we need to introduce a few terms:
 - [Forest](#forest)
-- [Tree](#tree-and-roots)
-- [Roots](#tree-and-roots)
+- [Tree](#trees)
+- [FilterConfig](#trees)
 - [Branch](#branches)
 - [Buildup](#buildups)
 - [Mapping](#the-mapping)
@@ -51,8 +51,8 @@ The process is structured in two parts, where 1 is prerequisite to 2.
 stateDiagram-v2
     Materials --> Buildups
     Buildups --> Library_Data
-    Roots_1 --> Tree_1
-    Roots_2 --> Tree_2
+    FilterConfig_1 --> Tree_1
+    FilterConfig_2 --> Tree_2
     Tree_1 --> Forest
     Tree_2 --> Forest
     Forest--> Model_Breakdown
@@ -111,9 +111,7 @@ We chose the analogy of a forest full of trees with branches to make it easier t
 
 ```mermaid
 flowchart BT
-    r1(Root 1)-->t(Tree)
-    r2(Root 2)-->t
-    rn(Root n)-->t
+    f1(FilterConfig)-->t(Tree)
     t-->b10(Branch 1)
     t-->b20(Branch 2)
     t-->bn0(Branch n)
@@ -137,59 +135,193 @@ flowchart BT
 ```
 
 A forest can be **saved** and **loaded**, this is the included information:
-```
+```json
 [
     {
         "Name": "Tree1",
-        "Roots": [
-            {
-                "Parameter": "Type Name",
-                "Method": "Parameter Contains Value",
-                "Value": "WAND"
-            },
-            {
-                "Parameter": "Type Name",
-                "Method": "Parameter Contains Value",
-                "Value": "ROH"
-            }
-        ],
+        "FilterConfig": {
+            "operator": "and",
+            "conditions": [
+                {
+                    "type": "SimpleCondition",
+                    "operator": null,
+                    "conditions": null,
+                    "condition": {
+                        "parameter": "Type Name",
+                        "method": "contains",
+                        "value": "WAND"
+                    }
+                },
+                {
+                    "type": "SimpleCondition",
+                    "operator": null,
+                    "conditions": null,
+                    "condition": {
+                        "parameter": "Type Name",
+                        "method": "contains",
+                        "value": "ROH"
+                    }
+                }
+            ]
+        },
         "BranchConfig": [
-            "Firerating",
-            "Comments"
+            "Grouping",
+            "SubGrouping"
         ]
     },
     {
         "Name": "Tree2",
-        "Roots": [
-            {
-                "Parameter": "Type Name",
-                "Method": "Parameter Contains Value",
-                "Value": "DECK"
-            },
-            {
-                "Parameter": "Type Name",
-                "Method": "Parameter Contains Value",
-                "Value": "ROH"
-            }
-        ],
+        "FilterConfig": {
+            "operator": "and",
+            "conditions": [
+                {
+                    "type": "SimpleCondition",
+                    "operator": null,
+                    "conditions": null,
+                    "condition": {
+                        "parameter": "Type Name",
+                        "method": "contains",
+                        "value": "DECK"
+                    }
+                },
+                {
+                    "type": "SimpleCondition",
+                    "operator": null,
+                    "conditions": null,
+                    "condition": {
+                        "parameter": "Type Name",
+                        "method": "contains",
+                        "value": "ROH"
+                    }
+                }
+            ]
+        },
         "BranchConfig": [
-            "Firerating",
-            "Comments"
+            "Grouping",
+            "SubGrouping"
         ]
     }
 ]
 ```
-> Note that "Parameter Contains Value" is currently the only supported method for roots.
 
-### Tree and Roots
+### Trees
 
-A **Tree** defines a high level grouping of alike elements. It encapsulates the logic that unites these elements. That logic is called **Roots**. The Roots shown in the example above produce a forest like this:
+A **Tree** defines a high level grouping of alike elements. It encapsulates the logic that unites these elements. That logic is called **FilterConfig**. The FilterConfig shown in the example above produce a forest like this:
 
 ```mermaid
 flowchart BT
     f(Forest)-->|Type Name Contains| t1('WAND' and 'ROH')
     f(Forest)-->|Type Name Contains|t2('DECK' and 'ROH')
-    f(Forest)-->|Type Name Contains|tn('XYZ')
+```
+
+### FilterConfig
+
+The filter config determines which elements will end up in a tree.
+The JSON configuration follows a specific structure to define the filter conditions:
+
+```json
+{
+    "operator": "and",
+    "conditions": [
+        {
+            "type": "GroupCondition",
+            "operator": "or",
+            "conditions": [
+                {
+                    "type": "SimpleCondition",
+                    "condition": {
+                        "parameter": "<Parameter Name>",
+                        "method": "<Comparison Method>",
+                        "value": "<Comparison Value>"
+                    }
+                },
+                {
+                    "type": "SimpleCondition",
+                    "condition": {
+                        "parameter": "<Parameter Name>",
+                        "method": "<Comparison Method>",
+                        "value": "<Comparison Value>"
+                    }
+                }
+                // Add more SimpleConditions or GroupConditions if needed
+            ]
+        },
+        {
+            "type": "SimpleCondition",
+            "condition": {
+                "parameter": "<Parameter Name>",
+                "method": "<Comparison Method>",
+                "value": "<Comparison Value>"
+            }
+        }
+        // Add more SimpleConditions or GroupConditions if needed
+    ]
+}
+```
+
+Explanation:
+
+- **type:** Indicates whether the condition is a "SimpleCondition" or a "GroupCondition". SimpleCondition represents a single condition on a parameter, while GroupCondition allows grouping multiple conditions together with either "and" or "or" logical operators.
+- **conditions:** Represents a list of conditions that are either SimpleConditions or GroupConditions. Each condition can be a standalone condition or part of a group of conditions.
+- **operator:** Specifies the logical operator used to combine conditions within a group (e.g., "and" or "or"). For example, conditions inside a GroupCondition with the "or" operator will be satisfied if at least one of them evaluates to true.
+- **parameter:** The name of the parameter on which the condition will be evaluated.
+- **method:** The comparison method used to evaluate the parameter against the specified value. 
+- **value:** The value used for the comparison.
+
+Filter Methods
+
+- **Equals:** Check if the field value is equal to the specified value.
+- **NotEquals:** Check if the field value is not equal to the specified value.
+- **Contains:** Check if the field value contains the specified value (as a substring).
+- **NotContains:** Check if the field value does not contain the specified value (as a substring).
+- **StartsWith:** Check if the field value starts with the specified value.
+- **NotStartsWith:** Check if the field value does not start with the specified value.
+- **EndsWith:** Check if the field value ends with the specified value.
+- **NotEndsWith:** Check if the field value does not end with the specified value.
+- **GreaterThan:** Check if the field value is greater than the specified value (numeric comparison).
+- **GreaterThanOrEqualTo:** Check if the field value is greater than or equal to the specified value (numeric comparison).
+- **LessThan:** Check if the field value is less than the specified value (numeric comparison).
+- **LessThanOrEqualTo:** Check if the field value is less than or equal to the specified value (numeric comparison).
+
+Please note that the availability of these filter methods depends on the data type of the parameter value being filtered. Ensure that the correct method is used based on the data type and desired filtering behavior.
+
+Example use:
+```json
+{
+    "operator": "and",
+    "conditions": [
+        {
+            "type": "GroupCondition",
+            "operator": "or",
+            "conditions": [
+                {
+                    "type": "SimpleCondition",
+                    "condition": {
+                        "parameter": "Foo",
+                        "method": "contains",
+                        "value": "a"
+                    }
+                },
+                {
+                    "type": "SimpleCondition",
+                    "condition": {
+                        "parameter": "Foo",
+                        "method": "equals",
+                        "value": "b"
+                    }
+                }
+            ]
+        },
+        {
+            "type": "SimpleCondition",
+            "condition": {
+                "parameter": "Bar",
+                "method": "equals",
+                "value": "c"
+            }
+        }
+    ]
+}
 ```
 
 ### Branches
@@ -243,7 +375,7 @@ flowchart BT
 The **relationship** branch <--> buildup can be **saved** and **loaded**.  
 Saving a mapping will include the following information, where evey item in the list is one Branch <--> buildup relationship.
 
-```
+```json
 [
     {
         "tree_name": "Structural Floors",
@@ -264,13 +396,4 @@ Saving a mapping will include the following information, where evey item in the 
 > - "Firerating: 90min = Buildup A" for "Structural Floors"
 > - "Firerating: 90min = Buildup B" for "Interior Walls"
 
-# Directus
-Class library for LCA tools that use [Directus](https://directus.io/) as a headless CMS
 
-## Authentication
-directus-lca uses environment variables for authentication with directus. There's two ways of doing this that come to my mind:
-
-1. They are provided by the UI applications that use this class library. I'd say this is the default way. See [revit-lca](https://github.com/herzogdemeuron/revit-lca#readme) for reference.
-2. They are present on a system-wide basis, aka you create them manually or your IT rolls them out to all machines in your company.
-
-The names of the environment variables are `DIRECTUS_LCA_TOKEN` and `DIRECTUS_LCA_URL`. Note that the url is the graphql endpoint of your directus project.
