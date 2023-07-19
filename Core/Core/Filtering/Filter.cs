@@ -98,6 +98,32 @@ public class GroupCondition : ICondition
 
         return false;
     }
+
+    public List<string> GetAllParameters()
+    {
+        List<string> parameters = new List<string>();
+
+        foreach (var conditionContainer in Conditions)
+        {
+            if (conditionContainer.Type.Equals("GroupCondition", StringComparison.OrdinalIgnoreCase))
+            {
+                GroupCondition groupCondition = new GroupCondition
+                {
+                    Operator = conditionContainer.Operator,
+                    Conditions = conditionContainer.Conditions
+                };
+                parameters.AddRange(groupCondition.GetAllParameters());
+            }
+            else if (conditionContainer.Type.Equals("SimpleCondition", StringComparison.OrdinalIgnoreCase))
+            {
+                SimpleCondition simpleCondition = conditionContainer.Condition;
+                {
+                    parameters.Add(simpleCondition.Parameter);
+                }
+            }
+        }
+        return parameters;
+    }
 }
 
 
