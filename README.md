@@ -18,11 +18,11 @@ you break down the groups into sub-groups.
 5. You **vizualize** the calculation results with **CalcLive**.
 6. You **save** the **results** to a central location to **compare** them **later**.
 
-### Calc can adapt to:
+### Calc can be adapted to:
 - Any 3d Authoring Software
 - Any Modelling Standard
-- Any Data Source
 - Any Visualization Medium
+- Any Data Source (planned)
 
 ### Current ecosystem:
 Authoring Softwares:
@@ -453,3 +453,22 @@ This is the mono-repo for everything calc related.
 - [Core](https://github.com/herzogdemeuron/calc/tree/master/Core/Core#readme)
 - [CalcLive](https://github.com/herzogdemeuron/calc/tree/master/Core/CalcLive#readme)
 - [Directus](https://github.com/herzogdemeuron/calc/tree/master/directus#readme)
+
+## Quickstart
+
+1. Follow the manual for setting up an instance of [Directus](https://github.com/herzogdemeuron/calc/tree/master/directus#readme).
+2. Create items in these Directus collections:
+    1. calc_materials
+    2. calc_groups
+    3. calc_buildups
+    - calc_architecture_projects
+    - calc_forests ([How to create a forest](#forest))
+3. Download and install the latest [release](https://github.com/herzogdemeuron/calc/releases/latest) for the authoring software you're using.
+4. Start your authoring software and open calc.
+    - In Revit: Add-Ins tab
+5. Authenticate with your Directus instance
+6. Create a new Mapping and assign buildups
+7. Start CalcLive to see your results.
+
+> Note that you can import csv or json data into a directus collection. 
+
