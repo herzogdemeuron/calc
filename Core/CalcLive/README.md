@@ -1,4 +1,4 @@
-# calc-web-interactive
+# CalcLive
 
 ## Project setup
 ```

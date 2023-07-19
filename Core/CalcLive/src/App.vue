@@ -89,7 +89,7 @@ export default {
 
       this.socket.onopen = () => {
         let time = new Date().toLocaleTimeString();
-        this.socket.send(`${time} cal-viz-interactive connected`);
+        this.socket.send(`${time} CalcLive connected`);
       };
 
       this.socket.onmessage = (event) => {
@@ -119,7 +119,7 @@ export default {
       window.addEventListener('beforeunload', () => {
         if (this.socket.readyState === WebSocket.OPEN) {
           // WebSocket is still open, send disconnection message to the server
-          this.socket.send('calc-viz-interactive disconnected');
+          this.socket.send('CalcLive disconnected');
           this.socket.close();
         }
       });
