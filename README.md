@@ -449,7 +449,7 @@ This is the mono-repo for everything calc related.
 
 ## Repo Content
 
-- [Connector Revit](https://github.com/herzogdemeuron/calc/tree/master/ConnectorRevit)
-- [Core](https://github.com/herzogdemeuron/calc/tree/master/Core/Core)
-- [CalcLive](https://github.com/herzogdemeuron/calc/tree/master/Core/CalcLive)
-- [Directus](https://github.com/herzogdemeuron/calc/tree/master/directus)
+- [Connector Revit](https://github.com/herzogdemeuron/calc/tree/master/ConnectorRevit#readme)
+- [Core](https://github.com/herzogdemeuron/calc/tree/master/Core/Core#readme)
+- [CalcLive](https://github.com/herzogdemeuron/calc/tree/master/Core/CalcLive#readme)
+- [Directus](https://github.com/herzogdemeuron/calc/tree/master/directus#readme)
