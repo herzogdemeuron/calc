@@ -286,8 +286,7 @@ namespace Calc.Core
 
             try
             {
-                await _graphqlRetry.ExecuteAsync(() =>
-                        this.ResultManager.CreateMany<ResultStorageDriver>(this.ResultDriver));
+                await this.ResultManager.CreateMany<ResultStorageDriver>(this.ResultDriver));
                 return true;
             }
             catch (Exception e)
