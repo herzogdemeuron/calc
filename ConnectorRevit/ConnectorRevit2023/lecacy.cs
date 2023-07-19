@@ -85,7 +85,7 @@ namespace Calc.ConnectorRevit.ViewModels
 
             foreach (var t in forest.Trees)
             {
-                t.Plant(ElementFilter.GetCalcElements(t));
+                t.Plant(RevitElementFilter.GetCalcElements(t));
             }
             CurrentForestItem = new NodeViewModel(forest);
         }

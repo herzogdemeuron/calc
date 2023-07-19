@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Calc.ConnectorRevit.Services;
+using Calc.Core.Filtering;
 
 namespace Calc.ConnectorRevit.Helpers
 {
@@ -18,7 +19,7 @@ namespace Calc.ConnectorRevit.Helpers
             foreach (var t in forest.Trees)
             {
                 //List<CalcElement> calcElements = ElementFilter.GetCalcElements(t, parameters, createdRevitElementIds);
-                List<CalcElement> calcElements = ElementFilter.GetCalcElements(t);
+                List<CalcElement> calcElements = RevitElementFilter.GetCalcElements(t);
                 t.Plant(calcElements);
             }
         }
@@ -27,9 +28,9 @@ namespace Calc.ConnectorRevit.Helpers
         {
             //get the root parameters from each tree
             var parameters = new List<string>();
-            foreach (var t in forest.Trees)
-            {
-               List<Root> roots = t.Roots;
+            
+                GroupCondition filterConfig = t.FilterConfig;
+
                 foreach (var r in roots)
                 {
                     if (!parameters.Contains(r.Parameter))

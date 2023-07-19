@@ -50,6 +50,11 @@ namespace Calc.ConnectorRevit.ViewModels
             Server.Start();
         }
 
+        public void HandleSaveResults()
+        {
+            //Mediator.Broadcast("SaveResults");
+        }
+
         public void HandleWindowClosing()
         {
             Server.Stop();

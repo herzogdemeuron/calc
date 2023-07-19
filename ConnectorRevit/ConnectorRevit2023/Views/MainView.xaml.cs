@@ -141,7 +141,7 @@ namespace Calc.ConnectorRevit.Views
 
         private void SaveResultsClicked(object sender, RoutedEventArgs e)
         {
-            //VMDepot.HandleSaveResults();
+            MainVM.HandleSaveResults();
         }
 
         private async void UpdateMappingClicked(object sender, RoutedEventArgs e)
