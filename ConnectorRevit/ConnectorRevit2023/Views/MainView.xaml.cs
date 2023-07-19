@@ -19,7 +19,29 @@ namespace Calc.ConnectorRevit.Views
             this.DataContext = MainVM;
             InitializeComponent();
             EventMessenger.OnMessageReceived += MessageFromViewModelReceived;
+            ViewMediator.Register("VisibilityProjectWaiting", _ => VisibilityProjectWaiting());
+            ViewMediator.Register("VisibilityMainViewEntering", _ => VisibilityMainViewEntering());
         }
+
+
+        private void VisibilityProjectWaiting()
+        {
+            WaitingTextBlock.Text = "LOADING PROJECTS...";
+            WaitingOverlay.Visibility = Visibility.Visible;
+            SelectProjectOverlay.Visibility = Visibility.Collapsed;
+        }
+
+        private void VisibilityMainViewEntering()
+        {
+            WaitingOverlay.Visibility = Visibility.Collapsed;
+        }
+
+        private void VisibilityResultSaving() 
+        {
+            SaveResultOverlay.Visibility = Visibility.Visible;
+        }
+
+
 
         private void MessageFromViewModelReceived(string message)
         {
@@ -42,7 +64,6 @@ namespace Calc.ConnectorRevit.Views
         private async void WindowLoaded(object sender, RoutedEventArgs e)
         {
             await MainVM.LoadingVM.HandleLoadingAsync();
-            LoadingOverlay.Visibility = Visibility.Collapsed;
         }
 
         private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -57,11 +78,10 @@ namespace Calc.ConnectorRevit.Views
             {
                 return;
             }
-            LoadingOverlay.Visibility = Visibility.Visible;
+            ViewMediator.Broadcast("VisibilityProjectWaiting");
             await MainVM.LoadingVM.HandleProjectSelectedAsync(project as Project);
             MainVM.NotifyStoreChange();
-            LoadingOverlay.Visibility = Visibility.Collapsed;
-            SelectProjectOverlay.Visibility = Visibility.Collapsed;
+            ViewMediator.Broadcast("VisibilityMainViewEntering");
         }
         
         private void ForestSelectionChanged (object sender, SelectionChangedEventArgs e)
@@ -141,7 +161,40 @@ namespace Calc.ConnectorRevit.Views
 
         private void SaveResultsClicked(object sender, RoutedEventArgs e)
         {
-            MainVM.HandleSaveResults();
+            SaveResultOverlay.Visibility = Visibility.Visible;
+        }
+
+        private async void SaveResultOKClicked( object sender, RoutedEventArgs e)
+        {
+            
+            this.WaitingTextBlock.Text = "SAVING RESULTS...";
+            WaitingOverlay.Visibility = Visibility.Visible;
+            SaveResultOverlay.Visibility = Visibility.Collapsed;
+            bool? saved = await MainVM.SavingVM.HandleSaveResults(NewResultNameTextBox.Text);
+            WaitingOverlay.Visibility = Visibility.Collapsed;
+            MessageOverlay.Visibility = Visibility.Visible;
+            if (saved == null)
+            {
+                MessageTextBlock.Text = "PLEASE CHOOSE A FOREST";
+            }
+            else if (saved == true)
+            {
+                MessageTextBlock.Text = "RESULTS SAVED";
+            }
+            else
+            {
+                MessageTextBlock.Text = "ERROR SAVING RESULTS";
+            }
+        }
+
+        private void SaveResultCancelClicked (object sender, RoutedEventArgs e)
+        {
+            SaveResultOverlay.Visibility = Visibility.Collapsed;
+        }
+
+        private void MessageOKClicked(object sender, RoutedEventArgs e)
+        {
+            MessageOverlay.Visibility = Visibility.Collapsed;
         }
 
         private async void UpdateMappingClicked(object sender, RoutedEventArgs e)

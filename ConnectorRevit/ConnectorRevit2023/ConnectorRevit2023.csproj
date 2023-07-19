@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\DTLogo.gif" />
     <None Remove="Resources\icon-01.png" />
     <None Remove="ToggleButtonTemplate.xaml" />
     <None Remove="Views\MainView.xaml" />
@@ -17,7 +18,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\DTLogo.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Polly" Version="7.2.4" />
+    <PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
   </ItemGroup>
 
   <ItemGroup>

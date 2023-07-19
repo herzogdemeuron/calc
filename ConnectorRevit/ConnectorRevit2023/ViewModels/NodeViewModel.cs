@@ -1,4 +1,5 @@
-﻿using Calc.Core.Color;
+﻿using Calc.Core;
+using Calc.Core.Color;
 using Calc.Core.Objects;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -9,6 +10,7 @@ namespace Calc.ConnectorRevit.ViewModels
     public class NodeViewModel : INotifyPropertyChanged
     {
         public string Name { get => GetName(); }
+        public DirectusStore Store { get; set; }
         public ObservableCollection<NodeViewModel> SubNodeItems { get; }
 
         private IGraphNode host;
@@ -26,14 +28,15 @@ namespace Calc.ConnectorRevit.ViewModels
             }
         }
 
-        public NodeViewModel(IGraphNode node)
+        public NodeViewModel(DirectusStore store, IGraphNode node)
         {
             Host = node;
+            Store = store;
             SubNodeItems = new ObservableCollection<NodeViewModel>();
 
             foreach (var subNode in node.SubBranches)
             {
-                SubNodeItems.Add(new NodeViewModel(subNode));
+                SubNodeItems.Add(new NodeViewModel(store, subNode));
             }
         }
 

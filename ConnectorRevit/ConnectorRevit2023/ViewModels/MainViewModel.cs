@@ -3,9 +3,11 @@ using Calc.ConnectorRevit.Services;
 using Calc.ConnectorRevit.Views;
 using Calc.Core;
 using Calc.Core.Objects;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Calc.ConnectorRevit.ViewModels
 {
@@ -18,7 +20,7 @@ namespace Calc.ConnectorRevit.ViewModels
         public MappingViewModel MappingVM { get; set; }
         public BuildupViewModel BuildupVM { get; set; }
         public NodeTreeViewModel NodeTreeVM { get; set; }
-
+        public SavingViewModel SavingVM { get; set; }
         public MainViewModel(DirectusStore store)
         {
             Store = store;
@@ -28,6 +30,7 @@ namespace Calc.ConnectorRevit.ViewModels
             MappingVM = new MappingViewModel(store);
             BuildupVM = new BuildupViewModel();
             NodeTreeVM = new NodeTreeViewModel(store);
+            SavingVM = new SavingViewModel(NodeTreeVM);
         }
 
         public void NotifyStoreChange()
@@ -50,10 +53,7 @@ namespace Calc.ConnectorRevit.ViewModels
             Server.Start();
         }
 
-        public void HandleSaveResults()
-        {
-            //Mediator.Broadcast("SaveResults");
-        }
+
 
         public void HandleWindowClosing()
         {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
 using Calc.ConnectorRevit.Helpers;
@@ -7,15 +8,19 @@ using Calc.Core.Objects;
 namespace Calc.ConnectorRevit.Services
 {
     public class RevitElementFilter
-    //filters revit objtcts in revit using roots
-    //and outputs a list of calc elements
+
     {
         static public List<CalcElement> CreateCalcElements(List<string> parameterNameList)
         {
+            /*Element elem = App.CurrentDoc.GetElement(new ElementId(767506));
+            return new List<CalcElement>()
+            {
+                CreateCalcElement(elem, parameterNameList)
+            };*/
             List<CalcElement> collector = new FilteredElementCollector(App.CurrentDoc)
-                .WhereElementIsNotElementType()
-                .WhereElementIsViewIndependent()
-                .Select(elem => CreateCalcElement(elem, parameterNameList)).ToList();
+                  .WhereElementIsNotElementType()
+                  .WhereElementIsViewIndependent()
+                  .Select(elem => CreateCalcElement(elem, parameterNameList)).ToList();
             return collector;
         }
 
@@ -27,9 +32,9 @@ namespace Calc.ConnectorRevit.Services
             Dictionary<string, object> parameterDictionary = new Dictionary<string, object>();
             foreach (string parameterName in parameterNameList)
             {
-                var value = ParameterHelper.CheckAndGet(elem, parameterName);
-                if ((bool)value == false) continue;
-                parameterDictionary[parameterName] = value;
+                Tuple<bool, object> result = ParameterHelper.CheckAndGet(elem, parameterName);
+                if (result.Item1 == false) continue;
+                parameterDictionary[parameterName] = result.Item2;
             }
 
             decimal _area = (decimal)GetBasicValue(elem, "Area");
@@ -42,8 +47,7 @@ namespace Calc.ConnectorRevit.Services
         static private double GetBasicValue(Element elem, string parameterName)
         {
             Parameter parameter = elem.LookupParameter(parameterName);
-            double parameterValue = parameter?.AsDouble() ?? 0;
-            return ParameterHelper.ToMetricValue(parameter, parameterValue);
+            return ParameterHelper.ToMetricValue(parameter);
 
         }
 

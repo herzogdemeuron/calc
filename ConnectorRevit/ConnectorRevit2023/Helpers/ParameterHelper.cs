@@ -9,66 +9,62 @@ namespace Calc.ConnectorRevit.Helpers
 {
     public class ParameterHelper
     {
-        public static object CheckAndGet(Element element, string parameterName)
+        public static Tuple<bool, object> CheckAndGet(Element element, string parameterName)
         {
-            // check if the Element has the parameter
-            // if not, return false
-            // if yes, return the parameter value convert to metric
-            // if the original parameter name is illegal, return false
-            (bool instance, string name) = GetParameterName(parameterName);
-
-            if (name == null)
-            {
-                return false;
-            }
-
-            Parameter parameter;
-
-            if (instance)
-            {
-                parameter = element.LookupParameter(parameterName);
-            }
-            else
-            {
-                parameter = LookupTypeParameter(element, parameterName);
-            }
-
+            // bool: if parameter exists
+            // object: parameter value
+            var parameter = GetParameter(element, parameterName);
             if (parameter == null)
             {
-                return false;
+                return Tuple.Create(false, (object)null);
             }
+
             if (parameter.StorageType != StorageType.Double)
             {
-                return parameter.AsValueString();
+                return Tuple.Create(true, (object)parameter.AsValueString());
             }
-            return ToMetricValue(parameter);
+            return Tuple.Create(true, (object)ToMetricValue(parameter));
 
         }
 
-        public static (bool,string) GetParameterName(string parameterName)
+        private static Parameter GetParameter(Element element, string parameterName)
+        {
+            Tuple<bool, string> result  = GetParameterName(parameterName);
+            bool isInstance = result.Item1;
+            string name = result.Item2;
+            
+            if (name == null)
+            {
+                return null;
+            }
+
+            return isInstance ? element.LookupParameter(name) : LookupTypeParameter(element, name);
+        }
+        public static Tuple<bool, string> GetParameterName(string parameterName)
         {
             // type paramter name: "type: parameterName"
             // instance parameter name: "inst: parameterName"
-            // check firstly if the parameter name is legal
+            // check if the parameter name is legal
             // if yes, return true for instance false for type parameter, and the parameter name
             // if no, return null
             if (parameterName.StartsWith("type:"))
             {
-                return (false, parameterName.Substring(6).Trim());
+                return Tuple.Create(false, parameterName.Substring(5).Trim());
             }
             else if (parameterName.StartsWith("inst:"))
             {
-                return (true, parameterName.Substring(6).Trim());
+                return Tuple.Create(true, parameterName.Substring(5).Trim());
             }
             else
             {
-                return (false, null);
+                return Tuple.Create(false, (string)null);
             }
         }
         public static List<string> ValidateParameterNames(List<string> parameterNames)
         {
             // check if the parameter names are legal
             // if yes, return the parameter names
+            // this is used before creating the calc elements
             List<string> checkedParameterNames = new List<string>();
             foreach (string parameterName in parameterNames)
             {
@@ -80,17 +76,20 @@ namespace Calc.ConnectorRevit.Helpers
             return checkedParameterNames;
         }
 
+
         private static Parameter LookupTypeParameter(Element element, string parameterName)
         {
             ElementId id = element.GetTypeId();
             Element type = element.Document.GetElement(id);
             return type.LookupParameter(parameterName);
         }
-        public static double ToMetricValue(Parameter parameter, object dummyValue = null)
+        
+
+        public static double ToMetricValue(Parameter parameter)
         {
             if (parameter == null) return 0;
-           
-            double value = (dummyValue != null) ? (double)dummyValue : parameter.AsDouble();
+
+            double value = parameter.AsDouble();
             // convert parameter value to metric if the GetDataType is length, area or volume
             ForgeTypeId typeId = parameter.Definition.GetDataType();
 

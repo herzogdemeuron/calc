@@ -1,4 +1,5 @@
-﻿using Calc.ConnectorRevit.Helpers;
+﻿using Autodesk.Revit.UI;
+using Calc.ConnectorRevit.Helpers;
 using Calc.ConnectorRevit.Revit;
 using Calc.ConnectorRevit.Services;
 using Calc.Core;
@@ -18,7 +19,6 @@ namespace Calc.ConnectorRevit.ViewModels
     {
         private DirectusStore store;
         private bool BranchesSwitch;
-        private RevitVisualizer Visualizer;
         private NodeViewModel selectedNodeItem;
         public NodeViewModel SelectedNodeItem
         {
@@ -49,14 +49,14 @@ namespace Calc.ConnectorRevit.ViewModels
             Mediator.Register("ViewToggleToBranch", _ => BranchesSwitch = true);
             Mediator.Register("ViewToggleToBranch", _ => ColorNodesToBranch());
 
-            Visualizer = new RevitVisualizer();
-            //changing priority:
-            //Forest => Mapping => Buildup
+            new RevitVisualizer();
+            new ResultSender();
+            //changing priority: Forest => Mapping => Buildup
         }
 
         public void UpdateNodeSource(Mapping mapping)
         {
-            CurrentForestItem = new NodeViewModel(store.ForestSelected);
+            CurrentForestItem = new NodeViewModel(store, store.ForestSelected);
             OnPropertyChanged(nameof(NodeSource));
             DeselectNodes();
             Mediator.Broadcast("MappingSelectionChanged", mapping);
@@ -95,14 +95,12 @@ namespace Calc.ConnectorRevit.ViewModels
                 
                 NodeHelper.ShowSubLabelColor(nodeItem);
                 Mediator.Broadcast("OnBranchItemSelectionChanged", SelectedNodeItem); // to visualizer
-                //eventHandler.Raise(Visualizer.IsolateAndColorSubbranchElements);
             }
             else
             {
                 
                 NodeHelper.ShowAllSubLabelColor(nodeItem);
                 Mediator.Broadcast("OnBuildupItemSelectionChanged", SelectedNodeItem); // to visualizer
-                //eventHandler.Raise(Visualizer.IsolateAndColorBottomBranchElements);
             }
             CurrentForestItem.NotifyLabelColorChange();
 

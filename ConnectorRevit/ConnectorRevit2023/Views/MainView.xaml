@@ -4,13 +4,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Calc.ConnectorRevit.ViewModels" 
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
         d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
         Loaded="WindowLoaded"
         Closing="WindowClosing"
         mc:Ignorable="d" 
         Background="White"
-        Height="600" MinHeight="600"
-        Width="600" MinWidth="700"
+        Height="700" MinHeight="700"
+        Width="700" MinWidth="700"
         WindowStartupLocation="CenterScreen"
         Topmost="True">
 
@@ -114,10 +115,10 @@
                             Style= "{StaticResource ButtonStyle}"
                             Click="InheritClicked"/>
                     <ComboBox x:Name="BuildupsComboBox"
-                        ItemsSource="{Binding DataContext.Store.BuildupsAll, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                        SelectedItem="{Binding DataContext.NodeTreeVM.SelectedNodeItem.Host.Buildup, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        DisplayMemberPath="Name"
-                        SelectionChanged="BuildupSelectionChanged"/>
+                                ItemsSource="{Binding DataContext.Store.BuildupsAll, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                SelectedItem="{Binding DataContext.NodeTreeVM.SelectedNodeItem.Host.Buildup, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                DisplayMemberPath="Name"
+                                SelectionChanged="BuildupSelectionChanged"/>
                 </DockPanel>
 
                 <DataGrid ItemsSource="{Binding SelectedItem.Components, ElementName=BuildupsComboBox}"
@@ -197,8 +198,9 @@
 
         <Grid x:Name="SelectProjectOverlay"
               d:IsHidden="true"
-          Background="White"
-          Margin="10,10,10,10" Grid.ColumnSpan="2">
+              Background="White"
+              Margin="10,10,10,10" 
+              Grid.ColumnSpan="2">
             <StackPanel VerticalAlignment="Center">
                 <TextBlock HorizontalAlignment="Center"
                             Text="Choose Project:"
@@ -216,13 +218,66 @@
             </StackPanel>
         </Grid>
 
-        <Grid x:Name="LoadingOverlay"
-              d:IsHidden="true" 
-          Background="LightGray"
-          Margin="10,10,10,10" Grid.ColumnSpan="2">
-            <TextBlock HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Text="Loading..."/>
+        <Grid x:Name="WaitingOverlay"
+             Background="LightGray"
+             Margin="10,10,10,10"
+              Visibility="Collapsed"
+             Grid.ColumnSpan="2">
+            <StackPanel VerticalAlignment="Center">
+            <TextBlock x:Name="WaitingTextBlock"
+                    HorizontalAlignment="Center"
+                    Text="LOADING..."/>
+                <Image gif:ImageBehavior.AnimatedSource="/CalcConnectorRevit2023;component/Resources/DTLogo.gif"
+                       Width="90"/>
+                <Button Content="QUIT" 
+                    HorizontalAlignment="Center"
+                    Width="90"
+                    Click="ProjectOKClicked"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid x:Name="MessageOverlay"
+             Background="LightGray"
+             Margin="10,10,10,10"
+             Visibility="Collapsed"
+             Grid.ColumnSpan="2">
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock x:Name="MessageTextBlock"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"/>
+                <Button Content="OK" 
+                    HorizontalAlignment="Center"
+                    Width="90"
+                    Margin="10"
+                    Click="MessageOKClicked"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid x:Name="SaveResultOverlay"
+             Background="LightGray"
+             Margin="10,10,10,10"
+             Visibility="Collapsed"
+             Grid.ColumnSpan="2">
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock HorizontalAlignment="Center"
+                    Text="Save result name:"/>
+                <TextBox x:Name="NewResultNameTextBox"
+                        HorizontalAlignment="Center"
+                        Width="90"
+                        Margin="10"/>
+                <TextBlock x:Name="ResultMessageText"
+                            HorizontalAlignment="Center"
+                            Text="xxx Items would be saved, this can take a while."/>
+                <Button Content="CONFIRM" 
+                    HorizontalAlignment="Center"
+                    Width="90"
+                    Margin="10"
+                    Click="SaveResultOKClicked"/>
+                <Button Content="CANCEL" 
+                    HorizontalAlignment="Center"
+                    Width="90"
+                    Click="SaveResultCancelClicked"/>
+            </StackPanel>
         </Grid>
 
     </Grid>
