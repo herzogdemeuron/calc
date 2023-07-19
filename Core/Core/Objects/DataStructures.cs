@@ -43,7 +43,7 @@ namespace Calc.Core.Objects
     public class Project
     {
         [JsonProperty(PropertyName = "id", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public int Id { get; set; }
+        public int Id { get; set; } = -1;
         [JsonProperty(PropertyName = "project_number")]
         public string ProjectNumber { get; set; }
     }
@@ -51,7 +51,7 @@ namespace Calc.Core.Objects
     public class Result : IHasProject
     {
         [JsonProperty(PropertyName = "id", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public int Id { get; set; }
+        public int Id { get; set; } = -1;
         [JsonProperty(PropertyName = "snapshot_name")]
         public string SnapshotName { get; set; }
         [JsonProperty(PropertyName = "element_id")]
@@ -81,7 +81,7 @@ namespace Calc.Core.Objects
     public class Material
     {
         [JsonProperty("id", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public int Id { get;  set; }
+        public int Id { get;  set; } = -1;
         [JsonProperty("material_name")]
         public string Name { get;  set; }
         [JsonProperty("global_warming_potential_a1_a2_a3")]
@@ -116,7 +116,7 @@ namespace Calc.Core.Objects
     public class Buildup
     {
         [JsonProperty("id", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public int Id { get; set; }
+        public int Id { get; set; } = -1;
         [JsonProperty("buildup_name")]
         public string Name { get; set; }
         [JsonProperty("group_id")]

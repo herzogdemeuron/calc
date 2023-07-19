@@ -57,12 +57,12 @@ namespace Calc.Core.DirectusAPI.Drivers
                 { "mappings", this.SendItem.SerializeMappingItems() }
             };
 
-            if (this.SendItem.Project != null && this.SendItem.Project.Id > 0)
+            if (this.SendItem.Project != null && this.SendItem.Project.Id >= 0)
             {
                 variables.Add("projectInput", new { id = this.SendItem.Project.Id });
             }
 
-            if (this.SendItem.Id > 0)
+            if (this.SendItem.Id >= 0)
             {
                 variables.Add("id", this.SendItem.Id);
             }

@@ -10,7 +10,7 @@ namespace Calc.Core.Objects
     public class Mapping : IHasProject
     {
         [JsonProperty("id")]
-        public int Id { get; set; }
+        public int Id { get; set; } = -1;
         [JsonProperty("mapping_name")]
         public string Name { get; set; }
         [JsonProperty("project_id")]

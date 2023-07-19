@@ -17,7 +17,7 @@ namespace Calc.Core.Objects
         [JsonIgnore]
         public HslColor HslColor { get; set; } = new HslColor(0, 0, 85);
         [JsonProperty("id")]
-        public int Id { get; set; }
+        public int Id { get; set; } = -1;
         [JsonProperty("forest_name")]
         public string Name { get; set; }
         [JsonProperty("trees")] // for recieving the tree JSON from the API
