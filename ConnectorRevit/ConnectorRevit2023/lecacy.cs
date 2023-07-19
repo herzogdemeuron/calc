@@ -78,7 +78,7 @@ namespace Calc.ConnectorRevit.ViewModels
             _ = Task.Run(async () => await server.Stop());
         }
 
-        private void PlantTrees(Forest forest)
+/*        private void PlantTrees(Forest forest)
         {
             if (forest == null)
                 return;
@@ -88,7 +88,7 @@ namespace Calc.ConnectorRevit.ViewModels
                 t.Plant(RevitElementFilter.GetCalcElements(t));
             }
             CurrentForestItem = new NodeViewModel(forest);
-        }
+        }*/
 
 
         /*        public async Task HandleLoadingAsync()
@@ -248,7 +248,7 @@ namespace Calc.ConnectorRevit.ViewModels
                     HandleSideClick();
                 }*/
 
-        public void HandleUpdateCalcElements()
+/*        public void HandleUpdateCalcElements()
         {
             if (CurrentForestItem == null)
                 return;
@@ -257,7 +257,7 @@ namespace Calc.ConnectorRevit.ViewModels
             PlantTrees(currentForest);
             ApplyMapping(currentMapping);
             //HandleSideClick();
-        }
+        }*/
 
         public void HandleStartCalcLive()
         {

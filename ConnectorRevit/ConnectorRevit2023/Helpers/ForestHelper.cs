@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Calc.ConnectorRevit.Services;
 using Calc.Core.Filtering;
+using System.Diagnostics;
 
 namespace Calc.ConnectorRevit.Helpers
 {
@@ -15,31 +16,26 @@ namespace Calc.ConnectorRevit.Helpers
         public static void PlantTrees(Forest forest)
         {
             List<string> parameters = GetParameterList(forest);
-            List<string> BacketElementIds = new List<string>();
+            List<CalcElement> calcElements = RevitElementFilter.CreateCalcElements(parameters);
             foreach (var t in forest.Trees)
             {
-                //List<CalcElement> calcElements = ElementFilter.GetCalcElements(t, parameters, createdRevitElementIds);
-                List<CalcElement> calcElements = RevitElementFilter.GetCalcElements(t);
-                t.Plant(calcElements);
+                calcElements = t.Plant(calcElements);
             }
+            Debug.WriteLine("Left overs: " + calcElements.Count);
         }
 
         private static List<string> GetParameterList(Forest forest)
         {
             //get the root parameters from each tree
-            var parameters = new List<string>();
-            
-                GroupCondition filterConfig = t.FilterConfig;
-
-                foreach (var r in roots)
-                {
-                    if (!parameters.Contains(r.Parameter))
-                    {
-                        parameters.Add(r.Parameter);
-                    }
-                }
+            List<string> parameters = new List<string>();
+            foreach (var t in forest.Trees)
+            {
+                parameters.AddRange(t.FilterConfig.GetAllParameters());
             }
-            return parameters;
+            List<string> validatedParameters = ParameterHelper.ValidateParameterNames(parameters);
+            // TODO: should show the illegal parameters
+            Debug.WriteLine("Illegal parameter count: " + (parameters.Count - validatedParameters.Count));
+            return validatedParameters;
         }
     }
 }
