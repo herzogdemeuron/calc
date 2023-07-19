@@ -99,9 +99,9 @@ public class GroupCondition : ICondition
         return false;
     }
 
-    public List<string> GetAllParameters()
+    public HashSet<string> GetAllParameters()
     {
-        List<string> parameters = new List<string>();
+        var parameters = new HashSet<string>();
 
         foreach (var conditionContainer in Conditions)
         {
@@ -112,7 +112,7 @@ public class GroupCondition : ICondition
                     Operator = conditionContainer.Operator,
                     Conditions = conditionContainer.Conditions
                 };
-                parameters.AddRange(groupCondition.GetAllParameters());
+                parameters.UnionWith(groupCondition.GetAllParameters());
             }
             else if (conditionContainer.Type.Equals("SimpleCondition", StringComparison.OrdinalIgnoreCase))
             {

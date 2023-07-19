@@ -42,6 +42,17 @@ namespace Calc.Core.Objects
             }
         }
 
+        public HashSet<string> GetAllParameters()
+        {
+            var parameters = new HashSet<string>();
+            foreach (Tree tree in Trees)
+            {
+                parameters.UnionWith(tree.FilterConfig.GetAllParameters());
+                parameters.UnionWith(tree.BranchConfig);
+            }
+            return parameters;
+        }
+
         public string SerializeTrees()
         {
             var treesJson = new StringBuilder();
