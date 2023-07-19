@@ -286,7 +286,7 @@ namespace Calc.Core
 
             try
             {
-                await this.ResultManager.CreateMany<ResultStorageDriver>(this.ResultDriver));
+                await this.ResultManager.CreateMany<ResultStorageDriver>(this.ResultDriver);
                 return true;
             }
             catch (Exception e)
