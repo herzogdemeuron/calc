@@ -106,34 +106,38 @@ namespace Calc.Core
             this.ResultDriver = new ResultStorageDriver();
         }
 
-        public async Task GetProjects()
+        public async Task<bool> GetProjects()
         {
             try
             {
-            this.ProjectDriver = await _graphqlRetry.ExecuteAsync(() => 
+                this.ProjectDriver = await _graphqlRetry.ExecuteAsync(() => 
                     this.ProjectManager.GetMany<ProjectStorageDriver>(this.ProjectDriver));
+                return true;
             }
             catch (Exception e)
             {
+                return false;
                 throw e;
             }
         }
 
-        public async Task GetOtherData()
+        public async Task<bool> GetOtherData()
         {
             CheckIfProjectSelected();
 
             try
             {
-            this.BuildupDriver = await _graphqlRetry.ExecuteAsync(() => 
+                this.BuildupDriver = await _graphqlRetry.ExecuteAsync(() => 
                     this.BuildupManager.GetMany<BuildupStorageDriver>(this.BuildupDriver));
-            this.MappingDriver = await _graphqlRetry.ExecuteAsync(() => 
+                this.MappingDriver = await _graphqlRetry.ExecuteAsync(() => 
                     this.MappingManager.GetMany<MappingStorageDriver>(this.MappingDriver));
-            this.ForestDriver = await _graphqlRetry.ExecuteAsync(() => 
+                this.ForestDriver = await _graphqlRetry.ExecuteAsync(() => 
                     this.ForestManager.GetMany<ForestStorageDriver>(this.ForestDriver));
+                return true;
             }
             catch (Exception e)
             {
+                return false;
                 throw e;
             }
         }
@@ -145,7 +149,7 @@ namespace Calc.Core
             this._mappingSelected = mapping;
         }
 
-        public async Task UpdateSelectedMapping()
+        public async Task<bool> UpdateSelectedMapping()
         {             
             if (this.MappingSelected == null)
             {
@@ -165,14 +169,16 @@ namespace Calc.Core
             {
                 await _graphqlRetry.ExecuteAsync(() => 
                         this.MappingManager.UpdateSingle<MappingStorageDriver>(this.MappingDriver));
+                return true;
             }
             catch (Exception e)
             {
+                return false;
                 throw e;
             }
         }
 
-        public async Task SaveSelectedMapping()
+        public async Task<bool> SaveSelectedMapping()
         {
             if (this.MappingSelected == null)
             {
@@ -187,9 +193,11 @@ namespace Calc.Core
                         this.MappingManager.CreateSingle<MappingStorageDriver>(this.MappingDriver));
                 this.MappingSelected.Id = mappingDriver.CreatedItem.Id;
                 this.MappingDriver.GotManyItems.Add(this.MappingSelected);
+                return true;
             }
             catch (Exception e)
             {
+                return false;
                 throw e;
             }
         }
@@ -259,7 +267,7 @@ namespace Calc.Core
             this._results = results;
         }
 
-        public async Task SaveResults()
+        public async Task<bool> SaveResults()
         {
             if (this.Results == null)
             {
@@ -280,9 +288,11 @@ namespace Calc.Core
             {
                 await _graphqlRetry.ExecuteAsync(() =>
                         this.ResultManager.CreateMany<ResultStorageDriver>(this.ResultDriver));
+                return true;
             }
             catch (Exception e)
             {
+                return false;
                 throw e;
             }
         }
