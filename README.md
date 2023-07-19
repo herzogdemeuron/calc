@@ -1,17 +1,64 @@
-# Life Cycle Assessment
-**Definition:**
+# Calc
+
+## Content
+
+- [Capabilites](#capabilities)
+- [Method](#method)
+- [Process](#process)
+- [About this Repo](#repository)
+
+## Capabilities
+
+### Calc is a calculation tool for 3d models:
+1. You create **materials** with any numerical information you want to calculate (e.g. KgCO2e, Cost, ...).
+2. You **combine** them into **buildups**.
+3. You customize **filters** to create **groups** of model **elements**, 
+you break down the groups into sub-groups.
+4. You **assign** buildups to **groups** or **sub-groups**.
+5. You **vizualize** the calculation results with **CalcLive**.
+6. You **save** the **results** to a central location to **compare** them **later**.
+
+### Calc can adapt to:
+- Any 3d Authoring Software
+- Any Modelling Standard
+- Any Data Source
+- Any Visualization Medium
+
+### Current ecosystem:
+Authoring Softwares:
+- Revit (2022, 2023)
+
+Data Sources:
+- Directus
+
+Visualization:
+- CalcLive (Website)
+- PowerBI
+
+### Current Calculations:
+- Life Cycle Assessment (LCA, KgCO2e[A1, A2, A3])
+- Cost (Any Currency)
+
+## Life Cycle Assessment
 
 *Life Cycle Assessment (LCA) is a tool used in architectural design to evaluate the environmental impacts of a building throughout its entire lifespan. It assesses factors like energy use, emissions, and waste generation from raw material extraction to demolition. By considering the life cycle perspective, architects can make informed decisions to minimize environmental burdens and create sustainable designs. LCA helps optimize building designs and promotes environmentally responsible practices in architecture.*
 
-This tool currently focusses on Global Warming Potential (GWP) in the phases A1, A2 and A3.
+Calc allows you to enter unit-rate KgCO2e for materials in your library 
+and perform calculations based on model quantities.
+This tool currently focusses on Global Warming Potential (GWP, KgCO2e) in the phases A1, A2 and A3.
+
+## Cost
+
+Calc allows you to enter unit-rate cost for materials in your library 
+and perform calculations based on model quantities.
 
 # Method
 
 ## Goal
 
-1. A full or partial mapping of model elements to buildups from a library.
-2. Calculate GWP per element according to unit rate from the buildup.
-3. Break-down or summarize result for timeline comparision.
+1. A full or partial mapping of model element groups to buildups from a library.
+2. Calculate KgCO2e per element according to unit rate from the buildup.
+3. Break-down or summarize result live.
 4. Benchmark against previous projects.
 
 ## Usability
@@ -22,7 +69,7 @@ LCA analysis is mostly a data centric task which inherently means:
 
 Usability in this case means perfect control over your data.
 
-> Control << Understanding << Visualization
+> Control <- Understanding <- Visualization
 
 ![extended](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbTh3dWEwbWZ6YnJ6cHliaDhtcXozcnlnemR3OThnZmI2dzY3cmo2eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/AjUF4mlwDl0IiDy65B/giphy.gif)
 
@@ -396,4 +443,13 @@ Saving a mapping will include the following information, where evey item in the 
 > - "Firerating: 90min = Buildup A" for "Structural Floors"
 > - "Firerating: 90min = Buildup B" for "Interior Walls"
 
+# Repository
 
+This is the mono-repo for everything calc related.
+
+## Repo Content
+
+- [Connector Revit](https://github.com/herzogdemeuron/calc/tree/master/ConnectorRevit)
+- [Core](https://github.com/herzogdemeuron/calc/tree/master/Core/Core)
+- [CalcLive](https://github.com/herzogdemeuron/calc/tree/master/Core/CalcLive)
+- [Directus](https://github.com/herzogdemeuron/calc/tree/master/directus)
