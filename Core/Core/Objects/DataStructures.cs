@@ -1,30 +1,24 @@
 ﻿using System.Collections.Generic;
 using Speckle.Newtonsoft.Json;
-using System.Runtime.Serialization;
 using Calc.Core.Color;
 using System;
+using Speckle.Newtonsoft.Json.Converters;
 
 namespace Calc.Core.Objects
 {
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum Unit
     {
-        [EnumMember(Value = "each")]
-        each,
-        [EnumMember(Value = "m")]
-        m,
-        [EnumMember(Value = "m2")]
-        m2,
-        [EnumMember(Value = "m3")]
-        m3
+        each, m, m2, m3
     }
 
-    public readonly struct CalcElement
+    public  struct CalcElement
     {
-        public readonly string Id;
-        public readonly decimal Length;
-        public readonly decimal Area;
-        public readonly decimal Volume;
-        public readonly Dictionary<string, object> Fields;
+        public string Id;
+        public decimal Length;
+        public decimal Area;
+        public decimal Volume;
+        public Dictionary<string, object> Fields;
 
         public CalcElement(string id,
             Dictionary<string, object> fields,
@@ -43,20 +37,16 @@ namespace Calc.Core.Objects
     public class Project
     {
         [JsonProperty(PropertyName = "id", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public int Id { get; set; }
+        public int Id { get; set; } = -1;
         [JsonProperty(PropertyName = "project_number")]
         public string ProjectNumber { get; set; }
     }
 
-    public class Result : IHasProject
+    public class Result
     {
-        [JsonProperty(PropertyName = "id", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public int Id { get; set; }
-        [JsonProperty(PropertyName = "snapshot_name")]
-        public string SnapshotName { get; set; }
         [JsonProperty(PropertyName = "element_id")]
         public string ElementId { get; set; }
-        [JsonProperty(PropertyName = "global_warming_potential_a1_a2_a3")]
+        [JsonProperty(PropertyName = "gwp_a123")]
         public decimal GlobalWarmingPotentialA1A2A3 { get; set; }
         [JsonProperty(PropertyName = "cost")]
         public decimal Cost { get; set; }
@@ -64,24 +54,34 @@ namespace Calc.Core.Objects
         public Unit Unit { get; set; }
         [JsonProperty(PropertyName = "material_amount")]
         public decimal MaterialAmount { get; set; }
-        [JsonProperty(PropertyName = "material_name")]
+        [JsonProperty(PropertyName = "material")]
         public string MaterialName { get; set; }
         [JsonProperty(PropertyName = "material_category")]
         public string MaterialCategory { get; set; }
-        [JsonProperty(PropertyName = "buildup_name")]
+        [JsonProperty(PropertyName = "buildup")]
         public string BuildupName { get; set; }
-        [JsonProperty(PropertyName = "group_name")]
+        [JsonProperty(PropertyName = "buildup_group")]
         public string GroupName { get; set; }
-        [JsonProperty(PropertyName = "project_id", NullValueHandling = NullValueHandling.Ignore)]
-        public Project Project { get; set; }
         [JsonProperty(PropertyName = "color")]
         public HslColor Color { get; set; }
+    }
+
+    public class Snapshot : IHasProject
+    {
+        [JsonProperty(PropertyName = "id", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public int Id { get; set; } = -1;
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+        [JsonProperty(PropertyName = "project_id", NullValueHandling = NullValueHandling.Ignore)]
+        public Project Project { get; set; }
+        [JsonProperty(PropertyName = "results")]
+        public List<Result> Results { get; set; }
     }
 
     public class Material
     {
         [JsonProperty("id", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public int Id { get;  set; }
+        public int Id { get;  set; } = -1;
         [JsonProperty("material_name")]
         public string Name { get;  set; }
         [JsonProperty("global_warming_potential_a1_a2_a3")]
@@ -106,17 +106,17 @@ namespace Calc.Core.Objects
         [JsonProperty("amount")]
         public decimal Amount { get; set; }
         [JsonIgnore]
-        public string FormattedAmount { get => Math.Round(Amount, 1).ToString() + " " + Material.Unit; }
+        public string FormattedAmount { get => Math.Round(Amount, 2).ToString() + " " + Material.Unit; }
         [JsonIgnore]
-        public string FormattedKgCO2eA123 { get => Math.Round(Amount * Material.KgCO2eA123, 1).ToString() + " Kg"; }
+        public string FormattedKgCO2eA123 { get => Math.Round(Amount * Material.KgCO2eA123, 2).ToString() + " Kg"; }
         [JsonIgnore]
-        public string FormattedCost { get => Math.Round(Amount * Material.Cost, 1).ToString(); }
+        public string FormattedCost { get => Math.Round(Amount * Material.Cost, 2).ToString(); }
     }
 
     public class Buildup
     {
         [JsonProperty("id", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public int Id { get; set; }
+        public int Id { get; set; } = -1;
         [JsonProperty("buildup_name")]
         public string Name { get; set; }
         [JsonProperty("group_id")]

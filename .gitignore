@@ -381,3 +381,4 @@ Core/Core.TestIntegration/Directus/config.json
 directus/database
 directus/uploads
 directus/schema-diff.json
+directus/directus-schema.json

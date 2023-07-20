@@ -65,13 +65,13 @@ namespace Calc.Core
         private DirectusManager<Buildup> BuildupManager { get; set; }
         private DirectusManager<Mapping> MappingManager { get; set; }
         private DirectusManager<Forest> ForestManager { get; set; }
-        private DirectusManager<Result> ResultManager { get; set; }
+        private DirectusManager<Snapshot> SnapshotManager { get; set; }
 
         private ProjectStorageDriver ProjectDriver { get; set; }
         private BuildupStorageDriver BuildupDriver { get; set; }
         private MappingStorageDriver MappingDriver { get; set; }
         private ForestStorageDriver ForestDriver { get; set; }
-        private ResultStorageDriver ResultDriver { get; set; }
+        private SnapshotStorageDriver SnapshotDriver { get; set; }
 
         private readonly Polly.Retry.AsyncRetryPolicy _graphqlRetry = Policy.Handle<GraphQLHttpRequestException>()
                 .WaitAndRetryAsync(4, retryAttempt => TimeSpan.FromSeconds(5),
@@ -97,43 +97,47 @@ namespace Calc.Core
             this.BuildupManager = new DirectusManager<Buildup>(this.Directus);
             this.MappingManager = new DirectusManager<Mapping>(this.Directus);
             this.ForestManager = new DirectusManager<Forest>(this.Directus);
-            this.ResultManager = new DirectusManager<Result>(this.Directus);
+            this.SnapshotManager = new DirectusManager<Snapshot>(this.Directus);
 
             this.ProjectDriver = new ProjectStorageDriver();
             this.BuildupDriver = new BuildupStorageDriver();
             this.MappingDriver = new MappingStorageDriver();
             this.ForestDriver = new ForestStorageDriver();
-            this.ResultDriver = new ResultStorageDriver();
+            this.SnapshotDriver = new SnapshotStorageDriver();
         }
 
-        public async Task GetProjects()
+        public async Task<bool> GetProjects()
         {
             try
             {
-            this.ProjectDriver = await _graphqlRetry.ExecuteAsync(() => 
+                this.ProjectDriver = await _graphqlRetry.ExecuteAsync(() => 
                     this.ProjectManager.GetMany<ProjectStorageDriver>(this.ProjectDriver));
+                return true;
             }
             catch (Exception e)
             {
+                return false;
                 throw e;
             }
         }
 
-        public async Task GetOtherData()
+        public async Task<bool> GetOtherData()
         {
             CheckIfProjectSelected();
 
             try
             {
-            this.BuildupDriver = await _graphqlRetry.ExecuteAsync(() => 
+                this.BuildupDriver = await _graphqlRetry.ExecuteAsync(() => 
                     this.BuildupManager.GetMany<BuildupStorageDriver>(this.BuildupDriver));
-            this.MappingDriver = await _graphqlRetry.ExecuteAsync(() => 
+                this.MappingDriver = await _graphqlRetry.ExecuteAsync(() => 
                     this.MappingManager.GetMany<MappingStorageDriver>(this.MappingDriver));
-            this.ForestDriver = await _graphqlRetry.ExecuteAsync(() => 
+                this.ForestDriver = await _graphqlRetry.ExecuteAsync(() => 
                     this.ForestManager.GetMany<ForestStorageDriver>(this.ForestDriver));
+                return true;
             }
             catch (Exception e)
             {
+                return false;
                 throw e;
             }
         }
@@ -145,7 +149,7 @@ namespace Calc.Core
             this._mappingSelected = mapping;
         }
 
-        public async Task UpdateSelectedMapping()
+        public async Task<bool> UpdateSelectedMapping()
         {             
             if (this.MappingSelected == null)
             {
@@ -165,14 +169,16 @@ namespace Calc.Core
             {
                 await _graphqlRetry.ExecuteAsync(() => 
                         this.MappingManager.UpdateSingle<MappingStorageDriver>(this.MappingDriver));
+                return true;
             }
             catch (Exception e)
             {
+                return false;
                 throw e;
             }
         }
 
-        public async Task SaveSelectedMapping()
+        public async Task<bool> SaveSelectedMapping()
         {
             if (this.MappingSelected == null)
             {
@@ -187,9 +193,11 @@ namespace Calc.Core
                         this.MappingManager.CreateSingle<MappingStorageDriver>(this.MappingDriver));
                 this.MappingSelected.Id = mappingDriver.CreatedItem.Id;
                 this.MappingDriver.GotManyItems.Add(this.MappingSelected);
+                return true;
             }
             catch (Exception e)
             {
+                return false;
                 throw e;
             }
         }
@@ -250,39 +258,34 @@ namespace Calc.Core
                 throw new Exception("Set SnapshotName first!");
             }
 
-            foreach (var result in results)
-            {
-                result.Project = this.ProjectSelected;
-                result.SnapshotName = this.SnapshotName;
-            }
-
             this._results = results;
         }
 
-        public async Task SaveResults()
+        public async Task<bool> SaveSnapshot()
         {
             if (this.Results == null)
             {
                 throw new Exception("Set Results first!");
             }
 
-            this.ResultDriver = new ResultStorageDriver
+            this.SnapshotDriver = new SnapshotStorageDriver
             {
-                SendItems = this.Results
+                SendItem = new Snapshot 
+                { 
+                    Results = this.Results,
+                    Name = this.SnapshotName,
+                    Project = this.ProjectSelected
+                }
             };
             
-            foreach (var result in this.ResultDriver.SendItems)
-            {
-                result.Project = this.ProjectSelected;
-            }
-
             try
             {
-                await _graphqlRetry.ExecuteAsync(() =>
-                        this.ResultManager.CreateMany<ResultStorageDriver>(this.ResultDriver));
+                await this.SnapshotManager.CreateSingle<SnapshotStorageDriver>(this.SnapshotDriver);
+                return true;
             }
             catch (Exception e)
             {
+                return false;
                 throw e;
             }
         }

@@ -3,14 +3,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Calc.ConnectorRevit.Views" 
+        xmlns:local="clr-namespace:Calc.ConnectorRevit.ViewModels" 
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
         d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
         Loaded="WindowLoaded"
         Closing="WindowClosing"
         mc:Ignorable="d" 
         Background="White"
-        Height="600" MinHeight="600"
-        Width="600" MinWidth="700"
+        Height="700" MinHeight="700"
+        Width="700" MinWidth="700"
         WindowStartupLocation="CenterScreen"
         Topmost="True">
 
@@ -23,13 +24,17 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
-        
-        <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="507*"/>
+            <ColumnDefinition Width="193*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20*"/>
                 <ColumnDefinition Width="30*"/>
             </Grid.ColumnDefinitions>
-            
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="*"/>
@@ -41,7 +46,7 @@
                        Margin="10"
                        HorizontalAlignment="Stretch">
                 <ComboBox x:Name="ForestsComboBox"
-                            ItemsSource="{Binding DataContext.Forests, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                          ItemsSource="{Binding DataContext.Store.ForestProjectRelated, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                           DisplayMemberPath="Name"
                           DockPanel.Dock="Left"
                           Height="25"
@@ -62,8 +67,8 @@
                         Click="NewMappingClicked"
                         Style= "{StaticResource ButtonStyle}"/>
                 <ComboBox x:Name="MappingsComboBox"
-                          ItemsSource="{Binding DataContext.Mappings, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                          SelectedItem="{Binding DataContext.MappingSelected, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          ItemsSource="{Binding DataContext.Store.MappingsProjectRelated, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                          SelectedItem="{Binding DataContext.Store.MappingSelected, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           DisplayMemberPath="Name"
                           DockPanel.Dock="Left"
                           Height="25"
@@ -75,7 +80,7 @@
                   Grid.Row="1"
                   Margin="10">
                 <TreeView x:Name="TreeView"
-                      ItemsSource="{Binding NodeSource}"
+                      ItemsSource="{Binding NodeTreeVM.NodeSource}"
                       TreeViewItem.Selected="TreeViewItemSelected"
                       MouseLeftButtonDown="SideClickDown"
                       ItemContainerStyle="{StaticResource TreeViewItemStyle}">
@@ -92,7 +97,7 @@
                     </TreeView.ItemTemplate>
                 </TreeView>
             </Grid>
-            
+
             <DockPanel  x:Name="BuildupPanel"
                         Grid.Column="2"
                         Grid.Row="1"
@@ -110,48 +115,48 @@
                             Style= "{StaticResource ButtonStyle}"
                             Click="InheritClicked"/>
                     <ComboBox x:Name="BuildupsComboBox"
-                        ItemsSource="{Binding DataContext.AllBuildups, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                        SelectedItem="{Binding DataContext.SelectedNodeItem.Host.Buildup, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        DisplayMemberPath="Name"
-                        SelectionChanged="BuildupSelectionChanged"/>
+                                ItemsSource="{Binding DataContext.Store.BuildupsAll, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                SelectedItem="{Binding DataContext.NodeTreeVM.SelectedNodeItem.Host.Buildup, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                DisplayMemberPath="Name"
+                                SelectionChanged="BuildupSelectionChanged"/>
                 </DockPanel>
 
-                    <DataGrid ItemsSource="{Binding SelectedItem.Components, ElementName=BuildupsComboBox}"
+                <DataGrid ItemsSource="{Binding SelectedItem.Components, ElementName=BuildupsComboBox}"
                             AutoGenerateColumns="False"
                             VerticalAlignment="Top"
                             HorizontalAlignment="Stretch"
                             MinHeight="100"
                             HorizontalGridLinesBrush="LightGray"
                             VerticalGridLinesBrush="LightGray">
-                        <DataGrid.ColumnHeaderStyle>
-                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="FontWeight" Value="SemiBold"/>
                             <Setter Property="HorizontalContentAlignment" Value="Center"/>
                         </Style>
-                        </DataGrid.ColumnHeaderStyle>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" />
-                            <DataGridTextColumn Binding="{Binding FormattedAmount}" IsReadOnly="True" >
+                    </DataGrid.ColumnHeaderStyle>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" />
+                        <DataGridTextColumn Binding="{Binding FormattedAmount}" IsReadOnly="True" >
                             <DataGridTextColumn.Header>
                                 <TextBlock Text="Amount" HorizontalAlignment="Right" Margin="0,0,0,0"/>
                             </DataGridTextColumn.Header>
                             <DataGridTextColumn.ElementStyle>
-                                    <StaticResource ResourceKey="NumberColumn"/>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn Header="CO2e A123" Binding="{Binding FormattedKgCO2eA123}" IsReadOnly="True" >
-                                <DataGridTextColumn.ElementStyle>
-                                    <StaticResource ResourceKey="NumberColumn"/>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn Header="Cost" Binding="{Binding FormattedCost}" IsReadOnly="True" >
-                                <DataGridTextColumn.ElementStyle>
-                                    <StaticResource ResourceKey="NumberColumn"/>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                
+                                <StaticResource ResourceKey="NumberColumn"/>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="CO2e A123" Binding="{Binding FormattedKgCO2eA123}" IsReadOnly="True" >
+                            <DataGridTextColumn.ElementStyle>
+                                <StaticResource ResourceKey="NumberColumn"/>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Cost" Binding="{Binding FormattedCost}" IsReadOnly="True" >
+                            <DataGridTextColumn.ElementStyle>
+                                <StaticResource ResourceKey="NumberColumn"/>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
             </DockPanel>
             <StackPanel Grid.Column="0"
                         Grid.Row="2"
@@ -171,7 +176,7 @@
                     Content="Update Revit"
                     Margin="0,0,10,10"
                     Width="90"
-                    Click="UpdateClicked"
+                    Click="UpdateRevitClicked"
                     HorizontalAlignment="Right"
                     Style= "{StaticResource ButtonStyle}"/>
 
@@ -190,18 +195,19 @@
             </Grid>
 
         </Grid>
-        
+
         <Grid x:Name="SelectProjectOverlay"
               d:IsHidden="true"
-          Background="White"
-          Margin="10">
+              Background="White"
+              Margin="10,10,10,10" 
+              Grid.ColumnSpan="2">
             <StackPanel VerticalAlignment="Center">
                 <TextBlock HorizontalAlignment="Center"
                             Text="Choose Project:"
                            Margin="10"/>
                 <ComboBox x:Name="ProjectsComboBox"
                           HorizontalAlignment="Center"
-                          ItemsSource= "{Binding AllProjects}"
+                          ItemsSource= "{Binding LoadingVM.AllProjects}"
                           DisplayMemberPath="ProjectNumber"
                           Width="90"/>
                 <Button Content="OK" 
@@ -211,14 +217,70 @@
                         Click="ProjectOKClicked"/>
             </StackPanel>
         </Grid>
-        
-        <Grid x:Name="LoadingOverlay"
-              d:IsHidden="true" 
-          Background="LightGray"
-          Margin="10">
-            <TextBlock HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Text="Loading..."/>
+
+        <Grid x:Name="WaitingOverlay"
+             Background="LightGray"
+             Margin="10,10,10,10"
+              Visibility="Collapsed"
+             Grid.ColumnSpan="2">
+            <StackPanel VerticalAlignment="Center">
+            <TextBlock x:Name="WaitingTextBlock"
+                    HorizontalAlignment="Center"
+                    Text="LOADING..."/>
+                <Image gif:ImageBehavior.AnimatedSource="/CalcConnectorRevit2023;component/Resources/DTLogo.gif"
+                       Width="90"/>
+                <Button Content="QUIT" 
+                    HorizontalAlignment="Center"
+                    Width="90"
+                    Click="ProjectOKClicked"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid x:Name="MessageOverlay"
+             Background="LightGray"
+             Margin="10,10,10,10"
+             Visibility="Collapsed"
+             Grid.ColumnSpan="2">
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock x:Name="MessageTextBlock"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"/>
+                <Button Content="OK" 
+                    HorizontalAlignment="Center"
+                    Width="90"
+                    Margin="10"
+                    Click="MessageOKClicked"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid x:Name="SaveResultOverlay"
+             Background="LightGray"
+             Margin="10,10,10,10"
+             Visibility="Collapsed"
+             Grid.ColumnSpan="2">
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock HorizontalAlignment="Center"
+                    Text="Save result name:"/>
+                <TextBox x:Name="NewResultNameTextBox"
+                        HorizontalAlignment="Center"
+                        Width="90"
+                        Margin="10"/>
+                <TextBlock x:Name="ResultMessageText"
+                            HorizontalAlignment="Center"
+                            Text="{Binding DataContext.SavingVM.ElementCount, RelativeSource={RelativeSource AncestorType={x:Type Window}}, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock 
+                            HorizontalAlignment="Center"
+                            Text="xxx items would be saved, this can take a while."/>
+                <Button Content="CONFIRM" 
+                    HorizontalAlignment="Center"
+                    Width="90"
+                    Margin="10"
+                    Click="SaveResultOKClicked"/>
+                <Button Content="CANCEL" 
+                    HorizontalAlignment="Center"
+                    Width="90"
+                    Click="SaveResultCancelClicked"/>
+            </StackPanel>
         </Grid>
 
     </Grid>

@@ -1,6 +1,6 @@
-# PowerBi Directus Query Template
+Back to [Calc](https://github.com/herzogdemeuron/calc#readme)
 
-## General
+# PowerBi Directus Query Template
 
 The template uses a python scripts to make a web requests to your Directus instance.
 The visuals in the template show you how the tables work together.

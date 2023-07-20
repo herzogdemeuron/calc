@@ -105,7 +105,6 @@ namespace Calc.Core.Objects
 
         public void SetBuildup(Buildup buildup)
         {
-            Debug.WriteLine($"Setting buildup for branch {Parameter} {Value} to {buildup}");
             // set the buildup of the current branch. Also set the buildup of all subbranches to the same value if they have no buildup assigned yet or the buildup is the same.
             var currentBuildup = _buildup;
             _buildup = buildup;
@@ -285,7 +284,7 @@ namespace Calc.Core.Objects
         public void PrintTree(int indentLevel = 0)
         {
             string indentation = new(' ', indentLevel * 4);
-            Console.WriteLine($"{indentation}L: {BranchLevel}, Param: {Parameter}, Val: {Value}, Meth: {Method}, Col: {HslColor.Hue}, Build: {Buildup}");
+            Console.WriteLine($"{indentation}L: {BranchLevel}, Param: {Parameter}, Val: {Value}, Meth: {Method}, Col: {HslColor.H}, Build: {Buildup}");
 
             foreach (var subBranch in SubBranches)
             {

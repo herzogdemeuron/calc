@@ -6,22 +6,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Collections.Generic;
 
-namespace Calc.ConnectorRevit.Views
+namespace Calc.ConnectorRevit.ViewModels
 {
     public class NewMappingViewModel : INotifyPropertyChanged
     {
         private DirectusStore store;
-        private ObservableCollection<Mapping> allMappings;
-        public ObservableCollection<Mapping> AllMappings
-        {
-            get { return allMappings; }
-            set
-            {
-                allMappings = value;
-                OnPropertyChanged(nameof(AllMappings));
-            }
-        }
 
         private string newName;
         public string NewName
@@ -48,10 +39,9 @@ namespace Calc.ConnectorRevit.Views
         public NewMappingViewModel(DirectusStore directusStore)
         {
             store = directusStore;
-            AllMappings = new ObservableCollection<Mapping>(directusStore.MappingsAll);
-            MappingsView = CollectionViewSource.GetDefaultView(AllMappings);
+            List<Mapping> allMappings = directusStore.MappingsAll;
+            MappingsView = CollectionViewSource.GetDefaultView(allMappings);
             MappingsView.GroupDescriptions?.Add(new PropertyGroupDescription("Project.ProjectNumber"));
-            //Debug.WriteLine(AllMappings.First().Project.ProjectNumber);
         }
 
         public async Task HandelNewMappingCreate(Mapping selectedMapping, string newName)

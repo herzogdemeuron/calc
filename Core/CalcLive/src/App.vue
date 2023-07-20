@@ -19,12 +19,12 @@
         </template>
         <template #content>
           <div class="card-grid">
-            <Line_YbyX :data="dataHistory" valueKey="global_warming_potential_a1_a2_a3" title="timeline"/>
-            <Bar_YbyX :data="dataset" labelKey="buildup_name" valueKey="global_warming_potential_a1_a2_a3" :sortValue="false" title="Buildup"/>
-            <Donut_YbyX :data="dataset" labelKey="group_name" valueKey="global_warming_potential_a1_a2_a3" title="Buildup Group"/>
-            <Bar_YbyX :data="dataset" labelKey="material_name" valueKey="global_warming_potential_a1_a2_a3" title="Material"/>
-            <Donut_YbyX :data="dataset" labelKey="material_category" valueKey="global_warming_potential_a1_a2_a3" title="Material Category"/>
-            <Bar_YbyX :data="dataset" labelKey="element_id" valueKey="global_warming_potential_a1_a2_a3" title="Element"/>
+            <Line_YbyX :data="dataHistory" valueKey="gwp_a123" title="timeline"/>
+            <Bar_YbyX :data="dataset" labelKey="buildup" valueKey="gwp_a123" :sortValue="false" title="Buildup"/>
+            <Donut_YbyX :data="dataset" labelKey="buildup_group" valueKey="gwp_a123" title="Buildup Group"/>
+            <Bar_YbyX :data="dataset" labelKey="material" valueKey="gwp_a123" title="Material"/>
+            <Donut_YbyX :data="dataset" labelKey="material_category" valueKey="gwp_a123" title="Material Category"/>
+            <Bar_YbyX :data="dataset" labelKey="element_id" valueKey="gwp_a123" title="Element"/>
           </div>
         </template>
       </vue-collapsible-panel>
@@ -37,9 +37,9 @@
         <template #content>
           <div class="card-grid">
             <Line_YbyX :data="dataHistory" valueKey="cost" title="timeline"/>
-            <Bar_YbyX :data="dataset" labelKey="buildup_name" valueKey="cost" :sortValue="false" title="Buildup"/>
-            <Donut_YbyX :data="dataset" labelKey="group_name" valueKey="cost" title="Buildup Group"/>
-            <Bar_YbyX :data="dataset" labelKey="material_name" valueKey="cost" title="Material"/>
+            <Bar_YbyX :data="dataset" labelKey="buildup" valueKey="cost" :sortValue="false" title="Buildup"/>
+            <Donut_YbyX :data="dataset" labelKey="buildup_group" valueKey="cost" title="Buildup Group"/>
+            <Bar_YbyX :data="dataset" labelKey="material" valueKey="cost" title="Material"/>
             <Donut_YbyX :data="dataset" labelKey="material_category" valueKey="cost" title="Material Category"/>
             <Bar_YbyX :data="dataset" labelKey="element_id" valueKey="cost" title="Element"/>
          </div>
@@ -89,7 +89,7 @@ export default {
 
       this.socket.onopen = () => {
         let time = new Date().toLocaleTimeString();
-        this.socket.send(`${time} cal-viz-interactive connected`);
+        this.socket.send(`${time} CalcLive connected`);
       };
 
       this.socket.onmessage = (event) => {
@@ -119,7 +119,7 @@ export default {
       window.addEventListener('beforeunload', () => {
         if (this.socket.readyState === WebSocket.OPEN) {
           // WebSocket is still open, send disconnection message to the server
-          this.socket.send('calc-viz-interactive disconnected');
+          this.socket.send('CalcLive disconnected');
           this.socket.close();
         }
       });

@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Calc.Core.TestIntegration.Drivers
 {
     [TestClass]
-    public class ResultStorageDriverTests
+    public class SnapshotStorageDriverTests
     {
         private Directus? directus;
 
@@ -33,20 +33,21 @@ namespace Calc.Core.TestIntegration.Drivers
             }
 
             var results = Calculator.Calculate(branches);
-            foreach (var result in results)
-            {
-                result.SnapshotName = "test snapshot name";
-                result.Project = new Project { Id = 1 };
-            }
-            var storageManager = new DirectusManager<Result>(this.directus);
+            var snapshot = new Snapshot
+            { 
+                Results = results,
+                Project = new Project() { Id = 1 },
+                Name = "Test"
+            };
+
+            var storageManager = new DirectusManager<Snapshot>(this.directus);
 
             // Act
-            var response = await storageManager.CreateMany<ResultStorageDriver>(new ResultStorageDriver() { SendItems = results });
-            foreach (var result in response.CreatedManyItems)
-            { Console.WriteLine(result.Id); }
+            var response = await storageManager.CreateSingle<SnapshotStorageDriver>(new SnapshotStorageDriver() { SendItem = snapshot });
+            Console.WriteLine(response.CreatedItem.Id);
 
             // Assert
-            Assert.IsTrue(response.CreatedManyItems.Count > 0);
+            Assert.IsTrue(response.CreatedItem.Id > 0);
         }
     }
 }

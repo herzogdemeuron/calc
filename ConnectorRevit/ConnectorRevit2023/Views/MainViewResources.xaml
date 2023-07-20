@@ -20,6 +20,16 @@
         <Setter Property="HorizontalAlignment" Value="Right" />
     </Style>
 
+    <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+        <Setter Property="IsEditable" Value="True" />
+        <Style.Triggers>
+            <Trigger Property="SelectedItem" Value="{x:Null}">
+                <Setter Property="Text" Value="{Binding RelativeSource={RelativeSource Self}, Path=Tag}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+
     <DataTemplate x:Key="BranchItemTemplate">
         <Border x:Name="Border"
             Padding="4,2,4,3"

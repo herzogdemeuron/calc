@@ -17,7 +17,7 @@ namespace Calc.Core.Objects
         [JsonIgnore]
         public HslColor HslColor { get; set; } = new HslColor(0, 0, 85);
         [JsonProperty("id")]
-        public int Id { get; set; }
+        public int Id { get; set; } = -1;
         [JsonProperty("forest_name")]
         public string Name { get; set; }
         [JsonProperty("trees")] // for recieving the tree JSON from the API
@@ -40,6 +40,17 @@ namespace Calc.Core.Objects
                 default:
                     break;
             }
+        }
+
+        public HashSet<string> GetAllParameters()
+        {
+            var parameters = new HashSet<string>();
+            foreach (Tree tree in Trees)
+            {
+                parameters.UnionWith(tree.FilterConfig.GetAllParameters());
+                parameters.UnionWith(tree.BranchConfig);
+            }
+            return parameters;
         }
 
         public string SerializeTrees()

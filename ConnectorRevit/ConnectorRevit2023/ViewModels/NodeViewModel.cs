@@ -1,14 +1,17 @@
-﻿using Calc.Core.Color;
+﻿using Calc.ConnectorRevit.Helpers;
+using Calc.Core;
+using Calc.Core.Color;
 using Calc.Core.Objects;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Media;
 
-namespace Calc.ConnectorRevit.Views
+namespace Calc.ConnectorRevit.ViewModels
 {
     public class NodeViewModel : INotifyPropertyChanged
     {
         public string Name { get => GetName(); }
+        public DirectusStore Store { get; set; }
         public ObservableCollection<NodeViewModel> SubNodeItems { get; }
 
         private IGraphNode host;
@@ -26,14 +29,15 @@ namespace Calc.ConnectorRevit.Views
             }
         }
 
-        public NodeViewModel(IGraphNode node)
+        public NodeViewModel(DirectusStore store, IGraphNode node)
         {
-            this.Host = node;
+            Host = node;
+            Store = store;
             SubNodeItems = new ObservableCollection<NodeViewModel>();
-
+            Mediator.Register("BuildupSelectionChanged", _ => NotifyHostChanged());
             foreach (var subNode in node.SubBranches)
             {
-                SubNodeItems.Add(new NodeViewModel(subNode));
+                SubNodeItems.Add(new NodeViewModel(store, subNode));
             }
         }
 
@@ -59,7 +63,7 @@ namespace Calc.ConnectorRevit.Views
                 {
                     var hsl = Host.HslColor;
                     var rgb = CalcColorConverter.HslToRgb(hsl);
-                    return Color.FromArgb(255, rgb.Red, rgb.Green, rgb.Blue);
+                    return Color.FromArgb(255, rgb.R, rgb.G, rgb.B);
                 }
                 else
                 {
@@ -71,12 +75,17 @@ namespace Calc.ConnectorRevit.Views
         {
             if (Host is Tree tree)
                 return tree.Name;
-            else if(Host is Branch branch)
-                return $"{branch.Parameter}:{branch.Value}";
-            else if(Host is Forest forest)
+            else if (Host is Branch branch)
+                return $"[{branch.Parameter}] {branch.Value}";
+            else if (Host is Forest forest)
                 return forest.Name;
             else
                 return "Unknown";
+        }
+
+        private void NotifyHostChanged()
+        {
+            OnPropertyChanged(nameof(Host));
         }
 
         public void NotifyLabelColorChange()

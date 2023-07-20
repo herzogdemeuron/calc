@@ -1,4 +1,4 @@
-# Directus (Currently not up to date)
+# Directus
 
 <span style="color:red">**WARNING:** If you are working on an existing Directus project be very careful to not delete your existing collections.    
 **ALWAYS** spin up a local instance with your scheme and test first! The included `update-directus-schema.py` script uses the `force` argument to "bypass version and database vendor restrictions".</span>
