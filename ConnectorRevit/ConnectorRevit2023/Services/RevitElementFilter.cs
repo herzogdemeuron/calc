@@ -12,14 +12,15 @@ namespace Calc.ConnectorRevit.Services
     {
         static public List<CalcElement> CreateCalcElements(List<string> parameterNameList)
         {
-            /*Element elem = App.CurrentDoc.GetElement(new ElementId(767506));
-            return new List<CalcElement>()
-            {
-                CreateCalcElement(elem, parameterNameList)
-            };*/
+            /* Element elem = App.CurrentDoc.GetElement(new ElementId(767264));
+             return new List<CalcElement>()
+             {
+                 CreateCalcElement(elem, parameterNameList)
+             };*/
             List<CalcElement> collector = new FilteredElementCollector(App.CurrentDoc)
                   .WhereElementIsNotElementType()
                   .WhereElementIsViewIndependent()
+                  .Where(x => (x.Category != null) && x.GetTypeId() != null)
                   .Select(elem => CreateCalcElement(elem, parameterNameList)).ToList();
             return collector;
         }
@@ -48,44 +49,7 @@ namespace Calc.ConnectorRevit.Services
         {
             Parameter parameter = elem.LookupParameter(parameterName);
             return ParameterHelper.ToMetricValue(parameter);
-
         }
-
-        /*        static private double ConvertToMetric(double value, string unitType)
-                {
-                    switch (unitType)
-                    {
-                        case "Length":
-                            return UnitUtils.ConvertFromInternalUnits(value, UnitTypeId.Meters);
-                        case "Area":
-                            return UnitUtils.ConvertFromInternalUnits(value, UnitTypeId.SquareMeters);
-                        case "Volume":
-                            return UnitUtils.ConvertFromInternalUnits(value, UnitTypeId.CubicMeters);
-                        default:
-                            return value;
-                    }
-                }*/
-
-        /*        static public List<CalcElement> GetCalcElements(Tree tree)
-        {
-            //create calc elements using only the necessary parameters of the forest
-            IEnumerable<Element> collector = new FilteredElementCollector(App.CurrentDoc)
-                .WhereElementIsNotElementType()
-                .WhereElementIsViewIndependent();
-            List<Root> roots = tree.Roots;
-            foreach (Root root in roots)
-            {
-                collector = collector.Where(e => CheckContains(e, root.Parameter, root.Value));
-            }
-            List<CalcElement> calcElements = collector.Select(CreateCalcElement).ToList();
-            return calcElements;
-        }
-
-        static private bool CheckContains(Element element, string parameter, string value)
-        {
-            Parameter param = element.LookupParameter(parameter);
-            return param?.AsValueString()?.Contains(value) ?? false;
-        }*/
 
     }
 }

@@ -24,23 +24,6 @@ namespace Calc.ConnectorRevit.Views
         }
 
 
-        private void VisibilityProjectWaiting()
-        {
-            WaitingTextBlock.Text = "LOADING PROJECTS...";
-            WaitingOverlay.Visibility = Visibility.Visible;
-            SelectProjectOverlay.Visibility = Visibility.Collapsed;
-        }
-
-        private void VisibilityMainViewEntering()
-        {
-            WaitingOverlay.Visibility = Visibility.Collapsed;
-        }
-
-        private void VisibilityResultSaving() 
-        {
-            SaveResultOverlay.Visibility = Visibility.Visible;
-        }
-
 
 
         private void MessageFromViewModelReceived(string message)
@@ -159,8 +142,21 @@ namespace Calc.ConnectorRevit.Views
             MainVM.HandleStartCalcLive();
         }
 
+        private void VisibilityProjectWaiting()
+        {
+            WaitingTextBlock.Text = "LOADING PROJECTS...";
+            WaitingOverlay.Visibility = Visibility.Visible;
+            SelectProjectOverlay.Visibility = Visibility.Collapsed;
+        }
+
+        private void VisibilityMainViewEntering()
+        {
+            WaitingOverlay.Visibility = Visibility.Collapsed;
+        }
+
         private void SaveResultsClicked(object sender, RoutedEventArgs e)
         {
+            //MainVM.SavingVM.UpdateElementCount();
             SaveResultOverlay.Visibility = Visibility.Visible;
         }
 

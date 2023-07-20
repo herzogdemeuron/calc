@@ -1,4 +1,5 @@
-﻿using Calc.Core;
+﻿using Calc.ConnectorRevit.Helpers;
+using Calc.Core;
 using Calc.Core.Color;
 using Calc.Core.Objects;
 using System.Collections.ObjectModel;
@@ -33,7 +34,7 @@ namespace Calc.ConnectorRevit.ViewModels
             Host = node;
             Store = store;
             SubNodeItems = new ObservableCollection<NodeViewModel>();
-
+            Mediator.Register("BuildupSelectionChanged", _ => NotifyHostChanged());
             foreach (var subNode in node.SubBranches)
             {
                 SubNodeItems.Add(new NodeViewModel(store, subNode));
@@ -75,11 +76,16 @@ namespace Calc.ConnectorRevit.ViewModels
             if (Host is Tree tree)
                 return tree.Name;
             else if (Host is Branch branch)
-                return $"{branch.Parameter}:{branch.Value}";
+                return $"[{branch.Parameter}] {branch.Value}";
             else if (Host is Forest forest)
                 return forest.Name;
             else
                 return "Unknown";
+        }
+
+        private void NotifyHostChanged()
+        {
+            OnPropertyChanged(nameof(Host));
         }
 
         public void NotifyLabelColorChange()
