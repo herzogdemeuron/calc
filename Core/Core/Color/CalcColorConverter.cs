@@ -6,9 +6,9 @@ namespace Calc.Core.Color
     {
         public static RgbColor HslToRgb(HslColor hsl)
         {
-            var h = hsl.Hue / 360.0;
-            var s = hsl.Saturation / 100.0;
-            var l = hsl.Lightness / 100.0;
+            var h = hsl.H / 360.0;
+            var s = hsl.S / 100.0;
+            var l = hsl.L / 100.0;
 
             double r;
             double g;
@@ -42,9 +42,9 @@ namespace Calc.Core.Color
 
         public static HexColor RgbToHex(RgbColor rgb)
         {
-            var r = rgb.Red.ToString("X2");
-            var g = rgb.Green.ToString("X2");
-            var b = rgb.Blue.ToString("X2");
+            var r = rgb.R.ToString("X2");
+            var g = rgb.G.ToString("X2");
+            var b = rgb.B.ToString("X2");
             return new HexColor($"#{r}{g}{b}");
         }
     }

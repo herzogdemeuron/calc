@@ -63,7 +63,7 @@ namespace Calc.ConnectorRevit.ViewModels
                 {
                     var hsl = Host.HslColor;
                     var rgb = CalcColorConverter.HslToRgb(hsl);
-                    return Color.FromArgb(255, rgb.Red, rgb.Green, rgb.Blue);
+                    return Color.FromArgb(255, rgb.R, rgb.G, rgb.B);
                 }
                 else
                 {

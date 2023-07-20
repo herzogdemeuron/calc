@@ -1,21 +1,15 @@
 ﻿using System.Collections.Generic;
 using Speckle.Newtonsoft.Json;
-using System.Runtime.Serialization;
 using Calc.Core.Color;
 using System;
+using Speckle.Newtonsoft.Json.Converters;
 
 namespace Calc.Core.Objects
 {
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum Unit
     {
-        [EnumMember(Value = "each")]
-        each,
-        [EnumMember(Value = "m")]
-        m,
-        [EnumMember(Value = "m2")]
-        m2,
-        [EnumMember(Value = "m3")]
-        m3
+        each, m, m2, m3
     }
 
     public  struct CalcElement
@@ -52,7 +46,7 @@ namespace Calc.Core.Objects
     {
         [JsonProperty(PropertyName = "element_id")]
         public string ElementId { get; set; }
-        [JsonProperty(PropertyName = "global_warming_potential_a1_a2_a3")]
+        [JsonProperty(PropertyName = "gwp_a123")]
         public decimal GlobalWarmingPotentialA1A2A3 { get; set; }
         [JsonProperty(PropertyName = "cost")]
         public decimal Cost { get; set; }
@@ -60,13 +54,13 @@ namespace Calc.Core.Objects
         public Unit Unit { get; set; }
         [JsonProperty(PropertyName = "material_amount")]
         public decimal MaterialAmount { get; set; }
-        [JsonProperty(PropertyName = "material_name")]
+        [JsonProperty(PropertyName = "material")]
         public string MaterialName { get; set; }
         [JsonProperty(PropertyName = "material_category")]
         public string MaterialCategory { get; set; }
-        [JsonProperty(PropertyName = "buildup_name")]
+        [JsonProperty(PropertyName = "buildup")]
         public string BuildupName { get; set; }
-        [JsonProperty(PropertyName = "group_name")]
+        [JsonProperty(PropertyName = "buildup_group")]
         public string GroupName { get; set; }
         [JsonProperty(PropertyName = "color")]
         public HslColor Color { get; set; }

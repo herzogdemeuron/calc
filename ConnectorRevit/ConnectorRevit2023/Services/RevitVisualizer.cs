@@ -133,11 +133,11 @@ namespace Calc.ConnectorRevit.Services
         private void ColorBranchElements(IGraphNode node, View view, ElementId patternId)
         {
             HslColor hslColor = node.HslColor;
-            HslColor hslColorDarker = new HslColor(hslColor.Hue, hslColor.Saturation, (int)(hslColor.Lightness * 0.6));
+            HslColor hslColorDarker = new HslColor(hslColor.H, hslColor.S, (int)(hslColor.L * 0.6));
             RgbColor rgbColor = CalcColorConverter.HslToRgb(hslColor);
             RgbColor rgbColorDarker = CalcColorConverter.HslToRgb(hslColorDarker);
-            Color color = new Color(rgbColor.Red, rgbColor.Green, rgbColor.Blue);
-            Color colorDarker = new Color(rgbColorDarker.Red, rgbColorDarker.Green, rgbColorDarker.Blue);
+            Color color = new Color(rgbColor.R, rgbColor.G, rgbColor.B);
+            Color colorDarker = new Color(rgbColorDarker.R, rgbColorDarker.G, rgbColorDarker.B);
             var overrideSettings = new OverrideGraphicSettings();
             overrideSettings.SetProjectionLineColor(colorDarker);
             overrideSettings.SetSurfaceTransparency(0);

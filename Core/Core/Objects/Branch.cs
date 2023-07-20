@@ -284,7 +284,7 @@ namespace Calc.Core.Objects
         public void PrintTree(int indentLevel = 0)
         {
             string indentation = new(' ', indentLevel * 4);
-            Console.WriteLine($"{indentation}L: {BranchLevel}, Param: {Parameter}, Val: {Value}, Meth: {Method}, Col: {HslColor.Hue}, Build: {Buildup}");
+            Console.WriteLine($"{indentation}L: {BranchLevel}, Param: {Parameter}, Val: {Value}, Meth: {Method}, Col: {HslColor.H}, Build: {Buildup}");
 
             foreach (var subBranch in SubBranches)
             {

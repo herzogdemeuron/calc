@@ -43,7 +43,7 @@ export default {
     },
     computed: {
         totalGwp() {
-            const gwp = this.data.reduce((acc, cur) => acc + cur.global_warming_potential_a1_a2_a3, 0);
+            const gwp = this.data.reduce((acc, cur) => acc + cur.gwp_a123, 0);
             return formatNumber(Math.round(gwp));
         },
         totalCost() {
@@ -54,7 +54,7 @@ export default {
             // count unique buildups
             const buildups = new Set();
             this.data.forEach((item) => {
-                buildups.add(item.buildup_name);
+                buildups.add(item.buildup);
             });
             return buildups.size;
         },
@@ -62,7 +62,7 @@ export default {
             // count unique group_id
             const groups = new Set();
             this.data.forEach((item) => {
-                groups.add(item.group_name);
+                groups.add(item.buildup_group);
             });
             return groups.size;
         },
@@ -70,7 +70,7 @@ export default {
             // count unique material_id
             const materials = new Set();
             this.data.forEach((item) => {
-                materials.add(item.material_name);
+                materials.add(item.material);
             });
             return materials.size;
         },
