@@ -30,6 +30,7 @@ namespace Calc.ConnectorRevit.Revit
                 if (directusInstance == null)
                 {
                     Debug.WriteLine("Failed to get directus.");
+                    TaskDialog.Show("Error", "Failed to connect the server.");
                     return Result.Cancelled;
                 }
                 DirectusStore store = new DirectusStore(directusInstance);
@@ -59,6 +60,7 @@ namespace Calc.ConnectorRevit.Revit
 
             if (directus == null)
             {
+                TaskDialog.Show("Error", "Failed to authenticate.");
                 System.Windows.Application.Current.Shutdown();
             }
             else

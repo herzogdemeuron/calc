@@ -21,6 +21,7 @@ namespace Calc.ConnectorRevit.ViewModels
         public BuildupViewModel BuildupVM { get; set; }
         public NodeTreeViewModel NodeTreeVM { get; set; }
         public SavingViewModel SavingVM { get; set; }
+        public VisibilityViewModel VisibilityVM { get; set; }
         public MainViewModel(DirectusStore store)
         {
             Store = store;
@@ -32,6 +33,8 @@ namespace Calc.ConnectorRevit.ViewModels
             NodeTreeVM = new NodeTreeViewModel(store);
             BuildupVM = new BuildupViewModel(NodeTreeVM);
             SavingVM = new SavingViewModel(NodeTreeVM);
+
+            VisibilityVM = new VisibilityViewModel(store);
         }
 
         public void NotifyStoreChange()
@@ -61,7 +64,14 @@ namespace Calc.ConnectorRevit.ViewModels
             Server.Stop();
         }
 
-         public event PropertyChangedEventHandler PropertyChanged;
+        public void HandleBackToMainView()
+        {
+            ViewMediator.Broadcast("ShowMainView");
+        }
+
+
+        
+        public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

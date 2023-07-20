@@ -18,16 +18,13 @@ namespace Calc.ConnectorRevit.Views
             MainVM = mvm;
             this.DataContext = MainVM;
             InitializeComponent();
-            EventMessenger.OnMessageReceived += MessageFromViewModelReceived;
-            ViewMediator.Register("VisibilityProjectWaiting", _ => VisibilityProjectWaiting());
-            ViewMediator.Register("VisibilityMainViewEntering", _ => VisibilityMainViewEntering());
+            EventMessenger.OnMessageReceived += MessageFromViewModelReceived; // to be replaced with Mediator
         }
-
-
 
 
         private void MessageFromViewModelReceived(string message)
         {
+            // to be replaced with Mediator
             if (message == "DeselectTreeView")
             {
                 if (TreeView.SelectedItem != null)
@@ -44,6 +41,8 @@ namespace Calc.ConnectorRevit.Views
             }
         }
 
+
+
         private async void WindowLoaded(object sender, RoutedEventArgs e)
         {
             await MainVM.LoadingVM.HandleLoadingAsync();
@@ -57,33 +56,23 @@ namespace Calc.ConnectorRevit.Views
         private async void ProjectOKClicked(object sender, RoutedEventArgs e)
         {
             var project = ProjectsComboBox.SelectedItem;
-            if (project == null)
-            {
-                return;
-            }
-            ViewMediator.Broadcast("VisibilityProjectWaiting");
             await MainVM.LoadingVM.HandleProjectSelectedAsync(project as Project);
             MainVM.NotifyStoreChange();
-            ViewMediator.Broadcast("VisibilityMainViewEntering");
         }
         
         private void ForestSelectionChanged (object sender, SelectionChangedEventArgs e)
         {
             var forest = ForestsComboBox.SelectedItem;
-            if (forest == null)
-            {
-                return;
-            }
             MainVM.ForestVM.HandleForestSelectionChanged(forest as Forest);
         }
 
         private void MappingSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var forest = ForestsComboBox.SelectedItem;
+/*            var forest = ForestsComboBox.SelectedItem;
             if (forest == null)
             {
                 return;
-            }
+            }*/
             MainVM.MappingVM.HandleMappingSelectionChanged(MappingsComboBox.SelectedItem as Mapping);
         }
 
@@ -142,55 +131,28 @@ namespace Calc.ConnectorRevit.Views
             MainVM.HandleStartCalcLive();
         }
 
-        private void VisibilityProjectWaiting()
-        {
-            WaitingTextBlock.Text = "LOADING PROJECTS...";
-            WaitingOverlay.Visibility = Visibility.Visible;
-            SelectProjectOverlay.Visibility = Visibility.Collapsed;
-        }
-
-        private void VisibilityMainViewEntering()
-        {
-            WaitingOverlay.Visibility = Visibility.Collapsed;
-        }
 
         private void SaveResultsClicked(object sender, RoutedEventArgs e)
         {
-            //MainVM.SavingVM.UpdateElementCount();
-            SaveResultOverlay.Visibility = Visibility.Visible;
+            NewResultNameTextBox.Text = "";
+            MainVM.SavingVM.HandleSavingResults();
         }
 
         private async void SaveResultOKClicked( object sender, RoutedEventArgs e)
         {
-            
-            this.WaitingTextBlock.Text = "SAVING RESULTS...";
-            WaitingOverlay.Visibility = Visibility.Visible;
-            SaveResultOverlay.Visibility = Visibility.Collapsed;
-            bool? saved = await MainVM.SavingVM.HandleSaveResults(NewResultNameTextBox.Text);
-            WaitingOverlay.Visibility = Visibility.Collapsed;
-            MessageOverlay.Visibility = Visibility.Visible;
-            if (saved == null)
-            {
-                MessageTextBlock.Text = "PLEASE CHOOSE A FOREST";
-            }
-            else if (saved == true)
-            {
-                MessageTextBlock.Text = "RESULTS SAVED";
-            }
-            else
-            {
-                MessageTextBlock.Text = "ERROR SAVING RESULTS";
-            }
+            await MainVM.SavingVM.HandleSendingResults(NewResultNameTextBox.Text);            
         }
 
         private void SaveResultCancelClicked (object sender, RoutedEventArgs e)
         {
-            SaveResultOverlay.Visibility = Visibility.Collapsed;
+            MainVM.SavingVM.HandleSaveResultCanceled();
         }
+
+
 
         private void MessageOKClicked(object sender, RoutedEventArgs e)
         {
-            MessageOverlay.Visibility = Visibility.Collapsed;
+            MainVM.HandleBackToMainView();
         }
 
         private async void UpdateMappingClicked(object sender, RoutedEventArgs e)

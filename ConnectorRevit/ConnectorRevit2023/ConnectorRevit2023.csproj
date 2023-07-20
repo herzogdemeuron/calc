@@ -8,19 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\DTLogo.gif" />
+    <None Remove="Resources\DT_logo.gif" />
     <None Remove="Resources\icon-01.png" />
     <None Remove="ToggleButtonTemplate.xaml" />
     <None Remove="Views\MainView.xaml" />
     <None Remove="Views\MainViewResources.xaml" />
     <None Remove="Views\NewMappingView.xaml" />
     <None Remove="Views\ToggleButtonResource.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Resources\DTLogo.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
   </ItemGroup>
 
   <ItemGroup>
@@ -65,6 +59,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\DT_logo.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\icon-01.png" />
   </ItemGroup>
 

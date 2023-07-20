@@ -28,7 +28,11 @@ namespace Calc.ConnectorRevit.ViewModels
         }
         public void HandleMappingSelectionChanged(Mapping mapping)
         {
-            Mediator.Broadcast("MappingSelectionChanged", mapping);
+            if (store.ForestSelected != null)
+            {
+                Mediator.Broadcast("MappingSelectionChanged", mapping);
+            }
+            
         }
 
         public async Task HandleUpdateMapping()

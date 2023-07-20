@@ -28,12 +28,27 @@ namespace Calc.ConnectorRevit.ViewModels
         {
             await store.GetProjects();
             OnPropertyChanged(nameof(AllProjects));
+            ViewMediator.Broadcast("ShowProjectOverlay");
         }
 
         public async Task HandleProjectSelectedAsync(Project project)
         {
+            if (project == null)
+            {
+                ViewMediator.Broadcast("ShowMessageOverlay",((object)null, new List<string>{"Please choose a project.","",""}));
+            }
+            ViewMediator.Broadcast("ShowWaitingOverlay", "Loading project data...");
             store.ProjectSelected = project;
-            await store.GetOtherData();
+            bool dataGot = await store.GetOtherData();
+            if (dataGot)
+            {
+                ViewMediator.Broadcast("ShowMainView");
+            }
+            else
+            {
+                ViewMediator.Broadcast("ShowMessageOverlay", ((object)null, new List<string> { "Error occured while getting project data, please try again." }));
+            }
+
         }
 
 
