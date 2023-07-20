@@ -267,7 +267,10 @@
                         Margin="10"/>
                 <TextBlock x:Name="ResultMessageText"
                             HorizontalAlignment="Center"
-                            Text="xxx Items would be saved, this can take a while."/>
+                            Text="{Binding DataContext.SavingVM.ElementCount, RelativeSource={RelativeSource AncestorType={x:Type Window}}, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock 
+                            HorizontalAlignment="Center"
+                            Text="xxx items would be saved, this can take a while."/>
                 <Button Content="CONFIRM" 
                     HorizontalAlignment="Center"
                     Width="90"

@@ -15,16 +15,26 @@ namespace Calc.ConnectorRevit.ViewModels
 
     public class BuildupViewModel : INotifyPropertyChanged
     {
+        private NodeTreeViewModel nodeTreeVM;
+        public BuildupViewModel(NodeTreeViewModel ntVM)
+        {
+            nodeTreeVM = ntVM;
+        }
 
         public void HandleBuildupSelectionChanged()
         {
             Mediator.Broadcast("BuildupSelectionChanged");
-            Debug.WriteLine("BuildupSelectionChanged broadcasted");
         }
 
         public void HandleInherit()
         {
-            Mediator.Broadcast("BuildupInherited");
+            if (nodeTreeVM.SelectedNodeItem == null)
+                return;
+            IGraphNode host = nodeTreeVM.SelectedNodeItem.Host;
+            if (!(host is Branch branch))
+                return;
+            branch.InheritMapping();
+            Mediator.Broadcast("BuildupSelectionChanged");
         }
 
 

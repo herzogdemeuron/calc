@@ -15,6 +15,8 @@ namespace Calc.ConnectorRevit.ViewModels
     public class SavingViewModel : INotifyPropertyChanged
     {
         private readonly NodeTreeViewModel nodetreeVM;
+        public double ElementCount { get; set; }
+
 
         public SavingViewModel(NodeTreeViewModel ntreeVM)
         
@@ -22,12 +24,14 @@ namespace Calc.ConnectorRevit.ViewModels
             nodetreeVM = ntreeVM;
         }
 
+
         public async Task<bool?> HandleSaveResults(string newName)
         {
             NodeViewModel CurrentForestItem = nodetreeVM.CurrentForestItem;
             NodeViewModel SelectedNodeItem = nodetreeVM.SelectedNodeItem;
             if (CurrentForestItem == null) return null;
             NodeViewModel nodeToCalculate = SelectedNodeItem ?? CurrentForestItem;
+            ElementCount = nodeToCalculate.Host.Elements.Count;
             ViewMediator.Broadcast("VisibilitySaving");
             ResultSender resultSender = new ResultSender();
             return await resultSender.SaveResults(nodeToCalculate, newName);

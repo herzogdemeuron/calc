@@ -81,7 +81,8 @@ namespace Calc.ConnectorRevit.Helpers
         {
             ElementId id = element.GetTypeId();
             Element type = element.Document.GetElement(id);
-            return type.LookupParameter(parameterName);
+            Parameter param =  type?.LookupParameter(parameterName) ?? null;
+            return param;
         }
         
 

@@ -28,8 +28,9 @@ namespace Calc.ConnectorRevit.ViewModels
             LoadingVM = new LoadingViewModel(store);
             ForestVM = new ForestViewModel(store);
             MappingVM = new MappingViewModel(store);
-            BuildupVM = new BuildupViewModel();
+            
             NodeTreeVM = new NodeTreeViewModel(store);
+            BuildupVM = new BuildupViewModel(NodeTreeVM);
             SavingVM = new SavingViewModel(NodeTreeVM);
         }
 
