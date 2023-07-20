@@ -31,18 +31,26 @@
 
         <Grid Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="20*"/>
-                <ColumnDefinition Width="30*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="400"/>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
+                <RowDefinition Height="22"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
+            <Label Content="Forest:"
+                   Padding="10,6,0,0"
+                   FontWeight="SemiBold"/>
+            <Label Grid.Column="1" 
+                   Content="Mapping:" 
+                   Padding="10,6,0,0"
+                   FontWeight="SemiBold"/>
 
             <DockPanel Grid.Column="0"
-                       Grid.Row="0"
+                       Grid.Row="1"
                        Margin="10"
                        HorizontalAlignment="Stretch">
                 <ComboBox x:Name="ForestsComboBox"
@@ -55,17 +63,20 @@
             </DockPanel>
 
             <DockPanel Grid.Column="2"
-                       Grid.Row="0"
+                       Grid.Row="1"
                        Margin="10"
                        HorizontalAlignment="Stretch">
                 <Button Content="Update" 
                         Width="50" 
                         Click="UpdateMappingClicked"
-                        Style= "{StaticResource ButtonStyle}"/>
+                        Height="25"
+                        DockPanel.Dock="Right"/>
                 <Button Content="New" 
-                        Width="50" 
+                        Width="50"
+                        Height="25"
+                        Margin="10,0,10,0"
                         Click="NewMappingClicked"
-                        Style= "{StaticResource ButtonStyle}"/>
+                        DockPanel.Dock="Right"/>
                 <ComboBox x:Name="MappingsComboBox"
                           ItemsSource="{Binding DataContext.Store.MappingsProjectRelated, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                           SelectedItem="{Binding DataContext.Store.MappingSelected, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -77,7 +88,7 @@
             </DockPanel>
 
             <Grid Grid.Column="0"
-                  Grid.Row="1"
+                  Grid.Row="2"
                   Margin="10">
                 <TreeView x:Name="TreeView"
                       ItemsSource="{Binding NodeTreeVM.NodeSource}"
@@ -100,11 +111,15 @@
 
             <DockPanel  x:Name="BuildupPanel"
                         Grid.Column="2"
-                        Grid.Row="1"
+                        Grid.Row="2"
                         Margin="10"
                         LastChildFill="True"
                         DockPanel.Dock="Top">
-                <Label Content="Buildup:" DockPanel.Dock="Top" FontWeight="SemiBold"/>
+                <Label Content="Buildup:" 
+                       DockPanel.Dock="Top" 
+                       Padding="0"
+                       Margin="0,0,0,12"
+                       FontWeight="SemiBold"/>
                 <DockPanel HorizontalAlignment="Stretch"
                            DockPanel.Dock="Top"
                            LastChildFill="True"
@@ -112,7 +127,9 @@
                             >
                     <Button Content="Use Parent"
                             Width="110"
-                            Style= "{StaticResource ButtonStyle}"
+                            DockPanel.Dock="Right"
+                            Margin="10,0,0,0"
+                            Height="25"
                             Click="InheritClicked"/>
                     <ComboBox x:Name="BuildupsComboBox"
                                 ItemsSource="{Binding DataContext.Store.BuildupsAll, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
@@ -159,7 +176,7 @@
 
             </DockPanel>
             <StackPanel Grid.Column="0"
-                        Grid.Row="2"
+                        Grid.Row="3"
                         Orientation="Horizontal"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Left"
@@ -172,25 +189,28 @@
                 <TextBlock Text="Buildup" FontSize="10" Margin="4,2,0,0"/>
             </StackPanel>
             <Button Grid.Column="0"
-                    Grid.Row="2"
+                    Grid.Row="3"
                     Content="Update Revit"
                     Margin="0,0,10,10"
                     Width="90"
+                    Height="25"
                     Click="UpdateRevitClicked"
                     HorizontalAlignment="Right"
-                    Style= "{StaticResource ButtonStyle}"/>
+                    />
 
             <Grid Grid.Column="2"
-                    Grid.Row="2">
+                    Grid.Row="3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0" 
                         Content="Start CalcLive"
+                        Height="25"
                         Click="StartCalcLiveClicked" Margin="10,0,5,10" />
                 <Button Grid.Column="1"
                         Content="Save Results"
+                        Height="25"
                         Click="SaveResultsClicked" Margin="5,0,10,10" />
             </Grid>
 
@@ -198,9 +218,9 @@
 
         <Grid x:Name="ProjectOverlay"
               d:IsHidden="true"
-              Background="White"
+              Background="LightGray"
               Margin="10,10,10,10"
-             Visibility="{Binding DataContext.VisibilityVM.ProjectOverlayVisibility, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+              Visibility="{Binding DataContext.VisibilityVM.ProjectOverlayVisibility, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
               Grid.ColumnSpan="2">
             <StackPanel VerticalAlignment="Center">
                 <TextBlock HorizontalAlignment="Center"
@@ -218,6 +238,66 @@
                         Click="ProjectOKClicked"/>
             </StackPanel>
         </Grid>
+        
+        <Grid x:Name="NewMappingOverlay"
+             Background="LightGray"
+              d:IsHidden="true"
+             Margin="10,10,10,10"
+             Visibility="{Binding DataContext.VisibilityVM.NewMappingOverlayVisibility, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+             Grid.ColumnSpan="2">
+            <StackPanel VerticalAlignment="Center">
+
+                <TextBlock Grid.Row="0"
+                           HorizontalAlignment="Center"
+                           Text="Mappings to duplicate:"/>
+
+                <ListBox Grid.Row="1"
+                         x:Name="MappingListBox"
+                         HorizontalAlignment="Center"
+                         Margin="10"
+                         Width="180"
+                         Height="180"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                         SelectionChanged="MappingSelectionChanged"
+                         ItemsSource="{Binding DataContext.NewMappingVM.MappingsListView, RelativeSource={RelativeSource AncestorType={x:Type Window}},UpdateSourceTrigger=PropertyChanged}">
+                        <ListBox.GroupStyle>
+                            <GroupStyle>
+                                <GroupStyle.HeaderTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}" Foreground="Gray" />
+                                    </DataTemplate>
+                                </GroupStyle.HeaderTemplate>
+                            </GroupStyle>
+                        </ListBox.GroupStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>      
+
+                <TextBlock Grid.Row="2"
+                           HorizontalAlignment="Center"
+                           Text="New mapping name:"/>
+                <TextBox Grid.Row="3"
+                         Margin="10"
+                         x:Name="NewNameText" 
+                         MinWidth="90"
+                         HorizontalAlignment="Center"
+                         Text="{Binding DataContext.NewMappingVM.NewName, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <Button Grid.Row="4"
+                        HorizontalAlignment="Center"
+                        Width="90"
+                        Content="Confirm" 
+                        Click="NewMappingConfirmed"/>
+                <Button Grid.Row="4"
+                        HorizontalAlignment="Center"
+                        Margin="10"
+                        Width="90"
+                        Content="Cancel" 
+                        Click="NewMappingCanceld"/>
+            </StackPanel>
+        </Grid>
 
         <Grid x:Name="WaitingOverlay"
              Background="LightGray"
@@ -226,34 +306,18 @@
              Grid.ColumnSpan="2"
               d:IsHidden="true">
             <StackPanel VerticalAlignment="Center">
-            <TextBlock x:Name="WaitingTextBlock"
+                <TextBlock x:Name="WaitingTextBlock"
                     HorizontalAlignment="Center"
-                    Text="LOADING..."/>
+                    Text="{Binding DataContext.VisibilityVM.WaitingText, RelativeSource={RelativeSource AncestorType={x:Type Window}}, UpdateSourceTrigger=PropertyChanged}"/>
+                           
                 <Image gif:ImageBehavior.AnimatedSource="/CalcConnectorRevit2023;component/Resources/DT_logo.gif"
                        Width="90"
                        Margin="10"/>
-                <Button Content="QUIT" 
+                <Button Content="Quit" 
+                        IsEnabled="False"
                     HorizontalAlignment="Center"
                     Width="90"
                     Click="ProjectOKClicked"/>
-            </StackPanel>
-        </Grid>
-
-        <Grid x:Name="MessageOverlay"
-             Background="LightGray"
-             Margin="10,10,10,10"
-             Visibility="{Binding DataContext.VisibilityVM.MessageOverlayVisibility, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-             Grid.ColumnSpan="2"
-              d:IsHidden="true">
-            <StackPanel VerticalAlignment="Center">
-                <TextBlock x:Name="MessageTextBlock"
-                            Text="{Binding DataContext.VisibilityVM.MessageText, RelativeSource={RelativeSource AncestorType={x:Type Window}}, UpdateSourceTrigger=PropertyChanged}"
-                            HorizontalAlignment="Center"/>
-                <Button Content="OK" 
-                    HorizontalAlignment="Center"
-                    Width="90"
-                    Margin="10"
-                    Click="MessageOKClicked"/>
             </StackPanel>
         </Grid>
 
@@ -281,6 +345,24 @@
                     HorizontalAlignment="Center"
                     Width="90"
                     Click="SaveResultCancelClicked"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid x:Name="MessageOverlay"
+             Background="LightGray"
+             Margin="10,10,10,10"
+             Visibility="{Binding DataContext.VisibilityVM.MessageOverlayVisibility, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+             Grid.ColumnSpan="2"
+              d:IsHidden="true">
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock x:Name="MessageTextBlock"
+                            Text="{Binding DataContext.VisibilityVM.MessageText, RelativeSource={RelativeSource AncestorType={x:Type Window}}, UpdateSourceTrigger=PropertyChanged}"
+                            HorizontalAlignment="Center"/>
+                <Button Content="OK" 
+                    HorizontalAlignment="Center"
+                    Width="90"
+                    Margin="10"
+                    Click="MessageOKClicked"/>
             </StackPanel>
         </Grid>
 

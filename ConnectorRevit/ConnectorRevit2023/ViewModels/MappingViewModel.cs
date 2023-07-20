@@ -6,6 +6,7 @@ using Calc.Core.Objects;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,12 +21,7 @@ namespace Calc.ConnectorRevit.ViewModels
         {
             store = directusStore;
         }
-        public void HandleNewMapping()
-        {
-            Window newMappingWindow = new NewMappingView(store);
-            newMappingWindow.ShowDialog();
-            Mediator.Broadcast("MappingSelectionChanged",store.MappingSelected);
-        }
+
         public void HandleMappingSelectionChanged(Mapping mapping)
         {
             if (store.ForestSelected != null)
@@ -37,15 +33,30 @@ namespace Calc.ConnectorRevit.ViewModels
 
         public async Task HandleUpdateMapping()
         {
+            bool? feedback;
+            string error = "";
             try
             {
-                await store.UpdateSelectedMapping();
-                TaskDialog.Show("Update Mapping", "Mapping updated"); // not topmost, fix it
+                ViewMediator.Broadcast("ShowWaitingOverlay", "Updating mapping...");
+                feedback = await store.UpdateSelectedMapping();
+                ViewMediator.Broadcast("ShowMainView");
             }
             catch (Exception ex)
             {
-                TaskDialog.Show("Update Mapping", ex.Message);
+                Debug.WriteLine(ex.Message);
+                ViewMediator.Broadcast("ShowMainView");
+                feedback = null;
+                error = ex.Message;
             }
+            ViewMediator.Broadcast
+               ("ShowMessageOverlay",
+               new List<object>
+                   {   feedback,
+                        error,
+                        "Updated mapping successfully.",
+                        "Error occured while saving, please try again."
+                   }
+                );
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

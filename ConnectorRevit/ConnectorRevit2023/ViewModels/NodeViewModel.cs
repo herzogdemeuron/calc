@@ -28,6 +28,16 @@ namespace Calc.ConnectorRevit.ViewModels
                 }
             }
         }
+        public string ElementsCount
+        {
+            get
+            {
+                if (Host == null)
+                    return "Choose a forest";
+                else
+                    return $"({ Host.Elements.Count})";
+            }
+        }
 
         public NodeViewModel(DirectusStore store, IGraphNode node)
         {

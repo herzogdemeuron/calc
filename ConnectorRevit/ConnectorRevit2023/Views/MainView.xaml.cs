@@ -78,8 +78,21 @@ namespace Calc.ConnectorRevit.Views
 
         private void NewMappingClicked(object sender, RoutedEventArgs e)
         {
-            MainVM.MappingVM.HandleNewMapping();
+            MainVM.NewMappingVM.HandleNewMappingClicked();
+        }
+        private async void NewMappingConfirmed(object sender, RoutedEventArgs e)
+        {
+            string newName = this.NewNameText.Text.Trim();
+            Mapping selectedMapping = this.MappingListBox.SelectedItem as Mapping;
+            await MainVM.NewMappingVM.HandleNewMappingCreate(selectedMapping, newName);
             MainVM.NotifyStoreChange();
+        }
+
+        private void NewMappingCanceld(object sender, RoutedEventArgs e)
+        {
+            this.NewNameText.Text = "";
+            MappingListBox.SelectedItem = null;
+            MainVM.NewMappingVM.HandleNewMappingCanceled();
         }
 
         private void TreeViewItemSelected(object sender, RoutedEventArgs e)
@@ -120,10 +133,6 @@ namespace Calc.ConnectorRevit.Views
         private void UpdateRevitClicked(object sender, RoutedEventArgs e)
         {
             var forest = ForestsComboBox.SelectedItem;
-            if (forest == null)
-            {
-                return;
-            }
             MainVM.ForestVM.HandleForestSelectionChanged(forest as Forest);
         }
         private void StartCalcLiveClicked(object sender, RoutedEventArgs e)
@@ -152,7 +161,7 @@ namespace Calc.ConnectorRevit.Views
 
         private void MessageOKClicked(object sender, RoutedEventArgs e)
         {
-            MainVM.HandleBackToMainView();
+            MainVM.HandleMessageClose();
         }
 
         private async void UpdateMappingClicked(object sender, RoutedEventArgs e)

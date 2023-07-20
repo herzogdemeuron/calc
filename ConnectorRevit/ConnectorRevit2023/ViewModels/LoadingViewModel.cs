@@ -35,7 +35,8 @@ namespace Calc.ConnectorRevit.ViewModels
         {
             if (project == null)
             {
-                ViewMediator.Broadcast("ShowMessageOverlay",((object)null, new List<string>{"Please choose a project.","",""}));
+                ViewMediator.Broadcast("ShowMessageOverlay", new List<object>{null, "Please choose a project."});
+                return;
             }
             ViewMediator.Broadcast("ShowWaitingOverlay", "Loading project data...");
             store.ProjectSelected = project;
@@ -46,7 +47,7 @@ namespace Calc.ConnectorRevit.ViewModels
             }
             else
             {
-                ViewMediator.Broadcast("ShowMessageOverlay", ((object)null, new List<string> { "Error occured while getting project data, please try again." }));
+                ViewMediator.Broadcast("ShowMessageOverlay", new List<object> { null, "Error occured while getting project data, please try again." });
             }
 
         }

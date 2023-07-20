@@ -16,7 +16,6 @@ namespace Calc.ConnectorRevit.ViewModels
     public class VisibilityViewModel : INotifyPropertyChanged
     {
 
-        private readonly DirectusStore store;
 
         private string messageText;
         public string MessageText
@@ -50,7 +49,7 @@ namespace Calc.ConnectorRevit.ViewModels
                 OnPropertyChanged(nameof(SavingMessage));
             }
         }
-        private Visibility projectOverlayVisibility;
+        private Visibility projectOverlayVisibility = Visibility.Visible;
         public Visibility ProjectOverlayVisibility
         {
             get { return projectOverlayVisibility; }
@@ -59,7 +58,7 @@ namespace Calc.ConnectorRevit.ViewModels
                 projectOverlayVisibility = value;
                 OnPropertyChanged(nameof(ProjectOverlayVisibility));
             }
-        }
+        } 
 
         private Visibility waitingOverlayVisibility;
         public Visibility WaitingOverlayVisibility
@@ -94,19 +93,29 @@ namespace Calc.ConnectorRevit.ViewModels
             }
         }
 
-        public VisibilityViewModel(DirectusStore directusStore)
+        private Visibility newMappingOverlayVisibility;
+        public Visibility NewMappingOverlayVisibility
         {
-            HideAllOverlays();
-            store = directusStore;
+            get { return newMappingOverlayVisibility; }
+            set
+            {
+                newMappingOverlayVisibility = value;
+                OnPropertyChanged(nameof(NewMappingOverlayVisibility));
+            }
+        }
+
+        public VisibilityViewModel()
+        {
+            HideAllOverlays(false);
             ViewMediator.Register("ShowMainView", _ => HideAllOverlays());
             ViewMediator.Register("ShowProjectOverlay", _ => ShowProjectOverlay());
             ViewMediator.Register("ShowWaitingOverlay", message => ShowWaitingOverlay((string)message));
             ViewMediator.Register("ShowSavingOverlay", message => ShowSavingOverlay((string)message));
-            ViewMediator.Register("ShowMessageOverlay", param => {
-                var tuple = (ValueTuple<bool?, List<string>>)param;
-                ShowMessageOverlay(tuple.Item1, tuple.Item2);
-            });
+            ViewMediator.Register("ShowMessageOverlay", args => ShowMessageOverlay((List<object>)args));
+            ViewMediator.Register("HideMessageOverlay", _ => HideMessageOverlay());
 
+            ViewMediator.Register("ShowNewMappingOverlay", _ => ShowNewMappingOverlay());
+            
         }
 
         private void ShowProjectOverlay()
@@ -123,6 +132,12 @@ namespace Calc.ConnectorRevit.ViewModels
 
         }
 
+        private void ShowNewMappingOverlay()
+        {
+            HideAllOverlays();
+            NewMappingOverlayVisibility = Visibility.Visible;
+        }
+
         private void ShowWaitingOverlay(string text)
         {
             HideAllOverlays();
@@ -130,30 +145,40 @@ namespace Calc.ConnectorRevit.ViewModels
             WaitingOverlayVisibility = Visibility.Visible;
         }
 
-        private void ShowMessageOverlay(bool? result, List<string> messages)
+        private void ShowMessageOverlay( List<object> args)
         {
-            HideAllOverlays();
+            
             MessageOverlayVisibility = Visibility.Visible;
+            bool? result = args.FirstOrDefault() as bool?;
             if (result == null)
             {
-                MessageText = messages.First();
+                MessageText = args[1]?.ToString() ?? "-";
             }
             else if (result == true)
             {
-                MessageText = messages[1];
+                MessageText = args[2]?.ToString() ?? "-";
             }
             else
             {
-                MessageText = messages.Last();
+                MessageText = args[3]?.ToString() ?? "-";
             }
         }
 
-        private void HideAllOverlays()
+        private void HideMessageOverlay() 
+        {
+            MessageOverlayVisibility = Visibility.Collapsed;
+        }
+
+        private void HideAllOverlays(bool? hideProjects = true)
         {
             WaitingOverlayVisibility = Visibility.Collapsed;
             MessageOverlayVisibility = Visibility.Collapsed;
             SavingOverlayVisibility = Visibility.Collapsed;
-            ProjectOverlayVisibility = Visibility.Collapsed;
+            NewMappingOverlayVisibility= Visibility.Collapsed;
+            if (hideProjects == true)
+            {
+                ProjectOverlayVisibility = Visibility.Collapsed;
+            }
         }
         
 

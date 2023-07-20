@@ -50,18 +50,15 @@ namespace Calc.ConnectorRevit.ViewModels
             ResultSender resultSender = new ResultSender();
             bool? feedback =  await resultSender.SaveResults(nodeToCalculate, newName);
             ViewMediator.Broadcast
-                (
-                    "ShowMessageOverlay",
-                    (
-                        feedback, 
-                        new List<string> 
-                            { 
-                                "No element is saved",
-                                "Saving results successfully.",
-                                "Error occured while saving." 
-                            }
-                    )
-                );
+                ("ShowMessageOverlay",
+                new List<object> 
+                    {   feedback,
+                        "No element is saved",
+                        "Saved results successfully.",
+                        "Error occured while saving." 
+                    }
+                 );
+            ViewMediator.Broadcast("ShowMainView");
         }
 
         public void HandleSaveResultCanceled()
