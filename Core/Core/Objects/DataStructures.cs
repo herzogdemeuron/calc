@@ -52,7 +52,7 @@ namespace Calc.Core.Objects
     {
         [JsonProperty(PropertyName = "element_id")]
         public string ElementId { get; set; }
-        [JsonProperty(PropertyName = "global_warming_potential_a1_a2_a3")]
+        [JsonProperty(PropertyName = "gwp_a123")]
         public decimal GlobalWarmingPotentialA1A2A3 { get; set; }
         [JsonProperty(PropertyName = "cost")]
         public decimal Cost { get; set; }
@@ -60,13 +60,13 @@ namespace Calc.Core.Objects
         public Unit Unit { get; set; }
         [JsonProperty(PropertyName = "material_amount")]
         public decimal MaterialAmount { get; set; }
-        [JsonProperty(PropertyName = "material_name")]
+        [JsonProperty(PropertyName = "material")]
         public string MaterialName { get; set; }
         [JsonProperty(PropertyName = "material_category")]
         public string MaterialCategory { get; set; }
-        [JsonProperty(PropertyName = "buildup_name")]
+        [JsonProperty(PropertyName = "buildup")]
         public string BuildupName { get; set; }
-        [JsonProperty(PropertyName = "group_name")]
+        [JsonProperty(PropertyName = "buildup_group")]
         public string GroupName { get; set; }
         [JsonProperty(PropertyName = "color")]
         public HslColor Color { get; set; }

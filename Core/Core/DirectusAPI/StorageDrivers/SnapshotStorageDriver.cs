@@ -11,13 +11,13 @@ namespace Calc.Core.DirectusAPI.Drivers
         public Snapshot SendItem { get; set; }
 
         public string QueryCreateSingle { get; } = @"
-                    mutation (name: String!, $results: JSON!, $projectInput: create_calc_architecture_projects_input) {
+                    mutation ($name: String!, $results: JSON!, $projectInput: create_calc_architecture_projects_input) {
                         create_calc_snapshots_item(data: {name: $name, results: $results, project_id: $projectInput}) {
                             id
                         }   
                     }";
 
-        [JsonProperty("create_calc_snapshot_item")]
+        [JsonProperty("create_calc_snapshots_item")]
         public Snapshot CreatedItem { get; set; }
 
         public Dictionary<string, object> GetVariables()
