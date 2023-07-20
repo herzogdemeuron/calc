@@ -1,21 +1,15 @@
 ﻿using System.Collections.Generic;
 using Speckle.Newtonsoft.Json;
-using System.Runtime.Serialization;
 using Calc.Core.Color;
 using System;
+using Speckle.Newtonsoft.Json.Converters;
 
 namespace Calc.Core.Objects
 {
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum Unit
     {
-        [EnumMember(Value = "each")]
-        each,
-        [EnumMember(Value = "m")]
-        m,
-        [EnumMember(Value = "m2")]
-        m2,
-        [EnumMember(Value = "m3")]
-        m3
+        each, m, m2, m3
     }
 
     public  struct CalcElement

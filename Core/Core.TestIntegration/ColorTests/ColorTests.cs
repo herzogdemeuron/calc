@@ -31,9 +31,9 @@ namespace Calc.Core.TestIntegration.ColorTests
             var rgbColor = CalcColorConverter.HslToRgb(hslColor);
 
             // Assert
-            Assert.AreEqual(255, rgbColor.Red);
-            Assert.AreEqual(0, rgbColor.Green);
-            Assert.AreEqual(0, rgbColor.Blue);
+            Assert.AreEqual(255, rgbColor.R);
+            Assert.AreEqual(0, rgbColor.G);
+            Assert.AreEqual(0, rgbColor.B);
         }
 
         [TestMethod]

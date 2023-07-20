@@ -4,28 +4,28 @@ namespace Calc.Core.Color
 {
     public struct HslColor
     {
-        public readonly int Hue;
-        public readonly int Saturation;
-        public readonly int Lightness;
+        public readonly int H;
+        public readonly int S;
+        public readonly int L;
 
         public HslColor(int hue, int saturation, int lightness)
         {
-            this.Hue = hue;
-            this.Saturation = saturation;
-            this.Lightness = lightness;
+            this.H = hue;
+            this.S = saturation;
+            this.L = lightness;
         }
     }
     public struct RgbColor
     {
-        public readonly byte Red;
-        public readonly byte Green;
-        public readonly byte Blue;
+        public readonly byte R;
+        public readonly byte G;
+        public readonly byte B;
 
         public RgbColor(byte red, byte green, byte blue)
         {
-            this.Red = red;
-            this.Green = green;
-            this.Blue = blue;
+            this.R = red;
+            this.G = green;
+            this.B = blue;
         }
     }
 
