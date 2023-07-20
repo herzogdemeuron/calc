@@ -22,6 +22,13 @@ I think you can host this in any way you like - but:
 Since CalcLive does not have any database access I recommend to hosting it on github pages.
 If you don't care about the url, you can use any public deployment of CalcLive to visualize your data.
 
+### Update GitHub Pages
+
+1. Merge all required changes into the branch you want to deploy from (e.g. gh-pages)
+2. Run `npm run build`
+3. Copy the build output into calc/docs (if you choose to deploy from the docs folder)
+4. Commit and push
+
 # For Developers
 
 ## Project setup
