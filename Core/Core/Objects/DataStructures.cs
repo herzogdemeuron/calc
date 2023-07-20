@@ -48,12 +48,8 @@ namespace Calc.Core.Objects
         public string ProjectNumber { get; set; }
     }
 
-    public class Result : IHasProject
+    public class Result
     {
-        [JsonProperty(PropertyName = "id", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public int Id { get; set; } = -1;
-        [JsonProperty(PropertyName = "snapshot_name")]
-        public string SnapshotName { get; set; }
         [JsonProperty(PropertyName = "element_id")]
         public string ElementId { get; set; }
         [JsonProperty(PropertyName = "global_warming_potential_a1_a2_a3")]
@@ -72,10 +68,20 @@ namespace Calc.Core.Objects
         public string BuildupName { get; set; }
         [JsonProperty(PropertyName = "group_name")]
         public string GroupName { get; set; }
-        [JsonProperty(PropertyName = "project_id", NullValueHandling = NullValueHandling.Ignore)]
-        public Project Project { get; set; }
         [JsonProperty(PropertyName = "color")]
         public HslColor Color { get; set; }
+    }
+
+    public class Snapshot : IHasProject
+    {
+        [JsonProperty(PropertyName = "id", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public int Id { get; set; } = -1;
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+        [JsonProperty(PropertyName = "project_id", NullValueHandling = NullValueHandling.Ignore)]
+        public Project Project { get; set; }
+        [JsonProperty(PropertyName = "results")]
+        public List<Result> Results { get; set; }
     }
 
     public class Material

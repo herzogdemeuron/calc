@@ -20,11 +20,9 @@ namespace Calc.ConnectorRevit.Services
         {
             DirectusStore store = nodeToCalculate.Store;
             var results = CalculationHelper.Calculate(nodeToCalculate);
-            string date = DateTime.Now.ToString("yyyy-MM-dd");
-            string snapshotName = $"{date}_{newName}";
-            store.SnapshotName = snapshotName;
+            store.SnapshotName = newName;
             store.Results = results;
-            return await store.SaveResults();
+            return await store.SaveSnapshot();
         }
     }
 }

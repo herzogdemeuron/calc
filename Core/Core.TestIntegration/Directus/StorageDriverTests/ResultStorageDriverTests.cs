@@ -41,7 +41,7 @@ namespace Calc.Core.TestIntegration.Drivers
             var storageManager = new DirectusManager<Result>(this.directus);
 
             // Act
-            var response = await storageManager.CreateMany<ResultStorageDriver>(new ResultStorageDriver() { SendItems = results });
+            var response = await storageManager.CreateMany<SnapshotStorageDriver>(new SnapshotStorageDriver() { SendItems = results });
             foreach (var result in response.CreatedManyItems)
             { Console.WriteLine(result.Id); }
 

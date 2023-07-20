@@ -306,7 +306,7 @@ namespace Calc.ConnectorRevit.ViewModels
             string snapshotName = "test_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
             store.SnapshotName = snapshotName;
             store.Results = results;
-            _ = Task.Run(async () => await store.SaveResults());
+            _ = Task.Run(async () => await store.SaveSnapshot());
         }
 
         private List<Result> PrepareCalculation()
