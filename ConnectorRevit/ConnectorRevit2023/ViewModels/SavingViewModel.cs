@@ -49,6 +49,7 @@ namespace Calc.ConnectorRevit.ViewModels
             ViewMediator.Broadcast("ShowWaitingOverlay", "Saving results...");
             ResultSender resultSender = new ResultSender();
             bool? feedback =  await resultSender.SaveResults(nodeToCalculate, newName);
+            ViewMediator.Broadcast("ShowMainView");
             ViewMediator.Broadcast
                 ("ShowMessageOverlay",
                 new List<object> 
@@ -58,7 +59,6 @@ namespace Calc.ConnectorRevit.ViewModels
                         "Error occured while saving." 
                     }
                  );
-            ViewMediator.Broadcast("ShowMainView");
         }
 
         public void HandleSaveResultCanceled()

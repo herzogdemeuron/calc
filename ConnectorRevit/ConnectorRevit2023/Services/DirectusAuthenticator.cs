@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Autodesk.Revit.UI;
 using Calc.ConnectorRevit.Views;
 using Calc.Core.DirectusAPI;
 
@@ -42,6 +43,7 @@ namespace Calc.ConnectorRevit.Services
 
             if (!directus.Authenticated)
             {
+                TaskDialog.Show("Directus Login", "Login failed");
                 return null;
             }
 

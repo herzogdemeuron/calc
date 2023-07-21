@@ -127,7 +127,8 @@ namespace Calc.ConnectorRevit.ViewModels
         {
             if (CurrentForestItem == null) return;
             NodeHelper.HideAllLabelColor(CurrentForestItem);
-            EventMessenger.SendMessage("DeselectTreeView"); //send command to the view to deselect treeview
+            //EventMessenger.SendMessage("DeselectTreeView"); //send command to the view to deselect treeview
+            ViewMediator.Broadcast("ViewDeselectTreeView"); //send command to the view to deselect treeview
             SelectedNodeItem = null;
             CurrentForestItem.NotifyLabelColorChange(); //better ways to do this?
             Mediator.Broadcast("TreeViewDeselected", CurrentForestItem); // to the visualizer

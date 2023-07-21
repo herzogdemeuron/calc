@@ -39,15 +39,16 @@ namespace Calc.ConnectorRevit.ViewModels
             {
                 ViewMediator.Broadcast("ShowWaitingOverlay", "Updating mapping...");
                 feedback = await store.UpdateSelectedMapping();
-                ViewMediator.Broadcast("ShowMainView");
+                //Mediator.Broadcast("MappingSelectionChanged", store.MappingSelected);
+
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                ViewMediator.Broadcast("ShowMainView");
                 feedback = null;
                 error = ex.Message;
             }
+            ViewMediator.Broadcast("ShowMainView");
             ViewMediator.Broadcast
                ("ShowMessageOverlay",
                new List<object>

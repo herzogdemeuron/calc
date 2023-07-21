@@ -65,6 +65,7 @@ namespace Calc.ConnectorRevit.ViewModels
 
         public void HandleWindowClosing()
         {
+            NodeTreeVM.DeselectNodes();
             Server.Stop();
         }
 

@@ -157,8 +157,6 @@ namespace Calc.ConnectorRevit.Views
             MainVM.SavingVM.HandleSaveResultCanceled();
         }
 
-
-
         private void MessageOKClicked(object sender, RoutedEventArgs e)
         {
             MainVM.HandleMessageClose();
