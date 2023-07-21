@@ -1,5 +1,13 @@
 # Calc
 
+## Content
+
+- [Spotlight](#spotlight)
+- [Capabilites](#capabilities)
+- [Method](#method)
+- [Process](#process)
+- [About this Repo](#repository)
+
 ## Spotlight
 
 ### Model Filtering
@@ -16,13 +24,6 @@ Select mappings from your data source and apply them to the filter groups:
 See your result in realtime:
 
 ![extended](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHNienZqNmg4eWRkaWtzNDN5YXpmbGJvdDViYTYwNTcyb2xxOWViYSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/JcUDbUK7lsAYjl3Pky/giphy.gif)
-
-## Content
-
-- [Capabilites](#capabilities)
-- [Method](#method)
-- [Process](#process)
-- [About this Repo](#repository)
 
 ## Capabilities
 
