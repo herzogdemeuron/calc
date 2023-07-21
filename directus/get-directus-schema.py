@@ -26,7 +26,7 @@ print("Auth response status code: {}".format(response.status_code))
 access_token = response.json()["data"]["access_token"]
 
 # Get schema
-urlSchema = 'http://localhost:8055/schema/snapshot'
+urlSchema = baseUrl + '/schema/snapshot'
 headers["Authorization"] = 'Bearer {}'.format(access_token)
 response = requests.get(urlSchema, headers=headers)
 print(response.status_code)
