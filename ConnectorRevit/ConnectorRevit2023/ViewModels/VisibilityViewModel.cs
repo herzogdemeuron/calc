@@ -1,18 +1,11 @@
 ﻿using Calc.ConnectorRevit.Helpers;
-using Calc.Core.Objects;
-using Calc.Core;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using Autodesk.Revit.DB.Visual;
 
 namespace Calc.ConnectorRevit.ViewModels
 {
-
     public class VisibilityViewModel : INotifyPropertyChanged
     {
 

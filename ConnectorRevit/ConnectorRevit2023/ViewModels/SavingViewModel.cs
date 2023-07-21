@@ -1,15 +1,8 @@
-﻿using Calc.Core.Objects;
-using Calc.Core;
-using System;
+﻿using Calc.ConnectorRevit.Helpers;
+using Calc.ConnectorRevit.Services;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Calc.ConnectorRevit.Helpers;
-using Calc.ConnectorRevit.Services;
-using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.Visual;
 
 namespace Calc.ConnectorRevit.ViewModels
 {

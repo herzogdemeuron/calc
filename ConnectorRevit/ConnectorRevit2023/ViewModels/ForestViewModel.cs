@@ -1,15 +1,7 @@
-﻿using Calc.ConnectorRevit.Views;
-using Calc.Core.Objects;
+﻿using Calc.ConnectorRevit.Helpers;
 using Calc.Core;
-using System;
-using System.Collections.Generic;
+using Calc.Core.Objects;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Calc.ConnectorRevit.Helpers;
-using System.Collections.ObjectModel;
-using Calc.ConnectorRevit.Services;
 
 namespace Calc.ConnectorRevit.ViewModels
 {
@@ -19,7 +11,6 @@ namespace Calc.ConnectorRevit.ViewModels
         public ForestViewModel(DirectusStore directusStore)
         {
             store = directusStore;
-            //Mediator.Register("ProjectSelected", _ => HandleForestSelectionChanged());
         }
         public void HandleForestSelectionChanged(Forest forest)
         {
@@ -27,7 +18,7 @@ namespace Calc.ConnectorRevit.ViewModels
             {
                 Mapping mapping;
                 if (store.ForestSelected == forest)
-                      {
+                {
                     // if the same forest is selected, update the current forest presering the mapping
                     Mapping currentMapping = new Mapping(store.ForestSelected, "CurrentMapping");
                     ForestHelper.PlantTrees(store.ForestSelected);
@@ -41,6 +32,7 @@ namespace Calc.ConnectorRevit.ViewModels
                     mapping = store.MappingSelected;
                 }
                 Mediator.Broadcast("ForestSelectionChanged", mapping);
+                //ViewMediator.Broadcast("ViewDeselectTreeView");
             }
         }
 
@@ -55,8 +47,6 @@ namespace Calc.ConnectorRevit.ViewModels
                 Mediator.Broadcast("ForestSelectionChanged");
             }
         }
-
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)

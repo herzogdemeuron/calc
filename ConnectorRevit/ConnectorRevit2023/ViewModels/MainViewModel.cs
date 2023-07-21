@@ -1,13 +1,7 @@
 ﻿using Calc.ConnectorRevit.Helpers;
 using Calc.ConnectorRevit.Services;
-using Calc.ConnectorRevit.Views;
 using Calc.Core;
-using Calc.Core.Objects;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Threading.Tasks;
 
 namespace Calc.ConnectorRevit.ViewModels
 {
@@ -61,8 +55,6 @@ namespace Calc.ConnectorRevit.ViewModels
             Server.Start();
         }
 
-
-
         public void HandleWindowClosing()
         {
             NodeTreeVM.DeselectNodes();
@@ -78,9 +70,6 @@ namespace Calc.ConnectorRevit.ViewModels
         {
             ViewMediator.Broadcast("HideMessageOverlay");
         }
-
-
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)

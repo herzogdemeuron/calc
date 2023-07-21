@@ -1,11 +1,9 @@
-﻿using Calc.Core.Objects;
+﻿using Calc.ConnectorRevit.Helpers;
+using Calc.ConnectorRevit.ViewModels;
+using Calc.Core.Objects;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using Calc.ConnectorRevit.ViewModels;
-using Calc.ConnectorRevit.Helpers;
 
 namespace Calc.ConnectorRevit.Views
 {
@@ -18,30 +16,19 @@ namespace Calc.ConnectorRevit.Views
             MainVM = mvm;
             this.DataContext = MainVM;
             InitializeComponent();
-            EventMessenger.OnMessageReceived += MessageFromViewModelReceived; // to be replaced with Mediator
+            ViewMediator.Register("ViewDeselectTreeView", _=>DeselectTreeView());
         }
 
-
-        private void MessageFromViewModelReceived(string message)
+        private void DeselectTreeView()
         {
-            // to be replaced with Mediator
-            if (message == "DeselectTreeView")
+            if (TreeView.SelectedItem != null)
             {
-                if (TreeView.SelectedItem != null)
+                if (TreeView.Tag is TreeViewItem selectedTreeViewItem)
                 {
-                    if (TreeView.Tag is TreeViewItem selectedTreeViewItem)
-                    {
-                        selectedTreeViewItem.IsSelected = false;
-                    }
+                    selectedTreeViewItem.IsSelected = false;
                 }
             }
-            else if (message == "CloseWindow")
-            {
-                this.Close();
-            }
         }
-
-
 
         private async void WindowLoaded(object sender, RoutedEventArgs e)
         {
@@ -68,11 +55,6 @@ namespace Calc.ConnectorRevit.Views
 
         private void MappingSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-/*            var forest = ForestsComboBox.SelectedItem;
-            if (forest == null)
-            {
-                return;
-            }*/
             MainVM.MappingVM.HandleMappingSelectionChanged(MappingsComboBox.SelectedItem as Mapping);
         }
 

@@ -1,16 +1,13 @@
-﻿using Calc.Core;
+﻿using Calc.ConnectorRevit.Helpers;
+using Calc.Core;
 using Calc.Core.Objects;
-using System.Collections.ObjectModel;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using System.Collections.Generic;
-using Calc.ConnectorRevit.Helpers;
-using Calc.ConnectorRevit.Views;
-using Autodesk.Revit.DB;
-using System;
 
 namespace Calc.ConnectorRevit.ViewModels
 {
@@ -49,14 +46,6 @@ namespace Calc.ConnectorRevit.ViewModels
             CreateMappingsList();
             ViewMediator.Broadcast("ShowNewMappingOverlay");
         }
-
-/*        public async Task HandleNewMappingCreate()
-        {
-            //Window newMappingWindow = new NewMappingView(store);
-            //newMappingWindow.ShowDialog();
-            await store.SaveSelectedMapping();
-            Mediator.Broadcast("MappingSelectionChanged", store.MappingSelected);
-        }*/
         
         private void CreateMappingsList()
         {

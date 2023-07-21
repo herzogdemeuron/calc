@@ -66,28 +66,28 @@ namespace Calc.ConnectorRevit.Views
             // 
             this.txtDirectusUrl.Location = new System.Drawing.Point(133, 9);
             this.txtDirectusUrl.Name = "txtDirectusUrl";
-            this.txtDirectusUrl.Size = new System.Drawing.Size(230, 26);
+            this.txtDirectusUrl.Size = new System.Drawing.Size(255, 26);
             this.txtDirectusUrl.TabIndex = 1;
             // 
             // txtEmail
             // 
             this.txtEmail.Location = new System.Drawing.Point(133, 41);
             this.txtEmail.Name = "txtEmail";
-            this.txtEmail.Size = new System.Drawing.Size(230, 26);
+            this.txtEmail.Size = new System.Drawing.Size(255, 26);
             this.txtEmail.TabIndex = 3;
             // 
             // txtPassword
             // 
             this.txtPassword.Location = new System.Drawing.Point(133, 73);
             this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(230, 26);
+            this.txtPassword.Size = new System.Drawing.Size(255, 26);
             this.txtPassword.TabIndex = 5;
             this.txtPassword.UseSystemPasswordChar = true;
             // 
             // lblDirectusUrl
             // 
             this.lblDirectusUrl.AutoSize = true;
-            this.lblDirectusUrl.Location = new System.Drawing.Point(31, 15);
+            this.lblDirectusUrl.Location = new System.Drawing.Point(12, 15);
             this.lblDirectusUrl.Name = "lblDirectusUrl";
             this.lblDirectusUrl.Size = new System.Drawing.Size(33, 20);
             this.lblDirectusUrl.TabIndex = 0;
@@ -96,7 +96,7 @@ namespace Calc.ConnectorRevit.Views
             // lblEmail
             // 
             this.lblEmail.AutoSize = true;
-            this.lblEmail.Location = new System.Drawing.Point(31, 47);
+            this.lblEmail.Location = new System.Drawing.Point(12, 47);
             this.lblEmail.Name = "lblEmail";
             this.lblEmail.Size = new System.Drawing.Size(52, 20);
             this.lblEmail.TabIndex = 2;
@@ -105,7 +105,7 @@ namespace Calc.ConnectorRevit.Views
             // lblPassword
             // 
             this.lblPassword.AutoSize = true;
-            this.lblPassword.Location = new System.Drawing.Point(31, 79);
+            this.lblPassword.Location = new System.Drawing.Point(12, 79);
             this.lblPassword.Name = "lblPassword";
             this.lblPassword.Size = new System.Drawing.Size(82, 20);
             this.lblPassword.TabIndex = 4;

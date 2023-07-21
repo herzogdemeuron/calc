@@ -1,17 +1,9 @@
-﻿using Autodesk.Revit.UI;
-using Calc.ConnectorRevit.Helpers;
-using Calc.ConnectorRevit.Revit;
+﻿using Calc.ConnectorRevit.Helpers;
 using Calc.ConnectorRevit.Services;
 using Calc.Core;
 using Calc.Core.Objects;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Calc.ConnectorRevit.ViewModels
 {
@@ -98,13 +90,10 @@ namespace Calc.ConnectorRevit.ViewModels
             }
             else
             {
-                
                 NodeHelper.ShowAllSubLabelColor(nodeItem);
                 Mediator.Broadcast("OnBuildupItemSelectionChanged", SelectedNodeItem); // to visualizer
             }
             CurrentForestItem.NotifyLabelColorChange();
-
-            //UpdateLiveVisualization();
         }
 
         public void ColorNodesToBuildup()
@@ -127,7 +116,6 @@ namespace Calc.ConnectorRevit.ViewModels
         {
             if (CurrentForestItem == null) return;
             NodeHelper.HideAllLabelColor(CurrentForestItem);
-            //EventMessenger.SendMessage("DeselectTreeView"); //send command to the view to deselect treeview
             ViewMediator.Broadcast("ViewDeselectTreeView"); //send command to the view to deselect treeview
             SelectedNodeItem = null;
             CurrentForestItem.NotifyLabelColorChange(); //better ways to do this?

@@ -1,16 +1,11 @@
-﻿using Autodesk.Revit.UI;
-using Calc.ConnectorRevit.Helpers;
-using Calc.ConnectorRevit.Views;
+﻿using Calc.ConnectorRevit.Helpers;
 using Calc.Core;
 using Calc.Core.Objects;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace Calc.ConnectorRevit.ViewModels
 {
@@ -39,8 +34,6 @@ namespace Calc.ConnectorRevit.ViewModels
             {
                 ViewMediator.Broadcast("ShowWaitingOverlay", "Updating mapping...");
                 feedback = await store.UpdateSelectedMapping();
-                //Mediator.Broadcast("MappingSelectionChanged", store.MappingSelected);
-
             }
             catch (Exception ex)
             {
