@@ -34,7 +34,7 @@ export function getChartData(data, labelKey, valueKey, sort) {
   let values = processedData.map((item) => item[valueKey]);
   let colors = [];
   // get HslColor for each label
-  if (labelKey === 'buildup_name') {
+  if (labelKey === 'buildup') {
     for (let label of labels) {
       const hslColor = getHslColor(label, data, labelKey);
       colors.push(hslColor);
