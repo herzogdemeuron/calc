@@ -1,5 +1,8 @@
 # Calc
 
+## Buildup Mapping
+![extended](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdjQyandnZGp6NjBkc29zNXN0bm10ZWQ5Y2xkbDR0aW5vdzlhczFsZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/z3RlZWk94Ndatat3kg/giphy.gif)
+
 ## Content
 
 - [Capabilites](#capabilities)
@@ -71,7 +74,6 @@ Usability in this case means perfect control over your data.
 
 > Control <- Understanding <- Visualization
 
-![extended](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbTh3dWEwbWZ6YnJ6cHliaDhtcXozcnlnemR3OThnZmI2dzY3cmo2eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/AjUF4mlwDl0IiDy65B/giphy.gif)
 
 ## Terminology
 
