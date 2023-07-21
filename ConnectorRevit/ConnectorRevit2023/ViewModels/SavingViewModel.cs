@@ -1,13 +1,8 @@
-﻿using Calc.Core.Objects;
-using Calc.Core;
-using System;
+﻿using Calc.ConnectorRevit.Helpers;
+using Calc.ConnectorRevit.Services;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Calc.ConnectorRevit.Helpers;
-using Calc.ConnectorRevit.Services;
 
 namespace Calc.ConnectorRevit.ViewModels
 {
@@ -24,17 +19,53 @@ namespace Calc.ConnectorRevit.ViewModels
             nodetreeVM = ntreeVM;
         }
 
+        public void HandleSavingResults()
+        {
+            NodeViewModel nodeToCalculate = GetNodeToCalculate();
+            int count = nodeToCalculate?.Host.Elements.Count??0;
+            string message;
+            if (count>100)
+            {
+                message = $"{count} elements to save,\nthis may take a while.";
+            }
+            else
+            {
+                message = $"{count} elements to save.";
+            }
+            ViewMediator.Broadcast("ShowSavingOverlay", message);
+        }
 
-        public async Task<bool?> HandleSaveResults(string newName)
+
+        public async Task HandleSendingResults(string newName)
+        {
+            NodeViewModel nodeToCalculate = GetNodeToCalculate();
+            ViewMediator.Broadcast("ShowWaitingOverlay", "Saving results...");
+            ResultSender resultSender = new ResultSender();
+            bool? feedback =  await resultSender.SaveResults(nodeToCalculate, newName);
+            ViewMediator.Broadcast("ShowMainView");
+            ViewMediator.Broadcast
+                ("ShowMessageOverlay",
+                new List<object> 
+                    {   feedback,
+                        "No element is saved",
+                        "Saved results successfully.",
+                        "Error occured while saving." 
+                    }
+                 );
+        }
+
+        public void HandleSaveResultCanceled()
+        {
+            ViewMediator.Broadcast("ShowMainView");
+        }
+
+        private NodeViewModel GetNodeToCalculate()
         {
             NodeViewModel CurrentForestItem = nodetreeVM.CurrentForestItem;
             NodeViewModel SelectedNodeItem = nodetreeVM.SelectedNodeItem;
             if (CurrentForestItem == null) return null;
             NodeViewModel nodeToCalculate = SelectedNodeItem ?? CurrentForestItem;
-            ElementCount = nodeToCalculate.Host.Elements.Count;
-            ViewMediator.Broadcast("VisibilitySaving");
-            ResultSender resultSender = new ResultSender();
-            return await resultSender.SaveResults(nodeToCalculate, newName);
+            return nodeToCalculate;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

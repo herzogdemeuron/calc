@@ -1,13 +1,11 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Calc.ConnectorRevit.Helpers;
-using Calc.ConnectorRevit.Revit;
 using Calc.ConnectorRevit.ViewModels;
 using Calc.Core.Color;
 using Calc.Core.Objects;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace Calc.ConnectorRevit.Services
@@ -16,10 +14,8 @@ namespace Calc.ConnectorRevit.Services
     public class RevitVisualizer
     {
         private Action<IGraphNode, View, ElementId> colorBranchAction;
-        //private NodeTreeViewModel nodeTreeVM;
         private NodeViewModel currentForestItem;
         private NodeViewModel selectedNodeItem;
-        
 
         public RevitVisualizer()
         { 
@@ -31,7 +27,6 @@ namespace Calc.ConnectorRevit.Services
                 selectedItem => IsolateAndColorBottomBranchElements((NodeViewModel)selectedItem));
             Mediator.Register("OnBranchItemSelectionChanged", 
                 selectedItem => IsolateAndColorSubbranchElements((NodeViewModel)selectedItem));
-            
         }
 
         private void ResetView(NodeViewModel forestItem)
@@ -99,7 +94,6 @@ namespace Calc.ConnectorRevit.Services
             }
         }
 
-
         private void ColorSubbranchElements(IGraphNode node, View view, ElementId patternId)
         {
             foreach (var subBranch in node.SubBranches)
@@ -148,7 +142,6 @@ namespace Calc.ConnectorRevit.Services
             {
                 view.SetElementOverrides(elementId, overrideSettings);
             }
-
         }
 
         private ElementId GetPatternId()

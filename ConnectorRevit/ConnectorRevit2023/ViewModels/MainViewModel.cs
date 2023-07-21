@@ -1,13 +1,7 @@
 ﻿using Calc.ConnectorRevit.Helpers;
 using Calc.ConnectorRevit.Services;
-using Calc.ConnectorRevit.Views;
 using Calc.Core;
-using Calc.Core.Objects;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Threading.Tasks;
 
 namespace Calc.ConnectorRevit.ViewModels
 {
@@ -21,6 +15,8 @@ namespace Calc.ConnectorRevit.ViewModels
         public BuildupViewModel BuildupVM { get; set; }
         public NodeTreeViewModel NodeTreeVM { get; set; }
         public SavingViewModel SavingVM { get; set; }
+        public NewMappingViewModel NewMappingVM { get; set; }
+        public VisibilityViewModel VisibilityVM { get; set; }
         public MainViewModel(DirectusStore store)
         {
             Store = store;
@@ -28,10 +24,15 @@ namespace Calc.ConnectorRevit.ViewModels
             LoadingVM = new LoadingViewModel(store);
             ForestVM = new ForestViewModel(store);
             MappingVM = new MappingViewModel(store);
+            NewMappingVM = new NewMappingViewModel(store);
+
             
             NodeTreeVM = new NodeTreeViewModel(store);
             BuildupVM = new BuildupViewModel(NodeTreeVM);
             SavingVM = new SavingViewModel(NodeTreeVM);
+
+
+            VisibilityVM = new VisibilityViewModel();
         }
 
         public void NotifyStoreChange()
@@ -54,14 +55,23 @@ namespace Calc.ConnectorRevit.ViewModels
             Server.Start();
         }
 
-
-
         public void HandleWindowClosing()
         {
+            NodeTreeVM.DeselectNodes();
             Server.Stop();
         }
 
-         public event PropertyChangedEventHandler PropertyChanged;
+        public void HandleBackToMainView()
+        {
+            ViewMediator.Broadcast("ShowMainView");
+        }
+
+        public void HandleMessageClose()
+        {
+            ViewMediator.Broadcast("HideMessageOverlay");
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

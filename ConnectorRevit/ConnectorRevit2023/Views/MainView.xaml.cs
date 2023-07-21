@@ -1,11 +1,9 @@
-﻿using Calc.Core.Objects;
+﻿using Calc.ConnectorRevit.Helpers;
+using Calc.ConnectorRevit.ViewModels;
+using Calc.Core.Objects;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using Calc.ConnectorRevit.ViewModels;
-using Calc.ConnectorRevit.Helpers;
 
 namespace Calc.ConnectorRevit.Views
 {
@@ -18,29 +16,17 @@ namespace Calc.ConnectorRevit.Views
             MainVM = mvm;
             this.DataContext = MainVM;
             InitializeComponent();
-            EventMessenger.OnMessageReceived += MessageFromViewModelReceived;
-            ViewMediator.Register("VisibilityProjectWaiting", _ => VisibilityProjectWaiting());
-            ViewMediator.Register("VisibilityMainViewEntering", _ => VisibilityMainViewEntering());
+            ViewMediator.Register("ViewDeselectTreeView", _=>DeselectTreeView());
         }
 
-
-
-
-        private void MessageFromViewModelReceived(string message)
+        private void DeselectTreeView()
         {
-            if (message == "DeselectTreeView")
+            if (TreeView.SelectedItem != null)
             {
-                if (TreeView.SelectedItem != null)
+                if (TreeView.Tag is TreeViewItem selectedTreeViewItem)
                 {
-                    if (TreeView.Tag is TreeViewItem selectedTreeViewItem)
-                    {
-                        selectedTreeViewItem.IsSelected = false;
-                    }
+                    selectedTreeViewItem.IsSelected = false;
                 }
-            }
-            else if (message == "CloseWindow")
-            {
-                this.Close();
             }
         }
 
@@ -57,40 +43,38 @@ namespace Calc.ConnectorRevit.Views
         private async void ProjectOKClicked(object sender, RoutedEventArgs e)
         {
             var project = ProjectsComboBox.SelectedItem;
-            if (project == null)
-            {
-                return;
-            }
-            ViewMediator.Broadcast("VisibilityProjectWaiting");
             await MainVM.LoadingVM.HandleProjectSelectedAsync(project as Project);
             MainVM.NotifyStoreChange();
-            ViewMediator.Broadcast("VisibilityMainViewEntering");
         }
         
         private void ForestSelectionChanged (object sender, SelectionChangedEventArgs e)
         {
             var forest = ForestsComboBox.SelectedItem;
-            if (forest == null)
-            {
-                return;
-            }
             MainVM.ForestVM.HandleForestSelectionChanged(forest as Forest);
         }
 
         private void MappingSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var forest = ForestsComboBox.SelectedItem;
-            if (forest == null)
-            {
-                return;
-            }
             MainVM.MappingVM.HandleMappingSelectionChanged(MappingsComboBox.SelectedItem as Mapping);
         }
 
         private void NewMappingClicked(object sender, RoutedEventArgs e)
         {
-            MainVM.MappingVM.HandleNewMapping();
+            MainVM.NewMappingVM.HandleNewMappingClicked();
+        }
+        private async void NewMappingConfirmed(object sender, RoutedEventArgs e)
+        {
+            string newName = this.NewNameText.Text.Trim();
+            Mapping selectedMapping = this.MappingListBox.SelectedItem as Mapping;
+            await MainVM.NewMappingVM.HandleNewMappingCreate(selectedMapping, newName);
             MainVM.NotifyStoreChange();
+        }
+
+        private void NewMappingCanceld(object sender, RoutedEventArgs e)
+        {
+            this.NewNameText.Text = "";
+            MappingListBox.SelectedItem = null;
+            MainVM.NewMappingVM.HandleNewMappingCanceled();
         }
 
         private void TreeViewItemSelected(object sender, RoutedEventArgs e)
@@ -131,10 +115,6 @@ namespace Calc.ConnectorRevit.Views
         private void UpdateRevitClicked(object sender, RoutedEventArgs e)
         {
             var forest = ForestsComboBox.SelectedItem;
-            if (forest == null)
-            {
-                return;
-            }
             MainVM.ForestVM.HandleForestSelectionChanged(forest as Forest);
         }
         private void StartCalcLiveClicked(object sender, RoutedEventArgs e)
@@ -142,55 +122,26 @@ namespace Calc.ConnectorRevit.Views
             MainVM.HandleStartCalcLive();
         }
 
-        private void VisibilityProjectWaiting()
-        {
-            WaitingTextBlock.Text = "LOADING PROJECTS...";
-            WaitingOverlay.Visibility = Visibility.Visible;
-            SelectProjectOverlay.Visibility = Visibility.Collapsed;
-        }
-
-        private void VisibilityMainViewEntering()
-        {
-            WaitingOverlay.Visibility = Visibility.Collapsed;
-        }
 
         private void SaveResultsClicked(object sender, RoutedEventArgs e)
         {
-            //MainVM.SavingVM.UpdateElementCount();
-            SaveResultOverlay.Visibility = Visibility.Visible;
+            NewResultNameTextBox.Text = "";
+            MainVM.SavingVM.HandleSavingResults();
         }
 
         private async void SaveResultOKClicked( object sender, RoutedEventArgs e)
         {
-            
-            this.WaitingTextBlock.Text = "SAVING RESULTS...";
-            WaitingOverlay.Visibility = Visibility.Visible;
-            SaveResultOverlay.Visibility = Visibility.Collapsed;
-            bool? saved = await MainVM.SavingVM.HandleSaveResults(NewResultNameTextBox.Text);
-            WaitingOverlay.Visibility = Visibility.Collapsed;
-            MessageOverlay.Visibility = Visibility.Visible;
-            if (saved == null)
-            {
-                MessageTextBlock.Text = "PLEASE CHOOSE A FOREST";
-            }
-            else if (saved == true)
-            {
-                MessageTextBlock.Text = "RESULTS SAVED";
-            }
-            else
-            {
-                MessageTextBlock.Text = "ERROR SAVING RESULTS";
-            }
+            await MainVM.SavingVM.HandleSendingResults(NewResultNameTextBox.Text);            
         }
 
         private void SaveResultCancelClicked (object sender, RoutedEventArgs e)
         {
-            SaveResultOverlay.Visibility = Visibility.Collapsed;
+            MainVM.SavingVM.HandleSaveResultCanceled();
         }
 
         private void MessageOKClicked(object sender, RoutedEventArgs e)
         {
-            MessageOverlay.Visibility = Visibility.Collapsed;
+            MainVM.HandleMessageClose();
         }
 
         private async void UpdateMappingClicked(object sender, RoutedEventArgs e)

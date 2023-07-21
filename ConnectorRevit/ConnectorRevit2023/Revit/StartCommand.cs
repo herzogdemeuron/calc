@@ -30,6 +30,7 @@ namespace Calc.ConnectorRevit.Revit
                 if (directusInstance == null)
                 {
                     Debug.WriteLine("Failed to get directus.");
+                    TaskDialog.Show("Error", "Failed to connect the server.");
                     return Result.Cancelled;
                 }
                 DirectusStore store = new DirectusStore(directusInstance);
@@ -59,6 +60,7 @@ namespace Calc.ConnectorRevit.Revit
 
             if (directus == null)
             {
+                TaskDialog.Show("Error", "Failed to authenticate.");
                 System.Windows.Application.Current.Shutdown();
             }
             else
@@ -72,7 +74,6 @@ namespace Calc.ConnectorRevit.Revit
         {
             // depending on the build mode, use different paths
             string assemblyFolder = @"C:\HdM-DT\calc\ConnectorRevit\ConnectorRevit2023\bin\Debug";
-            //string assemblyFolder = $"C:\\ProgramData\\Autodesk\\Revit\\Addins\\{App.RevitVersion}\\CalcRevit"; // Specify the directory where your DLLs are located
             string assemblyName = new AssemblyName(args.Name).Name;
             string assemblyPath = Path.Combine(assemblyFolder, assemblyName + ".dll");
 

@@ -169,6 +169,7 @@ namespace Calc.Core
             {
                 await _graphqlRetry.ExecuteAsync(() => 
                         this.MappingManager.UpdateSingle<MappingStorageDriver>(this.MappingDriver));
+                this.MappingSelected.MappingItems = sendMapping.MappingItems;
                 return true;
             }
             catch (Exception e)

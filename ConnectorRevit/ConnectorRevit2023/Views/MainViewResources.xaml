@@ -51,9 +51,7 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <TextBlock Text=" ("/>
-                <TextBlock Text="{Binding Host.Elements.Count}"/>
-                <TextBlock Text=")"/>
+                <TextBlock Text="{Binding ElementsCount}"/>
             </StackPanel>
         </Border>
     </DataTemplate>

@@ -1,15 +1,11 @@
-﻿using Autodesk.Revit.UI;
-using Calc.ConnectorRevit.Helpers;
-using Calc.ConnectorRevit.Views;
+﻿using Calc.ConnectorRevit.Helpers;
 using Calc.Core;
 using Calc.Core.Objects;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace Calc.ConnectorRevit.ViewModels
 {
@@ -20,28 +16,41 @@ namespace Calc.ConnectorRevit.ViewModels
         {
             store = directusStore;
         }
-        public void HandleNewMapping()
-        {
-            Window newMappingWindow = new NewMappingView(store);
-            newMappingWindow.ShowDialog();
-            Mediator.Broadcast("MappingSelectionChanged",store.MappingSelected);
-        }
+
         public void HandleMappingSelectionChanged(Mapping mapping)
         {
-            Mediator.Broadcast("MappingSelectionChanged", mapping);
+            if (store.ForestSelected != null)
+            {
+                Mediator.Broadcast("MappingSelectionChanged", mapping);
+            }
+            
         }
 
         public async Task HandleUpdateMapping()
         {
+            bool? feedback;
+            string error = "";
             try
             {
-                await store.UpdateSelectedMapping();
-                TaskDialog.Show("Update Mapping", "Mapping updated"); // not topmost, fix it
+                ViewMediator.Broadcast("ShowWaitingOverlay", "Updating mapping...");
+                feedback = await store.UpdateSelectedMapping();
             }
             catch (Exception ex)
             {
-                TaskDialog.Show("Update Mapping", ex.Message);
+                Debug.WriteLine(ex.Message);
+                feedback = null;
+                error = ex.Message;
             }
+            ViewMediator.Broadcast("ShowMainView");
+            ViewMediator.Broadcast
+               ("ShowMessageOverlay",
+               new List<object>
+                   {   feedback,
+                        error,
+                        "Updated mapping successfully.",
+                        "Error occured while saving, please try again."
+                   }
+                );
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

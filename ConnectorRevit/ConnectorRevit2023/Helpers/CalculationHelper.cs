@@ -1,12 +1,7 @@
 ﻿using Calc.ConnectorRevit.ViewModels;
 using Calc.Core.Calculations;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Calc.Core.Objects;
+using System.Collections.Generic;
 
 namespace Calc.ConnectorRevit.Helpers
 {
