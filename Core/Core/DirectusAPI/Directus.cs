@@ -13,7 +13,6 @@ namespace Calc.Core.DirectusAPI
 {
     public class Directus
     {
-        public string JsonResponse { get; set; }
         public int StatusCode;
         public Dictionary<string, object> Response;
         public string Token { get { return _token; } }

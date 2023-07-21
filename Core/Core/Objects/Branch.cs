@@ -243,44 +243,6 @@ namespace Calc.Core.Objects
             return branches;
         }
 
-        public List<int> GetAllBranchLevels()
-        {
-            List<int> levels = new() { BranchLevel };
-
-            foreach (var subBranch in SubBranches)
-            {
-                levels.AddRange(subBranch.GetAllBranchLevels());
-            }
-
-            levels.Sort();
-            return levels.Distinct().ToList();
-        }
-
-        /// <summary>
-        /// Returns a list of element ids at a given level.
-        /// Call this method on the root branch instance.
-        /// </summary>
-        /// <param name="level">The level to get element ids from.</param>
-        /// <returns>A list of element ids.</returns>
-        public List<string> GetElementIdsAtLevel(int level)
-        {
-            List<string> ids = new();
-
-            if (BranchLevel == level)
-            {
-                ids.AddRange(ElementIds);
-            }
-            else
-            {
-                foreach (var subBranch in SubBranches)
-                {
-                    ids.AddRange(subBranch.GetElementIdsAtLevel(level));
-                }
-            }
-
-            return ids;
-        }
-
         public void PrintTree(int indentLevel = 0)
         {
             string indentation = new(' ', indentLevel * 4);
