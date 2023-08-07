@@ -140,7 +140,7 @@ public class SimpleCondition : ICondition
 
     public bool Evaluate(CalcElement element)
     {
-        if (!element.Fields.TryGetValue(Parameter, out object fieldValue))
+        if (!element.Fields.TryGetValue(Parameter, out object fieldValue) || fieldValue == null)
         {
             return false;
         }
