@@ -37,6 +37,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -53,6 +61,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -217,15 +233,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:CalcRevit2022.Installer"
-        "ProductCode" = "8:{7D238E2A-82F3-4968-BCBD-A4DA93CE22CB}"
-        "PackageCode" = "8:{E11EA26B-68F3-4669-923C-27A6478C1DD0}"
+        "ProductCode" = "8:{55094E9A-0A7F-4DE1-BC4C-587762767D7B}"
+        "PackageCode" = "8:{CDF73D75-0400-472B-B01C-594B4305D490}"
         "UpgradeCode" = "8:{664271FA-A185-4A3C-A47D-134961C04660}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:0.1.4"
         "Manufacturer" = "8:HdM"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
