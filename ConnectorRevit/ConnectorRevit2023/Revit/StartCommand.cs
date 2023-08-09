@@ -11,6 +11,7 @@ using Calc.ConnectorRevit.ViewModels;
 using Calc.ConnectorRevit.Services;
 using Calc.Core.DirectusAPI;
 using System.Threading.Tasks;
+using Calc.ConnectorRevit.Helpers;
 
 namespace Calc.ConnectorRevit.Revit
 {
@@ -26,13 +27,14 @@ namespace Calc.ConnectorRevit.Revit
                 AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
                 App.CurrentDoc = commandData.Application.ActiveUIDocument.Document;
                 App.EventHandler = new ExternalEventHandler();
+                Logger.Log("Now authenticating.");
                 Task.Run(() => Authenticate()).Wait();
                 if (directusInstance == null)
                 {
-                    Debug.WriteLine("Failed to get directus.");
-                    TaskDialog.Show("Error", "Failed to connect the server.");
+                    Logger.Log("Failed to get directus.");
                     return Result.Cancelled;
                 }
+                Logger.Log("Authentication successful.");
                 DirectusStore store = new DirectusStore(directusInstance);
                 MainView mainView = new MainView(new MainViewModel(store));
                 mainView.Show();
@@ -40,34 +42,16 @@ namespace Calc.ConnectorRevit.Revit
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
+                Logger.Log(ex.Message);
+                Debug.WriteLine(ex.Message);
                 return Result.Failed;
             }
         }
 
         private async Task Authenticate()
         {
-            var directus = null as Directus;
-            try
-            {
-                var authenticator = new DirectusAuthenticator();
-                directus = await authenticator.ShowLoginWindowAsync().ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-            }
-
-            if (directus == null)
-            {
-                TaskDialog.Show("Error", "Failed to authenticate.");
-                System.Windows.Application.Current.Shutdown();
-            }
-            else
-            {
-                directusInstance = directus;
-            }
-
+            var authenticator = new DirectusAuthenticator();
+            directusInstance = await authenticator.ShowLoginWindowAsync().ConfigureAwait(false);
         }
 
         private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)

@@ -68,7 +68,7 @@ namespace Calc.Core.DirectusAPI
             }
 
             var responseContent = await response.Content.ReadAsStringAsync();
-
+            Debug.WriteLine($"Authentication response: {responseContent}");
             // Deserialize the response content into the custom class
             var responseData = JsonConvert.DeserializeObject<Dictionary<string, LoginResponseData>>(responseContent);
 

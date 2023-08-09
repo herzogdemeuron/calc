@@ -4,7 +4,7 @@
     <TargetFramework>net48</TargetFramework>
     <AssemblyName>CalcConnectorRevit2023</AssemblyName>
     <RootNamespace>Calc.ConnectorRevit</RootNamespace>
-    <BaseOutputPath>C:\HdM-DT\calc\ConnectorRevit\ConnectorRevit2023\bin\</BaseOutputPath>
+    <BaseOutputPath>C:\source\calc\ConnectorRevit\ConnectorRevit2023\bin</BaseOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -55,7 +55,7 @@
 
   <ItemGroup>
     <Resource Include="Resources\DT_logo.gif">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory></CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\icon-01.png" />
   </ItemGroup>
