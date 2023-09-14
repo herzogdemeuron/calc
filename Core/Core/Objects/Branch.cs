@@ -17,9 +17,11 @@ namespace Calc.Core.Objects
         [JsonIgnore]
         public string Parameter { get; set; }
         [JsonIgnore]
-        public string Method { get; set; }
-        [JsonIgnore]
         public string Value { get; set; }
+        [JsonIgnore]
+        public List<PathItem> Path => GeneratePath();
+        [JsonIgnore]
+        public string Method { get; set; }
         [JsonIgnore]
         public int BranchLevel = 0;
         [JsonIgnore]
@@ -137,14 +139,34 @@ namespace Calc.Core.Objects
             }
         }
 
+        private List<PathItem> GeneratePath()
+        {
+            var path = new List<PathItem>();
+
+            Branch currentBranch = this;
+            while (currentBranch.BranchLevel > 0)
+            {
+                path.Insert(0, new PathItem
+                {
+                    Parameter = currentBranch.Parameter,
+                    Value = currentBranch.Value
+                });
+
+                currentBranch = currentBranch._parentBranch;
+            }
+
+            return path;
+        }
+
+
         /// <summary>
         /// This method matches a buildup to a branch.
         /// The intended use is to reconstruct the buildup assignments in a full tree from 
         /// a mapping stored in the database.
         /// </summary>
-        public void MatchMapping(string parameter, string value, Buildup buildup)
+        public void MatchMapping(List<PathItem> path, Buildup buildup)
         {
-            if (Parameter == parameter && Value == value)
+            if (Path.SequenceEqual(path))
             {
                 this.Buildup = buildup;
             }
@@ -157,7 +179,7 @@ namespace Calc.Core.Objects
                 }
                 foreach (var subBranch in SubBranches)
                 {
-                    subBranch.MatchMapping(parameter, value, buildup);
+                    subBranch.MatchMapping(path, buildup);
                 }
             }
         }
