@@ -38,11 +38,12 @@ namespace Calc.ConnectorRevit.Services
                 parameterDictionary[parameterName] = result.Item2;
             }
 
+            string typeName = elem.GetType().Name;
             decimal _area = (decimal)GetBasicValue(elem, "Area");
             decimal _volume = (decimal)GetBasicValue(elem, "Volume");
             decimal _length = (decimal)GetBasicValue(elem, "Length");
 
-            return new CalcElement(elem.Id.ToString(), parameterDictionary, _length, _area, _volume);
+            return new CalcElement(elem.Id.ToString(), typeName, parameterDictionary, _length, _area, _volume);
         }
 
         static private double GetBasicValue(Element elem, string parameterName)

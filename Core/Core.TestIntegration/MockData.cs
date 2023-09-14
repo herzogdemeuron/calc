@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Linq;
 using Calc.Core.Filtering;
 using Calc.Core.Objects;
 using Newtonsoft.Json.Linq;
@@ -96,64 +97,70 @@ public class MockData
     {
         // Mock walls
         var id1 = Guid.NewGuid().ToString();
+        string name1 = "name1";
         var Fields1 = new Dictionary<string, object>
         {
             { "Type Name", "WAND_ROH_Whatever" },
             { "Grouping", "Group1" },
             { "SubGrouping", "SubGroup1" }
         };
-        var element1 = new CalcElement(id1, Fields1, area: this.Area);
+        var element1 = new CalcElement(id1,name1, Fields1, area: this.Area);
         this.Elements.Add(element1);
 
         var id2 = Guid.NewGuid().ToString();
+        string name2 = "name2";
         var Fields2 = new Dictionary<string, object>
         {
             { "Type Name", "WAND_AUSB_Whatever" },
             { "Grouping", "Group1" },
             { "SubGrouping", "SubGroup1" }
         };
-        var element2 = new CalcElement(id2, Fields2, area: this.Area);
+        var element2 = new CalcElement(id2,name2, Fields2, area: this.Area);
         this.Elements.Add(element2);
 
         var id3 = Guid.NewGuid().ToString();
+        string name3 = "name3";
         var Fields3 = new Dictionary<string, object>
         {
             { "Type Name", "WAND_ROH_Whatever" },
             { "Grouping", "Group2" },
             { "SubGrouping", "SubGroup2" }
         };
-        var element3 = new CalcElement(id3, Fields3, area: this.Area);
+        var element3 = new CalcElement(id3, name3, Fields3, area: this.Area);
         this.Elements.Add(element3);
 
         // Mock floors
         var id4 = Guid.NewGuid().ToString();
+        string name4 = "name4";
         var Fields4 = new Dictionary<string, object>
         {
             { "Type Name", "DECK_ROH_Whatever" },
             { "Grouping", "GroupA" },
             { "SubGrouping", "SubGroupA" }
         };
-        var element4 = new CalcElement(id4, Fields4, area: this.Area);
+        var element4 = new CalcElement(id4, name4, Fields4, area: this.Area);
         this.Elements.Add(element4);
 
         var id5 = Guid.NewGuid().ToString();
+        string name5 = "name5";
         var Fields5 = new Dictionary<string, object>
         {
             { "Type Name", "DECK_AUSB_Whatever" },
             { "Grouping", "GroupA" },
             { "SubGrouping", "SubGroupA" }
         };
-        var element5 = new CalcElement(id5, Fields5, area: this.Area);
+        var element5 = new CalcElement(id5, name5, Fields5, area: this.Area);
         this.Elements.Add(element5);
 
         var id6 = Guid.NewGuid().ToString();
+        string name6 = "name6";
         var Fields6 = new Dictionary<string, object>
         {
             { "Type Name", "DECK_ROH_Whatever" },
             { "Grouping", "GroupB" },
             { "SubGrouping", "SubGroupB" }
         };
-        var element6 = new CalcElement(id6, Fields6, area: this.Area);
+        var element6 = new CalcElement(id6, name6, Fields6, area: this.Area);
         this.Elements.Add(element6);
     }
 

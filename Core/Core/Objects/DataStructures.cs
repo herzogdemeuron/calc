@@ -15,18 +15,21 @@ namespace Calc.Core.Objects
     public  struct CalcElement
     {
         public string Id;
+        public string Name;
         public decimal Length;
         public decimal Area;
         public decimal Volume;
         public Dictionary<string, object> Fields;
 
         public CalcElement(string id,
+            string name,
             Dictionary<string, object> fields,
             decimal length=0,
             decimal area=0,
             decimal volume=0)
         {
             this.Id = id;
+            this.Name = name;
             this.Length = length;
             this.Area = area;
             this.Volume = volume;
