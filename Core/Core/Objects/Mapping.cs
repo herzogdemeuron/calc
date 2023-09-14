@@ -68,7 +68,7 @@ namespace Calc.Core.Objects
                 {
                     continue;
                 }
-                tree.MatchMapping(mappingItem.Parameter, mappingItem.Value, buildup);
+                tree.MatchMapping(mappingItem.Path, buildup);
             }
             return tree;
         }
@@ -100,8 +100,7 @@ namespace Calc.Core.Objects
                     mappingItems.Add(new MappingItem()
                     {
                         BuildupId = branch.Buildup.Id,
-                        Parameter = branch.Parameter,
-                        Value = branch.Value,
+                        Path = branch.Path,
                         TreeName = treeName
                     });
                 }
@@ -114,10 +113,9 @@ namespace Calc.Core.Objects
     {
         [JsonProperty("buildup_id")]
         public int BuildupId { get; set; }
-        [JsonProperty("parameter")]
-        public string Parameter { get; set; }
-        [JsonProperty("value")]
-        public string Value { get; set; }
+        [JsonProperty("mapping_path")]
+        public List<PathItem> Path { get; set; }
+
         [JsonProperty("tree_name")]
         public string TreeName { get; set; }
 
@@ -126,4 +124,6 @@ namespace Calc.Core.Objects
             return JsonConvert.SerializeObject(this);
         }
     }
+
+
 }
