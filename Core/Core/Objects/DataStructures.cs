@@ -15,25 +15,39 @@ namespace Calc.Core.Objects
     public  struct CalcElement
     {
         public string Id;
-        public string Name;
-        public decimal Length;
-        public decimal Area;
-        public decimal Volume;
+        public string Type;
         public Dictionary<string, object> Fields;
+        private Dictionary<Unit, decimal> _quantities;
 
         public CalcElement(string id,
-            string name,
+            string type,
             Dictionary<string, object> fields,
             decimal length=0,
             decimal area=0,
             decimal volume=0)
         {
             this.Id = id;
-            this.Name = name;
-            this.Length = length;
-            this.Area = area;
-            this.Volume = volume;
+            this.Type = type;
             this.Fields = fields;
+            this._quantities = new Dictionary<Unit, decimal>
+            {
+                { Unit.each, 1 },
+                { Unit.m, length },
+                { Unit.m2, area },
+                { Unit.m3, volume }
+            };
+        }
+
+        public decimal GetQuantityByUnit(Unit unit)
+        {
+            if (_quantities.TryGetValue(unit, out decimal value))
+            {
+                return value;
+            }
+            else
+            {
+                throw new ArgumentException($"Unit not recognized: {unit}");
+            }
         }
     }
 
@@ -47,24 +61,49 @@ namespace Calc.Core.Objects
 
     public class Result
     {
+        // parent infos
+        [JsonProperty(PropertyName = "forest")]
+        public string Forest { get; set; }
+        [JsonProperty(PropertyName = "tree")]
+        public string Tree { get; set; }
+
+        // element infos
         [JsonProperty(PropertyName = "element_id")]
         public string ElementId { get; set; }
-        [JsonProperty(PropertyName = "gwp_a123")]
-        public decimal GlobalWarmingPotentialA1A2A3 { get; set; }
-        [JsonProperty(PropertyName = "cost")]
-        public decimal Cost { get; set; }
-        [JsonProperty(PropertyName = "unit")]
-        public Unit Unit { get; set; }
-        [JsonProperty(PropertyName = "material_amount")]
-        public decimal MaterialAmount { get; set; }
-        [JsonProperty(PropertyName = "material")]
-        public string MaterialName { get; set; }
-        [JsonProperty(PropertyName = "material_category")]
-        public string MaterialCategory { get; set; }
-        [JsonProperty(PropertyName = "buildup")]
+        [JsonProperty(PropertyName = "element_type")]
+        public string ElementType { get; set; }
+        [JsonProperty(PropertyName = "element_unit")]
+        public Unit ElementUnit { get; set; }
+        [JsonProperty(PropertyName = "element_quantity")]
+        public decimal ElementQuantity { get; set; }
+
+        // building infos
+        [JsonProperty(PropertyName = "buildup_name")]
         public string BuildupName { get; set; }
         [JsonProperty(PropertyName = "buildup_group")]
         public string GroupName { get; set; }
+        [JsonProperty(PropertyName = "buildup_unit")]
+        public Unit BuildupUnit { get; set; }
+
+        // material infos
+        [JsonProperty(PropertyName = "material_name")]
+        public string MaterialName { get; set; }
+        [JsonProperty(PropertyName = "material_category")]
+        public string MaterialCategory { get; set; }
+        [JsonProperty(PropertyName = "material_gwp")]
+        public decimal MaterialGwp { get; set; }
+        [JsonProperty(PropertyName = "material_unit")]
+        public Unit MaterialUnit { get; set; }
+        [JsonProperty(PropertyName = "material_amount")]
+        public decimal MaterialAmount { get; set; }
+
+        // calculation results
+        [JsonProperty(PropertyName = "calculated_gwp")]
+        public decimal Gwp { get; set; }
+        [JsonProperty(PropertyName = "calculated_cost")]
+        public decimal Cost { get; set; }
+
+        // others
         [JsonProperty(PropertyName = "color")]
         public HslColor Color { get; set; }
     }

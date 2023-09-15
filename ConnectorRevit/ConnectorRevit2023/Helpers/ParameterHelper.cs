@@ -93,20 +93,18 @@ namespace Calc.ConnectorRevit.Helpers
 
             if (typeId == SpecTypeId.Length)
             {
-                return UnitUtils.ConvertFromInternalUnits(value, UnitTypeId.Meters);
+                value = UnitUtils.ConvertFromInternalUnits(value, UnitTypeId.Meters);
             }
             else if (typeId == SpecTypeId.Area)
             {
-                return UnitUtils.ConvertFromInternalUnits(value, UnitTypeId.SquareMeters);
+                value = UnitUtils.ConvertFromInternalUnits(value, UnitTypeId.SquareMeters);
             }
             else if (typeId == SpecTypeId.Volume)
             {
-                return UnitUtils.ConvertFromInternalUnits(value, UnitTypeId.CubicMeters);
+                value = UnitUtils.ConvertFromInternalUnits(value, UnitTypeId.CubicMeters);
             }
-            else
-            {
-                return value;
-            }
+           
+            return Math.Round(value, 5);            
 
         }
     }
