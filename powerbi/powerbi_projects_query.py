@@ -5,7 +5,7 @@ import pandas as pd
 token = "<your-directus-token>"
 
 # set url here:
-url = "https://<your-project-name>.directus.app/items"
+url = "https://<your-project-name>.directus.app"
 
 headers = {'Accept': 'application/json', 'Authorization': 'Bearer {}'.format(token), 'Content-Type': 'application/json'}
 res = requests.get("{}/items/calc_architecture_projects".format(url), headers=headers, allow_redirects=False)

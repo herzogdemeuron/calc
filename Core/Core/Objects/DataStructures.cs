@@ -135,6 +135,28 @@ namespace Calc.Core.Objects
         }
     }
 
+    public class PathItem
+    {
+        [JsonProperty("parameter")]
+        public string Parameter { get; set; }
+        [JsonProperty("value")]
+        public string Value { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+                return false;
+
+            var other = (PathItem)obj;
+            return Parameter == other.Parameter && Value == other.Value;
+        }
+        public override int GetHashCode()
+        {
+            return Parameter.GetHashCode() ^ Value.GetHashCode();
+        }
+
+    }
+
     public class MaterialGroup
     {
         [JsonProperty("group_name")]
