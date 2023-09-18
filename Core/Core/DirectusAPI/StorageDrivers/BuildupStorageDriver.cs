@@ -24,6 +24,8 @@ namespace Calc.Core.DirectusAPI.Drivers
                             cost
                             unit
                             material_category
+                            source_db
+                            source_db_identifier
                           }
                           amount
                         }

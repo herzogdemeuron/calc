@@ -20,8 +20,24 @@ namespace Calc.Core.Objects
         public int Id { get; set; } = -1;
         [JsonProperty("forest_name")]
         public string Name { get; set; }
-        [JsonProperty("trees")] // for recieving the tree JSON from the API
-        public List<Tree> Trees { get; set; }
+        [JsonIgnore]
+        private List<Tree> _trees;
+        [JsonProperty("trees")] // for receiving the tree JSON from the API
+        public List<Tree> Trees
+        {
+            get => _trees;
+            set
+            {
+                _trees = value;
+                if (_trees != null)
+                {
+                    foreach (var tree in _trees)
+                    {
+                        tree.ParentForest = this;
+                    }
+                }
+            }
+        }
         [JsonProperty("project_id")]
         public Project Project { get; set; }
 

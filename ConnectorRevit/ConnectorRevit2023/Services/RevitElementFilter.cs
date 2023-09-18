@@ -20,7 +20,7 @@ namespace Calc.ConnectorRevit.Services
             List<CalcElement> collector = new FilteredElementCollector(App.CurrentDoc)
                   .WhereElementIsNotElementType()
                   .WhereElementIsViewIndependent()
-                  .Where(x => (x.Category != null) && x.GetTypeId() != null)
+                  .Where(x => (x.Category != null) && x.GetTypeId() != null && x.GetTypeId() != ElementId.InvalidElementId)
                   .Select(elem => CreateCalcElement(elem, parameterNameList)).ToList();
             return collector;
         }
@@ -38,11 +38,13 @@ namespace Calc.ConnectorRevit.Services
                 parameterDictionary[parameterName] = result.Item2;
             }
 
+            ElementId typeId = elem.GetTypeId();
+            string typeName = App.CurrentDoc.GetElement(typeId).Name;
             decimal _area = (decimal)GetBasicValue(elem, "Area");
             decimal _volume = (decimal)GetBasicValue(elem, "Volume");
             decimal _length = (decimal)GetBasicValue(elem, "Length");
 
-            return new CalcElement(elem.Id.ToString(), parameterDictionary, _length, _area, _volume);
+            return new CalcElement(elem.Id.ToString(), typeName, parameterDictionary, _length, _area, _volume);
         }
 
         static private double GetBasicValue(Element elem, string parameterName)

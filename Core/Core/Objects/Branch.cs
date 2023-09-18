@@ -19,7 +19,7 @@ namespace Calc.Core.Objects
         [JsonIgnore]
         public string Value { get; set; }
         [JsonIgnore]
-        public List<PathItem> Path => GeneratePath();
+        public List<PathItem> Path { get => GeneratePath(); }
         [JsonIgnore]
         public string Method { get; set; }
         [JsonIgnore]
@@ -27,7 +27,11 @@ namespace Calc.Core.Objects
         [JsonIgnore]
         public List<Branch> SubBranches { get; set; } = new List<Branch>();
         [JsonIgnore]
-        private Branch _parentBranch;
+        public Branch ParentBranch;
+        [JsonIgnore]
+        public Tree ParentTree { get; set; }
+        [JsonIgnore]
+        public Forest ParentForest { get; set; }
         [JsonIgnore]
         private Buildup _buildup;
         [JsonIgnore]
@@ -87,15 +91,21 @@ namespace Calc.Core.Objects
                     Parameter = currentParameter,
                     Value = group.Key.ToString(),
                     Method = methodName,
-                    _parentBranch = this
+                    ParentBranch = this,
+                    // set the parent tree and forest of the subbranch
+                    ParentForest = this.ParentForest,
+                    ParentTree = this.BranchLevel == 0 ? this as Tree : this.ParentTree,
                 };
                 SubBranches.Add(branch);
             }
+
+
 
             if (SubBranches.Count == 0)
             {
                 return;
             }
+
 
             for (int index = 0; index < SubBranches.Count; index++)
             {
@@ -152,7 +162,7 @@ namespace Calc.Core.Objects
                     Value = currentBranch.Value
                 });
 
-                currentBranch = currentBranch._parentBranch;
+                currentBranch = currentBranch.ParentBranch;
             }
 
             return path;
@@ -186,13 +196,13 @@ namespace Calc.Core.Objects
 
         public void InheritMapping()
         {
-            if (_parentBranch == null)
+            if (ParentBranch == null)
             {
                 return;
             }
-            if (_parentBranch.Buildup != null)
+            if (ParentBranch.Buildup != null)
             {
-                this.Buildup = _parentBranch.Buildup;
+                this.Buildup = ParentBranch.Buildup;
             }
         }
 
@@ -206,7 +216,10 @@ namespace Calc.Core.Objects
                 BranchLevel = BranchLevel,
                 Buildup = Buildup,
                 HslColor = HslColor,
-                Elements = this.Elements
+                Elements = this.Elements,
+                ParentBranch = ParentBranch,
+                ParentTree = ParentTree,
+                ParentForest = ParentForest
             };
             if (SubBranches != null)
             {

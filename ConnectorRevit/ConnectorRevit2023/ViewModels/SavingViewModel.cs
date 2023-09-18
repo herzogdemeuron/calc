@@ -42,6 +42,7 @@ namespace Calc.ConnectorRevit.ViewModels
             ViewMediator.Broadcast("ShowWaitingOverlay", "Saving results...");
             ResultSender resultSender = new ResultSender();
             bool? feedback =  await resultSender.SaveResults(nodeToCalculate, newName);
+            //bool? feedback = true;
             ViewMediator.Broadcast("ShowMainView");
             ViewMediator.Broadcast
                 ("ShowMessageOverlay",

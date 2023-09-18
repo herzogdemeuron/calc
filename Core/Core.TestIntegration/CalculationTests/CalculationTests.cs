@@ -32,9 +32,9 @@ namespace Calc.Core.TestIntegration
             // Assert
             foreach (var result in results)
             {
-                Console.WriteLine(result.GlobalWarmingPotentialA1A2A3);
+                Console.WriteLine(result.Gwp);
                 var expected = mockData.gwp123 * mockData.Amount * mockData.Area;
-                Assert.AreEqual(expected, result.GlobalWarmingPotentialA1A2A3);
+                Assert.AreEqual(expected, result.Gwp);
             }
         }
     }

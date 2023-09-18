@@ -75,16 +75,29 @@ namespace Calc.Core.Calculations
                         var gwpA123 = CalculateGwpA123(element, component, buildup.Unit);
                         var cost = CalculateCost(element, component, buildup.Unit);
                         var calculationResult = new Result
-                        { 
+                        {
+                            Forest = branch.ParentForest.Name,
+                            Tree = branch.ParentTree.Name,
+
                             ElementId = element.Id,
-                            GlobalWarmingPotentialA1A2A3 = gwpA123,
-                            Cost = cost,
-                            Unit = buildup.Unit,
-                            MaterialAmount = component.Amount,
-                            MaterialName = material.Name,
-                            MaterialCategory = material.Category,
+                            ElementType = element.Type,
+                            ElementUnit = buildup.Unit,
+                            ElementQuantity = element.GetQuantityByUnit(buildup.Unit),
+
                             BuildupName = buildup.Name,
                             GroupName = buildup.Group.Name,
+                            BuildupUnit = buildup.Unit,
+
+                            MaterialName = material.Name,
+                            MaterialSource = material.Source,
+                            MaterialSourceCode = material.SourceCode,
+                            MaterialCategory = material.Category,
+                            MaterialGwp = material.KgCO2eA123,
+                            MaterialUnit = material.Unit,
+                            MaterialAmount = component.Amount,
+
+                            Gwp = gwpA123,
+                            Cost = cost,
                             Color = branch.HslColor
                         };
 
@@ -98,27 +111,15 @@ namespace Calc.Core.Calculations
         private static decimal CalculateGwpA123(CalcElement element, BuildupComponent component, Unit unit)
         {
             var material = component.Material;
-            return unit switch
-            {
-                Unit.each => material.KgCO2eA123 * component.Amount,
-                Unit.m => material.KgCO2eA123 * component.Amount * element.Length,
-                Unit.m2 => material.KgCO2eA123 * component.Amount * element.Area,
-                Unit.m3 => material.KgCO2eA123 * component.Amount * element.Volume,
-                _ => throw new Exception($"Unit not recognized: {unit}"),
-            };
+            decimal quantity = element.GetQuantityByUnit(unit);
+            return material.KgCO2eA123 * component.Amount * quantity;
         }
 
         private static decimal CalculateCost(CalcElement element, BuildupComponent component, Unit unit)
         {
             var material = component.Material;
-            return unit switch
-            {
-                Unit.each => material.Cost * component.Amount,
-                Unit.m => material.Cost * component.Amount * element.Length,
-                Unit.m2 => material.Cost * component.Amount * element.Area,
-                Unit.m3 => material.Cost * component.Amount * element.Volume,
-                _ => throw new Exception($"Unit not recognized: {unit}"),
-            };
+            decimal quantity = element.GetQuantityByUnit(unit);
+            return material.Cost * component.Amount * quantity;
         }
     }
 }
