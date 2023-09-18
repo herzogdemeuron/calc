@@ -75,9 +75,9 @@ namespace Calc.Core.Calculations
                         var gwpA123 = CalculateGwpA123(element, component, buildup.Unit);
                         var cost = CalculateCost(element, component, buildup.Unit);
                         var calculationResult = new Result
-                        { 
-                            Forest = "test forest",
-                            Tree = "test tree",
+                        {
+                            Forest = branch.ParentForest.Name,
+                            Tree = branch.ParentTree.Name,
 
                             ElementId = element.Id,
                             ElementType = element.Type,
@@ -89,6 +89,8 @@ namespace Calc.Core.Calculations
                             BuildupUnit = buildup.Unit,
 
                             MaterialName = material.Name,
+                            MaterialSource = material.Source,
+                            MaterialSourceCode = material.SourceCode,
                             MaterialCategory = material.Category,
                             MaterialGwp = material.KgCO2eA123,
                             MaterialUnit = material.Unit,

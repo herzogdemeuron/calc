@@ -40,7 +40,6 @@ namespace Calc.ConnectorRevit.ViewModels
         {
             if (forest != null)
             {
-                bool a = store.ForestSelected == forest;
                 Mapping currentMapping = new Mapping(store.ForestSelected, "CurrentMapping");
                 ForestHelper.PlantTrees(store.ForestSelected);
                 store.MappingSelected = currentMapping;

@@ -90,6 +90,10 @@ namespace Calc.Core.Objects
         public string MaterialName { get; set; }
         [JsonProperty(PropertyName = "material_category")]
         public string MaterialCategory { get; set; }
+        [JsonProperty(PropertyName = "material_source")]
+        public string MaterialSource { get; set; }
+        [JsonProperty(PropertyName = "material_source_code")]
+        public string MaterialSourceCode { get; set; }
         [JsonProperty(PropertyName = "material_gwp")]
         public decimal MaterialGwp { get; set; }
         [JsonProperty(PropertyName = "material_unit")]
@@ -134,6 +138,10 @@ namespace Calc.Core.Objects
         public Unit Unit { get;  set; }
         [JsonProperty("material_category")]
         public string Category { get;  set; }
+        [JsonProperty("source_db")]
+        public string Source { get; set; }
+        [JsonProperty("source_db_identifier")]
+        public string SourceCode { get; set; }
 
         public override string ToString()
         {
