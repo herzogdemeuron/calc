@@ -80,6 +80,8 @@ namespace Calc.ConnectorRevit.ViewModels
             if (nodeItem == null) return;
             if (CurrentForestItem == null) return;
             SelectedNodeItem = nodeItem;
+            var host = nodeItem.Host as Branch;
+            var result = host.Calculation;
             NodeHelper.HideAllLabelColor(CurrentForestItem);
 
             if (BranchesSwitch)

@@ -1,6 +1,7 @@
 ﻿using Calc.ConnectorRevit.Helpers;
 using Calc.Core;
 using Calc.Core.Objects;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
@@ -34,16 +35,18 @@ namespace Calc.ConnectorRevit.ViewModels
             }
             ViewMediator.Broadcast("ShowWaitingOverlay", "Loading project data...");
             store.ProjectSelected = project;
-            bool dataGot = await store.GetOtherData();
-            if (dataGot)
-            {
-                ViewMediator.Broadcast("ShowMainView");
-            }
-            else
-            {
-                ViewMediator.Broadcast("ShowMessageOverlay", new List<object> { null, "Error occured while getting project data, please try again." });
-            }
 
+            try
+            {
+                bool dataGot = await store.GetOtherData();
+                ViewMediator.Broadcast("ShowMainView");
+
+            }
+            catch (Exception ex)
+            {
+                ViewMediator.Broadcast("ShowMessageOverlay", new List<object> { null, $"Error occured while getting project data:{ex.Message}" });
+                ViewMediator.Broadcast("ShowProjectOverlay");
+            }
         }
 
 

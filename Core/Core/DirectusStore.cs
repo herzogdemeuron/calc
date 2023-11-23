@@ -137,7 +137,6 @@ namespace Calc.Core
             }
             catch (Exception e)
             {
-                return false;
                 throw e;
             }
         }

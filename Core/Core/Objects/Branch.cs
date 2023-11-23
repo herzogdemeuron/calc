@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using Calc.Core.Calculations;
 using Calc.Core.Color;
 using Speckle.Newtonsoft.Json;
 
@@ -50,6 +51,26 @@ namespace Calc.Core.Objects
             {
                 _hslColor = value;
                 OnPropertyChanged(nameof(HslColor));
+            }
+        }
+
+        [JsonIgnore]
+        private List<Result> _calculation;
+        [JsonIgnore]
+        public List<Result> Calculation
+        {
+            get
+            {
+                if(SubBranches.Count > 0)
+                {
+                    return SubBranches.SelectMany(sb => sb.Calculation).ToList();
+                }
+                return _calculation;
+            }
+            set
+            {
+                _calculation = value;
+                OnPropertyChanged(nameof(Calculation));
             }
         }
 
@@ -118,10 +139,12 @@ namespace Calc.Core.Objects
         public void SetBuildup(Buildup buildup)
         {
             // set the buildup of the current branch. Also set the buildup of all subbranches to the same value if they have no buildup assigned yet or the buildup is the same.
+
             var currentBuildup = _buildup;
             _buildup = buildup;
             if (SubBranches.Count == 0)
             {
+                Calculate();
                 return;
             }
 
@@ -137,12 +160,11 @@ namespace Calc.Core.Objects
 
         public void ResetBuildups()
         {
-            _buildup = null;
+            Buildup = null;
             if (SubBranches.Count == 0)
             {
                 return;
             }
-
             foreach (var subBranch in SubBranches)
             {
                 subBranch.ResetBuildups();
@@ -173,6 +195,7 @@ namespace Calc.Core.Objects
         /// This method matches a buildup to a branch.
         /// The intended use is to reconstruct the buildup assignments in a full tree from 
         /// a mapping stored in the database.
+        /// at the sametime update the calculation results.
         /// </summary>
         public void MatchMapping(List<PathItem> path, Buildup buildup)
         {
@@ -204,6 +227,19 @@ namespace Calc.Core.Objects
             {
                 this.Buildup = ParentBranch.Buildup;
             }
+        }
+
+        /// <summary>
+        /// calculates the results for one branch (should be the end branch) with buildup assigned.
+        /// </summary>
+        private void Calculate()
+        {
+           if(Buildup == null)
+            {
+               Calculation = new List<Result>();
+               return;
+           }
+           Calculation = Calculator.Calculate(this);
         }
 
         public Branch Copy()

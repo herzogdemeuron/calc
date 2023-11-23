@@ -61,48 +61,55 @@ namespace Calc.Core.Calculations
             var results = new List<Result>();
             foreach (var branch in flatBranches)
             {
-                if (branch.Buildup == null) continue;
+                results.AddRange(Calculate(branch));
+            }
+            return results;
+        }
 
-                var buildup = branch.Buildup;
+        public static List<Result> Calculate(Branch branch)
+        {
+            var results = new List<Result>();
+            if (branch.Buildup == null) return results;
 
-                if (buildup.Components == null) continue;
+            var buildup = branch.Buildup;
 
-                foreach (var element in branch.Elements)
+            if (buildup.Components == null) return results;
+
+            foreach (var element in branch.Elements)
+            {
+                foreach (var component in buildup.Components)
                 {
-                    foreach (var component in buildup.Components)
+                    var material = component.Material;
+                    var gwpA123 = CalculateGwpA123(element, component, buildup.Unit);
+                    var cost = CalculateCost(element, component, buildup.Unit);
+                    var calculationResult = new Result
                     {
-                        var material = component.Material;
-                        var gwpA123 = CalculateGwpA123(element, component, buildup.Unit);
-                        var cost = CalculateCost(element, component, buildup.Unit);
-                        var calculationResult = new Result
-                        {
-                            Forest = branch.ParentForest.Name,
-                            Tree = branch.ParentTree.Name,
+                        Forest = branch.ParentForest.Name,
+                        Tree = branch.ParentTree.Name,
 
-                            ElementId = element.Id,
-                            ElementType = element.Type,
-                            ElementUnit = buildup.Unit,
-                            ElementQuantity = element.GetQuantityByUnit(buildup.Unit),
+                        ElementId = element.Id,
+                        ElementType = element.Type,
+                        ElementUnit = buildup.Unit,
+                        ElementQuantity = element.GetQuantityByUnit(buildup.Unit),
 
-                            BuildupName = buildup.Name,
-                            GroupName = buildup.Group.Name,
-                            BuildupUnit = buildup.Unit,
+                        BuildupName = buildup.Name,
+                        GroupName = buildup.Group.Name,
+                        BuildupUnit = buildup.Unit,
 
-                            MaterialName = material.Name,
-                            MaterialSource = material.Source,
-                            MaterialSourceCode = material.SourceCode,
-                            MaterialCategory = material.Category,
-                            MaterialGwp = material.KgCO2eA123,
-                            MaterialUnit = material.Unit,
-                            MaterialAmount = component.Amount,
+                        MaterialName = material.Name,
+                        MaterialSource = material.Source,
+                        MaterialSourceCode = material.SourceCode,
+                        MaterialCategory = material.Category,
+                        MaterialGwp = material.KgCO2eA123,
+                        MaterialUnit = material.Unit,
+                        MaterialAmount = component.Amount,
 
-                            Gwp = gwpA123,
-                            Cost = cost,
-                            Color = branch.HslColor
-                        };
+                        Gwp = gwpA123,
+                        Cost = cost,
+                        Color = branch.HslColor
+                    };
 
-                        results.Add(calculationResult);
-                    }
+                    results.Add(calculationResult);
                 }
             }
             return results;

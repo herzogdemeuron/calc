@@ -17,6 +17,7 @@ namespace Calc.ConnectorRevit.Helpers
                 branchesToCalc.Add(branch);
             }
             else
+            // if the node is a forest, add the branches(trees) of the forest
             {
                 foreach (NodeViewModel subItem in nodeItem.SubNodeItems)
                 {
