@@ -93,7 +93,7 @@ namespace Calc.Core.Calculations
                         ElementQuantity = element.GetQuantityByUnit(buildup.Unit),
 
                         BuildupName = buildup.Name,
-                        GroupName = buildup.Group.Name,
+                        GroupName = buildup.Group?.Name,
                         BuildupUnit = buildup.Unit,
 
                         MaterialName = material.Name,

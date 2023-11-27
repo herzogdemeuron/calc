@@ -65,7 +65,7 @@ namespace Calc.Core.Objects
                 {
                     return SubBranches.SelectMany(sb => sb.Calculation).ToList();
                 }
-                return _calculation;
+                return _calculation?? new List<Result>();
             }
             set
             {
