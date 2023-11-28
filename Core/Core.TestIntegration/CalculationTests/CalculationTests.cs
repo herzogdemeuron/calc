@@ -18,16 +18,19 @@ namespace Calc.Core.TestIntegration
             {
                 tree.Plant(mockData.Elements);
                 mockData.AssignBuildups(tree);
-                tree.RemoveElementsByBuildupOverrides();
-                branches.AddRange(tree.Flatten());
+                //tree.RemoveElementsByBuildupOverrides();
+                var a = tree;
+                //branches.AddRange(tree.Flatten());
             }
+            var results = new List<Result>();
             foreach (var branch in branches)
             {
-                Console.WriteLine(branch.Buildup);
+                results.AddRange(branch.Calculation);
+                Console.WriteLine(branch.Calculation);
             }
 
             // Act
-            var results = Calculator.Calculate(branches);
+            //var results = Calculator.Calculate(branches);
 
             // Assert
             foreach (var result in results)

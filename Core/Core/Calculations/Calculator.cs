@@ -75,7 +75,7 @@ namespace Calc.Core.Calculations
 
             if (buildup.Components == null) return results;
 
-            foreach (var element in branch.Elements)
+            foreach (var element in branch.Elements??new List<CalcElement>())
             {
                 foreach (var component in buildup.Components)
                 {

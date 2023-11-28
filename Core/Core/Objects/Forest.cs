@@ -69,6 +69,18 @@ namespace Calc.Core.Objects
             return parameters;
         }
 
+        /// <summary>
+        /// Plants all trees in the forest and returns the remaining elements
+        /// </summary>
+        public List<CalcElement> PlantTrees(List<CalcElement> searchElements)
+        {
+            foreach (Tree tree in Trees)
+            {
+                searchElements = tree.Plant(searchElements);
+            }
+            return searchElements;
+        }
+
         public string SerializeTrees()
         {
             var treesJson = new StringBuilder();

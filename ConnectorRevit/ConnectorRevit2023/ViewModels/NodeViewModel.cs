@@ -8,6 +8,10 @@ using System.Windows.Media;
 
 namespace Calc.ConnectorRevit.ViewModels
 {
+    public enum NodeError
+    {
+        DoorOrWindowWithoutArea
+    }
     public class NodeViewModel : INotifyPropertyChanged
     {
         public string Name { get => GetName(); }

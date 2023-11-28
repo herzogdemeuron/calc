@@ -25,14 +25,11 @@ namespace Calc.ConnectorRevit.Helpers
             // record time
             watch = System.Diagnostics.Stopwatch.StartNew();
 
-            foreach (var t in forest.Trees)
-            {
-                calcElements = t.Plant(calcElements);
-            }
+            var leftElements = forest.PlantTrees(calcElements);
             watch.Stop();
             elapsedMs = watch.ElapsedMilliseconds;
             Debug.WriteLine("Time to plant trees: " + elapsedMs);
-            Debug.WriteLine("Left overs: " + calcElements.Count);
+            Debug.WriteLine("Left overs: " + leftElements);
         }
 
         private static List<string> GetParameterList(Forest forest)
