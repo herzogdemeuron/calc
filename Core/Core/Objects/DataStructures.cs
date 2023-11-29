@@ -15,21 +15,22 @@ namespace Calc.Core.Objects
     public  struct CalcElement
     {
         public string Id;
-        public string Type;
+        public string TypeName;
         public Dictionary<string, object> Fields;
-        private Dictionary<Unit, decimal> _quantities;
+        private Dictionary<Unit, decimal?> _quantities;
 
         public CalcElement(string id,
             string type,
             Dictionary<string, object> fields,
-            decimal length=0,
-            decimal area=0,
-            decimal volume=0)
+            decimal? length,
+            decimal? area,
+            decimal? volume
+            )
         {
             this.Id = id;
-            this.Type = type;
+            this.TypeName = type;
             this.Fields = fields;
-            this._quantities = new Dictionary<Unit, decimal>
+            this._quantities = new Dictionary<Unit, decimal?>
             {
                 { Unit.each, 1 },
                 { Unit.m, length },
@@ -38,9 +39,9 @@ namespace Calc.Core.Objects
             };
         }
 
-        public decimal GetQuantityByUnit(Unit unit)
+        public decimal? GetQuantityByUnit(Unit unit)
         {
-            if (_quantities.TryGetValue(unit, out decimal value))
+            if (_quantities.TryGetValue(unit, out decimal? value))
             {
                 return value;
             }

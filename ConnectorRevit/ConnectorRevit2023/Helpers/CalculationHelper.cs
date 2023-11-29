@@ -25,8 +25,11 @@ namespace Calc.ConnectorRevit.Helpers
                 }
             }
 
-            List<Result> results = Calculator.Calculate(branchesToCalc);
-            return results;
+            //List<Result> results = Calculator.Calculate(branchesToCalc);
+            //return results;
+
+            // to deprecate
+            return null;
         }
     }
 }

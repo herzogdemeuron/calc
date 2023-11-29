@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Calc.Core.Helpers;
 using Calc.Core.Objects;
 
 namespace Calc.Core.Calculations
@@ -61,72 +62,95 @@ namespace Calc.Core.Calculations
             var results = new List<Result>();
             foreach (var branch in flatBranches)
             {
-                results.AddRange(Calculate(branch));
+                //results.AddRange(Calculate(branch));
             }
             return results;
         }
 
-        public static List<Result> Calculate(Branch branch)
+        /// <summary>
+        /// calculate gwp and cost for one branch
+        /// store back the calculation to it
+        /// this should only happen for dead end branches
+        /// </summary>
+        public static void Calculate(Branch branch)
         {
             var results = new List<Result>();
-            if (branch.Buildup == null) return results;
+            var zeroQuantityElements = new Dictionary<string, int>();
+            var nullQuantityElements = new Dictionary<string, int>();
 
             var buildup = branch.Buildup;
+            if ( buildup != null && branch.Buildup.Components != null)
+            {
+                CalculateBranch(branch, results, zeroQuantityElements, nullQuantityElements);
+            }
 
-            if (buildup.Components == null) return results;
+            branch.CalculationResults = results;
+            branch.CalculationZeroElements = zeroQuantityElements;
+            branch.CalculationNullElements = nullQuantityElements;
+        }
 
-            foreach (var element in branch.Elements??new List<CalcElement>())
+        private static void CalculateBranch(Branch branch, List<Result> resultList, Dictionary<string, int> zeroList, Dictionary<string, int> nullList)
+        {
+            var buildup = branch.Buildup;
+            foreach (var element in branch.Elements)
             {
                 foreach (var component in buildup.Components)
                 {
-                    var material = component.Material;
-                    var gwpA123 = CalculateGwpA123(element, component, buildup.Unit);
-                    var cost = CalculateCost(element, component, buildup.Unit);
-                    var calculationResult = new Result
+                    var quantity = element.GetQuantityByUnit(buildup.Unit);
+                    if (quantity == 0)
                     {
-                        Forest = branch.ParentForest.Name,
-                        Tree = branch.ParentTree.Name,
+                        CollectionHelper.AddToCountDict(zeroList, element.TypeName);
+                        continue;
+                    }
+                    if (quantity == null)
+                    {
+                        CollectionHelper.AddToCountDict(nullList, element.TypeName);
+                        continue;
+                    }
 
-                        ElementId = element.Id,
-                        ElementType = element.Type,
-                        ElementUnit = buildup.Unit,
-                        ElementQuantity = element.GetQuantityByUnit(buildup.Unit),
+                    var calculationResult = GetResult(branch, element, buildup, component, (decimal)quantity);
 
-                        BuildupName = buildup.Name,
-                        GroupName = buildup.Group?.Name,
-                        BuildupUnit = buildup.Unit,
-
-                        MaterialName = material.Name,
-                        MaterialSource = material.Source,
-                        MaterialSourceCode = material.SourceCode,
-                        MaterialCategory = material.Category,
-                        MaterialGwp = material.KgCO2eA123,
-                        MaterialUnit = material.Unit,
-                        MaterialAmount = component.Amount,
-
-                        Gwp = gwpA123,
-                        Cost = cost,
-                        Color = branch.HslColor
-                    };
-
-                    results.Add(calculationResult);
+                    resultList.Add(calculationResult);
                 }
             }
-            return results;
         }
 
-        private static decimal CalculateGwpA123(CalcElement element, BuildupComponent component, Unit unit)
+
+        private static Result GetResult(Branch branch, CalcElement element, Buildup buildup, BuildupComponent component, decimal quantity)
         {
             var material = component.Material;
-            decimal quantity = element.GetQuantityByUnit(unit);
-            return material.KgCO2eA123 * component.Amount * quantity;
+            var gwpA123 = material.KgCO2eA123 * component.Amount * quantity;
+            var cost = material.Cost * component.Amount * quantity;
+
+            var calculationResult = new Result
+            {
+                Forest = branch.ParentForest.Name,
+                Tree = branch.ParentTree.Name,
+
+                ElementId = element.Id,
+                ElementType = element.TypeName,
+                ElementUnit = buildup.Unit,
+                ElementQuantity = quantity,
+
+                BuildupName = buildup.Name,
+                GroupName = buildup.Group?.Name,
+                BuildupUnit = buildup.Unit,
+
+                MaterialName = material.Name,
+                MaterialSource = material.Source,
+                MaterialSourceCode = material.SourceCode,
+                MaterialCategory = material.Category,
+                MaterialGwp = material.KgCO2eA123,
+                MaterialUnit = material.Unit,
+                MaterialAmount = component.Amount,
+
+                Gwp = gwpA123,
+                Cost = cost,
+                Color = branch.HslColor
+            };
+            return calculationResult;
         }
 
-        private static decimal CalculateCost(CalcElement element, BuildupComponent component, Unit unit)
-        {
-            var material = component.Material;
-            decimal quantity = element.GetQuantityByUnit(unit);
-            return material.Cost * component.Amount * quantity;
-        }
+       
     }
 }

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using Calc.Core.Calculations;
 using Calc.Core.Color;
+using Calc.Core.Helpers;
 using Speckle.Newtonsoft.Json;
 
 namespace Calc.Core.Objects
@@ -55,22 +56,69 @@ namespace Calc.Core.Objects
         }
 
         [JsonIgnore]
-        private List<Result> _calculation;
+        public bool HasCalculationErrors;
+
         [JsonIgnore]
-        public List<Result> Calculation
+        private Dictionary<string, int> _calculationNullElements;
+        [JsonIgnore]
+        public Dictionary<string, int> CalculationNullElements
+        {
+            get
+            {
+                if (SubBranches.Count > 0)
+                {
+                   var dicts = SubBranches.Select(sb => sb.CalculationNullElements).ToList();
+                   return CollectionHelper.MergeCountDicts(dicts);
+                }
+                return _calculationNullElements;
+            }
+            set
+            {
+                _calculationNullElements = value;
+                OnPropertyChanged(nameof(CalculationNullElements));
+            }
+        }
+
+        [JsonIgnore]
+        private Dictionary<string, int> _calculationZeroElements;
+        [JsonIgnore]
+        public Dictionary<string, int> CalculationZeroElements
+        {
+            get
+            {
+                if (SubBranches.Count > 0)
+                {
+                    var dicts = SubBranches.Select(sb => sb.CalculationZeroElements).ToList();
+                    return CollectionHelper.MergeCountDicts(dicts);
+                }
+                return _calculationZeroElements;
+            }
+            set
+            {
+                _calculationZeroElements = value;
+                OnPropertyChanged(nameof(CalculationZeroElements));
+            }
+        }
+
+
+
+        [JsonIgnore]
+        private List<Result> _calculationResults;
+        [JsonIgnore]
+        public List<Result> CalculationResults
         {
             get
             {
                 if(SubBranches.Count > 0)
                 {
-                    return SubBranches.SelectMany(sb => sb.Calculation).ToList();
+                    return SubBranches.SelectMany(sb => sb.CalculationResults).ToList();
                 }
-                return _calculation?? new List<Result>();
+                return _calculationResults;
             }
             set
             {
-                _calculation = value;
-                OnPropertyChanged(nameof(Calculation));
+                _calculationResults = value;
+                OnPropertyChanged(nameof(CalculationResults));
             }
         }
 
@@ -89,10 +137,6 @@ namespace Calc.Core.Objects
             Elements = elements;
         }
 
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
         public void CreateBranches(List<string> branchConfig)
         {
@@ -136,15 +180,18 @@ namespace Calc.Core.Objects
             }
         }
 
+        /// <summary>
+        /// set the buildup of the current branch. 
+        /// Also set the buildup of all subbranches to the same value if they have no buildup assigned yet or the buildup is the same.
+        /// calculate the branch with the new buildup if it is a dead end branch.
+        /// </summary>
         public void SetBuildup(Buildup buildup)
         {
-            // set the buildup of the current branch. Also set the buildup of all subbranches to the same value if they have no buildup assigned yet or the buildup is the same.
-
             var currentBuildup = _buildup;
             _buildup = buildup;
             if (SubBranches.Count == 0)
             {
-                Calculate();
+                Calculator.Calculate(this);
                 return;
             }
 
@@ -232,15 +279,7 @@ namespace Calc.Core.Objects
         /// <summary>
         /// calculates the results for one branch (should be the end branch) with buildup assigned.
         /// </summary>
-        private void Calculate()
-        {
-           if(Buildup == null)
-            {
-               Calculation = new List<Result>();
-               return;
-           }
-           Calculation = Calculator.Calculate(this);
-        }
+
 
         public Branch Copy()
         {
@@ -348,5 +387,11 @@ namespace Calc.Core.Objects
             }
             return groupedElements;
         }
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
     }
 }

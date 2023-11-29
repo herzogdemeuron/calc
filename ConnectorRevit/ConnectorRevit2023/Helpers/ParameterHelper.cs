@@ -85,8 +85,6 @@ namespace Calc.ConnectorRevit.Helpers
 
         public static double ToMetricValue(Parameter parameter)
         {
-            if (parameter == null) return 0;
-
             double value = parameter.AsDouble();
             // convert parameter value to metric if the GetDataType is length, area or volume
             ForgeTypeId typeId = parameter.Definition.GetDataType();
@@ -103,6 +101,7 @@ namespace Calc.ConnectorRevit.Helpers
             {
                 value = UnitUtils.ConvertFromInternalUnits(value, UnitTypeId.CubicMeters);
             }
+
            
             return Math.Round(value, 5);            
 

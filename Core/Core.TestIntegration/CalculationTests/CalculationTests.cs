@@ -25,8 +25,8 @@ namespace Calc.Core.TestIntegration
             var results = new List<Result>();
             foreach (var branch in branches)
             {
-                results.AddRange(branch.Calculation);
-                Console.WriteLine(branch.Calculation);
+                results.AddRange(branch.CalculationResults);
+                Console.WriteLine(branch.CalculationResults);
             }
 
             // Act

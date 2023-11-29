@@ -21,12 +21,18 @@ namespace Calc.ConnectorRevit.Services
                   .WhereElementIsNotElementType()
                   .WhereElementIsViewIndependent()
                   .Where(x => (x.Category != null) && x.GetTypeId() != null && x.GetTypeId() != ElementId.InvalidElementId)
-                  .Select(elem => CreateCalcElement(elem, parameterNameList)).ToList();
+                  .Select(elem => CreateCalcElement(elem, parameterNameList, AreName:".StandardArea")).ToList();
             return collector;
         }
 
 
-        static private CalcElement CreateCalcElement(Element elem, List<string> parameterNameList)
+        static private CalcElement CreateCalcElement(
+            Element elem, 
+            List<string> parameterNameList,
+            string LenName = "Length",
+            string AreName = "Area",
+            string VolName = "Volume"
+            )
         {
             // create a calc element using the element and the parameter name list
             // add as many parameters from the list as possible
@@ -39,18 +45,29 @@ namespace Calc.ConnectorRevit.Services
             }
 
             ElementId typeId = elem.GetTypeId();
-            string typeName = App.CurrentDoc.GetElement(typeId).Name;
-            decimal _area = (decimal)GetBasicValue(elem, "Area");
-            decimal _volume = (decimal)GetBasicValue(elem, "Volume");
-            decimal _length = (decimal)GetBasicValue(elem, "Length");
+            string type = App.CurrentDoc.GetElement(typeId).Name;
+            string typeName = $"{type} ({typeId.IntegerValue})";
 
-            return new CalcElement(elem.Id.ToString(), typeName, parameterDictionary, _length, _area, _volume);
+            decimal? lenValue = GetBasicValue(elem, LenName);
+            decimal? araValue = GetBasicValue(elem, AreName);
+            decimal? volValue = GetBasicValue(elem, VolName);
+
+
+            return new CalcElement(elem.Id.ToString(), typeName, parameterDictionary, lenValue, araValue, volValue);
         }
 
-        static private double GetBasicValue(Element elem, string parameterName)
+        /// <summary>
+        /// The basic quantity parameter value of an element,
+        /// if the parameter is not found, return null, this happens when the element does not contain the custom parameter (for doors and windows) or the default parameter (wrong unit setup)
+        /// or if the parameter value is 0, return 0, this happens when the parameter is not assigned a value, meaning the user may have wrong setups for material unit or the element needs new custom parameter to reflect the quatity
+        /// which will trigger an error in the calculation
+        /// </summary>
+        static private decimal? GetBasicValue(Element elem, string parameterName)
         {
             Parameter parameter = elem.LookupParameter(parameterName);
-            return ParameterHelper.ToMetricValue(parameter);
+            if (parameter == null) return null;
+            var value = ParameterHelper.ToMetricValue(parameter);
+            return (decimal)value;
         }
 
     }
