@@ -7,31 +7,31 @@ namespace Calc.Core.Helpers
     public static class CollectionHelper
     {
 
-        public static Dictionary<string, int> MergeCountDicts (List<Dictionary<string, int>> dicts)
+        public static Dictionary<string, List<string>> MergeCountDicts (List<Dictionary<string, List<string>>> dicts)
         {
-            Dictionary<string, int> result = new();
+            Dictionary<string, List<string>> result = new();
 
             foreach (var dict in dicts)
             {
                 foreach (var pair in dict)
                 {
-                    AddToCountDict(result, pair.Key);
+                    AddToCountDict(result, pair.Key, pair.Value.ToArray());
                 }
             }
 
             return result;
         }
 
-        public static void AddToCountDict(Dictionary<string, int> dict, string key)
+        public static void AddToCountDict(Dictionary<string, List<string>> dict, string typeName, params string[] elementIds)
         {
-            if (dict.ContainsKey(key))
+            if (!dict.ContainsKey(typeName))
             {
-                dict[key] += 1;
+                dict[typeName] = new List<string>();
             }
-            else
-            {
-                dict.Add(key, 1);
-            }
+
+            dict[typeName].AddRange(elementIds);
+
         }
+
     }
 }

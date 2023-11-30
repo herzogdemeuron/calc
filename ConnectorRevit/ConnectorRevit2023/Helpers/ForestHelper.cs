@@ -1,4 +1,6 @@
-﻿using Calc.ConnectorRevit.Services;
+﻿using Autodesk.Revit.DB;
+using Calc.ConnectorRevit.Config;
+using Calc.ConnectorRevit.Services;
 using Calc.Core.Objects;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,24 +13,13 @@ namespace Calc.ConnectorRevit.Helpers
         public static void PlantTrees(Forest forest)
         {
             List<string> parameters = GetParameterList(forest);
-            // record time
-            var watch = System.Diagnostics.Stopwatch.StartNew();
 
-
-            List<CalcElement> calcElements = RevitElementFilter.CreateCalcElements(parameters);
-            
-            // record time
-            watch.Stop();
-            var elapsedMs = watch.ElapsedMilliseconds;
-            Debug.WriteLine("Time to create CalcElements: " + elapsedMs);
-
-            // record time
-            watch = System.Diagnostics.Stopwatch.StartNew();
+            var doorParamConfig = new RevitBasicParamConfig(BuiltInCategory.OST_Doors, AreaName: ".Standard_Area");
+            var windowParamConfig = new RevitBasicParamConfig(BuiltInCategory.OST_Windows, AreaName: ".Standard_Area");
+            List<CalcElement> calcElements = RevitElementFilter.CreateCalcElements(parameters, doorParamConfig, windowParamConfig);
 
             var leftElements = forest.PlantTrees(calcElements);
-            watch.Stop();
-            elapsedMs = watch.ElapsedMilliseconds;
-            Debug.WriteLine("Time to plant trees: " + elapsedMs);
+
             Debug.WriteLine("Left overs: " + leftElements);
         }
 

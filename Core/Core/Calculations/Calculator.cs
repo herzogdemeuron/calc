@@ -75,8 +75,8 @@ namespace Calc.Core.Calculations
         public static void Calculate(Branch branch)
         {
             var results = new List<Result>();
-            var zeroQuantityElements = new Dictionary<string, int>();
-            var nullQuantityElements = new Dictionary<string, int>();
+            var zeroQuantityElements = new Dictionary<string, List<string>>();
+            var nullQuantityElements = new Dictionary<string, List<string>>();
 
             var buildup = branch.Buildup;
             if ( buildup != null && branch.Buildup.Components != null)
@@ -89,7 +89,7 @@ namespace Calc.Core.Calculations
             branch.CalculationNullElements = nullQuantityElements;
         }
 
-        private static void CalculateBranch(Branch branch, List<Result> resultList, Dictionary<string, int> zeroList, Dictionary<string, int> nullList)
+        private static void CalculateBranch(Branch branch, List<Result> resultList, Dictionary<string, List<string>> zeroList, Dictionary<string, List<string>> nullList)
         {
             var buildup = branch.Buildup;
             foreach (var element in branch.Elements)
@@ -99,12 +99,12 @@ namespace Calc.Core.Calculations
                     var quantity = element.GetQuantityByUnit(buildup.Unit);
                     if (quantity == 0)
                     {
-                        CollectionHelper.AddToCountDict(zeroList, element.TypeName);
+                        CollectionHelper.AddToCountDict(zeroList, element.TypeName, element.Id);
                         continue;
                     }
                     if (quantity == null)
                     {
-                        CollectionHelper.AddToCountDict(nullList, element.TypeName);
+                        CollectionHelper.AddToCountDict(nullList, element.TypeName, element.Id);
                         continue;
                     }
 
@@ -114,7 +114,6 @@ namespace Calc.Core.Calculations
                 }
             }
         }
-
 
         private static Result GetResult(Branch branch, CalcElement element, Buildup buildup, BuildupComponent component, decimal quantity)
         {

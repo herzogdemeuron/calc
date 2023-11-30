@@ -59,9 +59,9 @@ namespace Calc.Core.Objects
         public bool HasCalculationErrors;
 
         [JsonIgnore]
-        private Dictionary<string, int> _calculationNullElements;
+        private Dictionary<string, List<string>> _calculationNullElements;
         [JsonIgnore]
-        public Dictionary<string, int> CalculationNullElements
+        public Dictionary<string, List<string>> CalculationNullElements
         {
             get
             {
@@ -80,9 +80,9 @@ namespace Calc.Core.Objects
         }
 
         [JsonIgnore]
-        private Dictionary<string, int> _calculationZeroElements;
+        private Dictionary<string, List<string>> _calculationZeroElements;
         [JsonIgnore]
-        public Dictionary<string, int> CalculationZeroElements
+        public Dictionary<string, List<string>> CalculationZeroElements
         {
             get
             {

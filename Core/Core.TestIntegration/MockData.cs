@@ -100,7 +100,7 @@ public class MockData
     private void CreateElements()
     {
         // Mock walls
-        var id1 = Guid.NewGuid().ToString();
+
         string name1 = "elemName1";
         var Fields1 = new Dictionary<string, object>
         {
@@ -108,10 +108,9 @@ public class MockData
             { "Grouping", "Group1" },
             { "SubGrouping", "SubGroup1" }
         };
-        var element1 = new CalcElement(id1,name1, Fields1, area: 90);
+        var element1 = new CalcElement("id01",name1, Fields1, length: null, area: null, volume: null);
         this.Elements.Add(element1);
 
-        var id2 = Guid.NewGuid().ToString();
         string name2 = "elemName2";
         var Fields2 = new Dictionary<string, object>
         {
@@ -119,10 +118,9 @@ public class MockData
             { "Grouping", "Group1" },
             { "SubGrouping", "SubGroup2" }
         };
-        var element2 = new CalcElement(id2,name2, Fields2, area: 80);
+        var element2 = new CalcElement("id02", name1, Fields2, length: null, area: null, volume: null);
         this.Elements.Add(element2);
 
-        var id3 = Guid.NewGuid().ToString();
         string name3 = "elemName3";
         var Fields3 = new Dictionary<string, object>
         {
@@ -130,11 +128,10 @@ public class MockData
             { "Grouping", "Group2" },
             { "SubGrouping", "SubGroup2" }
         };
-        var element3 = new CalcElement(id3, name3, Fields3, area: 70);
+        var element3 = new CalcElement("id03", name3, Fields3, length: null,area: 0, volume:null);
         this.Elements.Add(element3);
 
         // Mock floors
-        var id4 = Guid.NewGuid().ToString();
         string name4 = "elemName4";
         var Fields4 = new Dictionary<string, object>
         {
@@ -142,10 +139,9 @@ public class MockData
             { "Grouping", "GroupA" },
             { "SubGrouping", "SubGroupA" }
         };
-        var element4 = new CalcElement(id4, name4, Fields4, area: 60);
+        var element4 = new CalcElement("id11", name4, Fields4, length: null, area: 0, volume: null);
         this.Elements.Add(element4);
 
-        var id5 = Guid.NewGuid().ToString();
         string name5 = "elemName5";
         var Fields5 = new Dictionary<string, object>
         {
@@ -153,10 +149,9 @@ public class MockData
             { "Grouping", "GroupA" },
             { "SubGrouping", "SubGroupA" }
         };
-        var element5 = new CalcElement(id5, name5, Fields5, area: 50);
+        var element5 = new CalcElement("id12", name5, Fields5, length: null, area: null, volume: null);
         this.Elements.Add(element5);
 
-        var id6 = Guid.NewGuid().ToString();
         string name6 = "elemName6";
         var Fields6 = new Dictionary<string, object>
         {
@@ -164,7 +159,7 @@ public class MockData
             { "Grouping", "GroupA" },
             { "SubGrouping", "SubGroupB" }
         };
-        var element6 = new CalcElement(id6, name6, Fields6, area: 40);
+        var element6 = new CalcElement("id13", name6, Fields6, length: null, area: 70, volume: null);
         this.Elements.Add(element6);
     }
 
