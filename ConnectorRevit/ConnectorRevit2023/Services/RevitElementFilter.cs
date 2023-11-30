@@ -97,9 +97,12 @@ namespace Calc.ConnectorRevit.Services
         /// </summary>
         static private decimal? GetBasicValue(Element elem, string parameterName)
         {
-            Parameter parameter = elem.LookupParameter(parameterName);
-            if (parameter == null) return null;
-            var value = ParameterHelper.ToMetricValue(parameter);
+            var parameters = elem.GetParameters(parameterName);
+            if (parameters.Count != 1)
+            {
+                return null;
+            }
+            var value = ParameterHelper.ToMetricValue(parameters.First());
             return (decimal)value;
         }
 

@@ -15,7 +15,7 @@ namespace Calc.ConnectorRevit.Helpers
             List<string> parameters = GetParameterList(forest);
 
             var doorParamConfig = new RevitBasicParamConfig(BuiltInCategory.OST_Doors, AreaName: ".Standard_Area");
-            var windowParamConfig = new RevitBasicParamConfig(BuiltInCategory.OST_Windows, AreaName: ".Standard_Area");
+            var windowParamConfig = new RevitBasicParamConfig(BuiltInCategory.OST_Windows, AreaName: ".Area");
             List<CalcElement> calcElements = RevitElementFilter.CreateCalcElements(parameters, doorParamConfig, windowParamConfig);
 
             var leftElements = forest.PlantTrees(calcElements);
