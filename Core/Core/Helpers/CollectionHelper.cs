@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Calc.Core.Objects;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Calc.Core.Helpers
@@ -32,6 +34,14 @@ namespace Calc.Core.Helpers
             dict[typeName].AddRange(elementIds);
 
         }
+
+        public static bool CompareBuildups( List<Buildup> buildups1, List<Buildup> buildups2)
+        {
+            List<int> id1 = buildups1.Select(x => x.Id).OrderBy(x => x).ToList();
+            List<int> id2 = buildups2.Select(x => x.Id).OrderBy(x => x).ToList();
+            return id1.SequenceEqual(id2);
+
+        }   
 
     }
 }

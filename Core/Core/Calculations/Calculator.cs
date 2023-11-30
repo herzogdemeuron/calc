@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Calc.Core.Helpers;
 using Calc.Core.Objects;
 
@@ -74,15 +75,15 @@ namespace Calc.Core.Calculations
         /// </summary>
         public static void Calculate(Branch branch)
         {
+            if (branch == null) return;
+
             var results = new List<Result>();
             var zeroQuantityElements = new Dictionary<string, List<string>>();
             var nullQuantityElements = new Dictionary<string, List<string>>();
 
-            var buildup = branch.Buildup;
-            if ( buildup != null && branch.Buildup.Components != null)
-            {
-                CalculateBranch(branch, results, zeroQuantityElements, nullQuantityElements);
-            }
+         
+            CalculateBranch(branch, results, zeroQuantityElements, nullQuantityElements);
+            
 
             branch.CalculationResults = results;
             branch.CalculationZeroElements = zeroQuantityElements;
@@ -91,26 +92,34 @@ namespace Calc.Core.Calculations
 
         private static void CalculateBranch(Branch branch, List<Result> resultList, Dictionary<string, List<string>> zeroList, Dictionary<string, List<string>> nullList)
         {
-            var buildup = branch.Buildup;
+            var buildups = branch.Buildups;
+            if (buildups == null) return;
+
             foreach (var element in branch.Elements)
             {
-                foreach (var component in buildup.Components)
+                foreach (var buildup in buildups)
                 {
-                    var quantity = element.GetQuantityByUnit(buildup.Unit);
-                    if (quantity == 0)
+                    if (buildup?.Components == null) continue;
+                    foreach (var component in buildup.Components)
                     {
-                        CollectionHelper.AddToCountDict(zeroList, element.TypeName, element.Id);
-                        continue;
-                    }
-                    if (quantity == null)
-                    {
-                        CollectionHelper.AddToCountDict(nullList, element.TypeName, element.Id);
-                        continue;
-                    }
+                        if (component == null) continue;
+                        decimal? quantity = element.GetQuantityByUnit(buildup.Unit);
 
-                    var calculationResult = GetResult(branch, element, buildup, component, (decimal)quantity);
+                        if (quantity == 0)
+                        {
+                            CollectionHelper.AddToCountDict(zeroList, element.TypeName, element.Id);
+                            continue;
+                        }
+                        if (quantity == null)
+                        {
+                            CollectionHelper.AddToCountDict(nullList, element.TypeName, element.Id);
+                            continue;
+                        }
 
-                    resultList.Add(calculationResult);
+                        var calculationResult = GetResult(branch, element, buildup, component, quantity.Value);
+
+                        resultList.Add(calculationResult);
+                    }
                 }
             }
         }

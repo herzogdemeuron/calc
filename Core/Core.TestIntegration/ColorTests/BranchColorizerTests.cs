@@ -55,7 +55,7 @@ namespace Calc.Core.TestIntegration.ColorTests
             var mockData = new MockData();
             foreach (var tree in this.Trees)
             {
-                mockData.AssignBuildups(tree);
+                //mockData.AssignBuildups(tree);
             }
 
             //Console.WriteLine(JsonConvert.SerializeObject(this.Trees, Formatting.Indented));

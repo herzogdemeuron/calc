@@ -1,6 +1,7 @@
 ﻿using Speckle.Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,30 +48,43 @@ namespace Calc.Core.Objects
         /// </code>
         /// </summary>
         /// <param name="tree">The tree to assign buildups to.</param>
-        /// <param name="buildups">The full list of buildups from the database.</param>
+        /// <param name="allBuildups">The full list of buildups from the database.</param>
         /// <returns></returns>
-        public Tree ApplyMappingToTree(Tree tree, List<Buildup> buildups)
+        public Tree ApplyToTree(Tree tree, List<Buildup> allBuildups)
         {
             tree.ResetBuildups();
-            // search through the list of mappings for the mapping with the same tree name
+            // find the mapping items that apply to this tree
             var mappingItems = MappingItems.Where(mappingItem => mappingItem.TreeName == tree.Name);
-            if (!mappingItems.Any())
-            {
-                return tree;
-            }
+            if (!mappingItems.Any()) return tree;
 
-            // search through the branches of the tree to find the branch with the same parameter and value as the mapping
-            // if the branch is found, get the buildup by id and apply the buildup to the branch
             foreach (var mappingItem in mappingItems)
             {
-                var buildup = buildups.SingleOrDefault(b => b.Id == mappingItem.BuildupId);
-                if (buildup == null)
-                {
-                    continue;
-                }
-                tree.MatchMapping(mappingItem.Path, buildup);
+                // find the buildups from this mapping item
+                var buildups = allBuildups.Where(b => mappingItem.BuildupIds.Contains(b.Id)).ToList();
+                MapBuildupsToTree(tree, buildups, mappingItem.Path);
+                //tree.MapBuildups(mappingItem.Path, buildups);
             }
             return tree;
+        }
+
+        // todo: replace tree.MapBuildups with this method
+        private void MapBuildupsToTree(Branch branch, List<Buildup> buildups, List<PathItem> path)
+        {
+            if (branch.Path.SequenceEqual(path))
+            {
+                branch.Buildups = buildups;
+            }
+            else
+            {
+                if (branch.SubBranches.Count == 0)
+                {
+                    return;
+                }
+                foreach (var subBranch in branch.SubBranches)
+                {
+                    MapBuildupsToTree(subBranch, buildups, path);
+                }
+            }
         }
 
         public string SerializeMappingItems()
@@ -95,11 +109,11 @@ namespace Calc.Core.Objects
             var mappingItems = new List<MappingItem>();
             foreach (var branch in branches)
             {
-                if (branch.Buildup != null)
+                if (branch.Buildups != null && branch.Buildups.Count > 0)
                 {
                     mappingItems.Add(new MappingItem()
                     {
-                        BuildupId = branch.Buildup.Id,
+                        BuildupIds = branch.Buildups.Select(b => b.Id).ToList(),
                         Path = branch.Path,
                         TreeName = treeName
                     });
@@ -109,10 +123,13 @@ namespace Calc.Core.Objects
         }
     }
 
+    /// <summary>
+    /// stands for a set of buildups that are assigned to a branch via a path
+    /// </summary>
     public class MappingItem
     {
-        [JsonProperty("buildup_id")]
-        public int BuildupId { get; set; }
+        [JsonProperty("buildup_ids")]
+        public List<int> BuildupIds{ get; set; }
         [JsonProperty("mapping_path")]
         public List<PathItem> Path { get; set; }
 

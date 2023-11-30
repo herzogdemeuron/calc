@@ -27,7 +27,7 @@ namespace Calc.Core.TestIntegration.Drivers
             foreach (var tree in mockData.Trees)
             {
                 tree.Plant(mockData.Elements);
-                mockData.AssignBuildups(tree);
+                //mockData.AssignBuildups(tree);
                 tree.RemoveElementsByBuildupOverrides();
                 branches.AddRange(tree.Flatten());
             }

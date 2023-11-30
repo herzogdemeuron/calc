@@ -12,7 +12,7 @@ namespace Calc.ConnectorRevit.Helpers
             {
                 Tree tree = nodeItem.Host as Tree;
                 if (newMapping == null) continue;
-                newMapping.ApplyMappingToTree(tree, store.BuildupsAll);
+                newMapping.ApplyToTree(tree, store.BuildupsAll);
             };
         }
 

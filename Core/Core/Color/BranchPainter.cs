@@ -31,14 +31,14 @@ namespace Calc.Core.Color
                 flattenedBranches.AddRange(branch.Flatten());
             }
 
-            var uniqueBuildups = flattenedBranches.Select(b => b.Buildup).Distinct().ToList();
+            var uniqueBuildups = flattenedBranches.Select(b => b.Buildups).Distinct().ToList();
             var colorGradient = new ColorGradient(uniqueBuildups.Count);
             var defaultColor = new HslColor(0, 0, 100);
 
             for (int i = 0; i < flattenedBranches.Count; i++)
             {
                 var branch = flattenedBranches[i];
-                var buildupIndex = uniqueBuildups.IndexOf(branch.Buildup);
+                var buildupIndex = uniqueBuildups.IndexOf(branch.Buildups);
                 if (buildupIndex >= 0)
                 {
                     branch.HslColor = colorGradient.HslColors[buildupIndex];

@@ -8,23 +8,26 @@ namespace Calc.Core.TestIntegration;
 
 public class MockData
 {
-    public List<Tree> Trees = new();
-    public List<CalcElement> Elements = new();
-    public Forest Forest = new() { Name = "MockForest" };
-    public decimal Area = 100m;
-    public decimal gwp123 = 123m;
-    public decimal Amount = 0.33m;
+    public Forest Forest { get; set; } = new Forest() { Name = "Mock Forest" };
+    public List<Tree> Trees { get; set; } = new List<Tree>();
+    public List<CalcElement> Elements { get; set; } = new List<CalcElement>();
+    public List<Buildup> Buildups { get; set; } = new List<Buildup>();
+    public Mapping Mapping { get; set; } = new Mapping();
+
 
     public MockData()
     {
-        CreateTrees();
-        CreateElements();
+        MakeForest();
+        MakeElements();
+        MakeBuildups();
+        MakeMapping();
     }
-    private void CreateTrees()
+    private void MakeForest()
     {
+        
         var tree1 = new Tree
         {
-            Name = "Roh Wand",
+            Name = "Roh_Wand",
             ParentForest = Forest,
             FilterConfig = new GroupCondition
             {
@@ -58,7 +61,7 @@ public class MockData
 
         var tree2 = new Tree
         {
-            Name = "Ausb Decke",
+            Name = "Ausb_Decke",
             ParentForest = Forest,
             FilterConfig = new GroupCondition
             {
@@ -90,14 +93,17 @@ public class MockData
             BranchConfig = new List<string> { "Grouping", "SubGrouping" }
         };
 
-        this.Trees.Add(tree1);
-        this.Trees.Add(tree2);
-
+        this.Trees = new List<Tree>
+            {
+                tree1,
+                tree2
+            };
         this.Forest.Trees = this.Trees;
+        
     }
 
 
-    private void CreateElements()
+    private void MakeElements()
     {
         // Mock walls
 
@@ -108,7 +114,7 @@ public class MockData
             { "Grouping", "Group1" },
             { "SubGrouping", "SubGroup1" }
         };
-        var element1 = new CalcElement("id01",name1, Fields1, length: null, area: null, volume: null);
+        var element1 = new CalcElement("id01",name1, Fields1, length: 14, area: 12, volume: 90);
         this.Elements.Add(element1);
 
         string name2 = "elemName2";
@@ -118,7 +124,7 @@ public class MockData
             { "Grouping", "Group1" },
             { "SubGrouping", "SubGroup2" }
         };
-        var element2 = new CalcElement("id02", name1, Fields2, length: null, area: null, volume: null);
+        var element2 = new CalcElement("id02", name2, Fields2, length: 18, area: 11, volume: 90);
         this.Elements.Add(element2);
 
         string name3 = "elemName3";
@@ -128,10 +134,11 @@ public class MockData
             { "Grouping", "Group2" },
             { "SubGrouping", "SubGroup2" }
         };
-        var element3 = new CalcElement("id03", name3, Fields3, length: null,area: 0, volume:null);
+        var element3 = new CalcElement("id03", name3, Fields3, length: 15,area: 13, volume:9);
         this.Elements.Add(element3);
 
         // Mock floors
+
         string name4 = "elemName4";
         var Fields4 = new Dictionary<string, object>
         {
@@ -139,7 +146,7 @@ public class MockData
             { "Grouping", "GroupA" },
             { "SubGrouping", "SubGroupA" }
         };
-        var element4 = new CalcElement("id11", name4, Fields4, length: null, area: 0, volume: null);
+        var element4 = new CalcElement("id11", name4, Fields4, length: null, area: 33, volume: 190);
         this.Elements.Add(element4);
 
         string name5 = "elemName5";
@@ -149,7 +156,7 @@ public class MockData
             { "Grouping", "GroupA" },
             { "SubGrouping", "SubGroupA" }
         };
-        var element5 = new CalcElement("id12", name5, Fields5, length: null, area: null, volume: null);
+        var element5 = new CalcElement("id12", name5, Fields5, length: null, area: 13, volume: 90);
         this.Elements.Add(element5);
 
         string name6 = "elemName6";
@@ -159,12 +166,17 @@ public class MockData
             { "Grouping", "GroupA" },
             { "SubGrouping", "SubGroupB" }
         };
-        var element6 = new CalcElement("id13", name6, Fields6, length: null, area: 70, volume: null);
+        var element6 = new CalcElement("id13", name6, Fields6, length: null, area: null, volume: null);
         this.Elements.Add(element6);
     }
 
-    public void AssignBuildups(Tree tree)
+    public void MakeBuildups()
     {
+        var group1 = new MaterialGroup
+        {
+            Name = "MaterialGroup1"
+        };
+
         var material1 = new Material
         {
             Id = 1,
@@ -179,23 +191,144 @@ public class MockData
             Material = material1
         };
 
+        var material2 = new Material
+        {
+            Id = 2,
+            Name = "Material2",
+            KgCO2eA123 = 5,
+            Category = "Category2"
+        };
+
+        var component2 = new BuildupComponent
+        {
+            Amount = 0.7m,
+            Material = material2
+        };
+
+        var material3 = new Material
+        {
+            Id = 3,
+            Name = "Material3",
+            KgCO2eA123 = 45,
+            Category = "Category1"
+        };
+
+        var component3 = new BuildupComponent
+        {
+            Amount = 0.8m,
+            Material = material3
+        };
+
+
         var buildup1 = new Buildup
         {
-            Id = 9,
-            Name = "Flat Concrete Slab",
+            Id = 901,
+            Name = "Buildup No.1",
             Unit = Unit.m2
         };
 
-        var group1 = new MaterialGroup
+        var buildup2 = new Buildup
         {
-            Name = "MaterialGroup1"
+            Id = 902,
+            Name = "Buildup No.2",
+            Unit = Unit.m3
         };
+
 
         buildup1.Group = group1;
         buildup1.Components = new List<BuildupComponent>
         {
-            component1
+            component1,
+            component2
         };
-        tree.SubBranches[0].Buildup = buildup1;
+
+        buildup2.Group = group1;
+        buildup2.Components = new List<BuildupComponent>
+        {
+            component3
+        };
+
+
+        this.Buildups.Add(buildup1);
+        this.Buildups.Add(buildup2);
+    }
+
+    public void MakeMapping()
+    {
+        var project = new Project
+        {
+            Id = 0,
+            ProjectNumber = "123"
+        };
+
+        
+        this.Mapping = new Mapping
+        {
+            Name = "Mapping1",
+            Project = project,
+            MappingItems = new List<MappingItem>
+            {
+                new MappingItem
+                {
+                    TreeName = "Roh_Wand",
+                    Path = new List<PathItem>(),
+                    BuildupIds = new List<int> { 902, 901 }
+                },
+                new MappingItem
+                {
+                    TreeName = "Roh_Wand",
+                    Path = new List<PathItem>
+                    {
+                        new PathItem
+                        {
+                            Parameter = "Grouping",
+                            Value = "Group1"
+                        },
+                        new PathItem
+                        {
+                            Parameter = "SubGrouping",
+                            Value = "SubGroup2"
+                        }
+                    },
+                    BuildupIds = new List<int> { 902 }
+                },
+                new MappingItem
+                {
+                    TreeName = "Ausb_Decke",
+                    Path = new List<PathItem>
+                    {
+                        new PathItem
+                        {
+                            Parameter = "Grouping",
+                            Value = "GroupA"
+                        },
+                        new PathItem
+                        {
+                            Parameter = "SubGrouping",
+                            Value = "SubGroupA"
+                        }
+                    },
+                    BuildupIds = new List<int> { 902 }
+                },
+                new MappingItem
+                {
+                    TreeName = "Ausb_Decke",
+                    Path = new List<PathItem>
+                    {
+                        new PathItem
+                        {
+                            Parameter = "Grouping",
+                            Value = "GroupA"
+                        },
+                        new PathItem
+                        {
+                            Parameter = "SubGrouping",
+                            Value = "SubGroupB"
+                        }
+                    },
+                    BuildupIds = new List<int> { 901 }
+                }
+            }
+        };
     }
 }

@@ -13,7 +13,7 @@ namespace Calc.Core.Objects
     public class Branch : IGraphNode, INotifyPropertyChanged
     {
         [JsonIgnore]
-        public List<CalcElement> Elements { get; set; }
+        public List<CalcElement> Elements { get; set; } = new List<CalcElement>();
         [JsonIgnore]
         public List<string> ElementIds => Elements.Select(e => e.Id).ToList();
         [JsonIgnore]
@@ -35,11 +35,11 @@ namespace Calc.Core.Objects
         [JsonIgnore]
         public Forest ParentForest { get; set; }
         [JsonIgnore]
-        private Buildup _buildup;
+        private List<Buildup> _buildups;
         [JsonIgnore]
-        public Buildup Buildup
+        public List<Buildup> Buildups
         {
-            get => _buildup;
+            get => _buildups;
             set => SetBuildup(value);
         }
         [JsonIgnore]
@@ -185,10 +185,10 @@ namespace Calc.Core.Objects
         /// Also set the buildup of all subbranches to the same value if they have no buildup assigned yet or the buildup is the same.
         /// calculate the branch with the new buildup if it is a dead end branch.
         /// </summary>
-        public void SetBuildup(Buildup buildup)
+        public void SetBuildup(List<Buildup> buildups)
         {
-            var currentBuildup = _buildup;
-            _buildup = buildup;
+            var currentBuildup = _buildups;
+            _buildups = buildups;
             if (SubBranches.Count == 0)
             {
                 Calculator.Calculate(this);
@@ -197,17 +197,17 @@ namespace Calc.Core.Objects
 
             foreach (var subBranch in SubBranches)
             {
-                if (subBranch.Buildup == null || subBranch.Buildup == currentBuildup)
+                if (subBranch.Buildups == null || CollectionHelper.CompareBuildups(subBranch.Buildups, currentBuildup))
                 {
-                    subBranch.SetBuildup(buildup);
+                    subBranch.SetBuildup(buildups);
                 }
             }
-            OnPropertyChanged(nameof(Buildup));
+            OnPropertyChanged(nameof(Buildups));
         }
 
         public void ResetBuildups()
         {
-            Buildup = null;
+            Buildups = null;
             if (SubBranches.Count == 0)
             {
                 return;
@@ -239,30 +239,28 @@ namespace Calc.Core.Objects
 
 
         /// <summary>
-        /// This method matches a buildup to a branch.
-        /// The intended use is to reconstruct the buildup assignments in a full tree from 
-        /// a mapping stored in the database.
-        /// at the sametime update the calculation results.
+        /// This method matches a set of buildups to the branch with a path
+        /// The intended use is to reconstruct the buildup assignments in a full tree from a mapping stored in the database.
+        /// this method is called on the root branch of the tree.
         /// </summary>
-        public void MatchMapping(List<PathItem> path, Buildup buildup)
+     /*   public void MapBuildups(List<PathItem> path, List<Buildup> buildups)
         {
             if (Path.SequenceEqual(path))
             {
-                this.Buildup = buildup;
+                this.Buildups = buildups;
             }
             else
             {
-                // check if subbranches exist
                 if (SubBranches.Count == 0)
                 {
                     return;
                 }
                 foreach (var subBranch in SubBranches)
                 {
-                    subBranch.MatchMapping(path, buildup);
+                    subBranch.MapBuildups(path, buildups);
                 }
             }
-        }
+        }*/
 
         public void InheritMapping()
         {
@@ -270,17 +268,15 @@ namespace Calc.Core.Objects
             {
                 return;
             }
-            if (ParentBranch.Buildup != null)
+            if (ParentBranch.Buildups != null)
             {
-                this.Buildup = ParentBranch.Buildup;
+                this.Buildups = ParentBranch.Buildups;
             }
         }
 
         /// <summary>
         /// calculates the results for one branch (should be the end branch) with buildup assigned.
         /// </summary>
-
-
         public Branch Copy()
         {
             var branch = new Branch
@@ -289,7 +285,7 @@ namespace Calc.Core.Objects
                 Method = Method,
                 Value = Value,
                 BranchLevel = BranchLevel,
-                Buildup = Buildup,
+                Buildups = Buildups,
                 HslColor = HslColor,
                 Elements = this.Elements,
                 ParentBranch = ParentBranch,
@@ -313,11 +309,11 @@ namespace Calc.Core.Objects
         /// </summary>
         public void RemoveElementsByBuildupOverrides()
         {
-            if (Buildup != null && SubBranches.Count > 0)
+            if (Buildups != null && SubBranches.Count > 0)
             {
                 // get all elements with buildup from subbranches
                 var subElementsWithBuildup = SubBranches
-                    .Where(sb => sb.Buildup != null)
+                    .Where(sb => sb.Buildups != null)
                     .SelectMany(sb => sb.Elements)
                     .ToList();
                 // remove subelements with buildup from elements of current branch
@@ -356,7 +352,7 @@ namespace Calc.Core.Objects
         public void PrintTree(int indentLevel = 0)
         {
             string indentation = new(' ', indentLevel * 4);
-            Console.WriteLine($"{indentation}∟: Elements: {Elements.Count}, Param: {Parameter}, Value: {Value}, Method: {Method}, Color: {HslColor.H}, Buildup: {Buildup}");
+            Console.WriteLine($"{indentation}∟: Elements: {Elements.Count}, Param: {Parameter}, Value: {Value}, Method: {Method}, Color: {HslColor.H}, Buildup: {Buildups}");
 
             foreach (var subBranch in SubBranches)
             {
