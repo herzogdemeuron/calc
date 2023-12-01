@@ -1,15 +1,19 @@
 ﻿using Calc.ConnectorRevit.Helpers;
 using Calc.ConnectorRevit.ViewModels;
 using Calc.Core.Objects;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Calc.ConnectorRevit.Views
 {
     public partial class MainView : Window
     {
         private readonly MainViewModel MainVM;
+        private Dictionary<ComboBox, bool> isFirstSelectionChange = new Dictionary<ComboBox, bool>();
+
 
         public MainView(MainViewModel mvm)
         {
@@ -92,9 +96,27 @@ namespace Calc.ConnectorRevit.Views
             MainVM.NodeTreeVM.DeselectNodes();
         }
 
+        /// <summary>
+        /// The index of the changed ComboBox is stored in the Tag property, since the TwoWay binding of the SelectedItem property is not working.
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BuildupSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            MainVM.BuildupVM.HandleBuildupSelectionChanged();
+            if (sender is ComboBox comboBox)
+            {
+                if (!isFirstSelectionChange.ContainsKey(comboBox))
+                {
+                    isFirstSelectionChange[comboBox] = true;
+                    return; // Ignore the first selection change, which is always the init change by creating the ComboBox.
+                }
+                var index = comboBox.Tag;
+                if(index == null) return;
+
+                var selectedBuildup = comboBox.SelectedItem as Buildup;
+                MainVM.BuildupVM.HandleBuildupSelectionChanged((int)index, selectedBuildup);
+            }
         }
 
         private void InheritClicked(object sender, RoutedEventArgs e)
@@ -147,6 +169,20 @@ namespace Calc.ConnectorRevit.Views
         private async void UpdateMappingClicked(object sender, RoutedEventArgs e)
         {
             await MainVM.MappingVM.HandleUpdateMapping();
+        }
+
+        private static T FindParent<T>(DependencyObject child) where T : DependencyObject
+        {
+            DependencyObject parent = VisualTreeHelper.GetParent(child);
+
+            if (parent == null) return null;
+
+            if (parent is T parentTyped)
+            {
+                return parentTyped;
+            }
+
+            return FindParent<T>(parent);
         }
     }
 }

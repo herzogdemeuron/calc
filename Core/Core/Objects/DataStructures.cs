@@ -164,7 +164,7 @@ namespace Calc.Core.Objects
         public string FormattedCost { get => Math.Round(Amount * Material.Cost, 2).ToString(); }
     }
 
-    public class Buildup
+    public class Buildup 
     {
         [JsonProperty("id", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public int Id { get; set; } = -1;

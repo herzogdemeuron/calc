@@ -1,5 +1,6 @@
 ﻿using Calc.ConnectorRevit.Helpers;
 using Calc.Core.Objects;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Calc.ConnectorRevit.ViewModels
@@ -13,8 +14,15 @@ namespace Calc.ConnectorRevit.ViewModels
             nodeTreeVM = ntVM;
         }
 
-        public void HandleBuildupSelectionChanged()
+        public void HandleBuildupSelectionChanged(int index, Buildup newBuildups)
         {
+            var branch = nodeTreeVM.SelectedNodeItem?.Host as Branch;
+            var buildups = new List<Buildup>(branch.Buildups)
+            {
+                [index] = newBuildups
+            };
+            branch.Buildups = buildups;
+
             Mediator.Broadcast("BuildupSelectionChanged");
         }
 
