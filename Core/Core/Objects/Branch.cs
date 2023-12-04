@@ -43,6 +43,17 @@ namespace Calc.Core.Objects
             set => SetBuildup(value);
         }
         [JsonIgnore]
+        public string BuildupsIdentifier
+        {     get
+            {
+                if (Buildups == null)
+                {
+                    return null;
+                }
+                return string.Join(",", Buildups.Select(b => b.Id).OrderBy(i => i));
+            }
+        }
+        [JsonIgnore]
         private HslColor _hslColor;
         [JsonIgnore]
         public HslColor HslColor
@@ -111,9 +122,9 @@ namespace Calc.Core.Objects
             {
                 if(SubBranches.Count > 0)
                 {
-                    return SubBranches.SelectMany(sb => sb.CalculationResults).ToList();
+                    return SubBranches.SelectMany(sb => sb.CalculationResults?? new List<Result>()).ToList();
                 }
-                return _calculationResults;
+                return _calculationResults?? new List<Result>();
             }
             set
             {
@@ -187,7 +198,7 @@ namespace Calc.Core.Objects
         /// </summary>
         public void SetBuildup(List<Buildup> buildups)
         {
-            var currentBuildup = _buildups;
+            var currentIdentifier = BuildupsIdentifier;
             _buildups = buildups;
             if (SubBranches.Count == 0)
             {
@@ -197,7 +208,7 @@ namespace Calc.Core.Objects
 
             foreach (var subBranch in SubBranches)
             {
-                if (subBranch.Buildups == null || CollectionHelper.CompareBuildups(subBranch.Buildups, currentBuildup))
+                if (subBranch.Buildups == null || (subBranch.BuildupsIdentifier == currentIdentifier))
                 {
                     subBranch.SetBuildup(buildups);
                 }

@@ -38,20 +38,37 @@
             <Border.Background>
                 <SolidColorBrush Color="{Binding LabelColor}"/>
             </Border.Background>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock x:Name="txtName">
-                    <TextBlock.Style>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Text" Value="{Binding Name}" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True">
-                                    <Setter Property="FontWeight" Value="Bold" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
-                <TextBlock Text="{Binding ElementsCount}"/>
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="txtName">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Text" Value="{Binding Name}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True">
+                                        <Setter Property="FontWeight" Value="Bold" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock Text="{Binding ElementsCount}"/>
+                </StackPanel>
+
+                <Grid Height="3"
+                      VerticalAlignment="Top">
+                <Border Height="3" 
+                        VerticalAlignment="Bottom" 
+                        CornerRadius="2" 
+                        Visibility="{Binding UnderlineVisibility}">
+                    <Border.Background>
+                        <SolidColorBrush Color="{Binding IdentifierColor}"/>
+                    </Border.Background>
+                </Border>
+                    
+                </Grid>
+                
+
             </StackPanel>
         </Border>
     </DataTemplate>

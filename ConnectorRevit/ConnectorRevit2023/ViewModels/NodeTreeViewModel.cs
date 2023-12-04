@@ -10,7 +10,7 @@ namespace Calc.ConnectorRevit.ViewModels
     public class NodeTreeViewModel : INotifyPropertyChanged
     {
         private DirectusStore store;
-        private bool BranchesSwitch;
+        public bool BranchesSwitch { get; set; }
         private NodeViewModel selectedNodeItem;
         public NodeViewModel SelectedNodeItem
         {
@@ -48,7 +48,7 @@ namespace Calc.ConnectorRevit.ViewModels
 
         public void UpdateNodeSource(Mapping mapping)
         {
-            CurrentForestItem = new NodeViewModel(store, store.ForestSelected);
+            CurrentForestItem = new NodeViewModel(store, store.ForestSelected, this);
             OnPropertyChanged(nameof(NodeSource));
             DeselectNodes();
             Mediator.Broadcast("MappingSelectionChanged", mapping);

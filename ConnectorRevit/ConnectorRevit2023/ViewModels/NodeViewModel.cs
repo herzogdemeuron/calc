@@ -4,6 +4,7 @@ using Calc.Core.Color;
 using Calc.Core.Objects;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Media;
 
 namespace Calc.ConnectorRevit.ViewModels
@@ -16,6 +17,7 @@ namespace Calc.ConnectorRevit.ViewModels
     {
         public string Name { get => GetName(); }
         public DirectusStore Store { get; set; }
+        public NodeTreeViewModel ParentTreeView { get; set; }
         public ObservableCollection<NodeViewModel> SubNodeItems { get; }
 
         private IGraphNode host;
@@ -43,30 +45,49 @@ namespace Calc.ConnectorRevit.ViewModels
             }
         }
 
-        public NodeViewModel(DirectusStore store, IGraphNode node)
+        public NodeViewModel(DirectusStore store, IGraphNode node, NodeTreeViewModel parentTreeView)
         {
             Host = node;
             Store = store;
+            ParentTreeView = parentTreeView;
             SubNodeItems = new ObservableCollection<NodeViewModel>();
             Mediator.Register("BuildupSelectionChanged", _ => NotifyHostChanged());
             foreach (var subNode in node.SubBranches)
             {
-                SubNodeItems.Add(new NodeViewModel(store, subNode));
+                SubNodeItems.Add(new NodeViewModel(store, subNode, parentTreeView));
             }
         }
 
 
-        private bool labelColorVisible;
+        private bool _labelColorVisible;
         public bool LabelColorVisible
         {
-            get => labelColorVisible;
+            get => _labelColorVisible;
             set
             {
-                if (labelColorVisible != value)
+                if (_labelColorVisible != value)
                 {
-                    labelColorVisible = value;
+                    _labelColorVisible = value;
                     OnPropertyChanged("LabelColorVisible");
                 }
+            }
+        }
+
+        public Color IdentifierColor
+        {
+            get
+            {
+                var hsl = Host.HslColor;
+                var rgb = CalcColorConverter.HslToRgb(hsl);
+                return Color.FromArgb(255, rgb.R, rgb.G, rgb.B);
+            }
+        }
+
+        public Visibility UnderlineVisibility
+        {
+            get
+            {
+                return ParentTreeView.BranchesSwitch == false? Visibility.Visible : Visibility.Collapsed;
             }
         }
         public Color LabelColor
@@ -75,9 +96,7 @@ namespace Calc.ConnectorRevit.ViewModels
             {
                 if (LabelColorVisible)
                 {
-                    var hsl = Host.HslColor;
-                    var rgb = CalcColorConverter.HslToRgb(hsl);
-                    return Color.FromArgb(255, rgb.R, rgb.G, rgb.B);
+                    return IdentifierColor;
                 }
                 else
                 {
@@ -104,7 +123,9 @@ namespace Calc.ConnectorRevit.ViewModels
 
         public void NotifyLabelColorChange()
         {
-            OnPropertyChanged("LabelColor");
+            OnPropertyChanged(nameof(IdentifierColor));
+            OnPropertyChanged(nameof(UnderlineVisibility));
+            OnPropertyChanged(nameof(LabelColor));
             foreach (var subBranch in SubNodeItems)
             {
                 subBranch.NotifyLabelColorChange();
