@@ -1,7 +1,9 @@
 ﻿using Calc.ConnectorRevit.Helpers;
 using Calc.Core.Objects;
+using GongSolutions.Wpf.DragDrop;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Windows;
 
 namespace Calc.ConnectorRevit.ViewModels
 {
@@ -14,18 +16,17 @@ namespace Calc.ConnectorRevit.ViewModels
             nodeTreeVM = ntVM;
         }
 
-        public void HandleBuildupSelectionChanged(int index, Buildup newBuildups)
+        public void HandleBuildupSelectionChanged(int index, Buildup newBuildup)
         {
             var branch = nodeTreeVM.SelectedNodeItem?.Host as Branch;
             var buildups = new List<Buildup>(branch.Buildups)
             {
-                [index] = newBuildups
+                [index] = newBuildup
             };
             branch.Buildups = buildups;
 
             Mediator.Broadcast("BuildupSelectionChanged");
         }
-
         public void HandleInherit()
         {
             if (nodeTreeVM.SelectedNodeItem == null)

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Calc.ConnectorRevit.ViewModels" 
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
+        xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.WPF.DragDrop"
         d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
         Loaded="WindowLoaded"
         Closing="WindowClosing"
@@ -44,12 +45,9 @@
             <Label Content="Forest:"
                    Padding="10,6,0,0"
                    FontWeight="SemiBold"/>
-            <Label Grid.Column="1" 
-                   Content="Mapping:" 
-                   Padding="10,6,0,0"
-                   FontWeight="SemiBold"/>
 
-            <DockPanel Grid.Column="0"
+            <DockPanel x:Name="ForestPanel"
+                        Grid.Column="0"
                        Grid.Row="1"
                        Margin="10"
                        HorizontalAlignment="Stretch">
@@ -61,33 +59,9 @@
                           SelectionChanged="ForestSelectionChanged"
                           HorizontalAlignment="Stretch"/>
             </DockPanel>
-
-            <DockPanel Grid.Column="2"
-                       Grid.Row="1"
-                       Margin="10"
-                       HorizontalAlignment="Stretch">
-                <Button Content="Update" 
-                        Width="50" 
-                        Click="UpdateMappingClicked"
-                        Height="25"
-                        DockPanel.Dock="Right"/>
-                <Button Content="New" 
-                        Width="50"
-                        Height="25"
-                        Margin="10,0,10,0"
-                        Click="NewMappingClicked"
-                        DockPanel.Dock="Right"/>
-                <ComboBox x:Name="MappingsComboBox"
-                          ItemsSource="{Binding DataContext.Store.MappingsProjectRelated, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                          SelectedItem="{Binding DataContext.Store.MappingSelected, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                          DisplayMemberPath="Name"
-                          DockPanel.Dock="Left"
-                          Height="25"
-                          SelectionChanged="MappingSelectionChanged"
-                          HorizontalAlignment="Stretch"/>
-            </DockPanel>
-
-            <Grid Grid.Column="0"
+            
+            <Grid x:Name="TreeViewGrid"
+                  Grid.Column="0"
                   Grid.Row="2"
                   Margin="10">
                 <TreeView x:Name="TreeView"
@@ -109,49 +83,119 @@
                 </TreeView>
             </Grid>
 
-            <DockPanel  x:Name="BuildupPanel"
+            <Label Grid.Column="1" 
+                   Content="Mapping:" 
+                   Padding="10,6,0,0"
+                   FontWeight="SemiBold"/>
+            
+            <DockPanel x:Name="MappingPanel"
+                       Grid.Column="2"
+                       Grid.Row="1"
+                       Margin="10"
+                       HorizontalAlignment="Stretch"
+                       LastChildFill="True">
+                <Button Content="Update" 
+                        Width="50" 
+                        Click="UpdateMappingClicked"
+                        Height="25"
+                        DockPanel.Dock="Right"/>
+                <Button Content="New" 
+                        Width="50"
+                        Height="25"
+                        Margin="10,0,10,0"
+                        Click="NewMappingClicked"
+                        DockPanel.Dock="Right"/>
+                <ComboBox x:Name="MappingsComboBox"
+                          ItemsSource="{Binding DataContext.Store.MappingsProjectRelated, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                          SelectedItem="{Binding DataContext.Store.MappingSelected, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          DisplayMemberPath="Name"
+                          DockPanel.Dock="Left"
+                          Height="25"
+                          SelectionChanged="MappingSelectionChanged"/>
+            </DockPanel>
+
+            
+
+            <DockPanel x:Name="BuildupPanel"
                         Grid.Column="2"
                         Grid.Row="2"
-                        Margin="10"
-                        LastChildFill="True"
-                        DockPanel.Dock="Top">
-                <Label Content="Buildup:" 
-                       DockPanel.Dock="Top" 
+                        Margin="10">
+                
+                <Label Content="Buildups:"
                        Padding="0"
                        Margin="0,0,0,12"
+                       DockPanel.Dock="Top"
                        FontWeight="SemiBold"/>
-                <DockPanel HorizontalAlignment="Stretch"
-                           DockPanel.Dock="Top"
-                           LastChildFill="True"
-                           Margin="0,0,0,20"
-                            >
-                    <Button Content="Use Parent"
-                            Width="110"
+
+                <DockPanel DockPanel.Dock="Top"
+                           Height="60">
+                    
+                    <Button Content="+"
+                            Width="25"
                             DockPanel.Dock="Right"
-                            Margin="10,0,0,0"
+                            VerticalAlignment="Top"
+                            Height="25"/>
+                    
+                    <Button Content="Use Parent"
+                            Width="75"
                             Height="25"
+                            Margin="10,0,10,0"
+                            DockPanel.Dock="Right"
+                            VerticalAlignment="Top"
                             Click="InheritClicked"/>
 
-                    <ItemsControl ItemsSource="{Binding DataContext.NodeTreeVM.SelectedNodeItem.Host.Buildups, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                                    AlternationCount="{Binding DataContext.NodeTreeVM.SelectedNodeItem.Host.Buildups.Count, RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <ComboBox Tag="{Binding RelativeSource={RelativeSource AncestorType=ContentPresenter}, Path=(ItemsControl.AlternationIndex)}"
-                      ItemsSource="{Binding DataContext.Store.BuildupsAll, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                      SelectedItem="{Binding ., Mode=TwoWay}"
-                      DisplayMemberPath="Name"
-                      SelectionChanged="BuildupSelectionChanged"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                    <DataGrid ItemsSource="{Binding DataContext.NodeTreeVM.SelectedNodeItem.Host.Buildups, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                              AutoGenerateColumns="False"
+                              HeadersVisibility="None"
+                              BorderThickness="0"
+                              Background="Transparent"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Stretch"
+                              HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Disabled"
+                              RowHeaderWidth="0"
+                              GridLinesVisibility="None"
+                              CanUserAddRows="False"
+                              >
+                        <DataGrid.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Height" Value="30"/>
 
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="{x:Null}"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                                
+                            </Style>
+                        </DataGrid.CellStyle>
+
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox Tag="{Binding RelativeSource={RelativeSource AncestorType=ContentPresenter}, Path=(ItemsControl.AlternationIndex)}"
+                                                ItemsSource="{Binding DataContext.Store.BuildupsAll, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                                SelectedItem="{Binding ., Mode=TwoWay}"
+                                                DisplayMemberPath="Name"
+                                                Height="25"
+                                                SelectionChanged="BuildupSelectionChanged"
+                                                HorizontalAlignment="Stretch"
+                                                  VerticalAlignment="Top"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+
+                    </DataGrid>
 
                 </DockPanel>
+
                 <DataGrid ItemsSource="{Binding SelectedItem.Components, ElementName=BuildupsComboBox}"
                             AutoGenerateColumns="False"
-                            VerticalAlignment="Top"
-                            HorizontalAlignment="Stretch"
-                            MinHeight="100"
+                            DockPanel.Dock="Bottom"
+                            Height="100"
                             HorizontalGridLinesBrush="LightGray"
                             VerticalGridLinesBrush="LightGray">
                     <DataGrid.ColumnHeaderStyle>
@@ -184,7 +228,8 @@
                 </DataGrid>
             </DockPanel>
             
-            <StackPanel Grid.Column="0"
+            <StackPanel x:Name="TogglePanel"
+                        Grid.Column="0"
                         Grid.Row="3"
                         Orientation="Horizontal"
                         VerticalAlignment="Center"
@@ -199,7 +244,7 @@
             </StackPanel>
             <Button Grid.Column="0"
                     Grid.Row="3"
-                    Content="Update Revit"
+                    Content="Reload"
                     Margin="0,0,10,10"
                     Width="90"
                     Height="25"
@@ -216,6 +261,7 @@
                 <Button Grid.Column="0" 
                         Content="Start CalcLive"
                         Height="25"
+                        IsEnabled="False"
                         Click="StartCalcLiveClicked" Margin="10,0,5,10" />
                 <Button Grid.Column="1"
                         Content="Save Results"

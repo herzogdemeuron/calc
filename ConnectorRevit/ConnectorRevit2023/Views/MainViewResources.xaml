@@ -55,8 +55,7 @@
                     <TextBlock Text="{Binding ElementsCount}"/>
                 </StackPanel>
 
-                <Grid Height="3"
-                      VerticalAlignment="Top">
+                <Grid Height="3">
                 <Border Height="3" 
                         VerticalAlignment="Bottom" 
                         CornerRadius="2" 
