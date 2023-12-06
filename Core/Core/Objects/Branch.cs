@@ -13,7 +13,7 @@ namespace Calc.Core.Objects
     public class Branch : IGraphNode, INotifyPropertyChanged
     {
         [JsonIgnore]
-        public List<CalcElement> Elements { get; set; } = new List<CalcElement>();
+        public List<CalcElement> Elements { get; set; } = new();
         [JsonIgnore]
         public List<string> ElementIds => Elements.Select(e => e.Id).ToList();
         [JsonIgnore]
@@ -27,7 +27,7 @@ namespace Calc.Core.Objects
         [JsonIgnore]
         public int BranchLevel = 0;
         [JsonIgnore]
-        public List<Branch> SubBranches { get; set; } = new List<Branch>();
+        public List<Branch> SubBranches { get; set; } = new();
         [JsonIgnore]
         public Branch ParentBranch;
         [JsonIgnore]
@@ -39,7 +39,7 @@ namespace Calc.Core.Objects
         [JsonIgnore]
         public List<Buildup> Buildups
         {
-            get => _buildups;
+            get => _buildups?? new List<Buildup>() { };
             set => SetBuildup(value);
         }
         [JsonIgnore]
@@ -198,8 +198,19 @@ namespace Calc.Core.Objects
         /// </summary>
         public void SetBuildup(List<Buildup> buildups)
         {
-            var currentIdentifier = BuildupsIdentifier;
+            if (buildups == null)
+            {
+                return;
+            }
+            var newIdentifier = string.Join(",", buildups.Select(b => b.Id).OrderBy(i => i));
+            if (BuildupsIdentifier == newIdentifier)
+            {
+                return; // No change, so skip the update
+            }
+
             _buildups = buildups;
+            OnPropertyChanged(nameof(Buildups));
+
             if (SubBranches.Count == 0)
             {
                 Calculator.Calculate(this);
@@ -208,13 +219,10 @@ namespace Calc.Core.Objects
 
             foreach (var subBranch in SubBranches)
             {
-                if (subBranch.Buildups == null || (subBranch.BuildupsIdentifier == currentIdentifier))
-                {
-                    subBranch.SetBuildup(buildups);
-                }
+                subBranch.SetBuildup(buildups);
             }
-            OnPropertyChanged(nameof(Buildups));
         }
+
 
         public void ResetBuildups()
         {

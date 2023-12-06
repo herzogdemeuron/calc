@@ -50,7 +50,7 @@ namespace Calc.Core.Objects
         /// <param name="tree">The tree to assign buildups to.</param>
         /// <param name="allBuildups">The full list of buildups from the database.</param>
         /// <returns></returns>
-        public Tree ApplyToTree(Tree tree, List<Buildup> allBuildups)
+        public Tree ApplyToTree(Tree tree, List<Buildup> allBuildups, int maxBuildups)
         {
             tree.ResetBuildups();
             // find the mapping items that apply to this tree
@@ -59,8 +59,9 @@ namespace Calc.Core.Objects
 
             foreach (var mappingItem in mappingItems)
             {
+                var buildupIds = mappingItem.BuildupIds.Take(maxBuildups).ToList();
                 // find the buildups from this mapping item
-                var buildups = allBuildups.Where(b => mappingItem.BuildupIds.Contains(b.Id)).ToList();
+                var buildups = allBuildups.Where(b => buildupIds.Contains(b.Id)).ToList();
                 MapBuildupsToTree(tree, buildups, mappingItem.Path);
                 //tree.MapBuildups(mappingItem.Path, buildups);
             }

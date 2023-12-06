@@ -6,13 +6,13 @@ namespace Calc.ConnectorRevit.Helpers
 {
     public class MappingHelper
     {
-        public static void ApplyMappingToForestItem(NodeViewModel ForestItem,DirectusStore store, Mapping newMapping)
+        public static void ApplyMappingToForestItem(NodeViewModel ForestItem,DirectusStore store, Mapping newMapping, int maxBuildups)
         {
             foreach (NodeViewModel nodeItem in ForestItem.SubNodeItems)
             {
                 Tree tree = nodeItem.Host as Tree;
                 if (newMapping == null) continue;
-                newMapping.ApplyToTree(tree, store.BuildupsAll);
+                newMapping.ApplyToTree(tree, store.BuildupsAll, maxBuildups);
             };
         }
 

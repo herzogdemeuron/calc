@@ -1,6 +1,7 @@
 ﻿using Calc.ConnectorRevit.Helpers;
 using Calc.ConnectorRevit.ViewModels;
 using Calc.Core.Objects;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,8 +13,6 @@ namespace Calc.ConnectorRevit.Views
     public partial class MainView : Window
     {
         private readonly MainViewModel MainVM;
-        private Dictionary<ComboBox, bool> isFirstSelectionChange = new Dictionary<ComboBox, bool>();
-
 
         public MainView(MainViewModel mvm)
         {
@@ -89,8 +88,9 @@ namespace Calc.ConnectorRevit.Views
                 TreeView.Tag = e.OriginalSource;
                 e.Handled = true;
             }
+            MainVM.BuildupVM.CheckBuildupAddition();
         }
-
+        
         private void SideClickDown(object sender, MouseButtonEventArgs e)
         {
             MainVM.NodeTreeVM.DeselectNodes();
@@ -106,16 +106,10 @@ namespace Calc.ConnectorRevit.Views
         {
             if (sender is ComboBox comboBox)
             {
-                if (!isFirstSelectionChange.ContainsKey(comboBox))
-                {
-                    isFirstSelectionChange[comboBox] = true;
-                    return; // Ignore the first selection change, which is always the init change by creating the ComboBox.
-                }
-                var index = comboBox.Tag;
-                if(index == null) return;
-
+                var index = (int)comboBox.Tag;
                 var selectedBuildup = comboBox.SelectedItem as Buildup;
-                MainVM.BuildupVM.HandleBuildupSelectionChanged((int)index, selectedBuildup);
+                MainVM.BuildupVM.HandleBuildupSelectionChanged(index, selectedBuildup);
+                MainVM.BuildupVM.CheckBuildupAddition();
             }
         }
 
