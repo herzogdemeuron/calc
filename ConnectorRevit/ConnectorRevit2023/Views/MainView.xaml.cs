@@ -116,11 +116,13 @@ namespace Calc.ConnectorRevit.Views
         private void InheritClicked(object sender, RoutedEventArgs e)
         {
             MainVM.BuildupVM.HandleInherit();
+            MainVM.BuildupVM.UpdateBuildupSection();
         }
 
         private void RemoveClicked(object sender, RoutedEventArgs e)
         {
             MainVM.BuildupVM.HandleRemove();
+            MainVM.BuildupVM.UpdateBuildupSection();
         }
 
         private void ViewToggleButtonChecked(object sender, RoutedEventArgs e)

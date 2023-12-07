@@ -16,6 +16,27 @@ namespace Calc.ConnectorRevit.ViewModels
 
         private readonly int maxBuildups = 2;
 
+        private bool _inheritEnabled = false;
+        public bool InheritEnabled
+        {
+            get => _inheritEnabled;
+            set
+            {
+                _inheritEnabled = value;
+                OnPropertyChanged(nameof(InheritEnabled));
+            }
+        }
+        private bool _removeEnabled = false;
+        public bool RemoveEnabled
+        {
+            get => _removeEnabled;
+            set
+            {
+                _removeEnabled = value;
+                OnPropertyChanged(nameof(RemoveEnabled));
+            }
+        }
+
         private bool underBuildupLimit = false;
         public bool UnderBuildupLimit
         {
@@ -37,6 +58,8 @@ namespace Calc.ConnectorRevit.ViewModels
         public void UpdateBuildupSection()
         {
             CheckBuildupLimit();
+            CheckInheritEnabled();
+            CheckRemoveEnabled();
         }
 
         /// <summary>
@@ -44,7 +67,7 @@ namespace Calc.ConnectorRevit.ViewModels
         /// </summary>
         private void CheckBuildupLimit()
         {
-            if (nodeTreeVM.SelectedNodeItem == null)
+            if (nodeTreeVM.SelectedNodeItem == null || !(nodeTreeVM.SelectedNodeItem.Host is Branch))
                 return;
             var branch = nodeTreeVM.SelectedNodeItem.Host as Branch;
             UnderBuildupLimit = branch.Buildups.Count < maxBuildups;
@@ -52,8 +75,9 @@ namespace Calc.ConnectorRevit.ViewModels
 
         public void HandleBuildupSelectionChanged(int index, Buildup buildup)
         {
-            if (nodeTreeVM.SelectedNodeItem == null)
+            if (nodeTreeVM.SelectedNodeItem == null || !(nodeTreeVM.SelectedNodeItem.Host is Branch))
                 return;
+
             var branch = nodeTreeVM.SelectedNodeItem.Host as Branch;
             var newBuildups = new List<Buildup>(branch.Buildups);
             if(index + 1 > newBuildups.Count)
@@ -71,6 +95,28 @@ namespace Calc.ConnectorRevit.ViewModels
             }
             branch.Buildups = newBuildups;
             Mediator.Broadcast("BuildupSelectionChanged");
+        }
+
+        public void CheckInheritEnabled()
+        {
+            if (nodeTreeVM.SelectedNodeItem == null || !(nodeTreeVM.SelectedNodeItem.Host is Branch))
+            {
+                InheritEnabled = false;
+                return;
+            }
+            InheritEnabled = true;
+        }
+
+        public void CheckRemoveEnabled()
+        {
+            if (nodeTreeVM.SelectedNodeItem == null || nodeTreeVM.SelectedNodeItem.Host is Forest)
+            {
+                RemoveEnabled = false;
+                return;
+            }
+            var branch = nodeTreeVM.SelectedNodeItem.Host as Branch;
+
+            RemoveEnabled = branch.Buildups?.Count > 0;
         }
 
         public void HandleRemove()
