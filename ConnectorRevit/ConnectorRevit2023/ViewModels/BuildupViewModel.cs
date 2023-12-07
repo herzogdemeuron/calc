@@ -79,10 +79,15 @@ namespace Calc.ConnectorRevit.ViewModels
                 return;
 
             var branch = nodeTreeVM.SelectedNodeItem.Host as Branch;
+
             var newBuildups = new List<Buildup>(branch.Buildups);
             if(index + 1 > newBuildups.Count)
             {
                 newBuildups.Add(buildup);
+            }
+            else if(newBuildups[index] == buildup)
+            { 
+               return;
             }
             else
             {
@@ -99,7 +104,7 @@ namespace Calc.ConnectorRevit.ViewModels
 
         public void CheckInheritEnabled()
         {
-            if (nodeTreeVM.SelectedNodeItem == null || !(nodeTreeVM.SelectedNodeItem.Host is Branch))
+            if (nodeTreeVM.SelectedNodeItem == null || nodeTreeVM.SelectedNodeItem.Host is Tree)
             {
                 InheritEnabled = false;
                 return;

@@ -42,6 +42,7 @@ namespace Calc.Core.Objects
             get => _buildups?? new List<Buildup>() { };
             set
             {
+
                 SetBuildup(value);
                 OnPropertyChanged(nameof(Buildups));
             }
@@ -204,7 +205,9 @@ namespace Calc.Core.Objects
             var currentIdentifier = BuildupsIdentifier;
 
             if (currentIdentifier == newIdentifier) return;
-
+            // give each buildup a formatted name with its index in the list
+            
+          
             _buildups = buildups;
 
             if (SubBranches.Count == 0)

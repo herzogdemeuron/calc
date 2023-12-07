@@ -176,7 +176,6 @@ namespace Calc.Core.Objects
         public List<BuildupComponent> Components { get; set; }
         [JsonProperty("unit")]
         public Unit Unit { get; set; }
-
         public override string ToString()
         {
             return $"{Name}";

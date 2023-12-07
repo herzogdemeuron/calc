@@ -29,23 +29,20 @@
     </Window.Resources>
 
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="507*"/>
-            <ColumnDefinition Width="193*"/>
-        </Grid.ColumnDefinitions>
-
-        <Grid Grid.ColumnSpan="2">
+        <Grid>
+            
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="400"/>
             </Grid.ColumnDefinitions>
-
+            
             <Grid.RowDefinitions>
                 <RowDefinition Height="22"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
+            
             <Label Content="Forest:"
                    Padding="10,6,0,0"
                    FontWeight="SemiBold"/>
@@ -143,7 +140,7 @@
                                         RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                             Click="InheritClicked"/>
 
-                        <Button Content="Remove"
+                        <Button Content="Reduce"
                             Width="50"
                             Margin="0,5,0,0"
                             Height="25"
@@ -165,7 +162,8 @@
                               VerticalScrollBarVisibility="Disabled"
                               RowHeaderWidth="0"
                               GridLinesVisibility="None"
-                              CanUserAddRows="{Binding DataContext.BuildupVM.UnderBuildupLimit, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                              CanUserAddRows="{Binding DataContext.BuildupVM.UnderBuildupLimit,
+                                              RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                               >
                         <DataGrid.CellStyle>
                             <Style TargetType="DataGridCell">
@@ -198,43 +196,47 @@
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-
                 </DockPanel>
 
-                <DataGrid ItemsSource="{Binding SelectedItem.Components, ElementName=BuildupsComboBox}"
-                            AutoGenerateColumns="False"
-                            DockPanel.Dock="Bottom"
-                            Height="100"
-                            HorizontalGridLinesBrush="LightGray"
-                            VerticalGridLinesBrush="LightGray">
-                    <DataGrid.ColumnHeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}">
-                            <Setter Property="FontWeight" Value="SemiBold"/>
-                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                        </Style>
-                    </DataGrid.ColumnHeaderStyle>
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" />
-                        <DataGridTextColumn Binding="{Binding FormattedAmount}" IsReadOnly="True" >
-                            <DataGridTextColumn.Header>
-                                <TextBlock Text="Amount" HorizontalAlignment="Right" Margin="0,0,0,0"/>
-                            </DataGridTextColumn.Header>
-                            <DataGridTextColumn.ElementStyle>
-                                <StaticResource ResourceKey="NumberColumn"/>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Header="CO2e A123" Binding="{Binding FormattedKgCO2eA123}" IsReadOnly="True" >
-                            <DataGridTextColumn.ElementStyle>
-                                <StaticResource ResourceKey="NumberColumn"/>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Header="Cost" Binding="{Binding FormattedCost}" IsReadOnly="True" >
-                            <DataGridTextColumn.ElementStyle>
-                                <StaticResource ResourceKey="NumberColumn"/>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
+                <TabControl x:Name="BuildupTabs"
+                             Margin="0,20,0,0"
+                            Height="250"
+                            VerticalAlignment="Top"
+                             ItemsSource="{Binding DataContext.NodeTreeVM.SelectedNodeItem.Host.Buildups,
+                                          RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                        ItemContainerStyle="{StaticResource TabItemStyle}">
+                    
+                    <TabControl.ContentTemplate>
+                        <DataTemplate>
+                            <DataGrid ItemsSource="{Binding Components}"
+                                      AutoGenerateColumns="False"
+                                      DockPanel.Dock="Bottom"
+                                      Height="400"
+                                      HorizontalGridLinesBrush="LightGray"
+                                      VerticalGridLinesBrush="LightGray"
+                                      HorizontalScrollBarVisibility="Disabled"
+                                      CanUserAddRows="False">
+                                
+                                <DataGrid.ColumnHeaderStyle>
+                                    <Style TargetType="{x:Type DataGridColumnHeader}">
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGrid.ColumnHeaderStyle>
+                                
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" Width="3*"  IsReadOnly="True" />
+                                    <DataGridTextColumn Header="Amount" Binding="{Binding FormattedAmount}" Width="1*"  IsReadOnly="True" />
+                                    <DataGridTextColumn Header="CO2e A123" Binding="{Binding FormattedKgCO2eA123}" Width="1*"  IsReadOnly="True" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DataTemplate>
+
+                    </TabControl.ContentTemplate>
+                </TabControl>
+
+
+           
             </DockPanel>
             
             <StackPanel x:Name="TogglePanel"
@@ -285,7 +287,7 @@
               Background="LightGray"
               Margin="10,10,10,10"
               Visibility="{Binding DataContext.VisibilityVM.ProjectOverlayVisibility, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-              Grid.ColumnSpan="2">
+              >
             <StackPanel VerticalAlignment="Center">
                 <TextBlock HorizontalAlignment="Center"
                             Text="Choose Project:"
@@ -308,7 +310,7 @@
               d:IsHidden="true"
              Margin="10,10,10,10"
              Visibility="{Binding DataContext.VisibilityVM.NewMappingOverlayVisibility, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-             Grid.ColumnSpan="2">
+             >
             <StackPanel VerticalAlignment="Center">
 
                 <TextBlock Grid.Row="0"
@@ -367,7 +369,7 @@
              Background="LightGray"
              Margin="10,10,10,10"
              Visibility="{Binding DataContext.VisibilityVM.WaitingOverlayVisibility, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-             Grid.ColumnSpan="2"
+             
               d:IsHidden="true">
             <StackPanel VerticalAlignment="Center">
                 <TextBlock x:Name="WaitingTextBlock"
@@ -390,7 +392,7 @@
              Margin="10,10,10,10"
              d:IsHidden="true"
              Visibility="{Binding DataContext.VisibilityVM.SavingOverlayVisibility, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-             Grid.ColumnSpan="2">
+             >
             <StackPanel VerticalAlignment="Center">
                 <TextBlock HorizontalAlignment="Center"
                     Text="Save result name:"/>
@@ -416,7 +418,7 @@
              Background="LightGray"
              Margin="10,10,10,10"
              Visibility="{Binding DataContext.VisibilityVM.MessageOverlayVisibility, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-             Grid.ColumnSpan="2"
+             
               d:IsHidden="true">
             <StackPanel VerticalAlignment="Center">
                 <TextBlock x:Name="MessageTextBlock"

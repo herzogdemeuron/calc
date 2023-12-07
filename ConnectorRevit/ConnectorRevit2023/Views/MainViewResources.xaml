@@ -56,19 +56,43 @@
                 </StackPanel>
 
                 <Grid Height="3">
-                <Border Height="3" 
+                    <Border Height="3" 
                         VerticalAlignment="Bottom" 
                         CornerRadius="2" 
                         Visibility="{Binding UnderlineVisibility}">
-                    <Border.Background>
-                        <SolidColorBrush Color="{Binding IdentifierColor}"/>
-                    </Border.Background>
-                </Border>
-                    
-                </Grid>
-                
+                        <Border.Background>
+                            <SolidColorBrush Color="{Binding IdentifierColor}"/>
+                        </Border.Background>
+                    </Border>
 
+                </Grid>
             </StackPanel>
         </Border>
     </DataTemplate>
+
+    <Style TargetType="TabItem" x:Key="TabItemStyle">
+        
+        <Setter Property="HeaderTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"
+                               ToolTip="{Binding Name}"
+                               TextWrapping="NoWrap" 
+                               MaxWidth="100"
+                               TextTrimming="CharacterEllipsis"/>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding}" Value="{x:Null}">
+                <Setter Property="Visibility" Value="Collapsed"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=Name}" Value="{x:Null}">
+                <Setter Property="Visibility" Value="Collapsed"/>
+            </DataTrigger>
+        </Style.Triggers>
+        
+    </Style>
+    
 </ResourceDictionary>
