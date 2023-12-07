@@ -40,17 +40,17 @@ namespace Calc.Core.Objects
         public List<Buildup> Buildups
         {
             get => _buildups?? new List<Buildup>() { };
-            set => SetBuildup(value);
+            set
+            {
+                SetBuildup(value);
+                OnPropertyChanged(nameof(Buildups));
+            }
         }
         [JsonIgnore]
         public string BuildupsIdentifier
         {     get
             {
-                if (Buildups == null)
-                {
-                    return null;
-                }
-                return string.Join(",", Buildups.Select(b => b.Id).OrderBy(i => i));
+                return GetBuildupsIdentifier(Buildups);
             }
         }
         [JsonIgnore]
@@ -198,18 +198,14 @@ namespace Calc.Core.Objects
         /// </summary>
         public void SetBuildup(List<Buildup> buildups)
         {
-            if (buildups == null)
-            {
-                return;
-            }
-            var newIdentifier = string.Join(",", buildups.Select(b => b.Id).OrderBy(i => i));
-            if (BuildupsIdentifier == newIdentifier)
-            {
-                return; // No change, so skip the update
-            }
+            if (buildups == null) return;
+
+            var newIdentifier = GetBuildupsIdentifier(buildups);
+            var currentIdentifier = BuildupsIdentifier;
+
+            if (currentIdentifier == newIdentifier) return;
 
             _buildups = buildups;
-            OnPropertyChanged(nameof(Buildups));
 
             if (SubBranches.Count == 0)
             {
@@ -219,7 +215,10 @@ namespace Calc.Core.Objects
 
             foreach (var subBranch in SubBranches)
             {
-                subBranch.SetBuildup(buildups);
+                if (subBranch.Buildups == null || (subBranch.BuildupsIdentifier == currentIdentifier))
+                {
+                    subBranch.SetBuildup(buildups);
+                }
             }
         }
 
@@ -403,6 +402,14 @@ namespace Calc.Core.Objects
             return groupedElements;
         }
 
+        private string GetBuildupsIdentifier( List<Buildup> buildups)
+        {
+            if (buildups == null)
+            {
+                return null;
+            }
+            return string.Join(",", buildups.Select(b => b.Id).OrderBy(i => i));
+        }
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

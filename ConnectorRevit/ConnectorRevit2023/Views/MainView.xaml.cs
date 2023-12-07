@@ -88,7 +88,7 @@ namespace Calc.ConnectorRevit.Views
                 TreeView.Tag = e.OriginalSource;
                 e.Handled = true;
             }
-            MainVM.BuildupVM.CheckBuildupAddition();
+            MainVM.BuildupVM.UpdateBuildupSection();
         }
         
         private void SideClickDown(object sender, MouseButtonEventArgs e)
@@ -109,13 +109,18 @@ namespace Calc.ConnectorRevit.Views
                 var index = (int)comboBox.Tag;
                 var selectedBuildup = comboBox.SelectedItem as Buildup;
                 MainVM.BuildupVM.HandleBuildupSelectionChanged(index, selectedBuildup);
-                MainVM.BuildupVM.CheckBuildupAddition();
+                MainVM.BuildupVM.UpdateBuildupSection();
             }
         }
 
         private void InheritClicked(object sender, RoutedEventArgs e)
         {
             MainVM.BuildupVM.HandleInherit();
+        }
+
+        private void RemoveClicked(object sender, RoutedEventArgs e)
+        {
+            MainVM.BuildupVM.HandleRemove();
         }
 
         private void ViewToggleButtonChecked(object sender, RoutedEventArgs e)
@@ -165,7 +170,7 @@ namespace Calc.ConnectorRevit.Views
             await MainVM.MappingVM.HandleUpdateMapping();
         }
 
-        private static T FindParent<T>(DependencyObject child) where T : DependencyObject
+/*        private static T FindParent<T>(DependencyObject child) where T : DependencyObject
         {
             DependencyObject parent = VisualTreeHelper.GetParent(child);
 
@@ -177,6 +182,6 @@ namespace Calc.ConnectorRevit.Views
             }
 
             return FindParent<T>(parent);
-        }
+        }*/
     }
 }

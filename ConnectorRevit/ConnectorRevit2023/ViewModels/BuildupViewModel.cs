@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Media;
 
 namespace Calc.ConnectorRevit.ViewModels
 {
@@ -12,27 +13,41 @@ namespace Calc.ConnectorRevit.ViewModels
     public class BuildupViewModel : INotifyPropertyChanged
     {
         private readonly NodeTreeViewModel nodeTreeVM;
+
         private readonly int maxBuildups = 2;
-        public bool CanAddBuildup
+
+        private bool underBuildupLimit = false;
+        public bool UnderBuildupLimit
         {
-            get
+            get => underBuildupLimit;
+            set
             {
-                if (nodeTreeVM.SelectedNodeItem == null)
-                    return false;
-                var branch = nodeTreeVM.SelectedNodeItem.Host as Branch;
-                return branch.Buildups.Count < maxBuildups;
+                underBuildupLimit = value;
+                OnPropertyChanged(nameof(UnderBuildupLimit));
             }
+
         }
 
-        public void CheckBuildupAddition()
-        {
-            OnPropertyChanged(nameof(CanAddBuildup));
-        }
 
         public BuildupViewModel(NodeTreeViewModel ntVM)
         {
             nodeTreeVM = ntVM;
             nodeTreeVM.MaxBuildups = maxBuildups;
+        }
+        public void UpdateBuildupSection()
+        {
+            CheckBuildupLimit();
+        }
+
+        /// <summary>
+        /// determines if the user can add new row of the data grid is enabled
+        /// </summary>
+        private void CheckBuildupLimit()
+        {
+            if (nodeTreeVM.SelectedNodeItem == null)
+                return;
+            var branch = nodeTreeVM.SelectedNodeItem.Host as Branch;
+            UnderBuildupLimit = branch.Buildups.Count < maxBuildups;
         }
 
         public void HandleBuildupSelectionChanged(int index, Buildup buildup)
@@ -58,6 +73,17 @@ namespace Calc.ConnectorRevit.ViewModels
             Mediator.Broadcast("BuildupSelectionChanged");
         }
 
+        public void HandleRemove()
+        {
+            if (nodeTreeVM.SelectedNodeItem == null)
+                return;
+            var branch = nodeTreeVM.SelectedNodeItem.Host as Branch;
+            var newBuildups = new List<Buildup>(branch.Buildups);
+            newBuildups.RemoveAt(newBuildups.Count - 1);
+            branch.Buildups = newBuildups;
+            Mediator.Broadcast("BuildupSelectionChanged");
+        }
+
         public void HandleInherit()
         {
             if (nodeTreeVM.SelectedNodeItem == null)
@@ -68,6 +94,8 @@ namespace Calc.ConnectorRevit.ViewModels
             branch.InheritMapping();
             Mediator.Broadcast("BuildupSelectionChanged");
         }
+
+        
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)

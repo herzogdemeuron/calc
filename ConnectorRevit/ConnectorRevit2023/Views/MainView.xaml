@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Calc.ConnectorRevit.ViewModels" 
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
-        xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.WPF.DragDrop"
+        xmlns:conv="clr-namespace:Calc.ConnectorRevit.Views.Converters"
+
         d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
         Loaded="WindowLoaded"
         Closing="WindowClosing"
@@ -18,12 +19,15 @@
 
     <Window.Resources>
         <ResourceDictionary>
+            <conv:TagToBoolConverter x:Key="TagToBoolConverter"/>
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="MainViewResources.xaml"/>
                 <ResourceDictionary Source="ToggleButtonResource.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="507*"/>
@@ -137,10 +141,11 @@
                             Height="25"
                             Click="InheritClicked"/>
 
-                        <Button Content="+"
+                        <Button Content="Remove"
                             Width="50"
                             Margin="0,5,0,0"
-                            Height="25"/>
+                            Height="25"
+                            Click="RemoveClicked"/>
                     </StackPanel>
 
                     <DataGrid ItemsSource="{Binding DataContext.NodeTreeVM.SelectedNodeItem.Host.Buildups,
@@ -156,7 +161,7 @@
                               VerticalScrollBarVisibility="Disabled"
                               RowHeaderWidth="0"
                               GridLinesVisibility="None"
-                              CanUserAddRows="{Binding DataContext.BuildupVM.CanAddBuildup, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                              CanUserAddRows="{Binding DataContext.BuildupVM.UnderBuildupLimit, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                               >
                         <DataGrid.CellStyle>
                             <Style TargetType="DataGridCell">
