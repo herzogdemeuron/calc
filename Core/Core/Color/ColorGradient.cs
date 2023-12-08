@@ -7,8 +7,8 @@ namespace Calc.Core.Color
     {
         private readonly List<HslColor> _hslColors;
         public List<HslColor> HslColors => this._hslColors;
-        public int Saturation { get; set; } = 40;
-        public int Lightness { get; set; } = 60;
+        public int Saturation { get; set; } = 30;
+        public int Lightness { get; set; } = 70;
         public int StartAngle { get; set; } = 80;
         private float e = 2.718f;
 

@@ -32,12 +32,12 @@
         <Grid>
             
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="400"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="4*"/>
             </Grid.ColumnDefinitions>
             
             <Grid.RowDefinitions>
-                <RowDefinition Height="22"/>
+                <RowDefinition Height="32"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="40"/>
@@ -45,10 +45,12 @@
             
             <Label Content="Forest:"
                    Padding="10,6,0,0"
-                   FontWeight="SemiBold"/>
+                   Grid.Column="0"
+                   Grid.Row="0"
+                   FontSize="20"/>
 
             <DockPanel x:Name="ForestPanel"
-                        Grid.Column="0"
+                       Grid.Column="0"
                        Grid.Row="1"
                        Margin="10"
                        HorizontalAlignment="Stretch">
@@ -85,13 +87,14 @@
             </Grid>
 
             <Label Grid.Column="1" 
+                   Grid.Row="0"
                    Content="Mapping:" 
                    Padding="10,6,0,0"
-                   FontWeight="SemiBold"/>
+                    FontSize="20"/>
             
             <DockPanel x:Name="MappingPanel"
-                       Grid.Column="2"
                        Grid.Row="1"
+                       Grid.Column="2"
                        Margin="10"
                        HorizontalAlignment="Stretch"
                        LastChildFill="True">
@@ -115,20 +118,27 @@
                           SelectionChanged="MappingSelectionChanged"/>
             </DockPanel>
 
-            
+            <Grid x:Name="BuildupGrid"
+                  DockPanel.Dock="Bottom"
+                  Grid.Column="2"
+                  Grid.Row="2"
+                  Margin="10">
 
-            <DockPanel x:Name="BuildupPanel"
-                        Grid.Column="2"
-                        Grid.Row="2"
-                        Margin="10">
-                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="32"/>
+                    <RowDefinition Height="80"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="32"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+
                 <Label Content="Buildups:"
+                       Grid.Row="0"
                        Padding="0"
-                       Margin="0,0,0,12"
-                       DockPanel.Dock="Top"
-                       FontWeight="SemiBold"/>
+                       FontSize="20"/>
 
-                <DockPanel DockPanel.Dock="Top"
+                <DockPanel x:Name="BuildupSelectionsPanel"
+                           Grid.Row="1"
                            Height="60">
                     <StackPanel DockPanel.Dock="Left"
                                 Width="50"
@@ -197,11 +207,31 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </DockPanel>
+                <Label Content="Calculation:"
+                       Grid.Row="3"
+                       Padding="0"
+                       FontSize="20"/>
+
+                <Border  Grid.Row="4" CornerRadius="4" Background="LightGray">
+                    <Border CornerRadius="4">
+                        <Border.Background>
+                            <SolidColorBrush Color="{Binding DataContext.NodeTreeVM.SelectedNodeItem.LabelColor,
+                                            RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                        </Border.Background>
+
+                    <Grid>
+                    </Grid>
+                        
+                </Border>
+                </Border>
+
+
 
                 <TabControl x:Name="BuildupTabs"
-                            Margin="0,20,0,0"
-                            Height="200"
-                            VerticalAlignment="Top"
+                            Grid.Row="2"
+                            
+                            Margin="0,10,0,20"
+                            DockPanel.Dock="Top"
                             ItemsSource="{Binding DataContext.NodeTreeVM.SelectedNodeItem.Host.Buildups,
                                           RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                             SelectedItem="{Binding DataContext.BuildupVM.SelectedBuildup,
@@ -237,10 +267,8 @@
                     </TabControl.ContentTemplate>
                 </TabControl>
 
-
-           
-            </DockPanel>
-            
+             </Grid>
+                
             <StackPanel x:Name="TogglePanel"
                         Grid.Column="0"
                         Grid.Row="3"

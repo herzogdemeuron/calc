@@ -5,6 +5,7 @@ using System;
 using Speckle.Newtonsoft.Json.Converters;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Collections.ObjectModel;
 
 namespace Calc.Core.Objects
 {
@@ -171,7 +172,7 @@ namespace Calc.Core.Objects
         private int id = -1;
         private string name;
         private MaterialGroup group;
-        private List<BuildupComponent> components;
+        private ObservableCollection<BuildupComponent> components;
         private Unit unit;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -198,7 +199,7 @@ namespace Calc.Core.Objects
         }
 
         [JsonProperty("components")]
-        public List<BuildupComponent> Components
+        public ObservableCollection<BuildupComponent> Components
         {
             get => components;
             set => SetProperty(ref components, value);

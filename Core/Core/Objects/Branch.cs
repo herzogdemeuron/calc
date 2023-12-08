@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -35,9 +36,9 @@ namespace Calc.Core.Objects
         [JsonIgnore]
         public Forest ParentForest { get; set; }
         [JsonIgnore]
-        private List<Buildup> _buildups = new();
+        private ObservableCollection<Buildup> _buildups = new();
         [JsonIgnore]
-        public List<Buildup> Buildups
+        public ObservableCollection<Buildup> Buildups
         {
             // set _buildups to empty list if null to avoid null reference exceptions
             get => _buildups;
@@ -51,7 +52,7 @@ namespace Calc.Core.Objects
         public string BuildupsIdentifier
         {     get
             {
-                return GetBuildupsIdentifier(Buildups);
+                return GetBuildupsIdentifier(Buildups.ToList());
             }
         }
         [JsonIgnore]
@@ -200,7 +201,6 @@ namespace Calc.Core.Objects
         public void SetBuildups(List<Buildup> buildups)
         {
             if (buildups == null) return;
-
             var newIdentifier = GetBuildupsIdentifier(buildups);
             var currentIdentifier = BuildupsIdentifier;
             if (currentIdentifier == newIdentifier) return;
@@ -210,7 +210,10 @@ namespace Calc.Core.Objects
             // reduce the Buildups list to the length of the new list
             if (currentCount > newCount)
             {
-                Buildups.RemoveRange(newCount, currentCount - newCount);
+                for (int i = currentCount - 1; i >= newCount; i--)
+                {
+                    Buildups.RemoveAt(i);
+                }
             }
 
             for (int i = 0; i < newCount; i++)
@@ -283,7 +286,7 @@ namespace Calc.Core.Objects
             }
             if (ParentBranch.Buildups != null)
             {
-                SetBuildups(ParentBranch.Buildups);
+                SetBuildups(ParentBranch.Buildups.ToList());
             }
         }
 
