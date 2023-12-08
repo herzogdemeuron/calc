@@ -73,7 +73,7 @@ namespace Calc.Core.Objects
         {
             if (branch.Path.SequenceEqual(path))
             {
-                branch.Buildups = buildups;
+                branch.SetBuildups(buildups);
             }
             else
             {

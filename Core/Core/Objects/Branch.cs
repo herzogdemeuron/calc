@@ -35,15 +35,15 @@ namespace Calc.Core.Objects
         [JsonIgnore]
         public Forest ParentForest { get; set; }
         [JsonIgnore]
-        private List<Buildup> _buildups;
+        private List<Buildup> _buildups = new();
         [JsonIgnore]
         public List<Buildup> Buildups
         {
-            get => _buildups?? new List<Buildup>() { };
-            set
+            // set _buildups to empty list if null to avoid null reference exceptions
+            get => _buildups;
+            private set
             {
-
-                SetBuildup(value);
+                _buildups = value;
                 OnPropertyChanged(nameof(Buildups));
             }
         }
@@ -197,18 +197,35 @@ namespace Calc.Core.Objects
         /// Also set the buildup of all subbranches to the same value if they have no buildup assigned yet or the buildup is the same.
         /// calculate the branch with the new buildup if it is a dead end branch.
         /// </summary>
-        public void SetBuildup(List<Buildup> buildups)
+        public void SetBuildups(List<Buildup> buildups)
         {
             if (buildups == null) return;
 
             var newIdentifier = GetBuildupsIdentifier(buildups);
             var currentIdentifier = BuildupsIdentifier;
-
             if (currentIdentifier == newIdentifier) return;
-            // give each buildup a formatted name with its index in the list
-            
-          
-            _buildups = buildups;
+
+            int currentCount = Buildups?.Count ?? 0;
+            int newCount = buildups?.Count ?? 0;
+            // reduce the Buildups list to the length of the new list
+            if (currentCount > newCount)
+            {
+                Buildups.RemoveRange(newCount, currentCount - newCount);
+            }
+
+            for (int i = 0; i < newCount; i++)
+            {
+                if (i < currentCount)
+                {
+                    Buildups[i].Copy(buildups[i]);
+                }
+                else
+                {
+                    Buildups.Add(buildups[i].Copy());
+                }
+            }
+
+            OnPropertyChanged(nameof(Buildups));
 
             if (SubBranches.Count == 0)
             {
@@ -220,7 +237,7 @@ namespace Calc.Core.Objects
             {
                 if (subBranch.Buildups == null || (subBranch.BuildupsIdentifier == currentIdentifier))
                 {
-                    subBranch.SetBuildup(buildups);
+                    subBranch.SetBuildups(buildups);
                 }
             }
         }
@@ -228,7 +245,7 @@ namespace Calc.Core.Objects
 
         public void ResetBuildups()
         {
-            Buildups = null;
+            Buildups = new();
             if (SubBranches.Count == 0)
             {
                 return;
@@ -258,31 +275,6 @@ namespace Calc.Core.Objects
             return path;
         }
 
-
-        /// <summary>
-        /// This method matches a set of buildups to the branch with a path
-        /// The intended use is to reconstruct the buildup assignments in a full tree from a mapping stored in the database.
-        /// this method is called on the root branch of the tree.
-        /// </summary>
-     /*   public void MapBuildups(List<PathItem> path, List<Buildup> buildups)
-        {
-            if (Path.SequenceEqual(path))
-            {
-                this.Buildups = buildups;
-            }
-            else
-            {
-                if (SubBranches.Count == 0)
-                {
-                    return;
-                }
-                foreach (var subBranch in SubBranches)
-                {
-                    subBranch.MapBuildups(path, buildups);
-                }
-            }
-        }*/
-
         public void InheritMapping()
         {
             if (ParentBranch == null)
@@ -291,7 +283,7 @@ namespace Calc.Core.Objects
             }
             if (ParentBranch.Buildups != null)
             {
-                this.Buildups = ParentBranch.Buildups;
+                SetBuildups(ParentBranch.Buildups);
             }
         }
 
@@ -335,6 +327,7 @@ namespace Calc.Core.Objects
                 // get all elements with buildup from subbranches
                 var subElementsWithBuildup = SubBranches
                     .Where(sb => sb.Buildups != null)
+                    .Where(sb => sb.Buildups.Count > 0)
                     .SelectMany(sb => sb.Elements)
                     .ToList();
                 // remove subelements with buildup from elements of current branch

@@ -185,7 +185,7 @@
                                                         Path=(ItemsControl.AlternationIndex)}"
                                                 ItemsSource="{Binding DataContext.Store.BuildupsAll,
                                                         RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                                                SelectedItem="{Binding .}"
+                                                SelectedItem="{Binding .,Mode=TwoWay}"
                                                 DisplayMemberPath="Name"
                                                 Height="25"
                                                 SelectionChanged="BuildupSelectionChanged"
@@ -199,12 +199,14 @@
                 </DockPanel>
 
                 <TabControl x:Name="BuildupTabs"
-                             Margin="0,20,0,0"
-                            Height="250"
+                            Margin="0,20,0,0"
+                            Height="200"
                             VerticalAlignment="Top"
-                             ItemsSource="{Binding DataContext.NodeTreeVM.SelectedNodeItem.Host.Buildups,
+                            ItemsSource="{Binding DataContext.NodeTreeVM.SelectedNodeItem.Host.Buildups,
                                           RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                                        ItemContainerStyle="{StaticResource TabItemStyle}">
+                            SelectedItem="{Binding DataContext.BuildupVM.SelectedBuildup,
+                                          RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                            ItemContainerStyle="{StaticResource TabItemStyle}">
                     
                     <TabControl.ContentTemplate>
                         <DataTemplate>

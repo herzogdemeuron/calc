@@ -46,7 +46,20 @@ namespace Calc.ConnectorRevit.ViewModels
                 underBuildupLimit = value;
                 OnPropertyChanged(nameof(UnderBuildupLimit));
             }
+        }
 
+        private Buildup _selectedBuildup;
+        public Buildup SelectedBuildup
+        {
+            get => _selectedBuildup;
+            set
+            {
+                if (_selectedBuildup != value)
+                {
+                    _selectedBuildup = value;
+                    OnPropertyChanged(nameof(SelectedBuildup));
+                }
+            }
         }
 
 
@@ -98,7 +111,8 @@ namespace Calc.ConnectorRevit.ViewModels
             {
                 newBuildups.RemoveRange(maxBuildups, newBuildups.Count - maxBuildups);
             }
-            branch.Buildups = newBuildups;
+            branch.SetBuildups(newBuildups);
+            SelectedBuildup = branch.Buildups[index];
             Mediator.Broadcast("BuildupSelectionChanged");
         }
 
@@ -131,7 +145,7 @@ namespace Calc.ConnectorRevit.ViewModels
             var branch = nodeTreeVM.SelectedNodeItem.Host as Branch;
             var newBuildups = new List<Buildup>(branch.Buildups);
             newBuildups.RemoveAt(newBuildups.Count - 1);
-            branch.Buildups = newBuildups;
+            branch.SetBuildups(newBuildups);
             Mediator.Broadcast("BuildupSelectionChanged");
         }
 

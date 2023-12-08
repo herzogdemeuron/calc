@@ -3,6 +3,8 @@ using Speckle.Newtonsoft.Json;
 using Calc.Core.Color;
 using System;
 using Speckle.Newtonsoft.Json.Converters;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace Calc.Core.Objects
 {
@@ -164,22 +166,107 @@ namespace Calc.Core.Objects
         public string FormattedCost { get => Math.Round(Amount * Material.Cost, 2).ToString(); }
     }
 
-    public class Buildup 
+    public class Buildup : INotifyPropertyChanged
     {
+        private int id = -1;
+        private string name;
+        private MaterialGroup group;
+        private List<BuildupComponent> components;
+        private Unit unit;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         [JsonProperty("id", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public int Id { get; set; } = -1;
+        public int Id
+        {
+            get => id;
+            set => SetProperty(ref id, value);
+        }
+
         [JsonProperty("buildup_name")]
-        public string Name { get; set; }
+        public string Name
+        {
+            get => name;
+            set => SetProperty(ref name, value);
+        }
+
         [JsonProperty("group_id")]
-        public MaterialGroup Group { get; set; }
+        public MaterialGroup Group
+        {
+            get => group;
+            set => SetProperty(ref group, value);
+        }
+
         [JsonProperty("components")]
-        public List<BuildupComponent> Components { get; set; }
+        public List<BuildupComponent> Components
+        {
+            get => components;
+            set => SetProperty(ref components, value);
+        }
+
         [JsonProperty("unit")]
-        public Unit Unit { get; set; }
+        public Unit Unit
+        {
+            get => unit;
+            set => SetProperty(ref unit, value);
+        }
+        public void Copy(Buildup other)
+        {
+            Id = other.Id;
+            Name = other.Name;
+            Group = other.Group;
+            Components = other.Components;
+            Unit = other.Unit;
+        }
+
+        public Buildup Copy()
+        {
+            return new Buildup()
+            {
+                Id = Id,
+                Name = Name,
+                Group = Group,
+                Components = Components,
+                Unit = Unit
+            };
+        }
+
         public override string ToString()
         {
             return $"{Name}";
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Buildup other)
+            {
+                return Id == other.Id;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(storage, value))
+            {
+                return false;
+            }
+
+            storage = value;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
+
     }
 
     public class PathItem
