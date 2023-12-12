@@ -2,6 +2,8 @@
 using Calc.Core;
 using Calc.Core.Color;
 using Calc.Core.Objects;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
@@ -16,6 +18,7 @@ namespace Calc.ConnectorRevit.ViewModels
     public class NodeViewModel : INotifyPropertyChanged
     {
         public string Name { get => GetName(); }
+        public string ShortName { get => GetName(false); }
         public DirectusStore Store { get; set; }
         public NodeTreeViewModel ParentTreeView { get; set; }
         public ObservableCollection<NodeViewModel> SubNodeItems { get; }
@@ -31,6 +34,7 @@ namespace Calc.ConnectorRevit.ViewModels
                     host = value;
                     OnPropertyChanged(nameof(Host));
                     OnPropertyChanged(nameof(LabelColor));
+                    OnPropertyChanged(nameof(CategorizedCalculation));
                 }
             }
         }
@@ -44,6 +48,32 @@ namespace Calc.ConnectorRevit.ViewModels
                     return $"({ Host.Elements.Count})";
             }
         }
+
+        public Dictionary<string, decimal> CategorizedCalculation
+        {
+            get
+            {
+                var calculation = new Dictionary<string, decimal>();
+                if (Host != null && Host is Branch branch)
+                {
+                    var results = branch.CalculationResults;
+                    foreach (var result in results)
+                    {
+                        if (calculation.ContainsKey(result.GroupName))
+                        {
+                            calculation[result.GroupName] += Math.Round(result.Gwp, 3);
+                        }
+                        else
+                        {
+                            calculation.Add(result.GroupName, Math.Round(result.Gwp, 3));
+                        }
+                    }
+                }
+                return calculation;
+            }
+
+        }
+
 
         public NodeViewModel(DirectusStore store, IGraphNode node, NodeTreeViewModel parentTreeView)
         {
@@ -68,7 +98,7 @@ namespace Calc.ConnectorRevit.ViewModels
                 if (_labelColorVisible != value)
                 {
                     _labelColorVisible = value;
-                    OnPropertyChanged("LabelColorVisible");
+                    OnPropertyChanged(nameof(LabelColorVisible));
                 }
             }
         }
@@ -104,12 +134,12 @@ namespace Calc.ConnectorRevit.ViewModels
                 }
             }
         }
-        public string GetName()
+        public string GetName(bool showType = true)
         {
             if (Host is Tree tree)
                 return tree.Name;
             else if (Host is Branch branch)
-                return $"[{branch.Parameter}] {branch.Value}";
+                return showType?$"[{branch.Parameter}] {branch.Value}": branch.Value;
             else if (Host is Forest forest)
                 return forest.Name;
             else
@@ -119,6 +149,7 @@ namespace Calc.ConnectorRevit.ViewModels
         private void NotifyHostChanged()
         {
             OnPropertyChanged(nameof(Host));
+            OnPropertyChanged(nameof(CategorizedCalculation));
         }
 
         public void NotifyLabelColorChange()
@@ -126,6 +157,7 @@ namespace Calc.ConnectorRevit.ViewModels
             OnPropertyChanged(nameof(IdentifierColor));
             OnPropertyChanged(nameof(UnderlineVisibility));
             OnPropertyChanged(nameof(LabelColor));
+            OnPropertyChanged(nameof(LabelColorVisible));
             foreach (var subBranch in SubNodeItems)
             {
                 subBranch.NotifyLabelColorChange();

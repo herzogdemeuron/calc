@@ -11,6 +11,10 @@ namespace Calc.Core.Objects
         [JsonIgnore]
         public List<CalcElement> Elements { get => GetElements(); }
         [JsonIgnore]
+        public decimal TotalArea { get => SubBranches.Sum(s => s.TotalArea); }
+        [JsonIgnore]
+        public decimal TotalVolume { get => SubBranches.Sum(s => s.TotalVolume); }
+        [JsonIgnore]
         public List<string> ElementIds => Elements.Select(e => e.Id).ToList();
         [JsonIgnore]
         public List<Branch> SubBranches => Trees.ConvertAll(tree => (Branch)tree);

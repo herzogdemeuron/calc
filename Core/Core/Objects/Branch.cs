@@ -16,6 +16,11 @@ namespace Calc.Core.Objects
         [JsonIgnore]
         public List<CalcElement> Elements { get; set; } = new();
         [JsonIgnore]
+        public decimal TotalArea { get => Elements.Sum(e => e.GetQuantityByUnit(Unit.m2,0) ?? 0); }
+        [JsonIgnore]
+        public decimal TotalVolume { get => Elements.Sum(e => e.GetQuantityByUnit(Unit.m3,0) ?? 0); }
+
+        [JsonIgnore]
         public List<string> ElementIds => Elements.Select(e => e.Id).ToList();
         [JsonIgnore]
         public string Parameter { get; set; }
@@ -55,7 +60,6 @@ namespace Calc.Core.Objects
                 return GetBuildupsIdentifier(Buildups.ToList());
             }
         }
-        [JsonIgnore]
         private HslColor _hslColor;
         [JsonIgnore]
         public HslColor HslColor
@@ -71,7 +75,6 @@ namespace Calc.Core.Objects
         [JsonIgnore]
         public bool HasCalculationErrors;
 
-        [JsonIgnore]
         private Dictionary<string, List<string>> _calculationNullElements;
         [JsonIgnore]
         public Dictionary<string, List<string>> CalculationNullElements
@@ -92,7 +95,6 @@ namespace Calc.Core.Objects
             }
         }
 
-        [JsonIgnore]
         private Dictionary<string, List<string>> _calculationZeroElements;
         [JsonIgnore]
         public Dictionary<string, List<string>> CalculationZeroElements
@@ -115,7 +117,6 @@ namespace Calc.Core.Objects
 
 
 
-        [JsonIgnore]
         private List<Result> _calculationResults;
         [JsonIgnore]
         public List<Result> CalculationResults

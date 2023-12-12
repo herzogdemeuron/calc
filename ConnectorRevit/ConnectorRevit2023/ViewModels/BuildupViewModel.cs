@@ -112,7 +112,11 @@ namespace Calc.ConnectorRevit.ViewModels
                 newBuildups.RemoveRange(maxBuildups, newBuildups.Count - maxBuildups);
             }
             branch.SetBuildups(newBuildups);
-            SelectedBuildup = branch.Buildups[index];
+
+            if(index < newBuildups.Count)
+            {
+                SelectedBuildup = branch.Buildups[index];
+            }
             Mediator.Broadcast("BuildupSelectionChanged");
         }
 

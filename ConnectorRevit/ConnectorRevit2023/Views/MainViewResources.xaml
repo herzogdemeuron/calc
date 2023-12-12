@@ -94,5 +94,43 @@
         </Style.Triggers>
         
     </Style>
-    
+
+    <Style TargetType="DataGrid" x:Key="DataGridStyle">
+
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Path=ItemsSource, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
+                <Setter Property="HeadersVisibility" Value="None"/>
+            </DataTrigger>
+        </Style.Triggers>
+
+        <Setter Property="AutoGenerateColumns" Value="False"/>
+        <Setter Property="HorizontalGridLinesBrush" Value="Transparent"/>
+        <Setter Property="VerticalGridLinesBrush" Value="LightGray"/>
+        <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="RowHeaderWidth" Value="0"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="CanUserAddRows" Value="False"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="IsTabStop" Value="False"/>
+
+
+        <Setter Property="ColumnHeaderStyle">
+            <Setter.Value>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="RowStyle">
+            <Setter.Value>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

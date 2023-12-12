@@ -42,16 +42,17 @@ namespace Calc.Core.Objects
             };
         }
 
-        public decimal? GetQuantityByUnit(Unit unit)
+        public decimal? GetQuantityByUnit(Unit unit, int roundDigits = 3)
         {
             if (_quantities.TryGetValue(unit, out decimal? value))
             {
-                return value;
+                return value == null ? null : Math.Round((decimal)value, roundDigits);
             }
             else
             {
                 throw new ArgumentException($"Unit not recognized: {unit}");
             }
+
         }
     }
 

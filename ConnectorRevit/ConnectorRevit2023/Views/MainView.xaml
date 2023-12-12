@@ -6,14 +6,14 @@
         xmlns:local="clr-namespace:Calc.ConnectorRevit.ViewModels" 
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:conv="clr-namespace:Calc.ConnectorRevit.Views.Converters"
+        Title="CALC"
 
         d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
         Loaded="WindowLoaded"
         Closing="WindowClosing"
-        mc:Ignorable="d" 
-        Background="White"
-        Height="700" MinHeight="700"
-        Width="700" MinWidth="700"
+        mc:Ignorable="d"
+        Height="800" MinHeight="700"
+        Width="900" MinWidth="750"
         WindowStartupLocation="CenterScreen"
         Topmost="True">
 
@@ -33,21 +33,23 @@
             
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="4*"/>
             </Grid.ColumnDefinitions>
             
             <Grid.RowDefinitions>
-                <RowDefinition Height="32"/>
+                <RowDefinition Height="45"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
-            
-            <Label Content="Forest:"
+
+            <Label Content="Building Element Groups:"
                    Padding="10,6,0,0"
                    Grid.Column="0"
                    Grid.Row="0"
-                   FontSize="20"/>
+                   FontSize="27"
+                   FontWeight="light"/>
 
             <DockPanel x:Name="ForestPanel"
                        Grid.Column="0"
@@ -63,34 +65,13 @@
                           HorizontalAlignment="Stretch"/>
             </DockPanel>
             
-            <Grid x:Name="TreeViewGrid"
-                  Grid.Column="0"
-                  Grid.Row="2"
-                  Margin="10">
-                <TreeView x:Name="TreeView"
-                      ItemsSource="{Binding NodeTreeVM.NodeSource}"
-                      TreeViewItem.Selected="TreeViewItemSelected"
-                      MouseLeftButtonDown="SideClickDown"
-                      ItemContainerStyle="{StaticResource TreeViewItemStyle}">
-                    <TreeView.ItemTemplate>
-                        <HierarchicalDataTemplate ItemsSource="{Binding SubNodeItems}">
-                            <ContentControl Content="{Binding}"
-                                            
-                                        ContentTemplate="{StaticResource BranchItemTemplate}">
-                                <ContentControl.ToolTip>
-                                    <TextBlock Text="{Binding Host.Buildup}"/>
-                                </ContentControl.ToolTip>
-                            </ContentControl>
-                        </HierarchicalDataTemplate>
-                    </TreeView.ItemTemplate>
-                </TreeView>
-            </Grid>
 
-            <Label Grid.Column="1" 
+            <Label Grid.Column="2" 
                    Grid.Row="0"
-                   Content="Mapping:" 
+                   Content="Mapping Settings:" 
                    Padding="10,6,0,0"
-                    FontSize="20"/>
+                    FontSize="27"
+                   FontWeight="Light"/>
             
             <DockPanel x:Name="MappingPanel"
                        Grid.Row="1"
@@ -118,6 +99,85 @@
                           SelectionChanged="MappingSelectionChanged"/>
             </DockPanel>
 
+            <Grid x:Name="TreeviewGrid"
+                  DockPanel.Dock="Bottom"
+                  Grid.Column="0"
+                  Grid.Row="2"
+                  Margin="10,0,10,10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="10"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TreeView x:Name="TreeView"
+                            Grid.Row="2"
+                            Grid.ColumnSpan="3"
+                            ItemsSource="{Binding NodeTreeVM.NodeSource}"
+                            TreeViewItem.Selected="TreeViewItemSelected"
+                            MouseLeftButtonDown="SideClickDown"
+                            ItemContainerStyle="{StaticResource TreeViewItemStyle}">
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding SubNodeItems}">
+                            <ContentControl Content="{Binding}"
+                                            
+                                    ContentTemplate="{StaticResource BranchItemTemplate}">
+                                <ContentControl.ToolTip>
+                                    <TextBlock Text="{Binding Host.Buildup}"/>
+                                </ContentControl.ToolTip>
+                            </ContentControl>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+
+                <Border Grid.ColumnSpan="3"
+                        Grid.Row="0"
+                        Background="LightGray"
+                        BorderThickness="0"
+                        CornerRadius="4">
+                </Border>
+
+                <StackPanel Grid.Row="0"
+                            Grid.Column="0"
+                            Margin="0,5,0,0">
+                    <TextBlock Text="Count"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding NodeTreeVM.SelectedNodeItem.Host.Elements.Count}"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="0,5,0,0">
+                    <TextBlock Text="Area"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding NodeTreeVM.SelectedNodeItem.Host.TotalArea,
+                                        StringFormat={}{0} m²}"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="0"
+                            Grid.Column="2"
+                            Margin="0,5,0,0">
+                    <TextBlock Text="Volume"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding NodeTreeVM.SelectedNodeItem.Host.TotalVolume,
+                                              StringFormat={}{0} m³}"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+
+
+
+            </Grid>
+
             <Grid x:Name="BuildupGrid"
                   DockPanel.Dock="Bottom"
                   Grid.Column="2"
@@ -125,17 +185,18 @@
                   Margin="10">
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="32"/>
+                    <RowDefinition Height="45"/>
                     <RowDefinition Height="80"/>
                     <RowDefinition Height="3*"/>
-                    <RowDefinition Height="32"/>
+                    <RowDefinition Height="45"/>
                     <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
 
                 <Label Content="Buildups:"
                        Grid.Row="0"
                        Padding="0"
-                       FontSize="20"/>
+                       FontSize="27"
+                       FontWeight="Light"/>
 
                 <DockPanel x:Name="BuildupSelectionsPanel"
                            Grid.Row="1"
@@ -210,7 +271,8 @@
                 <Label Content="Calculation:"
                        Grid.Row="3"
                        Padding="0"
-                       FontSize="20"/>
+                       FontSize="27"
+                       FontWeight="Light"/>
 
                 <Border  Grid.Row="4" CornerRadius="4" Background="LightGray">
                     <Border CornerRadius="4">
@@ -220,6 +282,29 @@
                         </Border.Background>
 
                     <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="38"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0"
+                                   Text="{Binding DataContext.NodeTreeVM.SelectedNodeItem.ShortName,
+                                            RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                   Margin="10"
+                                   FontSize="14"/>
+
+                            <DataGrid Grid.Row="1"
+                                      Style="{StaticResource DataGridStyle}"
+                                      VerticalAlignment="Bottom"
+                                      Margin="10"
+                                      ItemsSource="{Binding DataContext.NodeTreeVM.SelectedNodeItem.CategorizedCalculation,
+                                                    RelativeSource={RelativeSource AncestorType={x:Type Window}}}"> 
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Buildup Group" Binding="{Binding Key}" Width="3*"  IsReadOnly="True" />
+                                    <DataGridTextColumn Header="GWP (kgCO2)" Binding="{Binding Value}" Width="1*"  IsReadOnly="True" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        
+                        
                     </Grid>
                         
                 </Border>
@@ -240,22 +325,8 @@
                     
                     <TabControl.ContentTemplate>
                         <DataTemplate>
-                            <DataGrid ItemsSource="{Binding Components}"
-                                      AutoGenerateColumns="False"
-                                      DockPanel.Dock="Bottom"
-                                      Height="400"
-                                      HorizontalGridLinesBrush="LightGray"
-                                      VerticalGridLinesBrush="LightGray"
-                                      HorizontalScrollBarVisibility="Disabled"
-                                      CanUserAddRows="False">
-                                
-                                <DataGrid.ColumnHeaderStyle>
-                                    <Style TargetType="{x:Type DataGridColumnHeader}">
-                                        <Setter Property="FontWeight" Value="SemiBold"/>
-                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                                    </Style>
-                                </DataGrid.ColumnHeaderStyle>
-                                
+                            <DataGrid Style="{StaticResource DataGridStyle}"
+                                      ItemsSource="{Binding Components}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" Width="3*"  IsReadOnly="True" />
                                     <DataGridTextColumn Header="Amount" Binding="{Binding FormattedAmount}" Width="1*"  IsReadOnly="True" />

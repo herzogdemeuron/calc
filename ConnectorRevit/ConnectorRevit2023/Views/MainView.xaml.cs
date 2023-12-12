@@ -108,6 +108,12 @@ namespace Calc.ConnectorRevit.Views
             {
                 var index = (int)comboBox.Tag;
                 var selectedBuildup = comboBox.SelectedItem as Buildup;
+
+                if(index < 0 || index > 2)
+                {
+                    throw new Exception("Buildup index out of range");
+                }
+
                 MainVM.BuildupVM.HandleBuildupSelectionChanged(index, selectedBuildup);
                 MainVM.BuildupVM.UpdateBuildupSection();
             }
