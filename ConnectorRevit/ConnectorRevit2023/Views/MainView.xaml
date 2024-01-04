@@ -219,54 +219,27 @@
                                             RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                             Click="RemoveClicked"/>
                     </StackPanel>
+                    <StackPanel DockPanel.Dock="Left">
+                        <ComboBox Tag="1"
+                                  ItemsSource="{Binding DataContext.Store.BuildupsAll, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                  SelectedItem="{Binding DataContext.BuildupVM.Buildup1, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  DisplayMemberPath="Name"
+                                  Height="25"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Top"
+               />
 
-                    <DataGrid ItemsSource="{Binding DataContext.NodeTreeVM.SelectedNodeItem.Host.Buildups,
-                                            RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                              AlternationCount="100"
-                              AutoGenerateColumns="False"
-                              HeadersVisibility="None"
-                              BorderThickness="0"
-                              Background="Transparent"
-                              HorizontalAlignment="Stretch"
-                              VerticalAlignment="Stretch"
-                              HorizontalScrollBarVisibility="Disabled"
-                              VerticalScrollBarVisibility="Disabled"
-                              RowHeaderWidth="0"
-                              GridLinesVisibility="None"
-                              CanUserAddRows="{Binding DataContext.BuildupVM.UnderBuildupLimit,
-                                              RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                              >
-                        <DataGrid.CellStyle>
-                            <Style TargetType="DataGridCell">
-                                <Setter Property="BorderThickness" Value="0"/>
-                                <Setter Property="Height" Value="30"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter Property="Background" Value="{x:Null}"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DataGrid.CellStyle>
-
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn Width="*">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <ComboBox Tag="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow},
-                                                        Path=(ItemsControl.AlternationIndex)}"
-                                                ItemsSource="{Binding DataContext.Store.BuildupsAll,
-                                                        RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                                                SelectedItem="{Binding .,Mode=TwoWay}"
-                                                DisplayMemberPath="Name"
-                                                Height="25"
-                                                SelectionChanged="BuildupSelectionChanged"
-                                                HorizontalAlignment="Stretch"
-                                                VerticalAlignment="Top"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                        <ComboBox Tag="2"
+                                  ItemsSource="{Binding DataContext.Store.BuildupsAll, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                  SelectedItem="{Binding DataContext.BuildupVM.Buildup2, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  DisplayMemberPath="Name"
+                                  Height="25"
+                                  Margin="0,5,0,0"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Top"
+               />
+                    </StackPanel>
+                    
                 </DockPanel>
                 <Label Content="Calculation:"
                        Grid.Row="3"
@@ -314,12 +287,11 @@
 
                 <TabControl x:Name="BuildupTabs"
                             Grid.Row="2"
-                            
                             Margin="0,10,0,20"
                             DockPanel.Dock="Top"
-                            ItemsSource="{Binding DataContext.NodeTreeVM.SelectedNodeItem.Host.Buildups,
+                            ItemsSource="{Binding DataContext.BuildupVM.CurrentBuildups,
                                           RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                            SelectedItem="{Binding DataContext.BuildupVM.SelectedBuildup,
+                            SelectedItem="{Binding DataContext.BuildupVM.ActiveBuildup,
                                           RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                             ItemContainerStyle="{StaticResource TabItemStyle}">
                     

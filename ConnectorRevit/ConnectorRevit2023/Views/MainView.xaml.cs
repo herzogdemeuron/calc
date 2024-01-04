@@ -87,8 +87,10 @@ namespace Calc.ConnectorRevit.Views
                 MainVM.NodeTreeVM.HandleNodeItemSelectionChanged(selectedBranch);
                 TreeView.Tag = e.OriginalSource;
                 e.Handled = true;
+                MainVM.BuildupVM.SetFirstBuildupToActive();
+                MainVM.BuildupVM.UpdateBuildupsUI();
             }
-            MainVM.BuildupVM.UpdateBuildupSection();
+            MainVM.BuildupVM.UpdateBuildupsUI();
         }
         
         private void SideClickDown(object sender, MouseButtonEventArgs e)
@@ -102,33 +104,27 @@ namespace Calc.ConnectorRevit.Views
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BuildupSelectionChanged(object sender, SelectionChangedEventArgs e)
+   /*     private void BuildupSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (sender is ComboBox comboBox)
             {
                 var index = (int)comboBox.Tag;
                 var selectedBuildup = comboBox.SelectedItem as Buildup;
-
-                if(index < 0 || index > 2)
-                {
-                    throw new Exception("Buildup index out of range");
-                }
-
                 MainVM.BuildupVM.HandleBuildupSelectionChanged(index, selectedBuildup);
                 MainVM.BuildupVM.UpdateBuildupSection();
             }
-        }
+        }*/
 
         private void InheritClicked(object sender, RoutedEventArgs e)
         {
             MainVM.BuildupVM.HandleInherit();
-            MainVM.BuildupVM.UpdateBuildupSection();
+            MainVM.BuildupVM.UpdateBuildupsUI();
         }
 
         private void RemoveClicked(object sender, RoutedEventArgs e)
         {
             MainVM.BuildupVM.HandleRemove();
-            MainVM.BuildupVM.UpdateBuildupSection();
+            MainVM.BuildupVM.UpdateBuildupsUI();
         }
 
         private void ViewToggleButtonChecked(object sender, RoutedEventArgs e)
