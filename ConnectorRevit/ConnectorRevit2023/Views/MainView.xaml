@@ -221,6 +221,7 @@
                                   ItemsSource="{Binding Store.BuildupsAll}"
                                   SelectedItem="{Binding BuildupVM.Buildup1}"
                                   DisplayMemberPath="Name"
+                                  IsEnabled="{Binding BuildupVM.CanAddFirstBuildup}"
                                   Height="25"
                                   HorizontalAlignment="Stretch"
                                   VerticalAlignment="Top"

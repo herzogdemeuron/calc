@@ -35,6 +35,18 @@ namespace Calc.ConnectorRevit.ViewModels
                 OnPropertyChanged(nameof(RemoveEnabled));
             }
         }
+
+        private bool _canAddFirstBuildup = false;
+        public bool CanAddFirstBuildup
+        {
+            get => _canAddFirstBuildup;
+            set
+            {
+                _canAddFirstBuildup = value;
+                OnPropertyChanged(nameof(CanAddFirstBuildup));
+            }
+        }
+
         private bool _canAddSecondBuildup = false;
         public bool CanAddSecondBuildup
         {
@@ -132,7 +144,12 @@ namespace Calc.ConnectorRevit.ViewModels
         public void CheckAddBuildup()
         {
             if (nodeTreeVM.SelectedNodeItem == null || !(nodeTreeVM.SelectedNodeItem.Host is Branch))
+            {
+                CanAddFirstBuildup = false;
+                CanAddSecondBuildup = false;
                 return;
+            }
+            CanAddFirstBuildup = true;
             var branch = nodeTreeVM.SelectedNodeItem.Host as Branch;
             CanAddSecondBuildup = branch.Buildups?.Count > 0;
         }
@@ -144,7 +161,9 @@ namespace Calc.ConnectorRevit.ViewModels
                 InheritEnabled = false;
                 return;
             }
-            InheritEnabled = true;
+            var branch = nodeTreeVM.SelectedNodeItem.Host;
+            // if branch is branch but not tree, then it can inherit
+            InheritEnabled = (branch is Branch) && !(branch is Tree);
         }
 
         public void CheckRemoveEnabled()

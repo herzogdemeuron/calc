@@ -32,10 +32,11 @@ namespace Calc.Core.Color
             }
 
 
-            var uniqueBuildups = flattenedBranches.Select(b => b.BuildupsIdentifier).Distinct().ToList();
+            var uniqueBuildups = flattenedBranches.Where(b => !string.IsNullOrEmpty(b.BuildupsIdentifier))
+                                                 .Select(b => b.BuildupsIdentifier).Distinct().ToList();
 
             var colorGradient = new ColorGradient(uniqueBuildups.Count);
-            var defaultColor = new HslColor(0, 0, 100);
+            var defaultColor = new HslColor(0, 0, 86);
 
             for (int i = 0; i < flattenedBranches.Count; i++)
             {
