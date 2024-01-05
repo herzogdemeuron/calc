@@ -54,11 +54,13 @@ namespace Calc.ConnectorRevit.Views
         {
             var forest = ForestsComboBox.SelectedItem;
             MainVM.ForestVM.HandleForestSelectionChanged(forest as Forest);
+            MainVM.BuildupVM.UpdateBuildupsUI();
         }
 
         private void MappingSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             MainVM.MappingVM.HandleMappingSelectionChanged(MappingsComboBox.SelectedItem as Mapping);
+            MainVM.BuildupVM.UpdateBuildupsUI();
         }
 
         private void NewMappingClicked(object sender, RoutedEventArgs e)
@@ -96,6 +98,7 @@ namespace Calc.ConnectorRevit.Views
         private void SideClickDown(object sender, MouseButtonEventArgs e)
         {
             MainVM.NodeTreeVM.DeselectNodes();
+            MainVM.BuildupVM.UpdateBuildupsUI();
         }
 
         /// <summary>
