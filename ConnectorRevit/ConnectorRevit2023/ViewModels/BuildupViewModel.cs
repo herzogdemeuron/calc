@@ -186,6 +186,8 @@ namespace Calc.ConnectorRevit.ViewModels
             var newBuildups = new List<Buildup>(branch.Buildups);
             newBuildups.RemoveAt(newBuildups.Count - 1);
             branch.SetBuildups(newBuildups);
+            var buildupCount = newBuildups.Count;
+            ActiveBuildup = buildupCount > 0 ? newBuildups[buildupCount - 1] : null;
             Mediator.Broadcast("BuildupSelectionChanged");
         }
 
