@@ -35,6 +35,16 @@ namespace Calc.ConnectorRevit.ViewModels
                 OnPropertyChanged(nameof(RemoveEnabled));
             }
         }
+        private bool _canAddSecondBuildup = false;
+        public bool CanAddSecondBuildup
+        {
+            get => _canAddSecondBuildup;
+            set
+            {
+                _canAddSecondBuildup = value;
+                OnPropertyChanged(nameof(CanAddSecondBuildup));
+            }
+        }
 
         public Buildup Buildup1
         {
@@ -89,6 +99,7 @@ namespace Calc.ConnectorRevit.ViewModels
 
             CheckInheritEnabled();
             CheckRemoveEnabled();
+            CheckAddBuildup();
         }
 
         public void SetFirstBuildupToActive()
@@ -116,6 +127,14 @@ namespace Calc.ConnectorRevit.ViewModels
             branch.SetBuildups(newBuildups);
             ActiveBuildup = buildup;
             Mediator.Broadcast("BuildupSelectionChanged");
+        }
+
+        public void CheckAddBuildup()
+        {
+            if (nodeTreeVM.SelectedNodeItem == null || !(nodeTreeVM.SelectedNodeItem.Host is Branch))
+                return;
+            var branch = nodeTreeVM.SelectedNodeItem.Host as Branch;
+            CanAddSecondBuildup = branch.Buildups?.Count > 0;
         }
 
         public void CheckInheritEnabled()

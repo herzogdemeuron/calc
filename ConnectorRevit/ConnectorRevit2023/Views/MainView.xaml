@@ -230,6 +230,7 @@
                                   ItemsSource="{Binding Store.BuildupsAll}"
                                   SelectedItem="{Binding BuildupVM.Buildup2}"
                                   DisplayMemberPath="Name"
+                                  IsEnabled="{Binding BuildupVM.CanAddSecondBuildup}"
                                   Height="25"
                                   Margin="0,5,0,0"
                                   HorizontalAlignment="Stretch"
