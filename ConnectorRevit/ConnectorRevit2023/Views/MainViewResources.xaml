@@ -31,43 +31,82 @@
     
 
     <DataTemplate x:Key="BranchItemTemplate">
-        <Border x:Name="Border"
-            Padding="4,2,4,3"
-            Margin="2"
-            CornerRadius="4">
-            <Border.Background>
-                <SolidColorBrush Color="{Binding LabelColor}"/>
-            </Border.Background>
-            <StackPanel Orientation="Vertical">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock x:Name="txtName">
-                        <TextBlock.Style>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="Text" Value="{Binding Name}" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True">
-                                        <Setter Property="FontWeight" Value="Bold" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Style>
-                    </TextBlock>
-                    <TextBlock Text="{Binding ElementsCount}"/>
-                </StackPanel>
+        
+        <StackPanel Orientation="Horizontal">
 
-                <Grid Height="3">
-                    <Border Height="3" 
-                        VerticalAlignment="Bottom" 
-                        CornerRadius="2" 
-                        Visibility="{Binding UnderlineVisibility}">
-                        <Border.Background>
-                            <SolidColorBrush Color="{Binding IdentifierColor}"/>
-                        </Border.Background>
-                    </Border>
+            <Grid>
+                <Rectangle Stroke="Gray"
+                           StrokeThickness="1"
+                           Margin="0,2,0,2"
+                           RadiusX="4"
+                           RadiusY="4">
+                    <Rectangle.Style>
+                        <Style TargetType="Rectangle">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsBranch}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding BranchParameterIsInstance}" Value="True">
+                                    <Setter Property="StrokeDashArray" Value="2,2"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Rectangle.Style>
+                </Rectangle>
 
-                </Grid>
-            </StackPanel>
-        </Border>
+                <TextBlock Text="{Binding BranchParameterName}" VerticalAlignment="Center" FontSize="10" Margin="2"/>
+            </Grid>
+
+
+                <Border x:Name="LabelBorder"
+                    Padding="4,2,4,3"
+                    Margin="4,2,2,2"
+                    CornerRadius="4">
+                        
+                    <Border.Background>
+                        <SolidColorBrush Color="{Binding LabelColor}"/>
+                    </Border.Background>
+            
+
+                    <StackPanel Orientation="Vertical">
+                    
+                        <TextBlock x:Name="txtName">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="{Binding Name}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True">
+                                            <Setter Property="FontWeight" Value="Bold" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <Grid Height="3">
+                            <Border x:Name="Underline"
+                                Height="3" 
+                                VerticalAlignment="Bottom" 
+                                CornerRadius="2" 
+                                Visibility="{Binding UnderlineVisibility}">
+                                <Border.Background>
+                                    <SolidColorBrush Color="{Binding IdentifierColor}"/>
+                                </Border.Background>
+                            </Border>
+                        </Grid>
+                    
+                    </StackPanel>
+                </Border>
+
+            <TextBlock Text="{Binding Host.Elements.Count}"
+                       VerticalAlignment="Center"
+                       FontSize="11"
+                       Margin="5,0,0,0"
+                       Foreground ="Gray"/>
+        
+        </StackPanel>
+        
     </DataTemplate>
 
     <Style TargetType="TabItem" x:Key="TabItemStyle">

@@ -18,8 +18,13 @@ namespace Calc.ConnectorRevit.ViewModels
     }
     public class NodeViewModel : INotifyPropertyChanged
     {
-        public string Name { get => GetName(); }
-        public string ShortName { get => GetName(false); }
+        public string Name { get => GetNodeName(); }
+        public string BranchParameterName { get => GetParameterName(); }
+        public bool? BranchParameterIsInstance { get => CheckIfParameterIsInstance(); }
+
+
+        public bool IsBranch { get => CheckIfBranch(); }
+        
         public DirectusStore Store { get; set; }
         public NodeTreeViewModel ParentTreeView { get; set; }
         public ObservableCollection<NodeViewModel> SubNodeItems { get; }
@@ -39,16 +44,7 @@ namespace Calc.ConnectorRevit.ViewModels
                 }
             }
         }
-        public string ElementsCount
-        {
-            get
-            {
-                if (Host == null)
-                    return "Choose a forest";
-                else
-                    return $"({ Host.Elements.Count})";
-            }
-        }
+       
 
         public Dictionary<string, decimal> CategorizedCalculation
         {
@@ -131,21 +127,44 @@ namespace Calc.ConnectorRevit.ViewModels
                 }
                 else
                 {
-                    return Color.FromArgb(100, 220, 220, 220);
+                    return Color.FromArgb(100, 219, 219, 219);
                 }
             }
         }
-        public string GetName(bool showType = true)
+        public string GetNodeName()
         {
             if (Host is Tree tree)
                 return tree.Name;
             else if (Host is Branch branch)
-                return showType?$"[{branch.Parameter}] {branch.Value}": branch.Value;
+                return branch.Value;
             else if (Host is Forest forest)
                 return forest.Name;
             else
                 return "Unknown";
         }
+
+        public string GetParameterName()
+        {
+            if (Host is Branch branch)
+                return ParameterHelper.GetParameterInfo(branch.Parameter).Item2;
+            else
+                return null;
+        }
+
+        public bool? CheckIfParameterIsInstance()
+        {
+            if (Host is Branch branch)
+                return ParameterHelper.GetParameterInfo(branch.Parameter).Item1;
+            else
+                return null;
+        }
+
+        public bool CheckIfBranch()
+        {
+            return (Host is Branch) && !(Host is Tree);
+        }
+
+
 
         private void NotifyHostChanged()
         {

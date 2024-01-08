@@ -258,7 +258,7 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0"
-                                   Text="{Binding NodeTreeVM.SelectedNodeItem.ShortName}"
+                                   Text="{Binding NodeTreeVM.SelectedNodeItem.Name}"
                                    Margin="10"
                                    FontSize="14"/>
 

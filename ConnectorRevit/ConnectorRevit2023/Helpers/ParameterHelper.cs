@@ -26,7 +26,7 @@ namespace Calc.ConnectorRevit.Helpers
 
         private static Parameter GetParameter(Element element, string parameterName)
         {
-            Tuple<bool, string> result  = GetParameterName(parameterName);
+            Tuple<bool, string> result  = GetParameterInfo(parameterName);
             bool isInstance = result.Item1;
             string name = result.Item2;
             
@@ -37,7 +37,8 @@ namespace Calc.ConnectorRevit.Helpers
 
             return isInstance ? element.LookupParameter(name) : LookupTypeParameter(element, name);
         }
-        public static Tuple<bool, string> GetParameterName(string parameterName)
+
+        public static Tuple<bool, string> GetParameterInfo(string parameterName)
         {
             // type paramter name: "type: parameterName"
             // instance parameter name: "inst: parameterName"
