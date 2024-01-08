@@ -7,18 +7,21 @@ using System.Linq;
 using Calc.Core.Calculations;
 using Calc.Core.Color;
 using Calc.Core.Helpers;
+using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Mappings;
+using Calc.Core.Objects.Results;
 using Speckle.Newtonsoft.Json;
 
-namespace Calc.Core.Objects
+namespace Calc.Core.Objects.GraphNodes
 {
     public class Branch : IGraphNode, INotifyPropertyChanged
     {
         [JsonIgnore]
         public List<CalcElement> Elements { get; set; } = new();
         [JsonIgnore]
-        public decimal TotalArea { get => Elements.Sum(e => e.GetQuantityByUnit(Unit.m2,0) ?? 0); }
+        public decimal TotalArea { get => Elements.Sum(e => e.GetQuantityByUnit(Unit.m2, 0) ?? 0); }
         [JsonIgnore]
-        public decimal TotalVolume { get => Elements.Sum(e => e.GetQuantityByUnit(Unit.m3,0) ?? 0); }
+        public decimal TotalVolume { get => Elements.Sum(e => e.GetQuantityByUnit(Unit.m3, 0) ?? 0); }
 
         [JsonIgnore]
         public List<string> ElementIds => Elements.Select(e => e.Id).ToList();
@@ -27,7 +30,7 @@ namespace Calc.Core.Objects
         [JsonIgnore]
         public string Value { get; set; }
         [JsonIgnore]
-        public List<PathItem> Path { get => GeneratePath(); }
+        public List<MappingPath> Path { get => GeneratePath(); }
         [JsonIgnore]
         public string Method { get; set; }
         [JsonIgnore]
@@ -55,7 +58,8 @@ namespace Calc.Core.Objects
         }
         [JsonIgnore]
         public string BuildupsIdentifier
-        {     get
+        {
+            get
             {
                 return GetBuildupsIdentifier(Buildups.ToList());
             }
@@ -83,8 +87,8 @@ namespace Calc.Core.Objects
             {
                 if (SubBranches.Count > 0)
                 {
-                   var dicts = SubBranches.Select(sb => sb.CalculationNullElements).ToList();
-                   return CollectionHelper.MergeCountDicts(dicts);
+                    var dicts = SubBranches.Select(sb => sb.CalculationNullElements).ToList();
+                    return CollectionHelper.MergeCountDicts(dicts);
                 }
                 return _calculationNullElements;
             }
@@ -123,11 +127,11 @@ namespace Calc.Core.Objects
         {
             get
             {
-                if(SubBranches.Count > 0)
+                if (SubBranches.Count > 0)
                 {
-                    return SubBranches.SelectMany(sb => sb.CalculationResults?? new List<Result>()).ToList();
+                    return SubBranches.SelectMany(sb => sb.CalculationResults ?? new List<Result>()).ToList();
                 }
-                return _calculationResults?? new List<Result>();
+                return _calculationResults ?? new List<Result>();
             }
             set
             {
@@ -172,8 +176,8 @@ namespace Calc.Core.Objects
                     Method = methodName,
                     ParentBranch = this,
                     // set the parent tree and forest of the subbranch
-                    ParentForest = this.ParentForest,
-                    ParentTree = this.BranchLevel == 0 ? this as Tree : this.ParentTree,
+                    ParentForest = ParentForest,
+                    ParentTree = BranchLevel == 0 ? this as Tree : ParentTree,
                 };
                 SubBranches.Add(branch);
             }
@@ -241,7 +245,7 @@ namespace Calc.Core.Objects
 
             foreach (var subBranch in SubBranches)
             {
-                if (subBranch.Buildups == null || (subBranch.BuildupsIdentifier == currentIdentifier))
+                if (subBranch.Buildups == null || subBranch.BuildupsIdentifier == currentIdentifier)
                 {
                     subBranch.SetBuildups(buildups);
                 }
@@ -262,14 +266,14 @@ namespace Calc.Core.Objects
             }
         }
 
-        private List<PathItem> GeneratePath()
+        private List<MappingPath> GeneratePath()
         {
-            var path = new List<PathItem>();
+            var path = new List<MappingPath>();
 
             Branch currentBranch = this;
             while (currentBranch.BranchLevel > 0)
             {
-                path.Insert(0, new PathItem
+                path.Insert(0, new MappingPath
                 {
                     Parameter = currentBranch.Parameter,
                     Value = currentBranch.Value
@@ -306,7 +310,7 @@ namespace Calc.Core.Objects
                 BranchLevel = BranchLevel,
                 Buildups = Buildups,
                 HslColor = HslColor,
-                Elements = this.Elements,
+                Elements = Elements,
                 ParentBranch = ParentBranch,
                 ParentTree = ParentTree,
                 ParentForest = ParentForest
@@ -385,7 +389,7 @@ namespace Calc.Core.Objects
             var groupedElements = new Dictionary<object, List<CalcElement>>();
             var nullKey = new object(); // Sentinel value for null
 
-            foreach (var element in this.Elements)
+            foreach (var element in Elements)
             {
                 if (element.Fields.TryGetValue(parameter, out object value))
                 {
@@ -404,7 +408,7 @@ namespace Calc.Core.Objects
             return groupedElements;
         }
 
-        private string GetBuildupsIdentifier( List<Buildup> buildups)
+        private string GetBuildupsIdentifier(List<Buildup> buildups)
         {
             if (buildups == null)
             {

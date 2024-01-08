@@ -1,4 +1,4 @@
-﻿using Calc.Core.Objects;
+﻿using Calc.Core.Objects.Results;
 using System.Diagnostics;
 
 public class Program

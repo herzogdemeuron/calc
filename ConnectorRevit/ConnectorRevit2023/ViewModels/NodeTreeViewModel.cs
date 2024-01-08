@@ -1,7 +1,8 @@
 ﻿using Calc.ConnectorRevit.Helpers;
 using Calc.ConnectorRevit.Services;
 using Calc.Core;
-using Calc.Core.Objects;
+using Calc.Core.Objects.GraphNodes;
+using Calc.Core.Objects.Mappings;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
@@ -10,6 +11,7 @@ namespace Calc.ConnectorRevit.ViewModels
     public class NodeTreeViewModel : INotifyPropertyChanged
     {
         private DirectusStore store;
+        public int MaxBuildups { get; set; } = 2;
         public bool BranchesSwitch { get; set; }
         private NodeViewModel selectedNodeItem;
         public NodeViewModel SelectedNodeItem
@@ -56,7 +58,7 @@ namespace Calc.ConnectorRevit.ViewModels
         public void RemapAllNodes(Mapping mapping)
         {
             if (CurrentForestItem == null) return;
-            MappingHelper.ApplyMappingToForestItem(CurrentForestItem, store, mapping, 2);
+            MappingHelper.ApplyMappingToForestItem(CurrentForestItem, store, mapping, MaxBuildups);
             Mediator.Broadcast("BuildupSelectionChanged");
         }
 

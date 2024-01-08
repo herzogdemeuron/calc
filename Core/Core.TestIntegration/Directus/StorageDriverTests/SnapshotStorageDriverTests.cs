@@ -3,7 +3,8 @@ using Calc.Core.Calculations;
 using Calc.Core.DirectusAPI.Drivers;
 using Calc.Core.DirectusAPI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+using Calc.Core.Objects.GraphNodes;
+using Calc.Core.Objects.Results;
 
 namespace Calc.Core.TestIntegration.Drivers
 {

@@ -1,5 +1,7 @@
 ﻿using Calc.ConnectorRevit.Helpers;
 using Calc.Core.Objects;
+using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.GraphNodes;
 using GongSolutions.Wpf.DragDrop;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -64,7 +66,7 @@ namespace Calc.ConnectorRevit.ViewModels
             set
             {
                 UpdateBuildup(0, value);
-                UpdateBuildupsUI();
+                UpdateBuildupSection();
             }
         }
 
@@ -74,7 +76,7 @@ namespace Calc.ConnectorRevit.ViewModels
             set
             {
                 UpdateBuildup(1, value);
-                UpdateBuildupsUI();
+                UpdateBuildupSection();
             }
         }
 
@@ -102,7 +104,7 @@ namespace Calc.ConnectorRevit.ViewModels
         {
             nodeTreeVM = ntVM;
         }
-        public void UpdateBuildupsUI()
+        public void UpdateBuildupSection()
         {
             //CheckBuildupLimit();
             OnPropertyChanged(nameof(Buildup1));

@@ -1,5 +1,5 @@
 ﻿using Calc.Core.Color;
-using Calc.Core.Objects;
+using Calc.Core.Objects.GraphNodes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Calc.Core.TestIntegration.ColorTests

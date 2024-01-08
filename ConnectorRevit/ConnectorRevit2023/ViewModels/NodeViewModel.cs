@@ -2,6 +2,7 @@
 using Calc.Core;
 using Calc.Core.Color;
 using Calc.Core.Objects;
+using Calc.Core.Objects.GraphNodes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

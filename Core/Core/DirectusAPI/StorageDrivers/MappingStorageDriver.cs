@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Calc.Core.Objects;
+using Calc.Core.Objects.Mappings;
 using Speckle.Newtonsoft.Json;
 
 namespace Calc.Core.DirectusAPI.Drivers

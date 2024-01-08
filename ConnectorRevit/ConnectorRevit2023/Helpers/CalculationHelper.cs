@@ -1,6 +1,7 @@
 ﻿using Calc.ConnectorRevit.ViewModels;
 using Calc.Core.Calculations;
-using Calc.Core.Objects;
+using Calc.Core.Objects.GraphNodes;
+using Calc.Core.Objects.Results;
 using System.Collections.Generic;
 
 namespace Calc.ConnectorRevit.Helpers

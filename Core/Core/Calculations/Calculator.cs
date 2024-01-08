@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Calc.Core.Helpers;
 using Calc.Core.Objects;
+using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.GraphNodes;
+using Calc.Core.Objects.Results;
 
 namespace Calc.Core.Calculations
 {

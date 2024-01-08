@@ -1,6 +1,9 @@
 ﻿using Calc.ConnectorRevit.Helpers;
 using Calc.ConnectorRevit.ViewModels;
 using Calc.Core.Objects;
+using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.GraphNodes;
+using Calc.Core.Objects.Mappings;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -54,13 +57,11 @@ namespace Calc.ConnectorRevit.Views
         {
             var forest = ForestsComboBox.SelectedItem;
             MainVM.ForestVM.HandleForestSelectionChanged(forest as Forest);
-            MainVM.BuildupVM.UpdateBuildupsUI();
         }
 
         private void MappingSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             MainVM.MappingVM.HandleMappingSelectionChanged(MappingsComboBox.SelectedItem as Mapping);
-            MainVM.BuildupVM.UpdateBuildupsUI();
         }
 
         private void NewMappingClicked(object sender, RoutedEventArgs e)
@@ -89,45 +90,26 @@ namespace Calc.ConnectorRevit.Views
                 MainVM.NodeTreeVM.HandleNodeItemSelectionChanged(selectedBranch);
                 TreeView.Tag = e.OriginalSource;
                 e.Handled = true;
-                MainVM.BuildupVM.SetFirstBuildupToActive();
-                MainVM.BuildupVM.UpdateBuildupsUI();
             }
-            MainVM.BuildupVM.UpdateBuildupsUI();
+            MainVM.BuildupVM.UpdateBuildupSection();
         }
         
         private void SideClickDown(object sender, MouseButtonEventArgs e)
         {
             MainVM.NodeTreeVM.DeselectNodes();
-            MainVM.BuildupVM.UpdateBuildupsUI();
         }
 
-        /// <summary>
-        /// The index of the changed ComboBox is stored in the Tag property, since the TwoWay binding of the SelectedItem property is not working.
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-   /*     private void BuildupSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (sender is ComboBox comboBox)
-            {
-                var index = (int)comboBox.Tag;
-                var selectedBuildup = comboBox.SelectedItem as Buildup;
-                MainVM.BuildupVM.HandleBuildupSelectionChanged(index, selectedBuildup);
-                MainVM.BuildupVM.UpdateBuildupSection();
-            }
-        }*/
 
         private void InheritClicked(object sender, RoutedEventArgs e)
         {
             MainVM.BuildupVM.HandleInherit();
-            MainVM.BuildupVM.UpdateBuildupsUI();
+            MainVM.BuildupVM.UpdateBuildupSection();
         }
 
         private void RemoveClicked(object sender, RoutedEventArgs e)
         {
             MainVM.BuildupVM.HandleRemove();
-            MainVM.BuildupVM.UpdateBuildupsUI();
+            MainVM.BuildupVM.UpdateBuildupSection();
         }
 
         private void ViewToggleButtonChecked(object sender, RoutedEventArgs e)

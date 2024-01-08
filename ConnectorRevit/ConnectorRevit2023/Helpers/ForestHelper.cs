@@ -2,6 +2,7 @@
 using Calc.ConnectorRevit.Config;
 using Calc.ConnectorRevit.Services;
 using Calc.Core.Objects;
+using Calc.Core.Objects.GraphNodes;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;

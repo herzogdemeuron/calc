@@ -1,4 +1,6 @@
-﻿using Speckle.Newtonsoft.Json;
+﻿using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.GraphNodes;
+using Speckle.Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Calc.Core.Objects
+namespace Calc.Core.Objects.Mappings
 {
     public class Mapping : IHasProject
     {
@@ -69,7 +71,7 @@ namespace Calc.Core.Objects
         }
 
         // todo: replace tree.MapBuildups with this method
-        private void MapBuildupsToTree(Branch branch, List<Buildup> buildups, List<PathItem> path)
+        private void MapBuildupsToTree(Branch branch, List<Buildup> buildups, List<MappingPath> path)
         {
             if (branch.Path.SequenceEqual(path))
             {
@@ -98,7 +100,7 @@ namespace Calc.Core.Objects
         public Mapping Copy(string newName)
         {
             return new Mapping()
-            {   
+            {
                 Name = newName,
                 Project = Project,
                 MappingItems = MappingItems
@@ -123,25 +125,4 @@ namespace Calc.Core.Objects
             return mappingItems;
         }
     }
-
-    /// <summary>
-    /// stands for a set of buildups that are assigned to a branch via a path
-    /// </summary>
-    public class MappingItem
-    {
-        [JsonProperty("buildup_ids")]
-        public List<int> BuildupIds{ get; set; }
-        [JsonProperty("mapping_path")]
-        public List<PathItem> Path { get; set; }
-
-        [JsonProperty("tree_name")]
-        public string TreeName { get; set; }
-
-        public string Serialize()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
-    }
-
-
 }

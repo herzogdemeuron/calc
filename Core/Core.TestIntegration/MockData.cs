@@ -2,6 +2,9 @@
 using System.Xml.Linq;
 using Calc.Core.Filtering;
 using Calc.Core.Objects;
+using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.GraphNodes;
+using Calc.Core.Objects.Mappings;
 using Newtonsoft.Json.Linq;
 
 namespace Calc.Core.TestIntegration;
@@ -271,20 +274,20 @@ public class MockData
                 new MappingItem
                 {
                     TreeName = "Roh_Wand",
-                    Path = new List<PathItem>(),
+                    Path = new List<MappingPath>(),
                     BuildupIds = new List<int> { 902, 901 }
                 },
                 new MappingItem
                 {
                     TreeName = "Roh_Wand",
-                    Path = new List<PathItem>
+                    Path = new List<MappingPath>
                     {
-                        new PathItem
+                        new MappingPath
                         {
                             Parameter = "Grouping",
                             Value = "Group1"
                         },
-                        new PathItem
+                        new MappingPath
                         {
                             Parameter = "SubGrouping",
                             Value = "SubGroup2"
@@ -295,14 +298,14 @@ public class MockData
                 new MappingItem
                 {
                     TreeName = "Ausb_Decke",
-                    Path = new List<PathItem>
+                    Path = new List<MappingPath>
                     {
-                        new PathItem
+                        new MappingPath
                         {
                             Parameter = "Grouping",
                             Value = "GroupA"
                         },
-                        new PathItem
+                        new MappingPath
                         {
                             Parameter = "SubGrouping",
                             Value = "SubGroupA"
@@ -313,14 +316,14 @@ public class MockData
                 new MappingItem
                 {
                     TreeName = "Ausb_Decke",
-                    Path = new List<PathItem>
+                    Path = new List<MappingPath>
                     {
-                        new PathItem
+                        new MappingPath
                         {
                             Parameter = "Grouping",
                             Value = "GroupA"
                         },
-                        new PathItem
+                        new MappingPath
                         {
                             Parameter = "SubGrouping",
                             Value = "SubGroupB"

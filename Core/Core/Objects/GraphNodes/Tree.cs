@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Calc.Core.Filtering;
 using Speckle.Newtonsoft.Json;
 
-namespace Calc.Core.Objects;
+namespace Calc.Core.Objects.GraphNodes;
 
 public class Tree : Branch, IGraphNode
 {
@@ -22,18 +22,18 @@ public class Tree : Branch, IGraphNode
     /// </summary>
     public List<CalcElement> Plant(List<CalcElement> searchElements)
     {
-        this.Elements = new ElementFilter().FilterElements(searchElements, this.FilterConfig);
+        Elements = new ElementFilter().FilterElements(searchElements, FilterConfig);
 
         // clear subbranches
-        this.SubBranches = new List<Branch>();
+        SubBranches = new List<Branch>();
 
         if (BranchConfig != null && BranchConfig.Count > 0)
         {
-            this.CreateBranches(BranchConfig);
+            CreateBranches(BranchConfig);
         }
 
         // remove this.Elements from searchElements using RemoveAll method
-        searchElements.RemoveAll(e => this.Elements.Contains(e));
+        searchElements.RemoveAll(e => Elements.Contains(e));
 
         return searchElements;
     }

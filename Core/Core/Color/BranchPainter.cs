@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Calc.Core.Objects;
 using System.Linq;
+using Calc.Core.Objects.GraphNodes;
 
 namespace Calc.Core.Color
 {
@@ -32,11 +32,10 @@ namespace Calc.Core.Color
             }
 
 
-            var uniqueBuildups = flattenedBranches.Where(b => !string.IsNullOrEmpty(b.BuildupsIdentifier))
-                                                 .Select(b => b.BuildupsIdentifier).Distinct().ToList();
+            var uniqueBuildups = flattenedBranches.Select(b => b.BuildupsIdentifier).Distinct().ToList();
 
             var colorGradient = new ColorGradient(uniqueBuildups.Count);
-            var defaultColor = new HslColor(0, 0, 86);
+            var defaultColor = new HslColor(0, 0, 100);
 
             for (int i = 0; i < flattenedBranches.Count; i++)
             {

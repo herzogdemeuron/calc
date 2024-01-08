@@ -1,4 +1,4 @@
-﻿using Calc.Core.Objects;
+﻿using Calc.Core.Objects.Results;
 using Speckle.Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

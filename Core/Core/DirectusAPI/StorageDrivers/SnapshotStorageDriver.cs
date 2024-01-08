@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using Speckle.Newtonsoft.Json;
-using Calc.Core.Objects;
+using Calc.Core.Objects.Results;
 
 namespace Calc.Core.DirectusAPI.Drivers
 {

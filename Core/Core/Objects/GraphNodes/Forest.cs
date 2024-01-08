@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Calc.Core.Color;
 
-namespace Calc.Core.Objects
+namespace Calc.Core.Objects.GraphNodes
 {
     public class Forest : IHasProject, IGraphNode
     {
@@ -47,7 +47,7 @@ namespace Calc.Core.Objects
 
         public void SetBranchColorsBy(string method)
         {
-            List<Branch> branches = this.Trees.ConvertAll(tree => (Branch)tree);
+            List<Branch> branches = Trees.ConvertAll(tree => (Branch)tree);
 
             switch (method)
             {
