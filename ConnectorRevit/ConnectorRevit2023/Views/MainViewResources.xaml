@@ -37,7 +37,7 @@
             <Grid>
                 <Rectangle Stroke="Gray"
                            StrokeThickness="1"
-                           Margin="0,2,0,2"
+                           Margin="0,6,0,5"
                            RadiusX="4"
                            RadiusY="4">
                     <Rectangle.Style>
