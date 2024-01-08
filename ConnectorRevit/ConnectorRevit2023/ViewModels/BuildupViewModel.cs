@@ -4,6 +4,7 @@ using GongSolutions.Wpf.DragDrop;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
 
@@ -13,8 +14,6 @@ namespace Calc.ConnectorRevit.ViewModels
     public class BuildupViewModel : INotifyPropertyChanged
     {
         private readonly NodeTreeViewModel nodeTreeVM;
-
-        private readonly int maxBuildups = 2;
 
         private bool _inheritEnabled = false;
         public bool InheritEnabled
@@ -37,27 +36,63 @@ namespace Calc.ConnectorRevit.ViewModels
             }
         }
 
-        private bool underBuildupLimit = false;
-        public bool UnderBuildupLimit
+        private bool _canAddFirstBuildup = false;
+        public bool CanAddFirstBuildup
         {
-            get => underBuildupLimit;
+            get => _canAddFirstBuildup;
             set
             {
-                underBuildupLimit = value;
-                OnPropertyChanged(nameof(UnderBuildupLimit));
+                _canAddFirstBuildup = value;
+                OnPropertyChanged(nameof(CanAddFirstBuildup));
             }
         }
 
-        private Buildup _selectedBuildup;
-        public Buildup SelectedBuildup
+        private bool _canAddSecondBuildup = false;
+        public bool CanAddSecondBuildup
         {
-            get => _selectedBuildup;
+            get => _canAddSecondBuildup;
             set
             {
-                if (_selectedBuildup != value)
+                _canAddSecondBuildup = value;
+                OnPropertyChanged(nameof(CanAddSecondBuildup));
+            }
+        }
+
+        public Buildup Buildup1
+        {
+            get => CurrentBuildups?.Count > 0 ? CurrentBuildups[0] : null;
+            set
+            {
+                UpdateBuildup(0, value);
+                UpdateBuildupsUI();
+            }
+        }
+
+        public Buildup Buildup2
+        {
+            get => CurrentBuildups?.Count > 1 ? CurrentBuildups[1] : null;
+            set
+            {
+                UpdateBuildup(1, value);
+                UpdateBuildupsUI();
+            }
+        }
+
+        public ObservableCollection<Buildup> CurrentBuildups
+        {
+            get => nodeTreeVM.SelectedNodeItem?.Host is Branch branch ? branch.Buildups : null;
+        }
+
+        private Buildup _activeBuildup;
+        public Buildup ActiveBuildup
+        {
+            get => _activeBuildup;
+            set
+            {
+                if (_activeBuildup != value)
                 {
-                    _selectedBuildup = value;
-                    OnPropertyChanged(nameof(SelectedBuildup));
+                    _activeBuildup = value;
+                    OnPropertyChanged(nameof(ActiveBuildup));
                 }
             }
         }
@@ -66,58 +101,57 @@ namespace Calc.ConnectorRevit.ViewModels
         public BuildupViewModel(NodeTreeViewModel ntVM)
         {
             nodeTreeVM = ntVM;
-            nodeTreeVM.MaxBuildups = maxBuildups;
         }
-        public void UpdateBuildupSection()
+        public void UpdateBuildupsUI()
         {
-            CheckBuildupLimit();
+            //CheckBuildupLimit();
+            OnPropertyChanged(nameof(Buildup1));
+            OnPropertyChanged(nameof(Buildup2));
+            OnPropertyChanged(nameof(CurrentBuildups));
+
             CheckInheritEnabled();
             CheckRemoveEnabled();
+            CheckAddBuildup();
         }
 
-        /// <summary>
-        /// determines if the user can add new row of the data grid is enabled
-        /// </summary>
-        private void CheckBuildupLimit()
+        public void SetFirstBuildupToActive()
+        {
+            if (CurrentBuildups?.Count > 0)
+            {
+                ActiveBuildup = CurrentBuildups[0];
+            }
+        }
+
+        private void UpdateBuildup(int index, Buildup buildup)
         {
             if (nodeTreeVM.SelectedNodeItem == null || !(nodeTreeVM.SelectedNodeItem.Host is Branch))
                 return;
             var branch = nodeTreeVM.SelectedNodeItem.Host as Branch;
-            UnderBuildupLimit = branch.Buildups.Count < maxBuildups;
-        }
-
-        public void HandleBuildupSelectionChanged(int index, Buildup buildup)
-        {
-            if (nodeTreeVM.SelectedNodeItem == null || !(nodeTreeVM.SelectedNodeItem.Host is Branch))
-                return;
-
-            var branch = nodeTreeVM.SelectedNodeItem.Host as Branch;
-
             var newBuildups = new List<Buildup>(branch.Buildups);
-            if(index + 1 > newBuildups.Count)
+            if (index >= newBuildups.Count)
             {
                 newBuildups.Add(buildup);
-            }
-            else if(newBuildups[index] == buildup)
-            { 
-               return;
             }
             else
             {
                 newBuildups[index] = buildup;
             }
-
-            if(newBuildups.Count > maxBuildups)
-            {
-                newBuildups.RemoveRange(maxBuildups, newBuildups.Count - maxBuildups);
-            }
             branch.SetBuildups(newBuildups);
-
-            if(index < newBuildups.Count)
-            {
-                SelectedBuildup = branch.Buildups[index];
-            }
+            ActiveBuildup = buildup;
             Mediator.Broadcast("BuildupSelectionChanged");
+        }
+
+        public void CheckAddBuildup()
+        {
+            if (nodeTreeVM.SelectedNodeItem == null || !(nodeTreeVM.SelectedNodeItem.Host is Branch))
+            {
+                CanAddFirstBuildup = false;
+                CanAddSecondBuildup = false;
+                return;
+            }
+            CanAddFirstBuildup = true;
+            var branch = nodeTreeVM.SelectedNodeItem.Host as Branch;
+            CanAddSecondBuildup = branch.Buildups?.Count > 0;
         }
 
         public void CheckInheritEnabled()
@@ -127,7 +161,9 @@ namespace Calc.ConnectorRevit.ViewModels
                 InheritEnabled = false;
                 return;
             }
-            InheritEnabled = true;
+            var branch = nodeTreeVM.SelectedNodeItem.Host;
+            // if branch is branch but not tree, then it can inherit
+            InheritEnabled = (branch is Branch) && !(branch is Tree);
         }
 
         public void CheckRemoveEnabled()
@@ -150,6 +186,8 @@ namespace Calc.ConnectorRevit.ViewModels
             var newBuildups = new List<Buildup>(branch.Buildups);
             newBuildups.RemoveAt(newBuildups.Count - 1);
             branch.SetBuildups(newBuildups);
+            var buildupCount = newBuildups.Count;
+            ActiveBuildup = buildupCount > 0 ? newBuildups[buildupCount - 1] : null;
             Mediator.Broadcast("BuildupSelectionChanged");
         }
 

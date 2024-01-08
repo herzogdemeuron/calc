@@ -206,7 +206,7 @@ namespace Calc.Core.Objects
             var currentIdentifier = BuildupsIdentifier;
             if (currentIdentifier == newIdentifier) return;
 
-            int currentCount = Buildups?.Count ?? 0;
+            /*int currentCount = Buildups?.Count ?? 0;
             int newCount = buildups?.Count ?? 0;
             // reduce the Buildups list to the length of the new list
             if (currentCount > newCount)
@@ -227,7 +227,9 @@ namespace Calc.Core.Objects
                 {
                     Buildups.Add(buildups[i].Copy());
                 }
-            }
+            }*/
+
+            Buildups = new(buildups);
 
             OnPropertyChanged(nameof(Buildups));
 

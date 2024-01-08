@@ -7,7 +7,6 @@
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:conv="clr-namespace:Calc.ConnectorRevit.Views.Converters"
         Title="CALC"
-
         d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
         Loaded="WindowLoaded"
         Closing="WindowClosing"
@@ -57,7 +56,7 @@
                        Margin="10"
                        HorizontalAlignment="Stretch">
                 <ComboBox x:Name="ForestsComboBox"
-                          ItemsSource="{Binding DataContext.Store.ForestProjectRelated, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                          ItemsSource="{Binding Store.ForestProjectRelated}"
                           DisplayMemberPath="Name"
                           DockPanel.Dock="Left"
                           Height="25"
@@ -91,8 +90,8 @@
                         Click="NewMappingClicked"
                         DockPanel.Dock="Right"/>
                 <ComboBox x:Name="MappingsComboBox"
-                          ItemsSource="{Binding DataContext.Store.MappingsProjectRelated, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                          SelectedItem="{Binding DataContext.Store.MappingSelected, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          ItemsSource="{Binding Store.MappingsProjectRelated}"
+                          SelectedItem="{Binding Store.MappingSelected}"
                           DisplayMemberPath="Name"
                           DockPanel.Dock="Left"
                           Height="25"
@@ -207,66 +206,39 @@
                         <Button Content="Follow"
                             Width="50"
                             Height="25"
-                            IsEnabled="{Binding DataContext.BuildupVM.InheritEnabled,
-                                        RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                            IsEnabled="{Binding BuildupVM.InheritEnabled}"
                             Click="InheritClicked"/>
 
                         <Button Content="Reduce"
                             Width="50"
                             Margin="0,5,0,0"
                             Height="25"
-                                IsEnabled="{Binding DataContext.BuildupVM.RemoveEnabled,
-                                            RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                IsEnabled="{Binding BuildupVM.RemoveEnabled}"
                             Click="RemoveClicked"/>
                     </StackPanel>
+                    <StackPanel DockPanel.Dock="Left">
+                        <ComboBox Tag="1"
+                                  ItemsSource="{Binding Store.BuildupsAll}"
+                                  SelectedItem="{Binding BuildupVM.Buildup1}"
+                                  DisplayMemberPath="Name"
+                                  IsEnabled="{Binding BuildupVM.CanAddFirstBuildup}"
+                                  Height="25"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Top"
+               />
 
-                    <DataGrid ItemsSource="{Binding DataContext.NodeTreeVM.SelectedNodeItem.Host.Buildups,
-                                            RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                              AlternationCount="100"
-                              AutoGenerateColumns="False"
-                              HeadersVisibility="None"
-                              BorderThickness="0"
-                              Background="Transparent"
-                              HorizontalAlignment="Stretch"
-                              VerticalAlignment="Stretch"
-                              HorizontalScrollBarVisibility="Disabled"
-                              VerticalScrollBarVisibility="Disabled"
-                              RowHeaderWidth="0"
-                              GridLinesVisibility="None"
-                              CanUserAddRows="{Binding DataContext.BuildupVM.UnderBuildupLimit,
-                                              RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                              >
-                        <DataGrid.CellStyle>
-                            <Style TargetType="DataGridCell">
-                                <Setter Property="BorderThickness" Value="0"/>
-                                <Setter Property="Height" Value="30"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter Property="Background" Value="{x:Null}"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DataGrid.CellStyle>
-
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn Width="*">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <ComboBox Tag="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow},
-                                                        Path=(ItemsControl.AlternationIndex)}"
-                                                ItemsSource="{Binding DataContext.Store.BuildupsAll,
-                                                        RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                                                SelectedItem="{Binding .,Mode=TwoWay}"
-                                                DisplayMemberPath="Name"
-                                                Height="25"
-                                                SelectionChanged="BuildupSelectionChanged"
-                                                HorizontalAlignment="Stretch"
-                                                VerticalAlignment="Top"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                        <ComboBox Tag="2"
+                                  ItemsSource="{Binding Store.BuildupsAll}"
+                                  SelectedItem="{Binding BuildupVM.Buildup2}"
+                                  DisplayMemberPath="Name"
+                                  IsEnabled="{Binding BuildupVM.CanAddSecondBuildup}"
+                                  Height="25"
+                                  Margin="0,5,0,0"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Top"
+               />
+                    </StackPanel>
+                    
                 </DockPanel>
                 <Label Content="Calculation:"
                        Grid.Row="3"
@@ -277,8 +249,7 @@
                 <Border  Grid.Row="4" CornerRadius="4" Background="LightGray">
                     <Border CornerRadius="4">
                         <Border.Background>
-                            <SolidColorBrush Color="{Binding DataContext.NodeTreeVM.SelectedNodeItem.LabelColor,
-                                            RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                            <SolidColorBrush Color="{Binding NodeTreeVM.SelectedNodeItem.LabelColor}"/>
                         </Border.Background>
 
                     <Grid>
@@ -287,8 +258,7 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0"
-                                   Text="{Binding DataContext.NodeTreeVM.SelectedNodeItem.ShortName,
-                                            RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                   Text="{Binding NodeTreeVM.SelectedNodeItem.ShortName}"
                                    Margin="10"
                                    FontSize="14"/>
 
@@ -296,8 +266,7 @@
                                       Style="{StaticResource DataGridStyle}"
                                       VerticalAlignment="Bottom"
                                       Margin="10"
-                                      ItemsSource="{Binding DataContext.NodeTreeVM.SelectedNodeItem.CategorizedCalculation,
-                                                    RelativeSource={RelativeSource AncestorType={x:Type Window}}}"> 
+                                      ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.CategorizedCalculation}"> 
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Buildup Group" Binding="{Binding Key}" Width="3*"  IsReadOnly="True" />
                                     <DataGridTextColumn Header="GWP (kgCO2)" Binding="{Binding Value}" Width="1*"  IsReadOnly="True" />
@@ -314,13 +283,10 @@
 
                 <TabControl x:Name="BuildupTabs"
                             Grid.Row="2"
-                            
                             Margin="0,10,0,20"
                             DockPanel.Dock="Top"
-                            ItemsSource="{Binding DataContext.NodeTreeVM.SelectedNodeItem.Host.Buildups,
-                                          RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                            SelectedItem="{Binding DataContext.BuildupVM.SelectedBuildup,
-                                          RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                            ItemsSource="{Binding BuildupVM.CurrentBuildups}"
+                            SelectedItem="{Binding BuildupVM.ActiveBuildup}"
                             ItemContainerStyle="{StaticResource TabItemStyle}">
                     
                     <TabControl.ContentTemplate>
@@ -387,7 +353,7 @@
               d:IsHidden="true"
               Background="LightGray"
               Margin="10,10,10,10"
-              Visibility="{Binding DataContext.VisibilityVM.ProjectOverlayVisibility, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+              Visibility="{Binding VisibilityVM.ProjectOverlayVisibility}"
               >
             <StackPanel VerticalAlignment="Center">
                 <TextBlock HorizontalAlignment="Center"
@@ -410,7 +376,7 @@
              Background="LightGray"
               d:IsHidden="true"
              Margin="10,10,10,10"
-             Visibility="{Binding DataContext.VisibilityVM.NewMappingOverlayVisibility, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+             Visibility="{Binding VisibilityVM.NewMappingOverlayVisibility}"
              >
             <StackPanel VerticalAlignment="Center">
 
@@ -426,7 +392,7 @@
                          Height="180"
                          ScrollViewer.VerticalScrollBarVisibility="Auto"
                          SelectionChanged="MappingSelectionChanged"
-                         ItemsSource="{Binding DataContext.NewMappingVM.MappingsListView, RelativeSource={RelativeSource AncestorType={x:Type Window}},UpdateSourceTrigger=PropertyChanged}">
+                         ItemsSource="{Binding NewMappingVM.MappingsListView}">
                         <ListBox.GroupStyle>
                             <GroupStyle>
                                 <GroupStyle.HeaderTemplate>
@@ -451,7 +417,7 @@
                          x:Name="NewNameText" 
                          MinWidth="90"
                          HorizontalAlignment="Center"
-                         Text="{Binding DataContext.NewMappingVM.NewName, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                         Text="{Binding NewMappingVM.NewName}"/>
                 <Button Grid.Row="4"
                         HorizontalAlignment="Center"
                         Width="90"
@@ -469,13 +435,13 @@
         <Grid x:Name="WaitingOverlay"
              Background="LightGray"
              Margin="10,10,10,10"
-             Visibility="{Binding DataContext.VisibilityVM.WaitingOverlayVisibility, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+             Visibility="{Binding VisibilityVM.WaitingOverlayVisibility}"
              
               d:IsHidden="true">
             <StackPanel VerticalAlignment="Center">
                 <TextBlock x:Name="WaitingTextBlock"
                     HorizontalAlignment="Center"
-                    Text="{Binding DataContext.VisibilityVM.WaitingText, RelativeSource={RelativeSource AncestorType={x:Type Window}}, UpdateSourceTrigger=PropertyChanged}"/>
+                    Text="{Binding VisibilityVM.WaitingText}"/>
                            
                 <Image gif:ImageBehavior.AnimatedSource="/CalcConnectorRevit2023;component/Resources/DT_logo.gif"
                        Width="90"
@@ -492,7 +458,7 @@
              Background="LightGray"
              Margin="10,10,10,10"
              d:IsHidden="true"
-             Visibility="{Binding DataContext.VisibilityVM.SavingOverlayVisibility, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+             Visibility="{Binding VisibilityVM.SavingOverlayVisibility}"
              >
             <StackPanel VerticalAlignment="Center">
                 <TextBlock HorizontalAlignment="Center"
@@ -502,7 +468,7 @@
                         MinWidth="90"
                         Margin="10"/>
                 <TextBlock HorizontalAlignment="Center"
-                           Text="{Binding DataContext.VisibilityVM.SavingMessage, RelativeSource={RelativeSource AncestorType={x:Type Window}}, UpdateSourceTrigger=PropertyChanged}"/>
+                           Text="{Binding VisibilityVM.SavingMessage}"/>
                 <Button Content="Confirm" 
                     HorizontalAlignment="Center"
                     Width="90"
@@ -518,12 +484,12 @@
         <Grid x:Name="MessageOverlay"
              Background="LightGray"
              Margin="10,10,10,10"
-             Visibility="{Binding DataContext.VisibilityVM.MessageOverlayVisibility, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+             Visibility="{Binding VisibilityVM.MessageOverlayVisibility}"
              
               d:IsHidden="true">
             <StackPanel VerticalAlignment="Center">
                 <TextBlock x:Name="MessageTextBlock"
-                            Text="{Binding DataContext.VisibilityVM.MessageText, RelativeSource={RelativeSource AncestorType={x:Type Window}}, UpdateSourceTrigger=PropertyChanged}"
+                            Text="{Binding VisibilityVM.MessageText}"
                             HorizontalAlignment="Center"/>
                 <Button Content="OK" 
                     HorizontalAlignment="Center"

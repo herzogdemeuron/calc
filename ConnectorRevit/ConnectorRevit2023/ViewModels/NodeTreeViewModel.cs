@@ -10,7 +10,6 @@ namespace Calc.ConnectorRevit.ViewModels
     public class NodeTreeViewModel : INotifyPropertyChanged
     {
         private DirectusStore store;
-        public int MaxBuildups { get; set; } = 2;
         public bool BranchesSwitch { get; set; }
         private NodeViewModel selectedNodeItem;
         public NodeViewModel SelectedNodeItem
@@ -57,7 +56,7 @@ namespace Calc.ConnectorRevit.ViewModels
         public void RemapAllNodes(Mapping mapping)
         {
             if (CurrentForestItem == null) return;
-            MappingHelper.ApplyMappingToForestItem(CurrentForestItem, store, mapping, MaxBuildups);
+            MappingHelper.ApplyMappingToForestItem(CurrentForestItem, store, mapping, 2);
             Mediator.Broadcast("BuildupSelectionChanged");
         }
 

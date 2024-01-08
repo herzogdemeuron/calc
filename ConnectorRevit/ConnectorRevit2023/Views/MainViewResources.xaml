@@ -78,7 +78,7 @@
                     <TextBlock Text="{Binding Name}"
                                ToolTip="{Binding Name}"
                                TextWrapping="NoWrap" 
-                               MaxWidth="100"
+                               MaxWidth="200"
                                TextTrimming="CharacterEllipsis"/>
                 </DataTemplate>
             </Setter.Value>
