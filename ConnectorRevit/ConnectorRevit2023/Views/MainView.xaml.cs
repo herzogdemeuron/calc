@@ -92,11 +92,13 @@ namespace Calc.ConnectorRevit.Views
                 e.Handled = true;
             }
             MainVM.BuildupVM.UpdateBuildupSection();
+            MainVM.BuildupVM.SetFirstBuildupToActive();
         }
         
         private void SideClickDown(object sender, MouseButtonEventArgs e)
         {
             MainVM.NodeTreeVM.DeselectNodes();
+            MainVM.BuildupVM.UpdateBuildupSection();
         }
 
 
