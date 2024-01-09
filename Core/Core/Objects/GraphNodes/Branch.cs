@@ -23,7 +23,7 @@ namespace Calc.Core.Objects.GraphNodes
         { 
             get => Math.Round(
                 Elements.Sum(
-                    e => e.GetQuantityByUnit(Unit.m2, 3) ?? 0
+                    e => e.GetBasicUnitParameter(Unit.m2).Value ?? 0
                     ),
                 0); 
         }
@@ -32,7 +32,7 @@ namespace Calc.Core.Objects.GraphNodes
         { 
             get => Math.Round(
                 Elements.Sum(
-                    e => e.GetQuantityByUnit(Unit.m3, 3) ?? 0
+                    e => e.GetBasicUnitParameter(Unit.m3).Value ?? 0
                     ),
                 0); 
         }
@@ -90,8 +90,8 @@ namespace Calc.Core.Objects.GraphNodes
             }
         }
 
-        [JsonIgnore]
-        public bool HasCalculationErrors;
+        /*[JsonIgnore]
+        public bool HasCalculationErrors;*/
 
         private Dictionary<string, List<string>> _calculationNullElements;
         [JsonIgnore]

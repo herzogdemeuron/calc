@@ -85,8 +85,12 @@ namespace Calc.ConnectorRevit.Services
             decimal? araValue = GetBasicValue(elem, areaName);
             decimal? volValue = GetBasicValue(elem, volName);
 
+            var lenParam = new BasicUnitParameter() { Name = lenName, Value = lenValue, Unit = Unit.m };
+            var areaParam = new BasicUnitParameter() { Name = areaName, Value = araValue, Unit = Unit.m2 };
+            var volParam = new BasicUnitParameter() { Name = volName, Value = volValue, Unit = Unit.m3 };
 
-            return new CalcElement(elem.Id.ToString(), typeName, parameterDictionary, lenValue, araValue, volValue);
+
+            return new CalcElement(elem.Id.ToString(), typeName, parameterDictionary, lenParam, areaParam, volParam);
         }
 
         /// <summary>

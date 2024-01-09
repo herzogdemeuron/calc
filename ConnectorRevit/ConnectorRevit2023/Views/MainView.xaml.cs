@@ -117,17 +117,20 @@ namespace Calc.ConnectorRevit.Views
         private void ViewToggleButtonChecked(object sender, RoutedEventArgs e)
         {
             MainVM.HandleViewToggleToBuildup();
+            MainVM.BuildupVM.UpdateBuildupSection();
         }
 
         private void ViewToggleButtonUnchecked(object sender, RoutedEventArgs e)
         {
             MainVM.HandleViewToggleToBranch();
+            MainVM.BuildupVM.UpdateBuildupSection();
         }
 
         private void UpdateRevitClicked(object sender, RoutedEventArgs e)
         {
             var forest = ForestsComboBox.SelectedItem;
             MainVM.ForestVM.HandleForestSelectionChanged(forest as Forest);
+            MainVM.BuildupVM.UpdateBuildupSection();
         }
         private void StartCalcLiveClicked(object sender, RoutedEventArgs e)
         {
@@ -159,6 +162,7 @@ namespace Calc.ConnectorRevit.Views
         private async void UpdateMappingClicked(object sender, RoutedEventArgs e)
         {
             await MainVM.MappingVM.HandleUpdateMapping();
+            MainVM.BuildupVM.UpdateBuildupSection();
         }
 
 /*        private static T FindParent<T>(DependencyObject child) where T : DependencyObject

@@ -106,7 +106,11 @@ namespace Calc.Core.Calculations
                     foreach (var component in buildup.Components)
                     {
                         if (component == null) continue;
-                        decimal? quantity = element.GetQuantityByUnit(buildup.Unit);
+
+                        BasicUnitParameter param = element.GetBasicUnitParameter(buildup.Unit);
+
+                        var quantity = param.Value;
+                        var paramName = param.Name;
 
                         if (quantity == 0)
                         {

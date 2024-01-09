@@ -14,39 +14,38 @@ namespace Calc.Core.Objects
         public string Id;
         public string TypeName;
         public Dictionary<string, object> Fields;
-        private Dictionary<Unit, decimal?> _quantities;
+        private Dictionary<Unit, BasicUnitParameter> _quantities;
 
-        public CalcElement(string id,
-            string type,
-            Dictionary<string, object> fields,
-            decimal? length,
-            decimal? area,
-            decimal? volume
-            )
-        {
+        public CalcElement
+            (
+                string id,
+                string type,
+                Dictionary<string, object> fields,
+                BasicUnitParameter lenParam,
+                BasicUnitParameter areaParam,
+                BasicUnitParameter volParam
+             )
+            {
             this.Id = id;
             this.TypeName = type;
             this.Fields = fields;
-            this._quantities = new Dictionary<Unit, decimal?>
-            {
-                { Unit.each, 1 },
-                { Unit.m, length },
-                { Unit.m2, area },
-                { Unit.m3, volume }
-            };
-        }
+            this._quantities 
+                = new Dictionary<Unit, BasicUnitParameter>
+                    {
+                        { Unit.each, new BasicUnitParameter() { Value = 1, Unit = Unit.each } },
+                        { Unit.m, lenParam },
+                        { Unit.m2, areaParam },
+                        { Unit.m3, volParam }
+                    };
+            }
 
-        public decimal? GetQuantityByUnit(Unit unit, int roundDigits = 3)
+        public BasicUnitParameter GetBasicUnitParameter(Unit unit, int roundDigits = 3)
         {
-            if (_quantities.TryGetValue(unit, out decimal? value))
+            if (!_quantities.ContainsKey(unit))
             {
-                return value == null ? null : Math.Round((decimal)value, roundDigits);
+                throw new Exception($"Unit not recognized: {unit}");
             }
-            else
-            {
-                throw new ArgumentException($"Unit not recognized: {unit}");
-            }
-
+            return _quantities[unit];
         }
     }
 
