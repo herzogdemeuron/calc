@@ -33,8 +33,25 @@
     <DataTemplate x:Key="BranchItemTemplate">
         
         <StackPanel Orientation="Horizontal">
-
             <Grid>
+                <TextBlock Text="🚫"
+                           FontSize="8"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           Foreground="Red"/>
+            </Grid>
+
+            <Grid Margin="4,0,0,0">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsBranch}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
                 <Rectangle Stroke="Gray"
                            StrokeThickness="1"
                            Margin="0,6,0,5"
@@ -42,11 +59,7 @@
                            RadiusY="4">
                     <Rectangle.Style>
                         <Style TargetType="Rectangle">
-                            <Setter Property="Visibility" Value="Collapsed"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsBranch}" Value="True">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                </DataTrigger>
                                 <DataTrigger Binding="{Binding BranchParameterIsInstance}" Value="True">
                                     <Setter Property="StrokeDashArray" Value="2,2"/>
                                 </DataTrigger>
