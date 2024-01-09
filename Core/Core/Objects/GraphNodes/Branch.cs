@@ -19,9 +19,23 @@ namespace Calc.Core.Objects.GraphNodes
         [JsonIgnore]
         public List<CalcElement> Elements { get; set; } = new();
         [JsonIgnore]
-        public decimal TotalArea { get => Elements.Sum(e => e.GetQuantityByUnit(Unit.m2, 0) ?? 0); }
+        public decimal TotalArea 
+        { 
+            get => Math.Round(
+                Elements.Sum(
+                    e => e.GetQuantityByUnit(Unit.m2, 3) ?? 0
+                    ),
+                0); 
+        }
         [JsonIgnore]
-        public decimal TotalVolume { get => Elements.Sum(e => e.GetQuantityByUnit(Unit.m3, 0) ?? 0); }
+        public decimal TotalVolume 
+        { 
+            get => Math.Round(
+                Elements.Sum(
+                    e => e.GetQuantityByUnit(Unit.m3, 3) ?? 0
+                    ),
+                0); 
+        }
 
         [JsonIgnore]
         public List<string> ElementIds => Elements.Select(e => e.Id).ToList();
