@@ -114,12 +114,12 @@ namespace Calc.Core.Calculations
 
                         if (quantity == 0)
                         {
-                            CollectionHelper.AddToCountDict(zeroList, element.TypeName, element.Id);
+                            CollectionHelper.AddToCountDict(zeroList, paramName, element.Id);
                             continue;
                         }
                         if (quantity == null)
                         {
-                            CollectionHelper.AddToCountDict(nullList, element.TypeName, element.Id);
+                            CollectionHelper.AddToCountDict(nullList, paramName, element.Id);
                             continue;
                         }
 

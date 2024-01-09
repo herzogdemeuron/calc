@@ -39,7 +39,7 @@ namespace Calc.Core.Objects
                     };
             }
 
-        public BasicUnitParameter GetBasicUnitParameter(Unit unit, int roundDigits = 3)
+        public readonly BasicUnitParameter GetBasicUnitParameter(Unit unit)
         {
             if (!_quantities.ContainsKey(unit))
             {
