@@ -32,11 +32,14 @@
 
     <DataTemplate x:Key="BranchItemTemplate">
         
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal"
+                    Margin="-6,0,0,0">
             <Grid>
                 <Grid.Style>
                     <Style TargetType="Grid">
-                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Setter Property="Visibility" Value="Hidden"/>
+                        <Setter Property="Margin" Value="1,0,0,0"/>
+                        <Setter Property="Width" Value="10"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Host.HasCalculationErrors}" Value="True">
                                 <Setter Property="Visibility" Value="Visible"/>
@@ -44,9 +47,11 @@
                         </Style.Triggers>
                     </Style>
                 </Grid.Style>
-                <TextBlock Text="😈"
-                           FontSize="10"
+                <TextBlock Text="?"
+                           FontSize="13"
+                           FontWeight="Bold"
                            VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
                            Foreground="Red"/>
             </Grid>
 
