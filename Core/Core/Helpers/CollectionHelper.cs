@@ -24,15 +24,17 @@ namespace Calc.Core.Helpers
             return result;
         }
 
-        public static void AddToCountDict(Dictionary<string, List<string>> dict, string typeName, params string[] elementIds)
+        /// <summary>
+        /// Add the elementIds to the unique list of elementIds for the paramName
+        /// </summary>
+        public static void AddToCountDict(Dictionary<string, List<string>> dict, string paramName, params string[] elementIds)
         {
-            if (!dict.ContainsKey(typeName))
+            if (!dict.ContainsKey(paramName))
             {
-                dict[typeName] = new List<string>();
+                dict[paramName] = new List<string>();
             }
 
-            dict[typeName].AddRange(elementIds);
-
+            dict[paramName].AddRange(elementIds.Where(x => !dict[paramName].Contains(x)));
         }
 
         public static bool CompareBuildups( List<Buildup> buildups1, List<Buildup> buildups2)

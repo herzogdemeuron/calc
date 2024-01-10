@@ -34,9 +34,18 @@
         
         <StackPanel Orientation="Horizontal">
             <Grid>
-                <TextBlock Text="🚫"
-                           FontSize="8"
-                           FontWeight="Bold"
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Host.HasCalculationErrors}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <TextBlock Text="😈"
+                           FontSize="10"
                            VerticalAlignment="Center"
                            Foreground="Red"/>
             </Grid>

@@ -81,7 +81,7 @@ namespace Calc.Core.Calculations
             if (branch == null) return;
 
             var results = new List<Result>();
-            var zeroQuantityElements = new Dictionary<string, List<string>>();
+            var zeroQuantityElements = new Dictionary<string, List<string>>(); // key: basic unit parameter name, value: list of element ids
             var nullQuantityElements = new Dictionary<string, List<string>>();
 
          
@@ -111,12 +111,13 @@ namespace Calc.Core.Calculations
 
                         var quantity = param.Value;
                         var paramName = param.Name;
-
+                        // if the parameter has zero value, the value will be 0
                         if (quantity == 0)
                         {
                             CollectionHelper.AddToCountDict(zeroList, paramName, element.Id);
                             continue;
                         }
+                        // if there are no parameter or redundant parameter, the value will be null
                         if (quantity == null)
                         {
                             CollectionHelper.AddToCountDict(nullList, paramName, element.Id);

@@ -90,8 +90,11 @@ namespace Calc.Core.Objects.GraphNodes
             }
         }
 
-        /*[JsonIgnore]
-        public bool HasCalculationErrors;*/
+        [JsonIgnore]
+        public bool HasCalculationErrors =>
+     (CalculationNullElements != null && CalculationNullElements.Count > 0) ||
+     (CalculationZeroElements != null && CalculationZeroElements.Count > 0);
+
 
         private Dictionary<string, List<string>> _calculationNullElements;
         [JsonIgnore]
@@ -110,6 +113,7 @@ namespace Calc.Core.Objects.GraphNodes
             {
                 _calculationNullElements = value;
                 OnPropertyChanged(nameof(CalculationNullElements));
+                OnPropertyChanged(nameof(HasCalculationErrors));
             }
         }
 
@@ -130,6 +134,7 @@ namespace Calc.Core.Objects.GraphNodes
             {
                 _calculationZeroElements = value;
                 OnPropertyChanged(nameof(CalculationZeroElements));
+                OnPropertyChanged(nameof(HasCalculationErrors));
             }
         }
 

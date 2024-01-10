@@ -106,6 +106,7 @@ namespace Calc.ConnectorRevit.Views
         {
             MainVM.BuildupVM.HandleInherit();
             MainVM.BuildupVM.UpdateBuildupSection();
+            MainVM.BuildupVM.SetFirstBuildupToActive();
         }
 
         private void RemoveClicked(object sender, RoutedEventArgs e)
