@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Calc.Core.Objects.Results;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,7 +8,11 @@ namespace Calc.Core.Objects
     public class BasicUnitParameter
     {
         public string Name { get; set; }
+        public Unit Unit { get; set; }
+        public ParameterErrorType? ErrorType { get; set; }
+
         private decimal? _value;
+
         public decimal? Value
         {
             get
@@ -28,6 +33,5 @@ namespace Calc.Core.Objects
 
             }
         }
-        public Unit Unit { get; set; }
     }
 }

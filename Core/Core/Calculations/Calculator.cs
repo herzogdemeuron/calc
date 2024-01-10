@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Calc.Core.Helpers;
 using Calc.Core.Objects;
@@ -81,19 +82,14 @@ namespace Calc.Core.Calculations
             if (branch == null) return;
 
             var results = new List<Result>();
-            var zeroQuantityElements = new Dictionary<string, List<string>>(); // key: basic unit parameter name, value: list of element ids
-            var nullQuantityElements = new Dictionary<string, List<string>>();
-
-         
-            CalculateBranch(branch, results, zeroQuantityElements, nullQuantityElements);
-            
+            var errorList = new ObservableCollection<ParameterError>();
+            CalculateBranch(branch, results, errorList);
 
             branch.CalculationResults = results;
-            branch.CalculationZeroElements = zeroQuantityElements;
-            branch.CalculationNullElements = nullQuantityElements;
+            branch.ParameterErrors = errorList;
         }
 
-        private static void CalculateBranch(Branch branch, List<Result> resultList, Dictionary<string, List<string>> zeroList, Dictionary<string, List<string>> nullList)
+        private static void CalculateBranch(Branch branch, List<Result> resultList, ObservableCollection<ParameterError> errorList)
         {
             var buildups = branch.Buildups;
             if (buildups == null) return;
@@ -109,21 +105,23 @@ namespace Calc.Core.Calculations
 
                         BasicUnitParameter param = element.GetBasicUnitParameter(buildup.Unit);
 
-                        var quantity = param.Value;
-                        var paramName = param.Name;
-                        // if the parameter has zero value, the value will be 0
-                        if (quantity == 0)
+                        if (param.ErrorType != null)
                         {
-                            CollectionHelper.AddToCountDict(zeroList, paramName, element.Id);
-                            continue;
-                        }
-                        // if there are no parameter or redundant parameter, the value will be null
-                        if (quantity == null)
-                        {
-                            CollectionHelper.AddToCountDict(nullList, paramName, element.Id);
+                            ParameterErrorHelper.AddToErrorList
+                                (
+                                errorList, 
+                                new ParameterError
+                                    {
+                                        ParameterName = param.Name,
+                                        Unit = param.Unit,
+                                        ErrorType = param.ErrorType,
+                                        ElementIds = new List<string> { element.Id }
+                                    }
+                                );
                             continue;
                         }
 
+                        var quantity = param.Value;
                         var calculationResult = GetResult(branch, element, buildup, component, quantity.Value);
 
                         resultList.Add(calculationResult);

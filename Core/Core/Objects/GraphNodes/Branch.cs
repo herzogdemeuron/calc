@@ -91,54 +91,27 @@ namespace Calc.Core.Objects.GraphNodes
         }
 
         [JsonIgnore]
-        public bool HasCalculationErrors =>
-     (CalculationNullElements != null && CalculationNullElements.Count > 0) ||
-     (CalculationZeroElements != null && CalculationZeroElements.Count > 0);
+        public bool HasCalculationErrors => (ParameterErrors != null && ParameterErrors.Count > 0);
 
-
-        private Dictionary<string, List<string>> _calculationNullElements;
+        private ObservableCollection<ParameterError> _parameterErrors;
         [JsonIgnore]
-        public Dictionary<string, List<string>> CalculationNullElements
+        public ObservableCollection<ParameterError> ParameterErrors
         {
             get
             {
                 if (SubBranches.Count > 0)
                 {
-                    var dicts = SubBranches.Select(sb => sb.CalculationNullElements).ToList();
-                    return CollectionHelper.MergeCountDicts(dicts);
+                    var errorLists = SubBranches.Select(sb => sb.ParameterErrors).ToList();
+                    return ParameterErrorHelper.MergeParameterErrors(errorLists);
                 }
-                return _calculationNullElements;
+                return _parameterErrors?? new ObservableCollection<ParameterError>();
             }
             set
             {
-                _calculationNullElements = value;
-                OnPropertyChanged(nameof(CalculationNullElements));
-                OnPropertyChanged(nameof(HasCalculationErrors));
+                _parameterErrors = value;
+                OnPropertyChanged(nameof(ParameterErrors));
             }
         }
-
-        private Dictionary<string, List<string>> _calculationZeroElements;
-        [JsonIgnore]
-        public Dictionary<string, List<string>> CalculationZeroElements
-        {
-            get
-            {
-                if (SubBranches.Count > 0)
-                {
-                    var dicts = SubBranches.Select(sb => sb.CalculationZeroElements).ToList();
-                    return CollectionHelper.MergeCountDicts(dicts);
-                }
-                return _calculationZeroElements;
-            }
-            set
-            {
-                _calculationZeroElements = value;
-                OnPropertyChanged(nameof(CalculationZeroElements));
-                OnPropertyChanged(nameof(HasCalculationErrors));
-            }
-        }
-
-
 
         private List<Result> _calculationResults;
         [JsonIgnore]

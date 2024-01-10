@@ -5,6 +5,7 @@ using Autodesk.Revit.DB;
 using Calc.ConnectorRevit.Config;
 using Calc.ConnectorRevit.Helpers;
 using Calc.Core.Objects;
+using Calc.Core.Objects.Results;
 
 namespace Calc.ConnectorRevit.Services
 {
@@ -81,33 +82,68 @@ namespace Calc.ConnectorRevit.Services
             string type = App.CurrentDoc.GetElement(typeId).Name;
             string typeName = $"{type} ({typeId.IntegerValue})";
 
-            decimal? lenValue = GetBasicValue(elem, lenName);
-            decimal? araValue = GetBasicValue(elem, areaName);
-            decimal? volValue = GetBasicValue(elem, volName);
-
-            var lenParam = new BasicUnitParameter() { Name = lenName, Value = lenValue, Unit = Unit.m };
-            var areaParam = new BasicUnitParameter() { Name = areaName, Value = araValue, Unit = Unit.m2 };
-            var volParam = new BasicUnitParameter() { Name = volName, Value = volValue, Unit = Unit.m3 };
+            var lenParam = CreateBasicUnitParameter(elem, lenName, Unit.m);
+            var areaParam = CreateBasicUnitParameter(elem, areaName, Unit.m2);
+            var volParam = CreateBasicUnitParameter(elem, volName, Unit.m3);
 
 
-            return new CalcElement(elem.Id.ToString(), typeName, parameterDictionary, lenParam, areaParam, volParam);
+            return new CalcElement
+                (
+                elem.Id.ToString(), 
+                typeName, 
+                parameterDictionary, 
+                lenParam, 
+                areaParam, 
+                volParam
+                );
         }
 
         /// <summary>
-        /// The basic quantity parameter value of an element,
-        /// if the parameter is not found, return null, this happens when the element does not contain the custom parameter (for doors and windows) or the default parameter (wrong unit setup)
-        /// or if the parameter value is 0, return 0, this happens when the parameter is not assigned a value, meaning the user may have wrong setups for material unit or the element needs new custom parameter to reflect the quatity
-        /// which will trigger an error in the calculation
+        /// get the basic unit parameter of an element
+        /// create a basic unit parameter with error type if the parameter is missing or redundant
         /// </summary>
-        static private decimal? GetBasicValue(Element elem, string parameterName)
+        static private BasicUnitParameter CreateBasicUnitParameter(Element elem, string parameterName, Unit unit)
         {
             var parameters = elem.GetParameters(parameterName);
-            if (parameters.Count != 1)
+            if (parameters.Count == 0)
             {
-                return null;
+                return new BasicUnitParameter() 
+                { 
+                    Name = parameterName, 
+                    ErrorType = ParameterErrorType.Missing, 
+                    Unit = unit 
+                };
             }
+            else if (parameters.Count > 1) 
+            {
+                return new BasicUnitParameter() 
+                { 
+                    Name = parameterName, 
+                    ErrorType = ParameterErrorType.Redundant, 
+                    Unit = unit 
+                };
+            }
+
             var value = ParameterHelper.ToMetricValue(parameters.First());
-            return (decimal)value;
+
+            if (value == 0)
+            {
+                return new BasicUnitParameter() 
+                { 
+                    Name = parameterName, 
+                    ErrorType = ParameterErrorType.ZeroValue, 
+                    Unit = unit 
+                };
+            }
+            else
+            {
+                return new BasicUnitParameter() 
+                { 
+                    Name = parameterName, 
+                    Value = (decimal)value, 
+                    Unit = unit 
+                };
+            }
         }
 
     }
