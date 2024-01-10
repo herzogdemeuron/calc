@@ -93,7 +93,7 @@ namespace Calc.Core.Objects.GraphNodes
         [JsonIgnore]
         public bool HasCalculationErrors => (ParameterErrors != null && ParameterErrors.Count > 0);
 
-        private ObservableCollection<ParameterError> _parameterErrors;
+        private ObservableCollection<ParameterError> _parameterErrors = new();
         [JsonIgnore]
         public ObservableCollection<ParameterError> ParameterErrors
         {
@@ -104,7 +104,7 @@ namespace Calc.Core.Objects.GraphNodes
                     var errorLists = SubBranches.Select(sb => sb.ParameterErrors).ToList();
                     return ParameterErrorHelper.MergeParameterErrors(errorLists);
                 }
-                return _parameterErrors?? new ObservableCollection<ParameterError>();
+                return _parameterErrors;
             }
             set
             {
@@ -113,7 +113,7 @@ namespace Calc.Core.Objects.GraphNodes
             }
         }
 
-        private List<Result> _calculationResults;
+        private List<Result> _calculationResults = new();
         [JsonIgnore]
         public List<Result> CalculationResults
         {
@@ -123,7 +123,7 @@ namespace Calc.Core.Objects.GraphNodes
                 {
                     return SubBranches.SelectMany(sb => sb.CalculationResults ?? new List<Result>()).ToList();
                 }
-                return _calculationResults ?? new List<Result>();
+                return _calculationResults;
             }
             set
             {
