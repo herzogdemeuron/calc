@@ -101,17 +101,10 @@ namespace Calc.ConnectorRevit.ViewModels
         public BuildupViewModel(NodeTreeViewModel ntVM)
         {
             Mediator.Register("BuildupSelectionChanged", _ => UpdateBuildupSection());
-            //Mediator.Register("BuildupSelectionChanged", _ => ReloadBuildupSection());
             nodeTreeVM = ntVM;
         }
 
-        public void ReloadBuildupSection()
-        {
-            UpdateBuildupSection();
-            SetFirstBuildupToActive();
-        }
-
-        public void UpdateBuildupSection()
+        public void UpdateBuildupSection(bool setFirstBuildupActive = true)
         {
             OnPropertyChanged(nameof(Buildup1));
             OnPropertyChanged(nameof(Buildup2));
@@ -120,6 +113,11 @@ namespace Calc.ConnectorRevit.ViewModels
             CheckInheritEnabled();
             CheckRemoveEnabled();
             CheckAddBuildup();
+
+            if (setFirstBuildupActive)
+            {
+                SetFirstBuildupToActive();
+            }
         }
 
         public void SetFirstBuildupToActive()
@@ -146,7 +144,7 @@ namespace Calc.ConnectorRevit.ViewModels
             }
             branch.SetBuildups(newBuildups);
             ActiveBuildup = buildup;
-            Mediator.Broadcast("BuildupSelectionChanged");
+            UpdateBuildupSection(false);
         }
 
         public void CheckAddBuildup()

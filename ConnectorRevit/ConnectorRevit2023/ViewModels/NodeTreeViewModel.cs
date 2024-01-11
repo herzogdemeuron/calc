@@ -35,7 +35,6 @@ namespace Calc.ConnectorRevit.ViewModels
             Mediator.Register("ForestSelectionChanged", mapping => UpdateNodeSource((Mapping)mapping));
             Mediator.Register("MappingSelectionChanged", mapping => RemapAllNodes((Mapping)mapping));
             Mediator.Register("BuildupSelectionChanged", _ => RecolorAllNodes());
-            Mediator.Register("BuildupSelectionChanged", _ => RecolorAllNodes());
             Mediator.Register("BuildupInherited", _ => RecolorAllNodes());
 
             Mediator.Register("ViewToggleToBuildup", _ => BranchesSwitch = false);
@@ -48,6 +47,7 @@ namespace Calc.ConnectorRevit.ViewModels
             new ResultSender();
             //changing priority: Forest => Mapping => Buildup
         }
+
 
         public void UpdateNodeSource(Mapping mapping)
         {
@@ -63,6 +63,9 @@ namespace Calc.ConnectorRevit.ViewModels
             Mediator.Broadcast("BuildupSelectionChanged");
         }
 
+        /// <summary>
+        /// reset all node label colors property according to the current branch/buildup switch
+        /// </summary>
         private void RecolorAllNodes()
         {
             if (CurrentForestItem == null) return;
@@ -99,7 +102,8 @@ namespace Calc.ConnectorRevit.ViewModels
             }
             CurrentForestItem.NotifyLabelColorChange();
             Mediator.Broadcast("NodeItemSelectionChanged");
-            Mediator.Broadcast("BuildupSelectionChanged");
+            // TODO sort out the mediator broadcasts
+            //Mediator.Broadcast("BuildupSelectionChanged");
         }
 
         public void ColorNodesToBuildup()
@@ -126,7 +130,7 @@ namespace Calc.ConnectorRevit.ViewModels
             SelectedNodeItem = null;
             CurrentForestItem.NotifyLabelColorChange(); //better ways to do this?
             Mediator.Broadcast("TreeViewDeselected", CurrentForestItem); // to the visualizer
-            Mediator.Broadcast("BuildupSelectionChanged");
+            //Mediator.Broadcast("BuildupSelectionChanged");
         }
 
 
