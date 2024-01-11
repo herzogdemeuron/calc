@@ -66,7 +66,6 @@ namespace Calc.ConnectorRevit.ViewModels
             set
             {
                 UpdateBuildup(0, value);
-                UpdateBuildupSection();
             }
         }
 
@@ -76,7 +75,6 @@ namespace Calc.ConnectorRevit.ViewModels
             set
             {
                 UpdateBuildup(1, value);
-                UpdateBuildupSection();
             }
         }
 
@@ -102,11 +100,19 @@ namespace Calc.ConnectorRevit.ViewModels
 
         public BuildupViewModel(NodeTreeViewModel ntVM)
         {
+            Mediator.Register("BuildupSelectionChanged", _ => UpdateBuildupSection());
+            //Mediator.Register("BuildupSelectionChanged", _ => ReloadBuildupSection());
             nodeTreeVM = ntVM;
         }
+
+        public void ReloadBuildupSection()
+        {
+            UpdateBuildupSection();
+            SetFirstBuildupToActive();
+        }
+
         public void UpdateBuildupSection()
         {
-            //CheckBuildupLimit();
             OnPropertyChanged(nameof(Buildup1));
             OnPropertyChanged(nameof(Buildup2));
             OnPropertyChanged(nameof(CurrentBuildups));

@@ -1,7 +1,11 @@
 ﻿using Calc.ConnectorRevit.Helpers;
 using Calc.ConnectorRevit.Services;
 using Calc.Core;
+using Calc.Core.Objects;
+using Calc.Core.Objects.GraphNodes;
+using Calc.Core.Objects.Mappings;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace Calc.ConnectorRevit.ViewModels
 {
@@ -18,6 +22,7 @@ namespace Calc.ConnectorRevit.ViewModels
         public NewMappingViewModel NewMappingVM { get; set; }
         public VisibilityViewModel VisibilityVM { get; set; }
         public CalculationViewModel CalculationVM { get; set; }
+
         public MainViewModel(DirectusStore store)
         {
             Store = store;
@@ -37,24 +42,9 @@ namespace Calc.ConnectorRevit.ViewModels
             VisibilityVM = new VisibilityViewModel();
         }
 
-        public void NotifyStoreChange()
+        public async Task HandleWindowLoadedAsync()
         {
-            OnPropertyChanged(nameof(Store));
-        }
-
-        public void HandleViewToggleToBuildup()
-        {
-            Mediator.Broadcast("ViewToggleToBuildup");
-        }
-
-        public void HandleViewToggleToBranch()
-        {
-            Mediator.Broadcast("ViewToggleToBranch");
-        }
-
-        public void HandleStartCalcLive()
-        {
-            Server.Start();
+            await LoadingVM.HandleLoadingAsync();
         }
 
         public void HandleWindowClosing()
@@ -63,15 +53,109 @@ namespace Calc.ConnectorRevit.ViewModels
             Server.Stop();
         }
 
-        public void HandleBackToMainView()
+        public async Task HandleProjectSelectedAsync(Project project)
         {
-            ViewMediator.Broadcast("ShowMainView");
+            await LoadingVM.HandleProjectSelectedAsync(project);
+            NotifyStoreChange();
         }
 
+        public void HandleForestSelectionChanged(Forest forest)
+        {
+            ForestVM.HandleForestSelectionChanged(forest);
+        }
+
+        public void HandleMappingSelectionChanged(Mapping mapping)
+        {
+            MappingVM.HandleMappingSelectionChanged(mapping);
+        }
+
+        public void HandleNewMappingClicked()
+        {
+            NewMappingVM.HandleNewMappingClicked();
+        }
+
+        public async Task HandleNewMappingCreateAsync(Mapping selectedMapping, string newName)
+        {
+            await NewMappingVM.HandleNewMappingCreate(selectedMapping, newName);
+            NotifyStoreChange();
+        }
+
+        public async Task HandleUpdateMapping()
+        {
+            await MappingVM.HandleUpdateMapping();
+        }
+
+        public void HandleNewMappingCanceled()
+        {
+            NewMappingVM.HandleNewMappingCanceled();
+        }
+
+        public void HandleNodeItemSelectionChanged(NodeViewModel selectedBranch)
+        {
+            NodeTreeVM.HandleNodeItemSelectionChanged(selectedBranch);
+        }
+
+        public void HandleSideClicked()
+        {
+            NodeTreeVM.DeselectNodes();
+        }
+
+        public void HandleInherit()
+        {
+            BuildupVM.HandleInherit();
+        }
+
+        public void HandleRemove()
+        {
+            BuildupVM.HandleRemove();
+        }
+
+        public void HandleViewToggleToBuildup()
+        {
+            Mediator.Broadcast("ViewToggleToBuildup");
+            Mediator.Broadcast("BuildupSelectionChanged");
+        }
+
+        public void HandleViewToggleToBranch()
+        {
+            Mediator.Broadcast("ViewToggleToBranch");
+            Mediator.Broadcast("BuildupSelectionChanged");
+        }
+
+        public void HandleUpdateRevitClicked(Forest forest)
+        {
+            ForestVM.HandleForestSelectionChanged(forest);
+        }
+
+        public void HandleSavingResults()
+        {
+            SavingVM.HandleSavingResults();
+        }
+
+        public async Task HandleSendingResults(string newName)
+        {
+            await SavingVM.HandleSendingResults(newName);
+        }
+
+        public void HandleCancelSavingResults()
+        {
+            SavingVM.HandleSaveResultCanceled();
+        }
         public void HandleMessageClose()
         {
             ViewMediator.Broadcast("HideMessageOverlay");
         }
+
+        public void NotifyStoreChange()
+        {
+            OnPropertyChanged(nameof(Store));
+        }
+
+        public void HandleStartCalcLive()
+        {
+            Server.Start();
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)

@@ -35,6 +35,7 @@ namespace Calc.ConnectorRevit.ViewModels
             Mediator.Register("ForestSelectionChanged", mapping => UpdateNodeSource((Mapping)mapping));
             Mediator.Register("MappingSelectionChanged", mapping => RemapAllNodes((Mapping)mapping));
             Mediator.Register("BuildupSelectionChanged", _ => RecolorAllNodes());
+            Mediator.Register("BuildupSelectionChanged", _ => RecolorAllNodes());
             Mediator.Register("BuildupInherited", _ => RecolorAllNodes());
 
             Mediator.Register("ViewToggleToBuildup", _ => BranchesSwitch = false);
@@ -97,6 +98,8 @@ namespace Calc.ConnectorRevit.ViewModels
                 Mediator.Broadcast("OnBuildupItemSelectionChanged", SelectedNodeItem); // to visualizer
             }
             CurrentForestItem.NotifyLabelColorChange();
+            Mediator.Broadcast("NodeItemSelectionChanged");
+            Mediator.Broadcast("BuildupSelectionChanged");
         }
 
         public void ColorNodesToBuildup()
@@ -123,6 +126,7 @@ namespace Calc.ConnectorRevit.ViewModels
             SelectedNodeItem = null;
             CurrentForestItem.NotifyLabelColorChange(); //better ways to do this?
             Mediator.Broadcast("TreeViewDeselected", CurrentForestItem); // to the visualizer
+            Mediator.Broadcast("BuildupSelectionChanged");
         }
 
 

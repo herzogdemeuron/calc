@@ -33,6 +33,7 @@ namespace Calc.ConnectorRevit.ViewModels
                     mapping = store.MappingSelected;
                 }
                 Mediator.Broadcast("ForestSelectionChanged", mapping);
+                Mediator.Broadcast("BuildupSelectionChanged");
                 //ViewMediator.Broadcast("ViewDeselectTreeView");
             }
         }
