@@ -65,6 +65,19 @@ namespace Calc.Core.Objects.Results
                 }
                 return $"The {unit} parameter '{ParameterName}' {issue} in {Count} elements.";
             }
-}
+        }
+
+        public ParameterError(ParameterError other)
+        {
+            this.ParameterName = other.ParameterName;
+            this.Unit = other.Unit;
+            this.ErrorType = other.ErrorType;
+            this.ElementIds = new List<string>(other.ElementIds);
+        }
+
+        public ParameterError()
+        {
+            this.ElementIds = new List<string>();
+        }
     }
 }

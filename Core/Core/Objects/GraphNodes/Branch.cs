@@ -113,6 +113,9 @@ namespace Calc.Core.Objects.GraphNodes
             }
         }
 
+        [JsonIgnore]
+        public bool HasCalculationResults => (CalculationResults != null && CalculationResults.Count > 0);
+
         private List<Result> _calculationResults = new();
         [JsonIgnore]
         public List<Result> CalculationResults

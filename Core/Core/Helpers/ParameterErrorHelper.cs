@@ -18,7 +18,8 @@ namespace Calc.Core.Helpers
             {
                 foreach (var error in errorList)
                 {
-                    AddToErrorList(result, error);
+                    var errorCopy = new ParameterError(error);
+                    AddToErrorList(result, errorCopy);
                 }
             }
             return result;

@@ -28,21 +28,34 @@ namespace Calc.ConnectorRevit.Services
             var collector = new FilteredElementCollector(App.CurrentDoc)
                   .WhereElementIsNotElementType()
                   .WhereElementIsViewIndependent()
-                  .Where(x => (x.Category != null) && x.GetTypeId() != null && x.GetTypeId() != ElementId.InvalidElementId).ToList();
+                  .Where(x => (
+                  x.Category != null) &&
+                  x.GetTypeId() != null &&
+                  x.GetTypeId() != ElementId.InvalidElementId).ToList();
 
             foreach(RevitBasicParamConfig paramConfig in paramConfigs)
             {
                 
-                result.AddRange(CalcElementsFromParamConfig(collector, parameterNameList, paramConfig));
+                result.AddRange
+                    (
+                        CalcElementsFromParamConfig(collector, parameterNameList, paramConfig)
+                    );
             }
 
-            // add the rest of the elements
-            result.AddRange(CalcElementsFromParamConfig(collector, parameterNameList, new RevitBasicParamConfig()));
+            result.AddRange
+                (
+                    CalcElementsFromParamConfig(collector, parameterNameList, new RevitBasicParamConfig())
+                );
 
             return result;
         }
 
-        static private List<CalcElement> CalcElementsFromParamConfig(List<Element> elementList, List<string> parameterNameList, RevitBasicParamConfig paramConfig)
+        static private List<CalcElement> CalcElementsFromParamConfig
+            (
+            List<Element> elementList, 
+            List<string> parameterNameList, 
+            RevitBasicParamConfig paramConfig
+            )
         {
             var result = new List<CalcElement>();
 
@@ -52,13 +65,24 @@ namespace Calc.ConnectorRevit.Services
             var volumeName = paramConfig.VolumeName;
 
             //takes the whole list if the category is invalid, otherwise filter the list by category
-            var filteredElements = (int)builtinCategory == -1 ? elementList : elementList.Where(x => x.Category.Id.IntegerValue == (int)builtinCategory);
-            result = filteredElements.Select(x => CreateCalcElement(x, parameterNameList, lengthName, areaName, volumeName)).ToList();
+            var filteredElements = (int)builtinCategory == -1 ? 
+                elementList : 
+                elementList.Where(x => x.Category.Id.IntegerValue == (int)builtinCategory);
+
+            result = filteredElements.Select
+                (
+                x => CreateCalcElement(x, parameterNameList, lengthName, areaName, volumeName)
+                ).ToList();
+
             // remove the result elements from the elementList
             elementList.RemoveAll(x => x.Category.Id.IntegerValue == (int)builtinCategory);
             return result;
         }
 
+        /// <summary>
+        /// create a calc element using the element and the parameter name list
+        /// add as many parameters from the list as possible
+        /// </summary>
         static private CalcElement CreateCalcElement(
             Element elem, 
             List<string> parameterNameList,
@@ -67,9 +91,6 @@ namespace Calc.ConnectorRevit.Services
             string volName
             )
         {
-            // create a calc element using the element and the parameter name list
-            // add as many parameters from the list as possible
-            
             Dictionary<string, object> parameterDictionary = new Dictionary<string, object>();
             foreach (string parameterName in parameterNameList)
             {

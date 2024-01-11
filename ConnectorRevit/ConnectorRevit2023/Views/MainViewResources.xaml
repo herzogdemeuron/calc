@@ -39,7 +39,7 @@
                     <Style TargetType="Grid">
                         <Setter Property="Visibility" Value="Hidden"/>
                         <Setter Property="Margin" Value="1,0,0,0"/>
-                        <Setter Property="Width" Value="10"/>
+                        <Setter Property="Width" Value="12"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Host.HasCalculationErrors}" Value="True">
                                 <Setter Property="Visibility" Value="Visible"/>
@@ -47,9 +47,9 @@
                         </Style.Triggers>
                     </Style>
                 </Grid.Style>
-                <TextBlock Text="?"
-                           FontSize="13"
-                           FontWeight="Bold"
+                <TextBlock Text="💔"
+                           FontSize="10"
+                           FontWeight="SemiBold"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Center"
                            Foreground="Red"/>
@@ -198,5 +198,28 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style x:Key="ResultDataGridStyle" TargetType="DataGrid" BasedOn="{StaticResource DataGridStyle}">
+        <Setter Property="Visibility" Value="Collapsed"/>
+        <Style.Triggers>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding NodeTreeVM.SelectedNodeItem.Host.HasCalculationErrors}" Value="False"/>
+                    <Condition Binding="{Binding NodeTreeVM.SelectedNodeItem.Host.HasCalculationResults}" Value="True"/>
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Visibility" Value="Visible"/>
+            </MultiDataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ErrorDataGridStyle" TargetType="DataGrid" BasedOn="{StaticResource DataGridStyle}">
+        <Setter Property="Visibility" Value="Collapsed"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding NodeTreeVM.SelectedNodeItem.Host.HasCalculationErrors}" Value="True">
+                <Setter Property="Visibility" Value="Visible"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
 
 </ResourceDictionary>
