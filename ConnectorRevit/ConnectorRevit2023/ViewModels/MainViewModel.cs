@@ -17,6 +17,7 @@ namespace Calc.ConnectorRevit.ViewModels
         public SavingViewModel SavingVM { get; set; }
         public NewMappingViewModel NewMappingVM { get; set; }
         public VisibilityViewModel VisibilityVM { get; set; }
+        public CalculationViewModel CalculationVM { get; set; }
         public MainViewModel(DirectusStore store)
         {
             Store = store;
@@ -30,6 +31,7 @@ namespace Calc.ConnectorRevit.ViewModels
             NodeTreeVM = new NodeTreeViewModel(store);
             BuildupVM = new BuildupViewModel(NodeTreeVM);
             SavingVM = new SavingViewModel(NodeTreeVM);
+            CalculationVM = new CalculationViewModel(NodeTreeVM);
 
 
             VisibilityVM = new VisibilityViewModel();

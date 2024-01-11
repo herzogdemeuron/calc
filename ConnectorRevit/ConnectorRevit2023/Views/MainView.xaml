@@ -291,7 +291,7 @@
                                       Style="{StaticResource ResultDataGridStyle}"
                                       VerticalAlignment="Bottom"
                                       Margin="10"
-                                      ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.CategorizedCalculation}">
+                                      ItemsSource="{Binding CalculationVM.Results}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Buildup Group" Binding="{Binding Key}" Width="3*"  IsReadOnly="True" />
                                     <DataGridTextColumn Header="GWP (kgCO2)" Binding="{Binding Value}" Width="1*"  IsReadOnly="True" />
@@ -303,7 +303,7 @@
                                     Style="{StaticResource ErrorDataGridStyle}"
                                     VerticalAlignment="Bottom"
                                     Margin="10"
-                                    ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.Host.ParameterErrors}">
+                                    ItemsSource="{Binding CalculationVM.Errors}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Binding="{Binding ErrorMessage}" Width="1*" IsReadOnly="True">
                                         <DataGridTextColumn.Header>
