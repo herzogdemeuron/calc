@@ -23,7 +23,6 @@ namespace Calc.ConnectorRevit.ViewModels
             {
                 MediatorFromVM.Broadcast("MappingSelectionChanged", mapping);
             }
-            
         }
 
         public async Task HandleUpdateMapping()

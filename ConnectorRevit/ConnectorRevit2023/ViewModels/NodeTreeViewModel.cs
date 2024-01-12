@@ -137,7 +137,6 @@ namespace Calc.ConnectorRevit.ViewModels
             SelectedNodeItem = null;
             CurrentForestItem.NotifyNodePropertyChange(); //better ways to do this?
             MediatorToVisualizer.Broadcast("TreeViewDeselected", CurrentForestItem); // to the visualizer
-            //Mediator.Broadcast("BuildupPropertiesSwitched");
         }
 
 

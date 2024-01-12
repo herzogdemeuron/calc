@@ -66,6 +66,7 @@ namespace Calc.ConnectorRevit.ViewModels
             set
             {
                 UpdateBuildup(0, value);
+                //the combobox selection change due to node item selection change doe not belong to buildup selection change broadcast
                 MediatorFromVM.Broadcast("BuildupSelectionChanged");
             }
         }
@@ -111,7 +112,6 @@ namespace Calc.ConnectorRevit.ViewModels
         /// Notify the ui change of the buildup properties and the buttons,
         /// broadcast the buildup change to other viewmodels
         /// </summary>
-        /// <param name="setFirstBuildupActive"></param>
         public void UpdateBuildupSection(bool setFirstBuildupActive = true)
         {
             OnPropertyChanged(nameof(Buildup1));
@@ -126,8 +126,6 @@ namespace Calc.ConnectorRevit.ViewModels
             {
                 SetFirstBuildupToActive();
             }
-
-            //MediatorFromVM.Broadcast("BuildupPropertiesSwitched");
         }
 
         public void SetFirstBuildupToActive()
