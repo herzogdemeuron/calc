@@ -22,8 +22,11 @@ namespace Calc.ConnectorRevit.Services
             MediatorToVisualizer.Register("TreeViewDeselected", 
                 forestItem => ResetView((NodeViewModel)forestItem));
 
-            //MediatorToVisualizer.Register("AllNodesRecolored", 
-             //   selectedItem => IsolateAndColorBottomBranchElements((NodeViewModel)selectedItem));
+            MediatorToVisualizer.Register("AllNodesRecoloredOnBuildups", 
+                selectedItem => IsolateAndColorBottomBranchElements((NodeViewModel)selectedItem));
+
+            MediatorToVisualizer.Register("AllNodesRecoloredOnBranches",
+                selectedItem => IsolateAndColorSubbranchElements((NodeViewModel)selectedItem));
 
             MediatorToVisualizer.Register("OnBuildupItemSelectionChanged",
                 selectedItem => IsolateAndColorBottomBranchElements((NodeViewModel)selectedItem));

@@ -36,8 +36,6 @@ namespace Calc.ConnectorRevit.ViewModels
             MediatorFromVM.Register("ForestSelectionChanged", mapping => UpdateNodeSource((Mapping)mapping));
             MediatorFromVM.Register("MappingSelectionChanged", mapping => RemapAllNodes((Mapping)mapping));
             MediatorFromVM.Register("BuildupSelectionChanged", _ => RecolorAllNodes());
-            //MediatorFromVM.Register("BuildupPropertiesSwitched", _ => SelectedNodeItem?.NotifyHostChanged());
-            //Mediator.Register("BuildupInherited", _ => RecolorAllNodes());
 
             MediatorFromVM.Register("MainViewToggleToBuildup", _ => BranchesSwitch = false);
             MediatorFromVM.Register("MainViewToggleToBuildup", _ => ColorNodesToBuildup());
@@ -58,7 +56,6 @@ namespace Calc.ConnectorRevit.ViewModels
             OnPropertyChanged(nameof(NodeSource));
             RecolorAllNodes(true);
             DeselectNodes();
-            //MediatorFromVM.Broadcast("MappingSelectionChanged", mapping);
         }
         public void RemapAllNodes(Mapping mapping)
         {
@@ -79,13 +76,13 @@ namespace Calc.ConnectorRevit.ViewModels
                 if(forceRecolorAll)
                 {
                     store.ForestSelected.SetBranchColorsBy("branches");
-                    //MediatorToVisualizer.Broadcast("AllNodesRecoloredOnBranches", SelectedNodeItem); // to visualizer
+                    MediatorToVisualizer.Broadcast("AllNodesRecoloredOnBranches", SelectedNodeItem); // to visualizer
                 }
             }
             else
             {
                 store.ForestSelected.SetBranchColorsBy("buildups");
-                //MediatorToVisualizer.Broadcast("AllNodesRecoloredOnBuildups", SelectedNodeItem); // to visualizer
+                MediatorToVisualizer.Broadcast("AllNodesRecoloredOnBuildups", SelectedNodeItem); // to visualizer
             }
 
             CurrentForestItem.NotifyNodePropertyChange();
