@@ -66,8 +66,6 @@ namespace Calc.ConnectorRevit.ViewModels
             set
             {
                 UpdateBuildup(0, value);
-                UpdateBuildupSection(false);
-                MediatorFromVM.Broadcast("BuildupSelectionChanged");
 
             }
         }
@@ -78,9 +76,6 @@ namespace Calc.ConnectorRevit.ViewModels
             set
             {
                 UpdateBuildup(1, value);
-                UpdateBuildupSection(false);
-                MediatorFromVM.Broadcast("BuildupSelectionChanged");
-
             }
         }
 
@@ -106,11 +101,15 @@ namespace Calc.ConnectorRevit.ViewModels
 
         public BuildupViewModel(NodeTreeViewModel ntVM)
         {
-            //MediatorFromVM.Register("BuildupSelectionChanged", _ => UpdateBuildupSection());
             MediatorFromVM.Register("NodeItemSelectionChanged", _ => UpdateBuildupSection());
             nodeTreeVM = ntVM;
         }
 
+        /// <summary>
+        /// Notify the ui change of the buildup properties and the buttons,
+        /// broadcast the buildup change to other viewmodels
+        /// </summary>
+        /// <param name="setFirstBuildupActive"></param>
         public void UpdateBuildupSection(bool setFirstBuildupActive = true)
         {
             OnPropertyChanged(nameof(Buildup1));
@@ -125,6 +124,8 @@ namespace Calc.ConnectorRevit.ViewModels
             {
                 SetFirstBuildupToActive();
             }
+
+            MediatorFromVM.Broadcast("BuildupSelectionChanged");
         }
 
         public void SetFirstBuildupToActive()
@@ -151,6 +152,8 @@ namespace Calc.ConnectorRevit.ViewModels
             }
             branch.SetBuildups(newBuildups);
             ActiveBuildup = buildup;
+
+            UpdateBuildupSection(false);
         }
 
         public void CheckAddBuildup()
@@ -200,6 +203,8 @@ namespace Calc.ConnectorRevit.ViewModels
             branch.SetBuildups(newBuildups);
             var buildupCount = newBuildups.Count;
             ActiveBuildup = buildupCount > 0 ? newBuildups[buildupCount - 1] : null;
+
+            UpdateBuildupSection();
         }
 
         public void HandleInherit()
@@ -210,6 +215,8 @@ namespace Calc.ConnectorRevit.ViewModels
             if (!(host is Branch branch))
                 return;
             branch.InheritMapping();
+
+            UpdateBuildupSection();
         }
 
         

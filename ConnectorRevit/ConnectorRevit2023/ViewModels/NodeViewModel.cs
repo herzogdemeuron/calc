@@ -79,7 +79,6 @@ namespace Calc.ConnectorRevit.ViewModels
             Store = store;
             ParentTreeView = parentTreeView;
             SubNodeItems = new ObservableCollection<NodeViewModel>();
-            MediatorFromVM.Register("BuildupSelectionChanged", _ => NotifyHostChanged());
             foreach (var subNode in node.SubBranches)
             {
                 SubNodeItems.Add(new NodeViewModel(store, subNode, parentTreeView));
@@ -167,7 +166,7 @@ namespace Calc.ConnectorRevit.ViewModels
 
 
 
-        private void NotifyHostChanged()
+        public void NotifyHostChanged()
         {
             OnPropertyChanged(nameof(Host));
             OnPropertyChanged(nameof(CategorizedCalculation));

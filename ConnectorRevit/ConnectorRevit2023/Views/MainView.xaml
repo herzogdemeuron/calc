@@ -125,7 +125,6 @@
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate ItemsSource="{Binding SubNodeItems}">
                             <ContentControl Content="{Binding}"
-                                            
                                     ContentTemplate="{StaticResource BranchItemTemplate}">
                                 <ContentControl.ToolTip>
                                     <TextBlock Text="{Binding Host.Buildup}"/>
