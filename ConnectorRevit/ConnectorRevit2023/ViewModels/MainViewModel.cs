@@ -113,13 +113,13 @@ namespace Calc.ConnectorRevit.ViewModels
         public void HandleViewToggleToBuildup()
         {
             MediatorFromVM.Broadcast("MainViewToggleToBuildup");
-            //Mediator.Broadcast("BuildupSelectionChanged");
+            //Mediator.Broadcast("BuildupPropertiesSwitched");
         }
 
         public void HandleViewToggleToBranch()
         {
             MediatorFromVM.Broadcast("MainViewToggleToBranch");
-            //Mediator.Broadcast("BuildupSelectionChanged");
+            //Mediator.Broadcast("BuildupPropertiesSwitched");
         }
 
         public void HandleUpdateRevitClicked(Forest forest)

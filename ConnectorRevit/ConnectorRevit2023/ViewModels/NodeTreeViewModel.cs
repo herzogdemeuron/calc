@@ -36,7 +36,7 @@ namespace Calc.ConnectorRevit.ViewModels
             MediatorFromVM.Register("ForestSelectionChanged", mapping => UpdateNodeSource((Mapping)mapping));
             MediatorFromVM.Register("MappingSelectionChanged", mapping => RemapAllNodes((Mapping)mapping));
             MediatorFromVM.Register("BuildupSelectionChanged", _ => RecolorAllNodes());
-            //MediatorFromVM.Register("BuildupSelectionChanged", _ => SelectedNodeItem?.NotifyHostChanged());
+            //MediatorFromVM.Register("BuildupPropertiesSwitched", _ => SelectedNodeItem?.NotifyHostChanged());
             //Mediator.Register("BuildupInherited", _ => RecolorAllNodes());
 
             MediatorFromVM.Register("MainViewToggleToBuildup", _ => BranchesSwitch = false);
@@ -56,7 +56,7 @@ namespace Calc.ConnectorRevit.ViewModels
             CurrentForestItem = new NodeViewModel(store, store.ForestSelected, this);
             RemapAllNodes(mapping);
             OnPropertyChanged(nameof(NodeSource));
-            RecolorAllNodes();
+            RecolorAllNodes(true);
             DeselectNodes();
             //MediatorFromVM.Broadcast("MappingSelectionChanged", mapping);
         }
@@ -71,25 +71,25 @@ namespace Calc.ConnectorRevit.ViewModels
         /// reset all node label colors property according to the current branch/buildup switch
         /// report to the visualizer
         /// </summary>
-        private void RecolorAllNodes(bool recolorBranch = true)
+        private void RecolorAllNodes(bool forceRecolorAll = false)
         {
             if (CurrentForestItem == null) return;
             if (BranchesSwitch == true)
             {
-                if(recolorBranch)
+                if(forceRecolorAll)
                 {
                     store.ForestSelected.SetBranchColorsBy("branches");
+                    //MediatorToVisualizer.Broadcast("AllNodesRecoloredOnBranches", SelectedNodeItem); // to visualizer
                 }
             }
             else
             {
                 store.ForestSelected.SetBranchColorsBy("buildups");
+                //MediatorToVisualizer.Broadcast("AllNodesRecoloredOnBuildups", SelectedNodeItem); // to visualizer
             }
 
-            CurrentForestItem.NotifyLabelColorChange();
-            SelectedNodeItem?.NotifyHostChanged();
+            CurrentForestItem.NotifyNodePropertyChange();
 
-            MediatorToVisualizer.Broadcast("AllNodesRecolored", SelectedNodeItem); // to visualizer
         }
 
         public void HandleNodeItemSelectionChanged(NodeViewModel nodeItem)
@@ -112,7 +112,7 @@ namespace Calc.ConnectorRevit.ViewModels
                 MediatorToVisualizer.Broadcast("OnBuildupItemSelectionChanged", SelectedNodeItem); // to visualizer
             }
 
-            CurrentForestItem.NotifyLabelColorChange();
+            CurrentForestItem.NotifyNodePropertyChange();
             MediatorFromVM.Broadcast("NodeItemSelectionChanged");
         }
 
@@ -120,7 +120,7 @@ namespace Calc.ConnectorRevit.ViewModels
         {
             if (CurrentForestItem == null) return;
             store.ForestSelected.SetBranchColorsBy("buildups");
-            CurrentForestItem.NotifyLabelColorChange();
+            CurrentForestItem.NotifyNodePropertyChange();
             DeselectNodes();
         }
 
@@ -128,7 +128,7 @@ namespace Calc.ConnectorRevit.ViewModels
         {
             if (CurrentForestItem == null) return;
             store.ForestSelected.SetBranchColorsBy("branches");
-            CurrentForestItem.NotifyLabelColorChange();
+            CurrentForestItem.NotifyNodePropertyChange();
             DeselectNodes();
         }
 
@@ -138,9 +138,9 @@ namespace Calc.ConnectorRevit.ViewModels
             NodeHelper.HideAllLabelColor(CurrentForestItem);
             MediatorToView.Broadcast("ViewDeselectTreeView"); //send command to the view to deselect treeview
             SelectedNodeItem = null;
-            CurrentForestItem.NotifyLabelColorChange(); //better ways to do this?
+            CurrentForestItem.NotifyNodePropertyChange(); //better ways to do this?
             MediatorToVisualizer.Broadcast("TreeViewDeselected", CurrentForestItem); // to the visualizer
-            //Mediator.Broadcast("BuildupSelectionChanged");
+            //Mediator.Broadcast("BuildupPropertiesSwitched");
         }
 
 

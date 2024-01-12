@@ -164,23 +164,19 @@ namespace Calc.ConnectorRevit.ViewModels
             return (Host is Branch) && !(Host is Tree);
         }
 
-
-
-        public void NotifyHostChanged()
-        {
-            OnPropertyChanged(nameof(Host));
-            OnPropertyChanged(nameof(CategorizedCalculation));
-        }
-
-        public void NotifyLabelColorChange()
+        public void NotifyNodePropertyChange()
         {
             OnPropertyChanged(nameof(IdentifierColor));
             OnPropertyChanged(nameof(UnderlineVisibility));
             OnPropertyChanged(nameof(LabelColor));
             OnPropertyChanged(nameof(LabelColorVisible));
+
+            OnPropertyChanged(nameof(Host));
+            OnPropertyChanged(nameof(CategorizedCalculation));
+
             foreach (var subBranch in SubNodeItems)
             {
-                subBranch.NotifyLabelColorChange();
+                subBranch.NotifyNodePropertyChange();
             }
         }
 

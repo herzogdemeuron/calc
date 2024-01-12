@@ -66,7 +66,7 @@ namespace Calc.ConnectorRevit.ViewModels
             set
             {
                 UpdateBuildup(0, value);
-
+                MediatorFromVM.Broadcast("BuildupSelectionChanged");
             }
         }
 
@@ -76,6 +76,7 @@ namespace Calc.ConnectorRevit.ViewModels
             set
             {
                 UpdateBuildup(1, value);
+                MediatorFromVM.Broadcast("BuildupSelectionChanged");
             }
         }
 
@@ -102,6 +103,7 @@ namespace Calc.ConnectorRevit.ViewModels
         public BuildupViewModel(NodeTreeViewModel ntVM)
         {
             MediatorFromVM.Register("NodeItemSelectionChanged", _ => UpdateBuildupSection());
+            MediatorFromVM.Register("MappingSelectionChanged", _ => UpdateBuildupSection());
             nodeTreeVM = ntVM;
         }
 
@@ -125,7 +127,7 @@ namespace Calc.ConnectorRevit.ViewModels
                 SetFirstBuildupToActive();
             }
 
-            MediatorFromVM.Broadcast("BuildupSelectionChanged");
+            //MediatorFromVM.Broadcast("BuildupPropertiesSwitched");
         }
 
         public void SetFirstBuildupToActive()
@@ -204,6 +206,7 @@ namespace Calc.ConnectorRevit.ViewModels
             var buildupCount = newBuildups.Count;
             ActiveBuildup = buildupCount > 0 ? newBuildups[buildupCount - 1] : null;
 
+            MediatorFromVM.Broadcast("BuildupSelectionChanged");
             UpdateBuildupSection();
         }
 
@@ -215,7 +218,7 @@ namespace Calc.ConnectorRevit.ViewModels
             if (!(host is Branch branch))
                 return;
             branch.InheritMapping();
-
+            MediatorFromVM.Broadcast("BuildupSelectionChanged");
             UpdateBuildupSection();
         }
 
