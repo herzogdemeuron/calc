@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Calc.ConnectorRevit.Helpers
+namespace Calc.ConnectorRevit.Helpers.Mediators
 {
-    public class Mediator
+    public class MediatorFromVM
     {
         /// <summary>
-        /// Broadcasts messages
+        /// Broadcasts messages from source to ViewModels
+        /// The events are named from the source view model 
+        /// Broadcast happens in the source view model, Register and Unregister happens in the target view model
         /// ViewModels => NodeTreeViewModel(triggered) => RevitVisualizer(triggered) 
         /// </summary>
         private static IDictionary<string, List<Action<object>>> dictionary = new Dictionary<string, List<Action<object>>>();

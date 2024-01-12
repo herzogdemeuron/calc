@@ -1,4 +1,4 @@
-﻿using Calc.ConnectorRevit.Helpers;
+﻿using Calc.ConnectorRevit.Helpers.Mediators;
 using Calc.ConnectorRevit.Services;
 using Calc.Core;
 using Calc.Core.Objects;
@@ -112,13 +112,13 @@ namespace Calc.ConnectorRevit.ViewModels
 
         public void HandleViewToggleToBuildup()
         {
-            Mediator.Broadcast("ViewToggleToBuildup");
+            MediatorFromVM.Broadcast("MainViewToggleToBuildup");
             //Mediator.Broadcast("BuildupSelectionChanged");
         }
 
         public void HandleViewToggleToBranch()
         {
-            Mediator.Broadcast("ViewToggleToBranch");
+            MediatorFromVM.Broadcast("MainViewToggleToBranch");
             //Mediator.Broadcast("BuildupSelectionChanged");
         }
 
@@ -143,7 +143,7 @@ namespace Calc.ConnectorRevit.ViewModels
         }
         public void HandleMessageClose()
         {
-            ViewMediator.Broadcast("HideMessageOverlay");
+            MediatorToView.Broadcast("HideMessageOverlay");
         }
 
         public void NotifyStoreChange()

@@ -1,4 +1,4 @@
-﻿using Calc.ConnectorRevit.Helpers;
+﻿using Calc.ConnectorRevit.Helpers.Mediators;
 using Calc.Core;
 using Calc.Core.Objects;
 using System;
@@ -23,29 +23,29 @@ namespace Calc.ConnectorRevit.ViewModels
         {
             await store.GetProjects();
             OnPropertyChanged(nameof(AllProjects));
-            ViewMediator.Broadcast("ShowProjectOverlay");
+            MediatorToView.Broadcast("ShowProjectOverlay");
         }
 
         public async Task HandleProjectSelectedAsync(Project project)
         {
             if (project == null)
             {
-                ViewMediator.Broadcast("ShowMessageOverlay", new List<object>{null, "Please choose a project."});
+                MediatorToView.Broadcast("ShowMessageOverlay", new List<object>{null, "Please choose a project."});
                 return;
             }
-            ViewMediator.Broadcast("ShowWaitingOverlay", "Loading project data...");
+            MediatorToView.Broadcast("ShowWaitingOverlay", "Loading project data...");
             store.ProjectSelected = project;
 
             try
             {
                 bool dataGot = await store.GetOtherData();
-                ViewMediator.Broadcast("ShowMainView");
+                MediatorToView.Broadcast("ShowMainView");
 
             }
             catch (Exception ex)
             {
-                ViewMediator.Broadcast("ShowMessageOverlay", new List<object> { null, $"Error occured while getting project data:{ex.Message}" });
-                ViewMediator.Broadcast("ShowProjectOverlay");
+                MediatorToView.Broadcast("ShowMessageOverlay", new List<object> { null, $"Error occured while getting project data:{ex.Message}" });
+                MediatorToView.Broadcast("ShowProjectOverlay");
             }
         }
 

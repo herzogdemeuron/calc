@@ -1,4 +1,4 @@
-﻿using Calc.ConnectorRevit.Helpers;
+﻿using Calc.ConnectorRevit.Helpers.Mediators;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -100,14 +100,14 @@ namespace Calc.ConnectorRevit.ViewModels
         public VisibilityViewModel()
         {
             HideAllOverlays(false);
-            ViewMediator.Register("ShowMainView", _ => HideAllOverlays());
-            ViewMediator.Register("ShowProjectOverlay", _ => ShowProjectOverlay());
-            ViewMediator.Register("ShowWaitingOverlay", message => ShowWaitingOverlay((string)message));
-            ViewMediator.Register("ShowSavingOverlay", message => ShowSavingOverlay((string)message));
-            ViewMediator.Register("ShowMessageOverlay", args => ShowMessageOverlay((List<object>)args));
-            ViewMediator.Register("HideMessageOverlay", _ => HideMessageOverlay());
+            MediatorToView.Register("ShowMainView", _ => HideAllOverlays());
+            MediatorToView.Register("ShowProjectOverlay", _ => ShowProjectOverlay());
+            MediatorToView.Register("ShowWaitingOverlay", message => ShowWaitingOverlay((string)message));
+            MediatorToView.Register("ShowSavingOverlay", message => ShowSavingOverlay((string)message));
+            MediatorToView.Register("ShowMessageOverlay", args => ShowMessageOverlay((List<object>)args));
+            MediatorToView.Register("HideMessageOverlay", _ => HideMessageOverlay());
 
-            ViewMediator.Register("ShowNewMappingOverlay", _ => ShowNewMappingOverlay());
+            MediatorToView.Register("ShowNewMappingOverlay", _ => ShowNewMappingOverlay());
             
         }
 

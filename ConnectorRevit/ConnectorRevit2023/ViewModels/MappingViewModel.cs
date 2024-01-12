@@ -1,4 +1,4 @@
-﻿using Calc.ConnectorRevit.Helpers;
+﻿using Calc.ConnectorRevit.Helpers.Mediators;
 using Calc.Core;
 using Calc.Core.Objects.Mappings;
 using System;
@@ -21,7 +21,7 @@ namespace Calc.ConnectorRevit.ViewModels
         {
             if (store.ForestSelected != null)
             {
-                Mediator.Broadcast("MappingSelectionChanged", mapping);
+                MediatorFromVM.Broadcast("MappingSelectionChanged", mapping);
             }
             
         }
@@ -32,7 +32,7 @@ namespace Calc.ConnectorRevit.ViewModels
             string error = "";
             try
             {
-                ViewMediator.Broadcast("ShowWaitingOverlay", "Updating mapping...");
+                MediatorToView.Broadcast("ShowWaitingOverlay", "Updating mapping...");
                 feedback = await store.UpdateSelectedMapping();
             }
             catch (Exception ex)
@@ -41,8 +41,8 @@ namespace Calc.ConnectorRevit.ViewModels
                 feedback = null;
                 error = ex.Message;
             }
-            ViewMediator.Broadcast("ShowMainView");
-            ViewMediator.Broadcast
+            MediatorToView.Broadcast("ShowMainView");
+            MediatorToView.Broadcast
                ("ShowMessageOverlay",
                new List<object>
                    {   feedback,

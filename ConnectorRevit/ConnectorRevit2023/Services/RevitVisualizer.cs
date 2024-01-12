@@ -1,6 +1,6 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
-using Calc.ConnectorRevit.Helpers;
+using Calc.ConnectorRevit.Helpers.Mediators;
 using Calc.ConnectorRevit.ViewModels;
 using Calc.Core.Color;
 using Calc.Core.Objects;
@@ -18,14 +18,14 @@ namespace Calc.ConnectorRevit.Services
         private NodeViewModel selectedNodeItem;
 
         public RevitVisualizer()
-        { 
-            Mediator.Register("TreeViewDeselected", 
+        {
+            MediatorToVisualizer.Register("TreeViewDeselected", 
                 forestItem => ResetView((NodeViewModel)forestItem));
-            Mediator.Register("AllNodesRecolored", 
+            MediatorToVisualizer.Register("AllNodesRecolored", 
                 selectedItem => IsolateAndColorBottomBranchElements((NodeViewModel)selectedItem));
-            Mediator.Register("OnBuildupItemSelectionChanged",
+            MediatorToVisualizer.Register("OnBuildupItemSelectionChanged",
                 selectedItem => IsolateAndColorBottomBranchElements((NodeViewModel)selectedItem));
-            Mediator.Register("OnBranchItemSelectionChanged", 
+            MediatorToVisualizer.Register("OnBranchItemSelectionChanged", 
                 selectedItem => IsolateAndColorSubbranchElements((NodeViewModel)selectedItem));
         }
 

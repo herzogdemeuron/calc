@@ -1,4 +1,5 @@
 ﻿using Calc.ConnectorRevit.Helpers;
+using Calc.ConnectorRevit.Helpers.Mediators;
 using Calc.Core;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Mappings;
@@ -32,8 +33,8 @@ namespace Calc.ConnectorRevit.ViewModels
                     ForestHelper.PlantTrees(forest);
                     mapping = store.MappingSelected;
                 }
-                Mediator.Broadcast("ForestSelectionChanged", mapping);
-                Mediator.Broadcast("BuildupSelectionChanged");
+                MediatorFromVM.Broadcast("ForestSelectionChanged", mapping);
+                //Mediator.Broadcast("BuildupSelectionChanged");
                 //ViewMediator.Broadcast("ViewDeselectTreeView");
             }
         }
@@ -45,7 +46,7 @@ namespace Calc.ConnectorRevit.ViewModels
                 Mapping currentMapping = new Mapping(store.ForestSelected, "CurrentMapping");
                 ForestHelper.PlantTrees(store.ForestSelected);
                 store.MappingSelected = currentMapping;
-                Mediator.Broadcast("ForestSelectionChanged");
+                MediatorFromVM.Broadcast("ForestSelectionChanged");
             }
         }
 

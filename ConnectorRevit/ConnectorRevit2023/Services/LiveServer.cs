@@ -1,4 +1,5 @@
 ﻿using Calc.ConnectorRevit.Helpers;
+using Calc.ConnectorRevit.Helpers.Mediators;
 using Calc.ConnectorRevit.ViewModels;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace Calc.ConnectorRevit.Services
             Server = new CalcWebSocketServer("http://127.0.0.1:8184/");
             _ = Server.Start();
 
-            Mediator.Register("OnBuildupItemSelectionChanged",
+            MediatorFromVM.Register("OnBuildupItemSelectionChanged",
                 selectedItem => UpdateLiveVisualization((NodeViewModel)selectedItem));
         }
 

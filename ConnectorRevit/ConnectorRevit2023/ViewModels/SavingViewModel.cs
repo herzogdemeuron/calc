@@ -1,4 +1,4 @@
-﻿using Calc.ConnectorRevit.Helpers;
+﻿using Calc.ConnectorRevit.Helpers.Mediators;
 using Calc.ConnectorRevit.Services;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -32,19 +32,19 @@ namespace Calc.ConnectorRevit.ViewModels
             {
                 message = $"{count} elements to save.";
             }
-            ViewMediator.Broadcast("ShowSavingOverlay", message);
+            MediatorToView.Broadcast("ShowSavingOverlay", message);
         }
 
 
         public async Task HandleSendingResults(string newName)
         {
             NodeViewModel nodeToCalculate = GetNodeToCalculate();
-            ViewMediator.Broadcast("ShowWaitingOverlay", "Saving results...");
+            MediatorToView.Broadcast("ShowWaitingOverlay", "Saving results...");
             ResultSender resultSender = new ResultSender();
             bool? feedback =  await resultSender.SaveResults(nodeToCalculate, newName);
             //bool? feedback = true;
-            ViewMediator.Broadcast("ShowMainView");
-            ViewMediator.Broadcast
+            MediatorToView.Broadcast("ShowMainView");
+            MediatorToView.Broadcast
                 ("ShowMessageOverlay",
                 new List<object> 
                     {   feedback,
@@ -57,7 +57,7 @@ namespace Calc.ConnectorRevit.ViewModels
 
         public void HandleSaveResultCanceled()
         {
-            ViewMediator.Broadcast("ShowMainView");
+            MediatorToView.Broadcast("ShowMainView");
         }
 
         private NodeViewModel GetNodeToCalculate()

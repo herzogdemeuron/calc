@@ -1,4 +1,4 @@
-﻿using Calc.ConnectorRevit.Helpers;
+﻿using Calc.ConnectorRevit.Helpers.Mediators;
 using Calc.Core.Objects;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.GraphNodes;
@@ -66,6 +66,9 @@ namespace Calc.ConnectorRevit.ViewModels
             set
             {
                 UpdateBuildup(0, value);
+                UpdateBuildupSection(false);
+                MediatorFromVM.Broadcast("BuildupSelectionChanged");
+
             }
         }
 
@@ -75,6 +78,9 @@ namespace Calc.ConnectorRevit.ViewModels
             set
             {
                 UpdateBuildup(1, value);
+                UpdateBuildupSection(false);
+                MediatorFromVM.Broadcast("BuildupSelectionChanged");
+
             }
         }
 
@@ -100,7 +106,8 @@ namespace Calc.ConnectorRevit.ViewModels
 
         public BuildupViewModel(NodeTreeViewModel ntVM)
         {
-            Mediator.Register("BuildupSelectionChanged", _ => UpdateBuildupSection());
+            //MediatorFromVM.Register("BuildupSelectionChanged", _ => UpdateBuildupSection());
+            MediatorFromVM.Register("NodeItemSelectionChanged", _ => UpdateBuildupSection());
             nodeTreeVM = ntVM;
         }
 
@@ -144,7 +151,6 @@ namespace Calc.ConnectorRevit.ViewModels
             }
             branch.SetBuildups(newBuildups);
             ActiveBuildup = buildup;
-            UpdateBuildupSection(false);
         }
 
         public void CheckAddBuildup()
@@ -194,7 +200,6 @@ namespace Calc.ConnectorRevit.ViewModels
             branch.SetBuildups(newBuildups);
             var buildupCount = newBuildups.Count;
             ActiveBuildup = buildupCount > 0 ? newBuildups[buildupCount - 1] : null;
-            Mediator.Broadcast("BuildupSelectionChanged");
         }
 
         public void HandleInherit()
@@ -205,7 +210,6 @@ namespace Calc.ConnectorRevit.ViewModels
             if (!(host is Branch branch))
                 return;
             branch.InheritMapping();
-            Mediator.Broadcast("BuildupSelectionChanged");
         }
 
         

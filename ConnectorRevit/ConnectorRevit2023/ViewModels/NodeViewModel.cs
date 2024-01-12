@@ -1,4 +1,5 @@
 ﻿using Calc.ConnectorRevit.Helpers;
+using Calc.ConnectorRevit.Helpers.Mediators;
 using Calc.Core;
 using Calc.Core.Color;
 using Calc.Core.Objects;
@@ -78,7 +79,7 @@ namespace Calc.ConnectorRevit.ViewModels
             Store = store;
             ParentTreeView = parentTreeView;
             SubNodeItems = new ObservableCollection<NodeViewModel>();
-            Mediator.Register("BuildupSelectionChanged", _ => NotifyHostChanged());
+            MediatorFromVM.Register("BuildupSelectionChanged", _ => NotifyHostChanged());
             foreach (var subNode in node.SubBranches)
             {
                 SubNodeItems.Add(new NodeViewModel(store, subNode, parentTreeView));

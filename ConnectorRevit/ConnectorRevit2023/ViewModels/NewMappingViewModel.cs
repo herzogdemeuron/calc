@@ -1,4 +1,4 @@
-﻿using Calc.ConnectorRevit.Helpers;
+﻿using Calc.ConnectorRevit.Helpers.Mediators;
 using Calc.Core;
 using Calc.Core.Objects.Mappings;
 using System;
@@ -44,7 +44,7 @@ namespace Calc.ConnectorRevit.ViewModels
         public void HandleNewMappingClicked()
         {
             CreateMappingsList();
-            ViewMediator.Broadcast("ShowNewMappingOverlay");
+            MediatorToView.Broadcast("ShowNewMappingOverlay");
         }
         
         private void CreateMappingsList()
@@ -62,30 +62,30 @@ namespace Calc.ConnectorRevit.ViewModels
 
             if (selectedMapping == null) 
             {
-                ViewMediator.Broadcast("ShowMessageOverlay", new List<object> { null, "Please choose a mapping to duplicate." });
+                MediatorToView.Broadcast("ShowMessageOverlay", new List<object> { null, "Please choose a mapping to duplicate." });
                 return;
             }
             
             if (string.IsNullOrEmpty(newName))
             {
-                ViewMediator.Broadcast("ShowMessageOverlay", new List<object> { null, "Please enter a new name." });
+                MediatorToView.Broadcast("ShowMessageOverlay", new List<object> { null, "Please enter a new name." });
                 return;
             }
 
             List<string> currentNames = store.MappingsProjectRelated.Select(m => m.Name).ToList();
             if (currentNames.Contains(newName))
             {
-                ViewMediator.Broadcast("ShowMessageOverlay", new List<object> { null, "Name already exists in current project." });
+                MediatorToView.Broadcast("ShowMessageOverlay", new List<object> { null, "Name already exists in current project." });
                 return;
             }
 
             try
             {
-                ViewMediator.Broadcast("ShowWaitingOverlay", "Creating new mapping...");
+                MediatorToView.Broadcast("ShowWaitingOverlay", "Creating new mapping...");
                 Mapping newMapping = selectedMapping.Copy(newName);
                 store.MappingSelected = newMapping;
                 feedback = await store.SaveSelectedMapping();
-                Mediator.Broadcast("MappingSelectionChanged", store.MappingSelected);
+                MediatorFromVM.Broadcast("MappingSelectionChanged", store.MappingSelected);
 
             }
             catch (Exception ex)
@@ -94,8 +94,8 @@ namespace Calc.ConnectorRevit.ViewModels
                 feedback = null;
                 error = ex.Message;
             }
-            ViewMediator.Broadcast("ShowMainView");
-            ViewMediator.Broadcast
+            MediatorToView.Broadcast("ShowMainView");
+            MediatorToView.Broadcast
                 ("ShowMessageOverlay",
                 new List<object>
                     {  
@@ -109,7 +109,7 @@ namespace Calc.ConnectorRevit.ViewModels
 
         public void HandleNewMappingCanceled()
         {
-            ViewMediator.Broadcast("ShowMainView");
+            MediatorToView.Broadcast("ShowMainView");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

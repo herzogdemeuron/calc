@@ -1,4 +1,4 @@
-﻿using Calc.ConnectorRevit.Helpers;
+﻿using Calc.ConnectorRevit.Helpers.Mediators;
 using Calc.ConnectorRevit.ViewModels;
 using Calc.Core.Objects;
 using Calc.Core.Objects.Buildups;
@@ -22,7 +22,7 @@ namespace Calc.ConnectorRevit.Views
             MainVM = mvm;
             this.DataContext = MainVM;
             InitializeComponent();
-            ViewMediator.Register("ViewDeselectTreeView", _=>DeselectTreeView());
+            MediatorToView.Register("ViewDeselectTreeView", _=>DeselectTreeView());
         }
 
         private void DeselectTreeView()

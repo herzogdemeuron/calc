@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Calc.ConnectorRevit.Helpers
+namespace Calc.ConnectorRevit.Helpers.Mediators
 {
-    public class ViewMediator
+    public class MediatorToView
     {
         /// <summary>
         /// Broadcasts messages to main view
