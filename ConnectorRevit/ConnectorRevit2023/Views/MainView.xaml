@@ -134,11 +134,12 @@
                     </TreeView.ItemTemplate>
                 </TreeView>
 
-                <Border Grid.ColumnSpan="3"
-                        Grid.Row="0"
-                        Background="LightGray"
-                        BorderThickness="0"
-                        CornerRadius="4">
+                <Border Grid.ColumnSpan="3" Grid.Row="0" CornerRadius="4" Background="LightGray">
+                <Border BorderThickness="0" CornerRadius="4">
+                    <Border.Background>
+                        <SolidColorBrush Color="{Binding NodeTreeVM.SelectedNodeItem.LabelColor}"/>
+                    </Border.Background>
+                </Border>
                 </Border>
 
                 <StackPanel Grid.Row="0"
