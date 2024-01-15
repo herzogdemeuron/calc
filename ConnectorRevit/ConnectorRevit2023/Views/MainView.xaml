@@ -44,7 +44,7 @@
                 <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
 
-            <Label Content="Building Element Groups:"
+            <Label Content="Element Groups:"
                    Padding="10,6,0,0"
                    Grid.Column="0"
                    Grid.Row="0"
@@ -263,7 +263,7 @@
                 </TabControl>
 
                 
-                <Label Content="Calculation:"
+                <Label Content="Calculation Results:"
                        Grid.Row="3"
                        Padding="0"
                        FontSize="27"
