@@ -1,14 +1,17 @@
-﻿using Calc.ConnectorRevit.Helpers;
+﻿using Autodesk.Revit.DB.Visual;
+using Calc.ConnectorRevit.Helpers;
 using Calc.ConnectorRevit.Helpers.Mediators;
 using Calc.Core;
 using Calc.Core.Color;
 using Calc.Core.Objects;
+using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.GraphNodes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Media;
 
 namespace Calc.ConnectorRevit.ViewModels
@@ -69,9 +72,43 @@ namespace Calc.ConnectorRevit.ViewModels
                 }
                 return calculation;
             }
-
         }
 
+        private ObservableCollection<Buildup> _allBuildupsCollection1 => new ObservableCollection<Buildup>(Store.BuildupsAll);
+        private ICollectionView _allBuildupsView1;
+        public ICollectionView AllBuildupsView1
+        {
+            get
+            {
+                if ( _allBuildupsCollection1 != null)
+                {
+                    _allBuildupsView1 = CollectionViewSource.GetDefaultView(_allBuildupsCollection1);
+                    if (_allBuildupsView1.GroupDescriptions.Count == 0)
+                    {
+                        _allBuildupsView1.GroupDescriptions.Add(new PropertyGroupDescription("Group.Name"));
+                    }
+                }
+                return _allBuildupsView1;
+            }
+        }
+        private ObservableCollection<Buildup> _allBuildupsCollection2 => new ObservableCollection<Buildup>(Store.BuildupsAll);
+
+        private ICollectionView _allBuildupsView2;
+        public ICollectionView AllBuildupsView2
+        {
+            get
+            {
+                if ( _allBuildupsCollection2 != null)
+                {
+                    _allBuildupsView2 = CollectionViewSource.GetDefaultView(_allBuildupsCollection2);
+                    if (_allBuildupsView1.GroupDescriptions.Count == 0)
+                    {
+                        _allBuildupsView1.GroupDescriptions.Add(new PropertyGroupDescription("Group.Name"));
+                    }
+                }
+                return _allBuildupsView2;
+            }
+        }
 
         public NodeViewModel(DirectusStore store, IGraphNode node, NodeTreeViewModel parentTreeView)
         {

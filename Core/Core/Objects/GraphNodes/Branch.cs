@@ -389,10 +389,8 @@ namespace Calc.Core.Objects.GraphNodes
         private string GetBuildupsIdentifier(List<Buildup> buildups)
         {
             if (buildups == null)
-            {
                 return null;
-            }
-            return string.Join(",", buildups.Select(b => b.Id).OrderBy(i => i));
+            return string.Join(",", buildups.Select(b => b?.Id??'-').OrderBy(i => i));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

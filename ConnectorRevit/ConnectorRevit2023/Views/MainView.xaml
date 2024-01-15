@@ -3,9 +3,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Calc.ConnectorRevit.ViewModels" 
+        xmlns:local="clr-namespace:Calc.ConnectorRevit.ViewModels"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:conv="clr-namespace:Calc.ConnectorRevit.Views.Converters"
+        xmlns:views="clr-namespace:Calc.ConnectorRevit.Views" 
         Title="CALC"
         d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
         Loaded="WindowLoaded"
@@ -218,17 +219,31 @@
                             Click="RemoveClicked"/>
                     </StackPanel>
                     <StackPanel DockPanel.Dock="Left">
-                        <ComboBox Tag="1"
-                                  ItemsSource="{Binding Store.BuildupsAll}"
+                        <views:SearchComboBox Tag="1"
+                                  ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.AllBuildupsView1}"
                                   SelectedItem="{Binding BuildupVM.Buildup1}"
                                   DisplayMemberPath="Name"
                                   IsEnabled="{Binding BuildupVM.CanAddFirstBuildup}"
                                   Height="25"
                                   HorizontalAlignment="Stretch"
-                                  VerticalAlignment="Top"/>
+                                  VerticalAlignment="Top">
+                            
+                            <ComboBox.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.HeaderTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Name}" Foreground="Gray"/>
+                                        </DataTemplate>
+                                    </GroupStyle.HeaderTemplate>
+                                </GroupStyle>
+                            </ComboBox.GroupStyle>
 
-                        <ComboBox Tag="2"
-                                  ItemsSource="{Binding Store.BuildupsAll}"
+
+                        </views:SearchComboBox>
+
+
+                        <views:SearchComboBox Tag="2"
+                                  ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.AllBuildupsView2}"
                                   SelectedItem="{Binding BuildupVM.Buildup2}"
                                   DisplayMemberPath="Name"
                                   IsEnabled="{Binding BuildupVM.CanAddSecondBuildup}"

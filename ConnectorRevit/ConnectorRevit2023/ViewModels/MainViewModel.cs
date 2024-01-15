@@ -34,7 +34,7 @@ namespace Calc.ConnectorRevit.ViewModels
 
             
             NodeTreeVM = new NodeTreeViewModel(store);
-            BuildupVM = new BuildupViewModel(NodeTreeVM);
+            BuildupVM = new BuildupViewModel(store, NodeTreeVM);
             SavingVM = new SavingViewModel(NodeTreeVM);
             CalculationVM = new CalculationViewModel(NodeTreeVM);
 
