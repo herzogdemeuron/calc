@@ -136,6 +136,7 @@ namespace Calc.ConnectorRevit.ViewModels
             MediatorToView.Broadcast("ViewDeselectTreeView"); //send command to the view to deselect treeview
             SelectedNodeItem = null;
             CurrentForestItem.NotifyNodePropertyChange(); //better ways to do this?
+            MediatorFromVM.Broadcast("NodeItemSelectionChanged");
             MediatorToVisualizer.Broadcast("TreeViewDeselected", CurrentForestItem); // to the visualizer
         }
 

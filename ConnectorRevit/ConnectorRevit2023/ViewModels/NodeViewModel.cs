@@ -121,7 +121,7 @@ namespace Calc.ConnectorRevit.ViewModels
         {
             get
             {
-                if (LabelColorVisible)
+                if (LabelColorVisible || Host is Forest)
                 {
                     return IdentifierColor;
                 }

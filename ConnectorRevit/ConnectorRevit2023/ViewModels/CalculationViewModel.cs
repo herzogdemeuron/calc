@@ -1,4 +1,5 @@
 ﻿using Calc.ConnectorRevit.Helpers.Mediators;
+using Calc.Core.Calculations;
 using Calc.Core.Objects;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Results;
@@ -15,43 +16,76 @@ namespace Calc.ConnectorRevit.ViewModels
     public class CalculationViewModel : INotifyPropertyChanged
     {
         private readonly NodeTreeViewModel NodeTreeVM;
-        private IGraphNode HostNode => SelectedNodeItem.Host;
-        public NodeViewModel SelectedNodeItem => NodeTreeVM.SelectedNodeItem;
+        private IGraphNode HostNode => NodeTreeVM.SelectedNodeItem?.Host ?? NodeTreeVM.CurrentForestItem?.Host;
+        public string Name
+        {
+            get
+            {
+                if (HostNode is Forest forest)
+                    return forest.Name;
+                else
+                    return NodeTreeVM.SelectedNodeItem?.Name;
+            }
+        }
         public bool HasResults => (Results != null && Results.Count > 0);
         public Dictionary<string, decimal> Results
         {
             get
             {
                 var calculation = new Dictionary<string, decimal>();
-                if (HostNode != null && HostNode is Branch branch)
+                var results = new List<Result>();
+                if (HostNode == null)
+                    return null;
+                if (HostNode is Branch branch)
                 {
-                    var results = branch.CalculationResults;
-                    foreach (var result in results)
+                    results = branch.CalculationResults;
+                }
+                else
+                {
+                    var forest = NodeTreeVM.CurrentForestItem.Host as Forest;
+                    var branches = forest.Trees.SelectMany(tree => tree.Flatten());
+                    if (branches == null || branches.Count() == 0) 
+                        return calculation;
+                    results = branches.SelectMany(b => b.CalculationResults).ToList();
+                }
+
+                foreach (var result in results)
+                {
+                    if (calculation.ContainsKey(result.GroupName))
                     {
-                        if (calculation.ContainsKey(result.GroupName))
-                        {
-                            calculation[result.GroupName] += Math.Round(result.Gwp, 3);
-                        }
-                        else
-                        {
-                            calculation.Add(result.GroupName, Math.Round(result.Gwp, 3));
-                        }
+                        calculation[result.GroupName] += Math.Round(result.Gwp, 3);
+                    }
+                    else
+                    {
+                        calculation.Add(result.GroupName, Math.Round(result.Gwp, 3));
                     }
                 }
+
                 return calculation;
             }
 
         }
         public bool HasErrors => (Errors != null && Errors.Count > 0);
+        public bool CanSaveResults => (HasResults && !HasErrors);
 
         public List<ParameterError> Errors
         {
             get
             {
-                if (HostNode != null && HostNode is Branch branch)
+                if (HostNode == null) return null;
+                if (HostNode is Branch branch)
+                {
                     return branch.ParameterErrors;
+                }
                 else
-                    return null;
+                {
+                    var forest = NodeTreeVM.CurrentForestItem.Host as Forest;
+                    var branches = forest.Trees;
+                    if (branches == null || branches.Count() == 0)
+                        return null;
+                    return branches.SelectMany(b => b.ParameterErrors).ToList();
+                }
+
             }
         }
 
@@ -65,8 +99,12 @@ namespace Calc.ConnectorRevit.ViewModels
 
         private void NotifyCalculationChanged()
         {
+            OnPropertyChanged(nameof(Name));
             OnPropertyChanged(nameof(Results));
             OnPropertyChanged(nameof(Errors));
+            OnPropertyChanged(nameof(HasResults));
+            OnPropertyChanged(nameof(HasErrors));
+            OnPropertyChanged(nameof(CanSaveResults));
         }
 
 

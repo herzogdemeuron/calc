@@ -282,7 +282,7 @@
                             </Grid.RowDefinitions>
 
                             <TextBlock Grid.Row="0"
-                                   Text="{Binding NodeTreeVM.SelectedNodeItem.Name}"
+                                   Text="{Binding CalculationVM.Name}"
                                    Margin="10"
                                    FontSize="14"/>
 
@@ -359,7 +359,8 @@
                 <Button Grid.Column="1"
                         Content="Save Results"
                         Height="25"
-                        Click="SaveResultsClicked" Margin="5,0,10,10" />
+                        Click="SaveResultsClicked" Margin="5,0,10,10"
+                        IsEnabled="{Binding CalculationVM.CanSaveResults}"/>
             </Grid>
 
         </Grid>

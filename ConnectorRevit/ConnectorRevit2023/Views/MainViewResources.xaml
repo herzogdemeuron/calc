@@ -204,8 +204,8 @@
         <Style.Triggers>
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding NodeTreeVM.SelectedNodeItem.Host.HasCalculationErrors}" Value="False"/>
-                    <Condition Binding="{Binding NodeTreeVM.SelectedNodeItem.Host.HasCalculationResults}" Value="True"/>
+                    <Condition Binding="{Binding CalculationVM.HasErrors}" Value="False"/>
+                    <Condition Binding="{Binding CalculationVM.HasResults}" Value="True"/>
                 </MultiDataTrigger.Conditions>
                 <Setter Property="Visibility" Value="Visible"/>
             </MultiDataTrigger>
@@ -215,7 +215,7 @@
     <Style x:Key="ErrorDataGridStyle" TargetType="DataGrid" BasedOn="{StaticResource DataGridStyle}">
         <Setter Property="Visibility" Value="Collapsed"/>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding NodeTreeVM.SelectedNodeItem.Host.HasCalculationErrors}" Value="True">
+            <DataTrigger Binding="{Binding CalculationVM.HasErrors}" Value="True">
                 <Setter Property="Visibility" Value="Visible"/>
             </DataTrigger>
         </Style.Triggers>
