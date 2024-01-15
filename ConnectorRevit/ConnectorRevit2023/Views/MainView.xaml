@@ -148,7 +148,7 @@
                     <TextBlock Text="Count"
                                FontWeight="SemiBold"
                                HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding NodeTreeVM.SelectedNodeItem.Host.Elements.Count}"
+                    <TextBlock Text="{Binding CalculationVM.CurrentNodeItem.Host.Elements.Count}"
                                HorizontalAlignment="Center"/>
                 </StackPanel>
 
@@ -158,7 +158,7 @@
                     <TextBlock Text="Area"
                                FontWeight="SemiBold"
                                HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding NodeTreeVM.SelectedNodeItem.Host.TotalArea,
+                    <TextBlock Text="{Binding CalculationVM.CurrentNodeItem.Host.TotalArea,
                                         StringFormat={}{0} m²}"
                                HorizontalAlignment="Center"/>
                 </StackPanel>
@@ -169,7 +169,7 @@
                     <TextBlock Text="Volume"
                                FontWeight="SemiBold"
                                HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding NodeTreeVM.SelectedNodeItem.Host.TotalVolume,
+                    <TextBlock Text="{Binding CalculationVM.CurrentNodeItem.Host.TotalVolume,
                                               StringFormat={}{0} m³}"
                                HorizontalAlignment="Center"/>
                 </StackPanel>

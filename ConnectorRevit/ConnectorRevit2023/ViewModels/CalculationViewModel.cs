@@ -16,7 +16,8 @@ namespace Calc.ConnectorRevit.ViewModels
     public class CalculationViewModel : INotifyPropertyChanged
     {
         private readonly NodeTreeViewModel NodeTreeVM;
-        private IGraphNode HostNode => NodeTreeVM.SelectedNodeItem?.Host ?? NodeTreeVM.CurrentForestItem?.Host;
+        public NodeViewModel CurrentNodeItem => NodeTreeVM.SelectedNodeItem ?? NodeTreeVM.CurrentForestItem;
+        private IGraphNode HostNode => CurrentNodeItem?.Host;
         public string Name
         {
             get
@@ -120,6 +121,7 @@ namespace Calc.ConnectorRevit.ViewModels
         private void NotifyCalculationChanged()
         {
             OnPropertyChanged(nameof(Name));
+            OnPropertyChanged(nameof(CurrentNodeItem));
             OnPropertyChanged(nameof(Results));
             OnPropertyChanged(nameof(Errors));
             OnPropertyChanged(nameof(HasResults));
