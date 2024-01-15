@@ -250,7 +250,17 @@
                                   Height="25"
                                   Margin="0,5,0,0"
                                   HorizontalAlignment="Stretch"
-                                  VerticalAlignment="Top"/>
+                                  VerticalAlignment="Top">
+                            <ComboBox.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.HeaderTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Name}" Foreground="Gray"/>
+                                        </DataTemplate>
+                                    </GroupStyle.HeaderTemplate>
+                                </GroupStyle>
+                            </ComboBox.GroupStyle>
+                        </views:SearchComboBox>
                     </StackPanel>
                 </DockPanel>
 
