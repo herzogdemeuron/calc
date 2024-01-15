@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using Calc.Core.Calculations;
+﻿using Calc.Core.Calculations;
 using Calc.Core.Color;
 using Calc.Core.Helpers;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Mappings;
 using Calc.Core.Objects.Results;
 using Speckle.Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 
 namespace Calc.Core.Objects.GraphNodes
 {
@@ -96,6 +95,18 @@ namespace Calc.Core.Objects.GraphNodes
 
         [JsonIgnore]
         public bool HasCalculationErrors => (ParameterErrors != null && ParameterErrors.Count > 0);
+        [JsonIgnore]
+        public bool IsFullyCalculated
+        {
+            get
+            {
+                if (SubBranches.Count > 0)
+                {
+                    return SubBranches.All(sb => sb.IsFullyCalculated);
+                }
+                return HasCalculationResults || ElementIds.Count == 0;
+            }
+        }
 
         private List<ParameterError> _parameterErrors = new();
         [JsonIgnore]
@@ -139,7 +150,6 @@ namespace Calc.Core.Objects.GraphNodes
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public Branch()
         {
@@ -220,7 +230,6 @@ namespace Calc.Core.Objects.GraphNodes
                 }
             }
         }
-
 
         public void ResetBuildups()
         {
@@ -385,6 +394,8 @@ namespace Calc.Core.Objects.GraphNodes
             }
             return string.Join(",", buildups.Select(b => b.Id).OrderBy(i => i));
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

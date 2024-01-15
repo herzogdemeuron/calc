@@ -47,12 +47,12 @@
                         </Style.Triggers>
                     </Style>
                 </Grid.Style>
-                <TextBlock Text="💩"
+                <TextBlock Text="💔"
                            FontSize="10"
                            FontWeight="SemiBold"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Center"
-                           Foreground="SaddleBrown"/>
+                           Foreground="Red"/>
             </Grid>
 
             <Grid Margin="4,0,0,0">

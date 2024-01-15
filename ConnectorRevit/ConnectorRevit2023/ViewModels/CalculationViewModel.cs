@@ -66,7 +66,7 @@ namespace Calc.ConnectorRevit.ViewModels
 
         }
         public bool HasErrors => (Errors != null && Errors.Count > 0);
-        public bool CanSaveResults => (HasResults && !HasErrors);
+        public bool CanSaveResults => (HasResults && !HasErrors && IsFullyCalculated);
 
         public List<ParameterError> Errors
         {
@@ -86,6 +86,26 @@ namespace Calc.ConnectorRevit.ViewModels
                     return branches.SelectMany(b => b.ParameterErrors).ToList();
                 }
 
+            }
+        }
+
+        private bool IsFullyCalculated
+        {
+            get
+            {
+                if (HostNode == null) return false;
+                if (HostNode is Branch branch)
+                {
+                    return branch.IsFullyCalculated;
+                }
+                else
+                {
+                    var forest = NodeTreeVM.CurrentForestItem.Host as Forest;
+                    var branches = forest.Trees;
+                    if (branches == null || branches.Count() == 0)
+                        return true;
+                    return branches.All(b => b.IsFullyCalculated);
+                }
             }
         }
 
