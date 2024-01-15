@@ -67,6 +67,10 @@ namespace Calc.Core.Objects.GraphNodes
             private set
             {
                 _buildups = value;
+                if (SubBranches.Count == 0)
+                {
+                    Calculator.Calculate(this);
+                }
                 OnPropertyChanged(nameof(Buildups));
             }
         }
@@ -205,39 +209,9 @@ namespace Calc.Core.Objects.GraphNodes
             var currentIdentifier = BuildupsIdentifier;
             if (currentIdentifier == newIdentifier) return;
 
-            /*int currentCount = Buildups?.Count ?? 0;
-            int newCount = buildups?.Count ?? 0;
-            // reduce the Buildups list to the length of the new list
-            if (currentCount > newCount)
-            {
-                for (int i = currentCount - 1; i >= newCount; i--)
-                {
-                    Buildups.RemoveAt(i);
-                }
-            }
-
-            for (int i = 0; i < newCount; i++)
-            {
-                if (i < currentCount)
-                {
-                    Buildups[i].Copy(buildups[i]);
-                }
-                else
-                {
-                    Buildups.Add(buildups[i].Copy());
-                }
-            }*/
-
             Buildups = new(buildups);
 
             OnPropertyChanged(nameof(Buildups));
-
-            if (SubBranches.Count == 0)
-            {
-                Calculator.Calculate(this);
-                return;
-            }
-
             foreach (var subBranch in SubBranches)
             {
                 if (subBranch.Buildups == null || subBranch.BuildupsIdentifier == currentIdentifier)
