@@ -82,14 +82,14 @@ namespace Calc.Core.Calculations
             if (branch == null) return;
 
             var results = new List<Result>();
-            var errorList = new ObservableCollection<ParameterError>();
+            var errorList = new List<ParameterError>();
             CalculateBranch(branch, results, errorList);
 
             branch.CalculationResults = results;
             branch.ParameterErrors = errorList;
         }
 
-        private static void CalculateBranch(Branch branch, List<Result> resultList, ObservableCollection<ParameterError> errorList)
+        private static void CalculateBranch(Branch branch, List<Result> resultList, List<ParameterError> errorList)
         {
             var buildups = branch.Buildups;
             if (buildups == null) return;

@@ -11,9 +11,9 @@ namespace Calc.Core.Helpers
 {
     public static class ParameterErrorHelper
     {
-        public static ObservableCollection<ParameterError> MergeParameterErrors(List<ObservableCollection<ParameterError>> errorLists)
+        public static List<ParameterError> MergeParameterErrors(List<List<ParameterError>> errorLists)
         {
-            ObservableCollection<ParameterError> result = new();
+            List<ParameterError> result = new();
             foreach (var errorList in errorLists)
             {
                 foreach (var error in errorList)
@@ -28,7 +28,7 @@ namespace Calc.Core.Helpers
         /// <summary>
         /// Add a new parameter error to the error list
         /// </summary>
-        public static void AddToErrorList(ObservableCollection<ParameterError> errorList, ParameterError newError)
+        public static void AddToErrorList(List<ParameterError> errorList, ParameterError newError)
         {
             var existingError = errorList.FirstOrDefault(x => x.ParameterName == newError.ParameterName && x.ErrorType == newError.ErrorType);
             if (existingError == null)

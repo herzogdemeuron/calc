@@ -93,9 +93,9 @@ namespace Calc.Core.Objects.GraphNodes
         [JsonIgnore]
         public bool HasCalculationErrors => (ParameterErrors != null && ParameterErrors.Count > 0);
 
-        private ObservableCollection<ParameterError> _parameterErrors = new();
+        private List<ParameterError> _parameterErrors = new();
         [JsonIgnore]
-        public ObservableCollection<ParameterError> ParameterErrors
+        public List<ParameterError> ParameterErrors
         {
             get
             {

@@ -1,4 +1,5 @@
-﻿using Calc.Core.Objects;
+﻿using Calc.ConnectorRevit.Helpers.Mediators;
+using Calc.Core.Objects;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Results;
 using System;
@@ -43,7 +44,7 @@ namespace Calc.ConnectorRevit.ViewModels
         }
         public bool HasErrors => (Errors != null && Errors.Count > 0);
 
-        public ObservableCollection<ParameterError> Errors
+        public List<ParameterError> Errors
         {
             get
             {
@@ -57,6 +58,15 @@ namespace Calc.ConnectorRevit.ViewModels
         public CalculationViewModel(NodeTreeViewModel ntVM)
         {
             NodeTreeVM = ntVM;
+            MediatorFromVM.Register("BuildupSelectionChanged", _ => NotifyCalculationChanged());
+            MediatorFromVM.Register("NodeItemSelectionChanged", _ => NotifyCalculationChanged());
+            MediatorFromVM.Register("MappingSelectionChanged", _ => NotifyCalculationChanged());
+        }
+
+        private void NotifyCalculationChanged()
+        {
+            OnPropertyChanged(nameof(Results));
+            OnPropertyChanged(nameof(Errors));
         }
 
 
