@@ -1,16 +1,11 @@
 ﻿using Calc.ConnectorRevit.Helpers.Mediators;
-using Calc.Core;
 using Calc.Core.Objects;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.GraphNodes;
-using GongSolutions.Wpf.DragDrop;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Reflection;
-using System.Windows;
 using System.Windows.Data;
-using System.Windows.Media;
 
 namespace Calc.ConnectorRevit.ViewModels
 {

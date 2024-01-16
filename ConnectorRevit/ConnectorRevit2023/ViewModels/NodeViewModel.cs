@@ -1,17 +1,13 @@
-﻿using Autodesk.Revit.DB.Visual;
-using Calc.ConnectorRevit.Helpers;
-using Calc.ConnectorRevit.Helpers.Mediators;
+﻿using Calc.ConnectorRevit.Helpers;
 using Calc.Core;
 using Calc.Core.Color;
 using Calc.Core.Objects;
-using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.GraphNodes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Data;
 using System.Windows.Media;
 
 namespace Calc.ConnectorRevit.ViewModels
