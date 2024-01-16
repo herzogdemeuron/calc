@@ -66,8 +66,13 @@ namespace Calc.ConnectorRevit.Views
                 }
                 else
                 {
-                    ICV.Filter = new Predicate<object>(i => 
-                    ((Buildup)i).Name.ToLower().Contains(_editableTextBox.Text.ToLower()));
+                    ICV.Filter = new Predicate<object>(i =>
+                    {
+                        var buildup = (Buildup)i;
+                        var searchText = _editableTextBox.Text.ToLower();
+                        return buildup.Name.ToLower().Contains(searchText) ||
+                        (buildup.Group != null && buildup.Group.Name.ToLower().Contains(searchText));
+                    });
                 }
             }
         }

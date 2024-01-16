@@ -101,9 +101,9 @@ namespace Calc.ConnectorRevit.ViewModels
                 if ( _allBuildupsCollection2 != null)
                 {
                     _allBuildupsView2 = CollectionViewSource.GetDefaultView(_allBuildupsCollection2);
-                    if (_allBuildupsView1.GroupDescriptions.Count == 0)
+                    if (_allBuildupsView2.GroupDescriptions.Count == 0)
                     {
-                        _allBuildupsView1.GroupDescriptions.Add(new PropertyGroupDescription("Group.Name"));
+                        _allBuildupsView2.GroupDescriptions.Add(new PropertyGroupDescription("Group.Name"));
                     }
                 }
                 return _allBuildupsView2;
