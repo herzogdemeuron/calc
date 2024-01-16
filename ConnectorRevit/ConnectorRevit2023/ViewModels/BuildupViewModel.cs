@@ -18,7 +18,6 @@ namespace Calc.ConnectorRevit.ViewModels
     public class BuildupViewModel : INotifyPropertyChanged
     {
         private readonly NodeTreeViewModel _nodeTreeVM;
-        private readonly DirectusStore _store;
 
         private bool _inheritEnabled = false;
         public bool InheritEnabled
@@ -71,7 +70,8 @@ namespace Calc.ConnectorRevit.ViewModels
             set
             {
                 UpdateBuildup(0, value);
-                //the combobox selection change due to node item selection change doe not belong to buildup selection change broadcast
+                //the combobox selection change due to node item selection change does not
+                //belong to buildup selection change broadcast
                 MediatorFromVM.Broadcast("BuildupSelectionChanged");
             }
         }
@@ -106,7 +106,7 @@ namespace Calc.ConnectorRevit.ViewModels
         }
 
 
-        public BuildupViewModel(DirectusStore store, NodeTreeViewModel ntVM)
+        public BuildupViewModel(NodeTreeViewModel ntVM)
         {
             MediatorFromVM.Register("NodeItemSelectionChanged", _ => UpdateBuildupSection());
             MediatorFromVM.Register("MappingSelectionChanged", _ => UpdateBuildupSection());

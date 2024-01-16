@@ -31,14 +31,14 @@ namespace Calc.ConnectorRevit.ViewModels
             ForestVM = new ForestViewModel(store);
             MappingVM = new MappingViewModel(store);
             NewMappingVM = new NewMappingViewModel(store);
+            NodeTreeVM = new NodeTreeViewModel(store);
 
             
-            NodeTreeVM = new NodeTreeViewModel(store);
-            BuildupVM = new BuildupViewModel(store, NodeTreeVM);
-            SavingVM = new SavingViewModel(NodeTreeVM);
+            BuildupVM = new BuildupViewModel(NodeTreeVM);
             CalculationVM = new CalculationViewModel(NodeTreeVM);
 
 
+            SavingVM = new SavingViewModel(NodeTreeVM);
             VisibilityVM = new VisibilityViewModel();
         }
 
