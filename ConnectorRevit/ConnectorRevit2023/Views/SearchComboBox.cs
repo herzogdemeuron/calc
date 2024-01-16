@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Calc.Core.Objects.Buildups;
+using System;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows;
-using Calc.Core.Objects.Buildups;
-using System.Diagnostics;
+using System.Windows.Controls;
 
 namespace Calc.ConnectorRevit.Views
 {
@@ -55,6 +50,8 @@ namespace Calc.ConnectorRevit.Views
             }
             this.IsEditable = false;
             _firstFocus = true;
+
+            ResetFilter();
         }
 
         private void EditableTextBox_GotFocus(object sender, RoutedEventArgs e)
@@ -68,10 +65,7 @@ namespace Calc.ConnectorRevit.Views
             _editableTextBox.Text = text;
             _ignoreTextChange = false;
 
-            if (ItemsSource is ICollectionView ICV)
-            {
-                ICV.Filter = null;
-            }
+            ResetFilter();
             this.IsDropDownOpen = true;
         }
 
@@ -108,6 +102,14 @@ namespace Calc.ConnectorRevit.Views
                 }
             }
             
+        }
+
+        private void ResetFilter()
+        {
+            if (ItemsSource is ICollectionView ICV)
+            {
+                ICV.Filter = null;
+            }
         }
     }
 }

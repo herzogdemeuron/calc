@@ -206,10 +206,6 @@ namespace Calc.ConnectorRevit.ViewModels
             {
                 newBuildups[index] = buildup;
             }
-            else
-            {
-                return;
-            }
             branch.SetBuildups(newBuildups);
             ActiveBuildup = buildup;
 
