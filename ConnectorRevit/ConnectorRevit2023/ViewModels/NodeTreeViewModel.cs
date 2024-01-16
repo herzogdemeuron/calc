@@ -2,8 +2,10 @@
 using Calc.ConnectorRevit.Helpers.Mediators;
 using Calc.ConnectorRevit.Services;
 using Calc.Core;
+using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Mappings;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
@@ -12,8 +14,10 @@ namespace Calc.ConnectorRevit.ViewModels
     public class NodeTreeViewModel : INotifyPropertyChanged
     {
         private DirectusStore store;
+        public  List<Buildup> AllBuildups => store.BuildupsAll;
         public int MaxBuildups { get; set; } = 2;
         public bool BranchesSwitch { get; set; }
+
         private NodeViewModel selectedNodeItem;
         public NodeViewModel SelectedNodeItem
         {

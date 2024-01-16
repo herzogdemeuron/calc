@@ -33,6 +33,9 @@ namespace Calc.ConnectorRevit.ViewModels
         public NodeTreeViewModel ParentTreeView { get; set; }
         public ObservableCollection<NodeViewModel> SubNodeItems { get; }
 
+        public BuildupViewModel NodeBuildupItem { get; set; }
+        public CalculationViewModel NodeCalculation { get; set; }
+
         private IGraphNode host;
         public IGraphNode Host
         {
@@ -74,41 +77,6 @@ namespace Calc.ConnectorRevit.ViewModels
             }
         }
 
-        private ObservableCollection<Buildup> _allBuildupsCollection1 => new ObservableCollection<Buildup>(Store.BuildupsAll);
-        private ICollectionView _allBuildupsView1;
-        public ICollectionView AllBuildupsView1
-        {
-            get
-            {
-                if ( _allBuildupsCollection1 != null)
-                {
-                    _allBuildupsView1 = CollectionViewSource.GetDefaultView(_allBuildupsCollection1);
-                    if (_allBuildupsView1.GroupDescriptions.Count == 0)
-                    {
-                        _allBuildupsView1.GroupDescriptions.Add(new PropertyGroupDescription("Group.Name"));
-                    }
-                }
-                return _allBuildupsView1;
-            }
-        }
-        private ObservableCollection<Buildup> _allBuildupsCollection2 => new ObservableCollection<Buildup>(Store.BuildupsAll);
-
-        private ICollectionView _allBuildupsView2;
-        public ICollectionView AllBuildupsView2
-        {
-            get
-            {
-                if ( _allBuildupsCollection2 != null)
-                {
-                    _allBuildupsView2 = CollectionViewSource.GetDefaultView(_allBuildupsCollection2);
-                    if (_allBuildupsView2.GroupDescriptions.Count == 0)
-                    {
-                        _allBuildupsView2.GroupDescriptions.Add(new PropertyGroupDescription("Group.Name"));
-                    }
-                }
-                return _allBuildupsView2;
-            }
-        }
 
         public NodeViewModel(DirectusStore store, IGraphNode node, NodeTreeViewModel parentTreeView)
         {
@@ -116,6 +84,8 @@ namespace Calc.ConnectorRevit.ViewModels
             Store = store;
             ParentTreeView = parentTreeView;
             SubNodeItems = new ObservableCollection<NodeViewModel>();
+            NodeBuildupItem = new BuildupViewModel(this);
+
             foreach (var subNode in node.SubBranches)
             {
                 SubNodeItems.Add(new NodeViewModel(store, subNode, parentTreeView));

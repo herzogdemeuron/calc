@@ -1,15 +1,11 @@
 ﻿using Calc.ConnectorRevit.Helpers.Mediators;
-using Calc.Core.Calculations;
 using Calc.Core.Objects;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Results;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Calc.ConnectorRevit.ViewModels
 {

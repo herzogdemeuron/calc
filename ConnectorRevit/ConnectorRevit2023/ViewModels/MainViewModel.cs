@@ -16,7 +16,6 @@ namespace Calc.ConnectorRevit.ViewModels
         public LoadingViewModel LoadingVM { get; set; }
         public ForestViewModel ForestVM { get; set; }
         public MappingViewModel MappingVM { get; set; }
-        public BuildupViewModel BuildupVM { get; set; }
         public NodeTreeViewModel NodeTreeVM { get; set; }
         public SavingViewModel SavingVM { get; set; }
         public NewMappingViewModel NewMappingVM { get; set; }
@@ -34,7 +33,6 @@ namespace Calc.ConnectorRevit.ViewModels
             NodeTreeVM = new NodeTreeViewModel(store);
 
             
-            BuildupVM = new BuildupViewModel(NodeTreeVM);
             CalculationVM = new CalculationViewModel(NodeTreeVM);
 
 
@@ -102,12 +100,16 @@ namespace Calc.ConnectorRevit.ViewModels
 
         public void HandleInherit()
         {
-            BuildupVM.HandleInherit();
+            if (NodeTreeVM.SelectedNodeItem == null)
+                return;
+            NodeTreeVM.SelectedNodeItem.NodeBuildupItem.HandleInherit();
         }
 
         public void HandleRemove()
         {
-            BuildupVM.HandleRemove();
+            if (NodeTreeVM.SelectedNodeItem == null)
+                return;
+            NodeTreeVM.SelectedNodeItem.NodeBuildupItem.HandleRemove();
         }
 
         public void HandleViewToggleToBuildup()

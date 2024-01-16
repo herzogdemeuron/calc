@@ -208,22 +208,22 @@
                         <Button Content="Follow"
                             Width="50"
                             Height="25"
-                            IsEnabled="{Binding BuildupVM.InheritEnabled}"
+                            IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.InheritEnabled}"
                             Click="InheritClicked"/>
 
                         <Button Content="Reduce"
                             Width="50"
                             Margin="0,5,0,0"
                             Height="25"
-                                IsEnabled="{Binding BuildupVM.RemoveEnabled}"
+                            IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.RemoveEnabled}"
                             Click="RemoveClicked"/>
                     </StackPanel>
                     <StackPanel DockPanel.Dock="Left">
                         <views:SearchComboBox Tag="1"
-                                  ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.AllBuildupsView1}"
-                                  SelectedItem="{Binding BuildupVM.Buildup1}"
+                                  ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.AllBuildupsView1}"
+                                  SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup1}"
                                   DisplayMemberPath="Name"
-                                  IsEnabled="{Binding BuildupVM.CanAddFirstBuildup}"
+                                  IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CanAddFirstBuildup}"
                                   Height="25"
                                   HorizontalAlignment="Stretch"
                                   VerticalAlignment="Top">
@@ -243,10 +243,10 @@
 
 
                         <views:SearchComboBox Tag="2"
-                                  ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.AllBuildupsView2}"
-                                  SelectedItem="{Binding BuildupVM.Buildup2}"
+                                  ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.AllBuildupsView2}"
+                                  SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup2}"
                                   DisplayMemberPath="Name"
-                                  IsEnabled="{Binding BuildupVM.CanAddSecondBuildup}"
+                                  IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CanAddSecondBuildup}"
                                   Height="25"
                                   Margin="0,5,0,0"
                                   HorizontalAlignment="Stretch"
@@ -268,8 +268,8 @@
                             Grid.Row="2"
                             Margin="0,10,0,20"
                             DockPanel.Dock="Top"
-                            ItemsSource="{Binding BuildupVM.CurrentBuildups}"
-                            SelectedItem="{Binding BuildupVM.ActiveBuildup}"
+                            ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CurrentBuildups}"
+                            SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.ActiveBuildup}"
                             ItemContainerStyle="{StaticResource TabItemStyle}">
 
                     <TabControl.ContentTemplate>
