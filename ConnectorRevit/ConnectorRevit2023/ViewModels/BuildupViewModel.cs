@@ -150,7 +150,7 @@ namespace Calc.ConnectorRevit.ViewModels
 
         public BuildupViewModel(NodeViewModel node)
         {
-            //MediatorFromVM.Register("NodeItemSelectionChanged", _ => UpdateBuildupSection());
+            MediatorFromVM.Register("NodeItemSelectionChanged", _ => UpdateBuildupSection()); // if not, the buildup section sometimes not update,(parent reduced to zero, children remain all enabled), how to solve?
             MediatorFromVM.Register("MappingSelectionChanged", _ => UpdateBuildupSection());
             _node = node;
         }
@@ -197,7 +197,6 @@ namespace Calc.ConnectorRevit.ViewModels
 
             var newBuildups = new List<Buildup>(branch.Buildups);
 
-
             if (index >= newBuildups.Count)
             {
                 newBuildups.Add(buildup);
@@ -206,6 +205,7 @@ namespace Calc.ConnectorRevit.ViewModels
             {
                 newBuildups[index] = buildup;
             }
+
             branch.SetBuildups(newBuildups);
             ActiveBuildup = buildup;
 
@@ -214,15 +214,26 @@ namespace Calc.ConnectorRevit.ViewModels
 
         public void CheckAddBuildup()
         {
+            CanAddFirstBuildup = false;
+            CanAddSecondBuildup = false;
+
             if (_node == null || !(_node.Host is Branch) )
             {
-                CanAddFirstBuildup = false;
-                CanAddSecondBuildup = false;
                 return;
             }
+
             CanAddFirstBuildup = true;
+
             var branch = _node.Host as Branch;
-            CanAddSecondBuildup = branch.Buildups?.Count > 0;
+
+             if (branch.Buildups?.Count == 1 && branch.Buildups[0] != null)
+            {
+                CanAddSecondBuildup = true;
+            }
+            else if ((branch.Buildups?.Count > 1 && branch.Buildups[1] != null) )
+            {
+                CanAddSecondBuildup = true;
+            }
 
             
         }
