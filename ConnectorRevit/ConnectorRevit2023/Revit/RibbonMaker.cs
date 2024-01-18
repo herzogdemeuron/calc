@@ -1,26 +1,65 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Media.Imaging;
 using Autodesk.Revit.UI;
+using GongSolutions.Wpf.DragDrop.Utilities;
 
 
 namespace Calc.ConnectorRevit.Revit
 {
     public class RibbonMaker
     {
-        public static void Create(UIControlledApplication uiCtrlApp)
+        public static void Create(UIControlledApplication uiCtrlApp, string tabName, string panelName)
         {
-            RibbonPanel panel = uiCtrlApp.CreateRibbonPanel("Calc");
+            CreateTab(uiCtrlApp, tabName);
+            RibbonPanel panel = CreatePanel(uiCtrlApp, tabName, panelName);
+            panel.Visible = true;
+            panel.Enabled = true;
             PushButtonData buttonData = new PushButtonData(
                 "CalcButton",
-                "Start Calc",
+                "Calc",
+                Assembly.GetExecutingAssembly().Location,
+               "Calc.ConnectorRevit.Revit.StartCommand");
+            PushButton button = panel.AddItem(buttonData) as PushButton;
+            Uri uriImage = new Uri("pack://application:,,,/CalcConnectorRevit2023;component/Resources/icon-01.png", UriKind.Absolute);
+
+            button.LargeImage = new BitmapImage(uriImage);
+        }
+
+
+        private static void CreateTab(UIControlledApplication uiCtrlApp, string tabName)
+        {
+            try
+            {
+                uiCtrlApp.CreateRibbonTab(tabName);
+            }
+            catch (Autodesk.Revit.Exceptions.ArgumentException)
+            {
+                // Tab already exists
+            }
+        }
+
+        private static RibbonPanel CreatePanel(UIControlledApplication uiCtrlApp, string tabName, string panelName)
+        {
+            return uiCtrlApp.GetRibbonPanels(tabName).Where(x => x.Name == panelName)?.FirstOrDefault() ?? uiCtrlApp.CreateRibbonPanel(tabName, panelName);
+        }
+    }
+/*
+    public class RibbonMaker
+    {
+        public static void Create(UIControlledApplication uiCtrlApp)
+        {
+            RibbonPanel panel = uiCtrlApp.CreateRibbonPanel("CALC");
+            PushButtonData buttonData = new PushButtonData(
+                "CalcButton",
+                "Calc",
                 Assembly.GetExecutingAssembly().Location,
                 "Calc.ConnectorRevit.Revit.StartCommand");
             PushButton button = panel.AddItem(buttonData) as PushButton;
-            Uri uriImage = new Uri("pack://application:,,,/CalcConnectorRevit2023;component/Resources/icon-01.png", UriKind.Absolute);
                 button.LargeImage = new BitmapImage(uriImage);
         }
-    }
+    }*/
 }
 
 

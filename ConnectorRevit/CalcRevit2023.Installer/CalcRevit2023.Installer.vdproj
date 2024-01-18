@@ -15,7 +15,7 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_7C18077B816A40308F9B793D6D8F5A31"
+        "MsmKey" = "8:_32A4E055BF3541D48B3196B1E99D8DC1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -106,10 +106,10 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7C18077B816A40308F9B793D6D8F5A31"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_32A4E055BF3541D48B3196B1E99D8DC1"
             {
-            "SourcePath" = "8:..\\Addin\\CalcRevit2023.addin"
-            "TargetName" = "8:CalcRevit2023.addin"
+            "SourcePath" = "8:..\\Addin\\RevitCalc2023.addin"
+            "TargetName" = "8:RevitCalc2023.addin"
             "Tag" = "8:"
             "Folder" = "8:_A970C189A4D54051B288E73A0AF107F6"
             "Condition" = "8:"
@@ -250,7 +250,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:CalcRevit2023.Installer"
         "ProductCode" = "8:{F2906EDA-0173-4991-9537-8E65DFD468BE}"
-        "PackageCode" = "8:{1D561620-6DBE-4C71-A34B-E2E20E78D3D3}"
+        "PackageCode" = "8:{232C077A-F43C-4727-AC2E-68DA37CD081F}"
         "UpgradeCode" = "8:{5F00F4F2-6796-4446-A8FE-9D1450D5ADF9}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"

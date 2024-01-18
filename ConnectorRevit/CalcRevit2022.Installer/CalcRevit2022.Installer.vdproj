@@ -15,7 +15,7 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_2152025F0CBC49D691B3EDA05EB9E876"
+        "MsmKey" = "8:_0635E1212F5F452F96C73A2EB76F8051"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -106,10 +106,10 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2152025F0CBC49D691B3EDA05EB9E876"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0635E1212F5F452F96C73A2EB76F8051"
             {
-            "SourcePath" = "8:..\\Addin\\CalcRevit2022.addin"
-            "TargetName" = "8:CalcRevit2022.addin"
+            "SourcePath" = "8:..\\Addin\\RevitCalc2022.addin"
+            "TargetName" = "8:RevitCalc2022.addin"
             "Tag" = "8:"
             "Folder" = "8:_BB096592E35D47E8832CE357BAF6654A"
             "Condition" = "8:"
