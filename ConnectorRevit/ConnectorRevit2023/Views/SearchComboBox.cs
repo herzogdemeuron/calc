@@ -40,7 +40,7 @@ namespace Calc.ConnectorRevit.Views
         {
             base.OnDropDownClosed(e);
 
-            if (this.Items.Count > 0 && _editableTextBox.Text.Trim() != string.Empty && _firstFocus == false)
+            if (this.Items.Count > 0 && _editableTextBox.Text.Trim() != string.Empty && _firstFocus == false && Items.Count > 0)
             {
                 this.SelectedIndex = 0;
             }
