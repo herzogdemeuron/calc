@@ -13,8 +13,8 @@ namespace Calc.ConnectorRevit.ViewModels
 {
     public class NodeTreeViewModel : INotifyPropertyChanged
     {
-        private DirectusStore store;
-        public  List<Buildup> AllBuildups => store.BuildupsAll;
+        public DirectusStore Store;
+        public  List<Buildup> AllBuildups => Store.BuildupsAll;
         public int MaxBuildups { get; set; } = 2;
         public bool BranchesSwitch { get; set; }
 
@@ -35,7 +35,7 @@ namespace Calc.ConnectorRevit.ViewModels
 
         public NodeTreeViewModel(DirectusStore directusStore)
         {
-            store = directusStore;
+            Store = directusStore;
             BranchesSwitch = true;
             MediatorFromVM.Register("ForestSelectionChanged", mapping => UpdateNodeSource((Mapping)mapping));
             MediatorFromVM.Register("MappingSelectionChanged", mapping => RemapAllNodes((Mapping)mapping));
@@ -55,7 +55,7 @@ namespace Calc.ConnectorRevit.ViewModels
 
         public void UpdateNodeSource(Mapping mapping)
         {
-            CurrentForestItem = new NodeViewModel(store, store.ForestSelected, this);
+            CurrentForestItem = new NodeViewModel(Store, Store.ForestSelected, this);
             RemapAllNodes(mapping);
             OnPropertyChanged(nameof(NodeSource));
             RecolorAllNodes(true);
@@ -64,7 +64,7 @@ namespace Calc.ConnectorRevit.ViewModels
         public void RemapAllNodes(Mapping mapping)
         {
             if (CurrentForestItem == null) return;
-            MappingHelper.ApplyMappingToForestItem(CurrentForestItem, store, mapping, MaxBuildups);
+            MappingHelper.ApplyMappingToForestItem(CurrentForestItem, Store, mapping, MaxBuildups);
             RecolorAllNodes();
         }
 
@@ -79,13 +79,13 @@ namespace Calc.ConnectorRevit.ViewModels
             {
                 if(forceRecolorAll)
                 {
-                    store.ForestSelected.SetBranchColorsBy("branches");
+                    Store.ForestSelected.SetBranchColorsBy("branches");
                     MediatorToVisualizer.Broadcast("AllNodesRecoloredOnBranches", SelectedNodeItem); // to visualizer
                 }
             }
             else
             {
-                store.ForestSelected.SetBranchColorsBy("buildups");
+                Store.ForestSelected.SetBranchColorsBy("buildups");
                 MediatorToVisualizer.Broadcast("AllNodesRecoloredOnBuildups", SelectedNodeItem); // to visualizer
             }
 
@@ -120,7 +120,7 @@ namespace Calc.ConnectorRevit.ViewModels
         public void ColorNodesToBuildup()
         {
             if (CurrentForestItem == null) return;
-            store.ForestSelected.SetBranchColorsBy("buildups");
+            Store.ForestSelected.SetBranchColorsBy("buildups");
             CurrentForestItem.NotifyNodePropertyChange();
             DeselectNodes();
         }
@@ -128,7 +128,7 @@ namespace Calc.ConnectorRevit.ViewModels
         public void ColorNodesToBranch()
         {
             if (CurrentForestItem == null) return;
-            store.ForestSelected.SetBranchColorsBy("branches");
+            Store.ForestSelected.SetBranchColorsBy("branches");
             CurrentForestItem.NotifyNodePropertyChange();
             DeselectNodes();
         }

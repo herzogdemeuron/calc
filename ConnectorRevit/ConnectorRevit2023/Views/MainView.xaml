@@ -316,7 +316,7 @@
                                       Style="{StaticResource ResultDataGridStyle}"
                                       VerticalAlignment="Bottom"
                                       Margin="10"
-                                      ItemsSource="{Binding CalculationVM.Results}">
+                                      ItemsSource="{Binding CalculationVM.CategorizedResults}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Buildup Group" Binding="{Binding Key}" Width="3*"  IsReadOnly="True" />
                                     <DataGridTextColumn Header="GWP (kgCO2)" Binding="{Binding Value}" Width="1*"  IsReadOnly="True" />

@@ -10,19 +10,19 @@ namespace Calc.ConnectorRevit.ViewModels
     public class SavingViewModel : INotifyPropertyChanged
     {
         private readonly NodeTreeViewModel nodetreeVM;
+        private readonly CalculationViewModel calculationVM;
         public double ElementCount { get; set; }
 
 
-        public SavingViewModel(NodeTreeViewModel ntreeVM)
+        public SavingViewModel(CalculationViewModel calVM)
         
         {
-            nodetreeVM = ntreeVM;
+            calculationVM = calVM;
         }
 
         public void HandleSavingResults()
         {
-            NodeViewModel nodeToCalculate = GetNodeToCalculate();
-            int count = nodeToCalculate?.Host.Elements.Count??0;
+            int count = calculationVM.Results?.Count??0;
             string message;
             if (count>100)
             {
@@ -38,11 +38,10 @@ namespace Calc.ConnectorRevit.ViewModels
 
         public async Task HandleSendingResults(string newName)
         {
-            NodeViewModel nodeToCalculate = GetNodeToCalculate();
+            
             MediatorToView.Broadcast("ShowWaitingOverlay", "Saving results...");
             ResultSender resultSender = new ResultSender();
-            bool? feedback =  await resultSender.SaveResults(nodeToCalculate, newName);
-            //bool? feedback = true;
+            bool? feedback =  await resultSender.SaveResults(calculationVM.Store,calculationVM.Results,newName);
             MediatorToView.Broadcast("ShowMainView");
             MediatorToView.Broadcast
                 ("ShowMessageOverlay",

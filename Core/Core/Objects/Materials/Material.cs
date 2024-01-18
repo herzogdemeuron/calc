@@ -13,6 +13,8 @@ namespace Calc.Core.Objects.Materials
         public string Name { get; set; }
         [JsonProperty("global_warming_potential_a1_a2_a3")]
         public decimal KgCO2eA123 { get; set; }
+        [JsonProperty("grey_energy_a123")]
+        public decimal GreyEnergyA123 { get; set; }
         [JsonProperty("cost")]
         public decimal Cost { get; set; }
         [JsonProperty("unit")]

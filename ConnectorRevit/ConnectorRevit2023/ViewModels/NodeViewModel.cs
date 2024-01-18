@@ -30,7 +30,6 @@ namespace Calc.ConnectorRevit.ViewModels
         public ObservableCollection<NodeViewModel> SubNodeItems { get; }
 
         public BuildupViewModel NodeBuildupItem { get; set; }
-        public CalculationViewModel NodeCalculation { get; set; }
 
         private IGraphNode host;
         public IGraphNode Host

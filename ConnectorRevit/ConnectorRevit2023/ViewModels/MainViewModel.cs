@@ -36,7 +36,7 @@ namespace Calc.ConnectorRevit.ViewModels
             CalculationVM = new CalculationViewModel(NodeTreeVM);
 
 
-            SavingVM = new SavingViewModel(NodeTreeVM);
+            SavingVM = new SavingViewModel(CalculationVM);
             VisibilityVM = new VisibilityViewModel();
         }
 
