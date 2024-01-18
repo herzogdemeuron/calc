@@ -15,7 +15,9 @@ namespace Calc.Core.Objects.Buildups
         [JsonIgnore]
         public string FormattedAmount { get => Math.Round(Amount, 2).ToString() + " " + Material.Unit; }
         [JsonIgnore]
-        public string FormattedKgCO2eA123 { get => Math.Round(Amount * Material.KgCO2eA123, 2).ToString() + " Kg"; }
+        public string FormattedGWP { get => Math.Round(Amount * Material.GWP, 2).ToString(); }
+        [JsonIgnore]
+        public string FormattedGE { get => Math.Round(Amount * Material.GE, 2).ToString(); }
         [JsonIgnore]
         public string FormattedCost { get => Math.Round(Amount * Material.Cost, 2).ToString(); }
     }

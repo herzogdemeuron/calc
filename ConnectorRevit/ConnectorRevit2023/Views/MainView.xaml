@@ -274,16 +274,54 @@
 
                     <TabControl.ContentTemplate>
                         <DataTemplate>
-                            <DataGrid Style="{StaticResource DataGridStyle}"
-                                        ItemsSource="{Binding Components}">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" Width="3*"  IsReadOnly="True" />
-                                    <DataGridTextColumn Header="Amount" Binding="{Binding FormattedAmount}" Width="1*"  IsReadOnly="True" />
-                                    <DataGridTextColumn Header="CO2e A123" Binding="{Binding FormattedKgCO2eA123}" Width="1*"  IsReadOnly="True" />
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </DataTemplate>
+                            <DockPanel VerticalAlignment="Stretch">
+                                
+                                <Grid DockPanel.Dock="Bottom"
+                                      VerticalAlignment="Bottom"
+                                      Margin="10,0,0,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="15"/>
+                                        <RowDefinition Height="15"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
 
+                                    <TextBlock Grid.Row="0"
+                                               FontWeight="SemiBold"
+                                               Text="Buildup Group: "/>
+                                    <TextBlock Grid.Row="1"
+                                               FontWeight="SemiBold"
+                                               Text="Buildup Unit: "/>
+                                    <TextBlock Grid.Row="2"
+                                               FontWeight="SemiBold"
+                                               Text="Description: "/>
+                                    <TextBlock Grid.Column="1" Grid.Row="0"
+                                               Text="{Binding Group.Name}"/>
+                                    <TextBlock Grid.Column="1" Grid.Row="1"
+                                               Text="{Binding  Unit}"/>
+                                    <TextBlock Grid.Column="1" Grid.Row="2"
+                                               Text="{Binding  Description}" TextWrapping="Wrap"/>
+                                </Grid>
+                                <Separator DockPanel.Dock="Bottom"
+                                           BorderBrush="LightGray"
+                                           BorderThickness="1"
+                                           Margin="50,5,50,10"/>
+
+                                <DataGrid Style="{StaticResource DataGridStyle}"
+                                          ItemsSource="{Binding Components}"
+                                          DockPanel.Dock="Top">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" Width="4*"  IsReadOnly="True" />
+                                        <DataGridTextColumn Header="Amount" Binding="{Binding FormattedAmount}" Width="1*"  IsReadOnly="True" />
+                                        <DataGridTextColumn Header="GWP (kgCO2 eq)" Binding="{Binding FormattedGWP}" Width="2*"  IsReadOnly="True" />
+                                        <DataGridTextColumn Header="GE (kWh oil eq)" Binding="{Binding FormattedGE}" Width="2*"  IsReadOnly="True" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </DockPanel>
+                        </DataTemplate>
                     </TabControl.ContentTemplate>
                 </TabControl>
 
@@ -318,8 +356,9 @@
                                       Margin="10"
                                       ItemsSource="{Binding CalculationVM.CategorizedResults}">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Buildup Group" Binding="{Binding Key}" Width="3*"  IsReadOnly="True" />
-                                    <DataGridTextColumn Header="GWP (kgCO2)" Binding="{Binding Value}" Width="1*"  IsReadOnly="True" />
+                                    <DataGridTextColumn Header="Buildup Group" Binding="{Binding GroupName}" Width="3*"  IsReadOnly="True" />
+                                    <DataGridTextColumn Header="GWP (kgCO2)" Binding="{Binding Gwp}" Width="1*"  IsReadOnly="True" />
+                                    <DataGridTextColumn Header="GE (kWh oil)" Binding="{Binding Ge}" Width="1*"  IsReadOnly="True" />
                                 </DataGrid.Columns>
                             </DataGrid>
 

@@ -48,34 +48,38 @@ namespace Calc.ConnectorRevit.ViewModels
             }
         }
         public bool HasResults => (Results != null && Results.Count > 0);
-        public Dictionary<string, decimal> CategorizedResults
+        public List<CategorizedResultViewModel> CategorizedResults
         {
             get
             {
-                var calculation = new Dictionary<string, decimal>();
+                var calculation = new List<CategorizedResultViewModel>();
 
-                if (HostNode == null)
-                    return null;
-
-                if (Results == null)
+                if (HostNode == null || Results == null)
                     return null;
 
                 foreach (var result in Results)
                 {
-                    if (calculation.ContainsKey(result.GroupName))
+                    var existingResult = calculation.FirstOrDefault(c => c.GroupName == result.GroupName);
+                    if (existingResult != null)
                     {
-                        calculation[result.GroupName] += Math.Round(result.Gwp, 3);
+                        existingResult.Gwp += Math.Round(result.Gwp, 3);
+                        existingResult.Ge += Math.Round(result.Ge, 3);
                     }
                     else
                     {
-                        calculation.Add(result.GroupName, Math.Round(result.Gwp, 3));
+                        calculation.Add(new CategorizedResultViewModel
+                        {
+                            GroupName = result.GroupName,
+                            Gwp = Math.Round(result.Gwp, 3),
+                            Ge = Math.Round(result.Ge, 3)
+                        });
                     }
                 }
 
                 return calculation;
             }
-
         }
+
         public bool HasErrors => (Errors != null && Errors.Count > 0);
         public bool CanSaveResults => (HasResults && !HasErrors && IsFullyCalculated);
 

@@ -40,6 +40,9 @@ namespace Calc.Core.Objects.Buildups
             set => SetProperty(ref group, value);
         }
 
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
         [JsonProperty("components")]
         public ObservableCollection<BuildupComponent> Components
         {

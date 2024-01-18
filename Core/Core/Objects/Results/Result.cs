@@ -49,9 +49,10 @@ namespace Calc.Core.Objects.Results
         [JsonProperty(PropertyName = "material_amount")]
         public decimal MaterialAmount { get; set; }
 
-        // calculation results
         [JsonProperty(PropertyName = "calculated_gwp")]
         public decimal Gwp { get; set; }
+        [JsonProperty(PropertyName = "calculated_ge")]
+        public decimal Ge { get; set; }
         [JsonProperty(PropertyName = "calculated_cost")]
         public decimal Cost { get; set; }
 

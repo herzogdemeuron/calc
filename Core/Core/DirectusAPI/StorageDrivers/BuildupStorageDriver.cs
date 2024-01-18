@@ -16,11 +16,13 @@ namespace Calc.Core.DirectusAPI.Drivers
                         group_id {
                           group_name
                         }
+                        description
                         components {
                           calc_materials_id {
                             id
                             material_name
                             global_warming_potential_a1_a2_a3
+                            grey_energy_a123
                             cost
                             unit
                             material_category

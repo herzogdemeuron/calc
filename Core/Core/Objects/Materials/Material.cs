@@ -12,9 +12,9 @@ namespace Calc.Core.Objects.Materials
         [JsonProperty("material_name")]
         public string Name { get; set; }
         [JsonProperty("global_warming_potential_a1_a2_a3")]
-        public decimal KgCO2eA123 { get; set; }
+        public decimal GWP { get; set; }
         [JsonProperty("grey_energy_a123")]
-        public decimal GreyEnergyA123 { get; set; }
+        public decimal GE { get; set; }
         [JsonProperty("cost")]
         public decimal Cost { get; set; }
         [JsonProperty("unit")]
@@ -28,7 +28,7 @@ namespace Calc.Core.Objects.Materials
 
         public override string ToString()
         {
-            return $"Material Id: {Id}, Material Name: {Name}, KgCO2eA123: {KgCO2eA123}, Category: {Category}";
+            return $"Material Id: {Id}, Material Name: {Name}, Category: {Category}";
         }
     }
 
