@@ -14,12 +14,14 @@
                             Width="50" Height="20"
                             BorderThickness="0.6"
                             BorderBrush="Black">
-                            
-                            <Ellipse x:Name="Ellipse" Fill="LightGray" Stretch="Uniform"
-                                 Margin="2 1 2 1"
-                                 Stroke="Gray" StrokeThickness="0.5"
-                                 HorizontalAlignment="Stretch">
-                            </Ellipse>
+                            <Grid  x:Name="Ellipse">
+                                <TextBlock Text="🎨"
+                                           FontSize="14"
+                                           Margin="-1,-2,0,0"
+                                           VerticalAlignment="Center"
+                                           Foreground="Gray"/>
+
+                            </Grid>
                         </Border>
                     </Viewbox>
                     <ControlTemplate.Triggers>

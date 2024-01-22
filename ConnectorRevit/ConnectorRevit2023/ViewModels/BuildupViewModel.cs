@@ -210,20 +210,26 @@ namespace Calc.ConnectorRevit.ViewModels
         public void CheckAddBuildup()
         {
 
-
-            if (_node == null || !(_node.Host is Branch) )
+            if (_node.Host is Branch branch)
             {
-                CanAddFirstBuildup = false;
-                CanAddSecondBuildup = false;
-                return;
+                CanAddFirstBuildup = true;
+
+                var buildups = branch.Buildups;
+                if (buildups != null && buildups.Count > 0)
+                {
+                    CanAddSecondBuildup = true;
+                }
+                else
+                {
+                    CanAddSecondBuildup = false;
+                }
+              
             }
             else
             {
-                CanAddFirstBuildup = true;
-                CanAddSecondBuildup = true;
+                CanAddFirstBuildup = false;
+                CanAddSecondBuildup = false;
             }
-
-            CanAddFirstBuildup = true;
 
 
             

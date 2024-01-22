@@ -45,21 +45,6 @@ namespace Calc.ConnectorRevit.Revit
             return uiCtrlApp.GetRibbonPanels(tabName).Where(x => x.Name == panelName)?.FirstOrDefault() ?? uiCtrlApp.CreateRibbonPanel(tabName, panelName);
         }
     }
-/*
-    public class RibbonMaker
-    {
-        public static void Create(UIControlledApplication uiCtrlApp)
-        {
-            RibbonPanel panel = uiCtrlApp.CreateRibbonPanel("CALC");
-            PushButtonData buttonData = new PushButtonData(
-                "CalcButton",
-                "Calc",
-                Assembly.GetExecutingAssembly().Location,
-                "Calc.ConnectorRevit.Revit.StartCommand");
-            PushButton button = panel.AddItem(buttonData) as PushButton;
-                button.LargeImage = new BitmapImage(uriImage);
-        }
-    }*/
 }
 
 
