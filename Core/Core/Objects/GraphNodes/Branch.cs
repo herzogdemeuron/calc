@@ -191,8 +191,6 @@ namespace Calc.Core.Objects.GraphNodes
                 SubBranches.Add(branch);
             }
 
-
-
             if (SubBranches.Count == 0)
             {
                 return;
@@ -298,6 +296,35 @@ namespace Calc.Core.Objects.GraphNodes
                 branch.SubBranches = SubBranches.Select(sb => sb.Copy()).ToList();
             }
             return branch;
+        }
+
+        /// <summary>
+        /// add a new branch to the current branch using the parameter and value.
+        /// returns the new branch.
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public Branch AddBranch(string parameter, string value, List<Buildup> buildups)
+        {
+            //check if branch already exists
+            var existingBranch = SubBranches.FirstOrDefault(sb => sb.Parameter == parameter && sb.Value == value);
+            if (existingBranch != null)
+            {
+                return existingBranch;
+            }
+            var newBranch = new Branch()
+            {
+                Parameter = parameter,
+                Value = value,
+                Buildups = new ObservableCollection<Buildup>(buildups),
+                ParentBranch = this,
+                BranchLevel = this.BranchLevel + 1,
+                ParentTree = ParentTree,
+                ParentForest = ParentForest
+            };
+            SubBranches.Add(newBranch);
+            return newBranch;
         }
 
         /// <summary>

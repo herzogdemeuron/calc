@@ -21,14 +21,9 @@ namespace Calc.ConnectorRevit.ViewModels
         public string Name { get => GetNodeName(); }
         public string BranchParameterName { get => GetParameterName(); }
         public bool? BranchParameterIsInstance { get => CheckIfParameterIsInstance(); }
-
-
         public bool IsBranch { get => CheckIfBranch(); }
-        
-        public DirectusStore Store { get; set; }
         public NodeTreeViewModel ParentTreeView { get; set; }
         public ObservableCollection<NodeViewModel> SubNodeItems { get; }
-
         public BuildupViewModel NodeBuildupItem { get; set; }
 
         private IGraphNode host;
@@ -46,7 +41,6 @@ namespace Calc.ConnectorRevit.ViewModels
                 }
             }
         }
-       
 
         public Dictionary<string, decimal> CategorizedCalculation
         {
@@ -71,22 +65,6 @@ namespace Calc.ConnectorRevit.ViewModels
                 return calculation;
             }
         }
-
-
-        public NodeViewModel(DirectusStore store, IGraphNode node, NodeTreeViewModel parentTreeView)
-        {
-            Host = node;
-            Store = store;
-            ParentTreeView = parentTreeView;
-            SubNodeItems = new ObservableCollection<NodeViewModel>();
-            NodeBuildupItem = new BuildupViewModel(this);
-
-            foreach (var subNode in node.SubBranches)
-            {
-                SubNodeItems.Add(new NodeViewModel(store, subNode, parentTreeView));
-            }
-        }
-
 
         private bool _labelColorVisible;
         public bool LabelColorVisible
@@ -116,9 +94,10 @@ namespace Calc.ConnectorRevit.ViewModels
         {
             get
             {
-                return ParentTreeView.BranchesSwitch == false? Visibility.Visible : Visibility.Collapsed;
+                return ParentTreeView?.BranchesSwitch == false? Visibility.Visible : Visibility.Collapsed;
             }
         }
+
         public Color LabelColor
         {
             get
@@ -133,6 +112,20 @@ namespace Calc.ConnectorRevit.ViewModels
                 }
             }
         }
+
+        public NodeViewModel(IGraphNode node, NodeTreeViewModel parentTreeView = null)
+        {
+            Host = node;
+            ParentTreeView = parentTreeView;
+            SubNodeItems = new ObservableCollection<NodeViewModel>();
+            NodeBuildupItem = new BuildupViewModel(this);
+
+            foreach (var subNode in node.SubBranches)
+            {
+                SubNodeItems.Add(new NodeViewModel(subNode, parentTreeView));
+            }
+        }
+
         public string GetNodeName()
         {
             if (Host is Tree tree)
@@ -165,7 +158,6 @@ namespace Calc.ConnectorRevit.ViewModels
         {
             return (Host is Branch) && !(Host is Tree);
         }
-
         public void NotifyNodePropertyChange()
         {
             OnPropertyChanged(nameof(IdentifierColor));

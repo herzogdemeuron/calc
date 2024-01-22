@@ -11,6 +11,9 @@ namespace Calc.ConnectorRevit.Helpers
 {
     public class ForestHelper
     {
+        /// <summary>
+        /// creates calc elements from revit elements and sort them into trees
+        /// </summary>
         public static void PlantTrees(Forest forest)
         {
             List<string> parameters = GetParameterList(forest);
@@ -18,10 +21,9 @@ namespace Calc.ConnectorRevit.Helpers
             var doorParamConfig = new RevitBasicParamConfig(BuiltInCategory.OST_Doors, AreaName: ".Standard_Area");
             var windowParamConfig = new RevitBasicParamConfig(BuiltInCategory.OST_Windows, AreaName: ".Area");
             List<CalcElement> calcElements = RevitElementFilter.CreateCalcElements(parameters, doorParamConfig, windowParamConfig);
-
             var leftElements = forest.PlantTrees(calcElements);
 
-            Debug.WriteLine("Left overs: " + leftElements);
+            //Debug.WriteLine("Left overs: " + leftElements);
         }
 
         private static List<string> GetParameterList(Forest forest)

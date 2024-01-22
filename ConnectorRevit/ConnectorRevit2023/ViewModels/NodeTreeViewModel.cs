@@ -16,7 +16,7 @@ namespace Calc.ConnectorRevit.ViewModels
         public DirectusStore Store;
         public  List<Buildup> AllBuildups => Store.BuildupsAll;
         public int MaxBuildups { get; set; } = 2;
-        public bool BranchesSwitch { get; set; }
+        public bool BranchesSwitch { get; set; }        
 
         private NodeViewModel selectedNodeItem;
         public NodeViewModel SelectedNodeItem
@@ -30,6 +30,8 @@ namespace Calc.ConnectorRevit.ViewModels
         }
 
         public NodeViewModel CurrentForestItem { get; set; }
+        public NodeViewModel CurrentBrokenForestItem { get; set; }
+
         public ObservableCollection<NodeViewModel> NodeSource 
         { get => new ObservableCollection<NodeViewModel> { CurrentForestItem }; }
 
@@ -55,7 +57,7 @@ namespace Calc.ConnectorRevit.ViewModels
 
         public void UpdateNodeSource(Mapping mapping)
         {
-            CurrentForestItem = new NodeViewModel(Store, Store.ForestSelected, this);
+            CurrentForestItem = new NodeViewModel(Store.ForestSelected, this);
             RemapAllNodes(mapping);
             OnPropertyChanged(nameof(NodeSource));
             RecolorAllNodes(true);
@@ -64,7 +66,8 @@ namespace Calc.ConnectorRevit.ViewModels
         public void RemapAllNodes(Mapping mapping)
         {
             if (CurrentForestItem == null) return;
-            MappingHelper.ApplyMappingToForestItem(CurrentForestItem, Store, mapping, MaxBuildups);
+            var brokenForest = MappingHelper.ApplyMappingToForestItem(CurrentForestItem, Store, mapping, MaxBuildups);
+            CurrentBrokenForestItem = new NodeViewModel(brokenForest);
             RecolorAllNodes();
         }
 

@@ -54,40 +54,59 @@ namespace Calc.Core.Objects.Mappings
         /// <returns></returns>
         public Tree ApplyToTree(Tree tree, List<Buildup> allBuildups, int maxBuildups)
         {
+            var brokenTree = new Tree()
+            {
+                Name = tree.Name,
+            };
+
             tree.ResetBuildups();
             // find the mapping items that apply to this tree
             var mappingItems = MappingItems.Where(mappingItem => mappingItem.TreeName == tree.Name);
-            if (!mappingItems.Any()) return tree;
+            if (!mappingItems.Any())
+            {
+                return null;
+            }
 
             foreach (var mappingItem in mappingItems)
             {
                 var buildupIds = mappingItem.BuildupIds.Take(maxBuildups).ToList();
                 // find the buildups from this mapping item
                 var buildups = allBuildups.Where(b => buildupIds.Contains(b.Id)).ToList();
-                MapBuildupsToTree(tree, buildups, mappingItem.Path);
-                //tree.MapBuildups(mappingItem.Path, buildups);
+                var match = MapBuildupsToBranch(tree, buildups, mappingItem.Path);
+
+                if (!match)
+                {
+                    brokenTree.AddBranchWithMappingItem(mappingItem, buildups);
+                }
             }
-            return tree;
+
+            return brokenTree.SubBranches.Count > 0 ? brokenTree : null;
         }
 
-        // todo: replace tree.MapBuildups with this method
-        private void MapBuildupsToTree(Branch branch, List<Buildup> buildups, List<MappingPath> path)
+        private bool MapBuildupsToBranch(Branch branch, List<Buildup> buildups, List<MappingPath> path)
         {
+
             if (branch.Path.SequenceEqual(path))
             {
                 branch.SetBuildups(buildups);
+                return true;
             }
             else
             {
                 if (branch.SubBranches.Count == 0)
                 {
-                    return;
+                    return false;
                 }
                 foreach (var subBranch in branch.SubBranches)
                 {
-                    MapBuildupsToTree(subBranch, buildups, path);
+                    bool subMatch = MapBuildupsToBranch(subBranch, buildups, path);
+                    if (subMatch)
+                    {
+                        return true;
+                    }
                 }
             }
+            return false;
         }
 
         public string SerializeMappingItems()

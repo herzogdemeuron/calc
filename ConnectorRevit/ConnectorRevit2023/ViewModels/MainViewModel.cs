@@ -16,6 +16,7 @@ namespace Calc.ConnectorRevit.ViewModels
         public LoadingViewModel LoadingVM { get; set; }
         public ForestViewModel ForestVM { get; set; }
         public MappingViewModel MappingVM { get; set; }
+        public BrokenNodesViewModel BrokenNodesVM { get; set; }
         public NodeTreeViewModel NodeTreeVM { get; set; }
         public SavingViewModel SavingVM { get; set; }
         public NewMappingViewModel NewMappingVM { get; set; }
@@ -32,8 +33,9 @@ namespace Calc.ConnectorRevit.ViewModels
             NewMappingVM = new NewMappingViewModel(store);
             NodeTreeVM = new NodeTreeViewModel(store);
 
-            
+
             CalculationVM = new CalculationViewModel(NodeTreeVM);
+            BrokenNodesVM = new BrokenNodesViewModel(NodeTreeVM);
 
 
             SavingVM = new SavingViewModel(CalculationVM);

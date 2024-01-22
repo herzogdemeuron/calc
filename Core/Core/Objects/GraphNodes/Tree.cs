@@ -3,6 +3,8 @@ using System.Linq;
 using System.Collections.Generic;
 using Calc.Core.Filtering;
 using Speckle.Newtonsoft.Json;
+using Calc.Core.Objects.Mappings;
+using Calc.Core.Objects.Buildups;
 
 namespace Calc.Core.Objects.GraphNodes;
 
@@ -32,10 +34,23 @@ public class Tree : Branch, IGraphNode
             CreateBranches(BranchConfig);
         }
 
-        // remove this.Elements from searchElements using RemoveAll method
         searchElements.RemoveAll(e => Elements.Contains(e));
-
         return searchElements;
+    }
+
+    /// <summary>
+    /// creates a new branch from the mappingitem and adds buildups to it
+    /// </summary>
+    public void AddBranchWithMappingItem(MappingItem mappingItem, List<Buildup> buildups)
+    {
+        var paths = mappingItem.Path;
+        Branch currentBranch = this;
+        foreach (var path in paths)
+        {
+            var parameter = path.Parameter;
+            var value = path.Value;
+            currentBranch = currentBranch.AddBranch(parameter, value, buildups);
+        }
     }
 
 
