@@ -16,7 +16,7 @@ namespace Calc.ConnectorRevit.ViewModels
         public LoadingViewModel LoadingVM { get; set; }
         public ForestViewModel ForestVM { get; set; }
         public MappingViewModel MappingVM { get; set; }
-        public BrokenNodesViewModel BrokenNodesVM { get; set; }
+        public MappingErrorViewModel MappingErrorVM { get; set; }
         public NodeTreeViewModel NodeTreeVM { get; set; }
         public SavingViewModel SavingVM { get; set; }
         public NewMappingViewModel NewMappingVM { get; set; }
@@ -27,6 +27,9 @@ namespace Calc.ConnectorRevit.ViewModels
         {
             Store = store;
             Server = new LiveServer();
+            MappingErrorVM = new MappingErrorViewModel();
+            VisibilityVM = new VisibilityViewModel();
+
             LoadingVM = new LoadingViewModel(store);
             ForestVM = new ForestViewModel(store);
             MappingVM = new MappingViewModel(store);
@@ -35,11 +38,7 @@ namespace Calc.ConnectorRevit.ViewModels
 
 
             CalculationVM = new CalculationViewModel(NodeTreeVM);
-            BrokenNodesVM = new BrokenNodesViewModel(NodeTreeVM);
-
-
             SavingVM = new SavingViewModel(CalculationVM);
-            VisibilityVM = new VisibilityViewModel();
         }
 
         public async Task HandleWindowLoadedAsync()
@@ -80,6 +79,10 @@ namespace Calc.ConnectorRevit.ViewModels
             NotifyStoreChange();
         }
 
+        public void HandleMappingErrorClicked()
+        {
+            MappingErrorVM.HandleMappingErrorClicked();
+        }
         public async Task HandleUpdateMapping()
         {
             await MappingVM.HandleUpdateMapping();

@@ -77,43 +77,86 @@
                        Margin="10,5,10,10"
                        HorizontalAlignment="Stretch"
                        LastChildFill="True">
-                    <Button Content="Update" 
-                        Width="50" 
-                        Click="UpdateMappingClicked"
-                        Height="25"
-                        DockPanel.Dock="Left"/>
+                    <Button Style="{StaticResource MappingErrorButtonStyle}"
+                            Width="25"
+                            Height="25"
+                            Margin="10,0,0,0"
+                            DockPanel.Dock="Right"
+                            Click="MappingErrorClicked"/>
                     <Button Content="New" 
-                        Width="50"
+                        Width="70"
                         Height="25"
                         Click="NewMappingClicked"
                         DockPanel.Dock="Right"/>
+                    <Button Content="Save" 
+                        Width="70" 
+                        Click="UpdateMappingClicked"
+                        Height="25"
+                          Margin="10,0,10,0"
+                        DockPanel.Dock="Right"/>
+                    
+                    
                     <ComboBox x:Name="MappingsComboBox"
                           ItemsSource="{Binding Store.MappingsProjectRelated}"
                           SelectedItem="{Binding Store.MappingSelected}"
                           DisplayMemberPath="Name"
                           DockPanel.Dock="Left"
                           Height="25"
-                          Margin="10,0,10,0"
                           SelectionChanged="MappingSelectionChanged"/>
                 </DockPanel>
             </StackPanel>
-   
 
-                <Border BorderBrush="Black"
-                          Grid.Column="2" 
-                          Grid.Row="1"
-                        Width="200"
-                        Height="100"
-                        Padding="60,0,0,0"
-                        Background="AliceBlue">
+            <Grid x:Name="BrokenNodesSection"
+                    Grid.Column="2" 
+                    Grid.Row="1"
+                    Margin="100,0,10,0"
+                    Height="220"
+                  Visibility="{Binding MappingErrorVM.BrokenSectionVisibility}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="35"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.ColumnSpan="2" 
+                    Grid.RowSpan="4"
+                    CornerRadius="4"
+                    BorderBrush="Tomato"
+                    BorderThickness="2"/>
+
+                <Canvas Height="30" Width="0"
+                        HorizontalAlignment="Right"
+                        Grid.Column="1">
+                    <Line X1="-12" Y1="-13" X2="-12" Y2="-1" 
+                          Stroke="Tomato" 
+                          StrokeThickness="2"/>  
+                </Canvas>
+
+                <TextBlock Text="Broken Mappings"
+                               Grid.Column="0"
+                               Grid.ColumnSpan="2"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               FontSize="13"
+                               Margin="10,5,0,0"
+                               FontWeight="SemiBold"/>
                 <TreeView x:Name="BrokenNodesTreeView"
-            
-            ItemsSource="{Binding BrokenNodesVM.BrokenNodeSource}"
-                          ItemContainerStyle="{StaticResource TreeViewItemStyle}">
+                              Grid.ColumnSpan="2"
+                              Grid.Row="1"
+                              Background="Transparent"
+                              Margin="10,10,10,0"
+                              BorderBrush="LightGray"
+                              ItemsSource="{Binding MappingErrorVM.BrokenNodeSource}"
+                              ItemContainerStyle="{StaticResource TreeViewItemStyle}">
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate ItemsSource="{Binding SubNodeItems}">
                             <ContentControl Content="{Binding}"
-                                            ContentTemplate="{StaticResource BranchItemTemplate}">
+                                ContentTemplate="{StaticResource BranchItemTemplate}">
                                 <ContentControl.ToolTip>
                                     <TextBlock Text="{Binding Name}"/>
                                 </ContentControl.ToolTip>
@@ -121,7 +164,40 @@
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
                 </TreeView>
-            </Border>
+                <TextBlock Text="Buildup1"
+                               Grid.Column="2"
+                               Grid.Row="2"
+                               VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow"
+                               Margin="10,0,10,0"/>
+                <TextBlock Text="Buildup2"
+                               Grid.Column="2"
+                               Grid.Row="3"
+                               VerticalAlignment="Center"
+                               Margin="10,0,10,10"/>
+
+                <Button Content="Ignore"
+                            Grid.Row="2"
+                            Width="70"
+                            Margin="10,0,0,0"
+                            Height="25"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"/>
+                <Button Content="Ignore All"
+                            Grid.Row="3"
+                            Width="70"
+                            Height="25"
+                            Margin="10,0,0,10"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"/>
+
+
+            </Grid>
+
+
+
+
+
 
 
             <Grid x:Name="TreeviewGrid"
@@ -208,7 +284,7 @@
                   DockPanel.Dock="Bottom"
                   Grid.Column="2"
                   Grid.Row="2"
-                  Margin="10">
+                  Margin="10,10,10,10">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="45"/>
@@ -228,16 +304,16 @@
                            Grid.Row="1"
                            Height="60">
                     <StackPanel DockPanel.Dock="Left"
-                                Width="50"
+                                Width="70"
                                 Margin="0,0,10,0">
                         <Button Content="Follow"
-                            Width="50"
+                            Width="70"
                             Height="25"
                             IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.InheritEnabled}"
                             Click="InheritClicked"/>
 
                         <Button Content="Reduce"
-                            Width="50"
+                            Width="70"
                             Margin="0,5,0,0"
                             Height="25"
                             IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.RemoveEnabled}"
@@ -291,7 +367,6 @@
 
                 <TabControl x:Name="BuildupTabs"
                             Grid.Row="2"
-                            Margin="0,10,0,20"
                             DockPanel.Dock="Top"
                             ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CurrentBuildups}"
                             SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.ActiveBuildup}"
@@ -400,7 +475,7 @@
                                     <DataGridTextColumn Binding="{Binding ErrorMessage}" Width="1*" IsReadOnly="True">
                                         <DataGridTextColumn.Header>
                                             <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="💔" FontSize="10" Foreground="Red" VerticalAlignment="Center"/>
+                                                <TextBlock Text="💔" FontSize="10" Foreground="Tomato" VerticalAlignment="Center"/>
                                                 <TextBlock Text=" Issues" FontSize="13" />
                                             </StackPanel>
                                         </DataGridTextColumn.Header>
@@ -431,7 +506,7 @@
                     Grid.Row="3"
                     Content="Reload"
                     Margin="0,0,10,10"
-                    Width="90"
+                    Width="70"
                     Height="25"
                     Click="UpdateRevitClicked"
                     HorizontalAlignment="Right"

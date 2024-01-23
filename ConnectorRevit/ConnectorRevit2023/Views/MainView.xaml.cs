@@ -82,6 +82,11 @@ namespace Calc.ConnectorRevit.Views
             MainVM.HandleNewMappingCanceled();
         }
 
+        private void MappingErrorClicked(object sender, RoutedEventArgs e)
+        {
+            MainVM.HandleMappingErrorClicked();
+        }
+
         private void TreeViewItemSelected(object sender, RoutedEventArgs e)
         {
             if (TreeView.SelectedItem is NodeViewModel selectedBranch)

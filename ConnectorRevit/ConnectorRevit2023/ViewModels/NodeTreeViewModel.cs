@@ -67,7 +67,7 @@ namespace Calc.ConnectorRevit.ViewModels
         {
             if (CurrentForestItem == null) return;
             var brokenForest = MappingHelper.ApplyMappingToForestItem(CurrentForestItem, Store, mapping, MaxBuildups);
-            CurrentBrokenForestItem = new NodeViewModel(brokenForest);
+            MediatorFromVM.Broadcast("BrokenForestChanged", brokenForest);
             RecolorAllNodes();
         }
 

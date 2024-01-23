@@ -29,6 +29,22 @@
         </Style.Triggers>
     </Style>
 
+    <Style x:Key="MappingErrorButtonStyle" TargetType="Button">
+        <Setter Property="IsEnabled" Value="False"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Content" Value="✓"/>
+        <Setter Property="FontSize" Value="12"/>
+
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding MappingErrorVM.HasBrokenItems}" Value="True">
+                <Setter Property="IsEnabled" Value="True"/>
+                <Setter Property="Background" Value="Tomato"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Content" Value="💬"/>
+            </DataTrigger>
+        </Style.Triggers>
+        
+    </Style>
 
     <DataTemplate x:Key="BranchItemTemplate">
         <StackPanel Orientation="Horizontal"
@@ -51,7 +67,7 @@
                            FontWeight="SemiBold"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Center"
-                           Foreground="Red"/>
+                           Foreground="Tomato"/>
             </Grid>
 
             <Grid Margin="4,0,0,0">

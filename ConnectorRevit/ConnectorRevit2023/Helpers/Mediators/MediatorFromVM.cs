@@ -29,12 +29,12 @@ namespace Calc.ConnectorRevit.Helpers.Mediators
                 dictionary[token].Remove(callback);
             }
         }
-
         public static void Broadcast(string token, object args = null)
         {
             if (dictionary.ContainsKey(token))
             {
-                foreach (var callback in dictionary[token])
+                var callbacks = new List<Action<object>>(dictionary[token]);
+                foreach (var callback in callbacks)
                 {
                     callback(args);
                 }
