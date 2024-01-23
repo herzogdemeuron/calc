@@ -33,12 +33,13 @@
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="BorderBrush" Value="DimGray"/>
         <Setter Property="Background" Value="LightGray"/>
-        <Setter Property="Content" Value="✓"/>
+        <Setter Property="Content" Value="👌"/>
         <Setter Property="FontSize" Value="12"/>
 
         <Style.Triggers>
             <DataTrigger Binding="{Binding MappingErrorVM.BrokenSectionVisibility}" Value="Visible">
                 <Setter Property="BorderBrush" Value="SeaGreen"/>
+                <Setter Property="Foreground" Value="SeaGreen"/>
                 <Setter Property="BorderThickness" Value="2"/>
                 <Setter Property="Background" Value="White"/>
             </DataTrigger>
