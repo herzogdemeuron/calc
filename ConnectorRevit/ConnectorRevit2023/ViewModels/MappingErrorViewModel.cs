@@ -92,9 +92,17 @@ namespace Calc.ConnectorRevit.ViewModels
         {
             if (nodeItem != null && nodeItem.Host!= null)
             {
-                var branch = nodeItem.Host as Branch;
-                Buildup1 = branch.Buildups?.Count > 0 ? branch.Buildups[0].ToString() : null;
-                Buildup2 = branch.Buildups?.Count > 1 ? branch.Buildups[1].ToString() : null;
+                if(nodeItem.Host is Tree)
+                {
+                    Buildup1 = "-";
+                    Buildup2 = "-";
+                }
+                else
+                {
+                    var branch = nodeItem.Host as Branch;
+                    Buildup1 = branch.Buildups?.Count > 0 ? branch.Buildups[0].ToString() : "-";
+                    Buildup2 = branch.Buildups?.Count > 1 ? branch.Buildups[1].ToString() : "-";
+                }
             }
             else
             {

@@ -67,11 +67,10 @@
             <StackPanel x:Name="MappingSectoin"
                         Grid.Column="2" 
                         Grid.Row="0">
-                <Label 
-                   Content="Mapping Settings:" 
-                Margin="10"
-                    FontSize="27"
-                   FontWeight="Light"/>
+                <Label Content="Mapping Settings:" 
+                        Margin="10"
+                        FontSize="27"
+                       FontWeight="Light"/>
 
                 <DockPanel x:Name="MappingPanel"
                        Margin="10,5,10,10"
@@ -114,7 +113,7 @@
                     Grid.Column="2" 
                     Grid.Row="1"
                     Margin="80,0,10,0"
-                    Height="230"
+                    Height="220"
                   Visibility="{Binding MappingErrorVM.BrokenSectionVisibility}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="80"/>
@@ -304,7 +303,7 @@
                     <RowDefinition Height="45"/>
                     <RowDefinition Height="80"/>
                     <RowDefinition Height="4*"/>
-                    <RowDefinition Height="45"/>
+                    <RowDefinition Height="55"/>
                     <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
 
@@ -381,6 +380,7 @@
 
                 <TabControl x:Name="BuildupTabs"
                             Grid.Row="2"
+                            Margin="0,0,0,10"
                             DockPanel.Dock="Top"
                             ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CurrentBuildups}"
                             SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.ActiveBuildup}"
@@ -490,7 +490,7 @@
                                         <DataGridTextColumn.Header>
                                             <StackPanel Orientation="Horizontal">
                                                 <TextBlock Text="💔" FontSize="10" Foreground="Crimson" VerticalAlignment="Center"/>
-                                                <TextBlock Text=" Issues" FontSize="13" />
+                                                <TextBlock Text=" Issues" Foreground="Crimson" FontSize="13" />
                                             </StackPanel>
                                         </DataGridTextColumn.Header>
                                     </DataGridTextColumn>

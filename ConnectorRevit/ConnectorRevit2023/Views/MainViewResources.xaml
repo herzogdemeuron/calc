@@ -30,16 +30,17 @@
     </Style>
 
     <Style x:Key="MappingErrorButtonStyle" TargetType="Button">
-        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="BorderBrush" Value="DimGray"/>
-        <Setter Property="Background" Value="White"/>
+        <Setter Property="Background" Value="LightGray"/>
         <Setter Property="Content" Value="✓"/>
         <Setter Property="FontSize" Value="12"/>
 
         <Style.Triggers>
-            <DataTrigger Binding="{Binding MappingErrorVM.BrokenSectionVisibility}" Value="Collapsed">
-                <Setter Property="BorderThickness" Value="1"/>
-                <Setter Property="Background" Value="LightGray"/>
+            <DataTrigger Binding="{Binding MappingErrorVM.BrokenSectionVisibility}" Value="Visible">
+                <Setter Property="BorderBrush" Value="SeaGreen"/>
+                <Setter Property="BorderThickness" Value="2"/>
+                <Setter Property="Background" Value="White"/>
             </DataTrigger>
         
             <DataTrigger Binding="{Binding MappingErrorVM.HasBrokenItems}" Value="True">
@@ -63,7 +64,7 @@
 
     <Style x:Key="MappingErrorBorderStyle" TargetType="Border">
         <Setter Property="BorderThickness" Value="2"/>
-        <Setter Property="BorderBrush" Value="DimGray"/>
+        <Setter Property="BorderBrush" Value="SeaGreen"/>
         <Setter Property="CornerRadius" Value="4"/>
         <Style.Triggers>
             <DataTrigger Binding="{Binding MappingErrorVM.HasBrokenItems}" Value="True">
@@ -73,7 +74,7 @@
     </Style>
 
     <Style x:Key="MappingErrorPathStyle" TargetType="Path">
-        <Setter Property="Stroke" Value="DimGray"/>
+        <Setter Property="Stroke" Value="SeaGreen"/>
         <Setter Property="StrokeThickness" Value="2"/>
         <Style.Triggers>
             <DataTrigger Binding="{Binding MappingErrorVM.HasBrokenItems}" Value="True">
@@ -83,10 +84,12 @@
     </Style>
 
     <Style x:Key="MappingErrorTextStyle" TargetType="TextBlock">
-        <Setter Property="Text" Value="All Mappings Clear 😁"/>
+        <Setter Property="Text" Value="All Mappings Clear 😃"/>
+        <Setter Property="Foreground" Value="SeaGreen"/>
         <Style.Triggers>
             <DataTrigger Binding="{Binding MappingErrorVM.HasBrokenItems}" Value="True">
                 <Setter Property="Text" Value="Missing Mappings:"/>
+                <Setter Property="Foreground" Value="Crimson"/>
             </DataTrigger>
         </Style.Triggers>
     </Style>
