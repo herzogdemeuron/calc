@@ -127,24 +127,40 @@ namespace Calc.ConnectorRevit.ViewModels
             }
         }
 
-        public bool RemoveSubNode(NodeViewModel nodeItem)
+        /// <summary>
+        /// removes a subnode from the node
+        /// returns true if the node was found and removed, and the next node to select
+        /// returns false if the node was not found
+        /// </summary>
+        /// <param name="nodeItem"></param>
+        /// <returns></returns>
+        public (bool, NodeViewModel) RemoveSubNode(NodeViewModel nodeItem)
         {
             if (nodeItem == null || SubNodeItems == null)
-                return false;
+                return (false, null);
 
             foreach (var subNode in SubNodeItems)
             {
                 if (subNode == nodeItem)
                 {
-                    SubNodeItems.Remove(subNode);
-                    return true;
+                    var index = SubNodeItems.IndexOf(subNode);
+                    if(index + 1 < SubNodeItems.Count)
+                    {
+                        SubNodeItems.Remove(nodeItem);
+                        return (true, SubNodeItems[index]);
+                    }
+                    else
+                    {
+                        SubNodeItems.Remove(nodeItem);
+                        return (true, null);
+                    }
                 }
                 else
                 {
                     subNode.RemoveSubNode(nodeItem);
                 }
             }
-            return false;
+            return (false, null);
         }
         public string GetNodeName()
         {

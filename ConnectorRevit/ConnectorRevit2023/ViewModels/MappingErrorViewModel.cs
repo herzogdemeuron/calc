@@ -12,7 +12,6 @@ namespace Calc.ConnectorRevit.ViewModels
     {
         public bool HasBrokenItems => BrokenNodeSource.Count > 0;
         public ObservableCollection<NodeViewModel> BrokenNodeSource {  get; private set; }
-        private NodeViewModel selectedNodeItem;
 
         private string _buildup1;
         public string Buildup1
@@ -101,27 +100,34 @@ namespace Calc.ConnectorRevit.ViewModels
             {
                 Buildup1 = null;
                 Buildup2 = null;
-             }
-            selectedNodeItem = nodeItem;
+            }
         }
 
         public void RemoveBrokenNode(NodeViewModel nodeItem)
         {
+            if(nodeItem == null)
+                return;
             foreach (var tree in BrokenNodeSource)
             {
                 if(tree == nodeItem)
                 {
                     BrokenNodeSource.Remove(tree);
+                    DeselectNodes();
                     break;
                 }
                 else
                 {
-                    var removed = tree.RemoveSubNode(nodeItem);
+                    var result = tree.RemoveSubNode(nodeItem);
+                    var removed = result.Item1;
+                    var nextNode = result.Item2;
                     if (removed)
+                    {
+                        SelectNode(nextNode);
                         break;
+                    }
                 }
             }
-
+            // remove empty trees
             foreach (var tree in BrokenNodeSource)
             {
                 if (tree.SubNodeItems?.Count == 0)
@@ -131,12 +137,27 @@ namespace Calc.ConnectorRevit.ViewModels
                 }
             }
             OnPropertyChanged(nameof(BrokenNodeSource));
+            OnPropertyChanged(nameof(HasBrokenItems));
         }
 
-        public void RemoveAllBrokenNodes()
+        public void DeselectNodes()
+        {
+            Buildup1 = null;
+            Buildup2 = null;
+            MediatorToView.Broadcast("ViewDeselectBrokenNodesTreeView");
+        }
+
+        private void SelectNode(NodeViewModel node)
+        {
+            MediatorToView.Broadcast("ViewSelectBrokenNodesTreeView", node);
+        }
+
+            public void RemoveAllBrokenNodes()
         {
             BrokenNodeSource.Clear();
+            DeselectNodes();
             OnPropertyChanged(nameof(BrokenNodeSource));
+            OnPropertyChanged(nameof(HasBrokenItems));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

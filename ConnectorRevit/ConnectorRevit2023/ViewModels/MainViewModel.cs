@@ -98,6 +98,12 @@ namespace Calc.ConnectorRevit.ViewModels
         {
             MappingErrorVM.RemoveAllBrokenNodes();
         }
+
+        public void HandleErrorMappingSideClicked()
+        {
+            MappingErrorVM.DeselectNodes();
+        }
+
         public async Task HandleUpdateMapping()
         {
             await MappingVM.HandleUpdateMapping();

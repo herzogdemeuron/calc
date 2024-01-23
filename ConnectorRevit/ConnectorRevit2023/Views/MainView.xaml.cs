@@ -1,4 +1,5 @@
-﻿using Calc.ConnectorRevit.Helpers.Mediators;
+﻿using Calc.ConnectorRevit.Helpers;
+using Calc.ConnectorRevit.Helpers.Mediators;
 using Calc.ConnectorRevit.ViewModels;
 using Calc.Core.Objects;
 using Calc.Core.Objects.Buildups;
@@ -23,6 +24,8 @@ namespace Calc.ConnectorRevit.Views
             this.DataContext = MainVM;
             InitializeComponent();
             MediatorToView.Register("ViewDeselectTreeView", _=>DeselectTreeView());
+            MediatorToView.Register("ViewDeselectBrokenNodesTreeView", _ => DeselectBrokenNodesTreeView());
+            MediatorToView.Register("ViewSelectBrokenNodesTreeView", node => SelectNodeTreeView((NodeViewModel)node));
         }
 
         private void DeselectTreeView()
@@ -35,6 +38,36 @@ namespace Calc.ConnectorRevit.Views
                 }
             }
         }
+
+        private void DeselectBrokenNodesTreeView()
+        {
+            if (BrokenNodesTreeView.SelectedItem != null)
+            {
+                if (BrokenNodesTreeView.Tag is TreeViewItem selectedTreeViewItem)
+                {
+                    selectedTreeViewItem.IsSelected = false;
+                }
+            }
+        }
+
+        private void SelectNodeTreeView(NodeViewModel node)
+        {
+            if (node != null)
+            {
+                //find treeviewitem by node
+                var treeViewItem = ViewHelper.FindTreeViewItem(BrokenNodesTreeView, node);
+                if (treeViewItem != null)
+                {
+                    treeViewItem.IsSelected = true;
+                }
+            }
+            else
+            {
+                DeselectBrokenNodesTreeView();
+            }
+        }
+
+
 
         private async void WindowLoaded(object sender, RoutedEventArgs e)
         {
@@ -93,6 +126,7 @@ namespace Calc.ConnectorRevit.Views
             if (BrokenNodesTreeView.SelectedItem is NodeViewModel selectedNode)
             {
                 MainVM.HandleBrokenNodeSelectionChanged(selectedNode);
+                BrokenNodesTreeView.Tag = e.OriginalSource; // save selected treeviewitem for deselecting
                 e.Handled = true;
             }
         }
@@ -109,12 +143,17 @@ namespace Calc.ConnectorRevit.Views
             MainVM.HandleIgnoreAllBrokenNodes();
         }
 
+        private void ErrorMappingSideClickDown(object sender, MouseButtonEventArgs e)
+        {
+            MainVM.HandleErrorMappingSideClicked();
+        }
+
         private void TreeViewItemSelected(object sender, RoutedEventArgs e)
         {
             if (TreeView.SelectedItem is NodeViewModel selectedNode)
             {
                 MainVM.HandleNodeItemSelectionChanged(selectedNode);
-                TreeView.Tag = e.OriginalSource;
+                TreeView.Tag = e.OriginalSource; // save selected treeviewitem for deselecting
                 e.Handled = true;
             }
         }
