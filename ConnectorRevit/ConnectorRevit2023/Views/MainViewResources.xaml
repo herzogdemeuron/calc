@@ -31,13 +31,14 @@
 
     <Style x:Key="MappingErrorButtonStyle" TargetType="Button">
         <Setter Property="BorderThickness" Value="2"/>
-        <Setter Property="BorderBrush" Value="DarkGray"/>
+        <Setter Property="BorderBrush" Value="DimGray"/>
         <Setter Property="Background" Value="White"/>
         <Setter Property="Content" Value="✓"/>
         <Setter Property="FontSize" Value="12"/>
 
         <Style.Triggers>
             <DataTrigger Binding="{Binding MappingErrorVM.BrokenSectionVisibility}" Value="Collapsed">
+                <Setter Property="BorderThickness" Value="1"/>
                 <Setter Property="Background" Value="LightGray"/>
             </DataTrigger>
         
@@ -62,7 +63,7 @@
 
     <Style x:Key="MappingErrorBorderStyle" TargetType="Border">
         <Setter Property="BorderThickness" Value="2"/>
-        <Setter Property="BorderBrush" Value="DarkGray"/>
+        <Setter Property="BorderBrush" Value="DimGray"/>
         <Setter Property="CornerRadius" Value="4"/>
         <Style.Triggers>
             <DataTrigger Binding="{Binding MappingErrorVM.HasBrokenItems}" Value="True">
@@ -72,7 +73,7 @@
     </Style>
 
     <Style x:Key="MappingErrorPathStyle" TargetType="Path">
-        <Setter Property="Stroke" Value="DarkGray"/>
+        <Setter Property="Stroke" Value="DimGray"/>
         <Setter Property="StrokeThickness" Value="2"/>
         <Style.Triggers>
             <DataTrigger Binding="{Binding MappingErrorVM.HasBrokenItems}" Value="True">
