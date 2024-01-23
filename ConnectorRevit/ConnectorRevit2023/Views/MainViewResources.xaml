@@ -31,19 +31,23 @@
 
     <Style x:Key="MappingErrorButtonStyle" TargetType="Button">
         <Setter Property="IsEnabled" Value="False"/>
-        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Crimson"/>
+        <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="Content" Value="✓"/>
         <Setter Property="FontSize" Value="12"/>
 
         <Style.Triggers>
             <DataTrigger Binding="{Binding MappingErrorVM.HasBrokenItems}" Value="True">
                 <Setter Property="IsEnabled" Value="True"/>
-                <Setter Property="Background" Value="Tomato"/>
+                <Setter Property="Background" Value="Crimson"/>
                 <Setter Property="Foreground" Value="White"/>
                 <Setter Property="Content" Value="💬"/>
             </DataTrigger>
+            <DataTrigger Binding="{Binding MappingErrorVM.BrokenSectionVisibility}" Value="Visible">
+                <Setter Property="Background" Value="White"/>
+                <Setter Property="Foreground" Value="Crimson"/>
+            </DataTrigger>
         </Style.Triggers>
-        
     </Style>
 
     <DataTemplate x:Key="BranchItemTemplate">
@@ -67,7 +71,7 @@
                            FontWeight="SemiBold"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Center"
-                           Foreground="Tomato"/>
+                           Foreground="Crimson"/>
             </Grid>
 
             <Grid Margin="4,0,0,0">
@@ -96,7 +100,6 @@
                         </Style>
                     </Rectangle.Style>
                 </Rectangle>
-
                 <TextBlock Text="{Binding BranchParameterName}" VerticalAlignment="Center" FontSize="10" Margin="2"/>
             </Grid>
 
@@ -141,7 +144,19 @@
                        VerticalAlignment="Center"
                        FontSize="11"
                        Margin="5,0,0,0"
-                       Foreground ="Gray"/>
+                       Foreground ="Gray">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsBrokenNode}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+
         </StackPanel>
     </DataTemplate>
 

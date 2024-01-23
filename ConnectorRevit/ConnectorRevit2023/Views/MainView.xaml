@@ -82,7 +82,13 @@
                             Height="25"
                             Margin="10,0,0,0"
                             DockPanel.Dock="Right"
-                            Click="MappingErrorClicked"/>
+                            Click="MappingErrorClicked">
+                        <Button.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="4"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
                     <Button Content="New" 
                         Width="70"
                         Height="25"
@@ -94,8 +100,6 @@
                         Height="25"
                           Margin="10,0,10,0"
                         DockPanel.Dock="Right"/>
-                    
-                    
                     <ComboBox x:Name="MappingsComboBox"
                           ItemsSource="{Binding Store.MappingsProjectRelated}"
                           SelectedItem="{Binding Store.MappingSelected}"
@@ -109,8 +113,8 @@
             <Grid x:Name="BrokenNodesSection"
                     Grid.Column="2" 
                     Grid.Row="1"
-                    Margin="100,0,10,0"
-                    Height="220"
+                    Margin="80,0,10,0"
+                    Height="230"
                   Visibility="{Binding MappingErrorVM.BrokenSectionVisibility}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="80"/>
@@ -126,15 +130,21 @@
                 <Border Grid.ColumnSpan="2" 
                     Grid.RowSpan="4"
                     CornerRadius="4"
-                    BorderBrush="Tomato"
+                    BorderBrush="Crimson"
                     BorderThickness="2"/>
 
                 <Canvas Height="30" Width="0"
                         HorizontalAlignment="Right"
                         Grid.Column="1">
-                    <Line X1="-12" Y1="-13" X2="-12" Y2="-1" 
-                          Stroke="Tomato" 
-                          StrokeThickness="2"/>  
+                    <Path Stroke="Crimson" StrokeThickness="2">
+                        <Path.Data>
+                            <PathGeometry>
+                                <PathFigure StartPoint="-1,-14">
+                                    <BezierSegment Point1="-1,-14" Point2="5,-7" Point3="-1,0"/>
+                                </PathFigure>
+                            </PathGeometry>
+                        </Path.Data>
+                    </Path>
                 </Canvas>
 
                 <TextBlock Text="Broken Mappings"
@@ -151,6 +161,8 @@
                               Background="Transparent"
                               Margin="10,10,10,0"
                               BorderBrush="LightGray"
+                              TreeViewItem.Selected="BrokenNodeSelected"
+                              MouseLeftButtonDown="SideClickDown"
                               ItemsSource="{Binding MappingErrorVM.BrokenNodeSource}"
                               ItemContainerStyle="{StaticResource TreeViewItemStyle}">
                     <TreeView.ItemTemplate>
@@ -164,17 +176,19 @@
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
                 </TreeView>
-                <TextBlock Text="Buildup1"
-                               Grid.Column="2"
-                               Grid.Row="2"
-                               VerticalAlignment="Center"
-                           TextWrapping="WrapWithOverflow"
-                               Margin="10,0,10,0"/>
-                <TextBlock Text="Buildup2"
-                               Grid.Column="2"
-                               Grid.Row="3"
-                               VerticalAlignment="Center"
-                               Margin="10,0,10,10"/>
+                <TextBlock Text="{Binding MappingErrorVM.Buildup1}"
+                           ToolTip="{Binding MappingErrorVM.Buildup1}"
+                            Grid.Column="2"
+                            Grid.Row="2"
+                            VerticalAlignment="Center"
+                            TextWrapping="WrapWithOverflow"
+                            Margin="20,0,10,0"/>
+                <TextBlock Text="{Binding MappingErrorVM.Buildup2}"
+                           ToolTip="{Binding MappingErrorVM.Buildup2}"
+                            Grid.Column="2"
+                            Grid.Row="3"
+                            VerticalAlignment="Center"
+                            Margin="20,0,10,10"/>
 
                 <Button Content="Ignore"
                             Grid.Row="2"
@@ -182,14 +196,16 @@
                             Margin="10,0,0,0"
                             Height="25"
                             VerticalAlignment="Center"
-                            HorizontalAlignment="Left"/>
+                            HorizontalAlignment="Left"
+                            Click="HandleIgnoreSelectedBrokenNode"/>
                 <Button Content="Ignore All"
                             Grid.Row="3"
                             Width="70"
                             Height="25"
                             Margin="10,0,0,10"
                             VerticalAlignment="Center"
-                            HorizontalAlignment="Left"/>
+                            HorizontalAlignment="Left"
+                        Click="HandleIgnoreAllBrokenNodes"/>
 
 
             </Grid>
@@ -475,7 +491,7 @@
                                     <DataGridTextColumn Binding="{Binding ErrorMessage}" Width="1*" IsReadOnly="True">
                                         <DataGridTextColumn.Header>
                                             <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="💔" FontSize="10" Foreground="Tomato" VerticalAlignment="Center"/>
+                                                <TextBlock Text="💔" FontSize="10" Foreground="Crimson" VerticalAlignment="Center"/>
                                                 <TextBlock Text=" Issues" FontSize="13" />
                                             </StackPanel>
                                         </DataGridTextColumn.Header>

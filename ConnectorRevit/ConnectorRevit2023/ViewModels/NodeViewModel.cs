@@ -22,6 +22,7 @@ namespace Calc.ConnectorRevit.ViewModels
         public string BranchParameterName { get => GetParameterName(); }
         public bool? BranchParameterIsInstance { get => CheckIfParameterIsInstance(); }
         public bool IsBranch { get => CheckIfBranch(); }
+        public bool IsBrokenNode => (Host is Branch) && (Host as Branch).ParentForest == null; // mark as broken if parent forest is null
         public NodeTreeViewModel ParentTreeView { get; set; }
         public ObservableCollection<NodeViewModel> SubNodeItems { get; }
         public BuildupViewModel NodeBuildupItem { get; set; }
@@ -126,6 +127,25 @@ namespace Calc.ConnectorRevit.ViewModels
             }
         }
 
+        public bool RemoveSubNode(NodeViewModel nodeItem)
+        {
+            if (nodeItem == null || SubNodeItems == null)
+                return false;
+
+            foreach (var subNode in SubNodeItems)
+            {
+                if (subNode == nodeItem)
+                {
+                    SubNodeItems.Remove(subNode);
+                    return true;
+                }
+                else
+                {
+                    subNode.RemoveSubNode(nodeItem);
+                }
+            }
+            return false;
+        }
         public string GetNodeName()
         {
             if (Host is Tree tree)

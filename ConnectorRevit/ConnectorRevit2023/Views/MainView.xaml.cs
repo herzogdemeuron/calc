@@ -87,11 +87,33 @@ namespace Calc.ConnectorRevit.Views
             MainVM.HandleMappingErrorClicked();
         }
 
+
+        private void BrokenNodeSelected(object sender, RoutedEventArgs e)
+        {
+            if (BrokenNodesTreeView.SelectedItem is NodeViewModel selectedNode)
+            {
+                MainVM.HandleBrokenNodeSelectionChanged(selectedNode);
+                e.Handled = true;
+            }
+        }
+        private void HandleIgnoreSelectedBrokenNode(object sender, RoutedEventArgs e)
+        {
+            if (BrokenNodesTreeView.SelectedItem is NodeViewModel selectedNode)
+            {
+                MainVM.HandleIgnoreSelectedBrokenNode(selectedNode);
+            }
+        }
+
+        private void HandleIgnoreAllBrokenNodes(object sender, RoutedEventArgs e)
+        {
+            MainVM.HandleIgnoreAllBrokenNodes();
+        }
+
         private void TreeViewItemSelected(object sender, RoutedEventArgs e)
         {
-            if (TreeView.SelectedItem is NodeViewModel selectedBranch)
+            if (TreeView.SelectedItem is NodeViewModel selectedNode)
             {
-                MainVM.HandleNodeItemSelectionChanged(selectedBranch);
+                MainVM.HandleNodeItemSelectionChanged(selectedNode);
                 TreeView.Tag = e.OriginalSource;
                 e.Handled = true;
             }

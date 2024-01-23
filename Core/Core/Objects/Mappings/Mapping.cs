@@ -39,24 +39,14 @@ namespace Calc.Core.Objects.Mappings
         /// <summary>
         /// Assigns the buildups to the tree based on the mapping.
         /// Automatically determines which mapping to use based on the tree name.
-        /// Example Use:
-        /// <code>
-        /// var buildups = await BuildupStorageDriver.GetAllBuildups();
-        /// var mappings = await MappingStorageDriver.GetMappings("my mapping name");
-        /// foreach (var tree in trees)
-        /// {
-        ///     MappingStorageDriver.ApplyMappingToTree(tree, mappings.First(), buildups);
-        /// }
-        /// </code>
+        /// Returns a broken tree if the mapping path is not found.
         /// </summary>
-        /// <param name="tree">The tree to assign buildups to.</param>
-        /// <param name="allBuildups">The full list of buildups from the database.</param>
-        /// <returns></returns>
         public Tree ApplyToTree(Tree tree, List<Buildup> allBuildups, int maxBuildups)
         {
             var brokenTree = new Tree()
             {
                 Name = tree.Name,
+                ParentTree = tree
             };
 
             tree.ResetBuildups();
@@ -70,7 +60,6 @@ namespace Calc.Core.Objects.Mappings
             foreach (var mappingItem in mappingItems)
             {
                 var buildupIds = mappingItem.BuildupIds.Take(maxBuildups).ToList();
-                // find the buildups from this mapping item
                 var buildups = allBuildups.Where(b => buildupIds.Contains(b.Id)).ToList();
                 var match = MapBuildupsToBranch(tree, buildups, mappingItem.Path);
 
