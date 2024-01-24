@@ -152,7 +152,7 @@ namespace Calc.Core
             this._mappingSelected = mapping;
         }
 
-        public async Task<bool> UpdateSelectedMapping()
+        public async Task<bool> UpdateSelectedMapping(Forest additionalForest = null)
         {             
             if (this.MappingSelected == null)
             {
@@ -160,7 +160,7 @@ namespace Calc.Core
             }
 
             // refresh the mapping with the selected forest
-            var sendMapping = new Mapping(this.ForestSelected, this.MappingSelected.Name)
+            var sendMapping = new Mapping(this.MappingSelected.Name, this.ForestSelected, additionalForest)
             {
                 Project = this.ProjectSelected,
                 Id = this.MappingSelected.Id

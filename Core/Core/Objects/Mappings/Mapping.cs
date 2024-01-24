@@ -26,14 +26,27 @@ namespace Calc.Core.Objects.Mappings
             // empty constructor for deserialization
         }
 
-        public Mapping(Forest forest, string mappingName)
+        public Mapping(string mappingName, params Forest[] forests)
         {
             MappingItems = new List<MappingItem>();
-            foreach (var tree in forest.Trees)
+            foreach (var forest in forests)
             {
-                MappingItems.AddRange(ExtractMappingItems(tree.Flatten(), tree.Name));
+                if(forest == null)
+                {
+                    continue;
+                }
+
+                foreach (var tree in forest.Trees)
+                {
+                    MappingItems.AddRange(ExtractMappingItems(tree.Flatten(), tree.Name));
+                }
             }
             Name = mappingName;
+        }
+
+        public void AddMappingItems(List<MappingItem> mappingItems)
+        {
+            MappingItems.AddRange(mappingItems);
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using Calc.ConnectorRevit.Helpers.Mediators;
 using Calc.Core;
+using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Mappings;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace Calc.ConnectorRevit.ViewModels
     public class MappingViewModel : INotifyPropertyChanged
     {
         private DirectusStore store;
+        public Forest BrokenMappingForest { get; set; }
         public MappingViewModel(DirectusStore directusStore)
         {
             store = directusStore;
@@ -32,7 +34,7 @@ namespace Calc.ConnectorRevit.ViewModels
             try
             {
                 MediatorToView.Broadcast("ShowWaitingOverlay", "Updating mapping...");
-                feedback = await store.UpdateSelectedMapping();
+                feedback = await store.UpdateSelectedMapping(BrokenMappingForest);
             }
             catch (Exception ex)
             {

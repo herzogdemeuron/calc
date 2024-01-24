@@ -1,6 +1,7 @@
 ﻿using Calc.ConnectorRevit.Helpers;
 using Calc.ConnectorRevit.Helpers.Mediators;
 using Calc.Core.Objects.GraphNodes;
+using Calc.Core.Objects.Mappings;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
@@ -11,6 +12,7 @@ namespace Calc.ConnectorRevit.ViewModels
     public class MappingErrorViewModel : INotifyPropertyChanged
     {
         public bool HasBrokenItems => BrokenNodeSource.Count > 0;
+        private MappingViewModel mappingVM;
         public ObservableCollection<NodeViewModel> BrokenNodeSource {  get; private set; }
 
         private string _buildup1;
@@ -57,8 +59,9 @@ namespace Calc.ConnectorRevit.ViewModels
             }
         }
 
-        public MappingErrorViewModel( )
+        public MappingErrorViewModel(MappingViewModel mappingViewModel)
         {
+            mappingVM = mappingViewModel;
             BrokenNodeSource = new ObservableCollection<NodeViewModel>();
             MediatorFromVM.Register("BrokenForestChanged", forest => UpdateBrokenNodes((Forest)forest));
         }
@@ -79,6 +82,8 @@ namespace Calc.ConnectorRevit.ViewModels
                 BrokenForest = null;
                 BrokenNodeSource.Clear();
             }
+
+            mappingVM.BrokenMappingForest = BrokenForest;
             OnPropertyChanged(nameof(BrokenNodeSource));
             OnPropertyChanged(nameof(HasBrokenItems));
         }
@@ -121,6 +126,7 @@ namespace Calc.ConnectorRevit.ViewModels
             if(nodeItem.Host is Tree)
             {
                 BrokenNodeSource.Remove(nodeItem);
+                BrokenForest.Trees.Remove(nodeItem.Host as Tree);
             }
             else
             {
@@ -142,6 +148,7 @@ namespace Calc.ConnectorRevit.ViewModels
                 if (tree.SubNodeItems?.Count == 0)
                 {
                     BrokenNodeSource.Remove(tree);
+                    BrokenForest.Trees.Remove(tree.Host as Tree);
                     break;
                 }
             }

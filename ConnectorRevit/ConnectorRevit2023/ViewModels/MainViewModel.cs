@@ -27,7 +27,6 @@ namespace Calc.ConnectorRevit.ViewModels
         {
             Store = store;
             Server = new LiveServer();
-            MappingErrorVM = new MappingErrorViewModel();
             VisibilityVM = new VisibilityViewModel();
 
             LoadingVM = new LoadingViewModel(store);
@@ -36,7 +35,7 @@ namespace Calc.ConnectorRevit.ViewModels
             NewMappingVM = new NewMappingViewModel(store);
             NodeTreeVM = new NodeTreeViewModel(store);
 
-
+            MappingErrorVM = new MappingErrorViewModel(MappingVM);
             CalculationVM = new CalculationViewModel(NodeTreeVM);
             SavingVM = new SavingViewModel(CalculationVM);
         }

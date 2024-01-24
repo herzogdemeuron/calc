@@ -22,7 +22,7 @@ namespace Calc.ConnectorRevit.ViewModels
                 if (store.ForestSelected == forest)
                 {
                     // if the same forest is selected, update the current forest presering the mapping
-                    Mapping currentMapping = new Mapping(store.ForestSelected, "CurrentMapping");
+                    Mapping currentMapping = new Mapping("CurrentMapping", store.ForestSelected);
                     ForestHelper.PlantTrees(store.ForestSelected);
                     mapping = currentMapping;
                 }
@@ -41,7 +41,7 @@ namespace Calc.ConnectorRevit.ViewModels
         {
             if (forest != null)
             {
-                Mapping currentMapping = new Mapping(store.ForestSelected, "CurrentMapping");
+                Mapping currentMapping = new Mapping("CurrentMapping", store.ForestSelected);
                 ForestHelper.PlantTrees(store.ForestSelected);
                 store.MappingSelected = currentMapping;
                 MediatorFromVM.Broadcast("ForestSelectionChanged");

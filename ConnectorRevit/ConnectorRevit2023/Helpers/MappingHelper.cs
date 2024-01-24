@@ -30,7 +30,7 @@ namespace Calc.ConnectorRevit.Helpers
 
         public static Mapping CopyCurrentMapping(DirectusStore store)
         {
-            return new Mapping(store.ForestSelected, "CurrentMapping");
+            return new Mapping("CurrentMapping", store.ForestSelected);
         }
 
     }

@@ -139,7 +139,9 @@ namespace Calc.ConnectorRevit.ViewModels
                 return null;
 
             var index = ParentNodeItem.SubNodeItems.IndexOf(this);
+
             ParentNodeItem.SubNodeItems.RemoveAt(index);
+            ParentNodeItem.Host.SubBranches.RemoveAt(index);
 
             if (index < ParentNodeItem.SubNodeItems.Count)
             {
