@@ -115,26 +115,27 @@ namespace Calc.ConnectorRevit.ViewModels
         {
             if(nodeItem == null)
                 return;
-            foreach (var tree in BrokenNodeSource)
+
+            NodeViewModel nextNode = null;
+
+            if(nodeItem.Host is Tree)
             {
-                if(tree == nodeItem)
-                {
-                    BrokenNodeSource.Remove(tree);
-                    DeselectNodes();
-                    break;
-                }
-                else
-                {
-                    var result = tree.RemoveSubNode(nodeItem);
-                    var removed = result.Item1;
-                    var nextNode = result.Item2;
-                    if (removed)
-                    {
-                        SelectNode(nextNode);
-                        break;
-                    }
-                }
+                BrokenNodeSource.Remove(nodeItem);
             }
+            else
+            {
+                nextNode = nodeItem.RemoveFromParent();
+            }
+            
+            if(nextNode != null)
+            {
+                SelectNode(nextNode);
+            }
+            else
+            {
+                DeselectNodes();
+            }
+            
             // remove empty trees
             foreach (var tree in BrokenNodeSource)
             {
@@ -144,6 +145,7 @@ namespace Calc.ConnectorRevit.ViewModels
                     break;
                 }
             }
+
             OnPropertyChanged(nameof(BrokenNodeSource));
             OnPropertyChanged(nameof(HasBrokenItems));
         }

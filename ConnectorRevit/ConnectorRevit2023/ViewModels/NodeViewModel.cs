@@ -21,9 +21,10 @@ namespace Calc.ConnectorRevit.ViewModels
         public string Name { get => GetNodeName(); }
         public string BranchParameterName { get => GetParameterName(); }
         public bool? BranchParameterIsInstance { get => CheckIfParameterIsInstance(); }
-        public bool IsBranch { get => CheckIfBranch(); }
+        public bool IsBranch { get => CheckIfBranch(); } // is a branch but not a tree
         public bool IsBrokenNode => (Host is Branch) && (Host as Branch).ParentForest == null; // mark as broken if parent forest is null
         public NodeTreeViewModel ParentTreeView { get; set; }
+        public NodeViewModel ParentNodeItem { get; private set; }
         public ObservableCollection<NodeViewModel> SubNodeItems { get; }
         public BuildupViewModel NodeBuildupItem { get; set; }
 
@@ -114,7 +115,7 @@ namespace Calc.ConnectorRevit.ViewModels
             }
         }
 
-        public NodeViewModel(IGraphNode node, NodeTreeViewModel parentTreeView = null)
+        public NodeViewModel(IGraphNode node,  NodeTreeViewModel parentTreeView = null, NodeViewModel parentNodeItem = null)
         {
             Host = node;
             ParentTreeView = parentTreeView;
@@ -123,45 +124,33 @@ namespace Calc.ConnectorRevit.ViewModels
 
             foreach (var subNode in node.SubBranches)
             {
-                SubNodeItems.Add(new NodeViewModel(subNode, parentTreeView));
+                SubNodeItems.Add(new NodeViewModel(subNode, parentTreeView, this));
             }
+            ParentNodeItem = parentNodeItem;
         }
 
         /// <summary>
-        /// removes a subnode from the node
-        /// returns true if the node was found and removed, and the next node to select
-        /// returns false if the node was not found
+        /// remove the branch node from its parent node,
+        /// returns the next node to select.
         /// </summary>
-        /// <param name="nodeItem"></param>
-        /// <returns></returns>
-        public (bool, NodeViewModel) RemoveSubNode(NodeViewModel nodeItem)
+        public NodeViewModel RemoveFromParent()
         {
-            if (nodeItem == null || SubNodeItems == null)
-                return (false, null);
+            if (ParentNodeItem == null || IsBranch == false)
+                return null;
 
-            foreach (var subNode in SubNodeItems)
+            var index = ParentNodeItem.SubNodeItems.IndexOf(this);
+            ParentNodeItem.SubNodeItems.RemoveAt(index);
+
+            if (index < ParentNodeItem.SubNodeItems.Count)
             {
-                if (subNode == nodeItem)
-                {
-                    var index = SubNodeItems.IndexOf(subNode);
-                    if(index + 1 < SubNodeItems.Count)
-                    {
-                        SubNodeItems.Remove(nodeItem);
-                        return (true, SubNodeItems[index]);
-                    }
-                    else
-                    {
-                        SubNodeItems.Remove(nodeItem);
-                        return (true, null);
-                    }
-                }
-                else
-                {
-                    subNode.RemoveSubNode(nodeItem);
-                }
+                return ParentNodeItem.SubNodeItems[index];
+            }           
+            else
+            {
+                return null;
             }
-            return (false, null);
         }
+
         public string GetNodeName()
         {
             if (Host is Tree tree)
