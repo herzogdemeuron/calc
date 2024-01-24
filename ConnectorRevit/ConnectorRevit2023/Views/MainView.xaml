@@ -344,6 +344,7 @@
                     </StackPanel>
                     <StackPanel DockPanel.Dock="Left">
                         <views:SearchComboBox Tag="1"
+                                              x:Uid="ShowTextNote"
                                               Style="{StaticResource RoundedComboBoxStyle}"
                                               ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.AllBuildupsView1}"
                                               SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup1}"
@@ -357,6 +358,7 @@
                         </views:SearchComboBox>
                         
                         <views:SearchComboBox Tag="2"
+                                              x:Uid="ShowTextNote"
                                               Style="{StaticResource RoundedComboBoxStyle}"
                                               ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.AllBuildupsView2}"
                                               SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup2}"
