@@ -11,6 +11,8 @@
     <None Remove="Resources\DT_logo.gif" />
     <None Remove="Resources\icon-01.png" />
     <None Remove="ToggleButtonTemplate.xaml" />
+    <None Remove="Views\ButtonResource.xaml" />
+    <None Remove="Views\ComboBoxResource.xaml" />
     <None Remove="Views\MainView.xaml" />
     <None Remove="Views\MainViewResources.xaml" />
     <None Remove="Views\ToggleButtonResource.xaml" />
@@ -23,11 +25,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Include="Views\ComboBoxResource.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainViewResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ButtonResource.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ToggleButtonResource.xaml">

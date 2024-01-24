@@ -5,9 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Calc.ConnectorRevit.ViewModels"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
-        xmlns:conv="clr-namespace:Calc.ConnectorRevit.Views.Converters"
-        xmlns:views="clr-namespace:Calc.ConnectorRevit.Views" 
-        Title="CALC"
+        xmlns:views="clr-namespace:Calc.ConnectorRevit.Views"
         d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
         Loaded="WindowLoaded"
         Closing="WindowClosing"
@@ -15,29 +13,31 @@
         Height="900" MinHeight="700"
         Width="900" MinWidth="750"
         WindowStartupLocation="CenterScreen"
+        Title="CALC"
         Topmost="True">
 
     <Window.Resources>
-
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="MainViewResources.xaml"/>
                 <ResourceDictionary Source="ToggleButtonResource.xaml"/>
+                <ResourceDictionary Source="ButtonResource.xaml"/>
+                <ResourceDictionary Source="ComboBoxResource.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
 
     <Grid>
         <Grid>
-            
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="4*"/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            
+
             <Grid.RowDefinitions>
+                <RowDefinition Height="0"/>
                 <RowDefinition Height="110"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
@@ -46,19 +46,29 @@
 
 
 
+            <Button Style="{StaticResource ButtonStyle}"
+                    Grid.Column="2"
+                    HorizontalAlignment="Right"
+                    Margin="5"
+                    Width="25"
+                    Content="✕"
+                    Click="OnCloseClicked"/>
+
+
+
             <StackPanel x:Name="ForestPanel"
                        Grid.Column="0"
-                       Grid.Row="0">
+                       Grid.Row="1">
 
                 <Label Content="Element Groups:"
                        FontSize="27"
                        Margin="10"
                        FontWeight="light"/>
-                
+
                 <ComboBox x:Name="ForestsComboBox"
+                          Style="{StaticResource RoundedComboBoxStyle}"
                           ItemsSource="{Binding Store.ForestProjectRelated}"
                           DisplayMemberPath="Name"
-                          Height="25"
                           Margin="10,5,10,10"
                           SelectionChanged="ForestSelectionChanged"
                           HorizontalAlignment="Stretch"/>
@@ -66,7 +76,7 @@
 
             <StackPanel x:Name="MappingSectoin"
                         Grid.Column="2" 
-                        Grid.Row="0">
+                        Grid.Row="1">
                 <Label Content="Mapping Settings:" 
                         Margin="10"
                         FontSize="27"
@@ -78,40 +88,34 @@
                        LastChildFill="True">
                     <Button Style="{StaticResource MappingErrorButtonStyle}"
                             Width="25"
-                            Height="25"
                             Margin="10,0,0,0"
                             DockPanel.Dock="Right"
                             Click="MappingErrorClicked">
-                        <Button.Resources>
-                            <Style TargetType="{x:Type Border}">
-                                <Setter Property="CornerRadius" Value="4"/>
-                            </Style>
-                        </Button.Resources>
                     </Button>
-                    <Button Content="New" 
+                    <Button Style="{StaticResource ButtonStyle}"
+                        Content="New" 
                         Width="70"
-                        Height="25"
                         Click="NewMappingClicked"
                         DockPanel.Dock="Right"/>
-                    <Button Content="Save" 
+                    <Button Style="{StaticResource ButtonStyle}"
+                        Content="Save" 
                         Width="70" 
                         Click="UpdateMappingClicked"
-                        Height="25"
-                          Margin="10,0,10,0"
+                        Margin="10,0,10,0"
                         DockPanel.Dock="Right"/>
                     <ComboBox x:Name="MappingsComboBox"
-                          ItemsSource="{Binding Store.MappingsProjectRelated}"
-                          SelectedItem="{Binding Store.MappingSelected}"
-                          DisplayMemberPath="Name"
-                          DockPanel.Dock="Left"
-                          Height="25"
-                          SelectionChanged="MappingSelectionChanged"/>
+                              Style="{StaticResource RoundedComboBoxStyle}"
+                              ItemsSource="{Binding Store.MappingsProjectRelated}"
+                              SelectedItem="{Binding Store.MappingSelected}"
+                              DisplayMemberPath="Name"
+                              DockPanel.Dock="Left"
+                              SelectionChanged="MappingSelectionChanged"/>
                 </DockPanel>
             </StackPanel>
 
             <Grid x:Name="BrokenNodesSection"
                     Grid.Column="2" 
-                    Grid.Row="1"
+                    Grid.Row="2"
                     Margin="80,0,10,0"
                     Height="220"
                   Visibility="{Binding MappingErrorVM.BrokenSectionVisibility}">
@@ -152,27 +156,31 @@
                                FontSize="13"
                                Margin="10,5,0,0"
                                FontWeight="SemiBold"/>
-                <TreeView x:Name="BrokenNodesTreeView"
-                              Grid.ColumnSpan="2"
-                              Grid.Row="1"
+                <Border Grid.ColumnSpan="2"
+                        Grid.Row="1"
+                        Margin="10,10,10,0"
+                        BorderBrush="Silver"
+                        BorderThickness="1"
+                        CornerRadius="4">
+                    <TreeView x:Name="BrokenNodesTreeView"
                               Background="Transparent"
-                              Margin="10,10,10,0"
-                              BorderBrush="LightGray"
+                              BorderThickness="0"
                               TreeViewItem.Selected="BrokenNodeSelected"
                               MouseLeftButtonDown="ErrorMappingSideClickDown"
                               ItemsSource="{Binding MappingErrorVM.BrokenNodeSource}"
                               ItemContainerStyle="{StaticResource TreeViewItemStyle}">
-                    <TreeView.ItemTemplate>
-                        <HierarchicalDataTemplate ItemsSource="{Binding SubNodeItems}">
-                            <ContentControl Content="{Binding}"
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding SubNodeItems}">
+                                <ContentControl Content="{Binding}"
                                 ContentTemplate="{StaticResource BranchItemTemplate}">
-                                <ContentControl.ToolTip>
-                                    <TextBlock Text="{Binding Name}"/>
-                                </ContentControl.ToolTip>
-                            </ContentControl>
-                        </HierarchicalDataTemplate>
-                    </TreeView.ItemTemplate>
-                </TreeView>
+                                    <ContentControl.ToolTip>
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </ContentControl.ToolTip>
+                                </ContentControl>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </Border>
                 <TextBlock Text="{Binding MappingErrorVM.Buildup1}"
                            ToolTip="{Binding MappingErrorVM.Buildup1}"
                             Grid.Column="2"
@@ -187,36 +195,31 @@
                             VerticalAlignment="Center"
                             Margin="20,0,10,10"/>
 
-                <Button Content="Ignore"
-                            Grid.Row="2"
-                            Width="70"
-                            Margin="10,0,0,0"
-                            Height="25"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Left"
-                            Click="HandleIgnoreSelectedBrokenNode"/>
-                <Button Content="Ignore All"
-                            Grid.Row="3"
-                            Width="70"
-                            Height="25"
-                            Margin="10,0,0,10"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Left"
+                <Button Style="{StaticResource ButtonStyle}"
+                        Content="Ignore"
+                        Grid.Row="2"
+                        Width="70"
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Left"
+                        Click="HandleIgnoreSelectedBrokenNode"/>
+
+                <Button Style="{StaticResource ButtonStyle}"
+                        Content="Ignore All"
+                        Grid.Row="3"
+                        Width="70"
+                        Margin="10,0,0,10"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Left"
                         Click="HandleIgnoreAllBrokenNodes"/>
 
 
             </Grid>
 
-
-
-
-
-
-
             <Grid x:Name="TreeviewGrid"
                   DockPanel.Dock="Bottom"
                   Grid.Column="0"
-                  Grid.Row="1"
+                  Grid.Row="2"
                   Grid.RowSpan="2"
                   Margin="10,0,10,10">
                 <Grid.RowDefinitions>
@@ -229,10 +232,14 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-
-                <TreeView x:Name="TreeView"
-                            Grid.Row="2"
-                            Grid.ColumnSpan="3"
+                <Border Grid.Row="2"
+                        Grid.ColumnSpan="3"
+                        BorderBrush="Silver"
+                        BorderThickness="1"
+                        CornerRadius="4">           
+                    <TreeView x:Name="TreeView"
+                            Background="Transparent"
+                            BorderThickness="0"
                             ItemsSource="{Binding NodeTreeVM.NodeSource}"
                             TreeViewItem.Selected="TreeViewItemSelected"
                             MouseLeftButtonDown="SideClickDown"
@@ -248,13 +255,14 @@
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
                 </TreeView>
+                </Border>
 
                 <Border Grid.ColumnSpan="3" Grid.Row="0" CornerRadius="4" Background="LightGray">
-                <Border BorderThickness="0" CornerRadius="4">
-                    <Border.Background>
-                        <SolidColorBrush Color="{Binding NodeTreeVM.SelectedNodeItem.LabelColor}"/>
-                    </Border.Background>
-                </Border>
+                    <Border BorderThickness="0" CornerRadius="4">
+                        <Border.Background>
+                            <SolidColorBrush Color="{Binding NodeTreeVM.SelectedNodeItem.LabelColor}"/>
+                        </Border.Background>
+                    </Border>
                 </Border>
 
                 <StackPanel Grid.Row="0"
@@ -296,7 +304,7 @@
             <Grid x:Name="BuildupGrid"
                   DockPanel.Dock="Bottom"
                   Grid.Column="2"
-                  Grid.Row="2"
+                  Grid.Row="3"
                   Margin="10,10,10,10">
 
                 <Grid.RowDefinitions>
@@ -319,127 +327,118 @@
                     <StackPanel DockPanel.Dock="Left"
                                 Width="70"
                                 Margin="0,0,10,0">
-                        <Button Content="Follow"
-                            Width="70"
-                            Height="25"
-                            IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.InheritEnabled}"
-                            Click="InheritClicked"/>
+                        <Button Style="{StaticResource ButtonStyle}"
+                                Content="Follow"
+                                Width="70"
+                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.InheritEnabled}"
+                                Click="InheritClicked"/>
 
-                        <Button Content="Reduce"
-                            Width="70"
-                            Margin="0,5,0,0"
-                            Height="25"
-                            IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.RemoveEnabled}"
-                            Click="RemoveClicked"/>
+                        <Button Style="{StaticResource ButtonStyle}"
+                                Content="Reduce"
+                                Width="70"
+                                Margin="0,5,0,0"
+                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.RemoveEnabled}"
+                                Click="RemoveClicked"/>
                     </StackPanel>
                     <StackPanel DockPanel.Dock="Left">
                         <views:SearchComboBox Tag="1"
-                                  ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.AllBuildupsView1}"
-                                  SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup1}"
-                                  DisplayMemberPath="Name"
-                                  IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CanAddFirstBuildup}"
-                                  Height="25"
-                                  HorizontalAlignment="Stretch"
-                                  VerticalAlignment="Top">
-                            
+                                              Style="{StaticResource RoundedComboBoxStyle}"
+                                              ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.AllBuildupsView1}"
+                                              SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup1}"
+                                              DisplayMemberPath="Name"
+                                              IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CanAddFirstBuildup}"
+                                              HorizontalAlignment="Stretch"
+                                              VerticalAlignment="Top">
                             <ComboBox.GroupStyle>
-                                <GroupStyle>
-                                    <GroupStyle.HeaderTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Name}" Foreground="Gray"/>
-                                        </DataTemplate>
-                                    </GroupStyle.HeaderTemplate>
-                                </GroupStyle>
+                                <StaticResource ResourceKey="ComboBoxGroupStyle"/>
                             </ComboBox.GroupStyle>
-
-
                         </views:SearchComboBox>
-
-
+                        
                         <views:SearchComboBox Tag="2"
-                                  ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.AllBuildupsView2}"
-                                  SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup2}"
-                                  DisplayMemberPath="Name"
-                                  IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CanAddSecondBuildup}"
-                                  Height="25"
-                                  Margin="0,5,0,0"
-                                  HorizontalAlignment="Stretch"
-                                  VerticalAlignment="Top">
+                                              Style="{StaticResource RoundedComboBoxStyle}"
+                                              ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.AllBuildupsView2}"
+                                              SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup2}"
+                                              DisplayMemberPath="Name"
+                                              IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CanAddSecondBuildup}"
+                                              Margin="0,5,0,0"
+                                              HorizontalAlignment="Stretch"
+                                              VerticalAlignment="Top">
                             <ComboBox.GroupStyle>
-                                <GroupStyle>
-                                    <GroupStyle.HeaderTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Name}" Foreground="Gray"/>
-                                        </DataTemplate>
-                                    </GroupStyle.HeaderTemplate>
-                                </GroupStyle>
+                                <StaticResource ResourceKey="ComboBoxGroupStyle"/>
                             </ComboBox.GroupStyle>
                         </views:SearchComboBox>
                     </StackPanel>
                 </DockPanel>
-
+                <Grid Grid.Row="2"
+                        Margin="0,0,0,10"
+                        DockPanel.Dock="Top">
+                <Border Margin="0,21,0,0"
+                        BorderBrush="Silver"
+                        BorderThickness="1,1,1,1"
+                        
+                        CornerRadius="4"/>
                 <TabControl x:Name="BuildupTabs"
-                            Grid.Row="2"
-                            Margin="0,0,0,10"
-                            DockPanel.Dock="Top"
+                            BorderThickness="0"
+                            Background="Transparent"
                             ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CurrentBuildups}"
                             SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.ActiveBuildup}"
                             ItemContainerStyle="{StaticResource TabItemStyle}">
 
-                    <TabControl.ContentTemplate>
-                        <DataTemplate>
-                            <DockPanel VerticalAlignment="Stretch">
-                                
-                                <Grid DockPanel.Dock="Bottom"
+                        <TabControl.ContentTemplate>
+                            <DataTemplate>
+                                <DockPanel VerticalAlignment="Stretch">
+
+                                    <Grid DockPanel.Dock="Bottom"
                                       VerticalAlignment="Bottom"
                                       Margin="10,0,0,10">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="100"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="15"/>
-                                        <RowDefinition Height="15"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="100"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="15"/>
+                                            <RowDefinition Height="15"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
 
-                                    <TextBlock Grid.Row="0"
+                                        <TextBlock Grid.Row="0"
                                                FontWeight="SemiBold"
                                                Text="Buildup Group: "/>
-                                    <TextBlock Grid.Row="1"
+                                        <TextBlock Grid.Row="1"
                                                FontWeight="SemiBold"
                                                Text="Buildup Unit: "/>
-                                    <TextBlock Grid.Row="2"
+                                        <TextBlock Grid.Row="2"
                                                FontWeight="SemiBold"
                                                Text="Description: "/>
-                                    <TextBlock Grid.Column="1" Grid.Row="0"
+                                        <TextBlock Grid.Column="1" Grid.Row="0"
                                                Text="{Binding Group.Name}"/>
-                                    <TextBlock Grid.Column="1" Grid.Row="1"
+                                        <TextBlock Grid.Column="1" Grid.Row="1"
                                                Text="{Binding  Unit}"/>
-                                    <TextBlock Grid.Column="1" Grid.Row="2"
+                                        <TextBlock Grid.Column="1" Grid.Row="2"
                                                Text="{Binding  Description}" TextWrapping="Wrap"/>
-                                </Grid>
-                                <Separator DockPanel.Dock="Bottom"
+                                    </Grid>
+                                    <Separator DockPanel.Dock="Bottom"
                                            BorderBrush="LightGray"
                                            BorderThickness="1"
                                            Margin="50,5,50,10"/>
 
-                                <DataGrid Style="{StaticResource DataGridStyle}"
+                                    <DataGrid Style="{StaticResource DataGridStyle}"
                                           ItemsSource="{Binding Components}"
                                           DockPanel.Dock="Top">
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" Width="4*"  IsReadOnly="True" />
-                                        <DataGridTextColumn Header="Amount" Binding="{Binding FormattedAmount}" Width="1*"  IsReadOnly="True" />
-                                        <DataGridTextColumn Header="GWP (kgCO2 eq)" Binding="{Binding FormattedGWP}" Width="2*"  IsReadOnly="True" />
-                                        <DataGridTextColumn Header="GE (kWh oil eq)" Binding="{Binding FormattedGE}" Width="2*"  IsReadOnly="True" />
-                                    </DataGrid.Columns>
-                                </DataGrid>
-                            </DockPanel>
-                        </DataTemplate>
-                    </TabControl.ContentTemplate>
-                </TabControl>
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" Width="4*"  IsReadOnly="True" />
+                                            <DataGridTextColumn Header="Amount" Binding="{Binding FormattedAmount}" Width="1*"  IsReadOnly="True" />
+                                            <DataGridTextColumn Header="GWP (kgCO2 eq)" Binding="{Binding FormattedGWP}" Width="2*"  IsReadOnly="True" />
+                                            <DataGridTextColumn Header="GE (kWh oil eq)" Binding="{Binding FormattedGE}" Width="2*"  IsReadOnly="True" />
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </DockPanel>
+                            </DataTemplate>
+                        </TabControl.ContentTemplate>
+                    </TabControl>
+                </Grid>
 
-                
+
                 <Label Content="Calculation Results:"
                        Grid.Row="3"
                        Padding="0"
@@ -498,49 +497,49 @@
                             </DataGrid>
                         </Grid>
                     </Border>
-                </Border>                
+                </Border>
 
-             </Grid>
-                
+            </Grid>
+
             <StackPanel x:Name="TogglePanel"
                         Grid.Column="0"
-                        Grid.Row="3"
+                        Grid.Row="4"
                         Orientation="Horizontal"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Left"
                         Margin="10,0,0,10">
-                <TextBlock Text="Default" FontSize="10" Margin="0,2,4,0"/>
+                <TextBlock Text="Default" FontSize="10" Margin="0,5,4,0"/>
                 <ToggleButton x:Name="ViewToggleButton"
                                   Style="{StaticResource ToggleButtonStyle}" 
                                   Checked="ViewToggleButtonChecked"
                                   Unchecked="ViewToggleButtonUnchecked"/>
-                <TextBlock Text="By Buildup" FontSize="10" Margin="4,2,0,0"/>
+                <TextBlock Text="By Buildup" FontSize="10" Margin="4,5,0,0"/>
             </StackPanel>
-            <Button Grid.Column="0"
-                    Grid.Row="3"
+            <Button Style="{StaticResource ButtonStyle}"
+                    Grid.Column="0"
+                    Grid.Row="4"
                     Content="Reload"
                     Margin="0,0,10,10"
                     Width="70"
-                    Height="25"
                     Click="UpdateRevitClicked"
                     HorizontalAlignment="Right"
                     />
 
             <Grid  x:Name="SaveButtons"
                     Grid.Column="2"
-                    Grid.Row="3">
+                    Grid.Row="4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" 
+                <Button Style="{StaticResource ButtonStyle}"
+                        Grid.Column="0" 
                         Content="Start CalcLive"
-                        Height="25"
                         IsEnabled="False"
                         Click="StartCalcLiveClicked" Margin="10,0,5,10" />
-                <Button Grid.Column="1"
+                <Button Style="{StaticResource ButtonStyle}"
+                        Grid.Column="1"
                         Content="Save Results"
-                        Height="25"
                         Click="SaveResultsClicked" Margin="5,0,10,10"
                         IsEnabled="{Binding CalculationVM.CanSaveResults}"/>
             </Grid>
@@ -549,7 +548,7 @@
         <Grid x:Name="ProjectOverlay"
               d:IsHidden="true"
               Background="LightGray"
-              Margin="10,10,10,10"
+              Margin="5"
               Visibility="{Binding VisibilityVM.ProjectOverlayVisibility}"
               >
             <StackPanel VerticalAlignment="Center">
@@ -557,22 +556,24 @@
                             Text="Choose Project:"
                            Margin="10"/>
                 <ComboBox x:Name="ProjectsComboBox"
+                          Style="{StaticResource RoundedComboBoxStyle}"
                           HorizontalAlignment="Center"
                           ItemsSource= "{Binding LoadingVM.AllProjects}"
                           DisplayMemberPath="ProjectNumber"
                           Width="90"/>
-                <Button Content="OK" 
+                <Button Style="{StaticResource ButtonStyle}"
+                        Content="OK" 
                         HorizontalAlignment="Center"
                         Width="90"
                         Margin="10"
                         Click="ProjectOKClicked"/>
             </StackPanel>
         </Grid>
-        
+
         <Grid x:Name="NewMappingOverlay"
              Background="LightGray"
-              d:IsHidden="true"
-             Margin="10,10,10,10"
+              d:IsHidden="True"
+             Margin="5"
              Visibility="{Binding VisibilityVM.NewMappingOverlayVisibility}"
              >
             <StackPanel VerticalAlignment="Center">
@@ -590,21 +591,21 @@
                          ScrollViewer.VerticalScrollBarVisibility="Auto"
                          SelectionChanged="MappingSelectionChanged"
                          ItemsSource="{Binding NewMappingVM.MappingsListView}">
-                        <ListBox.GroupStyle>
-                            <GroupStyle>
-                                <GroupStyle.HeaderTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Name}" Foreground="Gray" />
-                                    </DataTemplate>
-                                </GroupStyle.HeaderTemplate>
-                            </GroupStyle>
-                        </ListBox.GroupStyle>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}"/>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>      
+                    <ListBox.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}" Foreground="Gray" />
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                        </GroupStyle>
+                    </ListBox.GroupStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
 
                 <TextBlock Grid.Row="2"
                            HorizontalAlignment="Center"
@@ -615,12 +616,14 @@
                          MinWidth="90"
                          HorizontalAlignment="Center"
                          Text="{Binding NewMappingVM.NewName}"/>
-                <Button Grid.Row="4"
+                <Button Style="{StaticResource ButtonStyle}"
+                        Grid.Row="4"
                         HorizontalAlignment="Center"
                         Width="90"
                         Content="Confirm" 
                         Click="NewMappingConfirmed"/>
-                <Button Grid.Row="4"
+                <Button Style="{StaticResource ButtonStyle}"
+                        Grid.Row="4"
                         HorizontalAlignment="Center"
                         Margin="10"
                         Width="90"
@@ -631,19 +634,19 @@
 
         <Grid x:Name="WaitingOverlay"
              Background="LightGray"
-             Margin="10,10,10,10"
+             Margin="5"              
              Visibility="{Binding VisibilityVM.WaitingOverlayVisibility}"
-             
-              d:IsHidden="true">
+              d:IsHidden="True">
             <StackPanel VerticalAlignment="Center">
                 <TextBlock x:Name="WaitingTextBlock"
                     HorizontalAlignment="Center"
                     Text="{Binding VisibilityVM.WaitingText}"/>
-                           
+
                 <Image gif:ImageBehavior.AnimatedSource="/CalcConnectorRevit2023;component/Resources/DT_logo.gif"
                        Width="90"
                        Margin="10"/>
-                <Button Content="Quit" 
+                <Button Style="{StaticResource ButtonStyle}"
+                        Content="Quit" 
                         IsEnabled="False"
                     HorizontalAlignment="Center"
                     Width="90"
@@ -653,7 +656,7 @@
 
         <Grid x:Name="SavingOverlay"
              Background="LightGray"
-             Margin="10,10,10,10"
+             Margin="5"
              d:IsHidden="true"
              Visibility="{Binding VisibilityVM.SavingOverlayVisibility}"
              >
@@ -666,21 +669,23 @@
                         Margin="10"/>
                 <TextBlock HorizontalAlignment="Center"
                            Text="{Binding VisibilityVM.SavingMessage}"/>
-                <Button Content="Confirm" 
-                    HorizontalAlignment="Center"
-                    Width="90"
-                    Margin="10"
-                    Click="SaveResultOKClicked"/>
-                <Button Content="Cancel" 
-                    HorizontalAlignment="Center"
-                    Width="90"
-                    Click="SaveResultCancelClicked"/>
+                <Button Style="{StaticResource ButtonStyle}"
+                        Content="Confirm" 
+                        HorizontalAlignment="Center"
+                        Width="90"
+                        Margin="10"
+                        Click="SaveResultOKClicked"/>
+                <Button Style="{StaticResource ButtonStyle}"
+                        Content="Cancel" 
+                        HorizontalAlignment="Center"
+                        Width="90"
+                        Click="SaveResultCancelClicked"/>
             </StackPanel>
         </Grid>
 
         <Grid x:Name="MessageOverlay"
              Background="LightGray"
-             Margin="10,10,10,10"
+             Margin="5"
              Visibility="{Binding VisibilityVM.MessageOverlayVisibility}"
              
               d:IsHidden="true">
@@ -688,13 +693,13 @@
                 <TextBlock x:Name="MessageTextBlock"
                             Text="{Binding VisibilityVM.MessageText}"
                             HorizontalAlignment="Center"/>
-                <Button Content="OK" 
-                    HorizontalAlignment="Center"
-                    Width="90"
-                    Margin="10"
-                    Click="MessageOKClicked"/>
+                <Button Style="{StaticResource ButtonStyle}"
+                        Content="OK" 
+                        HorizontalAlignment="Center"
+                        Width="90"
+                        Margin="10"
+                        Click="MessageOKClicked"/>
             </StackPanel>
         </Grid>
-
     </Grid>
 </Window>

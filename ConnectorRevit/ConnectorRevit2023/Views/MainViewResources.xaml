@@ -1,10 +1,46 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="ButtonResource.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+
     <Style x:Key="ButtonStyle" TargetType="Button">
-        <Setter Property="Margin" Value="10,0,0,0"/>
         <Setter Property="Height" Value="25"/>
-        <Setter Property="DockPanel.Dock" Value="Right"/>
+        <Setter Property="Background" Value="WhiteSmoke"/>
+        <Setter Property="BorderBrush" Value="Silver"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="border" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="border" Property="Background" Value="white"/>
+                            <Setter TargetName="border" Property="BorderBrush" Value="LightGray"/>
+                            <Setter Property="Foreground" Value="LightGray"/>
+                        </Trigger>
+
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="LightGray"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="Silver"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style x:Key="TreeViewItemStyle" TargetType="TreeViewItem">
@@ -20,34 +56,20 @@
         <Setter Property="HorizontalAlignment" Value="Right" />
     </Style>
 
-    <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
-        <Setter Property="IsEditable" Value="True" />
-        <Style.Triggers>
-            <Trigger Property="SelectedItem" Value="{x:Null}">
-                <Setter Property="Text" Value="{Binding RelativeSource={RelativeSource Self}, Path=Tag}" />
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-
-    <Style x:Key="MappingErrorButtonStyle" TargetType="Button">
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="DimGray"/>
-        <Setter Property="Background" Value="LightGray"/>
+    <Style x:Key="MappingErrorButtonStyle" TargetType="Button"  BasedOn="{StaticResource ButtonStyle}">
         <Setter Property="Content" Value="👌"/>
-        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontSize" Value="14"/>
 
         <Style.Triggers>
             <DataTrigger Binding="{Binding MappingErrorVM.BrokenSectionVisibility}" Value="Visible">
                 <Setter Property="BorderBrush" Value="SeaGreen"/>
                 <Setter Property="Foreground" Value="SeaGreen"/>
                 <Setter Property="BorderThickness" Value="2"/>
-                <Setter Property="Background" Value="White"/>
             </DataTrigger>
-        
+
             <DataTrigger Binding="{Binding MappingErrorVM.HasBrokenItems}" Value="True">
                 <Setter Property="BorderBrush" Value="Crimson"/>
                 <Setter Property="Content" Value="💬"/>
-                <Setter Property="Background" Value="White"/>
                 <Setter Property="Foreground" Value="Crimson"/>
             </DataTrigger>
 

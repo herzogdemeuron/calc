@@ -219,5 +219,16 @@ namespace Calc.ConnectorRevit.Views
         {
             await MainVM.HandleUpdateMapping();            
         }
+
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+            this.DragMove();
+        }
+
+        private void OnCloseClicked(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }
