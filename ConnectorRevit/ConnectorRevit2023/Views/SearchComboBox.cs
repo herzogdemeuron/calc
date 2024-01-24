@@ -28,7 +28,7 @@ namespace Calc.ConnectorRevit.Views
 
         protected override void OnDropDownOpened(EventArgs e)
         {
-            base.OnDropDownOpened(e);
+            _lastSelectedItem = this.SelectedItem;
             this.IsEditable = true;
             if (_editableTextBox == null)
             {
