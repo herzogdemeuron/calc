@@ -13,6 +13,8 @@
         Height="900" MinHeight="700"
         Width="900" MinWidth="750"
         WindowStartupLocation="CenterScreen"
+
+        Icon="pack://application:,,,/CalcConnectorRevit2023;component/Resources/icon-01.png"
         Title="CALC"
         Topmost="True">
 
@@ -547,7 +549,7 @@
 
         <Grid x:Name="ProjectOverlay"
               d:IsHidden="true"
-              Background="LightGray"
+              Background="Gainsboro"
               Margin="5"
               Visibility="{Binding VisibilityVM.ProjectOverlayVisibility}"
               >
@@ -571,7 +573,7 @@
         </Grid>
 
         <Grid x:Name="NewMappingOverlay"
-             Background="LightGray"
+             Background="Gainsboro"
               d:IsHidden="True"
              Margin="5"
              Visibility="{Binding VisibilityVM.NewMappingOverlayVisibility}"
@@ -633,7 +635,7 @@
         </Grid>
 
         <Grid x:Name="WaitingOverlay"
-             Background="LightGray"
+             Background="Gainsboro"
              Margin="5"              
              Visibility="{Binding VisibilityVM.WaitingOverlayVisibility}"
               d:IsHidden="True">
@@ -655,7 +657,7 @@
         </Grid>
 
         <Grid x:Name="SavingOverlay"
-             Background="LightGray"
+             Background="Gainsboro"
              Margin="5"
              d:IsHidden="true"
              Visibility="{Binding VisibilityVM.SavingOverlayVisibility}"
@@ -684,7 +686,7 @@
         </Grid>
 
         <Grid x:Name="MessageOverlay"
-             Background="LightGray"
+             Background="Gainsboro"
              Margin="5"
              Visibility="{Binding VisibilityVM.MessageOverlayVisibility}"
              
