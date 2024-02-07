@@ -14,8 +14,6 @@ namespace Calc.ConnectorRevit.Revit
         {
             CreateTab(uiCtrlApp, tabName);
             RibbonPanel panel = CreatePanel(uiCtrlApp, tabName, panelName);
-            panel.Visible = true;
-            panel.Enabled = true;
             PushButtonData buttonData = new PushButtonData(
                 "CalcButton",
                 "Calc",

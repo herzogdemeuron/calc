@@ -19,7 +19,7 @@ namespace Calc.ConnectorRevit
         {
             AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;
 
-            RibbonMaker.Create(application, "HdM", "Analyse");
+            RibbonMaker.Create(application, "HdM", "ANALYSIS");
             return Result.Succeeded;
         }
 
