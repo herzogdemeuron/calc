@@ -4,6 +4,7 @@ using Calc.Core.Objects;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Mappings;
 using Calc.MVVM.Helpers.Mediators;
+using Calc.MVVM.Models;
 using System.ComponentModel;
 using System.Threading.Tasks;
 
@@ -16,7 +17,7 @@ namespace Calc.MVVM.ViewModels
         public ForestViewModel ForestVM { get; set; }
         public MappingViewModel MappingVM { get; set; }
         public MappingErrorViewModel MappingErrorVM { get; set; }
-        public NodeTreeViewModel NodeTreeVM { get; set; }
+        public NodeTreeModel NodeTreeVM { get; set; }
         public SavingViewModel SavingVM { get; set; }
         public NewMappingViewModel NewMappingVM { get; set; }
         public VisibilityViewModel VisibilityVM { get; set; }
@@ -31,7 +32,7 @@ namespace Calc.MVVM.ViewModels
             ForestVM = new ForestViewModel(store, elementCreator);
             MappingVM = new MappingViewModel(store);
             NewMappingVM = new NewMappingViewModel(store);
-            NodeTreeVM = new NodeTreeViewModel(store, visualizer);
+            NodeTreeVM = new NodeTreeModel(store, visualizer);
 
             MappingErrorVM = new MappingErrorViewModel(MappingVM);
             CalculationVM = new CalculationViewModel(NodeTreeVM);
@@ -80,12 +81,12 @@ namespace Calc.MVVM.ViewModels
             MappingErrorVM.HandleMappingErrorClicked();
         }
 
-        public void HandleBrokenNodeSelectionChanged(NodeViewModel selectedNode)
+        public void HandleBrokenNodeSelectionChanged(NodeModel selectedNode)
         {
             MappingErrorVM.HandleBrokenNodeSelectionChanged(selectedNode);
         }
 
-        public void HandleIgnoreSelectedBrokenNode(NodeViewModel selectedNode)
+        public void HandleIgnoreSelectedBrokenNode(NodeModel selectedNode)
         {
             MappingErrorVM.RemoveBrokenNode(selectedNode);
         }
@@ -110,7 +111,7 @@ namespace Calc.MVVM.ViewModels
             NewMappingVM.HandleNewMappingCanceled();
         }
 
-        public void HandleNodeItemSelectionChanged(NodeViewModel selectedBranch)
+        public void HandleNodeItemSelectionChanged(NodeModel selectedBranch)
         {
             NodeTreeVM.HandleNodeItemSelectionChanged(selectedBranch);
         }

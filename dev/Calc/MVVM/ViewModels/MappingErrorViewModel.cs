@@ -1,5 +1,6 @@
 ﻿using Calc.Core.Objects.GraphNodes;
 using Calc.MVVM.Helpers.Mediators;
+using Calc.MVVM.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
@@ -11,7 +12,7 @@ namespace Calc.MVVM.ViewModels
     {
         public bool HasBrokenItems => BrokenNodeSource.Count > 0;
         private MappingViewModel mappingVM;
-        public ObservableCollection<NodeViewModel> BrokenNodeSource {  get; private set; }
+        public ObservableCollection<NodeModel> BrokenNodeSource {  get; private set; }
 
         private string _buildup1;
         public string Buildup1
@@ -60,7 +61,7 @@ namespace Calc.MVVM.ViewModels
         public MappingErrorViewModel(MappingViewModel mappingViewModel)
         {
             mappingVM = mappingViewModel;
-            BrokenNodeSource = new ObservableCollection<NodeViewModel>();
+            BrokenNodeSource = new ObservableCollection<NodeModel>();
             MediatorFromVM.Register("BrokenForestChanged", forest => UpdateBrokenNodes((Forest)forest));
         }
 
@@ -72,7 +73,7 @@ namespace Calc.MVVM.ViewModels
                 BrokenNodeSource.Clear();
                 foreach (var tree in forest.Trees)
                 {
-                    BrokenNodeSource.Add(new NodeViewModel(tree));
+                    BrokenNodeSource.Add(new NodeModel(tree));
                 }
             }
             else
@@ -91,7 +92,7 @@ namespace Calc.MVVM.ViewModels
             BrokenSectionVisibility = BrokenSectionVisibility == Visibility.Collapsed ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        public void HandleBrokenNodeSelectionChanged(NodeViewModel nodeItem)
+        public void HandleBrokenNodeSelectionChanged(NodeModel nodeItem)
         {
             if (nodeItem != null && nodeItem.Host!= null)
             {
@@ -114,12 +115,12 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        public void RemoveBrokenNode(NodeViewModel nodeItem)
+        public void RemoveBrokenNode(NodeModel nodeItem)
         {
             if(nodeItem == null)
                 return;
 
-            NodeViewModel nextNode = null;
+            NodeModel nextNode = null;
 
             if(nodeItem.Host is Tree)
             {
@@ -162,7 +163,7 @@ namespace Calc.MVVM.ViewModels
             MediatorToView.Broadcast("ViewDeselectBrokenNodesTreeView");
         }
 
-        private void SelectNode(NodeViewModel node)
+        private void SelectNode(NodeModel node)
         {
             MediatorToView.Broadcast("ViewSelectBrokenNodesTreeView", node);
         }

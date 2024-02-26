@@ -1,38 +1,38 @@
-﻿using Calc.MVVM.ViewModels;
+﻿using Calc.MVVM.Models;
 
 namespace Calc.MVVM.Helpers
 {
     public class NodeHelper
     {
-        public static void HideAllLabelColor(NodeViewModel forestItem)
+        public static void HideAllLabelColor(NodeModel forestItem)
         {    
-            foreach (NodeViewModel nodeItem in forestItem.SubNodeItems)
+            foreach (NodeModel nodeItem in forestItem.SubNodeItems)
             {
                 HideNodeLabelColor(nodeItem);
             }
         }
 
-        private static void HideNodeLabelColor(NodeViewModel nodeItem)
+        private static void HideNodeLabelColor(NodeModel nodeItem)
         {
             nodeItem.LabelColorVisible = false;
 
-            foreach (NodeViewModel subNodeItem in nodeItem.SubNodeItems)
+            foreach (NodeModel subNodeItem in nodeItem.SubNodeItems)
             {
                 HideNodeLabelColor(subNodeItem);
             }
         }
-        public static void ShowSubLabelColor(NodeViewModel nodeItem)
+        public static void ShowSubLabelColor(NodeModel nodeItem)
         {
-            foreach (NodeViewModel subNodeItem in nodeItem.SubNodeItems)
+            foreach (NodeModel subNodeItem in nodeItem.SubNodeItems)
             {
                 subNodeItem.LabelColorVisible = true;
             }
         }
 
-        public static void ShowAllSubLabelColor(NodeViewModel nodeItem)
+        public static void ShowAllSubLabelColor(NodeModel nodeItem)
         {
             nodeItem.LabelColorVisible = true;
-            foreach (NodeViewModel subNodeItem in nodeItem.SubNodeItems)
+            foreach (NodeModel subNodeItem in nodeItem.SubNodeItems)
             {
                 ShowAllSubLabelColor(subNodeItem);
             }

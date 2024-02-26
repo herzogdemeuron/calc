@@ -11,18 +11,18 @@ using System.ComponentModel;
 using Calc.Core.Interfaces;
 using System.Linq;
 
-namespace Calc.MVVM.ViewModels
+namespace Calc.MVVM.Models
 {
-    public class NodeTreeViewModel : INotifyPropertyChanged
+    public class NodeTreeModel : INotifyPropertyChanged
     {
         public DirectusStore Store;
-        public  List<Buildup> AllBuildups => Store.BuildupsAll;
+        public List<Buildup> AllBuildups => Store.BuildupsAll;
         public int MaxBuildups { get; set; } = 2;
-        public bool BranchesSwitch { get; set; }        
+        public bool BranchesSwitch { get; set; }
 
-        private NodeViewModel selectedNodeItem;
+        private NodeModel selectedNodeItem;
         private IVisualizer visualizer;
-        public NodeViewModel SelectedNodeItem
+        public NodeModel SelectedNodeItem
         {
             get => selectedNodeItem;
             set
@@ -32,13 +32,13 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        public NodeViewModel CurrentForestItem { get; set; }
-        public NodeViewModel CurrentBrokenForestItem { get; set; }
+        public NodeModel CurrentForestItem { get; set; }
+        public NodeModel CurrentBrokenForestItem { get; set; }
 
-        public ObservableCollection<NodeViewModel> NodeSource 
-        { get => new ObservableCollection<NodeViewModel> { CurrentForestItem }; }
+        public ObservableCollection<NodeModel> NodeSource
+        { get => new ObservableCollection<NodeModel> { CurrentForestItem }; }
 
-        public NodeTreeViewModel(DirectusStore directusStore, IVisualizer visualizer)
+        public NodeTreeModel(DirectusStore directusStore, IVisualizer visualizer)
         {
             Store = directusStore;
             this.visualizer = visualizer;
@@ -59,7 +59,7 @@ namespace Calc.MVVM.ViewModels
 
         public void UpdateNodeSource(Mapping mapping)
         {
-            CurrentForestItem = new NodeViewModel(Store.ForestSelected, this);
+            CurrentForestItem = new NodeModel(Store.ForestSelected, this);
             RemapAllNodes(mapping);
             OnPropertyChanged(nameof(NodeSource));
             RecolorAllNodes(true);
@@ -82,7 +82,7 @@ namespace Calc.MVVM.ViewModels
             if (CurrentForestItem == null) return;
             if (BranchesSwitch == true)
             {
-                if(forceRecolorAll)
+                if (forceRecolorAll)
                 {
                     Store.ForestSelected.SetBranchColorsBy("branches");
                     visualizer.IsolateAndColorSubbranchElements(SelectedNodeItem.Host);
@@ -98,7 +98,7 @@ namespace Calc.MVVM.ViewModels
 
         }
 
-        public void HandleNodeItemSelectionChanged(NodeViewModel nodeItem)
+        public void HandleNodeItemSelectionChanged(NodeModel nodeItem)
         {
             if (nodeItem == null) return;
             if (CurrentForestItem == null) return;
@@ -108,7 +108,7 @@ namespace Calc.MVVM.ViewModels
 
             if (BranchesSwitch)
             {
-                
+
                 NodeHelper.ShowSubLabelColor(nodeItem);
                 visualizer.IsolateAndColorSubbranchElements(SelectedNodeItem.Host);
             }

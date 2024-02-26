@@ -1,4 +1,5 @@
 ﻿using Calc.MVVM.Helpers.Mediators;
+using Calc.MVVM.Models;
 using Calc.MVVM.Services;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +10,7 @@ namespace Calc.MVVM.ViewModels
 
     public class SavingViewModel : INotifyPropertyChanged
     {
-        private readonly NodeTreeViewModel nodetreeVM;
+        private readonly NodeTreeModel nodetreeVM;
         private readonly CalculationViewModel calculationVM;
         public double ElementCount { get; set; }
 
@@ -59,12 +60,12 @@ namespace Calc.MVVM.ViewModels
             MediatorToView.Broadcast("ShowMainView");
         }
 
-        private NodeViewModel GetNodeToCalculate()
+        private NodeModel GetNodeToCalculate()
         {
-            NodeViewModel CurrentForestItem = nodetreeVM.CurrentForestItem;
-            NodeViewModel SelectedNodeItem = nodetreeVM.SelectedNodeItem;
+            NodeModel CurrentForestItem = nodetreeVM.CurrentForestItem;
+            NodeModel SelectedNodeItem = nodetreeVM.SelectedNodeItem;
             if (CurrentForestItem == null) return null;
-            NodeViewModel nodeToCalculate = SelectedNodeItem ?? CurrentForestItem;
+            NodeModel nodeToCalculate = SelectedNodeItem ?? CurrentForestItem;
             return nodeToCalculate;
         }
 

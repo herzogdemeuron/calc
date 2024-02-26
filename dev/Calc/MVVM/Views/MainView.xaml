@@ -14,7 +14,7 @@
         Width="900" MinWidth="750"
         WindowStartupLocation="CenterScreen"
 
-        Icon="pack://application:,,,/CalcConnectorRevit2023;component/Resources/icon-01.png"
+        Icon="pack://application:,,,/CalcMVVM;component/Resources/icon-01.png"
         Title="CALC"
         Topmost="True">
 
@@ -646,7 +646,7 @@
                     HorizontalAlignment="Center"
                     Text="{Binding VisibilityVM.WaitingText}"/>
 
-                <Image gif:ImageBehavior.AnimatedSource="/CalcConnectorRevit2023;component/Resources/DT_logo.gif"
+                <Image gif:ImageBehavior.AnimatedSource="/CalcMVVM;component/Resources/DT_logo.gif"
                        Width="90"
                        Margin="10"/>
                 <Button Style="{StaticResource ButtonStyle}"

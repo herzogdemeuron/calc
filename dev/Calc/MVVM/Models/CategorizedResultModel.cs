@@ -1,6 +1,6 @@
-﻿namespace Calc.MVVM.ViewModels
+﻿namespace Calc.MVVM.Models
 {
-    public class CategorizedResultViewModel
+    public class CategorizedResultModel
     {
         public string GroupName { get; set; }
         public decimal Gwp { get; set; }

@@ -8,8 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\DT_logo.gif" />
-    <None Remove="Resources\icon-01.png" />
     <None Remove="ToggleButtonTemplate.xaml" />
   </ItemGroup>
 
@@ -36,11 +34,6 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System.Xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Resources\DT_logo.gif" />
-    <Resource Include="Resources\icon-01.png" />
   </ItemGroup>
 
   <ItemGroup>

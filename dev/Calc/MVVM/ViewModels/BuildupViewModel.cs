@@ -6,13 +6,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
+using Calc.MVVM.Models;
 
 namespace Calc.MVVM.ViewModels
 {
 
     public class BuildupViewModel : INotifyPropertyChanged
     {
-        private readonly NodeViewModel _node;
+        private readonly NodeModel _node;
         private List<Buildup> _buildupsAll => _node.ParentTreeView.AllBuildups;
 
         private bool _inheritEnabled = false;
@@ -143,7 +144,7 @@ namespace Calc.MVVM.ViewModels
         }
 
 
-        public BuildupViewModel(NodeViewModel node)
+        public BuildupViewModel(NodeModel node)
         {
             MediatorFromVM.Register("NodeItemSelectionChanged", _ => UpdateBuildupSection()); // if not, the buildup section sometimes not update,(parent reduced to zero, children remain all enabled), how to solve?
             MediatorFromVM.Register("MappingSelectionChanged", _ => UpdateBuildupSection());

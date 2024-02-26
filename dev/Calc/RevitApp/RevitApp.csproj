@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\DT_logo.gif" />
     <None Remove="Resources\icon-01.png" />
     <None Remove="ToggleButtonTemplate.xaml" />
   </ItemGroup>
@@ -40,11 +39,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\DT_logo.gif" />
-    <Resource Include="Resources\icon-01.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
@@ -57,6 +51,10 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\icon-01.png" />
   </ItemGroup>
 
 <PropertyGroup>

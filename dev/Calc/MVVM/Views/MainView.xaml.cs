@@ -3,6 +3,7 @@ using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Mappings;
 using Calc.MVVM.Helpers;
 using Calc.MVVM.Helpers.Mediators;
+using Calc.MVVM.Models;
 using Calc.MVVM.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,7 +22,7 @@ namespace Calc.MVVM.Views
             InitializeComponent();
             MediatorToView.Register("ViewDeselectTreeView", _=>DeselectTreeView());
             MediatorToView.Register("ViewDeselectBrokenNodesTreeView", _ => DeselectBrokenNodesTreeView());
-            MediatorToView.Register("ViewSelectBrokenNodesTreeView", node => SelectNodeTreeView((NodeViewModel)node));
+            MediatorToView.Register("ViewSelectBrokenNodesTreeView", node => SelectNodeTreeView((NodeModel)node));
         }
 
         private void DeselectTreeView()
@@ -46,7 +47,7 @@ namespace Calc.MVVM.Views
             }
         }
 
-        private void SelectNodeTreeView(NodeViewModel node)
+        private void SelectNodeTreeView(NodeModel node)
         {
             if (node != null)
             {
@@ -119,7 +120,7 @@ namespace Calc.MVVM.Views
 
         private void BrokenNodeSelected(object sender, RoutedEventArgs e)
         {
-            if (BrokenNodesTreeView.SelectedItem is NodeViewModel selectedNode)
+            if (BrokenNodesTreeView.SelectedItem is NodeModel selectedNode)
             {
                 MainVM.HandleBrokenNodeSelectionChanged(selectedNode);
                 BrokenNodesTreeView.Tag = e.OriginalSource; // save selected treeviewitem for deselecting
@@ -128,7 +129,7 @@ namespace Calc.MVVM.Views
         }
         private void HandleIgnoreSelectedBrokenNode(object sender, RoutedEventArgs e)
         {
-            if (BrokenNodesTreeView.SelectedItem is NodeViewModel selectedNode)
+            if (BrokenNodesTreeView.SelectedItem is NodeModel selectedNode)
             {
                 MainVM.HandleIgnoreSelectedBrokenNode(selectedNode);
             }
@@ -146,7 +147,7 @@ namespace Calc.MVVM.Views
 
         private void TreeViewItemSelected(object sender, RoutedEventArgs e)
         {
-            if (TreeView.SelectedItem is NodeViewModel selectedNode)
+            if (TreeView.SelectedItem is NodeModel selectedNode)
             {
                 MainVM.HandleNodeItemSelectionChanged(selectedNode);
                 TreeView.Tag = e.OriginalSource; // save selected treeviewitem for deselecting

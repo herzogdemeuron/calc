@@ -1,11 +1,11 @@
-﻿using Calc.MVVM.ViewModels;
+﻿using Calc.MVVM.Models;
 using System.Windows.Controls;
 
 namespace Calc.MVVM.Helpers
 {
     public static class ViewHelper
     {
-        public static TreeViewItem FindTreeViewItem(ItemsControl itemsControl, NodeViewModel node)
+        public static TreeViewItem FindTreeViewItem(ItemsControl itemsControl, NodeModel node)
         {
             if (itemsControl != null && node != null)
             {

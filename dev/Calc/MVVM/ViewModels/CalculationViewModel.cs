@@ -7,14 +7,15 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Calc.MVVM.Models;
 
 namespace Calc.MVVM.ViewModels
 {
     public class CalculationViewModel : INotifyPropertyChanged
     {
-        private readonly NodeTreeViewModel NodeTreeVM;
+        private readonly NodeTreeModel NodeTreeVM;
         public DirectusStore Store => NodeTreeVM.Store;
-        public NodeViewModel CurrentNodeItem => NodeTreeVM.SelectedNodeItem ?? NodeTreeVM.CurrentForestItem;
+        public NodeModel CurrentNodeItem => NodeTreeVM.SelectedNodeItem ?? NodeTreeVM.CurrentForestItem;
         private IGraphNode HostNode => CurrentNodeItem?.Host;
         public string Name
         {
@@ -48,11 +49,11 @@ namespace Calc.MVVM.ViewModels
             }
         }
         public bool HasResults => (Results != null && Results.Count > 0);
-        public List<CategorizedResultViewModel> CategorizedResults
+        public List<CategorizedResultModel> CategorizedResults
         {
             get
             {
-                var calculation = new List<CategorizedResultViewModel>();
+                var calculation = new List<CategorizedResultModel>();
 
                 if (HostNode == null || Results == null)
                     return null;
@@ -67,7 +68,7 @@ namespace Calc.MVVM.ViewModels
                     }
                     else
                     {
-                        calculation.Add(new CategorizedResultViewModel
+                        calculation.Add(new CategorizedResultModel
                         {
                             GroupName = result.GroupName,
                             Gwp = Math.Round(result.Gwp, 3),
@@ -124,7 +125,7 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        public CalculationViewModel(NodeTreeViewModel ntVM)
+        public CalculationViewModel(NodeTreeModel ntVM)
         {
             NodeTreeVM = ntVM;
             MediatorFromVM.Register("BuildupSelectionChanged", _ => NotifyCalculationChanged());
