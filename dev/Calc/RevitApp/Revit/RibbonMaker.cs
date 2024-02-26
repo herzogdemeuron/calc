@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Autodesk.Revit.UI;
+using System;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Media.Imaging;
-using Autodesk.Revit.UI;
-using GongSolutions.Wpf.DragDrop.Utilities;
 
 
 namespace Calc.RevitApp.Revit

@@ -8,6 +8,8 @@ using Calc.Core.Objects.Mappings;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using Calc.Core.Interfaces;
+using System.Linq;
 
 namespace Calc.MVVM.ViewModels
 {
@@ -19,6 +21,7 @@ namespace Calc.MVVM.ViewModels
         public bool BranchesSwitch { get; set; }        
 
         private NodeViewModel selectedNodeItem;
+        private IVisualizer visualizer;
         public NodeViewModel SelectedNodeItem
         {
             get => selectedNodeItem;
@@ -35,9 +38,10 @@ namespace Calc.MVVM.ViewModels
         public ObservableCollection<NodeViewModel> NodeSource 
         { get => new ObservableCollection<NodeViewModel> { CurrentForestItem }; }
 
-        public NodeTreeViewModel(DirectusStore directusStore)
+        public NodeTreeViewModel(DirectusStore directusStore, IVisualizer visualizer)
         {
             Store = directusStore;
+            this.visualizer = visualizer;
             BranchesSwitch = true;
             MediatorFromVM.Register("ForestSelectionChanged", mapping => UpdateNodeSource((Mapping)mapping));
             MediatorFromVM.Register("MappingSelectionChanged", mapping => RemapAllNodes((Mapping)mapping));
@@ -48,8 +52,6 @@ namespace Calc.MVVM.ViewModels
 
             MediatorFromVM.Register("MainViewToggleToBranch", _ => BranchesSwitch = true);
             MediatorFromVM.Register("MainViewToggleToBranch", _ => ColorNodesToBranch());
-
-            new Visualizer();
             new ResultSender();
             //changing priority: Forest => Mapping => Buildup
         }
@@ -83,13 +85,13 @@ namespace Calc.MVVM.ViewModels
                 if(forceRecolorAll)
                 {
                     Store.ForestSelected.SetBranchColorsBy("branches");
-                    MediatorToVisualizer.Broadcast("AllNodesRecoloredOnBranches", SelectedNodeItem); // to visualizer
+                    visualizer.IsolateAndColorSubbranchElements(SelectedNodeItem.Host);
                 }
             }
             else
             {
                 Store.ForestSelected.SetBranchColorsBy("buildups");
-                MediatorToVisualizer.Broadcast("AllNodesRecoloredOnBuildups", SelectedNodeItem); // to visualizer
+                visualizer.IsolateAndColorBottomBranchElements(SelectedNodeItem.Host);
             }
 
             CurrentForestItem.NotifyNodePropertyChange();
@@ -108,12 +110,12 @@ namespace Calc.MVVM.ViewModels
             {
                 
                 NodeHelper.ShowSubLabelColor(nodeItem);
-                MediatorToVisualizer.Broadcast("OnBranchItemSelectionChanged", SelectedNodeItem); // to visualizer
+                visualizer.IsolateAndColorSubbranchElements(SelectedNodeItem.Host);
             }
             else
             {
                 NodeHelper.ShowAllSubLabelColor(nodeItem);
-                MediatorToVisualizer.Broadcast("OnBuildupItemSelectionChanged", SelectedNodeItem); // to visualizer
+                visualizer.IsolateAndColorBottomBranchElements(SelectedNodeItem.Host);
             }
 
             CurrentForestItem.NotifyNodePropertyChange();
@@ -144,7 +146,7 @@ namespace Calc.MVVM.ViewModels
             SelectedNodeItem = null;
             CurrentForestItem.NotifyNodePropertyChange(); //better ways to do this?
             MediatorFromVM.Broadcast("NodeItemSelectionChanged");
-            MediatorToVisualizer.Broadcast("TreeViewDeselected", CurrentForestItem); // to the visualizer
+            visualizer.ResetView(CurrentForestItem.SubNodeItems.Select(x => x.Host).ToList());
         }
 
 

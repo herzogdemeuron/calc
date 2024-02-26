@@ -1,16 +1,12 @@
-﻿using Calc.MVVM.Helpers;
-using Calc.MVVM.Helpers.Mediators;
-using Calc.MVVM.ViewModels;
-using Calc.Core.Objects;
-using Calc.Core.Objects.Buildups;
+﻿using Calc.Core.Objects;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Mappings;
-using System;
-using System.Collections.Generic;
+using Calc.MVVM.Helpers;
+using Calc.MVVM.Helpers.Mediators;
+using Calc.MVVM.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace Calc.MVVM.Views
 {
@@ -190,7 +186,6 @@ namespace Calc.MVVM.Views
         }
         private void StartCalcLiveClicked(object sender, RoutedEventArgs e)
         {
-            MainVM.HandleStartCalcLive();
         }
 
 

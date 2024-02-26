@@ -3,15 +3,15 @@ using Autodesk.Revit.UI;
 using System;
 using System.Diagnostics;
 
-namespace Calc.MVVM.Revit
+namespace Calc.RevitConnector.Revit
 {
     [Transaction(TransactionMode.Manual)]
-    public class ExternalEventHandler : IExternalEventHandler
+    public class RevitExternalEventHandler : IExternalEventHandler
     {
         private readonly ExternalEvent exEvent;
         private Action ActionToExecute { get; set; }
 
-        public ExternalEventHandler()
+        public RevitExternalEventHandler()
         {
             exEvent = ExternalEvent.Create(this);
         }

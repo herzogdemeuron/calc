@@ -9,10 +9,7 @@ namespace Calc.RevitApp
 {
     public class App : IExternalApplication
     {
-        public static Document CurrentDoc { get; set; }
         public static string RevitVersion { get; set; }
-
-        public static ExternalEventHandler EventHandler;
 
         public Result OnStartup(UIControlledApplication application)
         {

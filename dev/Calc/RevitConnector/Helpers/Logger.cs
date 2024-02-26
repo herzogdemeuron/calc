@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Calc.MVVM.Helpers
+namespace Calc.RevitConnector.Helpers
 {
     public  class Logger
     {

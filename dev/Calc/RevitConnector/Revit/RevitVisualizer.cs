@@ -1,54 +1,45 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Calc.Core.Color;
+using Calc.Core.Interfaces;
 using Calc.Core.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Calc.MVVM.Revit
+namespace Calc.RevitConnector.Revit
 {
     [Transaction(TransactionMode.Manual)]
-    public class RevitVisualizer
+    public class RevitVisualizer : IVisualizer
     {
+        private readonly RevitExternalEventHandler eventHandler;
+        private readonly Document doc;
         private Action<IGraphNode, View, ElementId> colorBranchAction;
-        private NodeViewModel currentForestItem;
-        private NodeViewModel selectedNodeItem;
+        private List<IGraphNode> currentNodes = new List<IGraphNode>();
+        private IGraphNode selectedNode;
 
-        public RevitVisualizer()
+        public RevitVisualizer(Document doc, RevitExternalEventHandler eventHandler)
         {
-            MediatorToVisualizer.Register("TreeViewDeselected",
-                forestItem => ResetView((NodeViewModel)forestItem));
-
-            MediatorToVisualizer.Register("AllNodesRecoloredOnBuildups",
-                selectedItem => IsolateAndColorBottomBranchElements((NodeViewModel)selectedItem));
-
-            MediatorToVisualizer.Register("AllNodesRecoloredOnBranches",
-                selectedItem => IsolateAndColorSubbranchElements((NodeViewModel)selectedItem));
-
-            MediatorToVisualizer.Register("OnBuildupItemSelectionChanged",
-                selectedItem => IsolateAndColorBottomBranchElements((NodeViewModel)selectedItem));
-
-            MediatorToVisualizer.Register("OnBranchItemSelectionChanged",
-                selectedItem => IsolateAndColorSubbranchElements((NodeViewModel)selectedItem));
+            this.eventHandler = eventHandler;
+            this.doc = doc;
         }
 
-        private void ResetView(NodeViewModel forestItem)
+        public void ResetView(List<IGraphNode> nodes)
         {
-            currentForestItem = forestItem;
-            App.EventHandler.Raise(Reset);
+            currentNodes = nodes;
+            eventHandler.Raise(Reset);
         }
 
         private void Reset()
         {
-            using (Transaction t = new Transaction(App.CurrentDoc, "Reset View"))
+            using (Transaction t = new Transaction(doc, "Reset View"))
             {
                 t.Start();
-                View currentView = App.CurrentDoc.ActiveView;
+                View currentView = doc.ActiveView;
                 currentView.TemporaryViewModes.DeactivateAllModes();
-                foreach (NodeViewModel nodeItem in currentForestItem.SubNodeItems)
+                foreach (IGraphNode node in currentNodes)
                 {
-                    List<ElementId> elementIds = StringsToElementIds(nodeItem.Host.ElementIds);
+                    List<ElementId> elementIds = StringsToElementIds(node.ElementIds);
                     foreach (ElementId elementId in elementIds)
                     {
                         currentView.SetElementOverrides(elementId, new OverrideGraphicSettings());
@@ -58,30 +49,29 @@ namespace Calc.MVVM.Revit
             }
         }
 
-        public void IsolateAndColorSubbranchElements(NodeViewModel nodeItem)
+        public void IsolateAndColorSubbranchElements(IGraphNode node)
         {
             colorBranchAction = ColorSubbranchElements;
-            selectedNodeItem = nodeItem;
-            App.EventHandler.Raise(IsolateAndColor);
+            selectedNode = node;
+            eventHandler.Raise(IsolateAndColor);
         }
 
-        private void IsolateAndColorBottomBranchElements(NodeViewModel nodeItem)
+        public void IsolateAndColorBottomBranchElements(IGraphNode node)
         {
             colorBranchAction = ColorBottomBranchElements;
-            selectedNodeItem = nodeItem;
-            App.EventHandler.Raise(IsolateAndColor);
+            selectedNode = node;
+            eventHandler.Raise(IsolateAndColor);
         }
 
         public void IsolateAndColor()
         {
-            if (selectedNodeItem == null) return;
+            if (selectedNode == null) return;
 
-            using (Transaction t = new Transaction(App.CurrentDoc, "Isolate and Color"))
+            using (Transaction t = new Transaction(doc, "Isolate and Color"))
             {
                 var patternId = GetPatternId();
-                IGraphNode selectedNode = selectedNodeItem.Host;
                 t.Start();
-                View currentView = App.CurrentDoc.ActiveView;
+                View currentView = doc.ActiveView;
                 IsolateElements(selectedNode, currentView);
                 colorBranchAction(selectedNode, currentView, patternId);
                 t.Commit();
@@ -150,7 +140,7 @@ namespace Calc.MVVM.Revit
 
         private ElementId GetPatternId()
         {
-            FilteredElementCollector collector = new FilteredElementCollector(App.CurrentDoc);
+            FilteredElementCollector collector = new FilteredElementCollector(doc);
             ICollection<Element> patterns = collector.OfClass(typeof(FillPatternElement)).ToElements();
             return patterns.FirstOrDefault().Id;
         }

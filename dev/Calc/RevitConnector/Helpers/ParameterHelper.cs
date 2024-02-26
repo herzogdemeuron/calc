@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Calc.MVVM.Helpers
+namespace Calc.RevitConnector.Helpers
 {
     public class ParameterHelper
     {
@@ -58,22 +58,6 @@ namespace Calc.MVVM.Helpers
                 return Tuple.Create(false, (string)null);
             }
         }
-        public static List<string> ValidateParameterNames(List<string> parameterNames)
-        {
-            // check if the parameter names are legal
-            // if yes, return the parameter names
-            // this is used before creating the calc elements
-            List<string> checkedParameterNames = new List<string>();
-            foreach (string parameterName in parameterNames)
-            {
-                if (parameterName.StartsWith("type:") || parameterName.StartsWith("inst:"))
-                {
-                    checkedParameterNames.Add(parameterName);
-                }
-            }
-            return checkedParameterNames;
-        }
-
 
         private static Parameter LookupTypeParameter(Element element, string parameterName)
         {

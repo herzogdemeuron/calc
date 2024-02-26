@@ -1,9 +1,9 @@
-﻿using Calc.MVVM.Helpers.Mediators;
-using Calc.MVVM.Services;
-using Calc.Core;
+﻿using Calc.Core;
+using Calc.Core.Interfaces;
 using Calc.Core.Objects;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Mappings;
+using Calc.MVVM.Helpers.Mediators;
 using System.ComponentModel;
 using System.Threading.Tasks;
 
@@ -22,16 +22,16 @@ namespace Calc.MVVM.ViewModels
         public VisibilityViewModel VisibilityVM { get; set; }
         public CalculationViewModel CalculationVM { get; set; }
 
-        public MainViewModel(DirectusStore store)
+        public MainViewModel(DirectusStore store, IElementCreator elementCreator, IVisualizer visualizer)
         {
             Store = store;
             VisibilityVM = new VisibilityViewModel();
 
             LoadingVM = new LoadingViewModel(store);
-            ForestVM = new ForestViewModel(store);
+            ForestVM = new ForestViewModel(store, elementCreator);
             MappingVM = new MappingViewModel(store);
             NewMappingVM = new NewMappingViewModel(store);
-            NodeTreeVM = new NodeTreeViewModel(store);
+            NodeTreeVM = new NodeTreeViewModel(store, visualizer);
 
             MappingErrorVM = new MappingErrorViewModel(MappingVM);
             CalculationVM = new CalculationViewModel(NodeTreeVM);

@@ -1,6 +1,4 @@
-﻿using Autodesk.Revit.DB;
-using Calc.MVVM.Config;
-using Calc.MVVM.Services;
+﻿using Calc.Core.Interfaces;
 using Calc.Core.Objects;
 using Calc.Core.Objects.GraphNodes;
 using System.Collections.Generic;
@@ -15,13 +13,12 @@ namespace Calc.MVVM.Helpers
         /// <summary>
         /// creates calc elements from revit elements and sort them into trees
         /// </summary>
-        public static void PlantTrees(Forest forest)
+        public static void PlantTrees(Forest forest, IElementCreator elementCreator)
         {
             List<string> parameters = GetParameterList(forest);
 
-            var doorParamConfig = new RevitBasicParamConfig(BuiltInCategory.OST_Doors, AreaName: ".Standard_Area");
-            var windowParamConfig = new RevitBasicParamConfig(BuiltInCategory.OST_Windows, AreaName: ".Area");
-            List<CalcElement> calcElements = Services.ElementFilter.CreateCalcElements(parameters, doorParamConfig, windowParamConfig);
+           
+            List<CalcElement> calcElements = elementCreator.CreateCalcElements(parameters);
             var leftElements = forest.PlantTrees(calcElements);
 
             //Debug.WriteLine("Left overs: " + leftElements);

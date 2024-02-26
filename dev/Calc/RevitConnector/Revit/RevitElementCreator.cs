@@ -2,34 +2,39 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autodesk.Revit.DB;
-using Calc.MVVM.Config;
-using Calc.MVVM.Helpers;
+using Calc.RevitConnector.Config;
+using Calc.RevitConnector.Helpers;
 using Calc.Core.Objects;
 using Calc.Core.Objects.Results;
 using Calc.Core.Interfaces;
 
-namespace Calc.MVVM.Revit
+namespace Calc.RevitConnector.Revit
 {
-    public class RevitElementCreator : ElementCreator
+    public class RevitElementCreator : IElementCreator
 
     {
         /// <summary>
         /// Create a list of calc elements from the current document
         /// it only takes the relevant parameters from the parameter name list to speed up the process
         /// </summary>
+        
+        private readonly Document doc;
+        
+        public RevitElementCreator(Document doc)
+        {
+            this.doc = doc;
+        }
         public List<CalcElement> CreateCalcElements(List<string> parameterNameList)
         {
-            /* Element elem = App.CurrentDoc.GetElement(new ElementId(767264));
-             return new List<CalcElement>()
-             {
-                 CreateCalcElement(elem, parameterNameList)
-             };*/
+            var doorParamConfig = new RevitBasicParamConfig(BuiltInCategory.OST_Doors, AreaName: ".Standard_Area");
+            var windowParamConfig = new RevitBasicParamConfig(BuiltInCategory.OST_Windows, AreaName: ".Area");
+            var paramConfigs = new List<RevitBasicParamConfig> { doorParamConfig, windowParamConfig };
             List<CalcElement> result = new List<CalcElement>();
 
-            var collector = new FilteredElementCollector(App.CurrentDoc)
+            var collector = new FilteredElementCollector(doc)
                   .WhereElementIsNotElementType()
                   .WhereElementIsViewIndependent()
-                  .Where(x => 
+                  .Where(x =>
                   x.Category != null &&
                   x.GetTypeId() != null &&
                   x.GetTypeId() != ElementId.InvalidElementId).ToList();
@@ -51,7 +56,7 @@ namespace Calc.MVVM.Revit
             return result;
         }
 
-        static private List<CalcElement> CalcElementsFromParamConfig
+        private List<CalcElement> CalcElementsFromParamConfig
             (
             List<Element> elementList,
             List<string> parameterNameList,
@@ -84,7 +89,7 @@ namespace Calc.MVVM.Revit
         /// create a calc element using the element and the parameter name list
         /// add as many parameters from the list as possible
         /// </summary>
-        static private CalcElement CreateCalcElement(
+        private CalcElement CreateCalcElement(
             Element elem,
             List<string> parameterNameList,
             string lenName,
@@ -101,7 +106,7 @@ namespace Calc.MVVM.Revit
             }
 
             ElementId typeId = elem.GetTypeId();
-            string type = App.CurrentDoc.GetElement(typeId).Name;
+            string type = doc.GetElement(typeId).Name;
             string typeName = $"{type} ({typeId.IntegerValue})";
 
             var lenParam = CreateBasicUnitParameter(elem, lenName, Unit.m);
@@ -124,7 +129,7 @@ namespace Calc.MVVM.Revit
         /// get the basic unit parameter of an element
         /// create a basic unit parameter with error type if the parameter is missing or redundant
         /// </summary>
-        static private BasicUnitParameter CreateBasicUnitParameter(Element elem, string parameterName, Unit unit)
+        private BasicUnitParameter CreateBasicUnitParameter(Element elem, string parameterName, Unit unit)
         {
             var parameters = elem.GetParameters(parameterName);
             if (parameters.Count == 0)

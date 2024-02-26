@@ -1,6 +1,5 @@
-﻿using Autodesk.Revit.UI;
+﻿using Calc.Core.DirectusAPI;
 using Calc.MVVM.Views;
-using Calc.Core.DirectusAPI;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -39,7 +38,7 @@ namespace Calc.MVVM.Services
 
             if (!directus.Authenticated)
             {
-                TaskDialog.Show("Directus Login", "Login failed");
+                //TaskDialog.Show("Directus Login", "Login failed");
                 return null;
             }
 

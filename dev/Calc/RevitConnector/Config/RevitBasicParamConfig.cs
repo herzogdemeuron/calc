@@ -1,11 +1,6 @@
 ﻿using Autodesk.Revit.DB;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Calc.MVVM.Config
+namespace Calc.RevitConnector.Config
 {
     /// <summary>
     /// defines the basic parameter names (len, area and vol) for multiple categories that are used for calc element creation

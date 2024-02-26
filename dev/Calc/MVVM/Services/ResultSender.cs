@@ -1,6 +1,4 @@
-﻿using Calc.MVVM.Helpers;
-using Calc.MVVM.ViewModels;
-using Calc.Core;
+﻿using Calc.Core;
 using Calc.Core.Objects.Results;
 using System.Collections.Generic;
 using System.Threading.Tasks;

@@ -1,18 +1,17 @@
-﻿using System;
-using System.IO;
-using System.Diagnostics;
+﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using Autodesk.Revit.Attributes;
-using Calc.MVVM.Views;
 using Calc.Core;
-using System.Reflection;
-using Calc.MVVM.ViewModels;
-using Calc.MVVM.Services;
 using Calc.Core.DirectusAPI;
+using Calc.MVVM.Services;
+using Calc.MVVM.ViewModels;
+using Calc.MVVM.Views;
+using Calc.RevitConnector.Revit;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
-using Calc.Core.Helpers;
-using Calc.MVVM.Revit;
 
 namespace Calc.RevitApp.Revit
 {
@@ -26,8 +25,8 @@ namespace Calc.RevitApp.Revit
             {
                 App.RevitVersion = commandData.Application.Application.VersionNumber;
                 AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-                App.CurrentDoc = commandData.Application.ActiveUIDocument.Document;
-                App.EventHandler = new ExternalEventHandler();
+                Document doc = commandData.Application.ActiveUIDocument.Document;
+
                 Logger.Log("Now authenticating.");
                 Task.Run(() => Authenticate()).Wait();
                 if (directusInstance == null)
@@ -38,8 +37,9 @@ namespace Calc.RevitApp.Revit
                 Logger.Log("Authentication successful.");
 
                 DirectusStore store = new DirectusStore(directusInstance);
-                RevitElementCreator elementCreator = new RevitElementCreator();
-                RevitVisualizer visualizer = new RevitVisualizer();
+
+                RevitElementCreator elementCreator = new RevitElementCreator(doc);
+                RevitVisualizer visualizer = new RevitVisualizer( doc, new RevitExternalEventHandler());
                 MainViewModel mainViewModel = new MainViewModel(store, elementCreator, visualizer);
                 MainView mainView = new MainView(mainViewModel);
 
