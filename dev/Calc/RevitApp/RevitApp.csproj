@@ -4,7 +4,7 @@
     <TargetFramework>net48</TargetFramework>
     <AssemblyName>CalcRevitApp</AssemblyName>
     <RootNamespace>Calc.RevitApp</RootNamespace>
-    <BaseOutputPath>C:\source\calc\ConnectorRevit\ConnectorRevit2023\bin</BaseOutputPath>
+    <BaseOutputPath>C:\source\calc\bin</BaseOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
