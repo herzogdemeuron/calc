@@ -51,6 +51,7 @@ namespace Calc.RevitConnector.Revit
 
         public void IsolateAndColorSubbranchElements(IGraphNode node)
         {
+            if (node == null) return;
             colorBranchAction = ColorSubbranchElements;
             selectedNode = node;
             eventHandler.Raise(IsolateAndColor);
@@ -58,6 +59,7 @@ namespace Calc.RevitConnector.Revit
 
         public void IsolateAndColorBottomBranchElements(IGraphNode node)
         {
+            if (node == null) return;
             colorBranchAction = ColorBottomBranchElements;
             selectedNode = node;
             eventHandler.Raise(IsolateAndColor);

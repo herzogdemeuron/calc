@@ -7,6 +7,14 @@
     <BaseOutputPath>C:\source\calc\bin</BaseOutputPath>
   </PropertyGroup>
 
+<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+	<OutputPath>C:\source\calc\bin\</OutputPath>
+</PropertyGroup>
+
+<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+	<OutputPath>C:\source\calc\bin\</OutputPath>
+</PropertyGroup>
+
   <ItemGroup>
     <None Remove="Resources\icon-01.png" />
     <None Remove="ToggleButtonTemplate.xaml" />

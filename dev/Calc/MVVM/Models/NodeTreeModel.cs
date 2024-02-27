@@ -20,8 +20,9 @@ namespace Calc.MVVM.Models
         public int MaxBuildups { get; set; } = 2;
         public bool BranchesSwitch { get; set; }
 
-        private NodeModel selectedNodeItem;
         private IVisualizer visualizer;
+
+        private NodeModel selectedNodeItem;
         public NodeModel SelectedNodeItem
         {
             get => selectedNodeItem;
@@ -85,13 +86,13 @@ namespace Calc.MVVM.Models
                 if (forceRecolorAll)
                 {
                     Store.ForestSelected.SetBranchColorsBy("branches");
-                    visualizer.IsolateAndColorSubbranchElements(SelectedNodeItem.Host);
+                    visualizer.IsolateAndColorSubbranchElements(SelectedNodeItem?.Host);
                 }
             }
             else
             {
                 Store.ForestSelected.SetBranchColorsBy("buildups");
-                visualizer.IsolateAndColorBottomBranchElements(SelectedNodeItem.Host);
+                visualizer.IsolateAndColorBottomBranchElements(SelectedNodeItem?.Host);
             }
 
             CurrentForestItem.NotifyNodePropertyChange();
@@ -110,12 +111,12 @@ namespace Calc.MVVM.Models
             {
 
                 NodeHelper.ShowSubLabelColor(nodeItem);
-                visualizer.IsolateAndColorSubbranchElements(SelectedNodeItem.Host);
+                visualizer.IsolateAndColorSubbranchElements(SelectedNodeItem?.Host);
             }
             else
             {
                 NodeHelper.ShowAllSubLabelColor(nodeItem);
-                visualizer.IsolateAndColorBottomBranchElements(SelectedNodeItem.Host);
+                visualizer.IsolateAndColorBottomBranchElements(SelectedNodeItem?.Host);
             }
 
             CurrentForestItem.NotifyNodePropertyChange();
