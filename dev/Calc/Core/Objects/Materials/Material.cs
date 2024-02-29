@@ -18,7 +18,7 @@ namespace Calc.Core.Objects.Materials
         [JsonProperty("cost")]
         public decimal Cost { get; set; }
         [JsonProperty("unit")]
-        public Unit Unit { get; set; }
+        public Unit MaterialUnit { get; set; }
         [JsonProperty("material_category")]
         public string Category { get; set; }
         [JsonProperty("source_db")]

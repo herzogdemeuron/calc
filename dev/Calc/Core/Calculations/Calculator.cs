@@ -43,7 +43,7 @@ namespace Calc.Core.Calculations
                     {
                         if (component == null) continue;
 
-                        BasicUnitParameter param = element.GetBasicUnitParameter(buildup.Unit);
+                        BasicUnitParameter param = element.GetBasicUnitParameter(buildup.BuildupUnit);
 
                         if (param.ErrorType != null)
                         {
@@ -84,19 +84,19 @@ namespace Calc.Core.Calculations
 
                 ElementId = element.Id,
                 ElementType = element.TypeName,
-                ElementUnit = buildup.Unit,
+                ElementUnit = buildup.BuildupUnit,
                 ElementQuantity = quantity,
 
                 BuildupName = buildup.Name,
                 GroupName = buildup.Group?.Name,
-                BuildupUnit = buildup.Unit,
+                BuildupUnit = buildup.BuildupUnit,
 
                 MaterialName = material.Name,
                 MaterialSource = material.Source,
                 MaterialSourceCode = material.SourceCode,
                 MaterialCategory = material.Category,
                 MaterialGwp = material.GWP,
-                MaterialUnit = material.Unit,
+                MaterialUnit = material.MaterialUnit,
                 MaterialAmount = component.Amount,
 
                 Gwp = gwpA123,

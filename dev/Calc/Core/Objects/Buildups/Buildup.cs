@@ -15,7 +15,7 @@ namespace Calc.Core.Objects.Buildups
         private string name;
         private MaterialGroup group;
         private ObservableCollection<BuildupComponent> components;
-        private Unit unit;
+        private Unit buildupUnit;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -51,10 +51,10 @@ namespace Calc.Core.Objects.Buildups
         }
 
         [JsonProperty("unit")]
-        public Unit Unit
+        public Unit BuildupUnit
         {
-            get => unit;
-            set => SetProperty(ref unit, value);
+            get => buildupUnit;
+            set => SetProperty(ref buildupUnit, value);
         }
         public void Copy(Buildup other)
         {
@@ -62,7 +62,7 @@ namespace Calc.Core.Objects.Buildups
             Name = other.Name;
             Group = other.Group;
             Components = other.Components;
-            Unit = other.Unit;
+            BuildupUnit = other.BuildupUnit;
         }
 
         public Buildup Copy()
@@ -73,7 +73,7 @@ namespace Calc.Core.Objects.Buildups
                 Name = Name,
                 Group = Group,
                 Components = Components,
-                Unit = Unit
+                BuildupUnit = BuildupUnit
             };
         }
 

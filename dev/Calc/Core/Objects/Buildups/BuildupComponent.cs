@@ -13,7 +13,7 @@ namespace Calc.Core.Objects.Buildups
         [JsonProperty("amount")]
         public decimal Amount { get; set; }
         [JsonIgnore]
-        public string FormattedAmount { get => Math.Round(Amount, 2).ToString() + " " + Material.Unit; }
+        public string FormattedAmount { get => Math.Round(Amount, 2).ToString() + " " + Material.MaterialUnit; }
         [JsonIgnore]
         public string FormattedGWP { get => Math.Round(Amount * Material.GWP, 2).ToString(); }
         [JsonIgnore]
