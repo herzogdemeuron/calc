@@ -7,6 +7,7 @@ using Calc.RevitConnector.Helpers;
 using Calc.Core.Objects;
 using Calc.Core.Objects.Results;
 using Calc.Core.Interfaces;
+using Calc.Core.Objects.BasicParameters;
 
 namespace Calc.RevitConnector.Revit
 {
@@ -129,12 +130,12 @@ namespace Calc.RevitConnector.Revit
         /// get the basic unit parameter of an element
         /// create a basic unit parameter with error type if the parameter is missing or redundant
         /// </summary>
-        private BasicUnitParameter CreateBasicUnitParameter(Element elem, string parameterName, Unit unit)
+        private BasicParameter CreateBasicUnitParameter(Element elem, string parameterName, Unit unit)
         {
             var parameters = elem.GetParameters(parameterName);
             if (parameters.Count == 0)
             {
-                return new BasicUnitParameter()
+                return new BasicParameter()
                 {
                     Name = parameterName,
                     ErrorType = ParameterErrorType.Missing,
@@ -143,7 +144,7 @@ namespace Calc.RevitConnector.Revit
             }
             else if (parameters.Count > 1)
             {
-                return new BasicUnitParameter()
+                return new BasicParameter()
                 {
                     Name = parameterName,
                     ErrorType = ParameterErrorType.Redundant,
@@ -155,7 +156,7 @@ namespace Calc.RevitConnector.Revit
 
             if (value == 0)
             {
-                return new BasicUnitParameter()
+                return new BasicParameter()
                 {
                     Name = parameterName,
                     ErrorType = ParameterErrorType.ZeroValue,
@@ -164,10 +165,10 @@ namespace Calc.RevitConnector.Revit
             }
             else
             {
-                return new BasicUnitParameter()
+                return new BasicParameter()
                 {
                     Name = parameterName,
-                    Value = (decimal)value,
+                    Value = (double)value,
                     Unit = unit
                 };
             }

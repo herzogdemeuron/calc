@@ -23,7 +23,7 @@ namespace Calc.Core.Objects.Results
         [JsonProperty(PropertyName = "element_unit")]
         public Unit ElementUnit { get; set; }
         [JsonProperty(PropertyName = "element_quantity")]
-        public decimal ElementQuantity { get; set; }
+        public double ElementQuantity { get; set; }
 
         // building infos
         [JsonProperty(PropertyName = "buildup_name")]
@@ -43,18 +43,18 @@ namespace Calc.Core.Objects.Results
         [JsonProperty(PropertyName = "material_source_code")]
         public string MaterialSourceCode { get; set; }
         [JsonProperty(PropertyName = "material_gwp")]
-        public decimal MaterialGwp { get; set; }
+        public double MaterialGwp { get; set; }
         [JsonProperty(PropertyName = "material_unit")]
         public Unit MaterialUnit { get; set; }
         [JsonProperty(PropertyName = "material_amount")]
-        public decimal MaterialAmount { get; set; }
+        public double MaterialAmount { get; set; }
 
         [JsonProperty(PropertyName = "calculated_gwp")]
-        public decimal Gwp { get; set; }
+        public double Gwp { get; set; }
         [JsonProperty(PropertyName = "calculated_ge")]
-        public decimal Ge { get; set; }
+        public double Ge { get; set; }
         [JsonProperty(PropertyName = "calculated_cost")]
-        public decimal Cost { get; set; }
+        public double Cost { get; set; }
 
         // others
         [JsonProperty(PropertyName = "color")]

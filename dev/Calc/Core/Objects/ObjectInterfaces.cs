@@ -13,7 +13,7 @@ namespace Calc.Core.Objects
     [JsonConverter(typeof(StringEnumConverter))]
     public enum Unit
     {
-        each, m, m2, m3
+        piece, m, m2, m3
     }
 
     public interface IHasProject
@@ -27,6 +27,7 @@ namespace Calc.Core.Objects
         List<string> ElementIds { get; }
         List<Branch> SubBranches { get; }
         HslColor HslColor { get; set; }
-
     }
+
+
 }

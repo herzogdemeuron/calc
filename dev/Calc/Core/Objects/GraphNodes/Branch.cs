@@ -18,7 +18,7 @@ namespace Calc.Core.Objects.GraphNodes
         [JsonIgnore]
         public List<CalcElement> Elements { get; set; } = new();
         [JsonIgnore]
-        public decimal TotalArea 
+        public double TotalArea 
         { 
             get => Math.Round(
                 Elements.Sum(
@@ -27,7 +27,7 @@ namespace Calc.Core.Objects.GraphNodes
                 0); 
         }
         [JsonIgnore]
-        public decimal TotalVolume 
+        public double TotalVolume 
         { 
             get => Math.Round(
                 Elements.Sum(

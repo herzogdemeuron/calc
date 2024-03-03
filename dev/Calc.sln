@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MVVM", "Calc\MVVM\MVVM.cspr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RevitConnector", "Calc\RevitConnector\RevitConnector.csproj", "{F8DFAEC8-440A-4F30-824F-8A334CFED99B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalcTest", "CalcBuilderTest\CalcTest.csproj", "{F6070D91-9AFB-44B5-9BAC-EA4973975010}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{F8DFAEC8-440A-4F30-824F-8A334CFED99B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8DFAEC8-440A-4F30-824F-8A334CFED99B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8DFAEC8-440A-4F30-824F-8A334CFED99B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6070D91-9AFB-44B5-9BAC-EA4973975010}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6070D91-9AFB-44B5-9BAC-EA4973975010}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6070D91-9AFB-44B5-9BAC-EA4973975010}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6070D91-9AFB-44B5-9BAC-EA4973975010}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,6 +75,7 @@ Global
 		{61943B3C-AC79-4A74-9D3A-287D6F2F931D} = {301A99E3-1DAB-433F-9595-4784586F17F5}
 		{91137000-2AE7-4555-A62D-70BD698364D0} = {92287F66-5CA0-47D3-865C-C734D703CC96}
 		{F8DFAEC8-440A-4F30-824F-8A334CFED99B} = {92287F66-5CA0-47D3-865C-C734D703CC96}
+		{F6070D91-9AFB-44B5-9BAC-EA4973975010} = {A6C5A8E5-960C-44A6-8E3C-C20CCA644364}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {08F04A72-7110-40A0-935B-06B0A87363FE}

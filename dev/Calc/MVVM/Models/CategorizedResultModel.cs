@@ -3,7 +3,7 @@
     public class CategorizedResultModel
     {
         public string GroupName { get; set; }
-        public decimal Gwp { get; set; }
-        public decimal Ge { get; set; }
+        public double Gwp { get; set; }
+        public double Ge { get; set; }
     }
 }

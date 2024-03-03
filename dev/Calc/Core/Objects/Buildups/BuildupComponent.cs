@@ -8,17 +8,31 @@ namespace Calc.Core.Objects.Buildups
 {
     public class BuildupComponent
     {
-        [JsonProperty("calc_materials_id")]
-        public Material Material { get; set; }
-        [JsonProperty("amount")]
-        public decimal Amount { get; set; }
-        [JsonIgnore]
-        public string FormattedAmount { get => Math.Round(Amount, 2).ToString() + " " + Material.MaterialUnit; }
-        [JsonIgnore]
-        public string FormattedGWP { get => Math.Round(Amount * Material.GWP, 2).ToString(); }
-        [JsonIgnore]
-        public string FormattedGE { get => Math.Round(Amount * Material.GE, 2).ToString(); }
-        [JsonIgnore]
-        public string FormattedCost { get => Math.Round(Amount * Material.Cost, 2).ToString(); }
+        public MaterialComponentSet MaterialComponentSet { get; set; }
+
+        public LayerComponent LayerComponent { get; set; }
+
+        public bool IsNormalizer { get; set; }
+        public bool IsMissing { get => LayerComponent == null; }
+
+        public bool CheckTarget(LayerComponent layerComponent)
+        {
+            return LayerComponent.CheckTarget(layerComponent);
+        }
+
+        public void SetTarget(LayerComponent layerComponent)
+        {
+            LayerComponent.SetTarget(layerComponent);
+        }
+
+        public void SetMainMaterial(Material material)
+        {
+            MaterialComponentSet.SetMainMaterial(material);
+        }
+
+        public void SetSubMaterial(Material material)
+        {
+            MaterialComponentSet.SetSubMaterial(material);
+        }
     }
 }

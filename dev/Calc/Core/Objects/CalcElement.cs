@@ -6,6 +6,7 @@ using Speckle.Newtonsoft.Json.Converters;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Collections.ObjectModel;
+using Calc.Core.Objects.BasicParameters;
 
 namespace Calc.Core.Objects
 {
@@ -14,32 +15,32 @@ namespace Calc.Core.Objects
         public string Id;
         public string TypeName;
         public Dictionary<string, object> Fields;
-        private Dictionary<Unit, BasicUnitParameter> _quantities;
+        private Dictionary<Unit, BasicParameter> _quantities;
 
         public CalcElement
             (
                 string id,
                 string type,
                 Dictionary<string, object> fields,
-                BasicUnitParameter lenParam,
-                BasicUnitParameter areaParam,
-                BasicUnitParameter volParam
+                BasicParameter lenParam,
+                BasicParameter areaParam,
+                BasicParameter volParam
              )
             {
             this.Id = id;
             this.TypeName = type;
             this.Fields = fields;
             this._quantities 
-                = new Dictionary<Unit, BasicUnitParameter>
+                = new Dictionary<Unit, BasicParameter>
                     {
-                        { Unit.each, new BasicUnitParameter() { Value = 1, Unit = Unit.each } },
+                        { Unit.piece, new BasicParameter() { Value = 1, Unit = Unit.piece } },
                         { Unit.m, lenParam },
                         { Unit.m2, areaParam },
                         { Unit.m3, volParam }
                     };
             }
 
-        public readonly BasicUnitParameter GetBasicUnitParameter(Unit unit)
+        public readonly BasicParameter GetBasicUnitParameter(Unit unit)
         {
             if (!_quantities.ContainsKey(unit))
             {

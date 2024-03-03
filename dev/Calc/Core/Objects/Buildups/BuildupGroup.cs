@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Calc.Core.Objects.Materials
+namespace Calc.Core.Objects.Buildups
 {
-    public class MaterialGroup
+    public class BuildupGroup
     {
         [JsonProperty("group_name")]
         public string Name { get; set; }

@@ -44,11 +44,11 @@ namespace Calc.MVVM.Models
             }
         }
 
-        public Dictionary<string, decimal> CategorizedCalculation
+        public Dictionary<string, double> CategorizedCalculation
         {
             get
             {
-                var calculation = new Dictionary<string, decimal>();
+                var calculation = new Dictionary<string, double>();
                 if (Host != null && Host is Branch branch)
                 {
                     var results = branch.CalculationResults;

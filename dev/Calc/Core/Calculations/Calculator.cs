@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Calc.Core.Helpers;
 using Calc.Core.Objects;
+using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Results;
@@ -43,7 +44,7 @@ namespace Calc.Core.Calculations
                     {
                         if (component == null) continue;
 
-                        BasicUnitParameter param = element.GetBasicUnitParameter(buildup.BuildupUnit);
+                        BasicParameter param = element.GetBasicUnitParameter(buildup.BuildupUnit);
 
                         if (param.ErrorType != null)
                         {
@@ -70,7 +71,7 @@ namespace Calc.Core.Calculations
             }
         }
 
-        private static Result GetResult(Branch branch, CalcElement element, Buildup buildup, BuildupComponent component, decimal quantity)
+        private static Result GetResult(Branch branch, CalcElement element, Buildup buildup, BuildupComponent component, double quantity)
         {
             var material = component.Material;
             var gwpA123 = material.GWP * component.Amount * quantity;
