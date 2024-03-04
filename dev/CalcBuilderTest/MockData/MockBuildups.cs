@@ -26,14 +26,20 @@ namespace CalcBuilderTest
                     {
                         new BuildupComponent
                         {
-                            MainMaterialComponent = new MaterialComponent(MockMaterials.GetMaterials()[0], 1),
+                            MaterialComponentSet = new MaterialComponentSet()
+                            {
+                                MainMaterialComponent = new MaterialComponent(MockMaterials.GetMaterials()[0], 1)
+                            },
                             LayerComponent = new LayerComponent("targetTypeName0", "targetMaterialName0")
 
                         },
                           new BuildupComponent
                         {
-                            MainMaterialComponent = new MaterialComponent(MockMaterials.GetMaterials()[1], 0.95),
-                            SubMaterialComponent = new MaterialComponent(MockMaterials.GetMaterials()[2], 0.05),
+                               MaterialComponentSet = new MaterialComponentSet()
+                            {
+                                MainMaterialComponent = new MaterialComponent(MockMaterials.GetMaterials()[1], 0.95),
+                                SubMaterialComponent = new MaterialComponent(MockMaterials.GetMaterials()[2], 0.05),
+                            },                            
                             LayerComponent = new LayerComponent("targetTypeName1", "targetMaterialName1")
                         }
                     }
@@ -50,8 +56,11 @@ namespace CalcBuilderTest
                     {
                         new BuildupComponent
                         {
-                            MainMaterialComponent = new MaterialComponent(MockMaterials.GetMaterials()[1], 0.95),
-                            SubMaterialComponent = new MaterialComponent(MockMaterials.GetMaterials()[2], 0.05),
+                             MaterialComponentSet = new MaterialComponentSet()
+                             {
+                                MainMaterialComponent = new MaterialComponent(MockMaterials.GetMaterials()[1], 0.95),
+                                SubMaterialComponent = new MaterialComponent(MockMaterials.GetMaterials()[2], 0.05),                            
+                             },                            
                             LayerComponent = new LayerComponent("targetTypeName1", "targetMaterialName1")
                         }
                     }

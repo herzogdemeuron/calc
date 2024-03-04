@@ -2,37 +2,48 @@
 using Speckle.Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Calc.Core.Objects.Buildups
 {
     public class BuildupComponent
     {
-        public MaterialComponentSet MaterialComponentSet { get; set; }
-
-        public LayerComponent LayerComponent { get; set; }
-
+        public List<int> ContainerIds { get; set; }
+        public string TargetTypeName { get; set; }
         public bool IsNormalizer { get; set; }
-        public bool IsMissing { get => LayerComponent == null; }
+        public List<LayerComponent> LayerComponents { get; set; } = new List<LayerComponent>();
 
-        public bool CheckTarget(LayerComponent layerComponent)
+        public bool CheckTarget(BuildupComponent buildupComponent)
         {
-            return LayerComponent.CheckTarget(layerComponent);
+            return this.TargetTypeName == buildupComponent.TargetTypeName;
         }
 
-        public void SetTarget(LayerComponent layerComponent)
+        /// <summary>
+        /// apply a buildupComponent from revit/rhino, check if its layerComponents are targeted in this buildupComponent, 
+        /// if true, set the corresponding layerComponent with the new layerComponent,
+        /// else add the new layerComponent to this buildupComponent.
+        /// Remove the untargeted layerComponents, return a new buildupComponent with them.
+        /// </summary>
+        public BuildupComponent ApplyTarget(BuildupComponent newBuildupComponent)
         {
-            LayerComponent.SetTarget(layerComponent);
-        }
+            this.ContainerIds = newBuildupComponent.ContainerIds;
+            var untargetedLayers = new List<LayerComponent>(LayerComponents);
+            LayerComponents.Clear();
 
-        public void SetMainMaterial(Material material)
-        {
-            MaterialComponentSet.SetMainMaterial(material);
-        }
+            foreach (LayerComponent newLayer in newBuildupComponent.LayerComponents)
+            {
+                var existingLayer = untargetedLayers.FirstOrDefault(currentLayer => currentLayer.CheckTarget(newLayer));
 
-        public void SetSubMaterial(Material material)
-        {
-            MaterialComponentSet.SetSubMaterial(material);
+                if (existingLayer != null)
+                {
+                    newLayer.ApplyTarget(existingLayer);
+                    untargetedLayers.Remove(existingLayer);
+                }
+
+                LayerComponents.Add(newLayer);
+            }
+            return new BuildupComponent { LayerComponents = untargetedLayers };
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Calc.Core.Objects.BasicParameters;
+using Calc.Core.Objects.Materials;
 
 namespace Calc.Core.Objects
 {
@@ -11,37 +12,44 @@ namespace Calc.Core.Objects
     /// </summary>
     public class LayerComponent
     {
-        public List<int> Ids { get; set; }
-        public string TargetTypeName { get; }
         public string TargetMaterialName { get; }
-        public int Count {  get => Ids?.Count??0;}
+        public MaterialComponentSet MaterialComponentSet { get; set; }
         private BasicParameterSet basicParameterSet;
 
-        public LayerComponent(string targetTypeName, string targetMaterialName)
+        public LayerComponent(string targetMaterialName, BasicParameterSet basicParameterSet = null)
         {
-            TargetTypeName = targetTypeName;
-            TargetMaterialName = targetMaterialName;            
+            TargetMaterialName = targetMaterialName;
+            this.basicParameterSet = basicParameterSet;
         }
 
         public bool CheckTarget( LayerComponent layerComponent)
         {
-            return TargetTypeName == layerComponent.TargetTypeName && TargetMaterialName == layerComponent.TargetMaterialName;
+            return TargetMaterialName == layerComponent.TargetMaterialName;
         }
 
-        public void SetTarget(LayerComponent layerComponent)
+        public void ApplyTarget(LayerComponent layerComponent)
         {
-            this.Ids = layerComponent.Ids;
-            this.basicParameterSet = layerComponent.basicParameterSet;
+            this.MaterialComponentSet = layerComponent.MaterialComponentSet;
         }
 
-        public void ResetTarget()
+        public void ResetTarget() // is this needed?
         {
-            this.Ids = null;
             this.basicParameterSet = null;
+        }
+
+        public void SetMainMaterial(Material material)
+        {
+            MaterialComponentSet.SetMainMaterial(material);
+        }
+
+        public void SetSubMaterial(Material material)
+        {
+            MaterialComponentSet.SetSubMaterial(material);
         }
 
         public BasicParameter GetQuantity(Unit unit)
         {
+            if (basicParameterSet == null) return null;
             return basicParameterSet.GetQuantity(unit);
         }
 
