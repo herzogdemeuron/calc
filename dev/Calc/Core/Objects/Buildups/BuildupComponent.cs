@@ -11,39 +11,38 @@ namespace Calc.Core.Objects.Buildups
     {
         public List<int> ContainerIds { get; set; }
         public string TargetTypeName { get; set; }
-        public bool IsNormalizer { get; set; }
         public List<LayerComponent> LayerComponents { get; set; } = new List<LayerComponent>();
-
-        public bool CheckTarget(BuildupComponent buildupComponent)
+        public bool IsNormalizer { get; set; }
+        public bool HasLayers => LayerComponents.Count > 0;
+        public bool CheckSource(BuildupComponent buildupComponent)
         {
             return this.TargetTypeName == buildupComponent.TargetTypeName;
         }
 
         /// <summary>
-        /// apply a buildupComponent from revit/rhino, check if its layerComponents are targeted in this buildupComponent, 
-        /// if true, set the corresponding layerComponent with the new layerComponent,
-        /// else add the new layerComponent to this buildupComponent.
-        /// Remove the untargeted layerComponents, return a new buildupComponent with them.
+        /// apply a source buildupComponent to current revit/rhino buildupComponent, 
+        /// check if its layerComponents match the current ones, 
+        /// if true, set this layerComponent with the source layerComponent,
+        /// else it stays in the list and will be presented as a unmapped layer.
+        /// return a new buildupComponent with the missing source layerComponents.
         /// </summary>
-        public BuildupComponent ApplyTarget(BuildupComponent newBuildupComponent)
+        public BuildupComponent ApplySource(BuildupComponent sourceBuildupComponent)
         {
-            this.ContainerIds = newBuildupComponent.ContainerIds;
-            var untargetedLayers = new List<LayerComponent>(LayerComponents);
-            LayerComponents.Clear();
 
-            foreach (LayerComponent newLayer in newBuildupComponent.LayerComponents)
+            this.IsNormalizer = sourceBuildupComponent.IsNormalizer;
+            var sourceLayers = sourceBuildupComponent.LayerComponents;
+
+            foreach (LayerComponent newLayer in LayerComponents)
             {
-                var existingLayer = untargetedLayers.FirstOrDefault(currentLayer => currentLayer.CheckTarget(newLayer));
+                var sourceLayer = sourceLayers.FirstOrDefault(l => l.CheckSource(newLayer));
 
-                if (existingLayer != null)
+                if (sourceLayer != null)
                 {
-                    newLayer.ApplyTarget(existingLayer);
-                    untargetedLayers.Remove(existingLayer);
+                    newLayer.ApplySource(sourceLayer);
+                    sourceLayers.Remove(sourceLayer);
                 }
-
-                LayerComponents.Add(newLayer);
             }
-            return new BuildupComponent { LayerComponents = untargetedLayers };
+            return new BuildupComponent { TargetTypeName = this.TargetTypeName, LayerComponents = sourceLayers };
         }
     }
 }

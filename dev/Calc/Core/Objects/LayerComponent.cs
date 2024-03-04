@@ -22,12 +22,12 @@ namespace Calc.Core.Objects
             this.basicParameterSet = basicParameterSet;
         }
 
-        public bool CheckTarget( LayerComponent layerComponent)
+        public bool CheckSource( LayerComponent layerComponent)
         {
             return TargetMaterialName == layerComponent.TargetMaterialName;
         }
 
-        public void ApplyTarget(LayerComponent layerComponent)
+        public void ApplySource(LayerComponent layerComponent)
         {
             this.MaterialComponentSet = layerComponent.MaterialComponentSet;
         }

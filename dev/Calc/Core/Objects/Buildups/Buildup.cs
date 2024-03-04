@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -46,17 +47,17 @@ namespace Calc.Core.Objects.Buildups
         [JsonProperty("description")]
         public string Description { get; set; }
 
-        private ObservableCollection<BuildupComponent> components = new ObservableCollection<BuildupComponent>();
+        private List<BuildupComponent> components = new List<BuildupComponent>();
         [JsonProperty("components")]
-        public ObservableCollection<BuildupComponent> Components
+        public List<BuildupComponent> Components
         {
             get => components;
             set => SetProperty(ref components, value);
         }
 
-        private ObservableCollection<BuildupComponent> missingComponents = new ObservableCollection<BuildupComponent>();
+        private List<BuildupComponent> missingComponents = new List<BuildupComponent>();
         [JsonProperty("missing_components")]
-        public ObservableCollection<BuildupComponent> MissingComponents
+        public List<BuildupComponent> MissingComponents
         {
             get => missingComponents;
             set => SetProperty(ref missingComponents, value);
@@ -72,52 +73,37 @@ namespace Calc.Core.Objects.Buildups
         }
 
         /// <summary>
-        /// receive layerComponents from revit/rhino to the buildupcomponents,
-        /// by checking if the layerComponent is targeted to the buildupcomponent.
+        /// receive a set of BuildupComponents from revit/rhino, modify the current buildup components
+        /// current buildup component (source) --> new revit/rhino buildup component (target)
+        /// if source is found, apply it to the target.
+        /// add target to the new buildup components
         /// </summary>
-        public void ReceiveLayerComponents(List<LayerComponent> layerComponents)
+        public void ReceiveBuildupComponents(List<BuildupComponent> newBuildupComponents)
         {
-            ResetComponentTargets();
-            var unmatchedLayerComponents = MatchLayerComponents(layerComponents);
-            foreach (var unmatched in unmatchedLayerComponents)
+            var currentComponents = new List<BuildupComponent>(Components);
+            Components = newBuildupComponents;
+
+            foreach (var newComponent in Components)
             {
-                Components.Add(new BuildupComponent { LayerComponent = unmatched });
-            }
-
-        }
-
-        /// <summary>
-        /// match layerComponents to the buildupcomponents,
-        /// if the buildupcomponent is not matched, add it to the missingComponents.
-        /// return the leftover layerComponents.
-        private List<LayerComponent> MatchLayerComponents(List<LayerComponent> layerComponents)
-        {
-            var result = new List<LayerComponent>(layerComponents);
-
-            foreach (var component in components)
-            {
-                foreach (var layerComponent in layerComponents)
+                var source = currentComponents.FirstOrDefault(c => c.CheckSource(newComponent));
+                if (source != null)
                 {
-                    if (component.CheckTarget(layerComponent))
-                    {
-                        component.SetTarget(layerComponent);
-                        result.Remove(layerComponent);
-                        break;
-                    }
+                    var missingComponent = newComponent.ApplySource(source);
+                    AddMissingComponent(missingComponent);
+                    currentComponents.Remove(source);
                 }
-                MissingComponents.Add(component);
             }
-            return result;
+            MissingComponents.AddRange(currentComponents);
         }
 
-        private void ResetComponentTargets()
+        private void AddMissingComponent(BuildupComponent missingComponent)
         {
-            if (Components == null) return;
-            foreach (var component in Components)
+            if(missingComponent.HasLayers)
             {
-              component.LayerComponent.ResetTarget();
+                MissingComponents.Add(missingComponent);
             }
         }
+
 
         public void Copy(Buildup other)
         {
