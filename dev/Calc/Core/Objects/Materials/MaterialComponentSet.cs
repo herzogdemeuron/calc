@@ -1,4 +1,6 @@
-﻿using Speckle.Newtonsoft.Json;
+﻿using Calc.Core.Calculations;
+using Calc.Core.Objects.Buildups;
+using Speckle.Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,7 +12,8 @@ namespace Calc.Core.Objects.Materials
         public MaterialComponent MainMaterialComponent { get; set; }
         public MaterialComponent SubMaterialComponent { get; set; }
 
-        public bool IsMapped { get => MainMaterialComponent != null; }
+        public bool HasMainMaterial { get => MainMaterialComponent != null; }
+        public bool HasSubMaterial { get => HasMainMaterial && SubMaterialComponent != null; }
 
         public void SetMainMaterial(Material material)
         {
@@ -48,5 +51,6 @@ namespace Calc.Core.Objects.Materials
                 MainMaterialComponent.Ratio = 1 - ratio;
             }
         }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using Calc.Core.Objects.Materials;
+﻿using Calc.Core.Objects.BasicParameters;
+using Calc.Core.Objects.Materials;
 using Speckle.Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -6,17 +7,22 @@ using System.Linq;
 using System.Text;
 
 namespace Calc.Core.Objects.Buildups
+
 {
+    /// <summary>
+    /// All instances of a revit/rhino type in the builder group.
+    /// </summary>
     public class BuildupComponent
     {
-        public List<int> ContainerIds { get; set; }
-        public string TargetTypeName { get; set; }
+        public List<int> Ids { get; set; }
+        public string TypeIdentifier { get; set; }
         public List<LayerComponent> LayerComponents { get; set; } = new List<LayerComponent>();
         public bool IsNormalizer { get; set; }
+        public BasicParameterSet TotalBasicParameterSet { get; set; }
         public bool HasLayers => LayerComponents.Count > 0;
         public bool CheckSource(BuildupComponent buildupComponent)
         {
-            return this.TargetTypeName == buildupComponent.TargetTypeName;
+            return this.TypeIdentifier == buildupComponent.TypeIdentifier;
         }
 
         /// <summary>
@@ -42,7 +48,7 @@ namespace Calc.Core.Objects.Buildups
                     sourceLayers.Remove(sourceLayer);
                 }
             }
-            return new BuildupComponent { TargetTypeName = this.TargetTypeName, LayerComponents = sourceLayers };
+            return new BuildupComponent { TypeIdentifier = this.TypeIdentifier, LayerComponents = sourceLayers };
         }
     }
 }

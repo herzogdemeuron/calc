@@ -4,7 +4,7 @@ using System.Text;
 using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Materials;
 
-namespace Calc.Core.Objects
+namespace Calc.Core.Objects.Buildups
 {
     /// <summary>
     /// A layer or component of an element type in revit/rhino.
@@ -22,19 +22,19 @@ namespace Calc.Core.Objects
             this.basicParameterSet = basicParameterSet;
         }
 
-        public bool CheckSource( LayerComponent layerComponent)
+        public bool CheckSource(LayerComponent layerComponent)
         {
             return TargetMaterialName == layerComponent.TargetMaterialName;
         }
 
         public void ApplySource(LayerComponent layerComponent)
         {
-            this.MaterialComponentSet = layerComponent.MaterialComponentSet;
+            MaterialComponentSet = layerComponent.MaterialComponentSet;
         }
 
         public void ResetTarget() // is this needed?
         {
-            this.basicParameterSet = null;
+            basicParameterSet = null;
         }
 
         public void SetMainMaterial(Material material)
@@ -47,7 +47,7 @@ namespace Calc.Core.Objects
             MaterialComponentSet.SetSubMaterial(material);
         }
 
-        public BasicParameter GetQuantity(Unit unit)
+        public BasicParameter GetQuantityParam(Unit unit)
         {
             if (basicParameterSet == null) return null;
             return basicParameterSet.GetQuantity(unit);

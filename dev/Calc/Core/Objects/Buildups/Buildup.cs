@@ -1,4 +1,5 @@
-﻿using Speckle.Newtonsoft.Json;
+﻿using Calc.Core.Calculations;
+using Speckle.Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -63,6 +64,12 @@ namespace Calc.Core.Objects.Buildups
             set => SetProperty(ref missingComponents, value);
         }
 
+        [JsonProperty("calculation_components")]
+        public List<CalculationComponent> CalculationComponents
+        {
+            get => GetCalculationComponents();
+        }
+
 
         private Unit buildupUnit;
         [JsonProperty("unit")]
@@ -71,6 +78,7 @@ namespace Calc.Core.Objects.Buildups
             get => buildupUnit;
             set => SetProperty(ref buildupUnit, value);
         }
+
 
         /// <summary>
         /// receive a set of BuildupComponents from revit/rhino, modify the current buildup components
@@ -89,19 +97,46 @@ namespace Calc.Core.Objects.Buildups
                 if (source != null)
                 {
                     var missingComponent = newComponent.ApplySource(source);
-                    AddMissingComponent(missingComponent);
+                    if (missingComponent.HasLayers)
+                    {
+                        MissingComponents.Add(missingComponent);
+                    }
+
                     currentComponents.Remove(source);
                 }
             }
             MissingComponents.AddRange(currentComponents);
         }
 
-        private void AddMissingComponent(BuildupComponent missingComponent)
+        /// <summary>
+        /// get the total ratio of the whole buildup when generating calculation components
+        /// is 1 divides the quantity of the normalizer of the buildup unit
+        /// </summary>
+        private double GetTotalRatio()
         {
-            if(missingComponent.HasLayers)
+            var normalizer = Components.Where(c => c.IsNormalizer).ToList();
+            if (normalizer.Count != 1) return 0;
+            var value = normalizer[0].TotalBasicParameterSet.GetQuantity(BuildupUnit).Value;
+            if(value.HasValue)
             {
-                MissingComponents.Add(missingComponent);
+                return 1/value.Value;
             }
+            return 0;
+        }
+
+        private List<CalculationComponent> GetCalculationComponents()
+        {
+            var calculationComponents = new List<CalculationComponent>();
+            var totalRatio = GetTotalRatio();
+            if (totalRatio != 0)
+            {
+                foreach(var component in Components)
+                {
+                    var calculationComponent = CalculationComponent.FromBuildupComponent(component, totalRatio);
+                    calculationComponents.AddRange(calculationComponent);
+                }
+            }
+            return calculationComponents;
         }
 
 

@@ -14,7 +14,7 @@ namespace Calc.Core.Objects.Materials
         {
             get => selectedDensity ?? (AvailableDensities.Count > 0 ? AvailableDensities[0] : null);
         }
-        public double Amount
+        public double AmountPerUnit
         {
             get
             {
@@ -52,10 +52,7 @@ namespace Calc.Core.Objects.Materials
         }
 
         private List<Unit> AvailableUnits { get => AvailableDensities.ConvertAll(x => x.Unit); }
-        public string FormattedAmount { get => Math.Round(Amount, 2).ToString() + " " + SelectedDensity?.Unit??"" ; }
-        public string FormattedGWP { get => Math.Round(Amount * Material.GWP, 2).ToString(); }
-        public string FormattedGE { get => Math.Round(Amount * Material.GE, 2).ToString(); }
-        public string FormattedCost { get => Math.Round(Amount * Material.Cost, 2).ToString(); }
+
 
         public MaterialComponent(Material material, double ratio)
         {

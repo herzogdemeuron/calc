@@ -39,8 +39,7 @@ namespace Calc.Core.Calculations
             {
                 foreach (var buildup in buildups)
                 {
-                    if (buildup?.Components == null) continue;
-                    foreach (var component in buildup.Components)
+                    foreach (var component in buildup.CalculationComponents)
                     {
                         if (component == null) continue;
 
@@ -71,12 +70,12 @@ namespace Calc.Core.Calculations
             }
         }
 
-        private static Result GetResult(Branch branch, CalcElement element, Buildup buildup, BuildupComponent component, double quantity)
+        private static Result GetResult(Branch branch, CalcElement element, Buildup buildup, CalculationComponent component, double quantity)
         {
             var material = component.Material;
-            var gwpA123 = material.GWP * component.Amount * quantity;
-            var geA123 = material.GE * component.Amount * quantity;
-            var cost = material.Cost * component.Amount * quantity;
+            var gwpA123 = component.GWP * quantity;
+            var geA123 = component.GE * quantity;
+            var cost = component.Cost * quantity;
 
             var calculationResult = new Result
             {
@@ -97,7 +96,7 @@ namespace Calc.Core.Calculations
                 MaterialSourceCode = material.SourceCode,
                 MaterialCategory = material.Category,
                 MaterialGwp = material.GWP,
-                MaterialUnit = material.MaterialUnit,
+                MaterialUnit = component.MaterialUnit,
                 MaterialAmount = component.Amount,
 
                 Gwp = gwpA123,
