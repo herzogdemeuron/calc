@@ -50,7 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MockData\MockBuildups.cs" />
-    <Compile Include="MockData\MockLayerComponents.cs" />
+    <Compile Include="MockData\MockBuildupComponents.cs" />
     <Compile Include="MockData\MockMaterials.cs" />
     <Compile Include="BuildupTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
