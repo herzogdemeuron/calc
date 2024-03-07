@@ -9,31 +9,39 @@ namespace Calc.Core.DirectusAPI.Drivers
     public class BuildupStorageDriver : IDriverGetMany<Buildup>
     {
         public string QueryGetMany { get; } = @"
-                    query GetBuildups {
-                      calc_buildups {
+            query GetBuildups {
+                calc_builder_buildups {
+                    id
+                    name
+                    standard
+                    buildup_unit
+                    group {
+                        group_name
+                    }
+                    description
+                    calculation_components {
                         id
-                        buildup_name
-                        group_id {
-                          group_name
+                        function
+                        quantity
+                        gwp
+                        ge
+                        calc_builder_materials_id {
+                        id
+                        name
+                        material_category
+                        standard
+                        thickness
+                        valid_from
+                        valid_until
+                        density
+                        material_unit
+                        gwp
+                        ge
+                        cost
                         }
-                        description
-                        components {
-                          calc_materials_id {
-                            id
-                            material_name
-                            global_warming_potential_a1_a2_a3
-                            grey_energy_a123
-                            cost
-                            unit
-                            material_category
-                            source_db
-                            source_db_identifier
-                          }
-                          amount
-                        }
-                        unit
-                      }
-                    }";
+                    }
+                }
+            }";
 
         [JsonProperty("calc_buildups")]
         public List<Buildup> GotManyItems { get; set; }

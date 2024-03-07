@@ -24,28 +24,28 @@ namespace CalcBuilderTest.MockData
                 (
                 "RevitMaterialName1",
                 new BasicParameterSet(
-                        new BasicParameter() {Unit = Unit.piece, Value = 3 },
+                        new BasicParameter() {Unit = Unit.piece, Amount = 3 },
                         new BasicParameter() {Name = "LenParamName", Unit = Unit.m, ErrorType = ParameterErrorType.ZeroValue},
                         new BasicParameter() {Name = "AreaParamName",Unit = Unit.m2, ErrorType = ParameterErrorType.ZeroValue },
-                        new BasicParameter() {Name = "VolParamName",Unit = Unit.m3, Value = 1 })
+                        new BasicParameter() {Name = "VolParamName",Unit = Unit.m3, Amount = 1 })
                 ),
                  new LayerComponent
                 (
                 "RevitMaterialName2",
                 new BasicParameterSet(
-                        new BasicParameter() {Unit = Unit.piece, Value = 1 },
+                        new BasicParameter() {Unit = Unit.piece, Amount = 1 },
                         new BasicParameter() {Name = "LenParamName", Unit = Unit.m, ErrorType = ParameterErrorType.ZeroValue},
                         new BasicParameter() {Name = "AreaParamName",Unit = Unit.m2, ErrorType = ParameterErrorType.ZeroValue },
-                        new BasicParameter() {Name = "VolParamName",Unit = Unit.m3, Value = 1 })
+                        new BasicParameter() {Name = "VolParamName",Unit = Unit.m3, Amount = 1 })
                 ),
                   new LayerComponent
                 (
                 "RevitMaterialName2",
                 new BasicParameterSet(
-                        new BasicParameter() {Unit = Unit.piece, Value = 2 },
+                        new BasicParameter() {Unit = Unit.piece, Amount = 2 },
                         new BasicParameter() {Name = "LenParamName", Unit = Unit.m, ErrorType = ParameterErrorType.ZeroValue},
-                        new BasicParameter() {Name = "AreaParamName",Unit = Unit.m2, Value = 11 },
-                        new BasicParameter() {Name = "VolParamName",Unit = Unit.m3, Value = 1 })
+                        new BasicParameter() {Name = "AreaParamName",Unit = Unit.m2, Amount = 11 },
+                        new BasicParameter() {Name = "VolParamName",Unit = Unit.m3, Amount = 1 })
                 ),
 
             };
@@ -58,28 +58,28 @@ namespace CalcBuilderTest.MockData
                 (
                 "RevitMaterialName1",
                 new BasicParameterSet(
-                        new BasicParameter() {Unit = Unit.piece, Value = 3 },
+                        new BasicParameter() {Unit = Unit.piece, Amount = 3 },
                         new BasicParameter() {Name = "LenParamName", Unit = Unit.m, ErrorType = ParameterErrorType.ZeroValue},
                         new BasicParameter() {Name = "AreaParamName",Unit = Unit.m2, ErrorType = ParameterErrorType.ZeroValue },
-                        new BasicParameter() {Name = "VolParamName",Unit = Unit.m3, Value = 1 })
+                        new BasicParameter() {Name = "VolParamName",Unit = Unit.m3, Amount = 1 })
                 ),
                  new LayerComponent
                 (
                 "RevitMaterialName2",
                 new BasicParameterSet(
-                        new BasicParameter() {Unit = Unit.piece, Value = 1 },
+                        new BasicParameter() {Unit = Unit.piece, Amount = 1 },
                         new BasicParameter() {Name = "LenParamName", Unit = Unit.m, ErrorType = ParameterErrorType.ZeroValue},
                         new BasicParameter() {Name = "AreaParamName",Unit = Unit.m2, ErrorType = ParameterErrorType.ZeroValue },
-                        new BasicParameter() {Name = "VolParamName",Unit = Unit.m3, Value = 1 })
+                        new BasicParameter() {Name = "VolParamName",Unit = Unit.m3, Amount = 1 })
                 ),
                   new LayerComponent
                 (
                 "RevitMaterialName2",
                 new BasicParameterSet(
-                        new BasicParameter() {Unit = Unit.piece, Value = 2 },
+                        new BasicParameter() {Unit = Unit.piece, Amount = 2 },
                         new BasicParameter() {Name = "LenParamName", Unit = Unit.m, ErrorType = ParameterErrorType.ZeroValue},
-                        new BasicParameter() {Name = "AreaParamName",Unit = Unit.m2, Value = 11 },
-                        new BasicParameter() {Name = "VolParamName",Unit = Unit.m3, Value = 1 })
+                        new BasicParameter() {Name = "AreaParamName",Unit = Unit.m2, Amount = 11 },
+                        new BasicParameter() {Name = "VolParamName",Unit = Unit.m3, Amount = 1 })
                 ),
 
             };

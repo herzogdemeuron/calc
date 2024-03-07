@@ -47,10 +47,10 @@ namespace Calc.Core.Objects.Buildups
             MaterialComponentSet.SetSubMaterial(material);
         }
 
-        public BasicParameter GetQuantityParam(Unit unit)
+        public BasicParameter GetAmountParam(Unit unit)
         {
             if (basicParameterSet == null) return null;
-            return basicParameterSet.GetQuantity(unit);
+            return basicParameterSet.GetAmountParam(unit);
         }
 
     }

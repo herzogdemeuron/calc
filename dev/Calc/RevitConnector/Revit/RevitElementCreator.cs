@@ -168,7 +168,7 @@ namespace Calc.RevitConnector.Revit
                 return new BasicParameter()
                 {
                     Name = parameterName,
-                    Value = (double)value,
+                    Amount = (double)value,
                     Unit = unit
                 };
             }

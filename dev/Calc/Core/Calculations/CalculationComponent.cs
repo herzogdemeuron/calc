@@ -2,6 +2,7 @@
 using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Materials;
+using Speckle.Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -15,13 +16,20 @@ namespace Calc.Core.Calculations
     /// </summary>
     public class CalculationComponent
     {
-        public Material Material { get; set; }
-        public double Amount { get; set; }
-        public Unit MaterialUnit { get; set; }
-        public bool HasError { get; set; }
+        [JsonProperty("function")]
+        public string Function { get; set; }
+        [JsonProperty("quantity")]
+        public double Quantity { get; set; }
+        [JsonProperty("gwp")]
         public double GWP { get; set; }
+        [JsonProperty("ge")]
         public double GE { get; set; }
+        [JsonProperty("cost")]
         public double Cost { get; set; }
+        [JsonProperty("calc_builder_materials_id")]
+        public Material Material { get; set; }
+        public Unit MaterialUnit { get => Material.MaterialUnit; }
+        public bool HasError { get; set; }
 
         public static List<CalculationComponent> FromBuildupComponent(BuildupComponent buildupComponent, double totalRatio)
         {
@@ -43,24 +51,24 @@ namespace Calc.Core.Calculations
 
        private static CalculationComponent FromMaterialComponent(MaterialComponent materialComponent, LayerComponent layer, double totalRatio)
         {
-            var unit = materialComponent.SelectedDensity.Unit;
-            var layerQuantityParam = layer.GetQuantityParam(unit);
-            var hasError = layerQuantityParam.ErrorType != null;
-            var layerQuantity = layerQuantityParam.Value ?? 0;
-            layerQuantity = layerQuantity * totalRatio;
+            var unit = materialComponent.Density.Unit;
+            var layerAmountParam = layer.GetAmountParam(unit);
+            var hasError = layerAmountParam.ErrorType != null;
+            var layerAmount = layerAmountParam.Amount ?? 0;
+            layerAmount *= totalRatio;
 
-            var amount = materialComponent.AmountPerUnit * layerQuantity;
+            var quantity = materialComponent.QuantityPerUnit * layerAmount;
             var materialGwp = materialComponent.Material.GWP;
             var materialGe = materialComponent.Material.GE;
 
             return new CalculationComponent
             {
                 Material = materialComponent.Material,
-                Amount = amount,
-                MaterialUnit = unit,
+                Function = materialComponent.Function,
+                Quantity = quantity,
                 HasError = hasError,
-                GWP = materialGwp * amount,
-                GE = materialGe * amount,
+                GWP = materialGwp * quantity,
+                GE = materialGe * quantity,
             };
         }
 

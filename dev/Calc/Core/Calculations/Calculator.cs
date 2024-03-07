@@ -61,7 +61,7 @@ namespace Calc.Core.Calculations
                             continue;
                         }
 
-                        var quantity = param.Value;
+                        var quantity = param.Amount;
                         var calculationResult = GetResult(branch, element, buildup, component, quantity.Value);
 
                         resultList.Add(calculationResult);
@@ -93,11 +93,11 @@ namespace Calc.Core.Calculations
 
                 MaterialName = material.Name,
                 MaterialSource = material.Source,
-                MaterialSourceCode = material.SourceCode,
+                //MaterialSourceCode = material.SourceCode,
                 MaterialCategory = material.Category,
                 MaterialGwp = material.GWP,
                 MaterialUnit = component.MaterialUnit,
-                MaterialAmount = component.Amount,
+                MaterialAmount = component.Quantity,
 
                 Gwp = gwpA123,
                 Ge = geA123,

@@ -11,24 +11,24 @@ namespace Calc.Core.Objects.BasicParameters
         public Unit Unit { get; set; }
         public ParameterErrorType? ErrorType { get; set; }
 
-        private double? _value;
+        private double? _amount;
 
-        public double? Value
+        public double? Amount
         {
             get
             {
-                return _value;
+                return _amount;
             }
             set
             {
 
                 if (value != null)
                 {
-                    _value = Math.Round((double)value, 3);
+                    _amount = Math.Round((double)value, 3);
                 }
                 else
                 {
-                    _value = null;
+                    _amount = null;
                 }
 
             }

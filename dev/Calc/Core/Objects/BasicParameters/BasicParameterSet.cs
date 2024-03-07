@@ -19,7 +19,7 @@ namespace Calc.Core.Objects.BasicParameters
             this.pieceParam = pieceParam;
         }
 
-        public BasicParameter GetQuantity(Unit unit)
+        public BasicParameter GetAmountParam(Unit unit)
         {
             switch (unit)
             {

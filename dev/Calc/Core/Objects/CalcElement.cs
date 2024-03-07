@@ -33,7 +33,7 @@ namespace Calc.Core.Objects
             this._quantities 
                 = new Dictionary<Unit, BasicParameter>
                     {
-                        { Unit.piece, new BasicParameter() { Value = 1, Unit = Unit.piece } },
+                        { Unit.piece, new BasicParameter() { Amount = 1, Unit = Unit.piece } },
                         { Unit.m, lenParam },
                         { Unit.m2, areaParam },
                         { Unit.m3, volParam }

@@ -18,24 +18,32 @@ namespace Calc.Core.Objects.Buildups
             set => SetProperty(ref id, value);
         }
 
-        private string name;
-        [JsonProperty("buildup_name")]
-        public string Name
-        {
-            get => name;
-            set => SetProperty(ref name, value);
-        }
-
         private string source;
-        [JsonProperty("source")]
+        [JsonProperty("standard")]
         public string Source
         {
             get => source;
             set => SetProperty(ref source, value);
         }
 
+        private string name;
+        [JsonProperty("name")]
+        public string Name
+        {
+            get => name;
+            set => SetProperty(ref name, value);
+        }
+
+        private Unit buildupUnit;
+        [JsonProperty("buildup_unit")]
+        public Unit BuildupUnit
+        {
+            get => buildupUnit;
+            set => SetProperty(ref buildupUnit, value);
+        }
+
         private BuildupGroup group;
-        [JsonProperty("group_id")]
+        [JsonProperty("group")]
         public BuildupGroup Group
         {
             get => group;
@@ -46,19 +54,10 @@ namespace Calc.Core.Objects.Buildups
         public string Description { get; set; }
 
         private List<BuildupComponent> components = new List<BuildupComponent>();
-        [JsonProperty("components")]
         public List<BuildupComponent> Components
         {
             get => components;
             set => SetProperty(ref components, value);
-        }
-
-        private List<BuildupComponent> missingComponents = new List<BuildupComponent>();
-        [JsonProperty("missing_components")]
-        public List<BuildupComponent> MissingComponents
-        {
-            get => missingComponents;
-            set => SetProperty(ref missingComponents, value);
         }
 
         [JsonProperty("calculation_components")]
@@ -68,22 +67,11 @@ namespace Calc.Core.Objects.Buildups
         }
 
 
-        private Unit buildupUnit;
-        [JsonProperty("unit")]
-        public Unit BuildupUnit
-        {
-            get => buildupUnit;
-            set => SetProperty(ref buildupUnit, value);
-        }
-
 
         /// <summary>
-        /// receive a set of BuildupComponents from revit/rhino, modify the current buildup components
-        /// current buildup component (source) --> new revit/rhino buildup component (target)
-        /// if source is found, apply it to the target.
-        /// add target to the new buildup components
+        /// receive a set of BuildupComponents from revit/rhino, create the current buildup components
         /// </summary>
-        public void ReceiveBuildupComponents(List<BuildupComponent> newBuildupComponents)
+       /* public void CreateBuildupComponents(List<BuildupComponent> newBuildupComponents)
         {
             var currentComponents = new List<BuildupComponent>(Components);
             Components = newBuildupComponents;
@@ -103,17 +91,17 @@ namespace Calc.Core.Objects.Buildups
                 }
             }
             MissingComponents.AddRange(currentComponents);
-        }
+        }*/
 
         /// <summary>
         /// get the total ratio of the whole buildup when generating calculation components
         /// is 1 divides the quantity of the normalizer of the buildup unit
         /// </summary>
-        private double GetTotalRatio()
+        private double GetQuantityRatio()
         {
             var normalizer = Components.Where(c => c.IsNormalizer).ToList();
             if (normalizer.Count != 1) return 0;
-            var value = normalizer[0].TotalBasicParameterSet.GetQuantity(BuildupUnit).Value;
+            var value = normalizer[0].TotalBasicParameterSet.GetAmountParam(BuildupUnit).Amount;
             if(value.HasValue)
             {
                 return 1/value.Value;
@@ -124,12 +112,12 @@ namespace Calc.Core.Objects.Buildups
         private List<CalculationComponent> GetCalculationComponents()
         {
             var calculationComponents = new List<CalculationComponent>();
-            var totalRatio = GetTotalRatio();
-            if (totalRatio != 0)
+            var quantityRatio = GetQuantityRatio();
+            if (quantityRatio != 0)
             {
                 foreach(var component in Components)
                 {
-                    var calculationComponent = CalculationComponent.FromBuildupComponent(component, totalRatio);
+                    var calculationComponent = CalculationComponent.FromBuildupComponent(component, quantityRatio);
                     calculationComponents.AddRange(calculationComponent);
                 }
             }

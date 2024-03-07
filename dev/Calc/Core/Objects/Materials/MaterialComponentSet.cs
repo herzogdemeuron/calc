@@ -12,6 +12,18 @@ namespace Calc.Core.Objects.Materials
         public MaterialComponent MainMaterialComponent { get; set; }
         public MaterialComponent SubMaterialComponent { get; set; }
 
+        private string functoin;
+        public string Function
+        {
+            get => functoin;
+            set
+            {
+                functoin = value;
+                if (MainMaterialComponent != null) MainMaterialComponent.Function = value;
+                if (SubMaterialComponent != null) SubMaterialComponent.Function = value;
+            }
+        }
+
         public bool HasMainMaterial { get => MainMaterialComponent != null; }
         public bool HasSubMaterial { get => HasMainMaterial && SubMaterialComponent != null; }
 

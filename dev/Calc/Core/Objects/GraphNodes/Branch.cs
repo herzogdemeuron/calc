@@ -22,7 +22,7 @@ namespace Calc.Core.Objects.GraphNodes
         { 
             get => Math.Round(
                 Elements.Sum(
-                    e => e.GetBasicUnitParameter(Unit.m2).Value ?? 0
+                    e => e.GetBasicUnitParameter(Unit.m2).Amount ?? 0
                     ),
                 0); 
         }
@@ -31,7 +31,7 @@ namespace Calc.Core.Objects.GraphNodes
         { 
             get => Math.Round(
                 Elements.Sum(
-                    e => e.GetBasicUnitParameter(Unit.m3).Value ?? 0
+                    e => e.GetBasicUnitParameter(Unit.m3).Amount ?? 0
                     ),
                 0); 
         }
