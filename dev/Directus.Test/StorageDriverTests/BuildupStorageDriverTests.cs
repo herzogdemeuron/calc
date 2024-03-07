@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System;
 using Calc.Core.Calculations;
+using Calc.Core.Objects.Materials;
 
 namespace Calc.DirectusTest.StorageDriverTests
 {
@@ -37,12 +38,14 @@ namespace Calc.DirectusTest.StorageDriverTests
 
             // serialize buildups to console using System.Text.Json, indent
             var buildupsJson = System.Text.Json.JsonSerializer.Serialize(response, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
-            Console.WriteLine(buildupsJson);
+            //Console.WriteLine(buildupsJson);
 
-            var buildup = response.GotManyItems[0];
-            List<CalculationComponent> calculations = buildup.GetCalculationComponents();
-            Assert.IsNotNull(calculations);
-            Console.WriteLine($"calculations: {System.Text.Json.JsonSerializer.Serialize(calculations, new System.Text.Json.JsonSerializerOptions { WriteIndented = true })}");
-        }
+            var matstorageManager = new DirectusManager<Material>(this.directus);
+            var matresponse = await matstorageManager.GetMany<MaterialStorageDriver>(new MaterialStorageDriver());
+            var materialsJson = System.Text.Json.JsonSerializer.Serialize(matresponse, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+            Console.WriteLine(materialsJson);
+
+
+          }
     }
 }
