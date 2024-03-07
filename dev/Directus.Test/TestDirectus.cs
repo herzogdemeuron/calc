@@ -2,15 +2,16 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading.Tasks;
+using Calc.DirectusTest.StorageDriverTests;
 
-namespace Calc.Core.TestIntegration
+namespace Calc.DirectusTest
 {
     [TestClass]
     public class DirectusApiTests
     {
-        private string? _email;
-        private string? _password;
-        private string? _url;
+        private string _email;
+        private string _password;
+        private string _url;
 
         [TestMethod]
         public async Task Directus_Authenticate_AuthenticatedIsTrue()

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Calc.Core.DirectusAPI;
 
-namespace Calc.Core.TestIntegration.Drivers
+namespace CCalc.DirectusTest.StorageDriverTests
 {
     public class TestUtils
     {
