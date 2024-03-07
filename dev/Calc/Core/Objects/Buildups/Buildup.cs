@@ -60,10 +60,12 @@ namespace Calc.Core.Objects.Buildups
             set => SetProperty(ref components, value);
         }
 
+        private List<CalculationComponent> calculationComponents = new List<CalculationComponent>();
         [JsonProperty("calculation_components")]
         public List<CalculationComponent> CalculationComponents
         {
-            get => GetCalculationComponents();
+            get => calculationComponents;
+            set => SetProperty(ref calculationComponents, value);
         }
 
 
@@ -109,7 +111,7 @@ namespace Calc.Core.Objects.Buildups
             return 0;
         }
 
-        private List<CalculationComponent> GetCalculationComponents()
+        public List<CalculationComponent> GetCalculationComponents()
         {
             var calculationComponents = new List<CalculationComponent>();
             var quantityRatio = GetQuantityRatio();

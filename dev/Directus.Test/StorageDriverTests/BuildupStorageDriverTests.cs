@@ -7,6 +7,7 @@ using CCalc.DirectusTest.StorageDriverTests;
 using System.Collections.Generic;
 using System.Text.Json;
 using System;
+using Calc.Core.Calculations;
 
 namespace Calc.DirectusTest.StorageDriverTests
 {
@@ -38,6 +39,10 @@ namespace Calc.DirectusTest.StorageDriverTests
             var buildupsJson = System.Text.Json.JsonSerializer.Serialize(response, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
             Console.WriteLine(buildupsJson);
 
+            var buildup = response.GotManyItems[0];
+            List<CalculationComponent> calculations = buildup.GetCalculationComponents();
+            Assert.IsNotNull(calculations);
+            Console.WriteLine($"calculations: {System.Text.Json.JsonSerializer.Serialize(calculations, new System.Text.Json.JsonSerializerOptions { WriteIndented = true })}");
         }
     }
 }

@@ -19,13 +19,13 @@ namespace Calc.Core.Calculations
         [JsonProperty("function")]
         public string Function { get; set; }
         [JsonProperty("quantity")]
-        public double Quantity { get; set; }
+        public double? Quantity { get; set; }
         [JsonProperty("gwp")]
-        public double GWP { get; set; }
+        public double? GWP { get; set; }
         [JsonProperty("ge")]
-        public double GE { get; set; }
+        public double? GE { get; set; }
         [JsonProperty("cost")]
-        public double Cost { get; set; }
+        public double? Cost { get; set; }
         [JsonProperty("calc_builder_materials_id")]
         public Material Material { get; set; }
         public Unit MaterialUnit { get => Material.MaterialUnit; }
@@ -67,8 +67,8 @@ namespace Calc.Core.Calculations
                 Function = materialComponent.Function,
                 Quantity = quantity,
                 HasError = hasError,
-                GWP = materialGwp * quantity,
-                GE = materialGe * quantity,
+                GWP =materialGwp * quantity,
+                GE = materialGe * quantity
             };
         }
 

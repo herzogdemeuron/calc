@@ -16,23 +16,23 @@ namespace Calc.Core.Objects.Materials
         [JsonProperty("material_category")]
         public string Category { get; set; }
         [JsonProperty("thickness")]
-        public double Thickness { get; set; }
+        public double? Thickness { get; set; }
         [JsonProperty("density")]
-        public double Density { get; set; }
+        public double? Density { get; set; }
         [JsonProperty("material_unit")]
         public Unit MaterialUnit { get; set; }
         [JsonProperty("valid_from")]
-        public int ValidFrom { get; set; }
+        public int? ValidFrom { get; set; }
         [JsonProperty("valid_until")]
-        public int ValidUntil { get; set; }
+        public int? ValidUntil { get; set; }
         [JsonProperty("gwp")]
-        public double GWP { get; set; }
+        public double? GWP { get; set; }
 
         [JsonProperty("ge")]
-        public double GE { get; set; }
+        public double? GE { get; set; }
 
         [JsonProperty("cost")]
-        public double Cost { get; set; }
+        public double? Cost { get; set; }
 
 
         //public string SourceCode { get; set; }

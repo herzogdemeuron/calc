@@ -10,7 +10,7 @@ namespace Calc.Core.DirectusAPI.Drivers
     {
         public string QueryGetMany { get; } = @"
             query GetBuildups {
-                calc_builder_buildups {
+                calc_builder_Buildups {
                     id
                     name
                     standard
@@ -43,7 +43,7 @@ namespace Calc.Core.DirectusAPI.Drivers
                 }
             }";
 
-        [JsonProperty("calc_buildups")]
+        [JsonProperty("calc_builder_Buildups")]
         public List<Buildup> GotManyItems { get; set; }
 
         public Dictionary<string, object> GetVariables()

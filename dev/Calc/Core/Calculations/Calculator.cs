@@ -95,13 +95,13 @@ namespace Calc.Core.Calculations
                 MaterialSource = material.Source,
                 //MaterialSourceCode = material.SourceCode,
                 MaterialCategory = material.Category,
-                MaterialGwp = material.GWP,
+                MaterialGwp = material.GWP??0,
                 MaterialUnit = component.MaterialUnit,
-                MaterialAmount = component.Quantity,
+                MaterialAmount = component.Quantity??0,
 
-                Gwp = gwpA123,
-                Ge = geA123,
-                Cost = cost,
+                Gwp = gwpA123??0,
+                Ge = geA123??0,
+                Cost = cost??0,
                 Color = branch.HslColor
             };
             return calculationResult;
