@@ -111,7 +111,7 @@ namespace Calc.Core.Objects.Buildups
             return 0;
         }
 
-        public List<CalculationComponent> GetCalculationComponents()
+        public List<CalculationComponent> UpdateCalculationComponents()
         {
             var calculationComponents = new List<CalculationComponent>();
             var quantityRatio = GetQuantityRatio();

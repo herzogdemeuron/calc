@@ -9,13 +9,28 @@ using System.Text.Json;
 using System;
 using Calc.Core.Calculations;
 using Calc.Core.Objects.Materials;
+using GraphQL.Client.Http;
+using Polly;
 
 namespace Calc.DirectusTest.StorageDriverTests
 {
+
+
     [TestClass]
     public class BuildupStorageDriverTests
     {
         private Directus directus;
+        private readonly Polly.Retry.AsyncRetryPolicy _graphqlRetry = Policy.Handle<GraphQLHttpRequestException>()
+                .WaitAndRetryAsync(4, retryAttempt => TimeSpan.FromSeconds(5),
+                (exception, timeSpan, retryCount, context) =>
+                {
+
+                    if (retryCount == 4)
+                    {
+                        Environment.Exit(1);
+                    }
+                });
+
 
         [TestInitialize]
         public async Task Initialize()
@@ -38,14 +53,49 @@ namespace Calc.DirectusTest.StorageDriverTests
 
             // serialize buildups to console using System.Text.Json, indent
             var buildupsJson = System.Text.Json.JsonSerializer.Serialize(response, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
-            //Console.WriteLine(buildupsJson);
+            Console.WriteLine(buildupsJson);
 
-            var matstorageManager = new DirectusManager<Material>(this.directus);
+           /* var matstorageManager = new DirectusManager<Material>(this.directus);
             var matresponse = await matstorageManager.GetMany<MaterialStorageDriver>(new MaterialStorageDriver());
-            var materialsJson = System.Text.Json.JsonSerializer.Serialize(matresponse, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
-            Console.WriteLine(materialsJson);
+            var materialsJson = System.Text.Json.JsonSerializer.Serialize(matresponse, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });*/
+            //Console.WriteLine(materialsJson);
+        }
 
+        [TestMethod]
+        public async Task CreateSingleBuildup()
+        {
+            var storageManager = new DirectusManager<Buildup>(this.directus);
+            var buildup = MockBuildup();
+            var buildupDriver = new BuildupStorageDriver();
+            buildupDriver = await _graphqlRetry.ExecuteAsync(() =>
+                    storageManager.GetMany<BuildupStorageDriver>(buildupDriver));
 
-          }
+            buildupDriver.SendItem = buildup;
+
+            var response = await storageManager.CreateSingle<BuildupStorageDriver>(buildupDriver);
+            Assert.IsNotNull(response.CreatedItem);
+        }
+
+        private static Buildup MockBuildup()
+        {
+            return new Buildup
+            {
+                Name = "TestBuildup",
+                Source = "TestStandard",
+                BuildupUnit = Core.Objects.Unit.m,
+                Description = "TestDescription ccc",
+                CalculationComponents = new List<CalculationComponent>
+                {
+                    new CalculationComponent
+                    {
+                        Function = "TestFunction",
+                        Quantity = 1,
+                        GWP = 1,
+                        GE = 1,
+                        Material = new Material { Id = 7 }
+                    }
+                }
+            };
+        }
     }
 }

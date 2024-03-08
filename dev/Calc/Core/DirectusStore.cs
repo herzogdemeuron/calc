@@ -10,6 +10,7 @@ using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Mappings;
 using Calc.Core.Objects.Results;
+using Calc.Core.Objects.Materials;
 
 namespace Calc.Core
 {
@@ -17,9 +18,8 @@ namespace Calc.Core
     {
         public List<Project> ProjectsAll { get { return this.ProjectDriver.GotManyItems; } }
         public Project ProjectSelected { get; set; } // the current project
-
+        public List<Material> MaterialsAll { get { return this.MaterialDriver.GotManyItems; } }
         public List<Buildup> BuildupsAll { get { return this.BuildupDriver.GotManyItems; } }
-
         public List<Mapping> MappingsAll { get { return this.MappingDriver.GotManyItems; } }
         private Mapping _mappingSelected = null;
         public Mapping MappingSelected
@@ -66,12 +66,14 @@ namespace Calc.Core
 
         private Directus Directus { get; set; }
         private DirectusManager<Project> ProjectManager { get; set; }
+        private DirectusManager<Material> MaterialManager { get; set; }
         private DirectusManager<Buildup> BuildupManager { get; set; }
         private DirectusManager<Mapping> MappingManager { get; set; }
         private DirectusManager<Forest> ForestManager { get; set; }
         private DirectusManager<Snapshot> SnapshotManager { get; set; }
 
         private ProjectStorageDriver ProjectDriver { get; set; }
+        private MaterialStorageDriver MaterialDriver { get; set; }
         private BuildupStorageDriver BuildupDriver { get; set; }
         private MappingStorageDriver MappingDriver { get; set; }
         private ForestStorageDriver ForestDriver { get; set; }
@@ -98,12 +100,14 @@ namespace Calc.Core
             this.Directus = directus;
 
             this.ProjectManager = new DirectusManager<Project>(this.Directus);
+            this.MaterialManager = new DirectusManager<Material>(this.Directus);
             this.BuildupManager = new DirectusManager<Buildup>(this.Directus);
             this.MappingManager = new DirectusManager<Mapping>(this.Directus);
             this.ForestManager = new DirectusManager<Forest>(this.Directus);
             this.SnapshotManager = new DirectusManager<Snapshot>(this.Directus);
 
             this.ProjectDriver = new ProjectStorageDriver();
+            this.MaterialDriver = new MaterialStorageDriver();
             this.BuildupDriver = new BuildupStorageDriver();
             this.MappingDriver = new MappingStorageDriver();
             this.ForestDriver = new ForestStorageDriver();
@@ -125,18 +129,27 @@ namespace Calc.Core
             }
         }
 
+        public void ReferenceMaterialsToBuildups()
+        {
+            BuildupDriver.ReferenceMaterials(MaterialDriver.GotManyItems);
+        }
+
         public async Task<bool> GetOtherData()
         {
             CheckIfProjectSelected();
 
             try
             {
+                this.MaterialDriver = await _graphqlRetry.ExecuteAsync(() =>
+                    this.MaterialManager.GetMany<MaterialStorageDriver>(this.MaterialDriver));
                 this.BuildupDriver = await _graphqlRetry.ExecuteAsync(() => 
                     this.BuildupManager.GetMany<BuildupStorageDriver>(this.BuildupDriver));
                 this.MappingDriver = await _graphqlRetry.ExecuteAsync(() => 
                     this.MappingManager.GetMany<MappingStorageDriver>(this.MappingDriver));
                 this.ForestDriver = await _graphqlRetry.ExecuteAsync(() => 
                     this.ForestManager.GetMany<ForestStorageDriver>(this.ForestDriver));
+
+                ReferenceMaterialsToBuildups();
                 return true;
             }
             catch (Exception e)

@@ -26,10 +26,20 @@ namespace Calc.Core.Calculations
         public double? GE { get; set; }
         [JsonProperty("cost")]
         public double? Cost { get; set; }
+
         [JsonProperty("calc_builder_materials_id")]
+        public MaterialReference MaterialReference { get; set; }
         public Material Material { get; set; }
-        public Unit MaterialUnit { get => Material.MaterialUnit; }
+        public Unit MaterialUnit { get; set; }
         public bool HasError { get; set; }
+
+        public void ReferenceMaterial(List<Material> materials)
+        {
+            if (MaterialReference != null)
+            {
+                Material = materials.Find(m => m.Id == MaterialReference.Id);
+            }
+        }
 
         public static List<CalculationComponent> FromBuildupComponent(BuildupComponent buildupComponent, double totalRatio)
         {

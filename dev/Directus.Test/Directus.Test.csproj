@@ -66,6 +66,12 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Polly, Version=7.0.0.0, Culture=neutral, PublicKeyToken=c8a3ffc3f8f825cc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Polly.7.1.0\lib\netstandard2.0\Polly.dll</HintPath>
+    </Reference>
+    <Reference Include="Polly.Extensions.Http, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c8a3ffc3f8f825cc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Polly.Extensions.Http.3.0.0\lib\netstandard2.0\Polly.Extensions.Http.dll</HintPath>
+    </Reference>
     <Reference Include="Speckle.Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Speckle.Newtonsoft.Json.13.0.2\lib\net45\Speckle.Newtonsoft.Json.dll</HintPath>
     </Reference>
