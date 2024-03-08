@@ -10,9 +10,12 @@ namespace Calc.Core.Objects.Buildups
         [JsonProperty("group_name")]
         public string Name { get; set; }
 
+        [JsonProperty("id")]
+        public int Id { get; set; }
+
         public override string ToString()
         {
-            return $"Group Name: {Name}";
+            return $"Buildup Group Name: {Name}";
         }
     }
 }

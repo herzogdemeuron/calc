@@ -26,7 +26,7 @@ public class MockMaterials
             Cost = 1.3m,
             MaterialUnit = Unit.CubicMeter,
             Category = "Category 1",
-            Source = "Source 1",
+            Standard = "Source 1",
             SourceCode = "Source Code 1"
         });
         Materials.Add(new Material
@@ -38,7 +38,7 @@ public class MockMaterials
             Cost = 2.3m,
             MaterialUnit = Unit.Kilogram,
             Category = "Category 2",
-            Source = "Source 2",
+            Standard = "Source 2",
             SourceCode = "Source Code 2"
         });
         Materials.Add(new Material
@@ -50,7 +50,7 @@ public class MockMaterials
             Cost = 3.3m,
             MaterialUnit = Unit.SquareMeter,
             Category = "Category 3",
-            Source = "Source 3",
+            Standard = "Source 3",
             SourceCode = "Source Code 3"
         });
     }

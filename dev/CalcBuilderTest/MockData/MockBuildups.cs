@@ -18,7 +18,7 @@ namespace CalcBuilderTest
                 {
                     Id = 1,
                     Name = "BuildupName1",
-                    Source = "Source1",
+                    Standard = "Source1",
                     BuildupUnit = Unit.m2,
                     Group = new BuildupGroup {Name = "BuildupGroup1" },
                     Description = "This is Buildup1 Description.",
@@ -48,7 +48,7 @@ namespace CalcBuilderTest
                 {
                     Id = 2,
                     Name = "BuildupName2",
-                    Source = "Source1",
+                    Standard = "Source1",
                     BuildupUnit = Unit.m2,
                     Group = new BuildupGroup {Name = "BuildupGroup2" },
                     Description = "This is Buildup2 Description.",

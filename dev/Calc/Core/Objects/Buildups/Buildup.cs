@@ -1,4 +1,5 @@
 ﻿using Calc.Core.Calculations;
+using Calc.Core.Objects.Materials;
 using Speckle.Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,12 +19,12 @@ namespace Calc.Core.Objects.Buildups
             set => SetProperty(ref id, value);
         }
 
-        private string source;
+        private Standard standard;
         [JsonProperty("standard")]
-        public string Source
+        public Standard Standard
         {
-            get => source;
-            set => SetProperty(ref source, value);
+            get => standard;
+            set => SetProperty(ref standard, value);
         }
 
         private string name;
@@ -50,6 +51,7 @@ namespace Calc.Core.Objects.Buildups
             set => SetProperty(ref group, value);
         }
 
+
         [JsonProperty("description")]
         public string Description { get; set; }
 
@@ -58,6 +60,22 @@ namespace Calc.Core.Objects.Buildups
         {
             get => components;
             set => SetProperty(ref components, value);
+        }
+
+        public void LinkGroup(List<BuildupGroup> buildupGroups)
+        {
+            if (Group != null)
+            {
+                Group = buildupGroups.Find(g => g.Id == Group.Id);
+            }
+        }
+
+        public void LinkStandard(List<Standard> standards)
+        {
+            if (Standard != null)
+            {
+                Standard = standards.Find(s => s.Id == Standard.Id);
+            }
         }
 
         private List<CalculationComponent> calculationComponents = new List<CalculationComponent>();

@@ -12,7 +12,7 @@ namespace Calc.Core.Objects.Materials
         [JsonProperty("name")]
         public string Name { get; set; }
         [JsonProperty("standard")]
-        public string Source { get; set; }
+        public Standard Standard { get; set; }
         [JsonProperty("material_category")]
         public string Category { get; set; }
         [JsonProperty("thickness")]
@@ -36,6 +36,14 @@ namespace Calc.Core.Objects.Materials
 
 
         //public string SourceCode { get; set; }
+
+        public void LinkStandard(List<Standard> standards)
+        {
+            if (Standard != null)
+            {
+                Standard = standards.Find(s => s.Id == Standard.Id);
+            }
+        }
 
         public override string ToString()
         {

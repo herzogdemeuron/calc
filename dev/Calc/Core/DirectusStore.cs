@@ -18,7 +18,9 @@ namespace Calc.Core
     {
         public List<Project> ProjectsAll { get { return this.ProjectDriver.GotManyItems; } }
         public Project ProjectSelected { get; set; } // the current project
+        public List<Standard> StandardsAll { get { return this.StandardDriver.GotManyItems; } }
         public List<Material> MaterialsAll { get { return this.MaterialDriver.GotManyItems; } }
+        public List<BuildupGroup> BuildupGroupsAll { get { return this.BuildupGroupDriver.GotManyItems; } }
         public List<Buildup> BuildupsAll { get { return this.BuildupDriver.GotManyItems; } }
         public List<Mapping> MappingsAll { get { return this.MappingDriver.GotManyItems; } }
         private Mapping _mappingSelected = null;
@@ -66,14 +68,18 @@ namespace Calc.Core
 
         private Directus Directus { get; set; }
         private DirectusManager<Project> ProjectManager { get; set; }
+        private DirectusManager<Standard> StandardManager { get; set; }
         private DirectusManager<Material> MaterialManager { get; set; }
+        private DirectusManager<BuildupGroup> BuildupGroupManager { get; set; }
         private DirectusManager<Buildup> BuildupManager { get; set; }
         private DirectusManager<Mapping> MappingManager { get; set; }
         private DirectusManager<Forest> ForestManager { get; set; }
         private DirectusManager<Snapshot> SnapshotManager { get; set; }
 
         private ProjectStorageDriver ProjectDriver { get; set; }
+        private StandardStorageDriver StandardDriver { get; set; }
         private MaterialStorageDriver MaterialDriver { get; set; }
+        private BuildupGroupStorageDriver BuildupGroupDriver { get; set; }
         private BuildupStorageDriver BuildupDriver { get; set; }
         private MappingStorageDriver MappingDriver { get; set; }
         private ForestStorageDriver ForestDriver { get; set; }
@@ -103,6 +109,7 @@ namespace Calc.Core
             this.MaterialManager = new DirectusManager<Material>(this.Directus);
             this.BuildupManager = new DirectusManager<Buildup>(this.Directus);
             this.MappingManager = new DirectusManager<Mapping>(this.Directus);
+            this.BuildupGroupManager = new DirectusManager<BuildupGroup>(this.Directus);
             this.ForestManager = new DirectusManager<Forest>(this.Directus);
             this.SnapshotManager = new DirectusManager<Snapshot>(this.Directus);
 
@@ -129,9 +136,16 @@ namespace Calc.Core
             }
         }
 
-        public void ReferenceMaterialsToBuildups()
+        /// <summary>
+        /// the first query got materials, buildups and some other fields with id separately
+        /// link the fields with the right objects with id
+        /// </summary>
+        public void LinkFields()
         {
-            BuildupDriver.ReferenceMaterials(MaterialDriver.GotManyItems);
+            MaterialDriver.LinkStandards(StandardDriver.GotManyItems);
+            BuildupDriver.LinkStandards(StandardDriver.GotManyItems);
+            BuildupDriver.LinkMaterials(MaterialDriver.GotManyItems);
+            BuildupDriver.LinkBuildupGroups(BuildupGroupDriver.GotManyItems);
         }
 
         public async Task<bool> GetOtherData()
@@ -140,16 +154,25 @@ namespace Calc.Core
 
             try
             {
+                this.StandardDriver = await _graphqlRetry.ExecuteAsync(() =>
+                    this.StandardManager.GetMany<StandardStorageDriver>(this.StandardDriver));
+
                 this.MaterialDriver = await _graphqlRetry.ExecuteAsync(() =>
                     this.MaterialManager.GetMany<MaterialStorageDriver>(this.MaterialDriver));
+
+                this.BuildupGroupDriver = await _graphqlRetry.ExecuteAsync(() =>
+                    this.BuildupGroupManager.GetMany<BuildupGroupStorageDriver>(this.BuildupGroupDriver));
+
                 this.BuildupDriver = await _graphqlRetry.ExecuteAsync(() => 
                     this.BuildupManager.GetMany<BuildupStorageDriver>(this.BuildupDriver));
+
                 this.MappingDriver = await _graphqlRetry.ExecuteAsync(() => 
                     this.MappingManager.GetMany<MappingStorageDriver>(this.MappingDriver));
+
                 this.ForestDriver = await _graphqlRetry.ExecuteAsync(() => 
                     this.ForestManager.GetMany<ForestStorageDriver>(this.ForestDriver));
 
-                ReferenceMaterialsToBuildups();
+                LinkFields();
                 return true;
             }
             catch (Exception e)

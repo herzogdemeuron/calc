@@ -28,16 +28,15 @@ namespace Calc.Core.Calculations
         public double? Cost { get; set; }
 
         [JsonProperty("calc_builder_materials_id")]
-        public MaterialReference MaterialReference { get; set; }
         public Material Material { get; set; }
         public Unit MaterialUnit { get; set; }
         public bool HasError { get; set; }
 
-        public void ReferenceMaterial(List<Material> materials)
+        public void LinkMaterial(List<Material> materials)
         {
-            if (MaterialReference != null)
+            if (Material != null)
             {
-                Material = materials.Find(m => m.Id == MaterialReference.Id);
+                Material = materials.Find(m => m.Id == Material.Id);
             }
         }
 

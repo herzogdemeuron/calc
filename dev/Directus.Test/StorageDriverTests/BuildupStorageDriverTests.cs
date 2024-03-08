@@ -81,7 +81,7 @@ namespace Calc.DirectusTest.StorageDriverTests
             return new Buildup
             {
                 Name = "TestBuildup",
-                Source = "TestStandard",
+                Standard = new Standard { Id = 1 },
                 BuildupUnit = Core.Objects.Unit.m,
                 Description = "TestDescription ccc",
                 CalculationComponents = new List<CalculationComponent>

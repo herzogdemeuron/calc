@@ -15,7 +15,9 @@ namespace Calc.Core.DirectusAPI.Drivers
                     id
                     name
                     material_category
-                    standard
+                    standard {
+                        id
+                    }
                     thickness
                     valid_from
                     valid_until
@@ -26,6 +28,14 @@ namespace Calc.Core.DirectusAPI.Drivers
                     cost
                 }
             }";
+
+        public void LinkStandards(List<Standard> standards)
+        {
+            foreach (var material in GotManyItems)
+            {
+                material.LinkStandard(standards);
+            }
+        }
 
         [JsonProperty("calc_builder_materials")]
         public List<Material> GotManyItems { get; set; }

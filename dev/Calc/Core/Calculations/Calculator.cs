@@ -92,7 +92,7 @@ namespace Calc.Core.Calculations
                 BuildupUnit = buildup.BuildupUnit,
 
                 MaterialName = material.Name,
-                MaterialSource = material.Source,
+                MaterialSource = material.Standard.Name,
                 //MaterialSourceCode = material.SourceCode,
                 MaterialCategory = material.Category,
                 MaterialGwp = material.GWP??0,

@@ -17,10 +17,12 @@ namespace Calc.Core.DirectusAPI.Drivers
                 calc_builder_buildups {
                     id
                     name
-                    standard
+                    standard {
+                        id
+                    }
                     buildup_unit
                     group {
-                        group_name
+                        id
                     }
                     description
                     calculation_components {
@@ -61,16 +63,32 @@ namespace Calc.Core.DirectusAPI.Drivers
         [JsonProperty("update_calc_builder_buildups_item")]
         public Buildup UpdatedItem { get; set; }
 
-        public void ReferenceMaterials(List<Material> materials)
+        public void LinkMaterials(List<Material> materials)
         {
             foreach (var buildup in GotManyItems)
             {
                 foreach (var calculationComponent in buildup.CalculationComponents)
                 {
-                    calculationComponent.ReferenceMaterial(materials);
+                    calculationComponent.LinkMaterial(materials);
                 }
             }
         }
+        public void LinkBuildupGroups(List<BuildupGroup> buildupGroups)
+        {
+            foreach (var buildup in GotManyItems)
+            {
+                buildup.LinkGroup(buildupGroups);
+            }
+        }
+
+        public void LinkStandards(List<Standard> standards)
+        {
+            foreach (var buildup in GotManyItems)
+            {
+                buildup.LinkStandard(standards);
+            }
+        }
+
         public Dictionary<string, object> GetVariables()
         {
             if (this.SendItem == null)
@@ -80,7 +98,7 @@ namespace Calc.Core.DirectusAPI.Drivers
             var input = new
             {
                 name = SendItem.Name,
-                standard = SendItem.Source,
+                standard = SendItem.Standard,
                 buildup_unit = SendItem.BuildupUnit,
                 //group = SendItem.Group?.Id ?? 0,
                 description = SendItem.Description,
