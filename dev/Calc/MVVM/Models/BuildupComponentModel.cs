@@ -12,11 +12,7 @@ using System.Windows.Media;
 
 namespace Calc.MVVM.Models
 {
-    public enum NodeError
-    {
-        DoorOrWindowWithoutArea
-    }
-    public class NodeModel : INotifyPropertyChanged
+    public class BuildupComponentModel : INotifyPropertyChanged
     {
         public string Name { get => GetNodeName(); }
         public string BranchParameterName { get => GetParameterName(); }
@@ -82,7 +78,7 @@ namespace Calc.MVVM.Models
             }
         }
 
-        private Color IdentifierColor
+        public Color IdentifierColor
         {
             get
             {
@@ -115,7 +111,7 @@ namespace Calc.MVVM.Models
             }
         }
 
-        public NodeModel(IGraphNode node, NodeTreeModel parentTreeView = null, NodeModel parentNodeItem = null)
+        public BuildupComponentModel(IGraphNode node, NodeTreeModel parentTreeView = null, NodeModel parentNodeItem = null)
         {
             Host = node;
             ParentTreeView = parentTreeView;

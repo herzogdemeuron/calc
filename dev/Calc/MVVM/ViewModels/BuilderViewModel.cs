@@ -26,12 +26,10 @@ namespace Calc.MVVM.ViewModels
             VisibilityVM = new VisibilityViewModel();
 
             LoadingVM = new LoadingViewModel(store);
-            ForestVM = new ForestViewModel(store, elementCreator);
-            MappingVM = new MappingViewModel(store);
+           
             NewMappingVM = new NewMappingViewModel(store);
             NodeTreeVM = new NodeTreeModel(store, visualizer);
 
-            MappingErrorVM = new MappingErrorViewModel(MappingVM);
             CalculationVM = new CalculationViewModel(NodeTreeVM);
             SavingVM = new SavingViewModel(CalculationVM);
         }
