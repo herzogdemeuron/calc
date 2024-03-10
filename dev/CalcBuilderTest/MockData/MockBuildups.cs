@@ -22,7 +22,7 @@ namespace CalcBuilderTest
                     BuildupUnit = Unit.m2,
                     Group = new BuildupGroup {Name = "BuildupGroup1" },
                     Description = "This is Buildup1 Description.",
-                    Components = new ObservableCollection<BuildupComponent>
+                    BuildupComponents = new ObservableCollection<BuildupComponent>
                     {
                         new BuildupComponent
                         {
@@ -52,7 +52,7 @@ namespace CalcBuilderTest
                     BuildupUnit = Unit.m2,
                     Group = new BuildupGroup {Name = "BuildupGroup2" },
                     Description = "This is Buildup2 Description.",
-                    Components = new ObservableCollection<BuildupComponent>
+                    BuildupComponents = new ObservableCollection<BuildupComponent>
                     {
                         new BuildupComponent
                         {

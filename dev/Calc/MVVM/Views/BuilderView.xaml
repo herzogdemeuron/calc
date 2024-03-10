@@ -11,7 +11,7 @@
         Closing="WindowClosing"
         mc:Ignorable="d"
         Height="800" MinHeight="600"
-        Width="900" MinWidth="750"
+        Width="800" MinWidth="600"
         WindowStartupLocation="CenterScreen"
 
         Icon="pack://application:,,,/CalcMVVM;component/Resources/icon-01.png"
@@ -181,21 +181,22 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Border Grid.Row="2"
-                        Grid.ColumnSpan="4"
+                        Grid.ColumnSpan="5"
                         BorderBrush="Silver"
                         BorderThickness="1"
                         CornerRadius="4">
                     <TreeView x:Name="TreeView"
                             Background="Transparent"
                             BorderThickness="0"
-                            ItemsSource="{Binding NodeTreeVM.NodeSource}"
+                            ItemsSource="{Binding BuildupCreationVM.Buildup.BuildupComponents}"
                             TreeViewItem.Selected="TreeViewItemSelected"
                             MouseLeftButtonDown="SideClickDown"
                             ItemContainerStyle="{StaticResource TreeViewItemStyle}">
                         <TreeView.ItemTemplate>
-                            <HierarchicalDataTemplate ItemsSource="{Binding SubNodeItems}">
+                            <HierarchicalDataTemplate ItemsSource="{Binding Layers}">
                                 <ContentControl Content="{Binding}"
                                     ContentTemplate="{StaticResource BranchItemTemplate}">
                                     <ContentControl.ToolTip>
@@ -211,13 +212,13 @@
                     Grid.Column="0"
                     Grid.Row="0"
                     Content="Select"
-                    Width="80"
-                    Height="40"
+                    Width="60"
+                    Height="25"
                         HorizontalAlignment="Left"
-                    Click="UpdateRevitClicked"
+                    Click="SelectClicked"
                     />
 
-                <Border Grid.ColumnSpan="3" Grid.Column="1" Grid.Row="0" CornerRadius="4" Background="LightGray">
+                <Border Grid.ColumnSpan="4" Grid.Column="1" Grid.Row="0" CornerRadius="4" Background="LightGray">
                     <Border BorderThickness="0" CornerRadius="4">
                         <Border.Background>
                             <SolidColorBrush Color="{Binding NodeTreeVM.SelectedNodeItem.LabelColor}"/>
@@ -231,29 +232,37 @@
                     <TextBlock Text="Count"
                                FontWeight="SemiBold"
                                HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding CalculationVM.CurrentNodeItem.Host.Elements.Count}"
+                    <TextBlock Text="{Binding BuildupCreationVM.CountString}"
                                HorizontalAlignment="Center"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="0"
                             Grid.Column="2"
                             Margin="0,5,0,0">
-                    <TextBlock Text="Area"
+                    <TextBlock Text="Length"
                                FontWeight="SemiBold"
                                HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding CalculationVM.CurrentNodeItem.Host.TotalArea,
-                                        StringFormat={}{0} m²}"
-                               HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding BuildupCreationVM.LengthString}"
+                                HorizontalAlignment="Center"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="0"
                             Grid.Column="3"
                             Margin="0,5,0,0">
+                    <TextBlock Text="Area"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding BuildupCreationVM.AreaString}"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="0"
+                            Grid.Column="4"
+                            Margin="0,5,0,0">
                     <TextBlock Text="Volume"
                                FontWeight="SemiBold"
                                HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding CalculationVM.CurrentNodeItem.Host.TotalVolume,
-                                              StringFormat={}{0} m³}"
+                    <TextBlock Text="{Binding BuildupCreationVM.VolumeString}"
                                HorizontalAlignment="Center"/>
                 </StackPanel>
 

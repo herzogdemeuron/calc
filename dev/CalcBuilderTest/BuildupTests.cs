@@ -15,7 +15,7 @@ namespace CalcTest
             var buildup = buildups[0];
             var layerCompos = MockBuildupComponents.GetLayerComponents();
             buildup.ApplyBuildupComponents(layerCompos);
-            Assert.AreEqual(layerCompos.Count, buildup.Components.Count);
+            Assert.AreEqual(layerCompos.Count, buildup.BuildupComponents.Count);
 
         }
     }

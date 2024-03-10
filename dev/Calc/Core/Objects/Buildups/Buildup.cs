@@ -55,11 +55,11 @@ namespace Calc.Core.Objects.Buildups
         [JsonProperty("description")]
         public string Description { get; set; }
 
-        private List<BuildupComponent> components = new List<BuildupComponent>();
-        public List<BuildupComponent> Components
+        private List<BuildupComponent> buildupComponents = new List<BuildupComponent>();
+        public List<BuildupComponent> BuildupComponents
         {
-            get => components;
-            set => SetProperty(ref components, value);
+            get => buildupComponents;
+            set => SetProperty(ref buildupComponents, value);
         }
 
         public void LinkGroup(List<BuildupGroup> buildupGroups)
@@ -119,9 +119,9 @@ namespace Calc.Core.Objects.Buildups
         /// </summary>
         private double GetQuantityRatio()
         {
-            var normalizer = Components.Where(c => c.IsNormalizer).ToList();
+            var normalizer = BuildupComponents.Where(c => c.IsNormalizer).ToList();
             if (normalizer.Count != 1) return 0;
-            var value = normalizer[0].TotalBasicParameterSet.GetAmountParam(BuildupUnit).Amount;
+            var value = normalizer[0].BasicParameterSet.GetAmountParam(BuildupUnit).Amount;
             if(value.HasValue)
             {
                 return 1/value.Value;
@@ -135,7 +135,7 @@ namespace Calc.Core.Objects.Buildups
             var quantityRatio = GetQuantityRatio();
             if (quantityRatio != 0)
             {
-                foreach(var component in Components)
+                foreach(var component in BuildupComponents)
                 {
                     var calculationComponent = CalculationComponent.FromBuildupComponent(component, quantityRatio);
                     calculationComponents.AddRange(calculationComponent);
@@ -149,7 +149,7 @@ namespace Calc.Core.Objects.Buildups
             Id = other.Id;
             Name = other.Name;
             Group = other.Group;
-            Components = other.Components;
+            BuildupComponents = other.BuildupComponents;
             BuildupUnit = other.BuildupUnit;
         }
 
@@ -160,7 +160,7 @@ namespace Calc.Core.Objects.Buildups
                 Id = Id,
                 Name = Name,
                 Group = Group,
-                Components = Components,
+                BuildupComponents = BuildupComponents,
                 BuildupUnit = BuildupUnit
             };
         }

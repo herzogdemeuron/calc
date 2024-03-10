@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Materials;
@@ -10,19 +11,20 @@ namespace Calc.Core.Objects.Buildups
     /// A layer or component of an element type in revit/rhino.
     /// A LayerComponent must have mapped infos，could have Ids to be targeted.
     /// </summary>
-    public class LayerComponent
+    public class LayerComponent : INotifyPropertyChanged, ICalcComponent
     {
         public string TargetMaterialName { get; }
         public MaterialComponentSet MaterialComponentSet { get; set; }
-        private BasicParameterSet basicParameterSet;
-
+        public BasicParameterSet BasicParameterSet { get; set; }
         public LayerComponent(string targetMaterialName, BasicParameterSet basicParameterSet = null)
         {
             TargetMaterialName = targetMaterialName;
-            this.basicParameterSet = basicParameterSet;
+            BasicParameterSet = basicParameterSet;
         }
 
-        public bool CheckSource(LayerComponent layerComponent)
+        
+
+/*        public bool CheckSource(LayerComponent layerComponent)
         {
             return TargetMaterialName == layerComponent.TargetMaterialName;
         }
@@ -31,10 +33,10 @@ namespace Calc.Core.Objects.Buildups
         {
             MaterialComponentSet = layerComponent.MaterialComponentSet;
         }
-
+*/
         public void ResetTarget() // is this needed?
         {
-            basicParameterSet = null;
+            BasicParameterSet = null;
         }
 
         public void SetMainMaterial(Material material)
@@ -49,8 +51,15 @@ namespace Calc.Core.Objects.Buildups
 
         public BasicParameter GetAmountParam(Unit unit)
         {
-            if (basicParameterSet == null) return null;
-            return basicParameterSet.GetAmountParam(unit);
+            if (BasicParameterSet == null) return null;
+            return BasicParameterSet.GetAmountParam(unit);
+        }
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
     }

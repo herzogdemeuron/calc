@@ -1,5 +1,6 @@
 ﻿using Calc.Core.Color;
 using Calc.Core.Objects;
+using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.GraphNodes;
 using Calc.MVVM.Helpers;
 using Calc.MVVM.ViewModels;
@@ -12,28 +13,28 @@ using System.Windows.Media;
 
 namespace Calc.MVVM.Models
 {
-    public class BuildupComponentModel : INotifyPropertyChanged
+    public class LayerComponentModel : INotifyPropertyChanged
     {
         public string Name { get => GetNodeName(); }
         public string BranchParameterName { get => GetParameterName(); }
         public bool? BranchParameterIsInstance { get => CheckIfParameterIsInstance(); }
         public bool IsBranch { get => CheckIfBranch(); } // is a branch but not a tree
-        public bool IsBrokenNode => Host is Branch && (Host as Branch).ParentForest == null; // mark as broken if parent forest is null
+        public bool IsBrokenNode => BuildupComponent is Branch && (BuildupComponent as Branch).ParentForest == null; // mark as broken if parent forest is null
         public NodeTreeModel ParentTreeView { get; set; }
         public NodeModel ParentNodeItem { get; private set; }
         public ObservableCollection<NodeModel> SubNodeItems { get; }
         public BuildupViewModel NodeBuildupItem { get; set; }
 
-        private IGraphNode host;
-        public IGraphNode Host
+        private BuildupComponent buildupComponent;
+        public BuildupComponent BuildupComponent
         {
-            get { return host; }
+            get { return buildupComponent; }
             set
             {
-                if (host != value)
+                if (buildupComponent != value)
                 {
-                    host = value;
-                    OnPropertyChanged(nameof(Host));
+                    buildupComponent = value;
+                    OnPropertyChanged(nameof(BuildupComponent));
                     OnPropertyChanged(nameof(LabelColor));
                     OnPropertyChanged(nameof(CategorizedCalculation));
                 }
@@ -45,7 +46,7 @@ namespace Calc.MVVM.Models
             get
             {
                 var calculation = new Dictionary<string, double>();
-                if (Host != null && Host is Branch branch)
+                if (BuildupComponent != null && BuildupComponent is Branch branch)
                 {
                     var results = branch.CalculationResults;
                     foreach (var result in results)
@@ -82,7 +83,7 @@ namespace Calc.MVVM.Models
         {
             get
             {
-                var hsl = Host.HslColor;
+                var hsl = BuildupComponent.HslColor;
                 var rgb = CalcColorConverter.HslToRgb(hsl);
                 return Color.FromArgb(255, rgb.R, rgb.G, rgb.B);
             }
@@ -100,7 +101,7 @@ namespace Calc.MVVM.Models
         {
             get
             {
-                if (LabelColorVisible || Host is Forest)
+                if (LabelColorVisible || BuildupComponent is Forest)
                 {
                     return IdentifierColor;
                 }
@@ -113,7 +114,7 @@ namespace Calc.MVVM.Models
 
         public BuildupComponentModel(IGraphNode node, NodeTreeModel parentTreeView = null, NodeModel parentNodeItem = null)
         {
-            Host = node;
+            BuildupComponent = node;
             ParentTreeView = parentTreeView;
             SubNodeItems = new ObservableCollection<NodeModel>();
             NodeBuildupItem = new BuildupViewModel(this);
@@ -149,21 +150,9 @@ namespace Calc.MVVM.Models
             }
         }
 
-        public string GetNodeName()
-        {
-            if (Host is Tree tree)
-                return tree.Name;
-            else if (Host is Branch branch)
-                return branch.Value;
-            else if (Host is Forest forest)
-                return forest.Name;
-            else
-                return "Unknown";
-        }
-
         public string GetParameterName()
         {
-            if (Host is Branch branch)
+            if (BuildupComponent is Branch branch)
                 return ParameterHelper.GetParameterInfo(branch.Parameter).Item2;
             else
                 return null;
@@ -171,7 +160,7 @@ namespace Calc.MVVM.Models
 
         public bool? CheckIfParameterIsInstance()
         {
-            if (Host is Branch branch)
+            if (BuildupComponent is Branch branch)
                 return ParameterHelper.GetParameterInfo(branch.Parameter).Item1;
             else
                 return null;
@@ -179,7 +168,7 @@ namespace Calc.MVVM.Models
 
         public bool CheckIfBranch()
         {
-            return Host is Branch && !(Host is Tree);
+            return BuildupComponent is Branch && !(BuildupComponent is Tree);
         }
         public void NotifyNodePropertyChange()
         {
@@ -188,7 +177,7 @@ namespace Calc.MVVM.Models
             OnPropertyChanged(nameof(LabelColor));
             OnPropertyChanged(nameof(LabelColorVisible));
 
-            OnPropertyChanged(nameof(Host));
+            OnPropertyChanged(nameof(BuildupComponent));
             OnPropertyChanged(nameof(CategorizedCalculation));
 
             foreach (var subBranch in SubNodeItems)

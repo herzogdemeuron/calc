@@ -241,14 +241,14 @@ public class MockData
 
 
         buildup1.Group = group1;
-        buildup1.Components = new ObservableCollection<BuildupComponent>
+        buildup1.BuildupComponents = new ObservableCollection<BuildupComponent>
         {
             component1,
             component2
         };
 
         buildup2.Group = group1;
-        buildup2.Components = new ObservableCollection<BuildupComponent>
+        buildup2.BuildupComponents = new ObservableCollection<BuildupComponent>
         {
             component3
         };

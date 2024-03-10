@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace Calc.RevitApp.Revit
 {
     [Transaction(TransactionMode.Manual)]
-    public class StartCommand : IExternalCommand
+    public class CalcModelCheckerCommand : IExternalCommand
     {
         private Directus directusInstance;
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)

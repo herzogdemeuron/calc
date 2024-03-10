@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Calc.Core.Objects.GraphNodes;
+using Calc.Core.Objects.BasicParameters;
 
 namespace Calc.Core.Objects
 {
@@ -27,6 +28,11 @@ namespace Calc.Core.Objects
         List<string> ElementIds { get; }
         List<Branch> SubBranches { get; }
         HslColor HslColor { get; set; }
+    }
+
+    public interface  ICalcComponent
+    {
+        BasicParameterSet BasicParameterSet { get; set; }
     }
 
 

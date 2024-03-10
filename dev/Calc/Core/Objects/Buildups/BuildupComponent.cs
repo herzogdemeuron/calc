@@ -3,6 +3,8 @@ using Calc.Core.Objects.Materials;
 using Speckle.Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
@@ -12,18 +14,26 @@ namespace Calc.Core.Objects.Buildups
     /// <summary>
     /// All instances of a revit/rhino type in the builder group.
     /// </summary>
-    public class BuildupComponent
+    public class BuildupComponent : INotifyPropertyChanged, ICalcComponent
     {
-        public List<int> Ids { get; set; }
-        public string TypeIdentifier { get; set; }
-        public List<LayerComponent> LayerComponents { get; set; } = new List<LayerComponent>();
+        public List<int> ElementIds { get; set; }
+        public string TypeIdentifier { get; set; } // includes revit type and category
+        public ObservableCollection<LayerComponent> LayersComponent { get; set; } = new();
         public bool IsNormalizer { get; set; }
-        public BasicParameterSet TotalBasicParameterSet { get; set; }
-        public bool HasLayers => LayerComponents.Count > 0;
+        public BasicParameterSet BasicParameterSet { get; set; }
+        public bool HasLayers => LayersComponent.Count > 0;
         public bool CheckSource(BuildupComponent buildupComponent)
         {
             return this.TypeIdentifier == buildupComponent.TypeIdentifier;
         }
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
 
         /// <summary>
         /// apply a source buildupComponent to current revit/rhino buildupComponent, 
@@ -32,7 +42,7 @@ namespace Calc.Core.Objects.Buildups
         /// else it stays in the list and will be presented as a unmapped layer.
         /// return a new buildupComponent with the missing source layerComponents.
         /// </summary>
-        public BuildupComponent ApplySource(BuildupComponent sourceBuildupComponent)
+        /*public BuildupComponent ApplySource(BuildupComponent sourceBuildupComponent)
         {
 
             this.IsNormalizer = sourceBuildupComponent.IsNormalizer;
@@ -49,6 +59,6 @@ namespace Calc.Core.Objects.Buildups
                 }
             }
             return new BuildupComponent { TypeIdentifier = this.TypeIdentifier, LayerComponents = sourceLayers };
-        }
+        }*/
     }
 }

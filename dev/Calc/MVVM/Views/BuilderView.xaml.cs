@@ -25,6 +25,20 @@ namespace Calc.MVVM.Views
             MediatorToView.Register("ViewSelectBrokenNodesTreeView", node => SelectNodeTreeView((NodeModel)node));
         }
 
+        private void SelectClicked(object sender, RoutedEventArgs e)
+        {
+            BuilderVM.HandleRemove();
+        }
+        private void TreeViewItemSelected(object sender, RoutedEventArgs e)
+        {
+            if (TreeView.SelectedItem is NodeModel selectedNode)
+            {
+                BuilderVM.HandleNodeItemSelectionChanged(selectedNode);
+                TreeView.Tag = e.OriginalSource; // save selected treeviewitem for deselecting
+                e.Handled = true;
+            }
+        }
+
         private void DeselectTreeView()
         {
             if (TreeView.SelectedItem != null)
@@ -36,16 +50,6 @@ namespace Calc.MVVM.Views
             }
         }
 
-        private void DeselectBrokenNodesTreeView()
-        {
-            if (BrokenNodesTreeView.SelectedItem != null)
-            {
-                if (BrokenNodesTreeView.Tag is TreeViewItem selectedTreeViewItem)
-                {
-                    selectedTreeViewItem.IsSelected = false;
-                }
-            }
-        }
 
         private void SelectNodeTreeView(NodeModel node)
         {
@@ -76,27 +80,6 @@ namespace Calc.MVVM.Views
             BuilderVM.HandleWindowClosing();
         }
 
-        private async void ProjectOKClicked(object sender, RoutedEventArgs e)
-        {
-            var project = ProjectsComboBox.SelectedItem;
-            await BuilderVM.HandleProjectSelectedAsync(project as Project);
-        }
-        
-        private void ForestSelectionChanged (object sender, SelectionChangedEventArgs e)
-        {
-            var forest = ForestsComboBox.SelectedItem;
-            BuilderVM.HandleForestSelectionChanged(forest as Forest);
-        }
-
-        private void MappingSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            BuilderVM.HandleMappingSelectionChanged(MappingsComboBox.SelectedItem as Mapping);
-        }
-
-        private void NewMappingClicked(object sender, RoutedEventArgs e)
-        {
-            BuilderVM.HandleNewMappingClicked();
-        }
 
         private async void NewMappingConfirmed(object sender, RoutedEventArgs e)
         {
@@ -118,77 +101,26 @@ namespace Calc.MVVM.Views
         }
 
 
-        private void BrokenNodeSelected(object sender, RoutedEventArgs e)
-        {
-            if (BrokenNodesTreeView.SelectedItem is NodeModel selectedNode)
-            {
-                BuilderVM.HandleBrokenNodeSelectionChanged(selectedNode);
-                BrokenNodesTreeView.Tag = e.OriginalSource; // save selected treeviewitem for deselecting
-                e.Handled = true;
-            }
-        }
-        private void HandleIgnoreSelectedBrokenNode(object sender, RoutedEventArgs e)
-        {
-            if (BrokenNodesTreeView.SelectedItem is NodeModel selectedNode)
-            {
-                BuilderVM.HandleIgnoreSelectedBrokenNode(selectedNode);
-            }
-        }
-
-        private void HandleIgnoreAllBrokenNodes(object sender, RoutedEventArgs e)
-        {
-            BuilderVM.HandleIgnoreAllBrokenNodes();
-        }
-
-        private void ErrorMappingSideClickDown(object sender, MouseButtonEventArgs e)
-        {
-            BuilderVM.HandleErrorMappingSideClicked();
-        }
-
-        private void TreeViewItemSelected(object sender, RoutedEventArgs e)
-        {
-            if (TreeView.SelectedItem is NodeModel selectedNode)
-            {
-                BuilderVM.HandleNodeItemSelectionChanged(selectedNode);
-                TreeView.Tag = e.OriginalSource; // save selected treeviewitem for deselecting
-                e.Handled = true;
-            }
-        }
         
         private void SideClickDown(object sender, MouseButtonEventArgs e)
         {
             BuilderVM.HandleSideClicked();
         }
 
-        private void InheritClicked(object sender, RoutedEventArgs e)
-        {
-            BuilderVM.HandleInherit();
-        }
 
         private void RemoveClicked(object sender, RoutedEventArgs e)
         {
             BuilderVM.HandleRemove();
         }
 
-        private void ViewToggleButtonChecked(object sender, RoutedEventArgs e)
-        {
-            BuilderVM.HandleViewToggleToBuildup();
-        }
-
-        private void ViewToggleButtonUnchecked(object sender, RoutedEventArgs e)
-        {
-            BuilderVM.HandleViewToggleToBranch();            
-        }
 
         private void UpdateRevitClicked(object sender, RoutedEventArgs e)
         {
             var forest = ForestsComboBox.SelectedItem;
             BuilderVM.HandleUpdateRevitClicked(forest as Forest);
         }
-        private void StartCalcLiveClicked(object sender, RoutedEventArgs e)
-        {
-        }
 
+ 
 
         private void SaveResultsClicked(object sender, RoutedEventArgs e)
         {
