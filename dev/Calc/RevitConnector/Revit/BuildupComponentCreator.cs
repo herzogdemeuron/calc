@@ -7,6 +7,7 @@ using Calc.Core.Objects.Buildups;
 using Calc.RevitConnector.Config;
 using Calc.RevitConnector.Helpers;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Documents;
 
@@ -69,13 +70,16 @@ namespace Calc.RevitConnector.Revit
         /// </summary>
         private BuildupComponent CreateBuildupComponent(Element element)
         {
-            var layers = CreateLayerComponents(element);
+            var layersSet = CreateLayerComponents(element);
+            var layers = layersSet.Item1;
+            var isCompound = layersSet.Item2;
             return new BuildupComponent
             {
                 ElementIds = new List<int> { element.Id.IntegerValue },
                 TypeIdentifier = element.GetTypeId().IntegerValue,
                 Name = GetElementType(element)?.Name,
-                LayersComponent = layers,
+                LayerComponents = layers,
+                IsCompoundElement = isCompound
                 //BasicParameterSet = GetTotalAmounts(element)
             };
 
@@ -86,15 +90,13 @@ namespace Calc.RevitConnector.Revit
         /// </summary>
         private void MergeBuildupComponentToList(List<BuildupComponent> List, BuildupComponent component)
         {
-            var sameComponent = List.FirstOrDefault(x => x.CheckType(component));
-            if (sameComponent != null)
+            var originComponent = List.FirstOrDefault(x => x.CheckType(component));
+            if (originComponent != null)
             {
                 //sameComponent.BasicParameterSet.Add(component.BasicParameterSet);
-                sameComponent.ElementIds.AddRange(component.ElementIds);
-                foreach (var layerComponent in component.LayersComponent)
-                {
-                    MergeLayerComponentToList(sameComponent.LayersComponent, layerComponent);
-                }
+                originComponent.ElementIds.AddRange(component.ElementIds);
+                var isCompound = originComponent.IsCompoundElement;
+                MergeLayerComponents(originComponent.LayerComponents, component.LayerComponents, isCompound);
             }
             else
             {
@@ -103,9 +105,9 @@ namespace Calc.RevitConnector.Revit
         }
 
         /// <summary>
-        /// merge a layer component to a list of layer components if they have the same material
+        /// merge a layer component to a list of layer components with the same material
         /// </summary>
-        private void MergeLayerComponentToList(List<LayerComponent> List, LayerComponent component)
+        private void MergeLayerComponentWithMaterial(List<LayerComponent> List, LayerComponent component)
         {
             var sameComponent = List.FirstOrDefault(x => x.TargetMaterialName == component.TargetMaterialName);
             if (sameComponent != null)
@@ -119,18 +121,48 @@ namespace Calc.RevitConnector.Revit
         }
 
         /// <summary>
+        /// for compound elements:
+        /// layers are defined by the compound structure layers in type property,
+        /// merge two layer component lists if they are from the same compound structure type
+        /// for non compond elements:
+        /// layers are defined by different materials,
+        /// merge two layer component lists of layer components if they have the same material
+        /// </summary>
+        private void MergeLayerComponents(List<LayerComponent> list1, List<LayerComponent> list2, bool isCompound)
+        {
+            if(isCompound)
+            {
+                for (int i = 0; i < list1.Count; i++)
+                {
+                    list1[i].BasicParameterSet.Add(list2[i].BasicParameterSet);
+                }
+            }
+            else
+            {
+                foreach (var layerComponent in list2)
+                {
+                    MergeLayerComponentWithMaterial(list1, layerComponent);
+                }
+
+            }
+        }
+
+        /// <summary>
         /// create a list of layer components from an element.
         /// Firstly get the amounts for each material despite of the compound structure (materialAmounts),
         /// if there is a compound structure, re-order the material amount with the compund layers by the compound material thicknesses and calculate the proportion of area and volume of the same material.
+        /// also returns if the element is a compound structure.
         /// </summary>
-        private List<LayerComponent> CreateLayerComponents(Element elem)
+        private (List<LayerComponent>,bool) CreateLayerComponents(Element elem)
         {
+            bool isCompound = false;
             var result = new List<LayerComponent>();
             var materialAmounts = GetMaterialAmounts(elem);
-            var materials = GetCompoundMaterialThicknesses(elem);
-            if (materials != null)
+            var compoundMaterials = GetCompoundMaterialThicknesses(elem);
+            if (compoundMaterials != null)
             {
-                foreach (var (material, thickness, areaProp, volumeProp) in materials)
+                isCompound = true;
+                foreach (var (material, thickness, areaProp, volumeProp) in compoundMaterials)
                 {
                     var materialAmount = materialAmounts.FirstOrDefault(x => x.Item1?.Id == material?.Id);
                     var paramSet = materialAmount.Item2;
@@ -156,9 +188,8 @@ namespace Calc.RevitConnector.Revit
                     result.Add(layerComponent);
                 }
             }
-            return result;
+            return (result, isCompound);
         }
-
         /// <summary>
         /// get the material amounts of an element separated by different materials by getting the material area and volume of the element.
         /// </summary>
@@ -169,12 +200,15 @@ namespace Calc.RevitConnector.Revit
             var countParamTotal = totalAmountParamSet.GetAmountParam(Unit.piece);
             var lengthParamTotal = totalAmountParamSet.GetAmountParam(Unit.m);
             var result = new List<(Material, BasicParameterSet)>();
+
+            // firslt calculate valid material amounts
             foreach (var materialId in materialIds)
             {
                 var material = Doc.GetElement(materialId) as Material;
-                if(material == null) continue;
+                if (material == null) continue;
 
                 var materialArea = elem.GetMaterialArea(materialId, false);
+                materialArea = ParameterHelper.ToMetricValue(materialArea, Unit.m2);
                 var areaParam = new BasicParameter()
                 {
                     Name = "From Material",
@@ -183,6 +217,7 @@ namespace Calc.RevitConnector.Revit
                 };
 
                 var materialVolume = elem.GetMaterialVolume(materialId);
+                materialVolume = ParameterHelper.ToMetricValue(materialVolume, Unit.m3);
                 var volumeParam = new BasicParameter()
                 {
                     Name = "From Material",
@@ -196,23 +231,24 @@ namespace Calc.RevitConnector.Revit
             }
 
             // calculate the no material amounts by subtracting the material amounts from the total amounts
-            var areaParamTotal = totalAmountParamSet.GetAmountParam(Unit.m2);
             var volumeParamTotal = totalAmountParamSet.GetAmountParam(Unit.m3);
+            var areaParamTotal = totalAmountParamSet.GetAmountParam(Unit.m2);
+
             foreach (var materialAmount in result.Select(x => x.Item2))
             {
-                var areaParam = materialAmount.GetAmountParam(Unit.m2);
                 var volumeParam = materialAmount.GetAmountParam(Unit.m3);
-                areaParamTotal = areaParamTotal.PerformOperation(Operation.Subtract, areaParam);
                 volumeParamTotal = volumeParamTotal.PerformOperation(Operation.Subtract, volumeParam);
             }
 
             // show no material if either area or volume has value
+            // the no material area takes the whole area of the element, which means later in the compound structure,
+            // only the no material area will not be divided by the compound layer count
             if (!(areaParamTotal.HasError && volumeParamTotal.HasError))
             {
                 var noMaterialAmount = new BasicParameterSet(countParamTotal, lengthParamTotal, areaParamTotal, volumeParamTotal);
                 result.Add((null, noMaterialAmount));
             }
- 
+
             return result;
         }
 
@@ -269,7 +305,8 @@ namespace Calc.RevitConnector.Revit
                 {
                     var materialId = layer.MaterialId;
                     var material = Doc.GetElement(materialId) as Material;
-                    materials.Add((material, layer.Width));
+                    var width = ParameterHelper.ToMetricValue(layer.Width, Unit.m);
+                    materials.Add((material, width));
                 }
                 foreach (var material in materials)
                 {
@@ -286,7 +323,7 @@ namespace Calc.RevitConnector.Revit
 
         /// <summary>
         /// get the proportion of the area and volume of the same material
-        /// for material, devided by same material layer count
+        /// for area, devided by same material layer count if the material is valid, otherwise devided by 1
         /// for volume, devided by the thickness of the same material
         /// </summary>
         private (double,double) GetMaterialRatio(List<(Material, double)> materials, (Material, double) singleMaterial)
@@ -296,7 +333,9 @@ namespace Calc.RevitConnector.Revit
             var sameMaterialCount = sameMaterial.Count();
             if(sameMaterialCount == 0) return (0,0);
 
-            var areaProportion = 1 / sameMaterialCount;
+            if(singleMaterial.Item1 == null) sameMaterialCount = 1;
+
+            var areaProportion = 1 / (double)sameMaterialCount;
 
             var wholeMaterialThickness = sameMaterial.Sum(x => x.Item2);
             var volumeProportion = wholeMaterialThickness == 0? 0: singleMaterial.Item2 / wholeMaterialThickness;

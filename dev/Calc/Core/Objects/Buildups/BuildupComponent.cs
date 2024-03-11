@@ -18,12 +18,13 @@ namespace Calc.Core.Objects.Buildups
     {
         public List<int> ElementIds { get; set; }
         public int TypeIdentifier { get; set; } // revit type id
+        public bool IsCompoundElement { get; set; }
         public string Name { get; set; }
         public double? Thickness { get; set; }
-        public List<LayerComponent> LayersComponent { get; set; } = new();
+        public List<LayerComponent> LayerComponents { get; set; } = new();
         public bool IsNormalizer { get; set; }
         public BasicParameterSet BasicParameterSet { get; set; }
-        public bool HasLayers => LayersComponent.Count > 0;
+        public bool HasLayers => LayerComponents.Count > 0;
         public bool CheckSource(BuildupComponent buildupComponent)
         {
             return this.TypeIdentifier == buildupComponent.TypeIdentifier;

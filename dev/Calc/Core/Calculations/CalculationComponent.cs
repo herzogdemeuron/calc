@@ -43,7 +43,7 @@ namespace Calc.Core.Calculations
         public static List<CalculationComponent> FromBuildupComponent(BuildupComponent buildupComponent, double totalRatio)
         {
             var result = new List<CalculationComponent>();
-            foreach (var layer in buildupComponent.LayersComponent)
+            foreach (var layer in buildupComponent.LayerComponents)
             {
                 var materialSet = layer.MaterialComponentSet;
 

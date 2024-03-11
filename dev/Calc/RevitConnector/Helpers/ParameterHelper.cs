@@ -80,21 +80,35 @@ namespace Calc.RevitConnector.Helpers
 
             if (typeId == SpecTypeId.Length)
             {
-                value = UnitUtils.ConvertFromInternalUnits(value, UnitTypeId.Meters);
+                value = ToMetricValue(value, Unit.m);
             }
             else if (typeId == SpecTypeId.Area)
             {
-                value = UnitUtils.ConvertFromInternalUnits(value, UnitTypeId.SquareMeters);
+                value = ToMetricValue(value, Unit.m2);
             }
             else if (typeId == SpecTypeId.Volume)
             {
-                value = UnitUtils.ConvertFromInternalUnits(value, UnitTypeId.CubicMeters);
+                value = ToMetricValue(value, Unit.m3);
             }
 
-           
             return Math.Round(value, 5);            
-
         }
+
+        public static double ToMetricValue(double value, Unit unit)
+        {
+            switch (unit)
+            {
+                case Unit.m:
+                    return UnitUtils.ConvertFromInternalUnits(value, UnitTypeId.Meters);
+                case Unit.m2:
+                    return UnitUtils.ConvertFromInternalUnits(value, UnitTypeId.SquareMeters);
+                case Unit.m3:
+                    return UnitUtils.ConvertFromInternalUnits(value, UnitTypeId.CubicMeters);
+                default:
+                    return value;
+            }
+        }
+
 
 
         /// <summary>
