@@ -11,9 +11,10 @@ namespace Calc.RevitConnector.Config
         public string LengthName { get; private set; }
         public string AreaName { get; private set; }
         public string VolumeName { get; private set; }
+        public string CountName { get; private set; } = "count";
 
         public RevitBasicParamConfig(
-            BuiltInCategory category = BuiltInCategory.INVALID, 
+            BuiltInCategory category = BuiltInCategory.INVALID,
             string LengthName = "Length", 
             string AreaName = "Area",
             string VolumeName = "Volume"

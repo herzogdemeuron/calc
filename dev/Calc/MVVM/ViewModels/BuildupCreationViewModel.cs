@@ -16,25 +16,28 @@ namespace Calc.MVVM.ViewModels
 
         public string CountString
         {
-            get => SelectedComponent.BasicParameterSet.GetAmountParam(Unit.piece).Amount?.ToString()??"?";
+            get => GetValueString(Unit.piece);
         }
 
         public string LengthString
         {
-            get => SelectedComponent.BasicParameterSet.GetAmountParam(Unit.m).Amount?.ToString()??"?";
+            get => GetValueString(Unit.m);
         }
 
         public string AreaString
         {
-            get => SelectedComponent.BasicParameterSet.GetAmountParam(Unit.m2).Amount?.ToString()??"?";
+            get => GetValueString(Unit.m2);
         }
 
         public string VolumeString
         {
-            get => SelectedComponent.BasicParameterSet.GetAmountParam(Unit.m3).Amount?.ToString()??"?";
+            get => GetValueString(Unit.m3);
         }
 
-
+        private string GetValueString(Unit unit)
+        {
+            return SelectedComponent.BasicParameterSet.GetAmountParam(unit).Amount?.ToString() ?? "?";
+        }
 
 
         public BuildupCreationViewModel(IBuildupComponentCreator _buildupComponentCreator)

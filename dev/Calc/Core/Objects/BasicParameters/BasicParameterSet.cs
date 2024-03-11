@@ -6,17 +6,17 @@ namespace Calc.Core.Objects.BasicParameters
 {
     public class BasicParameterSet
     {
+        private BasicParameter pieceParam;
         private BasicParameter lenParam;
         private BasicParameter areaParam;
         private BasicParameter volParam;
-        private BasicParameter pieceParam;
 
         public BasicParameterSet(BasicParameter pieceParam, BasicParameter lenParam, BasicParameter areaParam, BasicParameter volParam)
         {
+            this.pieceParam = pieceParam;
             this.lenParam = lenParam;
             this.areaParam = areaParam;
             this.volParam = volParam;
-            this.pieceParam = pieceParam;
         }
 
         public BasicParameter GetAmountParam(Unit unit)
@@ -34,6 +34,14 @@ namespace Calc.Core.Objects.BasicParameters
                 default:
                     throw new Exception($"Unit not recognized: {unit}");
             }
+        }
+
+        public void Add(BasicParameterSet other)
+        {
+            pieceParam = pieceParam.PerformOperation(Operation.Add, other.pieceParam);
+            lenParam = lenParam.PerformOperation(Operation.Add, other.lenParam);
+            areaParam = areaParam.PerformOperation(Operation.Add, other.areaParam);
+            volParam = volParam.PerformOperation(Operation.Add, other.volParam);
         }
 
     }

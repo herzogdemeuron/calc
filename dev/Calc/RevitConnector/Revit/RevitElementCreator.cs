@@ -110,9 +110,9 @@ namespace Calc.RevitConnector.Revit
             string type = doc.GetElement(typeId).Name;
             string typeName = $"{type} ({typeId.IntegerValue})";
 
-            var lenParam = CreateBasicUnitParameter(elem, lenName, Unit.m);
-            var areaParam = CreateBasicUnitParameter(elem, areaName, Unit.m2);
-            var volParam = CreateBasicUnitParameter(elem, volName, Unit.m3);
+            var lenParam = ParameterHelper.CreateBasicUnitParameter(elem, lenName, Unit.m);
+            var areaParam = ParameterHelper.CreateBasicUnitParameter(elem, areaName, Unit.m2);
+            var volParam = ParameterHelper.CreateBasicUnitParameter(elem, volName, Unit.m3);
 
 
             return new CalcElement
@@ -125,54 +125,5 @@ namespace Calc.RevitConnector.Revit
                 volParam
                 );
         }
-
-        /// <summary>
-        /// get the basic unit parameter of an element
-        /// create a basic unit parameter with error type if the parameter is missing or redundant
-        /// </summary>
-        private BasicParameter CreateBasicUnitParameter(Element elem, string parameterName, Unit unit)
-        {
-            var parameters = elem.GetParameters(parameterName);
-            if (parameters.Count == 0)
-            {
-                return new BasicParameter()
-                {
-                    Name = parameterName,
-                    ErrorType = ParameterErrorType.Missing,
-                    Unit = unit
-                };
-            }
-            else if (parameters.Count > 1)
-            {
-                return new BasicParameter()
-                {
-                    Name = parameterName,
-                    ErrorType = ParameterErrorType.Redundant,
-                    Unit = unit
-                };
-            }
-
-            var value = ParameterHelper.ToMetricValue(parameters.First());
-
-            if (value == 0)
-            {
-                return new BasicParameter()
-                {
-                    Name = parameterName,
-                    ErrorType = ParameterErrorType.ZeroValue,
-                    Unit = unit
-                };
-            }
-            else
-            {
-                return new BasicParameter()
-                {
-                    Name = parameterName,
-                    Amount = (double)value,
-                    Unit = unit
-                };
-            }
-        }
-
     }
 }

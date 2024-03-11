@@ -14,12 +14,14 @@ namespace Calc.Core.Objects.Buildups
     public class LayerComponent : INotifyPropertyChanged, ICalcComponent
     {
         public string TargetMaterialName { get; }
+        public double? Thickness { get; set; }
         public MaterialComponentSet MaterialComponentSet { get; set; }
         public BasicParameterSet BasicParameterSet { get; set; }
-        public LayerComponent(string targetMaterialName, BasicParameterSet basicParameterSet = null)
+        public LayerComponent(string targetMaterialName, BasicParameterSet basicParameterSet = null, double? thickness = null)
         {
             TargetMaterialName = targetMaterialName;
             BasicParameterSet = basicParameterSet;
+            Thickness = thickness;
         }
 
         

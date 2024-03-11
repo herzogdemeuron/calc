@@ -17,8 +17,10 @@ namespace Calc.Core.Objects.Buildups
     public class BuildupComponent : INotifyPropertyChanged, ICalcComponent
     {
         public List<int> ElementIds { get; set; }
-        public string TypeIdentifier { get; set; } // includes revit type and category
-        public ObservableCollection<LayerComponent> LayersComponent { get; set; } = new();
+        public int TypeIdentifier { get; set; } // revit type id
+        public string Name { get; set; }
+        public double? Thickness { get; set; }
+        public List<LayerComponent> LayersComponent { get; set; } = new();
         public bool IsNormalizer { get; set; }
         public BasicParameterSet BasicParameterSet { get; set; }
         public bool HasLayers => LayersComponent.Count > 0;
@@ -32,6 +34,11 @@ namespace Calc.Core.Objects.Buildups
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public bool CheckType(BuildupComponent component)
+        {
+            return TypeIdentifier == component.TypeIdentifier;
         }
 
 

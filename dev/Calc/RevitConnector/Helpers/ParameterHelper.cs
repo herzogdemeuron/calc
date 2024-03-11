@@ -1,6 +1,10 @@
 ﻿using Autodesk.Revit.DB;
+using Calc.Core.Objects;
+using Calc.Core.Objects.BasicParameters;
+using Calc.Core.Objects.Results;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Calc.RevitConnector.Helpers
 {
@@ -90,6 +94,65 @@ namespace Calc.RevitConnector.Helpers
            
             return Math.Round(value, 5);            
 
+        }
+
+
+        /// <summary>
+        /// get the basic unit parameter of an element
+        /// create a basic unit parameter with error type if the parameter is missing or redundant
+        /// </summary>
+        public static BasicParameter CreateBasicUnitParameter(Element elem, string parameterName, Unit unit)
+        {
+            if (unit == Unit.piece)
+            {
+                return new BasicParameter()
+                {
+                    Name = parameterName,
+                    Amount = 1,
+                    Unit = unit
+                };
+            }
+
+            var parameters = elem.GetParameters(parameterName);
+            if (parameters.Count == 0)
+            {
+                return new BasicParameter()
+                {
+                    Name = parameterName,
+                    ErrorType = ParameterErrorType.Missing,
+                    Unit = unit
+                };
+            }
+            else if (parameters.Count > 1)
+            {
+                return new BasicParameter()
+                {
+                    Name = parameterName,
+                    ErrorType = ParameterErrorType.Redundant,
+                    Unit = unit
+                };
+            }
+
+            var value = ParameterHelper.ToMetricValue(parameters.First());
+
+            if (value == 0)
+            {
+                return new BasicParameter()
+                {
+                    Name = parameterName,
+                    ErrorType = ParameterErrorType.ZeroValue,
+                    Unit = unit
+                };
+            }
+            else
+            {
+                return new BasicParameter()
+                {
+                    Name = parameterName,
+                    Amount = (double)value,
+                    Unit = unit
+                };
+            }
         }
     }
 }

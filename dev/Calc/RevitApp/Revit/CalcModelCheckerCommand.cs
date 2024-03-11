@@ -27,8 +27,8 @@ namespace Calc.RevitApp.Revit
                 AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
                 Document doc = commandData.Application.ActiveUIDocument.Document;
 
-                Logger.Log("Now authenticating.");
                 Task.Run(() => Authenticate()).Wait();
+
                 if (directusInstance == null)
                 {
                     Logger.Log("Failed to get directus.");

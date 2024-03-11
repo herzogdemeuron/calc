@@ -8,7 +8,8 @@ namespace Calc.Core.Objects.Results
     {
         Redundant,
         Missing,
-        ZeroValue
+        ZeroValue,
+        CalculationError
     }
     public class ParameterError
     {
@@ -67,6 +68,9 @@ namespace Calc.Core.Objects.Results
             }
         }
 
+        /// <summary>
+        /// copy constructor
+        /// </summary>
         public ParameterError(ParameterError other)
         {
             this.ParameterName = other.ParameterName;
