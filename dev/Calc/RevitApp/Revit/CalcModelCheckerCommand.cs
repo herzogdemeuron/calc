@@ -3,9 +3,9 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Calc.Core;
 using Calc.Core.DirectusAPI;
-using Calc.MVVM.Services;
-using Calc.MVVM.ViewModels;
-using Calc.MVVM.Views;
+//using Calc.MVVM.Services;
+//using Calc.MVVM.ViewModels;
+//using Calc.MVVM.Views;
 using Calc.RevitConnector.Revit;
 using System;
 using System.Diagnostics;
@@ -40,10 +40,10 @@ namespace Calc.RevitApp.Revit
 
                 RevitElementCreator elementCreator = new RevitElementCreator(doc);
                 RevitVisualizer visualizer = new RevitVisualizer( doc, new RevitExternalEventHandler());
-                MainViewModel mainViewModel = new MainViewModel(store, elementCreator, visualizer);
-                MainView mainView = new MainView(mainViewModel);
+                //MainViewModel mainViewModel = new MainViewModel(store, elementCreator, visualizer);
+                //MainView mainView = new MainView(mainViewModel);
 
-                mainView.Show();
+                //mainView.Show();
                 return Result.Succeeded;
             }
             catch (Exception ex)
@@ -56,8 +56,8 @@ namespace Calc.RevitApp.Revit
 
         private async Task Authenticate()
         {
-            var authenticator = new DirectusAuthenticator();
-            directusInstance = await authenticator.ShowLoginWindowAsync().ConfigureAwait(false);
+            //var authenticator = new DirectusAuthenticator();
+            //directusInstance = await authenticator.ShowLoginWindowAsync().ConfigureAwait(false);
         }
 
         private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)

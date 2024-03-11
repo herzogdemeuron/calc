@@ -22,6 +22,7 @@ namespace Calc.RevitConnector.Revit
         
         private readonly Document Doc;
         private readonly UIDocument Uidoc;
+        private const string noMaterialName = "No Material";
         private readonly List<RevitBasicParamConfig> basicParamConfigs =
             new List<RevitBasicParamConfig>
             {
@@ -143,7 +144,7 @@ namespace Calc.RevitConnector.Revit
                         volumeParam.PerformOperation(Operation.Multiply, volumeProp)
                         );
 
-                    var layerComponent = new LayerComponent(material.Name, newParamSet, thickness);
+                    var layerComponent = new LayerComponent(material?.Name??noMaterialName, newParamSet, thickness);
                     result.Add(layerComponent);
                 }
             }
@@ -151,7 +152,7 @@ namespace Calc.RevitConnector.Revit
             {
                 foreach (var (material, paramSet) in materialAmounts)
                 {
-                    var layerComponent = new LayerComponent(material.Name, paramSet);
+                    var layerComponent = new LayerComponent(material?.Name ?? noMaterialName, paramSet);
                     result.Add(layerComponent);
                 }
             }
@@ -261,6 +262,8 @@ namespace Calc.RevitConnector.Revit
             if (type is HostObjAttributes hostObjAttributes)
             {
                 var compoundStructure = hostObjAttributes.GetCompoundStructure();
+                if (compoundStructure == null) return null;
+
                 var layers = compoundStructure.GetLayers();
                 foreach (var layer in layers)
                 {

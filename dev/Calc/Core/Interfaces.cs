@@ -13,7 +13,7 @@ namespace Calc.Core.Interfaces
 
     public interface IBuildupComponentCreator
     {
-        public List<BuildupComponent> CreateBuildupComponentsFromSelection()
+        public List<BuildupComponent> CreateBuildupComponentsFromSelection();
     }
 
     public interface IVisualizer

@@ -3,11 +3,13 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Calc.Core;
 using Calc.Core.DirectusAPI;
-using Calc.MVVM.Services;
-using Calc.MVVM.ViewModels;
-using Calc.MVVM.Views;
+using Calc.Core.Objects.Buildups;
+//using Calc.MVVM.Services;
+//using Calc.MVVM.ViewModels;
+//using Calc.MVVM.Views;
 using Calc.RevitConnector.Revit;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -25,9 +27,9 @@ namespace Calc.RevitApp.Revit
             {
                 App.RevitVersion = commandData.Application.Application.VersionNumber;
                 AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-                Document doc = commandData.Application.ActiveUIDocument.Document;
+                UIDocument uidoc = commandData.Application.ActiveUIDocument;
 
-                Logger.Log("Now authenticating.");
+                /*Logger.Log("Now authenticating.");
                 Task.Run(() => Authenticate()).Wait();
                 if (directusInstance == null)
                 {
@@ -36,13 +38,17 @@ namespace Calc.RevitApp.Revit
                 }
                 Logger.Log("Authentication successful.");
 
-                DirectusStore store = new DirectusStore(directusInstance);
+                DirectusStore store = new DirectusStore(directusInstance);*/
+                TaskDialog.Show("Calc", "Now starting.");
+                BuildupComponentCreator componentCreator = new BuildupComponentCreator(uidoc);
 
-                RevitElementCreator elementCreator = new RevitElementCreator(doc);
-                BuilderViewModel builderViewModel = new BuilderViewModel(store, elementCreator);
-                BuilderView builderView = new BuilderView(builderViewModel);
+                List<BuildupComponent> components = componentCreator.CreateBuildupComponentsFromSelection();
+                TaskDialog.Show("Components", components.Count.ToString());
 
-                builderView.Show();
+                //BuilderViewModel builderViewModel = new BuilderViewModel(store, elementCreator);
+                //BuilderView builderView = new BuilderView(builderViewModel);
+
+                //builderView.Show();
                 return Result.Succeeded;
             }
             catch (Exception ex)
@@ -55,8 +61,8 @@ namespace Calc.RevitApp.Revit
 
         private async Task Authenticate()
         {
-            var authenticator = new DirectusAuthenticator();
-            directusInstance = await authenticator.ShowLoginWindowAsync().ConfigureAwait(false);
+            //var authenticator = new DirectusAuthenticator();
+            //directusInstance = await authenticator.ShowLoginWindowAsync().ConfigureAwait(false);
         }
 
         private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
