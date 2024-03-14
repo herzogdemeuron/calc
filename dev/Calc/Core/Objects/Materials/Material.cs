@@ -12,7 +12,7 @@ namespace Calc.Core.Objects.Materials
         [JsonProperty("name")]
         public string Name { get; set; }
         [JsonProperty("standard")]
-        public Standard Standard { get; set; }
+        public LcaStandard Standard { get; set; }
         [JsonProperty("material_category")]
         public string Category { get; set; }
         [JsonProperty("thickness")]
@@ -37,7 +37,7 @@ namespace Calc.Core.Objects.Materials
 
         //public string SourceCode { get; set; }
 
-        public void LinkStandard(List<Standard> standards)
+        public void LinkStandard(List<LcaStandard> standards)
         {
             if (Standard != null)
             {

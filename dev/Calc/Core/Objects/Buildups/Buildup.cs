@@ -1,5 +1,4 @@
 ﻿using Calc.Core.Calculations;
-using Calc.Core.Objects.Materials;
 using Speckle.Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,9 +18,9 @@ namespace Calc.Core.Objects.Buildups
             set => SetProperty(ref id, value);
         }
 
-        private Standard standard;
+        private LcaStandard standard;
         [JsonProperty("standard")]
-        public Standard Standard
+        public LcaStandard Standard
         {
             get => standard;
             set => SetProperty(ref standard, value);
@@ -55,12 +54,6 @@ namespace Calc.Core.Objects.Buildups
         [JsonProperty("description")]
         public string Description { get; set; }
 
-        private List<BuildupComponent> buildupComponents = new List<BuildupComponent>();
-        public List<BuildupComponent> BuildupComponents
-        {
-            get => buildupComponents;
-            set => SetProperty(ref buildupComponents, value);
-        }
 
         public void LinkGroup(List<BuildupGroup> buildupGroups)
         {
@@ -70,7 +63,7 @@ namespace Calc.Core.Objects.Buildups
             }
         }
 
-        public void LinkStandard(List<Standard> standards)
+        public void LinkStandard(List<LcaStandard> standards)
         {
             if (Standard != null)
             {
@@ -117,39 +110,15 @@ namespace Calc.Core.Objects.Buildups
         /// get the total ratio of the whole buildup when generating calculation components
         /// is 1 divides the quantity of the normalizer of the buildup unit
         /// </summary>
-        private double GetQuantityRatio()
-        {
-            var normalizer = BuildupComponents.Where(c => c.IsNormalizer).ToList();
-            if (normalizer.Count != 1) return 0;
-            var value = normalizer[0].BasicParameterSet.GetAmountParam(BuildupUnit).Amount;
-            if(value.HasValue)
-            {
-                return 1/value.Value;
-            }
-            return 0;
-        }
 
-        public List<CalculationComponent> UpdateCalculationComponents()
-        {
-            var calculationComponents = new List<CalculationComponent>();
-            var quantityRatio = GetQuantityRatio();
-            if (quantityRatio != 0)
-            {
-                foreach(var component in BuildupComponents)
-                {
-                    var calculationComponent = CalculationComponent.FromBuildupComponent(component, quantityRatio);
-                    calculationComponents.AddRange(calculationComponent);
-                }
-            }
-            return calculationComponents;
-        }
+
 
         public void Copy(Buildup other)
         {
             Id = other.Id;
             Name = other.Name;
             Group = other.Group;
-            BuildupComponents = other.BuildupComponents;
+            CalculationComponents = other.CalculationComponents;
             BuildupUnit = other.BuildupUnit;
         }
 
@@ -160,7 +129,7 @@ namespace Calc.Core.Objects.Buildups
                 Id = Id,
                 Name = Name,
                 Group = Group,
-                BuildupComponents = BuildupComponents,
+                CalculationComponents = CalculationComponents,
                 BuildupUnit = BuildupUnit
             };
         }

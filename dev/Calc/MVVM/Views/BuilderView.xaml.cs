@@ -1,7 +1,4 @@
-﻿using Calc.Core.Objects;
-using Calc.Core.Objects.GraphNodes;
-using Calc.Core.Objects.Mappings;
-using Calc.MVVM.Helpers;
+﻿using Calc.MVVM.Helpers;
 using Calc.MVVM.Helpers.Mediators;
 using Calc.MVVM.Models;
 using Calc.MVVM.ViewModels;
@@ -21,8 +18,6 @@ namespace Calc.MVVM.Views
             this.DataContext = BuilderVM;
             InitializeComponent();
             MediatorToView.Register("ViewDeselectTreeView", _=>DeselectTreeView());
-            MediatorToView.Register("ViewDeselectBrokenNodesTreeView", _ => DeselectBrokenNodesTreeView());
-            MediatorToView.Register("ViewSelectBrokenNodesTreeView", node => SelectNodeTreeView((NodeModel)node));
         }
 
         private void SelectClicked(object sender, RoutedEventArgs e)
@@ -50,26 +45,6 @@ namespace Calc.MVVM.Views
             }
         }
 
-
-        private void SelectNodeTreeView(NodeModel node)
-        {
-            if (node != null)
-            {
-                //find treeviewitem by node
-                var treeViewItem = ViewHelper.FindTreeViewItem(BrokenNodesTreeView, node);
-                if (treeViewItem != null)
-                {
-                    treeViewItem.IsSelected = true;
-                }
-            }
-            else
-            {
-                DeselectBrokenNodesTreeView();
-            }
-        }
-
-
-
         private async void WindowLoaded(object sender, RoutedEventArgs e)
         {
             await BuilderVM.HandleWindowLoadedAsync();
@@ -78,26 +53,6 @@ namespace Calc.MVVM.Views
         private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             BuilderVM.HandleWindowClosing();
-        }
-
-
-        private async void NewMappingConfirmed(object sender, RoutedEventArgs e)
-        {
-            string newName = this.NewNameText.Text.Trim();
-            Mapping selectedMapping = this.MappingListBox.SelectedItem as Mapping;
-            await BuilderVM.HandleNewMappingCreateAsync(selectedMapping, newName);
-        }
-
-        private void NewMappingCanceld(object sender, RoutedEventArgs e)
-        {
-            this.NewNameText.Text = "";
-            MappingListBox.SelectedItem = null;
-            BuilderVM.HandleNewMappingCanceled();
-        }
-
-        private void MappingErrorClicked(object sender, RoutedEventArgs e)
-        {
-            BuilderVM.HandleMappingErrorClicked();
         }
 
 
@@ -114,39 +69,11 @@ namespace Calc.MVVM.Views
         }
 
 
-        private void UpdateRevitClicked(object sender, RoutedEventArgs e)
-        {
-            var forest = ForestsComboBox.SelectedItem;
-            BuilderVM.HandleUpdateRevitClicked(forest as Forest);
-        }
-
- 
-
-        private void SaveResultsClicked(object sender, RoutedEventArgs e)
-        {
-            NewResultNameTextBox.Text = "";
-            BuilderVM.SavingVM.HandleSavingResults();
-        }
-
-        private async void SaveResultOKClicked( object sender, RoutedEventArgs e)
-        {
-            await BuilderVM.HandleSendingResults(NewResultNameTextBox.Text);            
-        }
-
-        private void SaveResultCancelClicked (object sender, RoutedEventArgs e)
-        {
-            BuilderVM.HandleCancelSavingResults();
-        }
-
         private void MessageOKClicked(object sender, RoutedEventArgs e)
         {
             BuilderVM.HandleMessageClose();
         }
 
-        private async void UpdateMappingClicked(object sender, RoutedEventArgs e)
-        {
-            await BuilderVM.HandleUpdateMapping();            
-        }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {

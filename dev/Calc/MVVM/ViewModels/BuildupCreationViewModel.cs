@@ -1,37 +1,103 @@
-﻿using Calc.Core.Interfaces;
+﻿using Calc.Core;
+using Calc.Core.Calculations;
+using Calc.Core.Interfaces;
 using Calc.Core.Objects;
 using Calc.Core.Objects.Buildups;
-using Calc.MVVM.Helpers.Mediators;
+using Speckle.Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace Calc.MVVM.ViewModels
 {
 
     public class BuildupCreationViewModel : INotifyPropertyChanged
     {
-        public Buildup Buildup { get; set; }
-        public ICalcComponent SelectedComponent{ get; set; }
+
+        private DirectusStore store;
+        public List<LcaStandard> StandardsAll { get => store.StandardsAll; }
+        public readonly List<Unit> BuildupUnitsAll = new List<Unit> { Unit.piece, Unit.m, Unit.m2, Unit.m3 };
         private IBuildupComponentCreator buildupComponentCreator;
+        public ICalcComponent SelectedComponent{ get; set; }
 
-        public string CountString
+        private LcaStandard selectedStandard;
+        public LcaStandard SelectedStandard
         {
-            get => GetValueString(Unit.piece);
+            get => selectedStandard;
+            set
+            {
+                if (selectedStandard != value)
+                {
+                    selectedStandard = value;
+                    OnPropertyChanged(nameof(SelectedStandard));
+                }
+            }
         }
 
-        public string LengthString
+        private Unit selectedBuildupUnit;
+        public Unit SelectedBuildupUnit
         {
-            get => GetValueString(Unit.m);
+            get => selectedBuildupUnit;
+            set
+            {
+                selectedBuildupUnit = value;
+                OnPropertyChanged(nameof(SelectedBuildupUnit));
+            }
         }
 
-        public string AreaString
+        private BuildupGroup selectedBuildupGroup;
+        public BuildupGroup SelectedBuildupGroup
         {
-            get => GetValueString(Unit.m2);
+            get => selectedBuildupGroup;
+            set
+            {
+                selectedBuildupGroup = value;
+                OnPropertyChanged(nameof(SelectedBuildupGroup));
+            }
         }
 
-        public string VolumeString
+        private List<BuildupComponent> buildupComponents = new List<BuildupComponent>();
+        public List<BuildupComponent> BuildupComponents
         {
-            get => GetValueString(Unit.m3);
+            get => buildupComponents;
+            set => OnPropertyChanged(nameof(BuildupComponents));
+        }
+
+        private List<CalculationComponent> calculationComponents = new List<CalculationComponent>();
+        [JsonProperty("calculation_components")]
+        public List<CalculationComponent> CalculationComponents
+        {
+            get => calculationComponents;
+            set => OnPropertyChanged(nameof(CalculationComponents));
+        }
+
+        public string CountString { get => GetValueString(Unit.piece); }
+
+        public string LengthString { get => GetValueString(Unit.m); }
+
+        public string AreaString { get => GetValueString(Unit.m2); }
+
+        public string VolumeString { get => GetValueString(Unit.m3); }
+
+        public BuildupCreationViewModel(DirectusStore store, IBuildupComponentCreator bcCreator)
+        {
+            this.store = store;
+            buildupComponentCreator = bcCreator;
+        }
+
+        public void UpdateCalculationComponents()
+        {
+            var calculationComponents = new List<CalculationComponent>();
+            var quantityRatio = GetQuantityRatio();
+            if (quantityRatio != 0)
+            {
+                foreach (var component in BuildupComponents)
+                {
+                    var calculationComponent = CalculationComponent.FromBuildupComponent(component, quantityRatio);
+                    calculationComponents.AddRange(calculationComponent);
+                }
+            }
+            CalculationComponents = calculationComponents;
         }
 
         private string GetValueString(Unit unit)
@@ -39,15 +105,17 @@ namespace Calc.MVVM.ViewModels
             return SelectedComponent.BasicParameterSet.GetAmountParam(unit).Amount?.ToString() ?? "?";
         }
 
-
-        public BuildupCreationViewModel(IBuildupComponentCreator _buildupComponentCreator)
+        private double GetQuantityRatio()
         {
-            buildupComponentCreator = _buildupComponentCreator;
-            //MediatorFromVM.Register("NodeItemSelectionChanged", _ => UpdateBuildupSection()); // if not, the buildup section sometimes not update,(parent reduced to zero, children remain all enabled), how to solve?
-            //MediatorFromVM.Register("MappingSelectionChanged", _ => UpdateBuildupSection());
+            var normalizer = BuildupComponents.Where(c => c.IsNormalizer).ToList();
+            if (normalizer.Count != 1) return 0;
+            var value = normalizer[0].BasicParameterSet.GetAmountParam(SelectedBuildupUnit).Amount;
+            if (value.HasValue)
+            {
+                return 1 / value.Value;
+            }
+            return 0;
         }
-
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)

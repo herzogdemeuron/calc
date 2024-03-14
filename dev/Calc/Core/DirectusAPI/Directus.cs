@@ -1,107 +1,115 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using GraphQL.Client.Http;
 using Calc.Core.GraphQL.Serializer;
 using System.Threading.Tasks;
 using Speckle.Newtonsoft.Json;
 using System.Text;
 using System.Diagnostics;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Security.Authentication;
 
 namespace Calc.Core.DirectusAPI
 {
     public class Directus
     {
-        public int StatusCode;
-        public Dictionary<string, object> Response;
-        public string Token { get { return _token; } }
-        public string Url { get { return _url; } }
-        public string GraphQlUrl { get { return $"{_url}/graphql"; } }
-        public bool Authenticated { get; set; }
-        public HttpClient HttpClient;
-        public GraphQLHttpClient Client;
+        public int StatusCode { get; private set; }
+        public Dictionary<string, object> Response { get; private set; }
+        public string Token => _token;
+        public string Url => _url;
+        public string GraphQlUrl => $"{_url}/graphql";
+        public bool Authenticated { get; private set; }
+        public static HttpClient HttpClient
+        {
+            get
+            {
+              /*  var handler = new HttpClientHandler
+                {
+                    SslProtocols = SslProtocols.Tls13
+                };*/
+                return new HttpClient();
+            }
+        }
+
+        public GraphQLHttpClient Client { get; private set; }
+
         private string _token;
         private string _url;
         private string _refreshToken;
 
         public Directus()
         {
+            HttpClient.DefaultRequestHeaders.Accept.Clear();
+            HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         public async Task Authenticate(string url, string email, string password)
         {
-            // if any of the inputs is null, set Authenticated to false and return
-            if (url == null || email == null || password == null)
+            if (string.IsNullOrWhiteSpace(url) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
             {
-                this.Authenticated = false;
-                Debug.WriteLine("Authentication aborted, one or more of the inputs is null");
+                Authenticated = false;
+                Debug.WriteLine("Authentication aborted: One or more of the inputs is null or whitespace.");
                 return;
             }
 
-            // check if url is valid URI
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
             {
-                this.Authenticated = false;
-                Debug.WriteLine("Authentication aborted, url is not a valid URI");
+                Authenticated = false;
+                Debug.WriteLine("Authentication aborted: URL is not a valid URI.");
                 return;
             }
 
-            this._url = url;
+            _url = url;
+            //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls13; // this is added since directus announced that they force using TLS 1.3 for directus cloud on all traffics
 
-            string requestBody = $"{{\"email\": \"{email}\", \"password\": \"{password}\"}}";
-            HttpContent content = new StringContent(requestBody, Encoding.UTF8, "application/json");
+            var requestBody = JsonConvert.SerializeObject(new { email, password });
+            var content = new StringContent(requestBody, Encoding.UTF8, "application/json");
 
-            HttpClient httpClient = new();
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            var response = new HttpResponseMessage();
             try
             {
-                response = await httpClient.PostAsync($"{this._url}/auth/login", content);
+                var response = await HttpClient.PostAsync($"{_url}/auth/login", content);
+                StatusCode = (int)response.StatusCode;
+
+                var responseContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Authentication response: {responseContent}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseData = JsonConvert.DeserializeObject<Dictionary<string, LoginResponseData>>(responseContent);
+                    if (responseData != null && responseData.TryGetValue("data", out LoginResponseData data))
+                    {
+                        _token = data.Access_token;
+                        _refreshToken = data.Refresh_token;
+
+                        if (!string.IsNullOrEmpty(_token))
+                        {
+                            Authenticated = true;
+                            Debug.WriteLine("Authentication successful");
+                            ConfigureHttpClient();
+                            return;
+                        }
+                    }
+                }
+
+                Authenticated = false;
+                Debug.WriteLine("Authentication failed: Unable to retrieve token.");
             }
             catch (Exception e)
             {
-                this.Authenticated = false;
+                Authenticated = false;
                 Debug.WriteLine($"Authentication aborted, error: {e.Message}");
-                return;
-            }
-
-            var responseContent = await response.Content.ReadAsStringAsync();
-            Debug.WriteLine($"Authentication response: {responseContent}");
-            // Deserialize the response content into the custom class
-            var responseData = JsonConvert.DeserializeObject<Dictionary<string, LoginResponseData>>(responseContent);
-
-            // Access the content of the 'data' field
-            LoginResponseData data = responseData["data"];
-
-            this._token = data.Access_token;
-            this._refreshToken = data.Refresh_token;
-
-            if (this.Token != null)
-            {
-                this.Authenticated = true;
-                Debug.WriteLine("Authentication successful");
-                ConfigureHttpClient();
-            }
-            else
-            {
-                this.Authenticated = false;
-                Debug.WriteLine("Authentication failed");
             }
         }
 
         private void ConfigureHttpClient()
         {
-            this.HttpClient = new HttpClient();
-            this.HttpClient.DefaultRequestHeaders.Accept.Clear();
-            this.HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            this.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.Token);
-
-            this.Client = new GraphQLHttpClient(new GraphQLHttpClientOptions
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            Client = new GraphQLHttpClient(new GraphQLHttpClientOptions
             {
-                EndPoint = new Uri(this.GraphQlUrl)
-            }, new NewtonsoftJsonSerializer(), this.HttpClient);
+                EndPoint = new Uri(GraphQlUrl)
+            }, new NewtonsoftJsonSerializer(), HttpClient);
             Debug.WriteLine("HttpClient configured");
         }
     }

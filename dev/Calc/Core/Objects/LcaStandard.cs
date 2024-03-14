@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Calc.Core.Objects.Materials
+namespace Calc.Core.Objects
 {
-    public class Standard
+    public class LcaStandard
     {
         [JsonProperty("name")]
         public string Name { get; set; }

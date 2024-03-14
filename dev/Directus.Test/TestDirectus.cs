@@ -16,6 +16,12 @@ namespace Calc.DirectusTest
         [TestMethod]
         public async Task Directus_Authenticate_AuthenticatedIsTrue()
         {
+            /*AppContext.SetSwitch("Switch.System.Net.DontEnableSchUseStrongCrypto", true);
+            AppContext.SetSwitch("Switch.System.Net.DontEnableSystemDefaultTlsVersions", true);
+            AppContext.SetSwitch("Switch.System.ServiceModel.DisableUsingServicePointManagerSecurityProtocols", false);
+            AppContext.SetSwitch("Switch.System.ServiceModel.DontEnableSystemDefaultTlsVersions", true);*/
+
+
             //Arrange
             // get email, password and url from environment variables
             _email = Environment.GetEnvironmentVariable("CALC_DIRECTUS_EMAIL");

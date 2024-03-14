@@ -6,14 +6,13 @@
         xmlns:local="clr-namespace:Calc.MVVM.ViewModels"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:views="clr-namespace:Calc.MVVM.Views"
-        d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
+        d:DataContext="{d:DesignInstance Type=local:BuilderViewModel}"
         Loaded="WindowLoaded"
         Closing="WindowClosing"
         mc:Ignorable="d"
-        Height="800" MinHeight="600"
+        Height="700" MinHeight="700"
         Width="800" MinWidth="600"
         WindowStartupLocation="CenterScreen"
-
         Icon="pack://application:,,,/CalcMVVM;component/Resources/icon-01.png"
         Title="CALC"
         Topmost="True">
@@ -28,149 +27,37 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
+    <Grid x:Name="MainGrid">
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="31*"/>
-            <ColumnDefinition Width="364*"/>
-            <ColumnDefinition Width="126*"/>
-            <ColumnDefinition Width="379*"/>
-        </Grid.ColumnDefinitions>
-        <Grid Grid.ColumnSpan="4">
+        <Grid x:Name="BuilderGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="4*"/>
-                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"/>
-                <RowDefinition Height="110"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="85"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="2*"/>
                 <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
-
-
-
-            <Button Style="{StaticResource ButtonStyle}"
-                    Grid.Column="2"
-                    HorizontalAlignment="Right"
-                    Margin="5"
-                    Width="25"
-                    Content="✕"
-                    Click="OnCloseClicked"/>
 
             <Label Content="Revit Elements:"
                     Grid.Column="0"
                     Grid.Row="0"
                     FontSize="27"
-                    Margin="10,5,0,0"
+                    Margin="10,0,0,0"
                     FontWeight="light"/>
 
-            <Label Content="Buildup Settings:" 
-                Grid.Column="2"
-                Grid.Row="0"
-                FontSize="27"
-                Margin="10,5,0,0"
-                FontWeight="light"/>
-
-
-            <StackPanel x:Name="BuildupSectoin"
-                        Height="200"
-                        Grid.Column="2" 
-                        Grid.Row="1">
-
-
-
-                <Grid Margin="10,0,10,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="25"/>
-                        <RowDefinition Height="35"/>
-                        <RowDefinition Height="25"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <ComboBox    x:Name="StandardComboBox"
-                                 Grid.Row="0"
-                                 Grid.Column="0"
-                                 ItemsSource="{Binding Store.StandardsAll}"
-                                 SelectedItem="{Binding Store.StandardSelected}"
-                                 Style="{StaticResource RoundedComboBoxStyle}"
-                                 DisplayMemberPath="Name"/>
-
-                    <ComboBox    x:Name="BuildupGroupComboBox"
-                                 Grid.Row="1"
-                                 Grid.Column="0"
-                                 ItemsSource="{Binding Store.BuildupGroupsAll}"
-                                 SelectedItem="{Binding BuildupFieldsVM.SelectedBuildupGroup}"
-                                 Style="{StaticResource RoundedComboBoxStyle}"
-                                 DisplayMemberPath="Name"/>
-
-                    <ComboBox    x:Name="BuildupUnitComboBox"
-                                 Grid.Row="2"
-                                 Grid.Column="0"
-                                 ItemsSource="{Binding BuildupFieldsVM.BuildupUnitsAll}"
-                                 SelectedItem="{Binding BuildupFieldsVM.SelectedBuildupUnit}"
-                                 Style="{StaticResource RoundedComboBoxStyle}"
-                                 DisplayMemberPath="Name"/>
-
-                    <Border  Grid.Column="1"
-                             Grid.Row="0"
-                             Grid.ColumnSpan="2"
-                             Margin="5,0,0,0"
-                             Height="25"
-                             BorderBrush="Silver"
-                             BorderThickness="1"
-                             CornerRadius="4">
-                        <TextBlock x:Name="BuildupNameTextBlock"
-                               FontWeight="SemiBold"
-                               HorizontalAlignment="Stretch"/>
-                    </Border>
-
-                    <Border  Grid.Column="1"
-                             Grid.Row="1"
-                             Grid.RowSpan="2"
-                             Height="55"
-                             Margin="5,5,0,0"
-                             BorderBrush="Silver"
-                             BorderThickness="1"
-                             CornerRadius="4">
-                        <TextBlock x:Name="DescriptionTextBlock"
-                                   FontWeight="SemiBold"
-                                   HorizontalAlignment="Stretch"/>
-                    </Border>
-                    <Border  Grid.Column="2"
-                             Grid.Row="1"
-                             Grid.RowSpan="2"
-                             Height="55"
-                             Margin="5,5,0,0"
-                             BorderBrush="Silver"
-                             BorderThickness="1"
-                             Background="WhiteSmoke"
-                             CornerRadius="4">
-                    </Border>
-                </Grid>
-
-                <DockPanel x:Name="MappingPanel"
-                       
-                       HorizontalAlignment="Stretch"
-                       LastChildFill="True">
-
-                </DockPanel>
-            </StackPanel>
-
             <Grid x:Name="TreeviewGrid"
-                  DockPanel.Dock="Bottom"
-                  Grid.Column="0"
-                  Grid.Row="1"
-                  Grid.RowSpan="3"
-                  Margin="10,0,10,10">
+                      Grid.Column="0"
+                      Grid.Row="1"
+                      Grid.RowSpan="5"
+                      Margin="10,0,10,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="10"/>
@@ -183,11 +70,74 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Border Grid.Row="2"
-                        Grid.ColumnSpan="5"
-                        BorderBrush="Silver"
-                        BorderThickness="1"
-                        CornerRadius="4">
+
+                <Button Content="Select"
+                            Style="{StaticResource ButtonStyle}"
+                            Grid.Column="0"
+                            Grid.Row="0"
+                            Width="60"
+                            Height="25"
+                            HorizontalAlignment="Left"
+                            Click="SelectClicked"/>
+                    
+                <Border Grid.ColumnSpan="4" Grid.Column="1" Grid.Row="0" CornerRadius="4" Background="LightGray">
+                    <Border BorderThickness="0" CornerRadius="4">
+                        <Border.Background>
+                            <SolidColorBrush Color="{Binding NodeTreeVM.SelectedNodeItem.LabelColor}"/>
+                        </Border.Background>
+                    </Border>
+                </Border>
+                    
+                <StackPanel x:Name="CountPanel"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="0,5,0,0">
+                    <TextBlock Text="Count"
+                                FontWeight="SemiBold"
+                                HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding BuildupCreationVM.CountString}"
+                                HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel x:Name="LengthPanel"
+                                Grid.Row="0"
+                            Grid.Column="2"
+                            Margin="0,5,0,0">
+                    <TextBlock Text="Length"
+                                FontWeight="SemiBold"
+                                HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding BuildupCreationVM.LengthString}"
+                                HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel x:Name="AreaPanel"
+                            Grid.Row="0"
+                            Grid.Column="3"
+                            Margin="0,5,0,0">
+                    <TextBlock Text="Area"
+                                FontWeight="SemiBold"
+                                HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding BuildupCreationVM.AreaString}"
+                                HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel x:Name="VolumePanel"
+                            Grid.Row="0"
+                            Grid.Column="4"
+                            Margin="0,5,0,0">
+                    <TextBlock Text="Volume"
+                                FontWeight="SemiBold"
+                                HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding BuildupCreationVM.VolumeString}"
+                                HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <Border x:Name="TreeViewBorder"
+                            Grid.Row="2"
+                            Grid.ColumnSpan="5"
+                            BorderBrush="Silver"
+                            BorderThickness="1"
+                            CornerRadius="4">
                     <TreeView x:Name="TreeView"
                             Background="Transparent"
                             BorderThickness="0"
@@ -197,164 +147,200 @@
                             ItemContainerStyle="{StaticResource TreeViewItemStyle}">
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding Layers}">
-                                <ContentControl Content="{Binding}"
-                                    ContentTemplate="{StaticResource BranchItemTemplate}">
-                                    <ContentControl.ToolTip>
-                                        <TextBlock Text="{Binding Name}"/>
-                                    </ContentControl.ToolTip>
-                                </ContentControl>
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>
                     </TreeView>
                 </Border>
+            </Grid>
+            
+            
 
-                <Button Style="{StaticResource ButtonStyle}"
-                    Grid.Column="0"
-                    Grid.Row="0"
-                    Content="Select"
-                    Width="60"
-                    Height="25"
-                        HorizontalAlignment="Left"
-                    Click="SelectClicked"
-                    />
+            <Label Content="Buildup Settings:" 
+                Grid.Column="2"
+                Grid.Row="0"
+                FontSize="27"
+                Margin="10,0,0,0"
+                FontWeight="light"/>
 
-                <Border Grid.ColumnSpan="4" Grid.Column="1" Grid.Row="0" CornerRadius="4" Background="LightGray">
-                    <Border BorderThickness="0" CornerRadius="4">
-                        <Border.Background>
-                            <SolidColorBrush Color="{Binding NodeTreeVM.SelectedNodeItem.LabelColor}"/>
-                        </Border.Background>
-                    </Border>
+            <Grid x:Name="BuildupInfoGrid"
+                    Grid.Column="2" 
+                    Grid.Row="1"
+                    Margin="10,0,10,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="25"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <ComboBox   x:Name="StandardComboBox"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            ItemsSource="{Binding Store.StandardsAll}"
+                            SelectedItem="{Binding Store.StandardSelected}"
+                            Style="{StaticResource RoundedComboBoxStyle}"
+                            DisplayMemberPath="Name"/>
+
+                <ComboBox   x:Name="BuildupGroupComboBox"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            ItemsSource="{Binding Store.BuildupGroupsAll}"
+                            SelectedItem="{Binding BuildupCreationVM.SelectedBuildupGroup}"
+                            Style="{StaticResource RoundedComboBoxStyle}"
+                            DisplayMemberPath="Name"/>
+
+                <ComboBox   x:Name="BuildupUnitComboBox"
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            ItemsSource="{Binding BuildupCreationVM.BuildupUnitsAll}"
+                            SelectedItem="{Binding BuildupCreationVM.SelectedBuildupUnit}"
+                            Style="{StaticResource RoundedComboBoxStyle}"
+                            DisplayMemberPath="Name"/>
+
+                <Border  Grid.Column="1"
+                            Grid.Row="0"
+                            Grid.ColumnSpan="2"
+                            Margin="5,0,0,0"
+                            Height="25"
+                            BorderBrush="Silver"
+                            BorderThickness="1"
+                            CornerRadius="4">
+                    <TextBlock x:Name="BuildupNameTextBlock"
+                            FontWeight="SemiBold"
+                            HorizontalAlignment="Stretch"/>
                 </Border>
 
-                <StackPanel Grid.Row="0"
-                            Grid.Column="1"
-                            Margin="0,5,0,0">
-                    <TextBlock Text="Count"
-                               FontWeight="SemiBold"
-                               HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding BuildupCreationVM.CountString}"
-                               HorizontalAlignment="Center"/>
-                </StackPanel>
-
-                <StackPanel Grid.Row="0"
-                            Grid.Column="2"
-                            Margin="0,5,0,0">
-                    <TextBlock Text="Length"
-                               FontWeight="SemiBold"
-                               HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding BuildupCreationVM.LengthString}"
-                                HorizontalAlignment="Center"/>
-                </StackPanel>
-
-                <StackPanel Grid.Row="0"
-                            Grid.Column="3"
-                            Margin="0,5,0,0">
-                    <TextBlock Text="Area"
-                               FontWeight="SemiBold"
-                               HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding BuildupCreationVM.AreaString}"
-                               HorizontalAlignment="Center"/>
-                </StackPanel>
-
-                <StackPanel Grid.Row="0"
-                            Grid.Column="4"
-                            Margin="0,5,0,0">
-                    <TextBlock Text="Volume"
-                               FontWeight="SemiBold"
-                               HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding BuildupCreationVM.VolumeString}"
-                               HorizontalAlignment="Center"/>
-                </StackPanel>
-
-
-
+                <Border  Grid.Column="1"
+                            Grid.Row="1"
+                            Grid.RowSpan="2"
+                            Height="55"
+                            Margin="5,5,0,0"
+                            BorderBrush="Silver"
+                            BorderThickness="1"
+                            CornerRadius="4">
+                    <TextBlock x:Name="DescriptionTextBlock"
+                                FontWeight="SemiBold"
+                                HorizontalAlignment="Stretch"/>
+                </Border>
+                <Border  Grid.Column="2"
+                            Grid.Row="1"
+                            Grid.RowSpan="2"
+                            Height="55"
+                            Margin="5,5,0,0"
+                            BorderBrush="Silver"
+                            BorderThickness="1"
+                            Background="WhiteSmoke"
+                            CornerRadius="4">
+                </Border>
             </Grid>
 
-            <Grid x:Name="BuildupGrid"
-                  DockPanel.Dock="Bottom"
-                  Grid.Column="2"
-                  Grid.Row="3"
-                  Margin="10,10,10,10">
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="45"/>
-                    <RowDefinition Height="80"/>
-                    <RowDefinition Height="4*"/>
-                    <RowDefinition Height="55"/>
-                    <RowDefinition Height="2*"/>
-                </Grid.RowDefinitions>
-
-                <Label Content="Materials:"
-                       Grid.Row="0"
-                       Padding="0"
+            <Label Content="Materials:"
+                       Grid.Column="2"
+                       Grid.Row="2"
+                       Margin="10,0,0,0"
                        FontSize="27"
                        FontWeight="Light"/>
+                    
+            <Grid x:Name="MaterialGrid"
+                  Grid.Column="2"
+                  Grid.Row="3"
+                  Margin="10,0,10,0">
 
-                <DockPanel x:Name="BuildupSelection"
-                           Grid.Row="1"
-                           Height="60">
-                    <StackPanel DockPanel.Dock="Left"
-                                Width="70"
-                                Margin="0,0,10,0">
-                        <Button Style="{StaticResource ButtonStyle}"
-                                Content="Follow"
-                                Width="70"
-                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.InheritEnabled}"
-                                Click="InheritClicked"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-                        <Button Style="{StaticResource ButtonStyle}"
-                                Content="Reduce"
-                                Width="70"
-                                Margin="0,5,0,0"
-                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.RemoveEnabled}"
-                                Click="RemoveClicked"/>
-                    </StackPanel>
-                    <StackPanel DockPanel.Dock="Left">
-                        <views:SearchComboBox Tag="1"
-                                              x:Uid="ShowTextNote"
-                                              Style="{StaticResource RoundedComboBoxStyle}"
-                                              ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.AllBuildupsView1}"
-                                              SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup1}"
-                                              DisplayMemberPath="Name"
-                                              IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CanAddFirstBuildup}"
-                                              HorizontalAlignment="Stretch"
-                                              VerticalAlignment="Top">
-                            <ComboBox.GroupStyle>
-                                <StaticResource ResourceKey="ComboBoxGroupStyle"/>
-                            </ComboBox.GroupStyle>
-                        </views:SearchComboBox>
+                <ComboBox   x:Name="MaterialFunctionComboBox"
+                            Grid.Column="1"
+                            Grid.Row="0"
+                            Grid.ColumnSpan="2"
+                            Margin="5,0,0,0"
+                            ItemsSource="{Binding Store.StandardsAll}"
+                            SelectedItem="{Binding Store.StandardSelected}"
+                            Style="{StaticResource RoundedComboBoxStyle}"
+                            DisplayMemberPath="Name"/>
+                
+                <views:SearchComboBox Tag="1"
+                      x:Uid="ShowTextNote"
+                      Grid.Column="0"
+                      Grid.Row="0"
+                      Style="{StaticResource RoundedComboBoxStyle}"
+                      ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.AllBuildupsView1}"
+                      SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup1}"
+                      DisplayMemberPath="Name"
+                      IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CanAddFirstBuildup}"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Top">
+                    <ComboBox.GroupStyle>
+                        <StaticResource ResourceKey="ComboBoxGroupStyle"/>
+                    </ComboBox.GroupStyle>
+                </views:SearchComboBox>
 
-                        <views:SearchComboBox Tag="2"
-                                              x:Uid="ShowTextNote"
-                                              Style="{StaticResource RoundedComboBoxStyle}"
-                                              ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.AllBuildupsView2}"
-                                              SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup2}"
-                                              DisplayMemberPath="Name"
-                                              IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CanAddSecondBuildup}"
-                                              Margin="0,5,0,0"
-                                              HorizontalAlignment="Stretch"
-                                              VerticalAlignment="Top">
-                            <ComboBox.GroupStyle>
-                                <StaticResource ResourceKey="ComboBoxGroupStyle"/>
-                            </ComboBox.GroupStyle>
-                        </views:SearchComboBox>
-                    </StackPanel>
-                </DockPanel>
-                <Grid Grid.Row="2"
-                        Margin="0,0,0,10"
+
+                <Button Content="Reduce"
+                        Grid.Column="2"
+                        Grid.Row="1"
+                        Margin="2.5,0,0,0"
+                        Style="{StaticResource ButtonStyle}"
+                        Click="RemoveClicked"/>
+                
+                <Border x:Name="RatioBorder"
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        Margin="5,0,2.5,0"
+                        Height="25"
+                        BorderBrush="Silver"
+                        BorderThickness="1"
+                        CornerRadius="4">
+                    <TextBlock x:Name="RatioTextBlock"
+                                FontWeight="SemiBold"
+                                HorizontalAlignment="Stretch"/>
+                </Border>
+
+                <views:SearchComboBox Tag="2"
+                      x:Uid="ShowTextNote"
+                      Grid.Column="0"
+                      Grid.Row="1"
+                      Margin="0,5,0,0"
+                      Style="{StaticResource RoundedComboBoxStyle}"
+                      ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.AllBuildupsView2}"
+                      SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup2}"
+                      DisplayMemberPath="Name"
+                      IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CanAddSecondBuildup}"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Top">
+                    <ComboBox.GroupStyle>
+                        <StaticResource ResourceKey="ComboBoxGroupStyle"/>
+                    </ComboBox.GroupStyle>
+                </views:SearchComboBox>
+
+
+                <Grid   x:Name="MaterialTabsGrid"
+                        Grid.ColumnSpan="3"
+                        Grid.Row="3"
                         DockPanel.Dock="Top">
                     <Border Margin="0,21,0,0"
                         BorderBrush="Silver"
                         BorderThickness="1,1,1,1"
-                        
                         CornerRadius="4"/>
-                    <TabControl x:Name="BuildupTabs"
+                    <TabControl x:Name="MaterialTabs"
                             BorderThickness="0"
                             Background="Transparent"
                             ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CurrentBuildups}"
                             SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.ActiveBuildup}"
                             ItemContainerStyle="{StaticResource TabItemStyle}">
-
                         <TabControl.ContentTemplate>
                             <DataTemplate>
                                 <DockPanel VerticalAlignment="Stretch">
@@ -408,238 +394,89 @@
                         </TabControl.ContentTemplate>
                     </TabControl>
                 </Grid>
-
-
-                <Label Content="Buildup Preview:"
-                       Grid.Row="3"
-                       Padding="0"
-                       FontSize="27"
-                       FontWeight="Light"/>
-
-                <Border  x:Name="ResultSection"
-                         Grid.Row="4" 
-                         CornerRadius="4" 
-                         Background="LightGray">
-                    <Border CornerRadius="4">
-                        <Border.Background>
-                            <SolidColorBrush Color="{Binding NodeTreeVM.SelectedNodeItem.LabelColor}"/>
-                        </Border.Background>
-
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="38"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-
-                            <TextBlock Grid.Row="0"
-                                   Text="{Binding CalculationVM.Name}"
-                                   Margin="10"
-                                   FontSize="14"/>
-
-                            <DataGrid x:Name="ResultGrid"
-                                      Grid.Row="1"
-                                      Style="{StaticResource ResultDataGridStyle}"
-                                      VerticalAlignment="Bottom"
-                                      Margin="10"
-                                      ItemsSource="{Binding CalculationVM.CategorizedResults}">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Buildup Group" Binding="{Binding GroupName}" Width="3*"  IsReadOnly="True" />
-                                    <DataGridTextColumn Header="GWP (kgCO2)" Binding="{Binding Gwp}" Width="1*"  IsReadOnly="True" />
-                                    <DataGridTextColumn Header="GE (kWh oil)" Binding="{Binding Ge}" Width="1*"  IsReadOnly="True" />
-                                </DataGrid.Columns>
-                            </DataGrid>
-
-                            <DataGrid x:Name="ErrorGrid"
-                                    Grid.Row="1"
-                                    Style="{StaticResource ErrorDataGridStyle}"
-                                    VerticalAlignment="Bottom"
-                                    Margin="10"
-                                    ItemsSource="{Binding CalculationVM.Errors}">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Binding="{Binding ErrorMessage}" Width="1*" IsReadOnly="True">
-                                        <DataGridTextColumn.Header>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="💔" FontSize="10" Foreground="Crimson" VerticalAlignment="Center"/>
-                                                <TextBlock Text=" Issues" Foreground="Crimson" FontSize="13" />
-                                            </StackPanel>
-                                        </DataGridTextColumn.Header>
-                                    </DataGridTextColumn>
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </Grid>
-                    </Border>
-                </Border>
-
             </Grid>
 
-            <StackPanel x:Name="TogglePanel"
-                        Grid.Column="0"
-                        Grid.Row="4"
-                        Orientation="Horizontal"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Left"
-                        Margin="10,0,0,10"/>
+            <Label Content="Buildup Preview:"
+                   Grid.Row="4"
+                   Grid.Column="2"
+                   Margin="10,0,0,0"
+                   FontSize="27"
+                   FontWeight="Light"/>
 
+            <Border  x:Name="PreviewSection"
+                     Margin="10,0,10,0"
+                     Grid.Row="5" 
+                     Grid.Column="2"
+                     CornerRadius="4" 
+                     Background="LightGray">
+                
 
-            <Grid  x:Name="SaveButtons"
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="38"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                            Text="{Binding CalculationVM.Name}"
+                            Margin="10"
+                            FontSize="14"/>
+
+                    <DataGrid x:Name="ResultGrid"
+                    Grid.Row="1"
+                    Style="{StaticResource ResultDataGridStyle}"
+                    VerticalAlignment="Bottom"
+                    Margin="10"
+                    ItemsSource="{Binding CalculationVM.CategorizedResults}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Buildup Group" Binding="{Binding GroupName}" Width="3*"  IsReadOnly="True" />
+                            <DataGridTextColumn Header="GWP (kgCO2)" Binding="{Binding Gwp}" Width="1*"  IsReadOnly="True" />
+                            <DataGridTextColumn Header="GE (kWh oil)" Binding="{Binding Ge}" Width="1*"  IsReadOnly="True" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <DataGrid x:Name="ErrorGrid"
+                Grid.Row="1"
+                Style="{StaticResource ErrorDataGridStyle}"
+                VerticalAlignment="Bottom"
+                Margin="10"
+                ItemsSource="{Binding CalculationVM.Errors}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding ErrorMessage}" Width="1*" IsReadOnly="True">
+                                <DataGridTextColumn.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="💔" FontSize="10" Foreground="Crimson" VerticalAlignment="Center"/>
+                                        <TextBlock Text=" Issues" Foreground="Crimson" FontSize="13" />
+                                    </StackPanel>
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
+
+            <Grid  x:Name="SaveGrid"
                     Grid.Column="2"
-                    Grid.Row="4">
+                    Grid.Row="6">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Button Style="{StaticResource ButtonStyle}"
+                <Button  Content="Save Buildup"
+                        Style="{StaticResource ButtonStyle}"
                         Grid.Column="1"
-                        Content="Save Buildup"
-                        Click="SaveResultsClicked" Margin="5,0,10,10"
-                        IsEnabled="{Binding CalculationVM.CanSaveResults}"/>
+                         Margin="0,0,10,0"/>
             </Grid>
         </Grid>
 
-        <Grid x:Name="ProjectOverlay"
-              d:IsHidden="true"
-              Background="Gainsboro"
-              Margin="5,5,5,5"
-              Visibility="{Binding VisibilityVM.ProjectOverlayVisibility}" Grid.ColumnSpan="4"
-              >
-            <StackPanel VerticalAlignment="Center">
-                <TextBlock HorizontalAlignment="Center"
-                            Text="Choose Project:"
-                           Margin="10"/>
-                <ComboBox x:Name="ProjectsComboBox"
-                          Style="{StaticResource RoundedComboBoxStyle}"
-                          HorizontalAlignment="Center"
-                          ItemsSource= "{Binding LoadingVM.AllProjects}"
-                          DisplayMemberPath="ProjectNumber"
-                          Width="90"/>
-                <Button Style="{StaticResource ButtonStyle}"
-                        Content="OK" 
-                        HorizontalAlignment="Center"
-                        Width="90"
-                        Margin="10"
-                        Click="ProjectOKClicked"/>
-            </StackPanel>
-        </Grid>
 
-        <Grid x:Name="NewMappingOverlay"
-             Background="Gainsboro"
-              d:IsHidden="True"
-             Margin="5,5,5,5"
-             Visibility="{Binding VisibilityVM.NewMappingOverlayVisibility}" Grid.ColumnSpan="4"
-             >
-            <StackPanel VerticalAlignment="Center">
 
-                <TextBlock Grid.Row="0"
-                           HorizontalAlignment="Center"
-                           Text="Mappings to duplicate:"/>
-
-                <ListBox Grid.Row="1"
-                         x:Name="MappingListBox"
-                         HorizontalAlignment="Center"
-                         Margin="10"
-                         Width="180"
-                         Height="180"
-                         ScrollViewer.VerticalScrollBarVisibility="Auto"
-                         SelectionChanged="MappingSelectionChanged"
-                         ItemsSource="{Binding NewMappingVM.MappingsListView}">
-                    <ListBox.GroupStyle>
-                        <GroupStyle>
-                            <GroupStyle.HeaderTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Name}" Foreground="Gray" />
-                                </DataTemplate>
-                            </GroupStyle.HeaderTemplate>
-                        </GroupStyle>
-                    </ListBox.GroupStyle>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Name}"/>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-
-                <TextBlock Grid.Row="2"
-                           HorizontalAlignment="Center"
-                           Text="New mapping name:"/>
-                <TextBox Grid.Row="3"
-                         Margin="10"
-                         x:Name="NewNameText" 
-                         MinWidth="90"
-                         HorizontalAlignment="Center"
-                         Text="{Binding NewMappingVM.NewName}"/>
-                <Button Style="{StaticResource ButtonStyle}"
-                        Grid.Row="4"
-                        HorizontalAlignment="Center"
-                        Width="90"
-                        Content="Confirm" 
-                        Click="NewMappingConfirmed"/>
-                <Button Style="{StaticResource ButtonStyle}"
-                        Grid.Row="4"
-                        HorizontalAlignment="Center"
-                        Margin="10"
-                        Width="90"
-                        Content="Cancel" 
-                        Click="NewMappingCanceld"/>
-            </StackPanel>
-        </Grid>
-
-        <Grid x:Name="WaitingOverlay"
-             Background="Gainsboro"
-             Margin="5,5,5,5"              
-             Visibility="{Binding VisibilityVM.WaitingOverlayVisibility}"
-              d:IsHidden="True" Grid.ColumnSpan="4">
-            <StackPanel VerticalAlignment="Center">
-                <TextBlock x:Name="WaitingTextBlock"
-                    HorizontalAlignment="Center"
-                    Text="{Binding VisibilityVM.WaitingText}"/>
-
-                <Image gif:ImageBehavior.AnimatedSource="/CalcMVVM;component/Resources/DT_logo.gif"
-                       Width="90"
-                       Margin="10"/>
-                <Button Style="{StaticResource ButtonStyle}"
-                        Content="Quit" 
-                        IsEnabled="False"
-                    HorizontalAlignment="Center"
-                    Width="90"
-                    Click="ProjectOKClicked"/>
-            </StackPanel>
-        </Grid>
-
-        <Grid x:Name="SavingOverlay"
-             Background="Gainsboro"
-             Margin="5,5,5,5"
-             d:IsHidden="true"
-             Visibility="{Binding VisibilityVM.SavingOverlayVisibility}" Grid.ColumnSpan="4"
-             >
-            <StackPanel VerticalAlignment="Center">
-                <TextBlock HorizontalAlignment="Center"
-                    Text="Save result name:"/>
-                <TextBox x:Name="NewResultNameTextBox"
-                        HorizontalAlignment="Center"
-                        MinWidth="90"
-                        Margin="10"/>
-                <TextBlock HorizontalAlignment="Center"
-                           Text="{Binding VisibilityVM.SavingMessage}"/>
-                <Button Style="{StaticResource ButtonStyle}"
-                        Content="Confirm" 
-                        HorizontalAlignment="Center"
-                        Width="90"
-                        Margin="10"
-                        Click="SaveResultOKClicked"/>
-                <Button Style="{StaticResource ButtonStyle}"
-                        Content="Cancel" 
-                        HorizontalAlignment="Center"
-                        Width="90"
-                        Click="SaveResultCancelClicked"/>
-            </StackPanel>
-        </Grid>
-
-        <Grid x:Name="MessageOverlay"
+        <Grid x:Name="MessageOverlayGrid"
              Background="Gainsboro"
              Margin="5,5,5,5"
              Visibility="{Binding VisibilityVM.MessageOverlayVisibility}"
              
-              d:IsHidden="true" Grid.ColumnSpan="4">
+              d:IsHidden="false">
             <StackPanel VerticalAlignment="Center">
                 <TextBlock x:Name="MessageTextBlock"
                             Text="{Binding VisibilityVM.MessageText}"
@@ -652,5 +489,7 @@
                         Click="MessageOKClicked"/>
             </StackPanel>
         </Grid>
+        
+        
     </Grid>
 </Window>

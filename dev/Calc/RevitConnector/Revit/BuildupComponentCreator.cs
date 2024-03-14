@@ -90,7 +90,7 @@ namespace Calc.RevitConnector.Revit
         /// </summary>
         private void MergeBuildupComponentToList(List<BuildupComponent> List, BuildupComponent component)
         {
-            var originComponent = List.FirstOrDefault(x => x.CheckType(component));
+            var originComponent = List.FirstOrDefault(x => x.Equals(component));
             if (originComponent != null)
             {
                 //sameComponent.BasicParameterSet.Add(component.BasicParameterSet);

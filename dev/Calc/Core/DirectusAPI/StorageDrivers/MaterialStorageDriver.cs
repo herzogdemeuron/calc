@@ -4,6 +4,7 @@ using GraphQL;
 using Speckle.Newtonsoft.Json;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Materials;
+using Calc.Core.Objects;
 
 namespace Calc.Core.DirectusAPI.Drivers
 {
@@ -29,7 +30,7 @@ namespace Calc.Core.DirectusAPI.Drivers
                 }
             }";
 
-        public void LinkStandards(List<Standard> standards)
+        public void LinkStandards(List<LcaStandard> standards)
         {
             foreach (var material in GotManyItems)
             {

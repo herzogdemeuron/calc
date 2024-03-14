@@ -19,7 +19,11 @@ namespace Calc.MVVM.ViewModels
             store = directusStore;
         }
 
-        public async Task HandleLoadingAsync()
+        public async Task HandleBuilderLoading()
+        {
+            await store.GetBuilderData();
+        }
+        public async Task HandleLoadingProjectsAsync()
         {
             await store.GetProjects();
             OnPropertyChanged(nameof(AllProjects));
@@ -38,7 +42,7 @@ namespace Calc.MVVM.ViewModels
 
             try
             {
-                bool dataGot = await store.GetOtherData();
+                bool dataGot = await store.GetModelCheckerData();
                 MediatorToView.Broadcast("ShowMainView");
 
             }

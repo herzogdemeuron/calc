@@ -25,23 +25,22 @@ namespace Calc.Core.Objects.Buildups
         public bool IsNormalizer { get; set; }
         public BasicParameterSet BasicParameterSet { get; set; }
         public bool HasLayers => LayerComponents.Count > 0;
+
         public bool CheckSource(BuildupComponent buildupComponent)
         {
             return this.TypeIdentifier == buildupComponent.TypeIdentifier;
         }
 
+        public bool Equals(BuildupComponent component)
+        {
+            return TypeIdentifier == component.TypeIdentifier;
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        public bool CheckType(BuildupComponent component)
-        {
-            return TypeIdentifier == component.TypeIdentifier;
-        }
-
 
         /// <summary>
         /// apply a source buildupComponent to current revit/rhino buildupComponent, 

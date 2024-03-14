@@ -14,29 +14,27 @@ namespace Calc.MVVM.ViewModels
     {
         public DirectusStore Store { get; set; }
         public BuildupCreationViewModel BuildupCreationVM { get; set; }
-
         public LoadingViewModel LoadingVM { get; set; }
-        public NodeTreeModel NodeTreeVM { get; set; }
-        public SavingViewModel SavingVM { get; set; }
+        //public NodeTreeModel NodeTreeVM { get; set; }
+        //public SavingViewModel SavingVM { get; set; }
         public VisibilityViewModel VisibilityVM { get; set; }
 
         public BuilderViewModel(DirectusStore store, IBuildupComponentCreator builupComponentCreator)
         {
             Store = store;
             VisibilityVM = new VisibilityViewModel();
-            LoadingVM = new LoadingViewModel(store);
-
-            BuildupCreationVM = new BuildupCreationViewModel(builupComponentCreator);
+            //LoadingVM = new LoadingViewModel(store);
+            BuildupCreationVM = new BuildupCreationViewModel(Store, builupComponentCreator);
         }
 
         public async Task HandleWindowLoadedAsync()
         {
-            await LoadingVM.HandleLoadingAsync();
+            await LoadingVM.HandleBuilderLoading();
         }
 
         public void HandleWindowClosing()
         {
-            NodeTreeVM.DeselectNodes();
+            //NodeTreeVM.DeselectNodes();
         }
 
 
@@ -47,33 +45,33 @@ namespace Calc.MVVM.ViewModels
 */
         public void HandleNodeItemSelectionChanged(NodeModel selectedBranch)
         {
-            NodeTreeVM.HandleNodeItemSelectionChanged(selectedBranch);
+            //NodeTreeVM.HandleNodeItemSelectionChanged(selectedBranch);
         }
 
         public void HandleSideClicked()
         {
-            NodeTreeVM.DeselectNodes();
+            //NodeTreeVM.DeselectNodes();
         }
 
 
         public void HandleRemove()
         {
-            if (NodeTreeVM.SelectedNodeItem == null)
+            /*if (NodeTreeVM.SelectedNodeItem == null)
                 return;
-            NodeTreeVM.SelectedNodeItem.NodeBuildupItem.HandleRemove();
+            NodeTreeVM.SelectedNodeItem.NodeBuildupItem.HandleRemove();*/
         }
 
 
 
         public void HandleUpdateRevitClicked(Forest forest)
         {
-            ForestVM.HandleForestSelectionChanged(forest);
+            //ForestVM.HandleForestSelectionChanged(forest);
         }
 
 
         public async Task HandleSendingResults(string newName)
         {
-            await SavingVM.HandleSendingResults(newName);
+            //await SavingVM.HandleSendingResults(newName);
         }
 
         public void HandleMessageClose()

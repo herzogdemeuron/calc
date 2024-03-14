@@ -41,7 +41,7 @@ namespace Calc.MVVM.ViewModels
 
         public async Task HandleWindowLoadedAsync()
         {
-            await LoadingVM.HandleLoadingAsync();
+            await LoadingVM.HandleLoadingProjectsAsync();
         }
 
         public void HandleWindowClosing()
