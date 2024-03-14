@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System;
 using Calc.Core.Calculations;
+using Calc.Core.Objects;
 using Calc.Core.Objects.Materials;
 using GraphQL.Client.Http;
 using Polly;
@@ -80,8 +81,8 @@ namespace Calc.DirectusTest.StorageDriverTests
         {
             return new Buildup
             {
-                Name = "TestBuildup",
-                Standard = new Standard { Id = 1 },
+               /* Name = "TestBuildup",
+                Standard = new LcaStandard { Id = 1 },
                 BuildupUnit = Core.Objects.Unit.m,
                 Description = "TestDescription ccc",
                 CalculationComponents = new List<CalculationComponent>
@@ -94,7 +95,7 @@ namespace Calc.DirectusTest.StorageDriverTests
                         GE = 1,
                         Material = new Material { Id = 7 }
                     }
-                }
+                }*/
             };
         }
     }

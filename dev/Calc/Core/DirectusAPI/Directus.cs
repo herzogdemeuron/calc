@@ -62,7 +62,7 @@ namespace Calc.Core.DirectusAPI
             }
 
             _url = url;
-            //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls13; // this is added since directus announced that they force using TLS 1.3 for directus cloud on all traffics
+            //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13; // this is added since directus announced that they force using TLS 1.3 for directus cloud on all traffics
 
             var requestBody = JsonConvert.SerializeObject(new { email, password });
             var content = new StringContent(requestBody, Encoding.UTF8, "application/json");

@@ -46,6 +46,13 @@ namespace Calc.Core.Objects.BasicParameters
 
         public bool HasValue => Amount != null;
 
+        public BasicParameter(string name, Unit unit, double amount)
+        {
+            Name = name;
+            Unit = unit;
+            Amount = amount;
+        }
+
         public BasicParameter PerformOperation(Operation operation, BasicParameter otherParam)
         {
             var resultParam = new BasicParameter()

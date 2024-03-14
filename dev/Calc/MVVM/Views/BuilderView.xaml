@@ -141,7 +141,7 @@
                     <TreeView x:Name="TreeView"
                             Background="Transparent"
                             BorderThickness="0"
-                            ItemsSource="{Binding BuildupCreationVM.Buildup.BuildupComponents}"
+                            ItemsSource="{Binding BuildupCreationVM.BuildupComponents}"
                             TreeViewItem.Selected="TreeViewItemSelected"
                             MouseLeftButtonDown="SideClickDown"
                             ItemContainerStyle="{StaticResource TreeViewItemStyle}">
