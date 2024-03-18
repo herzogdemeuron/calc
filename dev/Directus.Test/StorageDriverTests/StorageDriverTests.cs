@@ -18,7 +18,7 @@ namespace Calc.DirectusTest.StorageDriverTests
 
 
     [TestClass]
-    public class BuildupStorageDriverTests
+    public class StorageDriverTests
     {
         private Directus directus;
         private readonly Polly.Retry.AsyncRetryPolicy _graphqlRetry = Policy.Handle<GraphQLHttpRequestException>()
@@ -37,6 +37,41 @@ namespace Calc.DirectusTest.StorageDriverTests
         public async Task Initialize()
         {
             this.directus = await TestUtils.GetAuthenticatedDirectus();
+        }
+
+        [TestMethod]
+        public async Task GetProjects()
+        {
+            var storageManager = new DirectusManager<Project>(this.directus);
+
+            // Act
+            var response = await storageManager.GetMany<ProjectStorageDriver>(new ProjectStorageDriver());
+
+            // Assert
+            Assert.IsNotNull(response.GotManyItems);
+            Assert.IsInstanceOfType(response.GotManyItems, typeof(List<Project>));
+            Assert.IsTrue(response.GotManyItems.Count > 0);
+
+            var json = System.Text.Json.JsonSerializer.Serialize(response, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+            Console.WriteLine(json);
+        }
+
+        [TestMethod]
+        public async Task GetAllStandards()
+        {
+            var storageManager = new DirectusManager<LcaStandard>(this.directus);
+
+            // Act
+            var response = await storageManager.GetMany<StandardStorageDriver>(new StandardStorageDriver());
+
+            // Assert
+            Assert.IsNotNull(response.GotManyItems);
+            Assert.IsInstanceOfType(response.GotManyItems, typeof(List<LcaStandard>));
+            Assert.IsTrue(response.GotManyItems.Count > 0);
+
+            // serialize buildups to console using System.Text.Json, indent
+            var buildupsJson = System.Text.Json.JsonSerializer.Serialize(response, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+            Console.WriteLine(buildupsJson);
         }
 
         [TestMethod]

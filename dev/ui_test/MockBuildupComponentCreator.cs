@@ -18,10 +18,10 @@ namespace ui_test
                     "RevitMaterial1",
                     new BasicParameterSet
                     ( 
-                        new BasicParameter("pieceParam1", Unit.piece, 6),
-                        new BasicParameter("lengthParam1", Unit.m, 1.3),
-                        new BasicParameter("areaParam1", Unit.m2, 3.3),
-                        new BasicParameter("volumeParam1", Unit.m3, 4.1)
+                        new BasicParameter() { Name="pieceParam1", Unit=Unit.piece, Amount=6 },
+                        new BasicParameter() { Name = "lengthParam1", Unit = Unit.m, Amount = 1.3 },
+                        new BasicParameter() { Name = "areaParam1", Unit = Unit.m2, Amount = 3.3 },
+                        new BasicParameter() { Name = "volumeParam1", Unit = Unit.m3, Amount = 4.1 }
                     )
                 );
 
@@ -30,10 +30,10 @@ namespace ui_test
                     "RevitMaterial2",
                     new BasicParameterSet
                     (
-                        new BasicParameter("pieceParam2", Unit.piece, 2),
-                        new BasicParameter("lengthParam2", Unit.m, 2.3),
-                        new BasicParameter("areaParam2", Unit.m2, 3.6),
-                        new BasicParameter("volumeParam2", Unit.m3, 7.1)
+                        new BasicParameter() { Name = "pieceParam2", Unit = Unit.piece, Amount = 2 },
+                        new BasicParameter() { Name = "lengthParam2", Unit = Unit.m, Amount = 2.3 },
+                        new BasicParameter() { Name = "areaParam2", Unit = Unit.m2, Amount = 3.6 },
+                        new BasicParameter() { Name = "volumeParam2", Unit = Unit.m3, Amount = 7.1 }
                         )
                     );
             var layer3 = new LayerComponent
@@ -41,10 +41,10 @@ namespace ui_test
                     "RevitMaterial3",
                     new BasicParameterSet
                     (
-                        new BasicParameter("pieceParam3", Unit.piece, 3),
-                        new BasicParameter("lengthParam3", Unit.m, 3.3),
-                        new BasicParameter("areaParam3", Unit.m2, 4.3),
-                        new BasicParameter("volumeParam3", Unit.m3, 5.1)
+                        new BasicParameter() { Name = "pieceParam3", Unit = Unit.piece, Amount = 1 },
+                        new BasicParameter() { Name = "lengthParam3", Unit = Unit.m, Amount = 3.3 },
+                        new BasicParameter() { Name = "areaParam3", Unit = Unit.m2, Amount = 4.3 },
+                        new BasicParameter() { Name = "volumeParam3", Unit = Unit.m3, Amount = 5.1 }
                         )
                     );
 

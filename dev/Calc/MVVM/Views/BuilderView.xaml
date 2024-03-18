@@ -143,10 +143,12 @@
                             BorderThickness="0"
                             ItemsSource="{Binding BuildupCreationVM.BuildupComponents}"
                             TreeViewItem.Selected="TreeViewItemSelected"
-                            MouseLeftButtonDown="SideClickDown"
-                            ItemContainerStyle="{StaticResource TreeViewItemStyle}">
+                            MouseLeftButtonDown="SideClickDown">
                         <TreeView.ItemTemplate>
-                            <HierarchicalDataTemplate ItemsSource="{Binding Layers}">
+                            <HierarchicalDataTemplate ItemsSource="{Binding LayerComponents}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Title}" FontWeight="SemiBold"/>
+                                </StackPanel>
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>
                     </TreeView>
@@ -178,28 +180,31 @@
                 </Grid.ColumnDefinitions>
 
                 <ComboBox   x:Name="StandardComboBox"
+                            Text="Standard"
                             Grid.Row="0"
                             Grid.Column="0"
-                            ItemsSource="{Binding Store.StandardsAll}"
+                            ItemsSource="{Binding BuildupCreationVM.StandardsAll}"
                             SelectedItem="{Binding Store.StandardSelected}"
                             Style="{StaticResource RoundedComboBoxStyle}"
                             DisplayMemberPath="Name"/>
 
                 <ComboBox   x:Name="BuildupGroupComboBox"
+                            Text = "Buildup Group"
                             Grid.Row="1"
                             Grid.Column="0"
-                            ItemsSource="{Binding Store.BuildupGroupsAll}"
+                            ItemsSource="{Binding BuildupCreationVM.BuildupGroupsAll}"
                             SelectedItem="{Binding BuildupCreationVM.SelectedBuildupGroup}"
                             Style="{StaticResource RoundedComboBoxStyle}"
                             DisplayMemberPath="Name"/>
 
                 <ComboBox   x:Name="BuildupUnitComboBox"
+                            Text="Buildup Unit"
                             Grid.Row="2"
                             Grid.Column="0"
                             ItemsSource="{Binding BuildupCreationVM.BuildupUnitsAll}"
                             SelectedItem="{Binding BuildupCreationVM.SelectedBuildupUnit}"
-                            Style="{StaticResource RoundedComboBoxStyle}"
-                            DisplayMemberPath="Name"/>
+                            Style="{StaticResource RoundedComboBoxStyle}"/>
+
 
                 <Border  Grid.Column="1"
                             Grid.Row="0"
@@ -209,9 +214,12 @@
                             BorderBrush="Silver"
                             BorderThickness="1"
                             CornerRadius="4">
-                    <TextBlock x:Name="BuildupNameTextBlock"
+                    <TextBox x:Name="BuildupNameTextBox"
+                             VerticalAlignment="Center"
+                            BorderThickness="0"
+                            Background="Transparent"
                             FontWeight="SemiBold"
-                            HorizontalAlignment="Stretch"/>
+                            HorizontalAlignment="Stretch" TextChanged="BuildupNameTextBox_TextChanged"/>
                 </Border>
 
                 <Border  Grid.Column="1"
@@ -222,9 +230,13 @@
                             BorderBrush="Silver"
                             BorderThickness="1"
                             CornerRadius="4">
-                    <TextBlock x:Name="DescriptionTextBlock"
-                                FontWeight="SemiBold"
-                                HorizontalAlignment="Stretch"/>
+                    <TextBox x:Name="DescriptionTextBox"
+                             BorderThickness="0"
+                             TextWrapping="Wrap"
+                             Height="50"
+                             Background="Transparent"
+                            FontWeight="SemiBold"
+                            HorizontalAlignment="Stretch"/>
                 </Border>
                 <Border  Grid.Column="2"
                             Grid.Row="1"
@@ -235,6 +247,11 @@
                             BorderThickness="1"
                             Background="WhiteSmoke"
                             CornerRadius="4">
+                    <TextBlock Text="📷"
+                               Foreground="LightGray"
+                               FontSize="20"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
                 </Border>
             </Grid>
 
@@ -263,14 +280,13 @@
                 </Grid.RowDefinitions>
 
                 <ComboBox   x:Name="MaterialFunctionComboBox"
+                            Text="Material Function"
                             Grid.Column="1"
                             Grid.Row="0"
                             Grid.ColumnSpan="2"
                             Margin="5,0,0,0"
-                            ItemsSource="{Binding Store.StandardsAll}"
-                            SelectedItem="{Binding Store.StandardSelected}"
-                            Style="{StaticResource RoundedComboBoxStyle}"
-                            DisplayMemberPath="Name"/>
+                            ItemsSource="{Binding BuildupCreationVM.MaterialFunctionsAll}"
+                            Style="{StaticResource RoundedComboBoxStyle}"/>
                 
                 <views:SearchComboBox Tag="1"
                       x:Uid="ShowTextNote"
@@ -304,9 +320,12 @@
                         BorderBrush="Silver"
                         BorderThickness="1"
                         CornerRadius="4">
-                    <TextBlock x:Name="RatioTextBlock"
-                                FontWeight="SemiBold"
-                                HorizontalAlignment="Stretch"/>
+                    <TextBox x:Name="RatioTextBox"
+                            BorderThickness="0"
+                            VerticalAlignment="Center"
+                            Background="Transparent"
+                            FontWeight="SemiBold"
+                            HorizontalAlignment="Stretch"/>
                 </Border>
 
                 <views:SearchComboBox Tag="2"
@@ -476,7 +495,7 @@
              Margin="5,5,5,5"
              Visibility="{Binding VisibilityVM.MessageOverlayVisibility}"
              
-              d:IsHidden="false">
+              d:IsHidden="true">
             <StackPanel VerticalAlignment="Center">
                 <TextBlock x:Name="MessageTextBlock"
                             Text="{Binding VisibilityVM.MessageText}"

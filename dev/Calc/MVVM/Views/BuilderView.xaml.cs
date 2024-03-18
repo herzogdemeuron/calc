@@ -1,4 +1,5 @@
-﻿using Calc.MVVM.Helpers;
+﻿using Calc.Core.Objects;
+using Calc.MVVM.Helpers;
 using Calc.MVVM.Helpers.Mediators;
 using Calc.MVVM.Models;
 using Calc.MVVM.ViewModels;
@@ -22,13 +23,17 @@ namespace Calc.MVVM.Views
 
         private void SelectClicked(object sender, RoutedEventArgs e)
         {
-            BuilderVM.HandleRemove();
+            // hide the window when selecting elelemts
+            this.Hide();
+            BuilderVM.HandleSelect();
+            // show the window again
+            this.Show();
         }
         private void TreeViewItemSelected(object sender, RoutedEventArgs e)
         {
-            if (TreeView.SelectedItem is NodeModel selectedNode)
+            if (TreeView.SelectedItem is ICalcComponent selectedCompo)
             {
-                BuilderVM.HandleNodeItemSelectionChanged(selectedNode);
+                BuilderVM.HandleComponentSelectionChanged(selectedCompo);
                 TreeView.Tag = e.OriginalSource; // save selected treeviewitem for deselecting
                 e.Handled = true;
             }
@@ -65,7 +70,7 @@ namespace Calc.MVVM.Views
 
         private void RemoveClicked(object sender, RoutedEventArgs e)
         {
-            BuilderVM.HandleRemove();
+            BuilderVM.HandleSelect();
         }
 
 
@@ -84,6 +89,11 @@ namespace Calc.MVVM.Views
         private void OnCloseClicked(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void BuildupNameTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }

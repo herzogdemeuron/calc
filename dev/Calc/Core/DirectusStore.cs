@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 using GraphQL.Client.Http;
 using Polly;
 using Calc.Core.DirectusAPI;
@@ -16,13 +17,15 @@ namespace Calc.Core
 {
     public class DirectusStore
     {
-        public List<Project> ProjectsAll { get { return this.ProjectDriver.GotManyItems; } }
+        public List<Unit> UnitsAll { get; set; }
+        public List<MaterialFunction> MaterialFunctionsAll { get; set; }
+        public List<Project> ProjectsAll { get { return this.ProjectDriver?.GotManyItems; } }
         public Project ProjectSelected { get; set; } // the current project
-        public List<LcaStandard> StandardsAll { get { return this.StandardDriver.GotManyItems; } }
-        public List<Material> MaterialsAll { get { return this.MaterialDriver.GotManyItems; } }
-        public List<BuildupGroup> BuildupGroupsAll { get { return this.BuildupGroupDriver.GotManyItems; } }
-        public List<Buildup> BuildupsAll { get { return this.BuildupDriver.GotManyItems; } }
-        public List<Mapping> MappingsAll { get { return this.MappingDriver.GotManyItems; } }
+        public List<LcaStandard> StandardsAll { get { return this.StandardDriver?.GotManyItems; } }
+        public List<Material> MaterialsAll { get { return this.MaterialDriver?.GotManyItems; } }
+        public List<BuildupGroup> BuildupGroupsAll { get { return this.BuildupGroupDriver?.GotManyItems; } }
+        public List<Buildup> BuildupsAll { get { return this.BuildupDriver?.GotManyItems; } }
+        public List<Mapping> MappingsAll { get { return this.MappingDriver?.GotManyItems; } }
 
         public LcaStandard StandardSelected { get; set; }
 
@@ -119,6 +122,7 @@ namespace Calc.Core
             this.Directus = directus;
 
             this.ProjectManager = new DirectusManager<Project>(this.Directus);
+            this.StandardManager = new DirectusManager<LcaStandard>(this.Directus);
             this.MaterialManager = new DirectusManager<Material>(this.Directus);
             this.BuildupManager = new DirectusManager<Buildup>(this.Directus);
             this.MappingManager = new DirectusManager<Mapping>(this.Directus);
@@ -127,11 +131,16 @@ namespace Calc.Core
             this.SnapshotManager = new DirectusManager<Snapshot>(this.Directus);
 
             this.ProjectDriver = new ProjectStorageDriver();
+            this.StandardDriver = new StandardStorageDriver();
             this.MaterialDriver = new MaterialStorageDriver();
             this.BuildupDriver = new BuildupStorageDriver();
+            this.BuildupGroupDriver = new BuildupGroupStorageDriver();
             this.MappingDriver = new MappingStorageDriver();
             this.ForestDriver = new ForestStorageDriver();
             this.SnapshotDriver = new SnapshotStorageDriver();
+
+            UnitsAll =   Enum.GetValues(typeof(Unit)).Cast<Unit>().ToList();
+            MaterialFunctionsAll = Enum.GetValues(typeof(MaterialFunction)).Cast<MaterialFunction>().ToList();
         }
 
         public async Task<bool> GetProjects()

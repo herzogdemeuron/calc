@@ -13,32 +13,17 @@ namespace Calc.Core.Objects.Buildups
     /// </summary>
     public class LayerComponent : INotifyPropertyChanged, ICalcComponent
     {
+        public string Title { get => TargetMaterialName; }
         public string TargetMaterialName { get; }
         public double? Thickness { get; set; }
         public MaterialComponentSet MaterialComponentSet { get; set; }
+        public MaterialFunction MaterialFunction { get; set; }
         public BasicParameterSet BasicParameterSet { get; set; }
         public LayerComponent(string targetMaterialName, BasicParameterSet basicParameterSet = null, double? thickness = null)
         {
             TargetMaterialName = targetMaterialName;
             BasicParameterSet = basicParameterSet;
             Thickness = thickness;
-        }
-
-        
-
-/*        public bool CheckSource(LayerComponent layerComponent)
-        {
-            return TargetMaterialName == layerComponent.TargetMaterialName;
-        }
-
-        public void ApplySource(LayerComponent layerComponent)
-        {
-            MaterialComponentSet = layerComponent.MaterialComponentSet;
-        }
-*/
-        public void ResetTarget() // is this needed?
-        {
-            BasicParameterSet = null;
         }
 
         public void SetMainMaterial(Material material)

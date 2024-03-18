@@ -24,12 +24,12 @@ namespace Calc.DirectusTest
 
             //Arrange
             // get email, password and url from environment variables
-            //_email = Environment.GetEnvironmentVariable("CALC_DIRECTUS_EMAIL");
-            //_password = Environment.GetEnvironmentVariable("CALC_DIRECTUS_PASSWORD");
-            //_url = Environment.GetEnvironmentVariable("CALC_DIRECTUS_URL");
-            _url = "http://localhost:8055";
+            _email = Environment.GetEnvironmentVariable("CALC_DIRECTUS_EMAIL");
+            _password = Environment.GetEnvironmentVariable("CALC_DIRECTUS_PASSWORD");
+            _url = Environment.GetEnvironmentVariable("CALC_DIRECTUS_URL");
+          /*  _url = "http://localhost:8055";
             _password = "d1r3ctu5";
-            _email = "admin@example.com";
+            _email = "admin@example.com";*/
             Console.WriteLine($"email: {_email}");
             Console.WriteLine($"password: {_password}");    
             Console.WriteLine($"url: {_url}");

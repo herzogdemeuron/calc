@@ -88,6 +88,13 @@
                                         IsChecked="{Binding Path=IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
                                         Template="{StaticResource ComboBoxToggleButtonTemplate}"/>
 
+                        <TextBlock Name="PlaceholderTextBlock" Margin="7, 3, 23, 3"
+                                   Text="{Binding Path=Text, RelativeSource={RelativeSource TemplatedParent}}" 
+                                   VerticalAlignment="Center"
+                                   Background="Transparent"
+                                   IsHitTestVisible="False"
+                                   Visibility="Collapsed" Foreground="Gray"/>
+
                         <ContentPresenter Name="ContentSite" Margin="5, 3, 23, 3" IsHitTestVisible="False"
                               HorizontalAlignment="Left" VerticalAlignment="Center"                              
                               Content="{TemplateBinding ComboBox.SelectionBoxItem}" 
@@ -129,6 +136,9 @@
                     </Grid>
                     
                     <ControlTemplate.Triggers>
+                        <Trigger Property="SelectedItem" Value="{x:Null}">
+                            <Setter TargetName="PlaceholderTextBlock" Property="Visibility" Value="Visible"/>
+                        </Trigger>
                         <Trigger Property="ItemsControl.HasItems" Value="False">
                             <Setter Property="FrameworkElement.MinHeight" TargetName="DropDownBorder" Value="95"/>
                         </Trigger>

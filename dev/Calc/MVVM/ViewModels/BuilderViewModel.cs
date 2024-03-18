@@ -23,13 +23,14 @@ namespace Calc.MVVM.ViewModels
         {
             Store = store;
             VisibilityVM = new VisibilityViewModel();
-            //LoadingVM = new LoadingViewModel(store);
+            LoadingVM = new LoadingViewModel(store);
             BuildupCreationVM = new BuildupCreationViewModel(Store, builupComponentCreator);
         }
 
         public async Task HandleWindowLoadedAsync()
         {
             await LoadingVM.HandleBuilderLoading();
+            BuildupCreationVM.HandleLoaded();
         }
 
         public void HandleWindowClosing()
@@ -43,8 +44,9 @@ namespace Calc.MVVM.ViewModels
             NewMappingVM.HandleNewMappingCanceled();
         }
 */
-        public void HandleNodeItemSelectionChanged(NodeModel selectedBranch)
+        public void HandleComponentSelectionChanged(ICalcComponent selectedCompo)
         {
+            BuildupCreationVM.HandleComponentSelectionChanged(selectedCompo);
             //NodeTreeVM.HandleNodeItemSelectionChanged(selectedBranch);
         }
 
@@ -54,11 +56,10 @@ namespace Calc.MVVM.ViewModels
         }
 
 
-        public void HandleRemove()
+        public void HandleSelect()
         {
-            /*if (NodeTreeVM.SelectedNodeItem == null)
-                return;
-            NodeTreeVM.SelectedNodeItem.NodeBuildupItem.HandleRemove();*/
+            if (BuildupCreationVM == null) return;
+            BuildupCreationVM.HandleSelect();
         }
 
 

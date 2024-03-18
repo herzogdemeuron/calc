@@ -8,12 +8,12 @@ namespace Calc.MVVM.Services
 {
     public class DirectusAuthenticator
     {
-        public async Task<Directus> ShowLoginWindowAsync()
+        public async Task<Directus> ShowLoginWindowAsync(string _url = null, string _email = null, string _password = null)
         {
 
-            var url = Properties.Settings.Default.Config1;
-            var email = Properties.Settings.Default.Config2;
-            var password = Properties.Settings.Default.Config3;
+            var url = _url??Properties.Settings.Default.Config1;
+            var email = _email??Properties.Settings.Default.Config2;
+            var password = _password??Properties.Settings.Default.Config3;
 
             var directus = new Directus();
 

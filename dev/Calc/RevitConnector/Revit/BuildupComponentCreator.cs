@@ -77,7 +77,7 @@ namespace Calc.RevitConnector.Revit
             {
                 ElementIds = new List<int> { element.Id.IntegerValue },
                 TypeIdentifier = element.GetTypeId().IntegerValue,
-                Name = GetElementType(element)?.Name,
+                Title = GetElementType(element)?.Name,
                 LayerComponents = layers,
                 IsCompoundElement = isCompound
                 //BasicParameterSet = GetTotalAmounts(element)
