@@ -1,4 +1,5 @@
-﻿using Calc.Core.Objects.Buildups;
+﻿using Calc.Core.Objects;
+using Calc.Core.Objects.Buildups;
 using System;
 using System.ComponentModel;
 using System.Windows;
@@ -123,12 +124,12 @@ namespace Calc.MVVM.Views
                 }
                 else
                 {
-                    ICV.Filter = new Predicate<object>(item =>
+                    ICV.Filter = new Predicate<object>(i =>
                     {
-                        var buildup = (Buildup)item;
+                        var item = (ISearchable)i;
                         var searchText = _editableTextBox.Text.ToLower();
-                        var nameContains = buildup.Name.ToLower().Contains(searchText);
-                        var groupContains = buildup.Group != null && buildup.Group.Name.ToLower().Contains(searchText);
+                        var nameContains = item.Name.ToLower().Contains(searchText);
+                        var groupContains = item.GroupName != null && item.GroupName.ToLower().Contains(searchText);
                         return nameContains || groupContains;
                     });
                 }

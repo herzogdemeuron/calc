@@ -29,7 +29,7 @@ namespace Calc.Core.DirectusAPI.Drivers
                     calculation_components {
                         id
                         function
-                        quantity
+                        amount
                         gwp
                         ge
                         calc_builder_materials_id {
@@ -106,9 +106,9 @@ namespace Calc.Core.DirectusAPI.Drivers
                 calculation_components = SendItem.CalculationComponents.Select(cc => new
                 {
                     function = cc.Function,
-                    quantity = cc.Quantity ?? 0,
-                    gwp = cc.GWP ?? 0,
-                    ge = cc.GE ?? 0,
+                    amount = cc.Amount ?? 0,
+                    gwp = cc.Gwp ?? 0,
+                    ge = cc.Ge ?? 0,
                     calc_builder_materials_id = new { id = cc.Material.Id}
                 }).ToArray()
             };

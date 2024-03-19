@@ -4,6 +4,7 @@ using Calc.Core.Helpers;
 using Calc.Core.Interfaces;
 using Calc.Core.Objects;
 using Calc.Core.Objects.Buildups;
+using Calc.MVVM.Models;
 using Speckle.Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,6 @@ namespace Calc.MVVM.ViewModels
 
     public class BuildupCreationViewModel : INotifyPropertyChanged
     {
-
         private DirectusStore store;
         public List<LcaStandard> StandardsAll { get => store.StandardsAll; }
         public List<Unit> BuildupUnitsAll { get => store.UnitsAll; }
@@ -24,6 +24,46 @@ namespace Calc.MVVM.ViewModels
         public List<BuildupGroup> BuildupGroupsAll { get => store.BuildupGroupsAll; }
 
         private IBuildupComponentCreator buildupComponentCreator;
+        public bool MaterialSelectionEnabled { get => SelectedComponent is LayerComponent; }
+
+        public List<CalculationComponent> AllCalculationComponents
+        {
+            get
+            {
+                var components = new List<CalculationComponent>();
+                foreach (var component in BuildupComponents)
+                {
+                    components.AddRange(component.CalculationComponents.Where(c => c.Amount.HasValue));
+                }
+                return components;
+            }
+        }
+        public List<CalculationComponent> AllErrorCalculationComponents
+        {
+            get
+            {
+                var components = new List<CalculationComponent>();
+                foreach (var component in BuildupComponents)
+                {
+                    components.AddRange(component.CalculationComponents.Where(c => c.HasError));
+                }
+                return components;
+            }
+        }
+
+        private Dictionary<LayerComponent, LayerModel> LayerModels;
+        public LayerModel CurrentLayerModel
+        {
+            get
+            {
+                if (LayerModels == null) return null;
+                if (SelectedComponent is LayerComponent layerComponent)
+                {
+                  return LayerModels.TryGetValue(layerComponent, out var layerModel) ? layerModel : null;
+                }
+                return null;
+            }
+        }
 
         private ICalcComponent selectedComponent;
         public ICalcComponent SelectedComponent
@@ -83,18 +123,6 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        private List<CalculationComponent> calculationComponents = new List<CalculationComponent>();
-        [JsonProperty("calculation_components")]
-        public List<CalculationComponent> CalculationComponents
-        {
-            get => calculationComponents;
-            set
-            {
-                calculationComponents = value;
-                OnPropertyChanged(nameof(CalculationComponents));
-            }
-        }
-
         public string CountString { get => GetAmountString(Unit.piece); }
 
         public string LengthString { get => GetAmountString(Unit.m); }
@@ -115,32 +143,50 @@ namespace Calc.MVVM.ViewModels
             OnPropertyChanged(nameof(BuildupUnitsAll));
             OnPropertyChanged(nameof(BuildupGroupsAll));
         }
-        public void HandleSelect()
+        public void HandleSelectingElements()
         {
             BuildupComponents = buildupComponentCreator.CreateBuildupComponentsFromSelection();
+            UpdateLayerModels();
             UpdateCalculationComponents();
-            //OnPropertyChanged(nameof(BuildupComponents));
         }
 
         public void HandleComponentSelectionChanged(ICalcComponent selectedCompo)
         {
             SelectedComponent = selectedCompo;
             NotifyAmountChanged();
+            NotifyMaterialsChanged();
+        }
+
+        public void HandleReduceMaterial()
+        {
+            if(CurrentLayerModel != null)
+            {
+                CurrentLayerModel.RemoveSubMaterial();
+            }
+        }
+
+        private void UpdateLayerModels()
+        {
+            LayerModels = new Dictionary<LayerComponent, LayerModel>();
+            foreach (var component in BuildupComponents.Where(c => c.HasLayers))
+            {
+                foreach (var layer in component.LayerComponents)
+                {
+                    LayerModels.Add(layer, new LayerModel(layer, store.MaterialsAll, store.MaterialFunctionsAll));
+                }
+            }
         }
 
         public void UpdateCalculationComponents()
         {
-            var calculationComponents = new List<CalculationComponent>();
             var quantityRatio = GetQuantityRatio();
-            if (quantityRatio != 0)
+
+            foreach (var component in BuildupComponents)
             {
-                foreach (var component in BuildupComponents)
-                {
-                    var calculationComponent = CalculationComponent.FromBuildupComponent(component, quantityRatio);
-                    calculationComponents.AddRange(calculationComponent);
-                }
+                component.UpdateCalculationComponents(quantityRatio);
             }
-            CalculationComponents = calculationComponents;
+            OnPropertyChanged(nameof(AllCalculationComponents));
+            OnPropertyChanged(nameof(AllErrorCalculationComponents));
         }
 
         private string GetAmountString(Unit unit)
@@ -162,6 +208,10 @@ namespace Calc.MVVM.ViewModels
         }
 
 
+        private void NotifyMaterialsChanged()
+        {
+            OnPropertyChanged(nameof(CurrentLayerModel));
+        }
         private void NotifyAmountChanged()
         {
             OnPropertyChanged(nameof(CountString));

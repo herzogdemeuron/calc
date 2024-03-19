@@ -68,9 +68,9 @@ namespace Calc.MVVM.Views
         }
 
 
-        private void RemoveClicked(object sender, RoutedEventArgs e)
+        private void ReduceClicked(object sender, RoutedEventArgs e)
         {
-            BuilderVM.HandleSelect();
+            BuilderVM.HandleReduceMaterial();
         }
 
 

@@ -36,8 +36,15 @@ namespace Calc.Core.Objects
         HslColor HslColor { get; set; }
     }
 
+    public interface ISearchable
+    {
+        string Name { get; }
+        string GroupName{ get; }
+    }
+
     public interface  ICalcComponent
     {
+        string Title { get; }
         BasicParameterSet BasicParameterSet { get; set; }
     }
 

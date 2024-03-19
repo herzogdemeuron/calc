@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Calc.Core.Objects.Materials
 {
-    public class Density
+    public class Density // deprecated
     {
         public Unit Unit { get; set; }
         public double Quantity { get; set; }

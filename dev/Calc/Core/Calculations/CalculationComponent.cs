@@ -2,6 +2,7 @@
 using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Materials;
+using Calc.Core.Objects.Results;
 using Speckle.Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -17,13 +18,13 @@ namespace Calc.Core.Calculations
     public class CalculationComponent
     {
         [JsonProperty("function")]
-        public string Function { get; set; }
-        [JsonProperty("quantity")]
-        public double? Quantity { get; set; }
+        public MaterialFunction Function { get; set; }
+        [JsonProperty("amount")]
+        public double? Amount { get; set; }
         [JsonProperty("gwp")]
-        public double? GWP { get; set; }
+        public double? Gwp { get; set; }
         [JsonProperty("ge")]
-        public double? GE { get; set; }
+        public double? Ge { get; set; }
         [JsonProperty("cost")]
         public double? Cost { get; set; }
 
@@ -40,44 +41,40 @@ namespace Calc.Core.Calculations
             }
         }
 
-        public static List<CalculationComponent> FromBuildupComponent(BuildupComponent buildupComponent, double totalRatio)
+        public static List<CalculationComponent> FromLayerComponents(List<LayerComponent> layerComponents, double totalRatio)
         {
             var result = new List<CalculationComponent>();
-            foreach (var layer in buildupComponent.LayerComponents)
+            foreach (var layer in layerComponents)
             {
-                var materialSet = layer.MaterialComponentSet;
 
-                if (!materialSet.HasMainMaterial) continue;
-                var mainCalculationComponent = FromMaterialComponent(materialSet.MainMaterialComponent, layer, totalRatio);
+                if (!layer.HasMainMaterial) continue;
+                var mainCalculationComponent = FromLayerComponent(layer, totalRatio, true);
                 result.Add(mainCalculationComponent);
 
-                if (!materialSet.HasSubMaterial) continue;
-                var subCalculationComponent = FromMaterialComponent(materialSet.SubMaterialComponent, layer, totalRatio);
+                if (!layer.HasSubMaterial) continue;
+                var subCalculationComponent = FromLayerComponent(layer, totalRatio, false);
                 result.Add(subCalculationComponent);
             }
             return result;
         }
 
-       private static CalculationComponent FromMaterialComponent(MaterialComponent materialComponent, LayerComponent layer, double totalRatio)
+       private static CalculationComponent FromLayerComponent(LayerComponent layer, double totalRatio, bool getMain = true)
         {
-            var unit = materialComponent.Density.Unit;
-            var layerAmountParam = layer.GetAmountParam(unit);
-            var hasError = layerAmountParam.ErrorType != null;
-            var layerAmount = layerAmountParam.Amount ?? 0;
-            layerAmount *= totalRatio;
+            var layerAmountParam = layer.GetAmountParam();
+            var layerAmount = (layerAmountParam?.Amount != null) ? layerAmountParam.Amount * totalRatio : 0;
+            var materialRatio = getMain ? layer.MainMaterialRatio : layer.SubMaterialRatio;
 
-            var quantity = materialComponent.QuantityPerUnit * layerAmount;
-            var materialGwp = materialComponent.Material.GWP;
-            var materialGe = materialComponent.Material.GE;
+            var materialGwp = layer.GetMaterialGwp(getMain) * layerAmount;
+            var materialGe = layer.GetMaterialGe(getMain) * layerAmount;
 
             return new CalculationComponent
             {
-                Material = materialComponent.Material,
-                Function = materialComponent.Function,
-                Quantity = quantity,
-                HasError = hasError,
-                GWP =materialGwp * quantity,
-                GE = materialGe * quantity
+                Material = getMain ? layer.MainMaterial : layer.SubMaterial,
+                Function = layer.Function,
+                Amount = layerAmount * materialRatio,
+                HasError = layerAmountParam.HasError,
+                Gwp = materialGwp,
+                Ge = materialGe
             };
         }
 

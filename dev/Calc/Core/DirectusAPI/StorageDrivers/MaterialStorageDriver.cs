@@ -22,7 +22,6 @@ namespace Calc.Core.DirectusAPI.Drivers
                     thickness
                     valid_from
                     valid_until
-                    density
                     material_unit
                     gwp
                     ge

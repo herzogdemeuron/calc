@@ -61,8 +61,8 @@ namespace Calc.Core.Calculations
                             continue;
                         }
 
-                        var quantity = param.Amount;
-                        var calculationResult = GetResult(branch, element, buildup, component, quantity.Value);
+                        var amount = param.Amount;
+                        var calculationResult = GetResult(branch, element, buildup, component, amount.Value);
 
                         resultList.Add(calculationResult);
                     }
@@ -70,11 +70,12 @@ namespace Calc.Core.Calculations
             }
         }
 
+        // needs to be validaed. amount instead of quantity?
         private static Result GetResult(Branch branch, CalcElement element, Buildup buildup, CalculationComponent component, double quantity)
         {
             var material = component.Material;
-            var gwpA123 = component.GWP * quantity;
-            var geA123 = component.GE * quantity;
+            var gwpA123 = component.Gwp * quantity;
+            var geA123 = component.Ge * quantity;
             var cost = component.Cost * quantity;
 
             var calculationResult = new Result
@@ -95,9 +96,9 @@ namespace Calc.Core.Calculations
                 MaterialSource = material.Standard.Name,
                 //MaterialSourceCode = material.SourceCode,
                 MaterialCategory = material.Category,
-                MaterialGwp = material.GWP??0,
+                MaterialGwp = material.Gwp??0,
                 MaterialUnit = component.MaterialUnit,
-                MaterialAmount = component.Quantity??0,
+                MaterialAmount = component.Amount??0,
 
                 Gwp = gwpA123??0,
                 Ge = geA123??0,

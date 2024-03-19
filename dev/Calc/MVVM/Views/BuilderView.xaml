@@ -264,6 +264,7 @@
                        FontWeight="Light"/>
                     
             <Grid x:Name="MaterialGrid"
+                  DataContext="{Binding BuildupCreationVM.CurrentLayerModel}"
                   Grid.Column="2"
                   Grid.Row="3"
                   Margin="10,0,10,0">
@@ -285,7 +286,8 @@
                             Grid.Row="0"
                             Grid.ColumnSpan="2"
                             Margin="5,0,0,0"
-                            ItemsSource="{Binding BuildupCreationVM.MaterialFunctionsAll}"
+                            ItemsSource="{Binding MaterialFunctionsAll}"
+                            SelectedItem="{Binding MaterialFunction}"
                             Style="{StaticResource RoundedComboBoxStyle}"/>
                 
                 <views:SearchComboBox Tag="1"
@@ -293,10 +295,9 @@
                       Grid.Column="0"
                       Grid.Row="0"
                       Style="{StaticResource RoundedComboBoxStyle}"
-                      ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.AllBuildupsView1}"
-                      SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup1}"
+                      ItemsSource="{Binding AllMaterialsView1}"
+                      SelectedItem="{Binding MainMaterial}"
                       DisplayMemberPath="Name"
-                      IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CanAddFirstBuildup}"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Top">
                     <ComboBox.GroupStyle>
@@ -304,13 +305,29 @@
                     </ComboBox.GroupStyle>
                 </views:SearchComboBox>
 
+                <views:SearchComboBox Tag="2"
+                      x:Uid="ShowTextNote"
+                      Grid.Column="0"
+                      Grid.Row="1"
+                      Margin="0,5,0,0"
+                      Style="{StaticResource RoundedComboBoxStyle}"
+                      ItemsSource="{Binding AllMaterialsView2}"
+                      SelectedItem="{Binding SubMaterial}"
+                      DisplayMemberPath="Name"
+                      IsEnabled="{Binding CanAddSecondMaterial}"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Top">
+                    <ComboBox.GroupStyle>
+                        <StaticResource ResourceKey="ComboBoxGroupStyle"/>
+                    </ComboBox.GroupStyle>
+                </views:SearchComboBox>
 
                 <Button Content="Reduce"
                         Grid.Column="2"
                         Grid.Row="1"
                         Margin="2.5,0,0,0"
                         Style="{StaticResource ButtonStyle}"
-                        Click="RemoveClicked"/>
+                        Click="ReduceClicked"/>
                 
                 <Border x:Name="RatioBorder"
                         Grid.Column="1"
@@ -321,6 +338,7 @@
                         BorderThickness="1"
                         CornerRadius="4">
                     <TextBox x:Name="RatioTextBox"
+                            Text="{Binding SubMaterialRatio}"
                             BorderThickness="0"
                             VerticalAlignment="Center"
                             Background="Transparent"
@@ -328,22 +346,6 @@
                             HorizontalAlignment="Stretch"/>
                 </Border>
 
-                <views:SearchComboBox Tag="2"
-                      x:Uid="ShowTextNote"
-                      Grid.Column="0"
-                      Grid.Row="1"
-                      Margin="0,5,0,0"
-                      Style="{StaticResource RoundedComboBoxStyle}"
-                      ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.AllBuildupsView2}"
-                      SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup2}"
-                      DisplayMemberPath="Name"
-                      IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CanAddSecondBuildup}"
-                      HorizontalAlignment="Stretch"
-                      VerticalAlignment="Top">
-                    <ComboBox.GroupStyle>
-                        <StaticResource ResourceKey="ComboBoxGroupStyle"/>
-                    </ComboBox.GroupStyle>
-                </views:SearchComboBox>
 
 
                 <Grid   x:Name="MaterialTabsGrid"
@@ -357,8 +359,8 @@
                     <TabControl x:Name="MaterialTabs"
                             BorderThickness="0"
                             Background="Transparent"
-                            ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CurrentBuildups}"
-                            SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.ActiveBuildup}"
+                            ItemsSource="{Binding CurrentMaterials}"
+                            SelectedItem="{Binding ActiveMaterial}"
                             ItemContainerStyle="{StaticResource TabItemStyle}">
                         <TabControl.ContentTemplate>
                             <DataTemplate>

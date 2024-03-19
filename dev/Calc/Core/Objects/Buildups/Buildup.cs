@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace Calc.Core.Objects.Buildups
 {
-    public class Buildup : INotifyPropertyChanged
+    public class Buildup : INotifyPropertyChanged, ISearchable
     {
 
         private int id = -1;
@@ -50,6 +50,7 @@ namespace Calc.Core.Objects.Buildups
             set => SetProperty(ref group, value);
         }
 
+        public string GroupName => Group?.Name;
 
         [JsonProperty("description")]
         public string Description { get; set; }

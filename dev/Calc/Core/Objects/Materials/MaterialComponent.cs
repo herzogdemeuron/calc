@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Calc.Core.Objects.Materials
 {
-    public class MaterialComponent
+    public class MaterialComponent // deprecated
     {
         public Material Material { get; set; }
         public double Ratio { get; set; } = 1;

@@ -15,8 +15,6 @@ namespace Calc.MVVM.ViewModels
         public DirectusStore Store { get; set; }
         public BuildupCreationViewModel BuildupCreationVM { get; set; }
         public LoadingViewModel LoadingVM { get; set; }
-        //public NodeTreeModel NodeTreeVM { get; set; }
-        //public SavingViewModel SavingVM { get; set; }
         public VisibilityViewModel VisibilityVM { get; set; }
 
         public BuilderViewModel(DirectusStore store, IBuildupComponentCreator builupComponentCreator)
@@ -38,12 +36,6 @@ namespace Calc.MVVM.ViewModels
             //NodeTreeVM.DeselectNodes();
         }
 
-
-/*        public void HandleNewMappingCanceled()
-        {
-            NewMappingVM.HandleNewMappingCanceled();
-        }
-*/
         public void HandleComponentSelectionChanged(ICalcComponent selectedCompo)
         {
             BuildupCreationVM.HandleComponentSelectionChanged(selectedCompo);
@@ -55,18 +47,15 @@ namespace Calc.MVVM.ViewModels
             //NodeTreeVM.DeselectNodes();
         }
 
+        public void HandleReduceMaterial()
+        {
+            BuildupCreationVM.HandleReduceMaterial();
+        }
 
         public void HandleSelect()
         {
             if (BuildupCreationVM == null) return;
-            BuildupCreationVM.HandleSelect();
-        }
-
-
-
-        public void HandleUpdateRevitClicked(Forest forest)
-        {
-            //ForestVM.HandleForestSelectionChanged(forest);
+            BuildupCreationVM.HandleSelectingElements();
         }
 
 

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Calc.Core.Objects.Materials
 {
-    public class Material
+    public class Material : ISearchable
     {
         [JsonProperty("id", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public int Id { get; set; }
@@ -17,8 +17,11 @@ namespace Calc.Core.Objects.Materials
         public string Category { get; set; }
         [JsonProperty("thickness")]
         public double? Thickness { get; set; }
-        [JsonProperty("density")]
-        public double? Density { get; set; }
+
+        // deprecated
+/*        [JsonProperty("density")]
+        public double? Density { get; set; }*/
+
         [JsonProperty("material_unit")]
         public Unit MaterialUnit { get; set; }
         [JsonProperty("valid_from")]
@@ -26,15 +29,15 @@ namespace Calc.Core.Objects.Materials
         [JsonProperty("valid_until")]
         public int? ValidUntil { get; set; }
         [JsonProperty("gwp")]
-        public double? GWP { get; set; }
+        public double? Gwp { get; set; }
 
         [JsonProperty("ge")]
-        public double? GE { get; set; }
+        public double? Ge { get; set; }
 
         [JsonProperty("cost")]
         public double? Cost { get; set; }
 
-
+        public string GroupName => Category;
         //public string SourceCode { get; set; }
 
         public void LinkStandard(List<LcaStandard> standards)
