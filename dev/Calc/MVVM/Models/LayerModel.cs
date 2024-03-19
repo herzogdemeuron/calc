@@ -12,9 +12,10 @@ namespace Calc.MVVM.Models
     public class LayerModel : INotifyPropertyChanged
     {
         private LayerComponent layer;
-        private readonly List<Material> materialsAll;
+        private readonly ObservableCollection<Material> materialsFromStandard;
         public List<MaterialFunction> MaterialFunctionsAll { get; }
         public Material CurrentMaterial { get; set; }
+        public string MaterialMatchInfo { get => GetMaterialMatchText(); }
         public List<Material> CurrentMaterials
         {
             get
@@ -26,14 +27,14 @@ namespace Calc.MVVM.Models
             }
         }
 
-        private MaterialFunction materialFunction;
-        public MaterialFunction MaterialFunction
+        private MaterialFunction? selectedFunction;
+        public MaterialFunction? SelectedFunction
         {
-            get => materialFunction;
+            get => selectedFunction;
             set
             {
-                materialFunction = value;
-                OnPropertyChanged(nameof(MaterialFunction));
+                selectedFunction = value;
+                OnPropertyChanged(nameof(SelectedFunction));
             }
         }
 
@@ -44,8 +45,7 @@ namespace Calc.MVVM.Models
             {
                 layer.SetMainMaterial(value);
                 OnPropertyChanged(nameof(MainMaterial));
-                OnPropertyChanged(nameof(CanAddSecondMaterial));
-                OnPropertyChanged(nameof(CurrentMaterials));
+                NotifyPropertiesChange();
             }
         }
 
@@ -56,8 +56,7 @@ namespace Calc.MVVM.Models
             {
                 layer.SetSubMaterial(value);
                 OnPropertyChanged(nameof(SubMaterial));
-                OnPropertyChanged(nameof(CanAddSecondMaterial));
-                OnPropertyChanged(nameof(CurrentMaterials));
+                NotifyPropertiesChange();
             }
         }
 
@@ -76,12 +75,11 @@ namespace Calc.MVVM.Models
         {
             get
             {
-                if (materialsAll != null)
+                if (materialsFromStandard != null)
                 {
-                    _allMaterialsView1 = CollectionViewSource.GetDefaultView
-                        (
-                            new ObservableCollection<Material>(materialsAll)
-                        );
+                    _allMaterialsView1 = CollectionViewSource.GetDefaultView(materialsFromStandard);
+                    var groupDescrip = _allMaterialsView1.GroupDescriptions;
+                    if (groupDescrip.Count == 0) groupDescrip.Add(new PropertyGroupDescription("GroupName"));
                 }
                 return _allMaterialsView1;
             }
@@ -92,12 +90,11 @@ namespace Calc.MVVM.Models
         {
             get
             {
-                if (materialsAll != null)
+                if (materialsFromStandard != null)
                 {
-                    _allMaterialsView2 = CollectionViewSource.GetDefaultView
-                        (
-                            new ObservableCollection<Material>(materialsAll)
-                        );
+                    _allMaterialsView2 = CollectionViewSource.GetDefaultView(materialsFromStandard);
+                    var groupDescrip = _allMaterialsView2.GroupDescriptions;
+                    if (groupDescrip.Count == 0) groupDescrip.Add(new PropertyGroupDescription("GroupName"));
                 }
                 return _allMaterialsView2;
             }
@@ -118,14 +115,30 @@ namespace Calc.MVVM.Models
         public LayerModel(LayerComponent layercompo, List<Material> allMaterials, List<MaterialFunction> materialFunctionsAll)
         {
             layer = layercompo;
-            materialsAll = allMaterials;
+            materialsFromStandard = new ObservableCollection<Material>(allMaterials);
             MaterialFunctionsAll = materialFunctionsAll;
+        }
+
+        public void NotifyPropertiesChange()
+        {
+            OnPropertyChanged(nameof(CanAddSecondMaterial));
+            OnPropertyChanged(nameof(CurrentMaterials));
+            OnPropertyChanged(nameof(MaterialMatchInfo));
         }
 
         public void RemoveSubMaterial()
         {
             SubMaterial = null;
             SubMaterialRatio = 0;
+        }
+
+        private string GetMaterialMatchText()
+        {
+            if (layer.HasMainMaterial && layer.HasSubMaterial && MainMaterial.MaterialUnit != SubMaterial.MaterialUnit)
+            {
+                return $"Sub Material Unit ({SubMaterial.MaterialUnit}) does not match {MainMaterial.MaterialUnit}";
+            }
+            return null;
         }
 
 

@@ -36,6 +36,9 @@ namespace Calc.Core.Objects
         HslColor HslColor { get; set; }
     }
 
+    /// <summary>
+    /// can be searched with group name and name
+    /// </summary>
     public interface ISearchable
     {
         string Name { get; }

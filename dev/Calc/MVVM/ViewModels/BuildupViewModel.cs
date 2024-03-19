@@ -73,7 +73,7 @@ namespace Calc.MVVM.ViewModels
                         );
                     if (_allBuildupsView1.GroupDescriptions.Count == 0)
                     {
-                        _allBuildupsView1.GroupDescriptions.Add(new PropertyGroupDescription("Group.Name"));
+                        _allBuildupsView1.GroupDescriptions.Add(new PropertyGroupDescription("GroupName"));
                     }
                 }
                 return _allBuildupsView1;
@@ -93,7 +93,7 @@ namespace Calc.MVVM.ViewModels
                         );
                     if (_allBuildupsView2.GroupDescriptions.Count == 0)
                     {
-                        _allBuildupsView2.GroupDescriptions.Add(new PropertyGroupDescription("Group.Name"));
+                        _allBuildupsView2.GroupDescriptions.Add(new PropertyGroupDescription("GroupName"));
                     }
                 }
                 return _allBuildupsView2;

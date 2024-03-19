@@ -12,6 +12,7 @@ using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Mappings;
 using Calc.Core.Objects.Results;
 using Calc.Core.Objects.Materials;
+using System.Collections.ObjectModel;
 
 namespace Calc.Core
 {
@@ -22,22 +23,23 @@ namespace Calc.Core
         public List<Project> ProjectsAll { get { return this.ProjectDriver?.GotManyItems; } }
         public Project ProjectSelected { get; set; } // the current project
         public List<LcaStandard> StandardsAll { get { return this.StandardDriver?.GotManyItems; } }
-        public List<Material> MaterialsAll { get { return this.MaterialDriver?.GotManyItems; } }
         public List<BuildupGroup> BuildupGroupsAll { get { return this.BuildupGroupDriver?.GotManyItems; } }
         public List<Buildup> BuildupsAll { get { return this.BuildupDriver?.GotManyItems; } }
         public List<Mapping> MappingsAll { get { return this.MappingDriver?.GotManyItems; } }
-
+        private List<Material> MaterialsAll { get { return this.MaterialDriver?.GotManyItems; } }
+        private Dictionary<LcaStandard, List<Material>> MaterialsOfStandards { get; set; }
+        public List<Material> CurrentMaterials
+        {
+            get
+            {
+                if (this.StandardSelected == null)
+                {
+                    return new List<Material>();
+                }
+                return MaterialsOfStandards[this.StandardSelected];
+            }
+        }
         public LcaStandard StandardSelected { get; set; }
-
-        public List<Material> MaterialsStandardRelated
-        {
-            get => MaterialsAll?.FindAll(m => m.Standard?.Id == StandardSelected?.Id);
-        }
-
-        public List<Buildup> BuildupsStandardRelated
-        {
-            get => BuildupsAll?.FindAll(b => b.Standard?.Id == StandardSelected?.Id);
-        }
 
         private Mapping _mappingSelected = null;
         public Mapping MappingSelected
@@ -207,6 +209,8 @@ namespace Calc.Core
                     this.BuildupManager.GetMany<BuildupStorageDriver>(this.BuildupDriver));
 
                 LinkFields();
+                SortMaterials();
+                InitStandardSelection();
                 return true;
             }
             catch (Exception e)
@@ -214,6 +218,32 @@ namespace Calc.Core
                 throw e;
             }
         }
+
+        /// <summary>
+        /// sort all materials to MaterialsOfStandards by the standard
+        /// </summary>
+        private void SortMaterials()
+        {
+            MaterialsOfStandards = new();
+
+            foreach (var standard in StandardsAll)
+            {
+                MaterialsOfStandards.Add(standard, new List<Material>());
+            }
+            foreach (var material in MaterialsAll)
+            {
+                MaterialsOfStandards[material.Standard].Add(material);
+            }
+        }
+
+        private void InitStandardSelection()
+        {
+            if (this.StandardsAll.Count > 0)
+            {
+                this.StandardSelected = this.StandardsAll[0];
+            }
+        }
+        
 
 
         /// <summary>

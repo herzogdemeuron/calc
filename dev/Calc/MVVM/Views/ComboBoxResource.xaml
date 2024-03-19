@@ -88,7 +88,7 @@
                                         IsChecked="{Binding Path=IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
                                         Template="{StaticResource ComboBoxToggleButtonTemplate}"/>
 
-                        <TextBlock Name="PlaceholderTextBlock" Margin="7, 3, 23, 3"
+                        <TextBlock Name="PlaceholderTextBlock" Margin="6, 3, 23, 3"
                                    Text="{Binding Path=Text, RelativeSource={RelativeSource TemplatedParent}}" 
                                    VerticalAlignment="Center"
                                    Background="Transparent"

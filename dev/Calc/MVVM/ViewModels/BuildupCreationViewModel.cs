@@ -4,6 +4,7 @@ using Calc.Core.Helpers;
 using Calc.Core.Interfaces;
 using Calc.Core.Objects;
 using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Materials;
 using Calc.MVVM.Models;
 using Speckle.Newtonsoft.Json;
 using System;
@@ -22,8 +23,9 @@ namespace Calc.MVVM.ViewModels
         public List<Unit> BuildupUnitsAll { get => store.UnitsAll; }
         public List<MaterialFunction> MaterialFunctionsAll { get => store.MaterialFunctionsAll; }
         public List<BuildupGroup> BuildupGroupsAll { get => store.BuildupGroupsAll; }
+        private List<Material> CurrentMaterials { get => store.CurrentMaterials; }
 
-        private IBuildupComponentCreator buildupComponentCreator;
+        private readonly IBuildupComponentCreator buildupComponentCreator;
         public bool MaterialSelectionEnabled { get => SelectedComponent is LayerComponent; }
 
         public List<CalculationComponent> AllCalculationComponents
@@ -51,15 +53,15 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        private Dictionary<LayerComponent, LayerModel> LayerModels;
+        private Dictionary<LayerComponent, LayerModel> layerModels = new Dictionary<LayerComponent, LayerModel>();
         public LayerModel CurrentLayerModel
         {
             get
             {
-                if (LayerModels == null) return null;
+                if (layerModels == null) return null;
                 if (SelectedComponent is LayerComponent layerComponent)
                 {
-                  return LayerModels.TryGetValue(layerComponent, out var layerModel) ? layerModel : null;
+                  return layerModels.TryGetValue(layerComponent, out var layerModel) ? layerModel : null;
                 }
                 return null;
             }
@@ -76,15 +78,15 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        private LcaStandard selectedStandard;
         public LcaStandard SelectedStandard
         {
-            get => selectedStandard;
+            get => store.StandardSelected;
             set
             {
-                if (selectedStandard != value)
+                if (store.StandardSelected != value)
                 {
-                    selectedStandard = value;
+                    store.StandardSelected = value;
+                    UpdateLayerModels();
                     OnPropertyChanged(nameof(SelectedStandard));
                 }
             }
@@ -140,6 +142,7 @@ namespace Calc.MVVM.ViewModels
         public void HandleLoaded()
         {
             OnPropertyChanged(nameof(StandardsAll));
+            OnPropertyChanged(nameof(SelectedStandard));
             OnPropertyChanged(nameof(BuildupUnitsAll));
             OnPropertyChanged(nameof(BuildupGroupsAll));
         }
@@ -167,14 +170,16 @@ namespace Calc.MVVM.ViewModels
 
         private void UpdateLayerModels()
         {
-            LayerModels = new Dictionary<LayerComponent, LayerModel>();
+            layerModels?.Clear();
             foreach (var component in BuildupComponents.Where(c => c.HasLayers))
             {
                 foreach (var layer in component.LayerComponents)
                 {
-                    LayerModels.Add(layer, new LayerModel(layer, store.MaterialsAll, store.MaterialFunctionsAll));
+                    layerModels.Add(layer, new LayerModel(layer, CurrentMaterials, MaterialFunctionsAll));
                 }
             }
+            OnPropertyChanged(nameof(CurrentLayerModel));
+            CurrentLayerModel?.NotifyPropertiesChange();
         }
 
         public void UpdateCalculationComponents()
