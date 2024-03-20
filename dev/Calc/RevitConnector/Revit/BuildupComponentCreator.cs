@@ -64,7 +64,6 @@ namespace Calc.RevitConnector.Revit
             return result;
         }
 
-
         /// <summary>
         /// create a buildup component from one element
         /// </summary>
@@ -79,10 +78,9 @@ namespace Calc.RevitConnector.Revit
                 TypeIdentifier = element.GetTypeId().IntegerValue,
                 Title = GetElementType(element)?.Name,
                 LayerComponents = layers,
-                IsCompoundElement = isCompound
-                //BasicParameterSet = GetTotalAmounts(element)
+                IsCompoundElement = isCompound,
+                BasicParameterSet = GetTotalAmounts(element)
             };
-
         }
 
         /// <summary>
@@ -109,7 +107,7 @@ namespace Calc.RevitConnector.Revit
         /// </summary>
         private void MergeLayerComponentWithMaterial(List<LayerComponent> List, LayerComponent component)
         {
-            var sameComponent = List.FirstOrDefault(x => x.TargetMaterialName == component.TargetMaterialName);
+            var sameComponent = List.FirstOrDefault(x => x.Equals(component));
             if (sameComponent != null)
             {
                 sameComponent.BasicParameterSet.Add(component.BasicParameterSet);
@@ -271,8 +269,6 @@ namespace Calc.RevitConnector.Revit
         /// <summary>
         /// get the parameter config for the category of the element
         /// </summary>
-        /// <param name="elem"></param>
-        /// <returns></returns>
         private RevitBasicParamConfig GetParamConfig(Element elem)
         {
             foreach (var config in basicParamConfigs)

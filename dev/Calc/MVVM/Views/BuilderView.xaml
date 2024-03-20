@@ -212,6 +212,7 @@
                             Margin="5,0,0,0"
                             Height="25"
                             BorderBrush="Silver"
+                            Background="WhiteSmoke"
                             BorderThickness="1"
                             CornerRadius="4">
                     <TextBox x:Name="BuildupNameTextBox"
@@ -228,6 +229,7 @@
                             Height="55"
                             Margin="5,5,0,0"
                             BorderBrush="Silver"
+                         Background="WhiteSmoke"
                             BorderThickness="1"
                             CornerRadius="4">
                     <TextBox x:Name="DescriptionTextBox"
@@ -262,26 +264,32 @@
                        Margin="10,0,0,0"
                        FontSize="27"
                        FontWeight="Light"/>
-                    
-            <Grid x:Name="MaterialGrid"
+
+            <Border  x:Name="MaterialSection"
+                    Grid.Column="2"
+                    Grid.Row="3"
+                    Margin="10,0,10,0"
+                     CornerRadius="4" 
+                     Background="LightGray">
+
+                <Grid x:Name="MaterialGrid"
+                      Margin="10"
                   DataContext="{Binding BuildupCreationVM.CurrentLayerModel}"
-                  Grid.Column="2"
-                  Grid.Row="3"
-                  Margin="10,0,10,0">
+                  >
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="25"/>
-                    <RowDefinition Height="35"/>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-                <ComboBox   x:Name="MaterialFunctionComboBox"
+                    <ComboBox   x:Name="MaterialFunctionComboBox"
                             Text="Material Function"
                             Grid.Column="1"
                             Grid.Row="0"
@@ -290,8 +298,8 @@
                             ItemsSource="{Binding MaterialFunctionsAll}"
                             SelectedItem="{Binding SelectedFunction}"
                             Style="{StaticResource RoundedComboBoxStyle}"/>
-                
-                <views:SearchComboBox Tag="1"
+
+                    <views:SearchComboBox Tag="1"
                       x:Uid="ShowTextNote"
                       Grid.Column="0"
                       Grid.Row="0"
@@ -301,12 +309,12 @@
                       DisplayMemberPath="Name"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Top">
-                    <ComboBox.GroupStyle>
-                        <StaticResource ResourceKey="ComboBoxGroupStyle"/>
-                    </ComboBox.GroupStyle>
-                </views:SearchComboBox>
+                        <ComboBox.GroupStyle>
+                            <StaticResource ResourceKey="ComboBoxGroupStyle"/>
+                        </ComboBox.GroupStyle>
+                    </views:SearchComboBox>
 
-                <views:SearchComboBox Tag="2"
+                    <views:SearchComboBox Tag="2"
                       x:Uid="ShowTextNote"
                       Grid.Column="0"
                       Grid.Row="1"
@@ -318,113 +326,126 @@
                       IsEnabled="{Binding CanAddSecondMaterial}"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Top">
-                    <ComboBox.GroupStyle>
-                        <StaticResource ResourceKey="ComboBoxGroupStyle"/>
-                    </ComboBox.GroupStyle>
-                </views:SearchComboBox>
+                        <ComboBox.GroupStyle>
+                            <StaticResource ResourceKey="ComboBoxGroupStyle"/>
+                        </ComboBox.GroupStyle>
+                    </views:SearchComboBox>
 
-                <TextBlock Text="{Binding MaterialMatchInfo}"
+                    <TextBlock Text="{Binding MaterialMatchInfo}"
                            Grid.Column="0"
                            Grid.Row="2"
                            Margin="5,0,0,0"
                            Foreground="Red"
                            FontWeight="SemiBold"
-                           FontSize="10"/>
+                           FontSize="8"/>
 
-                <Button Content="Reduce"
+                    <Button Content="Reduce"
                         Grid.Column="2"
                         Grid.Row="1"
                         Margin="2.5,0,0,0"
                         Style="{StaticResource ButtonStyle}"
                         Click="ReduceClicked"/>
-                
-                <Border x:Name="RatioBorder"
+
+                    <Border x:Name="RatioBorder"
                         Grid.Column="1"
                         Grid.Row="1"
                         Margin="5,0,2.5,0"
                         Height="25"
                         BorderBrush="Silver"
                         BorderThickness="1"
+                            Background="WhiteSmoke"
                         CornerRadius="4">
-                    <TextBox x:Name="RatioTextBox"
+                        <TextBox x:Name="RatioTextBox"
                             Text="{Binding SubMaterialRatio}"
                             BorderThickness="0"
                             VerticalAlignment="Center"
                             Background="Transparent"
                             FontWeight="SemiBold"
                             HorizontalAlignment="Stretch"/>
-                </Border>
+                    </Border>
 
 
 
-                <Grid   x:Name="MaterialTabsGrid"
+                    <Grid   x:Name="MaterialTabsGrid"
                         Grid.ColumnSpan="3"
                         Grid.Row="4"
                         DockPanel.Dock="Top">
-                    <Border Margin="0,21,0,0"
+                        <Border Margin="0,21,0,0"
                         BorderBrush="Silver"
+                                Background="White"
                         BorderThickness="1,1,1,1"
                         CornerRadius="4"/>
-                    <TabControl x:Name="MaterialTabs"
+                        <TabControl x:Name="MaterialTabs"
                             BorderThickness="0"
                             Background="Transparent"
                             ItemsSource="{Binding CurrentMaterials}"
-                            SelectedItem="{Binding ActiveMaterial}"
                             ItemContainerStyle="{StaticResource TabItemStyle}">
-                        <TabControl.ContentTemplate>
-                            <DataTemplate>
-                                <DockPanel VerticalAlignment="Stretch">
+                            <TabControl.ContentTemplate>
+                                <DataTemplate>
 
-                                    <Grid DockPanel.Dock="Bottom"
-                                      VerticalAlignment="Bottom"
-                                      Margin="10,0,0,10">
+                                    <Grid Margin="10,0,0,10">
                                         <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="100"/>
+                                            <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="100"/>
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="15"/>
                                             <RowDefinition Height="15"/>
+                                            <RowDefinition Height="15"/>
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
 
-                                        <TextBlock Grid.Row="0"
+                                        <TextBlock Grid.Row="0" Grid.Column="0"
+                                                   HorizontalAlignment="Right"
                                                FontWeight="SemiBold"
-                                               Text="Buildup Group: "/>
-                                        <TextBlock Grid.Row="1"
+                                               Text="Material Group: "/>
+                                        <TextBlock Grid.Row="0" Grid.Column="1"
+                                               Text="{Binding GroupName}"/>
+
+                                        <TextBlock Grid.Row="1" Grid.Column="0"
+                                                    HorizontalAlignment="Right"
                                                FontWeight="SemiBold"
-                                               Text="Buildup Unit: "/>
-                                        <TextBlock Grid.Row="2"
+                                               Text="Material Unit: "/>
+                                        <TextBlock Grid.Row="1" Grid.Column="1" 
+                                               Text="{Binding  MaterialUnit}"/>
+
+                                        <TextBlock Grid.Row="2" Grid.Column="0"
+                                                    HorizontalAlignment="Right"
+                                                   FontWeight="SemiBold"
+                                                   Text="Thickness: "/>
+                                        <TextBlock Grid.Row="2" Grid.Column="1" 
+                                                   Text="{Binding  Thickness}"/>
+
+                                        <TextBlock Grid.Row="0" Grid.Column="2"
+                                                    HorizontalAlignment="Right"
+                                              FontWeight="SemiBold"
+                                              Text="GWP (kgCO2eq): "/>
+                                        <TextBlock Grid.Row="0" Grid.Column="3"
+                                              Text="{Binding Gwp}"/>
+
+                                        <TextBlock Grid.Row="1" Grid.Column="2"
+                                                    HorizontalAlignment="Right"
+                                              FontWeight="SemiBold"
+                                              Text="GE (kWhOileq): "/>
+                                        <TextBlock Grid.Row="1" Grid.Column="3"
+                                              Text="{Binding Ge}"/>
+
+                                        <TextBlock Grid.Row="3" Grid.Column="0"
+                                                    HorizontalAlignment="Right"
                                                FontWeight="SemiBold"
                                                Text="Description: "/>
-                                        <TextBlock Grid.Column="1" Grid.Row="0"
-                                               Text="{Binding Group.Name}"/>
-                                        <TextBlock Grid.Column="1" Grid.Row="1"
-                                               Text="{Binding  Unit}"/>
-                                        <TextBlock Grid.Column="1" Grid.Row="2"
+                                        <TextBlock Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"
                                                Text="{Binding  Description}" TextWrapping="Wrap"/>
                                     </Grid>
-                                    <Separator DockPanel.Dock="Bottom"
-                                           BorderBrush="LightGray"
-                                           BorderThickness="1"
-                                           Margin="50,5,50,10"/>
 
-                                    <DataGrid Style="{StaticResource DataGridStyle}"
-                                          ItemsSource="{Binding Components}"
-                                          DockPanel.Dock="Top">
-                                        <DataGrid.Columns>
-                                            <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" Width="4*"  IsReadOnly="True" />
-                                            <DataGridTextColumn Header="Amount" Binding="{Binding FormattedAmount}" Width="1*"  IsReadOnly="True" />
-                                            <DataGridTextColumn Header="GWP (kgCO2 eq)" Binding="{Binding FormattedGWP}" Width="2*"  IsReadOnly="True" />
-                                            <DataGridTextColumn Header="GE (kWh oil eq)" Binding="{Binding FormattedGE}" Width="2*"  IsReadOnly="True" />
-                                        </DataGrid.Columns>
-                                    </DataGrid>
-                                </DockPanel>
-                            </DataTemplate>
-                        </TabControl.ContentTemplate>
-                    </TabControl>
+                                </DataTemplate>
+                            </TabControl.ContentTemplate>
+                        </TabControl>
+                    </Grid>
                 </Grid>
-            </Grid>
+            </Border>
 
             <Label Content="Buildup Preview:"
                    Grid.Row="4"

@@ -26,6 +26,7 @@ namespace Calc.Core.DirectusAPI.Drivers
                     gwp
                     ge
                     cost
+                    description
                 }
             }";
 

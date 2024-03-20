@@ -58,7 +58,7 @@ namespace Calc.Core.Calculations
             return result;
         }
 
-       private static CalculationComponent FromLayerComponent(LayerComponent layer, double totalRatio, bool getMain = true)
+       public static CalculationComponent FromLayerComponent(LayerComponent layer, double totalRatio, bool getMain = true)
         {
             var layerAmountParam = layer.GetAmountParam();
             var layerAmount = (layerAmountParam?.Amount != null) ? layerAmountParam.Amount * totalRatio : 0;

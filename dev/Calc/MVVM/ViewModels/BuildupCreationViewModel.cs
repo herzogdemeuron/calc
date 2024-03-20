@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 
 namespace Calc.MVVM.ViewModels
 {
@@ -53,7 +54,7 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        private Dictionary<LayerComponent, LayerModel> layerModels = new Dictionary<LayerComponent, LayerModel>();
+        private Dictionary<LayerComponent,  LayerModel> layerModels = new Dictionary<LayerComponent, LayerModel>();
         public LayerModel CurrentLayerModel
         {
             get
@@ -73,6 +74,7 @@ namespace Calc.MVVM.ViewModels
             get => selectedComponent;
             set
             {
+                if (selectedComponent == value) return;
                 selectedComponent = value;
                 OnPropertyChanged(nameof(SelectedComponent));
             }
@@ -83,12 +85,10 @@ namespace Calc.MVVM.ViewModels
             get => store.StandardSelected;
             set
             {
-                if (store.StandardSelected != value)
-                {
-                    store.StandardSelected = value;
-                    UpdateLayerModels();
-                    OnPropertyChanged(nameof(SelectedStandard));
-                }
+                if (store.StandardSelected == value) return;
+                store.StandardSelected = value;
+                UpdateLayerModels();
+                OnPropertyChanged(nameof(SelectedStandard));
             }
         }
 
@@ -98,6 +98,7 @@ namespace Calc.MVVM.ViewModels
             get => selectedBuildupUnit;
             set
             {
+                if (selectedBuildupUnit == value) return;
                 selectedBuildupUnit = value;
                 OnPropertyChanged(nameof(SelectedBuildupUnit));
             }
@@ -109,6 +110,7 @@ namespace Calc.MVVM.ViewModels
             get => selectedBuildupGroup;
             set
             {
+                if (selectedBuildupGroup == value) return;
                 selectedBuildupGroup = value;
                 OnPropertyChanged(nameof(SelectedBuildupGroup));
             }
@@ -120,6 +122,7 @@ namespace Calc.MVVM.ViewModels
             get => buildupComponents;
             set
             {
+                if (buildupComponents == value) return;
                 buildupComponents = value;
                 OnPropertyChanged(nameof(BuildupComponents));
             }
@@ -150,6 +153,7 @@ namespace Calc.MVVM.ViewModels
         {
             BuildupComponents = buildupComponentCreator.CreateBuildupComponentsFromSelection();
             UpdateLayerModels();
+            SetNormalizer(); // temporary only for testing
             UpdateCalculationComponents();
         }
 
@@ -157,7 +161,6 @@ namespace Calc.MVVM.ViewModels
         {
             SelectedComponent = selectedCompo;
             NotifyAmountChanged();
-            NotifyMaterialsChanged();
         }
 
         public void HandleReduceMaterial()
@@ -175,11 +178,19 @@ namespace Calc.MVVM.ViewModels
             {
                 foreach (var layer in component.LayerComponents)
                 {
-                    layerModels.Add(layer, new LayerModel(layer, CurrentMaterials, MaterialFunctionsAll));
+                    var layerModel = new LayerModel(layer, CurrentMaterials, MaterialFunctionsAll);
+                    layerModel.MaterialPropertyChanged += HandleMaterialChanged;
+                    layerModels.Add(layer, layerModel);
                 }
             }
             OnPropertyChanged(nameof(CurrentLayerModel));
             CurrentLayerModel?.NotifyPropertiesChange();
+        }
+
+        // on material chaned
+        private void HandleMaterialChanged(object sender, EventArgs e)
+        {
+            UpdateCalculationComponents();
         }
 
         public void UpdateCalculationComponents()
@@ -199,6 +210,11 @@ namespace Calc.MVVM.ViewModels
             return SelectedComponent?.BasicParameterSet.GetAmountParam(unit).Amount?.ToString() ?? "?";
         }
 
+        private void SetNormalizer() // temporary only for testing
+        {
+            BuildupComponents.First().IsNormalizer = true;
+        }
+
         private double GetQuantityRatio()
         {
             var normalizer = BuildupComponents.Where(c => c.IsNormalizer).ToList();
@@ -213,16 +229,13 @@ namespace Calc.MVVM.ViewModels
         }
 
 
-        private void NotifyMaterialsChanged()
-        {
-            OnPropertyChanged(nameof(CurrentLayerModel));
-        }
         private void NotifyAmountChanged()
         {
             OnPropertyChanged(nameof(CountString));
             OnPropertyChanged(nameof(LengthString));
             OnPropertyChanged(nameof(AreaString));
             OnPropertyChanged(nameof(VolumeString));
+            OnPropertyChanged(nameof(CurrentLayerModel));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

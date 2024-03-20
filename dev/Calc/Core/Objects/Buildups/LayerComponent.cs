@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using Calc.Core.Calculations;
 using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Materials;
 
@@ -15,7 +16,7 @@ namespace Calc.Core.Objects.Buildups
     {
         // general properties
         public string Title { get => TargetMaterialName; }
-        public string TargetMaterialName { get; }
+        private string TargetMaterialName { get; }
         public double? TargetThickness { get; }
         public MaterialFunction Function { get; set; }
         public BasicParameterSet BasicParameterSet { get; set; }
@@ -34,6 +35,11 @@ namespace Calc.Core.Objects.Buildups
             TargetMaterialName = materialName;
             BasicParameterSet = basicParameterSet;
             TargetThickness = thickness;
+        }
+
+        public bool Equals(LayerComponent component)
+        {
+            return TargetMaterialName == component.TargetMaterialName;
         }
 
         public void SetMainMaterial(Material material)

@@ -19,10 +19,10 @@ namespace Calc.Core.Objects.Buildups
     {
         public string Title { get; set; }
         public int TypeIdentifier { get; set; } // revit type id
+        public bool IsNormalizer { get; set; }
         public List<int> ElementIds { get; set; }
         public bool IsCompoundElement { get; set; }
         public double? Thickness { get; set; }
-        public bool IsNormalizer { get; set; }
         public BasicParameterSet BasicParameterSet { get; set; }
         public List<LayerComponent> LayerComponents { get; set; }
         public List<CalculationComponent> CalculationComponents { get; set; }

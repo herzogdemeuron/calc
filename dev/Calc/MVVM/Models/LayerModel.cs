@@ -1,6 +1,7 @@
 ﻿using Calc.Core.Objects;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Materials;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -13,6 +14,7 @@ namespace Calc.MVVM.Models
     {
         private LayerComponent layer;
         private readonly ObservableCollection<Material> materialsFromStandard;
+        public event EventHandler MaterialPropertyChanged;
         public List<MaterialFunction> MaterialFunctionsAll { get; }
         public Material CurrentMaterial { get; set; }
         public string MaterialMatchInfo { get => GetMaterialMatchText(); }
@@ -67,6 +69,7 @@ namespace Calc.MVVM.Models
             {
                 layer.SetSubMaterialRatio(value);
                 OnPropertyChanged(nameof(SubMaterialRatio));
+                NotifyPropertiesChange();
             }
         }
 
@@ -124,6 +127,8 @@ namespace Calc.MVVM.Models
             OnPropertyChanged(nameof(CanAddSecondMaterial));
             OnPropertyChanged(nameof(CurrentMaterials));
             OnPropertyChanged(nameof(MaterialMatchInfo));
+            MaterialPropertyChanged?.Invoke(this, EventArgs.Empty);
+
         }
 
         public void RemoveSubMaterial()
