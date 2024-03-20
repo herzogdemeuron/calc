@@ -97,7 +97,7 @@ namespace Calc.Core.Calculations
                 //MaterialSourceCode = material.SourceCode,
                 MaterialCategory = material.Category,
                 MaterialGwp = material.Gwp??0,
-                MaterialUnit = component.MaterialUnit,
+                MaterialUnit = component.Material.MaterialUnit,
                 MaterialAmount = component.Amount??0,
 
                 Gwp = gwpA123??0,

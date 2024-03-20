@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace Calc.MVVM.ViewModels
@@ -65,6 +66,30 @@ namespace Calc.MVVM.ViewModels
                   return layerModels.TryGetValue(layerComponent, out var layerModel) ? layerModel : null;
                 }
                 return null;
+            }
+        }
+
+        private string newBuildupName;
+        public string NewBuildupName
+        {
+            get => newBuildupName;
+            set
+            {
+                if (newBuildupName == value) return;
+                newBuildupName = value;
+                OnPropertyChanged(nameof(NewBuildupName));
+            }
+        }
+
+        private string newBuildupDescription;
+        public string NewBuildupDescription
+        {
+            get => newBuildupDescription;
+            set
+            {
+                if (newBuildupDescription == value) return;
+                newBuildupDescription = value;
+                OnPropertyChanged(nameof(NewBuildupDescription));
             }
         }
 
@@ -228,7 +253,27 @@ namespace Calc.MVVM.ViewModels
             return 0;
         }
 
+        private Buildup CreateBuildup()
+        {
+            var buildup = new Buildup
+            {
+                Name = NewBuildupName,
+                Description = NewBuildupDescription,
+                Standard = SelectedStandard,
+                Group = SelectedBuildupGroup,
+                BuildupUnit = (Unit)SelectedBuildupUnit,
+                CalculationComponents = AllCalculationComponents
+            };
+            return buildup;
+        }
 
+        public async Task<bool> HandleSaveBuildup()
+        {
+            var buildup = CreateBuildup();
+            bool response = await store.SaveSingleBuildup(buildup);
+            return response;
+
+        }
         private void NotifyAmountChanged()
         {
             OnPropertyChanged(nameof(CountString));

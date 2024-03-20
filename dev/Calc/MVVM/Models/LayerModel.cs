@@ -29,14 +29,15 @@ namespace Calc.MVVM.Models
             }
         }
 
-        private MaterialFunction? selectedFunction;
         public MaterialFunction? SelectedFunction
         {
-            get => selectedFunction;
+            get => layer.Function;
             set
             {
-                selectedFunction = value;
+                if(value ==null) return;
+                layer.Function = (MaterialFunction)value;
                 OnPropertyChanged(nameof(SelectedFunction));
+                NotifyPropertiesChange();
             }
         }
 

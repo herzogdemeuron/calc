@@ -30,7 +30,6 @@ namespace Calc.Core.Calculations
 
         [JsonProperty("calc_builder_materials_id")]
         public Material Material { get; set; }
-        public Unit MaterialUnit { get; set; }
         public bool HasError { get; set; }
 
         public void LinkMaterial(List<Material> materials)
@@ -71,10 +70,10 @@ namespace Calc.Core.Calculations
             {
                 Material = getMain ? layer.MainMaterial : layer.SubMaterial,
                 Function = layer.Function,
-                Amount = layerAmount * materialRatio,
+                Amount = Math.Round((layerAmount * materialRatio).Value, 3),
                 HasError = layerAmountParam.HasError,
-                Gwp = materialGwp,
-                Ge = materialGe
+                Gwp = Math.Round(materialGwp.Value,3),
+                Ge = Math.Round(materialGe.Value,3)
             };
         }
 

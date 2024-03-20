@@ -101,7 +101,7 @@ namespace Calc.Core.DirectusAPI.Drivers
                 name = SendItem.Name,
                 standard = SendItem.Standard,
                 buildup_unit = SendItem.BuildupUnit,
-                //group = SendItem.Group?.Id ?? 0,
+                group = new { id = SendItem.Group.Id},
                 description = SendItem.Description,
                 calculation_components = SendItem.CalculationComponents.Select(cc => new
                 {

@@ -11,10 +11,10 @@
         Closing="WindowClosing"
         mc:Ignorable="d"
         Height="700" MinHeight="700"
-        Width="800" MinWidth="600"
+        Width="900" MinWidth="800"
         WindowStartupLocation="CenterScreen"
         Icon="pack://application:,,,/CalcMVVM;component/Resources/icon-01.png"
-        Title="CALC"
+        Title="CALC BUILDER"
         Topmost="True">
 
     <Window.Resources>
@@ -31,9 +31,9 @@
 
         <Grid x:Name="BuilderGrid">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
@@ -64,7 +64,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="60"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -75,7 +75,7 @@
                             Style="{StaticResource ButtonStyle}"
                             Grid.Column="0"
                             Grid.Row="0"
-                            Width="55"
+                            Width="50"
                             Height="40"
                             HorizontalAlignment="Left"
                             Click="SelectClicked"/>
@@ -216,11 +216,12 @@
                             BorderThickness="1"
                             CornerRadius="4">
                     <TextBox x:Name="BuildupNameTextBox"
+                             Text="{Binding BuildupCreationVM.NewBuildupName, Mode=OneWayToSource}"
                              VerticalAlignment="Center"
-                            BorderThickness="0"
-                            Background="Transparent"
-                            FontWeight="SemiBold"
-                            HorizontalAlignment="Stretch" TextChanged="BuildupNameTextBox_TextChanged"/>
+                             BorderThickness="0"
+                             Background="Transparent"
+                             FontWeight="SemiBold"
+                             HorizontalAlignment="Stretch"/>
                 </Border>
 
                 <Border  Grid.Column="1"
@@ -229,16 +230,16 @@
                             Height="55"
                             Margin="5,5,0,0"
                             BorderBrush="Silver"
-                         Background="WhiteSmoke"
+                            Background="WhiteSmoke"
                             BorderThickness="1"
                             CornerRadius="4">
                     <TextBox x:Name="DescriptionTextBox"
+                             Text="{Binding BuildupCreationVM.NewBuildupDescription}"
                              BorderThickness="0"
                              TextWrapping="Wrap"
                              Height="50"
                              Background="Transparent"
-                            FontWeight="SemiBold"
-                            HorizontalAlignment="Stretch"/>
+                             HorizontalAlignment="Stretch"/>
                 </Border>
                 <Border  Grid.Column="2"
                             Grid.Row="1"
@@ -274,9 +275,7 @@
 
                 <Grid x:Name="MaterialGrid"
                       Margin="10"
-                  DataContext="{Binding BuildupCreationVM.CurrentLayerModel}"
-                  >
-
+                      DataContext="{Binding BuildupCreationVM.CurrentLayerModel}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="4*"/>
                         <ColumnDefinition Width="*"/>
@@ -360,7 +359,6 @@
                             BorderThickness="0"
                             VerticalAlignment="Center"
                             Background="Transparent"
-                            FontWeight="SemiBold"
                             HorizontalAlignment="Stretch"/>
                     </Border>
 
@@ -371,10 +369,10 @@
                         Grid.Row="4"
                         DockPanel.Dock="Top">
                         <Border Margin="0,21,0,0"
-                        BorderBrush="Silver"
+                                BorderBrush="Silver"
                                 Background="White"
-                        BorderThickness="1,1,1,1"
-                        CornerRadius="4"/>
+                                BorderThickness="1,1,1,1"
+                                CornerRadius="4"/>
                         <TabControl x:Name="MaterialTabs"
                             BorderThickness="0"
                             Background="Transparent"
@@ -398,44 +396,38 @@
                                         </Grid.RowDefinitions>
 
                                         <TextBlock Grid.Row="0" Grid.Column="0"
-                                                   HorizontalAlignment="Right"
                                                FontWeight="SemiBold"
-                                               Text="Material Group: "/>
+                                               Text="Material Group"/>
                                         <TextBlock Grid.Row="0" Grid.Column="1"
                                                Text="{Binding GroupName}"/>
 
                                         <TextBlock Grid.Row="1" Grid.Column="0"
-                                                    HorizontalAlignment="Right"
                                                FontWeight="SemiBold"
                                                Text="Material Unit: "/>
                                         <TextBlock Grid.Row="1" Grid.Column="1" 
                                                Text="{Binding  MaterialUnit}"/>
 
                                         <TextBlock Grid.Row="2" Grid.Column="0"
-                                                    HorizontalAlignment="Right"
                                                    FontWeight="SemiBold"
-                                                   Text="Thickness: "/>
+                                                   Text="Thickness"/>
                                         <TextBlock Grid.Row="2" Grid.Column="1" 
                                                    Text="{Binding  Thickness}"/>
 
                                         <TextBlock Grid.Row="0" Grid.Column="2"
-                                                    HorizontalAlignment="Right"
                                               FontWeight="SemiBold"
-                                              Text="GWP (kgCO2eq): "/>
+                                              Text="GWP (kgCO2eq)"/>
                                         <TextBlock Grid.Row="0" Grid.Column="3"
                                               Text="{Binding Gwp}"/>
 
                                         <TextBlock Grid.Row="1" Grid.Column="2"
-                                                    HorizontalAlignment="Right"
                                               FontWeight="SemiBold"
-                                              Text="GE (kWhOileq): "/>
+                                              Text="GE (kWhOileq)"/>
                                         <TextBlock Grid.Row="1" Grid.Column="3"
                                               Text="{Binding Ge}"/>
 
                                         <TextBlock Grid.Row="3" Grid.Column="0"
-                                                    HorizontalAlignment="Right"
                                                FontWeight="SemiBold"
-                                               Text="Description: "/>
+                                               Text="Description"/>
                                         <TextBlock Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"
                                                Text="{Binding  Description}" TextWrapping="Wrap"/>
                                     </Grid>
@@ -454,70 +446,68 @@
                    FontSize="27"
                    FontWeight="Light"/>
 
-            <Border  x:Name="PreviewSection"
+            <Grid x:Name="BuildupPreview"
                      Margin="10,0,10,0"
                      Grid.Row="5" 
-                     Grid.Column="2"
-                     CornerRadius="4" 
-                     Background="LightGray">
-                
+                     Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="38"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Grid.Row="0"
-                            Text="{Binding CalculationVM.Name}"
-                            Margin="10"
-                            FontSize="14"/>
-
-                    <DataGrid x:Name="ResultGrid"
-                    Grid.Row="1"
-                    Style="{StaticResource ResultDataGridStyle}"
-                    VerticalAlignment="Bottom"
-                    Margin="10"
-                    ItemsSource="{Binding CalculationVM.CategorizedResults}">
+                <Border x:Name="PreviewCalculation"
+                        BorderBrush="Silver"
+                        BorderThickness="1"
+                        Grid.Row="1"
+                        CornerRadius="4">
+                    <DataGrid x:Name="Calculations"
+                              Style="{StaticResource DataGridStyle}"
+                              ItemsSource="{Binding BuildupCreationVM.AllCalculationComponents}"
+                            AutoGenerateColumns="False">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Buildup Group" Binding="{Binding GroupName}" Width="3*"  IsReadOnly="True" />
-                            <DataGridTextColumn Header="GWP (kgCO2)" Binding="{Binding Gwp}" Width="1*"  IsReadOnly="True" />
-                            <DataGridTextColumn Header="GE (kWh oil)" Binding="{Binding Ge}" Width="1*"  IsReadOnly="True" />
+                            <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" Width="3*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Function" Binding="{Binding Function}" Width="*" IsReadOnly="True"/>
+                            <DataGridTemplateColumn Header="Amount" Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} {1}">
+                                                    <Binding Path="Amount"/>
+                                                    <Binding Path="Material.MaterialUnit"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="GWP" Binding="{Binding Gwp}" Width="*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="GE" Binding="{Binding Ge}" Width="*" IsReadOnly="True"/>
                         </DataGrid.Columns>
                     </DataGrid>
+                </Border>
 
-                    <DataGrid x:Name="ErrorGrid"
-                Grid.Row="1"
-                Style="{StaticResource ErrorDataGridStyle}"
-                VerticalAlignment="Bottom"
-                Margin="10"
-                ItemsSource="{Binding CalculationVM.Errors}">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding ErrorMessage}" Width="1*" IsReadOnly="True">
-                                <DataGridTextColumn.Header>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="💔" FontSize="10" Foreground="Crimson" VerticalAlignment="Center"/>
-                                        <TextBlock Text=" Issues" Foreground="Crimson" FontSize="13" />
-                                    </StackPanel>
-                                </DataGridTextColumn.Header>
-                            </DataGridTextColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-            </Border>
+          
+                <TextBlock Grid.Column="2"
+                            FontWeight="SemiBold"                              
+                            Text="{Binding BuildupCreationVM.NewBuildupName}"/>
+               
+            </Grid>
 
-            <Grid  x:Name="SaveGrid"
+            <Grid  x:Name="SaveButtonGrid"
                     Grid.Column="2"
                     Grid.Row="6">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Button  Content="Save Buildup"
+                <Button Content="Save Buildup"
+                        Click="SaveBuildupClicked"
                         Style="{StaticResource ButtonStyle}"
                         Grid.Column="1"
-                         Margin="0,0,10,0"/>
+                        Margin="0,0,10,0"/>
             </Grid>
+    
         </Grid>
 
 

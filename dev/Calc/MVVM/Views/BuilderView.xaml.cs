@@ -79,6 +79,11 @@ namespace Calc.MVVM.Views
             BuilderVM.HandleMessageClose();
         }
 
+        private void SaveBuildupClicked(object sender, RoutedEventArgs e)
+        {
+            BuilderVM.HandleSaveBuildup();
+        }
+
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
@@ -89,11 +94,6 @@ namespace Calc.MVVM.Views
         private void OnCloseClicked(object sender, RoutedEventArgs e)
         {
             this.Close();
-        }
-
-        private void BuildupNameTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
         }
     }
 }

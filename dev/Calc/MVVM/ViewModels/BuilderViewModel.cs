@@ -6,6 +6,7 @@ using Calc.Core.Objects.GraphNodes;
 using Calc.MVVM.Helpers.Mediators;
 using Calc.MVVM.Models;
 using System.ComponentModel;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace Calc.MVVM.ViewModels
@@ -29,6 +30,11 @@ namespace Calc.MVVM.ViewModels
         {
             await LoadingVM.HandleBuilderLoading();
             BuildupCreationVM.HandleLoaded();
+        }
+
+        public async Task HandleSaveBuildup()
+        {
+            await BuildupCreationVM.HandleSaveBuildup();
         }
 
         public void HandleWindowClosing()

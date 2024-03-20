@@ -407,6 +407,23 @@ namespace Calc.Core
             }
         }
 
+        public async Task<bool> SaveSingleBuildup(Buildup buildup)
+        {
+            this.BuildupDriver.SendItem = buildup;
+
+            try
+            {
+                await _graphqlRetry.ExecuteAsync(() =>
+                                       this.BuildupManager.CreateSingle<BuildupStorageDriver>(this.BuildupDriver));
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+                throw e;
+            }
+        }
+
         private List<T> GetProjectRelated<T>(IDriverGetMany<T> driver) where T : IHasProject
         {
             if (this.ProjectSelected == null)
