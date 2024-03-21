@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace Calc.Core.Objects.GraphNodes
 {
-    public class Branch : IGraphNode, INotifyPropertyChanged
+    public class Branch : IGraphNode, INotifyPropertyChanged, IColorizable
     {
         [JsonIgnore]
         public List<CalcElement> Elements { get; set; } = new();
@@ -74,11 +74,11 @@ namespace Calc.Core.Objects.GraphNodes
             }
         }
         [JsonIgnore]
-        public string BuildupsIdentifier
+        public string ColorIdentifier
         {
             get
             {
-                return GetBuildupsIdentifier(Buildups.ToList());
+                return GetColorIdentifier(Buildups.ToList());
             }
         }
         private HslColor _hslColor;
@@ -213,8 +213,8 @@ namespace Calc.Core.Objects.GraphNodes
         public void SetBuildups(List<Buildup> buildups)
         {
             if (buildups == null) return;
-            var newIdentifier = GetBuildupsIdentifier(buildups);
-            var currentIdentifier = BuildupsIdentifier;
+            var newIdentifier = GetColorIdentifier(buildups);
+            var currentIdentifier = ColorIdentifier;
             if (currentIdentifier == newIdentifier) return;
 
             Buildups = new(buildups);
@@ -222,7 +222,7 @@ namespace Calc.Core.Objects.GraphNodes
             OnPropertyChanged(nameof(Buildups));
             foreach (var subBranch in SubBranches)
             {
-                if (subBranch.Buildups == null || subBranch.BuildupsIdentifier == currentIdentifier)
+                if (subBranch.Buildups == null || subBranch.ColorIdentifier == currentIdentifier)
                 {
                     subBranch.SetBuildups(buildups);
                 }
@@ -413,7 +413,7 @@ namespace Calc.Core.Objects.GraphNodes
             return groupedElements;
         }
 
-        private string GetBuildupsIdentifier(List<Buildup> buildups)
+        private string GetColorIdentifier(List<Buildup> buildups)
         {
             if (buildups == null)
                 return null;

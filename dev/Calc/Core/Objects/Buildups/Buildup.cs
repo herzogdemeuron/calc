@@ -52,6 +52,12 @@ namespace Calc.Core.Objects.Buildups
 
         public string GroupName => Group?.Name;
 
+        [JsonProperty("buildup_gwp")]
+        public double? BuildupGwp { get; set; }
+
+        [JsonProperty("buildup_ge")]
+        public double? BuildupGe { get; set; }
+
         [JsonProperty("description")]
         public string Description { get; set; }
 

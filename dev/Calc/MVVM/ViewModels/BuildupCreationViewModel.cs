@@ -1,5 +1,6 @@
 ﻿using Calc.Core;
 using Calc.Core.Calculations;
+using Calc.Core.Color;
 using Calc.Core.Helpers;
 using Calc.Core.Interfaces;
 using Calc.Core.Objects;
@@ -30,6 +31,19 @@ namespace Calc.MVVM.ViewModels
         private readonly IBuildupComponentCreator buildupComponentCreator;
         public bool MaterialSelectionEnabled { get => SelectedComponent is LayerComponent; }
 
+
+        private List<BuildupComponent> buildupComponents = new List<BuildupComponent>();
+        public List<BuildupComponent> BuildupComponents
+        {
+            get => buildupComponents;
+            set
+            {
+                if (buildupComponents == value) return;
+                buildupComponents = value;
+                OnPropertyChanged(nameof(BuildupComponents));
+            }
+        }
+
         public List<CalculationComponent> AllCalculationComponents
         {
             get
@@ -56,15 +70,15 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        private Dictionary<LayerComponent,  LayerModel> layerModels = new Dictionary<LayerComponent, LayerModel>();
-        public LayerModel CurrentLayerModel
+        private Dictionary<LayerComponent,  LayerMaterialModel> layerMaterialModels = new Dictionary<LayerComponent, LayerMaterialModel>();
+        public LayerMaterialModel CurrentLayerMaterialModel
         {
             get
             {
-                if (layerModels == null) return null;
+                if (layerMaterialModels == null) return null;
                 if (SelectedComponent is LayerComponent layerComponent)
                 {
-                  return layerModels.TryGetValue(layerComponent, out var layerModel) ? layerModel : null;
+                  return layerMaterialModels.TryGetValue(layerComponent, out var layerMaterialModel) ? layerMaterialModel : null;
                 }
                 return null;
             }
@@ -113,8 +127,11 @@ namespace Calc.MVVM.ViewModels
             {
                 if (store.StandardSelected == value) return;
                 store.StandardSelected = value;
-                UpdateLayerModels();
+                UpdateLayerMaterialModels();
                 OnPropertyChanged(nameof(SelectedStandard));
+                UpdateCalculationComponents();
+                UpdateLayerColors();
+
             }
         }
 
@@ -127,6 +144,7 @@ namespace Calc.MVVM.ViewModels
                 if (selectedBuildupUnit == value) return;
                 selectedBuildupUnit = value;
                 OnPropertyChanged(nameof(SelectedBuildupUnit));
+                UpdateCalculationComponents();
             }
         }
 
@@ -142,17 +160,8 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        private List<BuildupComponent> buildupComponents = new List<BuildupComponent>();
-        public List<BuildupComponent> BuildupComponents
-        {
-            get => buildupComponents;
-            set
-            {
-                if (buildupComponents == value) return;
-                buildupComponents = value;
-                OnPropertyChanged(nameof(BuildupComponents));
-            }
-        }
+        public double? BuildupGwp { get => AllCalculationComponents?.Where(c => c.Amount.HasValue).Sum(c => c.Gwp); }
+        public double? BuildupGe { get => AllCalculationComponents?.Where(c => c.Amount.HasValue).Sum(c => c.Ge); }
 
         public string CountString { get => GetAmountString(Unit.piece); }
 
@@ -178,9 +187,10 @@ namespace Calc.MVVM.ViewModels
         public void HandleSelectingElements()
         {
             BuildupComponents = buildupComponentCreator.CreateBuildupComponentsFromSelection();
-            UpdateLayerModels();
+            UpdateLayerMaterialModels();
             SetNormalizer(); // temporary only for testing
             UpdateCalculationComponents();
+            UpdateLayerColors();
         }
 
         public void HandleComponentSelectionChanged(ICalcComponent selectedCompo)
@@ -191,32 +201,38 @@ namespace Calc.MVVM.ViewModels
 
         public void HandleReduceMaterial()
         {
-            if(CurrentLayerModel != null)
+            if(CurrentLayerMaterialModel != null)
             {
-                CurrentLayerModel.RemoveSubMaterial();
+                CurrentLayerMaterialModel.RemoveSubMaterial();
             }
         }
 
-        private void UpdateLayerModels()
+        private void UpdateLayerMaterialModels()
         {
-            layerModels?.Clear();
+            layerMaterialModels?.Clear();
             foreach (var component in BuildupComponents.Where(c => c.HasLayers))
             {
                 foreach (var layer in component.LayerComponents)
                 {
-                    var layerModel = new LayerModel(layer, CurrentMaterials, MaterialFunctionsAll);
-                    layerModel.MaterialPropertyChanged += HandleMaterialChanged;
-                    layerModels.Add(layer, layerModel);
+                    var layerMaterialModel = new LayerMaterialModel(layer, CurrentMaterials, MaterialFunctionsAll);
+                    layerMaterialModel.MaterialPropertyChanged += HandleMaterialChanged;
+                    layerMaterialModels.Add(layer, layerMaterialModel);
                 }
             }
-            OnPropertyChanged(nameof(CurrentLayerModel));
-            CurrentLayerModel?.NotifyPropertiesChange();
+            OnPropertyChanged(nameof(CurrentLayerMaterialModel));
+            CurrentLayerMaterialModel?.NotifyPropertiesChange();
         }
 
         // on material chaned
         private void HandleMaterialChanged(object sender, EventArgs e)
         {
             UpdateCalculationComponents();
+            UpdateLayerColors();
+        }
+
+        private void UpdateLayerColors()
+        {
+            ItemPainter.ColorLayersByMaterial(BuildupComponents);
         }
 
         public void UpdateCalculationComponents()
@@ -229,6 +245,8 @@ namespace Calc.MVVM.ViewModels
             }
             OnPropertyChanged(nameof(AllCalculationComponents));
             OnPropertyChanged(nameof(AllErrorCalculationComponents));
+            OnPropertyChanged(nameof(BuildupGwp));
+            OnPropertyChanged(nameof(BuildupGe));
         }
 
         private string GetAmountString(Unit unit)
@@ -263,7 +281,9 @@ namespace Calc.MVVM.ViewModels
                 Standard = SelectedStandard,
                 Group = SelectedBuildupGroup,
                 BuildupUnit = (Unit)SelectedBuildupUnit,
-                CalculationComponents = AllCalculationComponents
+                CalculationComponents = AllCalculationComponents,
+                BuildupGwp = BuildupGwp??0,
+                BuildupGe = BuildupGe??0
             };
             return buildup;
         }
@@ -281,7 +301,7 @@ namespace Calc.MVVM.ViewModels
             OnPropertyChanged(nameof(LengthString));
             OnPropertyChanged(nameof(AreaString));
             OnPropertyChanged(nameof(VolumeString));
-            OnPropertyChanged(nameof(CurrentLayerModel));
+            OnPropertyChanged(nameof(CurrentLayerMaterialModel));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

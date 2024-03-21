@@ -52,10 +52,10 @@ namespace Calc.Core.Objects.GraphNodes
             switch (method)
             {
                 case "branches":
-                    BranchPainter.ColorBranchesByBranch(branches);
+                    ItemPainter.ColorBranchesByBranch(branches);
                     break;
                 case "buildups":
-                    BranchPainter.ColorBranchesByBuildup(branches);
+                    ItemPainter.ColorBranchesByBuildup(branches);
                     break;
                 default:
                     break;

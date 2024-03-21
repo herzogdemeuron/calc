@@ -45,6 +45,12 @@ namespace Calc.Core.Objects
         string GroupName{ get; }
     }
 
+    public interface IColorizable
+    {
+        string ColorIdentifier { get; }
+        HslColor HslColor { get; set; }
+    }
+
     public interface  ICalcComponent
     {
         string Title { get; }

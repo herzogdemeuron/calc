@@ -1,4 +1,5 @@
-﻿using Calc.Core.Objects;
+﻿using Calc.Core.Color;
+using Calc.Core.Objects;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Materials;
 using System;
@@ -6,15 +7,18 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Security.RightsManagement;
+using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace Calc.MVVM.Models
 {
-    public class LayerModel : INotifyPropertyChanged
+    public class LayerMaterialModel : INotifyPropertyChanged
     {
+        public event EventHandler MaterialPropertyChanged;
+
         private LayerComponent layer;
         private readonly ObservableCollection<Material> materialsFromStandard;
-        public event EventHandler MaterialPropertyChanged;
         public List<MaterialFunction> MaterialFunctionsAll { get; }
         public Material CurrentMaterial { get; set; }
         public string MaterialMatchInfo { get => GetMaterialMatchText(); }
@@ -116,7 +120,9 @@ namespace Calc.MVVM.Models
             }
         }
 
-        public LayerModel(LayerComponent layercompo, List<Material> allMaterials, List<MaterialFunction> materialFunctionsAll)
+
+
+        public LayerMaterialModel(LayerComponent layercompo, List<Material> allMaterials, List<MaterialFunction> materialFunctionsAll)
         {
             layer = layercompo;
             materialsFromStandard = new ObservableCollection<Material>(allMaterials);

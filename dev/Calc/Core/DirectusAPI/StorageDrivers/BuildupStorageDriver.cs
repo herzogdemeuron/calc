@@ -36,6 +36,8 @@ namespace Calc.Core.DirectusAPI.Drivers
                             id
                         }           
                     }
+                    buildup_gwp
+                    buildup_ge
                 }
             }";
 
@@ -111,7 +113,9 @@ namespace Calc.Core.DirectusAPI.Drivers
                     gwp = cc.Gwp ?? 0,
                     ge = cc.Ge ?? 0,
                     calc_builder_materials_id = new { id = cc.Material.Id}
-                }).ToArray()
+                }).ToArray(),
+                buildup_gwp = SendItem.BuildupGwp,
+                buildup_ge = SendItem.BuildupGe
             };
 
             var variables = new Dictionary<string, object>();

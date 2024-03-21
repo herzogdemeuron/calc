@@ -23,7 +23,6 @@ namespace Calc.RevitConnector.Revit
         
         private readonly Document Doc;
         private readonly UIDocument Uidoc;
-        private const string noMaterialName = "No Material";
         private readonly List<RevitBasicParamConfig> basicParamConfigs =
             new List<RevitBasicParamConfig>
             {
@@ -174,7 +173,7 @@ namespace Calc.RevitConnector.Revit
                         volumeParam.PerformOperation(Operation.Multiply, volumeProp)
                         );
 
-                    var layerComponent = new LayerComponent(material?.Name??noMaterialName, newParamSet, thickness);
+                    var layerComponent = new LayerComponent(material?.Name, newParamSet, thickness);
                     result.Add(layerComponent);
                 }
             }
@@ -182,7 +181,7 @@ namespace Calc.RevitConnector.Revit
             {
                 foreach (var (material, paramSet) in materialAmounts)
                 {
-                    var layerComponent = new LayerComponent(material?.Name ?? noMaterialName, paramSet);
+                    var layerComponent = new LayerComponent(material?.Name, paramSet);
                     result.Add(layerComponent);
                 }
             }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using Calc.Core.Calculations;
+using Calc.Core.Color;
 using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Materials;
 
@@ -12,10 +13,10 @@ namespace Calc.Core.Objects.Buildups
     /// A layer or component of an element type in revit/rhino.
     /// A LayerComponent must have mapped infos，could have Ids to be targeted.
     /// </summary>
-    public class LayerComponent : ICalcComponent
+    public class LayerComponent : ICalcComponent, IColorizable, INotifyPropertyChanged
     {
         // general properties
-        public string Title { get => TargetMaterialName; }
+        public string Title { get => TargetMaterialName?? "No Material"; }
         private string TargetMaterialName { get; }
         public double? TargetThickness { get; }
         public MaterialFunction? Function { get; set; }
@@ -28,7 +29,18 @@ namespace Calc.Core.Objects.Buildups
         public double MainMaterialRatio { get => 1 - SubMaterialRatio; }
         public bool HasMainMaterial { get => MainMaterial != null; }
         public bool HasSubMaterial { get => HasMainMaterial && SubMaterial != null; }
+        public string ColorIdentifier{ get => GetColorIdentifier(); }
 
+        private HslColor hslColor;
+        public HslColor HslColor
+        {
+            get => hslColor;
+            set
+            {
+                hslColor = value;
+                OnPropertyChanged(nameof(HslColor));
+            }
+        }
 
         public LayerComponent(string materialName, BasicParameterSet basicParameterSet = null, double? thickness = null)
         {
@@ -57,6 +69,7 @@ namespace Calc.Core.Objects.Buildups
             SubMaterialRatio = ratio;
         }
 
+
         /// <summary>
         /// get the amount parameter of this layer using the unit from the main material
         /// </summary>
@@ -66,6 +79,15 @@ namespace Calc.Core.Objects.Buildups
             var unit = MainMaterial?.MaterialUnit;
             if (unit == null) return null;
             return BasicParameterSet.GetAmountParam((Unit)unit);
+        }
+
+        private string GetColorIdentifier()
+        {
+            var result = "";
+            if (!HasMainMaterial) return result;
+            result += MainMaterial.Id;
+            if (HasSubMaterial) result += $"-{SubMaterial.Id}";
+            return result;
         }
 
         public double GetMaterialGwp(bool getMain = true)
@@ -92,6 +114,12 @@ namespace Calc.Core.Objects.Buildups
                 return ge * ratio;
             };
             return 0;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
