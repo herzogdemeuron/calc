@@ -17,6 +17,8 @@ namespace Calc.Core.Calculations
     /// </summary>
     public class CalculationComponent
     {
+        [JsonProperty("position")]
+        public int Position { get; set; }
         [JsonProperty("function")]
         public MaterialFunction? Function { get; set; }
         [JsonProperty("amount")]
@@ -75,6 +77,15 @@ namespace Calc.Core.Calculations
                 Gwp = Math.Round(materialGwp.Value,3),
                 Ge = Math.Round(materialGe.Value,3)
             };
+        }
+
+        public static void UpdatePosition(List<CalculationComponent> components)
+        {
+            if (components == null) return;
+            for (int i = 0; i < components.Count; i++)
+            {
+                components[i].Position = i + 1;
+            }
         }
 
     }

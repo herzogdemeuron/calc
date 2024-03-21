@@ -39,6 +39,7 @@ namespace Calc.MVVM.ViewModels
                 {
                     components.AddRange(component.CalculationComponents.Where(c => c.Amount.HasValue));
                 }
+                CalculationComponent.UpdatePosition(components);
                 return components;
             }
         }

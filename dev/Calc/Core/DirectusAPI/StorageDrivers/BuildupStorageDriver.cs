@@ -105,6 +105,7 @@ namespace Calc.Core.DirectusAPI.Drivers
                 description = SendItem.Description,
                 calculation_components = SendItem.CalculationComponents.Select(cc => new
                 {
+                    position = cc.Position,
                     function = cc.Function,
                     amount = cc.Amount ?? 0,
                     gwp = cc.Gwp ?? 0,
