@@ -18,7 +18,7 @@ namespace Calc.Core.Calculations
     public class CalculationComponent
     {
         [JsonProperty("function")]
-        public MaterialFunction Function { get; set; }
+        public MaterialFunction? Function { get; set; }
         [JsonProperty("amount")]
         public double? Amount { get; set; }
         [JsonProperty("gwp")]

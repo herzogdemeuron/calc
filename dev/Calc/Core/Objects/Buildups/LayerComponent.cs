@@ -18,7 +18,7 @@ namespace Calc.Core.Objects.Buildups
         public string Title { get => TargetMaterialName; }
         private string TargetMaterialName { get; }
         public double? TargetThickness { get; }
-        public MaterialFunction Function { get; set; }
+        public MaterialFunction? Function { get; set; }
         public BasicParameterSet BasicParameterSet { get; set; }
 
         // material mappings
