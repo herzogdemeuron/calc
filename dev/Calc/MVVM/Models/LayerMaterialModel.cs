@@ -181,7 +181,7 @@ namespace Calc.MVVM.Models
         {
             if (layer.HasMainMaterial && layer.HasSubMaterial && MainMaterial.MaterialUnit != SubMaterial.MaterialUnit)
             {
-                return $"Sub Material Unit ({SubMaterial.MaterialUnit}) does not match {MainMaterial.MaterialUnit}";
+                return $"Sub material unit does not match.";
             }
             return null;
         }

@@ -334,12 +334,14 @@
                     </views:SearchComboBox>
 
                     <TextBlock Text="{Binding MaterialMatchInfo}"
-                           Grid.Column="0"
-                           Grid.Row="2"
-                           Margin="5,0,0,0"
-                           Foreground="Red"
-                           FontWeight="SemiBold"
-                           FontSize="8"/>
+                               d:Text="Sub material unit does not match."
+                               VerticalAlignment="Center"
+                               Grid.Column="0"
+                               Grid.Row="2"
+                               Margin="5,0,0,0"
+                               Foreground="Red"
+                               FontWeight="SemiBold"
+                               FontSize="10"/>
 
                     <Button Content="Reduce"
                         Grid.Column="2"
