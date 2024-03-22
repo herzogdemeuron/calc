@@ -43,11 +43,5 @@ namespace Calc.Core.Objects.BasicParameters
             areaParam = areaParam.PerformOperation(Operation.Add, other.areaParam);
             volParam = volParam.PerformOperation(Operation.Add, other.volParam);
         }
-
-        public void AddPiece()
-        {
-            pieceParam = pieceParam.PerformOperation(Operation.Add, 1);
-        }
-
     }
 }

@@ -90,7 +90,7 @@ namespace Calc.RevitConnector.Revit
             var originComponent = List.FirstOrDefault(x => x.Equals(component));
             if (originComponent != null)
             {
-                originComponent.BasicParameterSet.AddPiece();
+                originComponent.BasicParameterSet.Add(component.BasicParameterSet);
                 originComponent.ElementIds.AddRange(component.ElementIds);
                 var isCompound = originComponent.IsCompoundElement;
                 MergeLayerComponents(originComponent.LayerComponents, component.LayerComponents, isCompound);
