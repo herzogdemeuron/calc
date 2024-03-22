@@ -50,7 +50,7 @@ namespace Calc.MVVM.ViewModels
 
         public void HandleSideClicked()
         {
-            //NodeTreeVM.DeselectNodes();
+            BuildupCreationVM.HandleDeselect();
         }
 
         public void HandleReduceMaterial()

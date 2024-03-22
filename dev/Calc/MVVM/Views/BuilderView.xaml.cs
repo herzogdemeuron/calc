@@ -28,6 +28,7 @@ namespace Calc.MVVM.Views
             BuilderVM.HandleSelect();
             // show the window again
             this.Show();
+            ExpandAll(this.TreeView, true);
         }
         private void TreeViewItemSelected(object sender, RoutedEventArgs e)
         {
@@ -95,5 +96,21 @@ namespace Calc.MVVM.Views
         {
             this.Close();
         }
+
+        private void ExpandAll(ItemsControl items, bool expand)
+        {
+            foreach (object obj in items.Items)
+            {
+                ItemsControl childControl = items.ItemContainerGenerator.ContainerFromItem(obj) as ItemsControl;
+                if (childControl != null)
+                {
+                    ExpandAll(childControl, expand);
+                }
+                TreeViewItem item = childControl as TreeViewItem;
+                if (item != null)
+                    item.IsExpanded = true;
+            }
+        }
+
     }
 }

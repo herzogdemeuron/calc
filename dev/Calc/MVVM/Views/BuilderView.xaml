@@ -79,15 +79,13 @@
                             Height="40"
                             HorizontalAlignment="Left"
                             Click="SelectClicked"/>
-                    
-                <Border Grid.ColumnSpan="4" Grid.Column="1" Grid.Row="0" CornerRadius="4" Background="LightGray">
-                    <Border BorderThickness="0" CornerRadius="4">
-                        <Border.Background>
-                            <SolidColorBrush Color="{Binding NodeTreeVM.SelectedNodeItem.LabelColor}"/>
-                        </Border.Background>
-                    </Border>
-                </Border>
-                    
+
+                <Border Grid.ColumnSpan="4" Grid.Column="1" Grid.Row="0"
+                            BorderThickness="0" 
+                            CornerRadius="4"
+                            d:Background="LightGray"
+                            Background="{Binding BuildupCreationVM.CurrentColor, Converter={StaticResource ColorConverter}}"/>
+
                 <StackPanel x:Name="CountPanel"
                             Grid.Row="0"
                             Grid.Column="1"
@@ -270,15 +268,17 @@
                        FontWeight="Light"/>
 
             <Border  x:Name="MaterialSection"
-                    Grid.Column="2"
-                    Grid.Row="3"
-                    Margin="10,0,10,0"
-                     CornerRadius="4" 
-                     Background="LightGray">
+                     Grid.Column="2"
+                     Grid.Row="3"
+                     Margin="10,0,10,0"
+                     CornerRadius="4"
+                     d:Background="LightGray"
+                     Background="{Binding BuildupCreationVM.CurrentColor, Converter={StaticResource ColorConverter}}">
 
                 <Grid x:Name="MaterialGrid"
                       Margin="10"
-                      DataContext="{Binding BuildupCreationVM.CurrentLayerMaterialModel}">
+                      DataContext="{Binding BuildupCreationVM.CurrentLayerMaterialModel}"
+                     IsEnabled="{Binding IsEnabled}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="4*"/>
                         <ColumnDefinition Width="*"/>
@@ -378,6 +378,7 @@
                             BorderThickness="0"
                             Background="Transparent"
                             ItemsSource="{Binding CurrentMaterials}"
+                            SelectedItem="{Binding ActiveMaterial}"
                             ItemContainerStyle="{StaticResource TabItemStyle}">
                             <TabControl.ContentTemplate>
                                 <DataTemplate>

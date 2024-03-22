@@ -13,9 +13,9 @@ namespace Calc.MVVM.Converters
             if (value is HslColor hsl)
             {
                 var rgb = CalcColorConverter.HslToRgb(hsl);
-                return Color.FromArgb(255, rgb.R, rgb.G, rgb.B);
+                return new SolidColorBrush(Color.FromArgb(255, rgb.R, rgb.G, rgb.B));
             }
-            return Color.FromArgb(50, 40, 120, 78);
+            return new SolidColorBrush(Color.FromArgb(50, 40, 120, 78));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

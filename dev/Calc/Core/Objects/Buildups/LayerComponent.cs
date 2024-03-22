@@ -16,6 +16,7 @@ namespace Calc.Core.Objects.Buildups
     public class LayerComponent : ICalcComponent, IColorizable, INotifyPropertyChanged
     {
         // general properties
+        public bool IsValid { get; set; } = true;
         public string Title { get => TargetMaterialName?? "No Material"; }
         private string TargetMaterialName { get; }
         public double? TargetThickness { get; }
@@ -48,6 +49,8 @@ namespace Calc.Core.Objects.Buildups
             BasicParameterSet = basicParameterSet;
             TargetThickness = thickness;
         }
+
+        public LayerComponent(){}
 
         public bool Equals(LayerComponent component)
         {

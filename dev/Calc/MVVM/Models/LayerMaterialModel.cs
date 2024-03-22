@@ -17,11 +17,12 @@ namespace Calc.MVVM.Models
     {
         public event EventHandler MaterialPropertyChanged;
 
-        private LayerComponent layer;
+        private readonly LayerComponent layer;
         private readonly ObservableCollection<Material> materialsFromStandard;
         public List<MaterialFunction> MaterialFunctionsAll { get; }
         public Material CurrentMaterial { get; set; }
         public string MaterialMatchInfo { get => GetMaterialMatchText(); }
+        public bool IsEnabled { get => layer.IsValid; }
         public List<Material> CurrentMaterials
         {
             get
@@ -51,6 +52,7 @@ namespace Calc.MVVM.Models
             set
             {
                 layer.SetMainMaterial(value);
+                ActiveMaterial = value;
                 OnPropertyChanged(nameof(MainMaterial));
                 NotifyPropertiesChange();
             }
@@ -62,6 +64,7 @@ namespace Calc.MVVM.Models
             set
             {
                 layer.SetSubMaterial(value);
+                ActiveMaterial = value;
                 OnPropertyChanged(nameof(SubMaterial));
                 NotifyPropertiesChange();
             }
@@ -120,13 +123,27 @@ namespace Calc.MVVM.Models
             }
         }
 
-
+        private Material activeMaterial;
+        public Material ActiveMaterial // for the tab to show the current material
+        {
+            get => activeMaterial;
+            set
+            {
+                activeMaterial = value;
+                OnPropertyChanged(nameof(ActiveMaterial));
+            }
+        }
 
         public LayerMaterialModel(LayerComponent layercompo, List<Material> allMaterials, List<MaterialFunction> materialFunctionsAll)
         {
             layer = layercompo;
             materialsFromStandard = new ObservableCollection<Material>(allMaterials);
             MaterialFunctionsAll = materialFunctionsAll;
+        }
+
+        public LayerMaterialModel()
+        {
+            layer = new LayerComponent() { IsValid = false };
         }
 
         public void NotifyPropertiesChange()
@@ -138,10 +155,25 @@ namespace Calc.MVVM.Models
 
         }
 
-        public void RemoveSubMaterial()
+        public void ResetCurrentMaterial()
         {
-            SubMaterial = null;
-            SubMaterialRatio = 0;
+            CurrentMaterial = MainMaterial;
+        }
+
+        public void RemoveMaterial()
+        {
+            if(layer.HasSubMaterial)
+            {
+                SubMaterial = null;
+                SubMaterialRatio = 0;
+                return;
+            }
+            if(layer.HasMainMaterial)
+            {
+                MainMaterial = null;
+                SubMaterialRatio = 0;
+                return;
+            }
         }
 
         private string GetMaterialMatchText()

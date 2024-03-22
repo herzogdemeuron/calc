@@ -1,4 +1,5 @@
 ﻿using Calc.Core.Calculations;
+using Calc.Core.Color;
 using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Materials;
 using Speckle.Newtonsoft.Json;
@@ -26,6 +27,8 @@ namespace Calc.Core.Objects.Buildups
         public BasicParameterSet BasicParameterSet { get; set; }
         public List<LayerComponent> LayerComponents { get; set; }
         public List<CalculationComponent> CalculationComponents { get; set; }
+        public HslColor HslColor { get => ItemPainter.DefaultColor; }
+
         public bool HasLayers => LayerComponents.Count > 0;
 
         public void UpdateCalculationComponents(double totalRation)

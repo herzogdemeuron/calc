@@ -6,6 +6,7 @@ using Calc.Core.Interfaces;
 using Calc.Core.Objects;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Materials;
+using Calc.MVVM.Helpers.Mediators;
 using Calc.MVVM.Models;
 using Speckle.Newtonsoft.Json;
 using System;
@@ -30,7 +31,7 @@ namespace Calc.MVVM.ViewModels
 
         private readonly IBuildupComponentCreator buildupComponentCreator;
         public bool MaterialSelectionEnabled { get => SelectedComponent is LayerComponent; }
-
+        public HslColor CurrentColor { get => SelectedComponent?.HslColor?? ItemPainter.DefaultColor; }
 
         private List<BuildupComponent> buildupComponents = new List<BuildupComponent>();
         public List<BuildupComponent> BuildupComponents
@@ -71,6 +72,7 @@ namespace Calc.MVVM.ViewModels
         }
 
         private Dictionary<LayerComponent,  LayerMaterialModel> layerMaterialModels = new Dictionary<LayerComponent, LayerMaterialModel>();
+        private LayerMaterialModel InvalidLayerMaterialModel { get => new LayerMaterialModel(); }
         public LayerMaterialModel CurrentLayerMaterialModel
         {
             get
@@ -78,9 +80,9 @@ namespace Calc.MVVM.ViewModels
                 if (layerMaterialModels == null) return null;
                 if (SelectedComponent is LayerComponent layerComponent)
                 {
-                  return layerMaterialModels.TryGetValue(layerComponent, out var layerMaterialModel) ? layerMaterialModel : null;
+                  return layerMaterialModels.TryGetValue(layerComponent, out var layerMaterialModel) ? layerMaterialModel : InvalidLayerMaterialModel;
                 }
-                return null;
+                return InvalidLayerMaterialModel;
             }
         }
 
@@ -184,6 +186,14 @@ namespace Calc.MVVM.ViewModels
             OnPropertyChanged(nameof(BuildupUnitsAll));
             OnPropertyChanged(nameof(BuildupGroupsAll));
         }
+
+        public void HandleDeselect()
+        {
+            SelectedComponent = null;
+            MediatorToView.Broadcast("ViewDeselectTreeView");
+            NotifyAmountChanged();
+            OnPropertyChanged(nameof(CurrentColor));
+        }
         public void HandleSelectingElements()
         {
             BuildupComponents = buildupComponentCreator.CreateBuildupComponentsFromSelection();
@@ -197,14 +207,12 @@ namespace Calc.MVVM.ViewModels
         {
             SelectedComponent = selectedCompo;
             NotifyAmountChanged();
+            OnPropertyChanged(nameof(CurrentColor));
         }
 
         public void HandleReduceMaterial()
         {
-            if(CurrentLayerMaterialModel != null)
-            {
-                CurrentLayerMaterialModel.RemoveSubMaterial();
-            }
+            CurrentLayerMaterialModel.RemoveMaterial();
         }
 
         private void UpdateLayerMaterialModels()
@@ -220,7 +228,7 @@ namespace Calc.MVVM.ViewModels
                 }
             }
             OnPropertyChanged(nameof(CurrentLayerMaterialModel));
-            CurrentLayerMaterialModel?.NotifyPropertiesChange();
+            CurrentLayerMaterialModel.NotifyPropertiesChange();
         }
 
         // on material chaned
@@ -230,9 +238,12 @@ namespace Calc.MVVM.ViewModels
             UpdateLayerColors();
         }
 
+
+
         private void UpdateLayerColors()
         {
             ItemPainter.ColorLayersByMaterial(BuildupComponents);
+            OnPropertyChanged(nameof(CurrentColor));
         }
 
         public void UpdateCalculationComponents()

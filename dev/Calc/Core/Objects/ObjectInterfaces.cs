@@ -54,6 +54,7 @@ namespace Calc.Core.Objects
     public interface  ICalcComponent
     {
         string Title { get; }
+        HslColor HslColor { get;}
         BasicParameterSet BasicParameterSet { get; set; }
     }
 

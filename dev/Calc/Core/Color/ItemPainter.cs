@@ -9,7 +9,7 @@ namespace Calc.Core.Color
 {
     public class ItemPainter
     {
-        private static HslColor DefaultColor = new HslColor(0, 0, 86);
+        public static HslColor DefaultColor = new HslColor(0, 0, 86);
         public static void ColorBranchesByBranch(List<Branch> branches)
         {
             if (branches.Count == 0)
