@@ -78,7 +78,7 @@ namespace Calc.RevitConnector.Revit
                 Title = GetElementType(element)?.Name,
                 LayerComponents = layers,
                 IsCompoundElement = isCompound,
-                BasicParameterSet = GetTotalAmounts(element)
+                BasicParameterSet = GetTotalAmounts(element) //Total amount of the buildup component is not sumed up from the layers, but directly from the element
             };
         }
 
@@ -90,7 +90,7 @@ namespace Calc.RevitConnector.Revit
             var originComponent = List.FirstOrDefault(x => x.Equals(component));
             if (originComponent != null)
             {
-                //sameComponent.BasicParameterSet.Add(component.BasicParameterSet);
+                originComponent.BasicParameterSet.AddPiece();
                 originComponent.ElementIds.AddRange(component.ElementIds);
                 var isCompound = originComponent.IsCompoundElement;
                 MergeLayerComponents(originComponent.LayerComponents, component.LayerComponents, isCompound);

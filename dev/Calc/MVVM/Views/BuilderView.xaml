@@ -46,7 +46,7 @@
                 <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
 
-            <Label Content="Revit Elements:"
+            <Label Content="Revit Elements"
                     Grid.Column="0"
                     Grid.Row="0"
                     FontSize="27"
@@ -158,7 +158,7 @@
             
             
 
-            <Label Content="Buildup Settings:" 
+            <Label Content="Buildup Settings" 
                 Grid.Column="2"
                 Grid.Row="0"
                 FontSize="27"
@@ -260,7 +260,7 @@
             </Grid>
 
 
-            <Label Content="Materials:"
+            <Label Content="Materials"
                        Grid.Column="2"
                        Grid.Row="2"
                        Margin="5,5,0,0"
@@ -441,7 +441,7 @@
                 </Grid>
             </Border>
 
-            <Label Content="Buildup Preview:"
+            <Label Content="Buildup Preview"
                    Grid.Row="4"
                    Grid.Column="2"
                    Margin="5,5,0,0"

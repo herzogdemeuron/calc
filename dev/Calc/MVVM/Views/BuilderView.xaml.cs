@@ -28,7 +28,8 @@ namespace Calc.MVVM.Views
             BuilderVM.HandleSelect();
             // show the window again
             this.Show();
-            ExpandAll(this.TreeView, true);
+            // if there are less than 5 items in the treeview, expand all
+            if (TreeView.Items?.Count < 5) ExpandAll(this.TreeView, true);
         }
         private void TreeViewItemSelected(object sender, RoutedEventArgs e)
         {

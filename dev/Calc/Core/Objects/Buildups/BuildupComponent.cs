@@ -26,14 +26,21 @@ namespace Calc.Core.Objects.Buildups
         public double? Thickness { get; set; }
         public BasicParameterSet BasicParameterSet { get; set; }
         public List<LayerComponent> LayerComponents { get; set; }
-        public List<CalculationComponent> CalculationComponents { get; set; }
         public HslColor HslColor { get => ItemPainter.DefaultColor; }
 
         public bool HasLayers => LayerComponents.Count > 0;
 
         public void UpdateCalculationComponents(double totalRation)
         {
-            CalculationComponents = CalculationComponent.FromLayerComponents(LayerComponents, totalRation);
+            foreach (var layer in LayerComponents)
+            {
+                layer.UpdateCalculation(totalRation);
+            }
+        }
+
+        public List<CalculationComponent> GetCalculationComponents()
+        {
+            return LayerComponents.Where(l => l.CalculationCompleted).SelectMany(l => l.CalculationComponents).ToList();
         }
 
         public bool Equals(BuildupComponent component)

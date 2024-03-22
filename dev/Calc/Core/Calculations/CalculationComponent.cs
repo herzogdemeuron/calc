@@ -33,6 +33,7 @@ namespace Calc.Core.Calculations
         [JsonProperty("calc_builder_materials_id")]
         public Material Material { get; set; }
         public bool HasError { get; set; }
+        public bool IsComplete { get => CheckComplete(); }
 
         public void LinkMaterial(List<Material> materials)
         {
@@ -42,24 +43,22 @@ namespace Calc.Core.Calculations
             }
         }
 
-        public static List<CalculationComponent> FromLayerComponents(List<LayerComponent> layerComponents, double totalRatio)
+        public static List<CalculationComponent> FromLayer(LayerComponent layer, double totalRatio)
         {
             var result = new List<CalculationComponent>();
-            foreach (var layer in layerComponents)
-            {
-
-                if (!layer.HasMainMaterial) continue;
-                var mainCalculationComponent = FromLayerComponent(layer, totalRatio, true);
+   
+                if (!layer.HasMainMaterial) return result;
+                var mainCalculationComponent = FromLayerMaterial(layer, totalRatio, true);
                 result.Add(mainCalculationComponent);
 
-                if (!layer.HasSubMaterial) continue;
-                var subCalculationComponent = FromLayerComponent(layer, totalRatio, false);
+                if (!layer.HasSubMaterial) return result;
+                var subCalculationComponent = FromLayerMaterial(layer, totalRatio, false);
                 result.Add(subCalculationComponent);
-            }
+            
             return result;
         }
 
-       public static CalculationComponent FromLayerComponent(LayerComponent layer, double totalRatio, bool getMain = true)
+       public static CalculationComponent FromLayerMaterial(LayerComponent layer, double totalRatio, bool getMain = true)
         {
             var layerAmountParam = layer.GetAmountParam();
             var layerAmount = (layerAmountParam?.Amount != null) ? layerAmountParam.Amount * totalRatio : 0;
@@ -77,6 +76,11 @@ namespace Calc.Core.Calculations
                 Gwp = Math.Round(materialGwp.Value,3),
                 Ge = Math.Round(materialGe.Value,3)
             };
+        }
+
+        public bool CheckComplete()
+        {
+            return Function != null && Amount != null && Amount > 0;
         }
 
         public static void UpdatePosition(List<CalculationComponent> components)

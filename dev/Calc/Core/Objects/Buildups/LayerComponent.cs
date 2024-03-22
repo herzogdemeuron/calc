@@ -18,10 +18,15 @@ namespace Calc.Core.Objects.Buildups
         // general properties
         public bool IsValid { get; set; } = true;
         public string Title { get => TargetMaterialName?? "No Material"; }
-        private string TargetMaterialName { get; }
+        public string TargetMaterialName { get; }
         public double? TargetThickness { get; }
         public MaterialFunction? Function { get; set; }
         public BasicParameterSet BasicParameterSet { get; set; }
+
+        // calculation components
+        public List<CalculationComponent> CalculationComponents { get; set; } = new List<CalculationComponent>();
+        public bool HasCalculationError { get => CalculationComponents.Exists(c => c.HasError); }
+        public bool CalculationCompleted { get => CalculationComponents.TrueForAll(c => c.IsComplete); }
 
         // material mappings
         public Material MainMaterial { get; set; }
@@ -72,7 +77,6 @@ namespace Calc.Core.Objects.Buildups
             SubMaterialRatio = ratio;
         }
 
-
         /// <summary>
         /// get the amount parameter of this layer using the unit from the main material
         /// </summary>
@@ -117,6 +121,11 @@ namespace Calc.Core.Objects.Buildups
                 return ge * ratio;
             };
             return 0;
+        }
+
+        public void UpdateCalculation(double totalRation)
+        {
+            CalculationComponents = CalculationComponent.FromLayer(this, totalRation);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

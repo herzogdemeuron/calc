@@ -19,10 +19,10 @@ namespace Calc.MVVM.Models
 
         private readonly LayerComponent layer;
         private readonly ObservableCollection<Material> materialsFromStandard;
+        public string TargetMaterialName { get => layer.TargetMaterialName; }
         public List<MaterialFunction> MaterialFunctionsAll { get; }
-        public Material CurrentMaterial { get; set; }
-        public string MaterialMatchInfo { get => GetMaterialMatchText(); }
-        public bool IsEnabled { get => layer.IsValid; }
+        public bool IsEnabled { get => layer.IsValid; } // for ui to disable selection controls
+        public string MaterialMatchInfo { get => GetMaterialMatchText(); } // warning message for material unit match bewteen main and sub material
         public List<Material> CurrentMaterials
         {
             get
@@ -39,7 +39,6 @@ namespace Calc.MVVM.Models
             get => layer.Function;
             set
             {
-                if(value ==null) return;
                 layer.Function = (MaterialFunction)value;
                 OnPropertyChanged(nameof(SelectedFunction));
                 NotifyPropertiesChange();
@@ -146,18 +145,20 @@ namespace Calc.MVVM.Models
             layer = new LayerComponent() { IsValid = false };
         }
 
-        public void NotifyPropertiesChange()
+        public void NotifyPropertiesChange(bool sendEvent = true)
         {
             OnPropertyChanged(nameof(CanAddSecondMaterial));
             OnPropertyChanged(nameof(CurrentMaterials));
             OnPropertyChanged(nameof(MaterialMatchInfo));
-            MaterialPropertyChanged?.Invoke(this, EventArgs.Empty);
-
+            if (sendEvent)
+            {
+                MaterialPropertyChanged?.Invoke(this, EventArgs.Empty);
+            }
         }
 
-        public void ResetCurrentMaterial()
+        public void ResetActiveMaterial() // not implemented yet
         {
-            CurrentMaterial = MainMaterial;
+            if(layer.HasMainMaterial) ActiveMaterial = MainMaterial;
         }
 
         public void RemoveMaterial()
@@ -183,6 +184,38 @@ namespace Calc.MVVM.Models
                 return $"Sub Material Unit ({SubMaterial.MaterialUnit}) does not match {MainMaterial.MaterialUnit}";
             }
             return null;
+        }
+
+        /// <summary>
+        /// check if the target material is the same, and they are not the identical object
+        /// </summary>
+        public bool CheckIdenticalTargetMaterial(LayerMaterialModel otherModel)
+        {
+            if (otherModel == null) return false;
+            if (this == otherModel) return false;
+            if (this.TargetMaterialName == null || otherModel.TargetMaterialName == null) return false;
+            return this.TargetMaterialName == otherModel.TargetMaterialName;
+        }
+
+        /// <summary>
+        /// copy material setting from another model
+        /// without triggering the event
+        /// </summary>
+        public void LearnMaterialSetting(LayerMaterialModel otherModel)
+        {
+            this.layer.Function = otherModel.SelectedFunction;
+            OnPropertyChanged(nameof(SelectedFunction));
+
+            this.layer.SetMainMaterial(otherModel.MainMaterial);
+            OnPropertyChanged(nameof(MainMaterial));
+
+            this.layer.SetSubMaterial(otherModel.SubMaterial);
+            OnPropertyChanged(nameof(SubMaterial));
+
+            this.layer.SetSubMaterialRatio(otherModel.SubMaterialRatio);
+            OnPropertyChanged(nameof(SubMaterialRatio));
+
+            NotifyPropertiesChange(false);
         }
 
 

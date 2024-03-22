@@ -61,7 +61,7 @@
                        Grid.Column="0"
                        Grid.Row="1">
 
-                <Label Content="Element Groups:"
+                <Label Content="Element Groups"
                        FontSize="27"
                        Margin="10"
                        FontWeight="light"/>
@@ -78,7 +78,7 @@
             <StackPanel x:Name="MappingSectoin"
                         Grid.Column="2" 
                         Grid.Row="1">
-                <Label Content="Mapping Settings:" 
+                <Label Content="Mapping Settings" 
                         Margin="10"
                         FontSize="27"
                        FontWeight="Light"/>
@@ -316,7 +316,7 @@
                     <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
 
-                <Label Content="Buildups:"
+                <Label Content="Buildups"
                        Grid.Row="0"
                        Padding="0"
                        FontSize="27"
@@ -442,7 +442,7 @@
                 </Grid>
 
 
-                <Label Content="Calculation Results:"
+                <Label Content="Calculation Results"
                        Grid.Row="3"
                        Padding="0"
                        FontSize="27"

@@ -49,25 +49,13 @@ namespace Calc.MVVM.ViewModels
         {
             get
             {
-                var components = new List<CalculationComponent>();
+                var calcs = new List<CalculationComponent>();
                 foreach (var component in BuildupComponents)
                 {
-                    components.AddRange(component.CalculationComponents.Where(c => c.Amount.HasValue));
+                    calcs.AddRange(component.GetCalculationComponents());
                 }
-                CalculationComponent.UpdatePosition(components);
-                return components;
-            }
-        }
-        public List<CalculationComponent> AllErrorCalculationComponents
-        {
-            get
-            {
-                var components = new List<CalculationComponent>();
-                foreach (var component in BuildupComponents)
-                {
-                    components.AddRange(component.CalculationComponents.Where(c => c.HasError));
-                }
-                return components;
+                CalculationComponent.UpdatePosition(calcs);
+                return calcs;
             }
         }
 
@@ -194,6 +182,10 @@ namespace Calc.MVVM.ViewModels
             NotifyAmountChanged();
             OnPropertyChanged(nameof(CurrentColor));
         }
+
+        /// <summary>
+        /// selecting elements from revit
+        /// </summary>
         public void HandleSelectingElements()
         {
             BuildupComponents = buildupComponentCreator.CreateBuildupComponentsFromSelection();
@@ -203,9 +195,14 @@ namespace Calc.MVVM.ViewModels
             UpdateLayerColors();
         }
 
+        /// <summary>
+        /// component selection from treeview changed
+        /// </summary>
         public void HandleComponentSelectionChanged(ICalcComponent selectedCompo)
         {
             SelectedComponent = selectedCompo;
+            // set the main material tab to active
+            CurrentLayerMaterialModel.ResetActiveMaterial();
             NotifyAmountChanged();
             OnPropertyChanged(nameof(CurrentColor));
         }
@@ -231,14 +228,31 @@ namespace Calc.MVVM.ViewModels
             CurrentLayerMaterialModel.NotifyPropertiesChange();
         }
 
-        // on material chaned
+        // on material changed
+        
         private void HandleMaterialChanged(object sender, EventArgs e)
         {
+            if (sender is LayerMaterialModel changedModel)
+            {
+                UpdateMaterialModelSettings(changedModel);
+            }
             UpdateCalculationComponents();
             UpdateLayerColors();
         }
 
-
+        /// <summary>
+        /// set the same material setting to models with the same target material
+        /// </summary>
+        private void UpdateMaterialModelSettings(LayerMaterialModel changedModel)
+        {
+            foreach (var model in layerMaterialModels.Values)
+            {
+                if (model.CheckIdenticalTargetMaterial(changedModel))
+                {
+                    model.LearnMaterialSetting(changedModel);
+                }
+            }
+        }
 
         private void UpdateLayerColors()
         {
@@ -255,7 +269,6 @@ namespace Calc.MVVM.ViewModels
                 component.UpdateCalculationComponents(quantityRatio);
             }
             OnPropertyChanged(nameof(AllCalculationComponents));
-            OnPropertyChanged(nameof(AllErrorCalculationComponents));
             OnPropertyChanged(nameof(BuildupGwp));
             OnPropertyChanged(nameof(BuildupGe));
         }
