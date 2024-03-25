@@ -1,4 +1,5 @@
-﻿using Calc.Core.Objects;
+﻿using Calc.Core.Color;
+using Calc.Core.Objects;
 using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Materials;
@@ -32,6 +33,7 @@ namespace Calc.Core.Calculations
 
         [JsonProperty("calc_builder_materials_id")]
         public Material Material { get; set; }
+        public HslColor HslColor { get; set; }
         public bool HasError { get; set; }
         public bool IsComplete { get => CheckComplete(); }
 
@@ -47,18 +49,18 @@ namespace Calc.Core.Calculations
         {
             var result = new List<CalculationComponent>();
    
-                if (!layer.HasMainMaterial) return result;
-                var mainCalculationComponent = FromLayerMaterial(layer, totalRatio, true);
-                result.Add(mainCalculationComponent);
+            if (!layer.HasMainMaterial) return result;
+            var mainCalculationComponent = FromLayerMaterial(layer, totalRatio, layer.HslColor, true);
+            result.Add(mainCalculationComponent);
 
-                if (!layer.HasSubMaterial) return result;
-                var subCalculationComponent = FromLayerMaterial(layer, totalRatio, false);
-                result.Add(subCalculationComponent);
+            if (!layer.HasSubMaterial) return result;
+            var subCalculationComponent = FromLayerMaterial(layer, totalRatio, layer.HslColor, false);
+            result.Add(subCalculationComponent);
             
             return result;
         }
 
-       public static CalculationComponent FromLayerMaterial(LayerComponent layer, double totalRatio, bool getMain = true)
+       public static CalculationComponent FromLayerMaterial(LayerComponent layer, double totalRatio, HslColor hslColor, bool getMain = true)
         {
             var layerAmountParam = layer.GetAmountParam();
             var layerAmount = (layerAmountParam?.Amount != null) ? layerAmountParam.Amount * totalRatio : 0;
@@ -74,7 +76,8 @@ namespace Calc.Core.Calculations
                 Amount = Math.Round((layerAmount * materialRatio).Value, 3),
                 HasError = layerAmountParam.HasError,
                 Gwp = Math.Round(materialGwp.Value,3),
-                Ge = Math.Round(materialGe.Value,3)
+                Ge = Math.Round(materialGe.Value,3),
+                HslColor = hslColor
             };
         }
 

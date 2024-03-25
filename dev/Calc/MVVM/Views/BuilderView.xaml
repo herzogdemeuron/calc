@@ -450,49 +450,64 @@
                    FontSize="27"
                    FontWeight="Light"/>
 
-            <Grid x:Name="BuildupPreview"
+            <Grid x:Name="BuildupPreviewGrid"
                      Margin="10,0,10,0"
                      Grid.Row="5" 
                      Grid.Column="2">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="18"/>
+                    <RowDefinition Height="18"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
 
-                <Grid x:Name="PreviewTitle"
-                      Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>                    
-                    <TextBlock d:Text="This is a Buildup name"
-                               FontWeight="SemiBold"
-                               VerticalAlignment="Center"
-                           Text="{Binding BuildupCreationVM.NewBuildupName}"/>
-                    <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="0,0,10,0">
-                        <TextBlock.Text>
-                            <Binding Path="BuildupCreationVM.BuildupGwp" StringFormat="Total GWP: {0}"/>
-                        </TextBlock.Text>
-                    </TextBlock>
-                    <TextBlock Grid.Column="2" VerticalAlignment="Center" Margin="0,0,10,0">
+                <TextBlock d:Text="This is a Buildup name"
+                           Grid.RowSpan="2"
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            VerticalAlignment="Top"
+                            Text="{Binding BuildupCreationVM.NewBuildupName}"/>
+
+                <TextBlock Grid.Column="1" Text="Total GWP: " VerticalAlignment="Center" FontWeight="SemiBold"/>
+                <TextBlock Grid.Column="2" VerticalAlignment="Center" d:Text="177.902">
+                    <TextBlock.Text>
+                        <Binding Path="BuildupCreationVM.BuildupGwp" StringFormat="Total GWP: {0}"/>
+                    </TextBlock.Text>
+                </TextBlock>
+
+                <TextBlock Grid.Column="1" Grid.Row="1" Text="Total GE: " VerticalAlignment="Center" FontWeight="SemiBold"/>
+                <TextBlock Grid.Column="2" Grid.Row="1" VerticalAlignment="Center"  d:Text="1312.902">
                         <TextBlock.Text>
                             <Binding Path="BuildupCreationVM.BuildupGe" StringFormat="Total GE: {0}"/>
                         </TextBlock.Text>
                     </TextBlock>
-                </Grid>
-
-
+                
                 <Border x:Name="PreviewCalculation"
                         BorderBrush="Silver"
                         BorderThickness="1"
-                        Grid.Row="1"
+                        Grid.Row="2"
+                        Grid.ColumnSpan="3"
                         CornerRadius="4">
                     <DataGrid x:Name="Calculations"
                               Style="{StaticResource DataGridStyle}"
                               ItemsSource="{Binding BuildupCreationVM.AllCalculationComponents}"
                               AutoGenerateColumns="False">
                         <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="" Width="20">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="■" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <TextBlock.Foreground>
+                                                <Binding Path="HslColor" Converter="{StaticResource ColorConverter}"/>
+                                            </TextBlock.Foreground>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                             <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" Width="3*" IsReadOnly="True"/>
                             <DataGridTextColumn Header="Function" Binding="{Binding Function}" Width="*" IsReadOnly="True"/>
                             <DataGridTemplateColumn Header="Amount" Width="*">

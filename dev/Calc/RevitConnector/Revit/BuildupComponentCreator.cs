@@ -240,7 +240,7 @@ namespace Calc.RevitConnector.Revit
             // show no material if either area or volume has value
             // the no material area takes the whole area of the element, which means later in the compound structure,
             // only the no material area will not be divided by the compound layer count
-            if (!(areaParamTotal.HasError && volumeParamTotal.HasError))
+            if (!(areaParamTotal.HasError && volumeParamTotal.HasError) && (areaParamTotal.Amount > 0 || volumeParamTotal.Amount > 0))
             {
                 var noMaterialAmount = new BasicParameterSet(countParamTotal, lengthParamTotal, areaParamTotal, volumeParamTotal);
                 result.Add((null, noMaterialAmount));
