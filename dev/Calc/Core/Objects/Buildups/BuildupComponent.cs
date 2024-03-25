@@ -20,7 +20,17 @@ namespace Calc.Core.Objects.Buildups
     {
         public string Title { get; set; }
         public int TypeIdentifier { get; set; } // revit type id
-        public bool IsNormalizer { get; set; }
+        private bool isNormalizer;
+        public bool IsNormalizer
+        {
+            get => isNormalizer;
+            set
+            {
+                isNormalizer = value;
+                OnPropertyChanged(nameof(IsNormalizer));
+            }
+        }
+
         public List<int> ElementIds { get; set; }
         public bool IsCompoundElement { get; set; }
         public double? Thickness { get; set; }

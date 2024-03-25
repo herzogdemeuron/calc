@@ -8,41 +8,6 @@
 
     <covtrs:HslToColorConverter x:Key="ColorConverter"/>
 
-    <Style x:Key="ButtonStyle" TargetType="Button">
-        <Setter Property="Height" Value="25"/>
-        <Setter Property="Background" Value="WhiteSmoke"/>
-        <Setter Property="BorderBrush" Value="Silver"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Foreground" Value="Black"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="border" 
-                            BorderBrush="{TemplateBinding BorderBrush}" 
-                            Background="{TemplateBinding Background}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="4">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Border>
-                    <ControlTemplate.Triggers>
-
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="border" Property="Background" Value="white"/>
-                            <Setter TargetName="border" Property="BorderBrush" Value="LightGray"/>
-                            <Setter Property="Foreground" Value="LightGray"/>
-                        </Trigger>
-
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="LightGray"/>
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="Silver"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
 
     <Style x:Key="TreeViewItemStyle" TargetType="TreeViewItem">
         <Style.Resources>
@@ -120,13 +85,35 @@
 
 
     <DataTemplate x:Key="LayerItemTemplate">
+        
         <StackPanel Orientation="Horizontal"
                     Margin="-6,0,0,0">
 
+            <Grid x:Name="BrokenHeartGrid">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility" Value="Hidden"/>
+                        <Setter Property="Margin" Value="1,0,0,0"/>
+                        <Setter Property="Width" Value="12"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasCalculationError}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <TextBlock Text="💔"
+                          FontSize="10"
+                          FontWeight="SemiBold"
+                          VerticalAlignment="Center"
+                          HorizontalAlignment="Center"
+                          Foreground="Crimson"/>
+            </Grid>
+
             <Border x:Name="LabelBorder"
-                Padding="4,2,4,3"
-                Margin="4,2,2,2"
-                CornerRadius="4">
+                    Padding="4,2,4,3"
+                    Margin="4,2,2,2"
+                    CornerRadius="4">
                 <Border.Style>
                     <Style TargetType="Border">
                         <Setter Property="Background" Value="WhiteSmoke" />
@@ -134,9 +121,14 @@
                             <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True">
                                 <Setter Property="Background" Value="{Binding HslColor, Converter={StaticResource ColorConverter}}" />
                             </DataTrigger>
+                            <DataTrigger Binding="{Binding IsNormalizer}" Value="True">
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <Setter Property="BorderBrush" Value="Black"/>
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </Border.Style>
+
 
                 <StackPanel Orientation="Vertical">
                     <TextBlock x:Name="txtName">
@@ -153,11 +145,11 @@
                     </TextBlock>
 
                     <Grid x:Name="UnderlineGrid"
-                          Height="3">
+                        Height="3">
                         <Border Height="3" 
-                                VerticalAlignment="Bottom" 
-                                CornerRadius="2" 
-                                Background="{Binding HslColor, Converter={StaticResource ColorConverter}}">
+                            VerticalAlignment="Bottom" 
+                            CornerRadius="2" 
+                            Background="{Binding HslColor, Converter={StaticResource ColorConverter}}">
                             <Border.Style>
                                 <Style TargetType="Border">
                                     <Setter Property="Visibility" Value="Hidden" />
@@ -172,8 +164,25 @@
                     </Grid>
                 </StackPanel>
             </Border>
-            
+            <TextBlock x:Name="NormalizerMark"
+                        Text="Normalizer"
+                        FontSize="8"
+                        FontWeight="SemiBold"
+                        VerticalAlignment="Bottom"
+                        Margin="0,0,0,2">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsNormalizer}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
         </StackPanel>
+
     </DataTemplate>
     
     

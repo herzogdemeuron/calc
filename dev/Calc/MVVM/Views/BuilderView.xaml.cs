@@ -62,8 +62,13 @@ namespace Calc.MVVM.Views
             BuilderVM.HandleWindowClosing();
         }
 
+        private void AmountClicked(object sender, RoutedEventArgs e)
+        {
+            string tag = (sender as Button).Tag.ToString();
+            BuilderVM.HandleAmountClicked(tag);
+        }
 
-        
+
         private void SideClickDown(object sender, MouseButtonEventArgs e)
         {
             BuilderVM.HandleSideClicked();

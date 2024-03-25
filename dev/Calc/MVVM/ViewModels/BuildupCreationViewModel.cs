@@ -27,6 +27,8 @@ namespace Calc.MVVM.ViewModels
         public List<Unit> BuildupUnitsAll { get => store.UnitsAll; }
         public List<MaterialFunction> MaterialFunctionsAll { get => store.MaterialFunctionsAll; }
         public List<BuildupGroup> BuildupGroupsAll { get => store.BuildupGroupsAll; }
+
+        public BasicAmountsModel AmountsModel { get; set; } = new BasicAmountsModel();
         private List<Material> CurrentMaterials { get => store.CurrentMaterials; }
 
         private readonly IBuildupComponentCreator buildupComponentCreator;
@@ -107,6 +109,8 @@ namespace Calc.MVVM.ViewModels
                 if (selectedComponent == value) return;
                 selectedComponent = value;
                 OnPropertyChanged(nameof(SelectedComponent));
+                OnPropertyChanged(nameof(CurrentLayerMaterialModel));
+                UpdateAmounts();
             }
         }
 
@@ -135,6 +139,7 @@ namespace Calc.MVVM.ViewModels
                 selectedBuildupUnit = value;
                 OnPropertyChanged(nameof(SelectedBuildupUnit));
                 UpdateCalculationComponents();
+                UpdateAmounts();
             }
         }
 
@@ -153,13 +158,6 @@ namespace Calc.MVVM.ViewModels
         public double? BuildupGwp { get => AllCalculationComponents?.Where(c => c.Amount.HasValue).Sum(c => c.Gwp); }
         public double? BuildupGe { get => AllCalculationComponents?.Where(c => c.Amount.HasValue).Sum(c => c.Ge); }
 
-        public string CountString { get => GetAmountString(Unit.piece); }
-
-        public string LengthString { get => GetAmountString(Unit.m); }
-
-        public string AreaString { get => GetAmountString(Unit.m2); }
-
-        public string VolumeString { get => GetAmountString(Unit.m3); }
 
         public BuildupCreationViewModel(DirectusStore store, IBuildupComponentCreator bcCreator)
         {
@@ -179,8 +177,22 @@ namespace Calc.MVVM.ViewModels
         {
             SelectedComponent = null;
             MediatorToView.Broadcast("ViewDeselectTreeView");
-            NotifyAmountChanged();
             OnPropertyChanged(nameof(CurrentColor));
+        }
+
+        public void HandleAmountClicked(Unit? newBuildupUnit)
+        {
+          if(newBuildupUnit == null) return;
+           SetCurrentNormalizer(newBuildupUnit.Value);
+        }
+
+        /// <summary>
+        /// updates the basic unit amounts of the current selection
+        /// </summary>
+        private void UpdateAmounts()
+        {
+            var materialUnit = CurrentLayerMaterialModel?.MainMaterial?.MaterialUnit;
+            AmountsModel.UpdateAmounts(SelectedComponent, SelectedBuildupUnit, materialUnit);
         }
 
         /// <summary>
@@ -190,7 +202,6 @@ namespace Calc.MVVM.ViewModels
         {
             BuildupComponents = buildupComponentCreator.CreateBuildupComponentsFromSelection();
             UpdateLayerMaterialModels();
-            SetNormalizer(); // temporary only for testing
             UpdateCalculationComponents();
             UpdateLayerColors();
         }
@@ -203,13 +214,13 @@ namespace Calc.MVVM.ViewModels
             SelectedComponent = selectedCompo;
             // set the main material tab to active
             CurrentLayerMaterialModel.ResetActiveMaterial();
-            NotifyAmountChanged();
             OnPropertyChanged(nameof(CurrentColor));
         }
 
         public void HandleReduceMaterial()
         {
             CurrentLayerMaterialModel.RemoveMaterial();
+            UpdateAmounts();
         }
 
         private void UpdateLayerMaterialModels()
@@ -226,6 +237,7 @@ namespace Calc.MVVM.ViewModels
             }
             OnPropertyChanged(nameof(CurrentLayerMaterialModel));
             CurrentLayerMaterialModel.NotifyPropertiesChange();
+            UpdateAmounts();
         }
 
         // on material changed
@@ -238,6 +250,7 @@ namespace Calc.MVVM.ViewModels
             }
             UpdateCalculationComponents();
             UpdateLayerColors();
+            UpdateAmounts();
         }
 
         /// <summary>
@@ -273,14 +286,18 @@ namespace Calc.MVVM.ViewModels
             OnPropertyChanged(nameof(BuildupGe));
         }
 
-        private string GetAmountString(Unit unit)
+        private void SetCurrentNormalizer(Unit unit) // temporary only for testing
         {
-            return SelectedComponent?.BasicParameterSet.GetAmountParam(unit).Amount?.ToString() ?? "?";
-        }
+            foreach (var component in BuildupComponents)
+            {
+                component.IsNormalizer = false;
+            }
 
-        private void SetNormalizer() // temporary only for testing
-        {
-            BuildupComponents.First().IsNormalizer = true;
+            if (SelectedComponent is BuildupComponent bc)
+            {
+                bc.IsNormalizer = true;
+                SelectedBuildupUnit = unit;
+            }
         }
 
         private double GetQuantityRatio()
@@ -319,14 +336,7 @@ namespace Calc.MVVM.ViewModels
             return response;
 
         }
-        private void NotifyAmountChanged()
-        {
-            OnPropertyChanged(nameof(CountString));
-            OnPropertyChanged(nameof(LengthString));
-            OnPropertyChanged(nameof(AreaString));
-            OnPropertyChanged(nameof(VolumeString));
-            OnPropertyChanged(nameof(CurrentLayerMaterialModel));
-        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)

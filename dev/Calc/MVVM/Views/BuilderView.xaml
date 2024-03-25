@@ -63,11 +63,9 @@
                     <RowDefinition Height="10"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
+                
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="60"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="65"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
@@ -75,60 +73,51 @@
                             Style="{StaticResource ButtonStyle}"
                             Grid.Column="0"
                             Grid.Row="0"
-                            Width="55"
+                            Width="60"
                             Height="40"
                             HorizontalAlignment="Left"
                             Click="SelectClicked"/>
 
+                
                 <Border Grid.ColumnSpan="4" Grid.Column="1" Grid.Row="0"
                             BorderThickness="0" 
                             CornerRadius="4"
                             d:Background="LightGray"
                             Background="{Binding BuildupCreationVM.CurrentColor, Converter={StaticResource ColorConverter}}"/>
 
-                <StackPanel x:Name="CountPanel"
-                            Grid.Row="0"
+                <Grid Grid.Column="1"
+                      DataContext="{Binding BuildupCreationVM.AmountsModel}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Tag="Count"
+                            DataContext="{Binding CountAmount}"
+                            Grid.Column="0"
+                            Click="AmountClicked"
+                            Style="{StaticResource UnitButtonStyle}"/>
+
+                    <Button Tag="Length"
+                            DataContext="{Binding LengthAmount}"
                             Grid.Column="1"
-                            Margin="0,5,0,0">
-                    <TextBlock Text="Count"
-                                FontWeight="SemiBold"
-                                HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding BuildupCreationVM.CountString}"
-                                HorizontalAlignment="Center"/>
-                </StackPanel>
+                            Click="AmountClicked"
+                            Style="{StaticResource UnitButtonStyle}"/>
 
-                <StackPanel x:Name="LengthPanel"
-                                Grid.Row="0"
+                    <Button Tag="Area"
+                            DataContext="{Binding AreaAmount}"
                             Grid.Column="2"
-                            Margin="0,5,0,0">
-                    <TextBlock Text="Length"
-                                FontWeight="SemiBold"
-                                HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding BuildupCreationVM.LengthString}"
-                                HorizontalAlignment="Center"/>
-                </StackPanel>
+                            Click="AmountClicked"
+                            Style="{StaticResource UnitButtonStyle}"/>
 
-                <StackPanel x:Name="AreaPanel"
-                            Grid.Row="0"
+                    <Button Tag="Volume"
+                            DataContext="{Binding VolumeAmount}"
                             Grid.Column="3"
-                            Margin="0,5,0,0">
-                    <TextBlock Text="Area"
-                                FontWeight="SemiBold"
-                                HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding BuildupCreationVM.AreaString}"
-                                HorizontalAlignment="Center"/>
-                </StackPanel>
-
-                <StackPanel x:Name="VolumePanel"
-                            Grid.Row="0"
-                            Grid.Column="4"
-                            Margin="0,5,0,0">
-                    <TextBlock Text="Volume"
-                                FontWeight="SemiBold"
-                                HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding BuildupCreationVM.VolumeString}"
-                                HorizontalAlignment="Center"/>
-                </StackPanel>
+                            Click="AmountClicked"
+                            Style="{StaticResource UnitButtonStyle}"/>
+                </Grid>
 
                 <Border x:Name="TreeViewBorder"
                             Grid.Row="2"
@@ -278,7 +267,7 @@
                 <Grid x:Name="MaterialGrid"
                       Margin="10"
                       DataContext="{Binding BuildupCreationVM.CurrentLayerMaterialModel}"
-                     IsEnabled="{Binding IsEnabled}">
+                      IsEnabled="{Binding IsEnabled}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="4*"/>
                         <ColumnDefinition Width="*"/>
@@ -475,14 +464,14 @@
                 <TextBlock Grid.Column="1" Text="Total GWP: " VerticalAlignment="Center" FontWeight="SemiBold"/>
                 <TextBlock Grid.Column="2" VerticalAlignment="Center" d:Text="177.902">
                     <TextBlock.Text>
-                        <Binding Path="BuildupCreationVM.BuildupGwp" StringFormat="Total GWP: {0}"/>
+                        <Binding Path="BuildupCreationVM.BuildupGwp"/>
                     </TextBlock.Text>
                 </TextBlock>
 
                 <TextBlock Grid.Column="1" Grid.Row="1" Text="Total GE: " VerticalAlignment="Center" FontWeight="SemiBold"/>
                 <TextBlock Grid.Column="2" Grid.Row="1" VerticalAlignment="Center"  d:Text="1312.902">
                         <TextBlock.Text>
-                            <Binding Path="BuildupCreationVM.BuildupGe" StringFormat="Total GE: {0}"/>
+                            <Binding Path="BuildupCreationVM.BuildupGe"/>
                         </TextBlock.Text>
                     </TextBlock>
                 
@@ -500,7 +489,7 @@
                             <DataGridTemplateColumn Header="" Width="20">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="■" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <TextBlock Text="■" FontSize="16" Padding="0,-2,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
                                             <TextBlock.Foreground>
                                                 <Binding Path="HslColor" Converter="{StaticResource ColorConverter}"/>
                                             </TextBlock.Foreground>

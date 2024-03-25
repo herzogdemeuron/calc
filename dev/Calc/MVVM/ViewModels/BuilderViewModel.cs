@@ -42,6 +42,30 @@ namespace Calc.MVVM.ViewModels
             //NodeTreeVM.DeselectNodes();
         }
 
+        public void HandleAmountClicked(string unit)
+        {
+            Unit? newBuildupUnit;
+            switch (unit)
+            {
+                case "Count":
+                    newBuildupUnit = Unit.piece;
+                    break;
+                case "Length":
+                    newBuildupUnit = Unit.m;
+                    break;
+                case "Area":
+                    newBuildupUnit = Unit.m2;
+                    break;
+                case "Volume":
+                    newBuildupUnit = Unit.m3;
+                    break;
+                default:
+                    return;
+            }
+
+            BuildupCreationVM.HandleAmountClicked(newBuildupUnit);
+        }
+
         public void HandleComponentSelectionChanged(ICalcComponent selectedCompo)
         {
             BuildupCreationVM.HandleComponentSelectionChanged(selectedCompo);
