@@ -18,11 +18,18 @@ namespace Calc.RevitConnector.Helpers
         {
             var selection = uidoc.Selection;
             var filter = new CustomSelectionFilter();
-            var elements = selection.PickObjects(
-                Autodesk.Revit.UI.Selection.ObjectType.Element,
-                filter,
-                "Select Elements");
-            return elements.Select(x => x.ElementId).ToList();
+            try
+            {
+                var elements = selection.PickObjects(
+                    Autodesk.Revit.UI.Selection.ObjectType.Element,
+                    filter,
+                    "Select Elements");
+                return elements.Select(x => x.ElementId).ToList();
+            }
+            catch (Exception)
+            {
+                return new List<ElementId>();
+            }
         }
     }
 }

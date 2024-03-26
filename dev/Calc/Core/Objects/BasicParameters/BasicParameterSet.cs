@@ -43,5 +43,16 @@ namespace Calc.Core.Objects.BasicParameters
             areaParam = areaParam.PerformOperation(Operation.Add, other.areaParam);
             volParam = volParam.PerformOperation(Operation.Add, other.volParam);
         }
+
+        public static BasicParameterSet ErrorParamSet()
+        {
+            return new BasicParameterSet
+                    (
+                    BasicParameter.ErrorParam(Unit.piece),
+                    BasicParameter.ErrorParam(Unit.m),
+                    BasicParameter.ErrorParam(Unit.m2),
+                    BasicParameter.ErrorParam(Unit.m3)
+                    );
+        }
     }
 }

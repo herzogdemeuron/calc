@@ -19,7 +19,7 @@ namespace Calc.Core.Objects.Buildups
         public bool IsValid { get; set; } = true;
         public string Title { get => TargetMaterialName?? "No Material"; }
         public string TargetMaterialName { get; }
-        public double? TargetThickness { get; }
+        public double? Thickness { get; }
         public MaterialFunction? Function { get; set; }
         public BasicParameterSet BasicParameterSet { get; set; }
 
@@ -53,7 +53,7 @@ namespace Calc.Core.Objects.Buildups
         {
             TargetMaterialName = materialName;
             BasicParameterSet = basicParameterSet;
-            TargetThickness = thickness;
+            Thickness = thickness;
         }
 
         public LayerComponent(){}

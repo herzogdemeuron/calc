@@ -4,6 +4,7 @@ using Calc.Core.Interfaces;
 using Calc.Core.Objects;
 using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Results;
 using Calc.RevitConnector.Config;
 using Calc.RevitConnector.Helpers;
 using System.Collections.Generic;
@@ -62,8 +63,10 @@ namespace Calc.RevitConnector.Revit
             var layersSet = CreateLayerComponents(element);
             var layers = layersSet.Item1;
             var isCompound = layersSet.Item2;
+            var thickness = GetThickness(element, isCompound);
             return new BuildupComponent
             {
+                Thickness = thickness,
                 ElementIds = new List<int> { element.Id.IntegerValue },
                 TypeIdentifier = element.GetTypeId().IntegerValue,
                 Title = GetElementType(element)?.Name,
@@ -146,15 +149,18 @@ namespace Calc.RevitConnector.Revit
         {
             bool isCompound = false;
             var result = new List<LayerComponent>();
-            var materialAmounts = GetMaterialAmounts(elem);
+            
             var compoundMaterials = GetCompoundMaterialThicknesses(elem);
             if (compoundMaterials != null)
             {
+                var materialAmounts = GetMaterialAmounts(elem,true);
                 isCompound = true;
                 foreach (var (material, thickness, areaProp, volumeProp) in compoundMaterials)
                 {
                     var materialAmount = materialAmounts.FirstOrDefault(x => x.Item1?.Id == material?.Id);
                     var paramSet = materialAmount.Item2;
+
+                    // for compound, area and volume material amounts are trusted
                     var areaParam = paramSet.GetAmountParam(Unit.m2);
                     var volumeParam = paramSet.GetAmountParam(Unit.m3);
 
@@ -171,6 +177,7 @@ namespace Calc.RevitConnector.Revit
             }
             else
             {
+                var materialAmounts = GetMaterialAmounts(elem, false);
                 foreach (var (material, paramSet) in materialAmounts)
                 {
                     var layerComponent = new LayerComponent(material?.Name, paramSet);
@@ -182,19 +189,23 @@ namespace Calc.RevitConnector.Revit
         /// <summary>
         /// get the material amounts of an element separated by different materials 
         /// by getting the material area and volume of the element.
-        /// The count, length and area of the material are counted with the total amount of the element, since sometimes
-        /// in revit the area of the material is taken from the whole faces.
+        /// this step takes the area and volume of the material from revit, though the area could be sometimes not accurate.
+        /// for compund elements and panels, the area is correct, in other cases, the area could be the whole area of the element.
+        /// but this would be figured out later.
         /// </summary>
-        private List<(Material, BasicParameterSet)> GetMaterialAmounts(Element elem)
+        private List<(Material, BasicParameterSet)> GetMaterialAmounts(Element elem, bool isCompund)
         {
+            var result = new List<(Material, BasicParameterSet)>();
             var totalAmountParamSet = GetTotalAmounts(elem);
             var materialIds = elem.GetMaterialIds(false);
+
             var countParamTotal = totalAmountParamSet.GetAmountParam(Unit.piece);
             var lengthParamTotal = totalAmountParamSet.GetAmountParam(Unit.m);
-            //var areaParamTotal = totalAmountParamSet.GetAmountParam(Unit.m2);
-            var result = new List<(Material, BasicParameterSet)>();
+            var areaParamTotal = totalAmountParamSet.GetAmountParam(Unit.m2);
+            var volumeParamTotal = totalAmountParamSet.GetAmountParam(Unit.m3);
 
-            // firslt calculate valid material amounts
+
+            // firstly calculate valid material amounts
             foreach (var materialId in materialIds)
             {
                 var material = Doc.GetElement(materialId) as Material;
@@ -208,22 +219,31 @@ namespace Calc.RevitConnector.Revit
             }
 
             // calculate the no material amounts by subtracting the material amounts from the total amounts
-            var volumeParamTotal = totalAmountParamSet.GetAmountParam(Unit.m3);
-            var areaParamTotal = totalAmountParamSet.GetAmountParam(Unit.m2);
-
             foreach (var materialAmount in result.Select(x => x.Item2))
             {
                 var volumeParam = materialAmount.GetAmountParam(Unit.m3);
                 volumeParamTotal = volumeParamTotal.PerformOperation(Operation.Subtract, volumeParam);
             }
 
-            // show no material if either area or volume has value
-            // the no material area takes the whole area of the element, which means later in the compound structure,
-            // only the no material area will not be divided by the compound layer count
-            if (!(areaParamTotal.HasError && volumeParamTotal.HasError) && volumeParamTotal.Amount > 0)
+            // show no material if volume has value
+            // the no material amounts are all missing params, they shall not be used for calculation
+            if (!volumeParamTotal.HasError && volumeParamTotal.Amount > 0)
             {
-                var noMaterialAmount = new BasicParameterSet(countParamTotal, lengthParamTotal, areaParamTotal, volumeParamTotal);
-                result.Add((null, noMaterialAmount));
+                result.Add( (null, BasicParameterSet.ErrorParamSet()) );
+            }
+            // the material area values are correct if it is a compound structure
+            if(isCompund) return result;
+
+            // otherwise, if there is only one material, take the whole area as the material area
+            // if more than one material, make the area param as error
+            if (result.Count == 1)
+            {
+                result[0].Item2.GetAmountParam(Unit.m2).Amount = areaParamTotal.Amount;
+            }
+            else
+            {
+                var areaParam = BasicParameter.ErrorParam(Unit.m2);
+                result.ForEach(x => x.Item2.GetAmountParam(Unit.m2).ErrorType = ParameterErrorType.CalculationError);
             }
 
             return result;
@@ -313,6 +333,16 @@ namespace Calc.RevitConnector.Revit
             var volumeProportion = wholeMaterialThickness == 0? 0: singleMaterial.Item2 / wholeMaterialThickness;
 
             return (areaProportion, volumeProportion);
+        }
+
+        private double? GetThickness(Element elem, bool isCompound)
+        {
+            if (isCompound)
+            {
+                double thickness = elem.LookupParameter("Thickness")?.AsDouble() ?? 0;
+                return ParameterHelper.ToMetricValue(thickness, Unit.m);
+            }
+            return null;
         }
 
         private Element GetElementType(Element elem)

@@ -53,6 +53,7 @@ namespace Calc.Core.Objects
 
     public interface  ICalcComponent
     {
+        double? Thickness { get; }
         string Title { get; }
         HslColor HslColor { get;}
         BasicParameterSet BasicParameterSet { get; set; }

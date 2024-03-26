@@ -157,5 +157,14 @@ namespace Calc.Core.Objects.BasicParameters
             }
             return null;
         }
+
+        public static BasicParameter ErrorParam(Unit Unit)
+        {
+            return new BasicParameter()
+            {
+                Unit = Unit,
+                ErrorType = ParameterErrorType.CalculationError
+            };
+        }
     }
 }
