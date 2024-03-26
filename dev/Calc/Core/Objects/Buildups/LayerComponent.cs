@@ -126,6 +126,9 @@ namespace Calc.Core.Objects.Buildups
         public void UpdateCalculation(double totalRation)
         {
             CalculationComponents = CalculationComponent.FromLayer(this, totalRation);
+            OnPropertyChanged(nameof(HasCalculationError));
+            OnPropertyChanged(nameof(CalculationCompleted));
+
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

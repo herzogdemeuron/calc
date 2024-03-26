@@ -155,6 +155,7 @@ namespace Calc.RevitConnector.Helpers
                 {
                     Name = parameterName,
                     ErrorType = ParameterErrorType.ZeroValue,
+                    Amount = 0,
                     Unit = unit
                 };
             }
@@ -167,6 +168,47 @@ namespace Calc.RevitConnector.Helpers
                     Unit = unit
                 };
             }
+        }
+
+        /// <summary>
+        /// getthe material amount parameter of an element, either area or volume
+        /// </summary>
+        public static BasicParameter CreateMaterialAmountParameter(Element elem, ElementId materialId, Unit unit)
+        {
+            double amount;
+            switch (unit)
+            {
+                case Unit.m2:
+                    amount = elem.GetMaterialArea(materialId, false);
+                    break;
+                case Unit.m3:
+                    amount = elem.GetMaterialVolume(materialId);
+                    break;
+                default:
+                    throw new Exception($"Unit not recognized: {unit}");
+            }
+            if(amount == 0)
+            {
+                return new BasicParameter()
+                {
+                    Name = "Material Amount",
+                    ErrorType = ParameterErrorType.ZeroValue,
+                    Amount = 0,
+                    Unit = unit
+                };
+            }
+            else
+            {
+                var value = ToMetricValue(amount, unit);
+                return new BasicParameter()
+                {
+                    Name = "Material Amount",
+                    Amount = value,
+                    Unit = unit
+                };
+            }
+
+          
         }
     }
 }

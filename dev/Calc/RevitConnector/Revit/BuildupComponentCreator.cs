@@ -1,4 +1,4 @@
-﻿using Autodesk.Revit.DB;
+﻿ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Calc.Core.Interfaces;
 using Calc.Core.Objects;
@@ -204,24 +204,8 @@ namespace Calc.RevitConnector.Revit
                 var material = Doc.GetElement(materialId) as Material;
                 if (material == null) continue;
 
-                var materialArea = elem.GetMaterialArea(materialId, false);
-                materialArea = ParameterHelper.ToMetricValue(materialArea, Unit.m2);
-                var areaParam = new BasicParameter()
-                {
-                    Name = "From Material",
-                    Unit = Unit.m2,
-                    Amount = materialArea
-                };
-
-                var materialVolume = elem.GetMaterialVolume(materialId);
-                materialVolume = ParameterHelper.ToMetricValue(materialVolume, Unit.m3);
-                var volumeParam = new BasicParameter()
-                {
-                    Name = "From Material",
-                    Unit = Unit.m3,
-                    Amount = materialVolume
-                };
-
+                var areaParam = ParameterHelper.CreateMaterialAmountParameter(elem, materialId, Unit.m2);
+                var volumeParam = ParameterHelper.CreateMaterialAmountParameter(elem, materialId, Unit.m3);
                 var materialAmount = new BasicParameterSet(countParamTotal, lengthParamTotal, areaParam, volumeParam);
 
                 result.Add((material, materialAmount));

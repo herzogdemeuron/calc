@@ -43,8 +43,9 @@ namespace Calc.Core.Objects.BasicParameters
         }
 
         public bool HasError => ErrorType != null;
+        public bool CanOperate => !HasError || ErrorType == ParameterErrorType.ZeroValue; // zero value allows operations
 
-        public bool HasValue => Amount != null;
+        public bool HasValue => Amount != null && Amount >= 0;
 
         public BasicParameter PerformOperation(Operation operation, BasicParameter otherParam)
         {
@@ -54,19 +55,19 @@ namespace Calc.Core.Objects.BasicParameters
                 Unit = Unit
             };
 
-            if(HasError && !otherParam.HasError)
+            if(!CanOperate && otherParam.CanOperate)
             {
                 resultParam.ErrorType = ErrorType;
                 return resultParam;
             }
 
-            if (!HasError && otherParam.HasError)
+            if (CanOperate && !otherParam.CanOperate)
             {
                 resultParam.ErrorType = otherParam.ErrorType;
                 return resultParam;
             }
 
-            if (HasError && otherParam.HasError)
+            if (!CanOperate && !otherParam.CanOperate)
             {
                 resultParam.ErrorType = ErrorType == otherParam.ErrorType? ErrorType : ParameterErrorType.CalculationError;
                 return resultParam;
@@ -89,6 +90,11 @@ namespace Calc.Core.Objects.BasicParameters
             else
             {
                 resultParam.Amount = resultAmount;
+            }
+
+            if (resultParam.Amount == 0)
+            {
+                resultParam.ErrorType = ParameterErrorType.ZeroValue;
             }
 
             return resultParam;

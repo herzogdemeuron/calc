@@ -323,12 +323,12 @@
                     </views:SearchComboBox>
 
                     <TextBlock Text="{Binding MaterialMatchInfo}"
-                               d:Text="Sub material unit does not match."
-                               VerticalAlignment="Center"
+                               d:Text="Material units don't match."
+                               VerticalAlignment="Bottom"
                                Grid.Column="0"
                                Grid.Row="2"
                                Margin="5,0,0,0"
-                               Foreground="Red"
+                               Foreground="Crimson"
                                FontWeight="SemiBold"
                                FontSize="10"/>
 

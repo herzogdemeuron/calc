@@ -31,39 +31,22 @@ namespace Calc.Core.Objects.Results
         {
             get
             {
-                string unit;
-                switch (Unit)
+                string unit = Unit switch
                 {
-                    case Unit.m:
-                        unit = "length";
-                        break;
-                    case Unit.m2:
-                        unit = "area";
-                        break;
-                    case Unit.m3:
-                        unit = "volume";
-                        break;
-                    default:
-                        unit = "unknown";
-                        break;
-                }
+                    Unit.m => "length",
+                    Unit.m2 => "area",
+                    Unit.m3 => "volume",
+                    _ => "unknown",
+                };
 
-                string issue;
-                switch (ErrorType)
+                string issue = ErrorType switch
                 {
-                    case ParameterErrorType.Redundant:
-                        issue = "is redundant";
-                        break;
-                    case ParameterErrorType.Missing:
-                        issue = "is missing";
-                        break;
-                    case ParameterErrorType.ZeroValue:
-                        issue = "has zero value";
-                        break;
-                    default:
-                        issue = "has unknown issue";
-                        break;
-                }
+                    ParameterErrorType.Redundant => "is redundant",
+                    ParameterErrorType.Missing => "is missing",
+                    ParameterErrorType.ZeroValue => "has zero value",
+                    _ => "has unknown issue",
+                };
+
                 return $"The {unit} parameter '{ParameterName}' {issue} in {Count} elements.";
             }
         }

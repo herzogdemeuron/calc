@@ -1,6 +1,7 @@
 ﻿using Calc.Core.Objects;
 using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Results;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,12 +21,13 @@ namespace Calc.MVVM.Models
         private Unit? buildupUnit;
         private Unit? materialUnit;
         private BasicParameterSet basicParameterSet { get => host?.BasicParameterSet; }
+        private bool HasError { get => (basicParameterSet?.GetAmountParam(unit)?.HasError) ?? true; }
         private bool IsHostNormalizable { get => host is BuildupComponent; }
         public string AmountString { get => GetAmountString(); } // show the sting of the basic amounts in UI 
         public bool IsNormalizable { get => CheckNormalizable(); }  // show if each amount can be set as a normalizer
         public bool IsNormalizer { get => CheckNormalizer(); } // show if an amount is set as a normalizer
         public bool IsUsed { get => CheckUsed(); }  // show if an amount is used for normalization or for material calculation
-
+        public bool WarningActive { get => IsUsed && HasError; }
         public AmountModel(Unit unit)
         {
             this.unit = unit;
@@ -44,7 +46,21 @@ namespace Calc.MVVM.Models
 
         private string GetAmountString()
         {
-            return basicParameterSet?.GetAmountParam(unit).Amount?.ToString() ?? "?";
+            if (basicParameterSet == null) return "-";
+            var param = basicParameterSet.GetAmountParam(unit);
+            if(!param.HasError) return param.Amount.ToString();
+            switch (param.ErrorType)
+            {
+                case ParameterErrorType.Missing:
+                    return "absent";
+                case ParameterErrorType.Redundant:
+                    return "duplicate";
+                case ParameterErrorType.ZeroValue:
+                    return "0";
+                default:
+                return "?";
+            }
+
         }
 
         private bool CheckNormalizable()
@@ -81,6 +97,7 @@ namespace Calc.MVVM.Models
             OnPropertyChanged(nameof(IsNormalizable));
             OnPropertyChanged(nameof(IsNormalizer));
             OnPropertyChanged(nameof(IsUsed));
+            OnPropertyChanged(nameof(WarningActive));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

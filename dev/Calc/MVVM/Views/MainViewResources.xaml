@@ -108,6 +108,12 @@
                           VerticalAlignment="Center"
                           HorizontalAlignment="Center"
                           Foreground="Crimson"/>
+                <TextBlock Text="🖍️"
+                          FontSize="10"
+                          FontWeight="SemiBold"
+                          VerticalAlignment="Center"
+                          HorizontalAlignment="Center"
+                          Foreground="Chocolate"/>
             </Grid>
 
             <Border x:Name="LabelBorder"

@@ -84,6 +84,10 @@
                             <Setter Property="Foreground" Value="Gray"/>
                         </DataTrigger>
 
+                        <DataTrigger Binding="{Binding WarningActive}" Value="True">
+                            <Setter Property="Foreground" Value="Crimson"/>
+                        </DataTrigger>
+
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="border" Property="BorderThickness" Value="1"/>
                             <Setter Property="Foreground" Value="Black"/>
