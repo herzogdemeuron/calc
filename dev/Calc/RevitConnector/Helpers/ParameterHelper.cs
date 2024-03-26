@@ -128,6 +128,9 @@ namespace Calc.RevitConnector.Helpers
             }
 
             var parameters = elem.GetParameters(parameterName);
+            // get parameters with unique ids
+            parameters = parameters.GroupBy(p => p.Id.IntegerValue).Select(g => g.First()).ToList();
+
             if (parameters.Count == 0)
             {
                 return new BasicParameter()

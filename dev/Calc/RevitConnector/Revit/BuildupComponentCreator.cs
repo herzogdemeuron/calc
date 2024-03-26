@@ -138,7 +138,8 @@ namespace Calc.RevitConnector.Revit
         /// <summary>
         /// create a list of layer components from an element.
         /// Firstly get the amounts for each material despite of the compound structure (materialAmounts),
-        /// if there is a compound structure, re-order the material amount with the compund layers by the compound material thicknesses and calculate the proportion of area and volume of the same material.
+        /// if there is a compound structure, re-order the material amount with the compund layers by the compound material thicknesses 
+        /// and calculate the proportion of area and volume of the same material.
         /// also returns if the element is a compound structure.
         /// </summary>
         private (List<LayerComponent>,bool) CreateLayerComponents(Element elem)
@@ -179,7 +180,10 @@ namespace Calc.RevitConnector.Revit
             return (result, isCompound);
         }
         /// <summary>
-        /// get the material amounts of an element separated by different materials by getting the material area and volume of the element.
+        /// get the material amounts of an element separated by different materials 
+        /// by getting the material area and volume of the element.
+        /// The count, length and area of the material are counted with the total amount of the element, since sometimes
+        /// in revit the area of the material is taken from the whole faces.
         /// </summary>
         private List<(Material, BasicParameterSet)> GetMaterialAmounts(Element elem)
         {
@@ -187,6 +191,7 @@ namespace Calc.RevitConnector.Revit
             var materialIds = elem.GetMaterialIds(false);
             var countParamTotal = totalAmountParamSet.GetAmountParam(Unit.piece);
             var lengthParamTotal = totalAmountParamSet.GetAmountParam(Unit.m);
+            //var areaParamTotal = totalAmountParamSet.GetAmountParam(Unit.m2);
             var result = new List<(Material, BasicParameterSet)>();
 
             // firslt calculate valid material amounts
@@ -215,7 +220,7 @@ namespace Calc.RevitConnector.Revit
             // show no material if either area or volume has value
             // the no material area takes the whole area of the element, which means later in the compound structure,
             // only the no material area will not be divided by the compound layer count
-            if (!(areaParamTotal.HasError && volumeParamTotal.HasError) && (areaParamTotal.Amount > 0 || volumeParamTotal.Amount > 0))
+            if (!(areaParamTotal.HasError && volumeParamTotal.HasError) && volumeParamTotal.Amount > 0)
             {
                 var noMaterialAmount = new BasicParameterSet(countParamTotal, lengthParamTotal, areaParamTotal, volumeParamTotal);
                 result.Add((null, noMaterialAmount));
