@@ -14,13 +14,7 @@ using System.Windows.Documents;
 namespace Calc.RevitConnector.Revit
 {
     public class BuildupComponentCreator : IBuildupComponentCreator
-
     {
-        /// <summary>
-        /// Create a list of calc elements from the current document
-        /// it only takes the relevant parameters from the parameter name list to speed up the process
-        /// </summary>
-        
         private readonly Document Doc;
         private readonly UIDocument Uidoc;
         private readonly List<RevitBasicParamConfig> basicParamConfigs =
@@ -30,14 +24,11 @@ namespace Calc.RevitConnector.Revit
             new RevitBasicParamConfig(BuiltInCategory.OST_Windows, AreaName: ".Area")
             };
 
-
-
         public BuildupComponentCreator(UIDocument uidoc)
         {
             Doc = uidoc.Document;
             Uidoc = uidoc;
         }
-
 
         /// <summary>
         /// prompt the user to select elements from revit, and return a list of buildup components.
@@ -233,7 +224,6 @@ namespace Calc.RevitConnector.Revit
             return result;
         }
 
-
         /// <summary>
         /// get the total amounts of an element, including count, length, area and volume using the basic parameter config.
         /// </summary>
@@ -293,10 +283,8 @@ namespace Calc.RevitConnector.Revit
 
                     result.Add((material.Item1, material.Item2, props.Item1, props.Item2));
                 }
-
                 return result;
             }
-
             return null;
         }
 

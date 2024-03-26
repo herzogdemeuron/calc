@@ -88,6 +88,10 @@ namespace Calc.MVVM.ViewModels
             BuildupCreationVM.HandleSelectingElements();
         }
 
+        public void HandleBuildupNameChanged(string text)
+        {
+            BuildupCreationVM.NewBuildupName = text;
+        }
 
         public async Task HandleSendingResults(string newName)
         {

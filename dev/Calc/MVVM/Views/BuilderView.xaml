@@ -47,8 +47,6 @@
             </Grid.RowDefinitions>
 
             <Label Content="Revit Elements"
-                    Grid.Column="0"
-                    Grid.Row="0"
                     FontSize="27"
                     Margin="5,5,0,0"
                     FontWeight="light"/>
@@ -60,7 +58,7 @@
                       Margin="10,0,10,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
-                    <RowDefinition Height="10"/>
+                    <RowDefinition Height="20"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 
@@ -68,6 +66,16 @@
                     <ColumnDefinition Width="65"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+
+                <TextBlock Text="{Binding BuildupCreationVM.MainWarning}"
+                           d:Text="Choose a type and set one amount as normalizer."
+                           Grid.ColumnSpan="5"
+                           Grid.Row="1"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Right"
+                           Foreground="Crimson"
+                           FontWeight="SemiBold"
+                           FontSize="10"/>
 
                 <Button Content="Select"
                             Style="{StaticResource ButtonStyle}"
@@ -206,11 +214,11 @@
                             BorderThickness="1"
                             CornerRadius="4">
                     <TextBox x:Name="BuildupNameTextBox"
-                             Text="{Binding BuildupCreationVM.NewBuildupName, Mode=OneWayToSource}"
                              VerticalAlignment="Center"
                              BorderThickness="0"
                              Background="Transparent"
                              FontWeight="SemiBold"
+                             TextChanged="BuildupNameTextChanged"
                              HorizontalAlignment="Stretch"/>
                 </Border>
 
@@ -325,6 +333,7 @@
                     <TextBlock Text="{Binding MaterialMatchInfo}"
                                d:Text="Material units don't match."
                                VerticalAlignment="Bottom"
+                               HorizontalAlignment="Right"
                                Grid.Column="0"
                                Grid.Row="2"
                                Margin="5,0,0,0"

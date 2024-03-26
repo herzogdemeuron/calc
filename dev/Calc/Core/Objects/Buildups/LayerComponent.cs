@@ -25,8 +25,9 @@ namespace Calc.Core.Objects.Buildups
 
         // calculation components
         public List<CalculationComponent> CalculationComponents { get; set; } = new List<CalculationComponent>();
-        public bool HasCalculationError { get => CalculationComponents.Exists(c => c.HasError); }
-        public bool CalculationCompleted { get => CalculationComponents.TrueForAll(c => c.IsComplete); }
+        public bool HasParamError { get => CalculationComponents.Exists(c => c.HasError); }
+        public bool CalculationCompleted { get => CalculationComponents.TrueForAll(c => c.IsComplete) && MaterialUnitsMatch; }
+        private bool MaterialUnitsMatch { get => CheckUnitsMatch(); }
 
         // material mappings
         public Material MainMaterial { get; set; }
@@ -123,10 +124,19 @@ namespace Calc.Core.Objects.Buildups
             return 0;
         }
 
+        public bool CheckUnitsMatch()
+        {
+            if (HasMainMaterial && HasSubMaterial && MainMaterial.MaterialUnit != SubMaterial.MaterialUnit)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public void UpdateCalculation(double totalRation)
         {
             CalculationComponents = CalculationComponent.FromLayer(this, totalRation);
-            OnPropertyChanged(nameof(HasCalculationError));
+            OnPropertyChanged(nameof(HasParamError));
             OnPropertyChanged(nameof(CalculationCompleted));
 
         }

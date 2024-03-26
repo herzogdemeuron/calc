@@ -31,6 +31,17 @@ namespace Calc.Core.Objects.Buildups
             }
         }
 
+        private bool hasParamError;
+        public bool HasParamError
+        {
+            get => hasParamError;
+            set
+            {
+                hasParamError = value;
+                OnPropertyChanged(nameof(HasParamError));
+            }
+        }
+
         public List<int> ElementIds { get; set; }
         public bool IsCompoundElement { get; set; }
         public double? Thickness { get; set; }
@@ -51,6 +62,11 @@ namespace Calc.Core.Objects.Buildups
         public List<CalculationComponent> GetCalculationComponents()
         {
             return LayerComponents.Where(l => l.CalculationCompleted).SelectMany(l => l.CalculationComponents).ToList();
+        }
+
+        public void UpdateParamError(Unit unit)
+        {
+            HasParamError = BasicParameterSet?.GetAmountParam(unit)?.HasError ?? true;
         }
 
         public bool Equals(BuildupComponent component)

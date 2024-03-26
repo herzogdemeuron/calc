@@ -89,31 +89,50 @@
         <StackPanel Orientation="Horizontal"
                     Margin="-6,0,0,0">
 
-            <Grid x:Name="BrokenHeartGrid">
-                <Grid.Style>
-                    <Style TargetType="Grid">
-                        <Setter Property="Visibility" Value="Hidden"/>
-                        <Setter Property="Margin" Value="1,0,0,0"/>
-                        <Setter Property="Width" Value="12"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding HasCalculationError}" Value="True">
-                                <Setter Property="Visibility" Value="Visible"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Grid.Style>
+            <Grid x:Name="ErrorGrid"
+                  Margin="1,0,0,0"
+                  Width="12">
+                
                 <TextBlock Text="💔"
                           FontSize="10"
                           FontWeight="SemiBold"
                           VerticalAlignment="Center"
                           HorizontalAlignment="Center"
-                          Foreground="Crimson"/>
+                          Foreground="Crimson">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HasParamError}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                
                 <TextBlock Text="🖍️"
                           FontSize="10"
                           FontWeight="SemiBold"
                           VerticalAlignment="Center"
                           HorizontalAlignment="Center"
-                          Foreground="Chocolate"/>
+                          Foreground="Gray">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding HasParamError}" Value="False"/>
+                                        <Condition Binding="{Binding CalculationCompleted}" Value="False"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                
             </Grid>
 
             <Border x:Name="LabelBorder"

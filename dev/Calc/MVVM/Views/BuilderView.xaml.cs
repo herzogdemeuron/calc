@@ -62,6 +62,12 @@ namespace Calc.MVVM.Views
             BuilderVM.HandleWindowClosing();
         }
 
+        private void BuildupNameTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var currentText = (sender as TextBox).Text;
+            BuilderVM.HandleBuildupNameChanged(currentText);
+        }
+
         private void AmountClicked(object sender, RoutedEventArgs e)
         {
             string tag = (sender as Button).Tag.ToString();

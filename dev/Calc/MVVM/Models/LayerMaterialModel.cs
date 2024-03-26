@@ -177,11 +177,12 @@ namespace Calc.MVVM.Models
             }
         }
 
+
         private string GetMaterialMatchText()
         {
-            if (layer.HasMainMaterial && layer.HasSubMaterial && MainMaterial.MaterialUnit != SubMaterial.MaterialUnit)
+            if (!layer.CheckUnitsMatch())
             {
-                return $"Sub material unit does not match.";
+                return "Material units don't match.";
             }
             return null;
         }

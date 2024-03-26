@@ -23,17 +23,29 @@ namespace Calc.MVVM.ViewModels
     public class BuildupCreationViewModel : INotifyPropertyChanged
     {
         private DirectusStore store;
+        private List<Material> CurrentMaterials { get => store.CurrentMaterials; }
+        private readonly IBuildupComponentCreator buildupComponentCreator;
+
         public List<LcaStandard> StandardsAll { get => store.StandardsAll; }
         public List<Unit> BuildupUnitsAll { get => store.UnitsAll; }
         public List<MaterialFunction> MaterialFunctionsAll { get => store.MaterialFunctionsAll; }
         public List<BuildupGroup> BuildupGroupsAll { get => store.BuildupGroupsAll; }
 
         public BasicAmountsModel AmountsModel { get; set; } = new BasicAmountsModel();
-        private List<Material> CurrentMaterials { get => store.CurrentMaterials; }
-
-        private readonly IBuildupComponentCreator buildupComponentCreator;
         public bool MaterialSelectionEnabled { get => SelectedComponent is LayerComponent; }
         public HslColor CurrentColor { get => SelectedComponent?.HslColor?? ItemPainter.DefaultColor; }
+        private string mainWarning;
+        public string MainWarning
+        {
+            get => mainWarning;
+            set
+            {
+                if (mainWarning == value) return;
+                mainWarning = value;
+                OnPropertyChanged(nameof(MainWarning));
+            }
+        }
+
 
         private List<BuildupComponent> buildupComponents = new List<BuildupComponent>();
         public List<BuildupComponent> BuildupComponents
@@ -135,11 +147,12 @@ namespace Calc.MVVM.ViewModels
             get => selectedBuildupUnit;
             set
             {
-                if (selectedBuildupUnit == value) return;
                 selectedBuildupUnit = value;
                 OnPropertyChanged(nameof(SelectedBuildupUnit));
                 UpdateCalculationComponents();
                 UpdateAmounts();
+                UpdateBuildupComponentError();
+                OnPropertyChanged(nameof(MainWarning));
             }
         }
 
@@ -171,6 +184,7 @@ namespace Calc.MVVM.ViewModels
             OnPropertyChanged(nameof(SelectedStandard));
             OnPropertyChanged(nameof(BuildupUnitsAll));
             OnPropertyChanged(nameof(BuildupGroupsAll));
+            UpadteMainWarning();
         }
 
         public void HandleDeselect()
@@ -182,8 +196,37 @@ namespace Calc.MVVM.ViewModels
 
         public void HandleAmountClicked(Unit? newBuildupUnit)
         {
-          if(newBuildupUnit == null) return;
-           SetCurrentNormalizer(newBuildupUnit.Value);
+            if(newBuildupUnit == null) return;
+            foreach (var component in BuildupComponents)
+            {
+                component.IsNormalizer = false;
+                component.HasParamError = false;
+            }
+            if (SelectedComponent is BuildupComponent bc)
+            {
+                bc.IsNormalizer = true;
+            }
+            SelectedBuildupUnit = newBuildupUnit;
+            UpadteMainWarning();
+        }
+
+        private void UpadteMainWarning()
+        {
+            if (BuildupComponents.Count == 0)
+            {
+                MainWarning = "Select elements to start.";
+                return;
+            }
+            var hasNormalizer = BuildupComponents.Where(c => c.IsNormalizer).ToList().Count == 1;
+            MainWarning = hasNormalizer ? "" : "Choose a type and set one amount as normalizer.";
+        }
+
+        private void UpdateBuildupComponentError()
+        {
+            if (SelectedComponent is BuildupComponent bc)
+            {
+                bc.UpdateParamError((Unit)SelectedBuildupUnit);
+            }
         }
 
         /// <summary>
@@ -204,6 +247,7 @@ namespace Calc.MVVM.ViewModels
             UpdateLayerMaterialModels();
             UpdateCalculationComponents();
             UpdateLayerColors();
+            UpadteMainWarning();
         }
 
         /// <summary>
@@ -286,19 +330,6 @@ namespace Calc.MVVM.ViewModels
             OnPropertyChanged(nameof(BuildupGe));
         }
 
-        private void SetCurrentNormalizer(Unit unit) // temporary only for testing
-        {
-            foreach (var component in BuildupComponents)
-            {
-                component.IsNormalizer = false;
-            }
-
-            if (SelectedComponent is BuildupComponent bc)
-            {
-                bc.IsNormalizer = true;
-                SelectedBuildupUnit = unit;
-            }
-        }
 
         private double GetQuantityRatio()
         {
