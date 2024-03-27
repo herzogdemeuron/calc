@@ -1,9 +1,6 @@
 ﻿using Autodesk.Revit.DB;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Calc.RevitConnector.Revit
 {
@@ -11,19 +8,21 @@ namespace Calc.RevitConnector.Revit
     {
         private List<Type> allowedTypes = new List<Type>()
         {
-            typeof(Autodesk.Revit.DB.Wall),
-            typeof(Autodesk.Revit.DB.Floor),
-            typeof(Autodesk.Revit.DB.RoofBase),
-            typeof(Autodesk.Revit.DB.FamilyInstance),
-            typeof(Autodesk.Revit.DB.Mullion),
-            typeof(Autodesk.Revit.DB.Panel),
-            typeof(Autodesk.Revit.DB.ModelCurve)
+            typeof(Wall),
+            typeof(Floor),
+            typeof(Ceiling),
+            typeof(RoofBase),
+            typeof(FamilyInstance),
+            typeof(Mullion),
+            typeof(Panel),
+            typeof(ModelCurve)
         };
 
         public CustomSelectionFilter()
         {
         }
-        private bool checkCurtainWall(Element elem)
+
+        private bool CheckCurtainWall(Element elem)
         {
             if (elem.GetType() == typeof(Wall))
             {
@@ -35,15 +34,17 @@ namespace Calc.RevitConnector.Revit
             }
             return false;
         }
-        public bool AllowElement(Autodesk.Revit.DB.Element elem)
+
+        public bool AllowElement(Element elem)
         {
-            if (checkCurtainWall(elem))
+            if (CheckCurtainWall(elem))
             {
                 return false;
             }
             return allowedTypes.Contains(elem.GetType());
         }
-        public bool AllowReference(Autodesk.Revit.DB.Reference reference, Autodesk.Revit.DB.XYZ position)
+
+        public bool AllowReference(Reference reference, XYZ position)
         {
             return false;
         }

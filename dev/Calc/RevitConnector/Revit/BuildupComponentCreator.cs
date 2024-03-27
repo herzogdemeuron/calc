@@ -18,7 +18,7 @@ namespace Calc.RevitConnector.Revit
     {
         private readonly Document Doc;
         private readonly UIDocument Uidoc;
-        private readonly List<RevitBasicParamConfig> basicParamConfigs =
+        private readonly List<RevitBasicParamConfig> basicParamConfigs =  // todo: this should be taken from directus
             new List<RevitBasicParamConfig>
             {
             new RevitBasicParamConfig(BuiltInCategory.OST_Doors, AreaName: ".Area"),
@@ -63,7 +63,7 @@ namespace Calc.RevitConnector.Revit
             var layersSet = CreateLayerComponents(element);
             var layers = layersSet.Item1;
             var isCompound = layersSet.Item2;
-            var thickness = GetThickness(element, isCompound);
+            var thickness = GetTypeThickness(element, isCompound);
             return new BuildupComponent
             {
                 Thickness = thickness,
@@ -334,15 +334,19 @@ namespace Calc.RevitConnector.Revit
             return (areaProportion, volumeProportion);
         }
 
-        private double? GetThickness(Element elem, bool isCompound)
+        private double? GetTypeThickness(Element elem, bool isCompound)
         {
             if (isCompound)
             {
                 var type = GetElementType(elem);
                 if (type == null) return null;
+
+                var thickness = type is FloorType || type is RoofType || type is CeilingType ?
+                    type.LookupParameter("Default Thickness")?.AsDouble() ?? 0 :
+                    type.LookupParameter("Width")?.AsDouble() ?? 0;
                 
-                
-                double thickness = elem.LookupParameter("Thickness")?.AsDouble() ?? 0;
+                if (thickness == 0) return null;
+
                 return ParameterHelper.ToMetricValue(thickness, Unit.m);
             }
             return null;
