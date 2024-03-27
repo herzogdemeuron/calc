@@ -44,6 +44,28 @@ namespace Calc.Core.Objects.BasicParameters
             volParam = volParam.PerformOperation(Operation.Add, other.volParam);
         }
 
+        public void Set(BasicParameter param)
+        {
+            var unit = param.Unit;
+            switch (unit)
+            {
+                case Unit.m:
+                    lenParam = param;
+                    break;
+                case Unit.m2:
+                    areaParam = param;
+                    break;
+                case Unit.m3:
+                    volParam = param;
+                    break;
+                case Unit.piece:
+                    pieceParam = param;
+                    break;
+                default:
+                    throw new Exception($"Unit not recognized: {unit}");
+            }
+        }
+
         public static BasicParameterSet ErrorParamSet()
         {
             return new BasicParameterSet

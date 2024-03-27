@@ -189,9 +189,8 @@ namespace Calc.RevitConnector.Revit
         /// <summary>
         /// get the material amounts of an element separated by different materials 
         /// by getting the material area and volume of the element.
-        /// this step takes the area and volume of the material from revit, though the area could be sometimes not accurate.
+        /// this step takes the area and volume of the material from revit, the area could be sometimes not accurate.
         /// for compund elements and panels, the area is correct, in other cases, the area could be the whole area of the element.
-        /// but this would be figured out later.
         /// </summary>
         private List<(Material, BasicParameterSet)> GetMaterialAmounts(Element elem, bool isCompund)
         {
@@ -234,16 +233,16 @@ namespace Calc.RevitConnector.Revit
             // the material area values are correct if it is a compound structure
             if(isCompund) return result;
 
-            // otherwise, if there is only one material, take the whole area as the material area
+            // otherwise, if there is only one material, take the element area as the material area
             // if more than one material, make the area param as error
             if (result.Count == 1)
             {
-                result[0].Item2.GetAmountParam(Unit.m2).Amount = areaParamTotal.Amount;
+                result[0].Item2.Set(areaParamTotal);
             }
             else
             {
                 var areaParam = BasicParameter.ErrorParam(Unit.m2);
-                result.ForEach(x => x.Item2.GetAmountParam(Unit.m2).ErrorType = ParameterErrorType.CalculationError);
+                result.ForEach(x => x.Item2.Set(areaParam));
             }
 
             return result;
