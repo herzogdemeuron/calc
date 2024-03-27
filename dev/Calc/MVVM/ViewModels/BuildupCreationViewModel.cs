@@ -135,8 +135,8 @@ namespace Calc.MVVM.ViewModels
                 store.StandardSelected = value;
                 UpdateLayerMaterialModels();
                 OnPropertyChanged(nameof(SelectedStandard));
-                UpdateCalculationComponents();
                 UpdateLayerColors();
+                UpdateCalculationComponents();
 
             }
         }
@@ -149,9 +149,9 @@ namespace Calc.MVVM.ViewModels
             {
                 selectedBuildupUnit = value;
                 OnPropertyChanged(nameof(SelectedBuildupUnit));
-                UpdateCalculationComponents();
                 UpdateAmounts();
                 UpdateBuildupComponentError();
+                UpdateCalculationComponents();
                 OnPropertyChanged(nameof(MainWarning));
             }
         }
@@ -245,8 +245,8 @@ namespace Calc.MVVM.ViewModels
         {
             BuildupComponents = buildupComponentCreator.CreateBuildupComponentsFromSelection();
             UpdateLayerMaterialModels();
-            UpdateCalculationComponents();
             UpdateLayerColors();
+            UpdateCalculationComponents();
             UpadteMainWarning();
         }
 
@@ -292,8 +292,8 @@ namespace Calc.MVVM.ViewModels
             {
                 UpdateMaterialModelSettings(changedModel);
             }
-            UpdateCalculationComponents();
             UpdateLayerColors();
+            UpdateCalculationComponents();
             UpdateAmounts();
         }
 

@@ -339,6 +339,10 @@ namespace Calc.RevitConnector.Revit
         {
             if (isCompound)
             {
+                var type = GetElementType(elem);
+                if (type == null) return null;
+                
+                
                 double thickness = elem.LookupParameter("Thickness")?.AsDouble() ?? 0;
                 return ParameterHelper.ToMetricValue(thickness, Unit.m);
             }

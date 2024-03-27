@@ -135,6 +135,7 @@ namespace Calc.Core.Objects.Buildups
 
         public void UpdateCalculation(double totalRation)
         {
+            CalculationComponents.Clear();
             CalculationComponents = CalculationComponent.FromLayer(this, totalRation);
             OnPropertyChanged(nameof(HasParamError));
             OnPropertyChanged(nameof(CalculationCompleted));
