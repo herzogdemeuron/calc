@@ -235,7 +235,7 @@ namespace Calc.RevitConnector.Revit
 
             // otherwise, if there is only one material, take the element area as the material area
             // if more than one material, make the area param as error
-            if (result.Count == 1)
+            if ( (result.Count == 1) && (result[0].Item1 != null))
             {
                 result[0].Item2.Set(areaParamTotal);
             }
