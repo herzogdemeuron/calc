@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Calc.Core.Objects;
 using Calc.Core.Objects.Buildups;
@@ -37,7 +38,7 @@ namespace Calc.Core.Color
             SetByIdentifier(allBranches);
         }
 
-        public static void ColorLayersByMaterial(List<BuildupComponent> bcompos)
+        public static void ColorLayersByMaterial(ObservableCollection<BuildupComponent> bcompos)
         {
             var allLayers = new List<IColorizable>();
             foreach (var bcompo in bcompos)

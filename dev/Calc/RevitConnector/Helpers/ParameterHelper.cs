@@ -70,7 +70,6 @@ namespace Calc.RevitConnector.Helpers
             Parameter param =  type?.LookupParameter(parameterName) ?? null;
             return param;
         }
-        
 
         public static double ToMetricValue(Parameter parameter)
         {
@@ -108,8 +107,6 @@ namespace Calc.RevitConnector.Helpers
                     return value;
             }
         }
-
-
 
         /// <summary>
         /// get the basic unit parameter of an element

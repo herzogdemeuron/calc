@@ -47,8 +47,8 @@ namespace Calc.MVVM.ViewModels
         }
 
 
-        private List<BuildupComponent> buildupComponents = new List<BuildupComponent>();
-        public List<BuildupComponent> BuildupComponents
+        private ObservableCollection<BuildupComponent> buildupComponents = new ObservableCollection<BuildupComponent>();
+        public ObservableCollection<BuildupComponent> BuildupComponents
         {
             get => buildupComponents;
             set
@@ -243,7 +243,9 @@ namespace Calc.MVVM.ViewModels
         /// </summary>
         public void HandleSelectingElements()
         {
-            BuildupComponents = buildupComponentCreator.CreateBuildupComponentsFromSelection();
+            var components = buildupComponentCreator.CreateBuildupComponentsFromSelection();
+            BuildupComponents = new ObservableCollection<BuildupComponent>(components);
+
             UpdateLayerMaterialModels();
             UpdateLayerColors();
             UpdateCalculationComponents();
@@ -366,6 +368,13 @@ namespace Calc.MVVM.ViewModels
             bool response = await store.SaveSingleBuildup(buildup);
             return response;
 
+        }
+
+        public void MoveBuildupComponent(int oldIndex, int newIndex)
+        {
+            if (oldIndex < 0 || newIndex < 0 || oldIndex == newIndex) return;
+            BuildupComponents.Move(oldIndex, newIndex);
+            UpdateCalculationComponents();
         }
 
 

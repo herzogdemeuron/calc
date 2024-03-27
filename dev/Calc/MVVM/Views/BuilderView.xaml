@@ -136,9 +136,14 @@
                     <TreeView x:Name="TreeView"
                             Background="Transparent"
                             BorderThickness="0"
+                            AllowDrop="True"
+                            MouseLeftButtonDown="SideClickDown"
+                              MouseDoubleClick="TreeViewDoubleClick"
+                            MouseMove="TreeViewMouseMove"
+                            DragOver="TreeViewDragOver"
+                            Drop="TreeViewDrop"
                             ItemsSource="{Binding BuildupCreationVM.BuildupComponents}"
                             TreeViewItem.Selected="TreeViewItemSelected"
-                            MouseLeftButtonDown="SideClickDown"
                             ItemContainerStyle="{StaticResource TreeViewItemStyle}">
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding LayerComponents}">
