@@ -18,12 +18,12 @@ namespace Calc.MVVM.ViewModels
         public LoadingViewModel LoadingVM { get; set; }
         public VisibilityViewModel VisibilityVM { get; set; }
 
-        public BuilderViewModel(DirectusStore store, IBuildupComponentCreator builupComponentCreator)
+        public BuilderViewModel(DirectusStore store, IBuildupComponentCreator builupComponentCreator, IImageSnapshotCreator imageSnapshotCreator)
         {
             Store = store;
             VisibilityVM = new VisibilityViewModel();
             LoadingVM = new LoadingViewModel(store);
-            BuildupCreationVM = new BuildupCreationViewModel(Store, builupComponentCreator);
+            BuildupCreationVM = new BuildupCreationViewModel(Store, builupComponentCreator, imageSnapshotCreator);
         }
 
         public async Task HandleWindowLoadedAsync()
@@ -86,6 +86,16 @@ namespace Calc.MVVM.ViewModels
         {
             if (BuildupCreationVM == null) return;
             BuildupCreationVM.HandleSelectingElements();
+        }
+
+        public void HandleCaptureClicked()
+        {
+            BuildupCreationVM.HandleCaptureClicked();
+        }
+
+        public void HandleCaptureMouseOver(bool isEnter)
+        {
+            BuildupCreationVM.HandleCaptureMouseOver(isEnter);
         }
 
         public void HandleBuildupNameChanged(string text)

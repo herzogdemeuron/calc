@@ -105,6 +105,12 @@ namespace Calc.Core.DirectusAPI.Drivers
                 buildup_unit = SendItem.BuildupUnit,
                 group = new { id = SendItem.Group.Id},
                 description = SendItem.Description,
+                image = new
+                {
+                    id = SendItem.Image,
+                    storage = "cloud",
+                    filename_download = $"{SendItem.Name}.png"
+                },
                 calculation_components = SendItem.CalculationComponents.Select(cc => new
                 {
                     position = cc.Position,

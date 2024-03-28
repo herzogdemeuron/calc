@@ -46,6 +46,7 @@ namespace Calc.MVVM.Views
             }
         }
 
+
         private void DeselectTreeView()
         {
             if (TreeView.SelectedItem != null)
@@ -104,6 +105,33 @@ namespace Calc.MVVM.Views
         private void OnCloseClicked(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+
+        private void OnCaputureClicked(object sender, RoutedEventArgs e)
+        {
+            BuilderVM.HandleCaptureClicked();
+        }
+
+        private void CaptureMouseEnter(object sender, MouseEventArgs e)
+        {
+            BuilderVM.HandleCaptureMouseOver(true);
+            ImagePreviewPopup.IsOpen = true;
+        }
+
+        private void CaptureMouseLeave(object sender, MouseEventArgs e)
+        {
+            BuilderVM.HandleCaptureMouseOver(false);
+            ImagePreviewPopup.IsOpen = false;
+        }
+
+        private void CaptureMouseMove(object sender, MouseEventArgs e)
+        {
+            if (!ImagePreviewPopup.IsOpen) return;
+
+            ImagePreviewPopup.Placement = System.Windows.Controls.Primitives.PlacementMode.Relative;
+            ImagePreviewPopup.HorizontalOffset = e.GetPosition(this).X + 10;
+            ImagePreviewPopup.VerticalOffset = e.GetPosition(this).Y + 10;
         }
 
         private void SideClickDown(object sender, MouseButtonEventArgs e)

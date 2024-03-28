@@ -9,6 +9,7 @@ using Speckle.Newtonsoft.Json;
 using System.Text;
 using System.Diagnostics;
 using System.Net;
+using System.IO;
 
 namespace Calc.Core.DirectusAPI
 {
@@ -106,6 +107,32 @@ namespace Calc.Core.DirectusAPI
             }, new NewtonsoftJsonSerializer(), this.HttpClient);
             Debug.WriteLine("HttpClient configured");
         }
+
+        public async Task<string> UploadImageAsync(string imagePath)
+        {
+            if (!File.Exists(imagePath))
+            {
+                throw new FileNotFoundException("Image file not found.", imagePath);
+            }
+
+            // Prepare the multipart/form-data request
+            var content = new MultipartFormDataContent();
+            var imageContent = new StreamContent(File.OpenRead(imagePath));
+            imageContent.Headers.ContentType = new MediaTypeHeaderValue("multipart/form-data");
+            content.Add(imageContent, "file", Path.GetFileName(imagePath));
+
+            // Send the request to the Directus file upload endpoint
+            var response = await this.HttpClient.PostAsync($"{this.Url}/files", content);
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorResponse = await response.Content.ReadAsStringAsync();
+                throw new ApplicationException($"Failed to upload image: {errorResponse}");
+            }
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var uploadResponse = JsonConvert.DeserializeObject<DirectusFileUploadResponse>(responseContent);
+            return uploadResponse?.Data?.Id; // Return the UUID of the uploaded image
+        }
     }
 
     internal class LoginResponseData
@@ -113,5 +140,15 @@ namespace Calc.Core.DirectusAPI
         public string Access_token { get; set; }
         public int Expires { get; set; }
         public string Refresh_token { get; set; }
+    }
+
+    internal class DirectusFileUploadResponse
+    {
+        public DirectusFile Data { get; set; }
+    }
+
+    internal class DirectusFile
+    {
+        public string Id { get; set; } // The UUID of the uploaded file
     }
 }

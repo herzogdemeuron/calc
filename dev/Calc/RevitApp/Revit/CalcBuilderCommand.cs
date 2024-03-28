@@ -14,6 +14,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace Calc.RevitApp.Revit
 {
@@ -28,6 +29,7 @@ namespace Calc.RevitApp.Revit
                 App.RevitVersion = commandData.Application.Application.VersionNumber;
                 AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
                 UIDocument uidoc = commandData.Application.ActiveUIDocument;
+                Document doc = commandData.Application.ActiveUIDocument.Document;
 
                 Logger.Log("Now authenticating.");
                 Task.Run(() => Authenticate()).Wait();
@@ -40,11 +42,9 @@ namespace Calc.RevitApp.Revit
 
                 DirectusStore store = new DirectusStore(directusInstance);
                 BuildupComponentCreator componentCreator = new BuildupComponentCreator(uidoc);
+                RevitImageCreator imageCreator = new RevitImageCreator(doc);
 
-                //List<BuildupComponent> components = componentCreator.CreateBuildupComponentsFromSelection();
-                //TaskDialog.Show("Components", components.Count.ToString());
-
-                BuilderViewModel builderViewModel = new BuilderViewModel(store, componentCreator);
+                BuilderViewModel builderViewModel = new BuilderViewModel(store, componentCreator, imageCreator);
                 BuilderView builderView = new BuilderView(builderViewModel);
 
                 builderView.Show();

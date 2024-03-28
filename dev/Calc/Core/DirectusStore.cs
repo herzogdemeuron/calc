@@ -451,5 +451,15 @@ namespace Calc.Core
                 throw new Exception("No project selected");
             }
         }
+
+        public async Task<string> UploadImageAsync(string imagePath)
+        {
+            if (Directus.Authenticated == false)
+            {
+                throw new Exception("DirectusStore: Directus not authenticated");
+            }
+
+            return await Directus.UploadImageAsync(imagePath);
+        }
     }
 }

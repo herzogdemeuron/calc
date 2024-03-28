@@ -16,6 +16,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace Calc.MVVM.ViewModels
 {
@@ -25,6 +26,7 @@ namespace Calc.MVVM.ViewModels
         private DirectusStore store;
         private List<Material> CurrentMaterials { get => store.CurrentMaterials; }
         private readonly IBuildupComponentCreator buildupComponentCreator;
+        private readonly IImageSnapshotCreator imageSnapshotCreator;
 
         public List<LcaStandard> StandardsAll { get => store.StandardsAll; }
         public List<Unit> BuildupUnitsAll { get => store.UnitsAll; }
@@ -168,14 +170,40 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
+        private string currentImagePath;
+        private BitmapImage currentImage;
+        public BitmapImage CurrentImage
+        {
+            get => currentImage;
+            set
+            {
+                if (currentImage == value) return;
+                currentImage = value;
+                OnPropertyChanged(nameof(CurrentImage));
+            }
+        }
+
+        private string captureText = "📷";
+        public string CaptureText
+        {
+            get => captureText;
+            set
+            {
+                if (captureText == value) return;
+                captureText = value;
+                OnPropertyChanged(nameof(CaptureText));
+            }
+        }
+
         public double? BuildupGwp { get => AllCalculationComponents?.Where(c => c.Amount.HasValue).Sum(c => c.Gwp); }
         public double? BuildupGe { get => AllCalculationComponents?.Where(c => c.Amount.HasValue).Sum(c => c.Ge); }
 
 
-        public BuildupCreationViewModel(DirectusStore store, IBuildupComponentCreator bcCreator)
+        public BuildupCreationViewModel(DirectusStore store, IBuildupComponentCreator bcCreator, IImageSnapshotCreator imgCreator)
         {
             this.store = store;
             buildupComponentCreator = bcCreator;
+            imageSnapshotCreator = imgCreator;
         }
 
         public void HandleLoaded()
@@ -208,6 +236,19 @@ namespace Calc.MVVM.ViewModels
             }
             SelectedBuildupUnit = newBuildupUnit;
             UpadteMainWarning();
+        }
+
+        public void HandleCaptureClicked()
+        {
+            string filename = NewBuildupName ?? "Buildup";
+            currentImagePath = imageSnapshotCreator.CreateImageSnapshot(filename);
+            CurrentImage = new BitmapImage(new Uri(currentImagePath));
+        }
+
+        public void HandleCaptureMouseOver(bool isEnter)
+        {
+            if(CurrentImage == null) return;
+            CaptureText = isEnter ? "↻" : "";
         }
 
         private void UpadteMainWarning()
@@ -250,6 +291,9 @@ namespace Calc.MVVM.ViewModels
             UpdateLayerColors();
             UpdateCalculationComponents();
             UpadteMainWarning();
+
+            CurrentImage = null;
+            CaptureText = "📷";
         }
 
         /// <summary>
@@ -346,7 +390,7 @@ namespace Calc.MVVM.ViewModels
             return 0;
         }
 
-        private Buildup CreateBuildup()
+        private Buildup CreateBuildup(string imageUuid)
         {
             var buildup = new Buildup
             {
@@ -357,14 +401,16 @@ namespace Calc.MVVM.ViewModels
                 BuildupUnit = (Unit)SelectedBuildupUnit,
                 CalculationComponents = AllCalculationComponents,
                 BuildupGwp = BuildupGwp??0,
-                BuildupGe = BuildupGe??0
+                BuildupGe = BuildupGe??0,
+                Image = imageUuid
             };
             return buildup;
         }
 
         public async Task<bool> HandleSaveBuildup()
         {
-            var buildup = CreateBuildup();
+            string imageUuid = await store.UploadImageAsync(currentImagePath); // todo: make this more robust
+            var buildup = CreateBuildup(imageUuid);
             bool response = await store.SaveSingleBuildup(buildup);
             return response;
 

@@ -17,6 +17,12 @@ namespace Calc.Core.Interfaces
         public List<BuildupComponent> CreateBuildupComponentsFromSelection();
     }
 
+    public interface IImageSnapshotCreator
+    {
+        public string CreateImageSnapshot(string baseName);
+    }
+    
+
     public interface IVisualizer
     {
         void ResetView(List<IGraphNode> nodes);

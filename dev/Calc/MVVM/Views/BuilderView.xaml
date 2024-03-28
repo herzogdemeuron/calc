@@ -245,20 +245,37 @@
                              HorizontalAlignment="Stretch"/>
                 </Border>
                 <Border  Grid.Column="2"
-                            Grid.Row="1"
-                            Grid.RowSpan="2"
-                            Height="55"
-                            Margin="5,5,0,0"
-                            BorderBrush="Silver"
-                            BorderThickness="1"
-                            Background="WhiteSmoke"
-                            CornerRadius="4">
-                    <TextBlock Text="📷"
-                               Foreground="LightGray"
-                               FontSize="20"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"/>
+                         Grid.Row="1"
+                         Grid.RowSpan="2"
+                         Height="55"
+                         Margin="5,5,0,0"
+                         BorderBrush="Silver"
+                         BorderThickness="1"
+                         Background="WhiteSmoke"
+                         MouseLeftButtonDown="OnCaputureClicked"
+                         MouseEnter="CaptureMouseEnter"
+                         MouseLeave="CaptureMouseLeave"
+                         MouseMove="CaptureMouseMove"
+                         CornerRadius="4">
+                    <Grid>
+                        <Image x:Name="ImagePreview" 
+                                Source="{Binding BuildupCreationVM.CurrentImage}"/>
+                        <TextBlock x:Name="CaptureTextBlock"
+                                   Text="{Binding BuildupCreationVM.CaptureText}"
+                                   d:Text="↻"
+                                   Foreground="Gray"
+                                   FontSize="20"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Grid>
                 </Border>
+
+                <Popup x:Name="ImagePreviewPopup" AllowsTransparency="True">
+                    <Border BorderThickness="0" Background="Transparent" CornerRadius="4">
+                        <Image Source="{Binding BuildupCreationVM.CurrentImage}" Width="500" Height="400"/>
+                    </Border>
+                </Popup>
+                
             </Grid>
 
 
