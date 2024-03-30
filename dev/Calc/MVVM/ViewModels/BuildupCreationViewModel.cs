@@ -240,7 +240,7 @@ namespace Calc.MVVM.ViewModels
 
         public void HandleCaptureClicked()
         {
-            string filename = NewBuildupName ?? "Buildup";
+            string filename = NewBuildupName ?? "CalcBuildup";
             currentImagePath = imageSnapshotCreator.CreateImageSnapshot(filename);
             CurrentImage = new BitmapImage(new Uri(currentImagePath));
         }
@@ -409,7 +409,7 @@ namespace Calc.MVVM.ViewModels
 
         public async Task<bool> HandleSaveBuildup()
         {
-            string imageUuid = await store.UploadImageAsync(currentImagePath); // todo: make this more robust
+            string imageUuid = await store.UploadImageAsync(currentImagePath, NewBuildupName); // todo: make this more robust
             var buildup = CreateBuildup(imageUuid);
             bool response = await store.SaveSingleBuildup(buildup);
             return response;

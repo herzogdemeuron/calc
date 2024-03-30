@@ -9,6 +9,14 @@ namespace Calc.Core.DirectusAPI.Drivers
         public Dictionary<string, object> GetVariables();
     }
 
+    public interface IDriverGetManySystem<T>
+    {
+        public string QueryGetManySystem { get; }
+        public List<T> GotManyItems { get; set; }
+        public Dictionary<string, object> GetVariables();
+    }
+
+
     public interface IDriverCreateSingle<T>
     {
         public T SendItem { get; set; }

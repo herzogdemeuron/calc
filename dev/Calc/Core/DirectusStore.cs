@@ -93,6 +93,7 @@ namespace Calc.Core
         private DirectusManager<Mapping> MappingManager { get; set; }
         private DirectusManager<Forest> ForestManager { get; set; }
         private DirectusManager<Snapshot> SnapshotManager { get; set; }
+        private DirectusManager<DirectusFolder> FolderManager { get; set; }
 
         private ProjectStorageDriver ProjectDriver { get; set; }
         private StandardStorageDriver StandardDriver { get; set; }
@@ -102,6 +103,7 @@ namespace Calc.Core
         private MappingStorageDriver MappingDriver { get; set; }
         private ForestStorageDriver ForestDriver { get; set; }
         private SnapshotStorageDriver SnapshotDriver { get; set; }
+        private FolderStorageDriver FolderDriver { get; set; }
 
         private readonly Polly.Retry.AsyncRetryPolicy _graphqlRetry = Policy.Handle<GraphQLHttpRequestException>()
                 .WaitAndRetryAsync(4, retryAttempt => TimeSpan.FromSeconds(5),
@@ -131,6 +133,7 @@ namespace Calc.Core
             this.BuildupGroupManager = new DirectusManager<BuildupGroup>(this.Directus);
             this.ForestManager = new DirectusManager<Forest>(this.Directus);
             this.SnapshotManager = new DirectusManager<Snapshot>(this.Directus);
+            this.FolderManager = new DirectusManager<DirectusFolder>(this.Directus);
 
             this.ProjectDriver = new ProjectStorageDriver();
             this.StandardDriver = new StandardStorageDriver();
@@ -140,6 +143,7 @@ namespace Calc.Core
             this.MappingDriver = new MappingStorageDriver();
             this.ForestDriver = new ForestStorageDriver();
             this.SnapshotDriver = new SnapshotStorageDriver();
+            this.FolderDriver = new FolderStorageDriver();
 
             UnitsAll =   Enum.GetValues(typeof(Unit)).Cast<Unit>().ToList();
             MaterialFunctionsAll = Enum.GetValues(typeof(MaterialFunction)).Cast<MaterialFunction>().ToList();
@@ -207,6 +211,9 @@ namespace Calc.Core
 
                 this.BuildupDriver = await _graphqlRetry.ExecuteAsync(() =>
                     this.BuildupManager.GetMany<BuildupStorageDriver>(this.BuildupDriver));
+
+                this.FolderDriver = await _graphqlRetry.ExecuteAsync(() =>
+                                 this.FolderManager.GetManySystem<FolderStorageDriver>(this.FolderDriver));
 
                 LinkFields();
                 SortMaterials();
@@ -452,14 +459,16 @@ namespace Calc.Core
             }
         }
 
-        public async Task<string> UploadImageAsync(string imagePath)
+        public async Task<string> UploadImageAsync(string imagePath, string newFileName)
         {
             if (Directus.Authenticated == false)
             {
                 throw new Exception("DirectusStore: Directus not authenticated");
             }
 
-            return await Directus.UploadImageAsync(imagePath);
+            string folderId = FolderDriver.GetFolderId("calc_buildup_images");
+
+            return await Directus.UploadImageAsync(imagePath, folderId, newFileName);
         }
     }
 }

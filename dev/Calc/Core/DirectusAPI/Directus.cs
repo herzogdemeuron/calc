@@ -23,6 +23,7 @@ namespace Calc.Core.DirectusAPI
         public bool Authenticated { get; set; }
         public HttpClient HttpClient;
         public GraphQLHttpClient Client;
+        public GraphQLHttpClient SystemClient { get; private set; }
         private string _token;
         private string _url;
         private string _refreshToken;
@@ -105,10 +106,16 @@ namespace Calc.Core.DirectusAPI
             {
                 EndPoint = new Uri(this.GraphQlUrl)
             }, new NewtonsoftJsonSerializer(), this.HttpClient);
+
+            this.SystemClient = new GraphQLHttpClient(new GraphQLHttpClientOptions
+            {
+                EndPoint = new Uri($"{this.Url}/graphql/system")
+            }, new NewtonsoftJsonSerializer(), this.HttpClient);
+
             Debug.WriteLine("HttpClient configured");
         }
 
-        public async Task<string> UploadImageAsync(string imagePath)
+        public async Task<string> UploadImageAsync(string imagePath, string folderId, string newFileName)
         {
             if (!File.Exists(imagePath))
             {
@@ -118,7 +125,19 @@ namespace Calc.Core.DirectusAPI
             // Prepare the multipart/form-data request
             var content = new MultipartFormDataContent();
             var imageContent = new StreamContent(File.OpenRead(imagePath));
-            imageContent.Headers.ContentType = new MediaTypeHeaderValue("multipart/form-data");
+            imageContent.Headers.ContentType = new MediaTypeHeaderValue("image/png");
+
+            // Specify the filename in the Content-Disposition header
+            imageContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+            {
+                Name = "\"file\"",
+                FileName = $"\"{newFileName}\""
+            };
+
+            if (folderId != null)
+            {
+                content.Add(new StringContent(folderId), "folder");
+            }
             content.Add(imageContent, "file", Path.GetFileName(imagePath));
 
             // Send the request to the Directus file upload endpoint

@@ -22,6 +22,14 @@ namespace Calc.Core.DirectusAPI.Drivers
             return response.Data;
         }
 
+        public async Task<TDriver> GetManySystem<TDriver>(IDriverGetManySystem<T> driver) where TDriver : IDriverGetManySystem<T>
+        {
+            var request = CreateRequest(driver.QueryGetManySystem, driver.GetVariables());
+            var response = await this._directus.SystemClient.SendQueryAsync<TDriver>(request);
+            CheckResponseForErrors(response);
+            return response.Data;
+        }
+
         public async Task<TDriver> CreateSingle<TDriver>(IDriverCreateSingle<T> driver) where TDriver : IDriverCreateSingle<T>
         {
             CheckDriverPropertyIsNotNull(driver, "SendItem");

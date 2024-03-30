@@ -99,7 +99,18 @@ namespace Calc.MVVM.Views
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
-            this.DragMove();
+
+            if (e.ButtonState == MouseButtonState.Pressed)
+            {
+                try
+                {
+                    this.DragMove();
+                }
+                catch (InvalidOperationException)
+                {
+                    // ignored
+                }
+            }
         }
 
         private void OnCloseClicked(object sender, RoutedEventArgs e)
