@@ -52,7 +52,7 @@ namespace Calc.RevitConnector.Revit
                 PixelSize = 2048,
                 HLRandWFViewsFileType = ImageFileType.PNG,
                 ShadowViewsFileType = ImageFileType.PNG,
-                ExportRange = ExportRange.VisibleRegionOfCurrentView,
+                ExportRange = ExportRange.CurrentView,
             };
 
             try

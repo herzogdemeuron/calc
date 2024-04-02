@@ -141,8 +141,8 @@ namespace Calc.MVVM.Views
             if (!ImagePreviewPopup.IsOpen) return;
 
             ImagePreviewPopup.Placement = System.Windows.Controls.Primitives.PlacementMode.Relative;
-            ImagePreviewPopup.HorizontalOffset = e.GetPosition(this).X + 10;
-            ImagePreviewPopup.VerticalOffset = e.GetPosition(this).Y + 10;
+            ImagePreviewPopup.HorizontalOffset = e.GetPosition(this).X;
+            ImagePreviewPopup.VerticalOffset = e.GetPosition(this).Y;
         }
 
         private void SideClickDown(object sender, MouseButtonEventArgs e)
