@@ -61,7 +61,7 @@
                     <RowDefinition Height="20"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                
+
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="65"/>
                     <ColumnDefinition Width="*"/>
@@ -86,7 +86,7 @@
                             HorizontalAlignment="Left"
                             Click="SelectClicked"/>
 
-                
+
                 <Border Grid.ColumnSpan="4" Grid.Column="1" Grid.Row="0"
                             BorderThickness="0" 
                             CornerRadius="4"
@@ -157,8 +157,8 @@
                     </TreeView>
                 </Border>
             </Grid>
-            
-            
+
+
 
             <Label Content="Buildup Settings" 
                 Grid.Column="2"
@@ -209,41 +209,28 @@
                             Style="{StaticResource RoundedComboBoxStyle}"/>
 
 
-                <Border  Grid.Column="1"
-                            Grid.Row="0"
-                            Grid.ColumnSpan="2"
-                            Margin="5,0,0,0"
-                            Height="25"
-                            BorderBrush="Silver"
-                            Background="WhiteSmoke"
-                            BorderThickness="1"
-                            CornerRadius="4">
-                    <TextBox x:Name="BuildupNameTextBox"
-                             VerticalAlignment="Center"
-                             BorderThickness="0"
-                             Background="Transparent"
-                             FontWeight="SemiBold"
-                             TextChanged="BuildupNameTextChanged"
-                             HorizontalAlignment="Stretch"/>
-                </Border>
 
-                <Border  Grid.Column="1"
-                            Grid.Row="1"
-                            Grid.RowSpan="2"
-                            Height="55"
-                            Margin="5,5,0,0"
-                            BorderBrush="Silver"
-                            Background="WhiteSmoke"
-                            BorderThickness="1"
-                            CornerRadius="4">
-                    <TextBox x:Name="DescriptionTextBox"
-                             Text="{Binding BuildupCreationVM.NewBuildupDescription}"
-                             BorderThickness="0"
-                             TextWrapping="Wrap"
-                             Height="50"
-                             Background="Transparent"
-                             HorizontalAlignment="Stretch"/>
-                </Border>
+                <TextBox x:Name="BuildupNameTextBox"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        Height="25"
+                        Margin="5,0,0,0"
+                        d:Text="test name"
+                        Style="{StaticResource TextBoxStyle}"
+                        FontWeight="SemiBold"
+                        TextChanged="BuildupNameTextChanged"/>
+
+                <TextBox x:Name="DescriptionTextBox"
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        Grid.RowSpan="2"
+                        Margin="5,5,0,0"
+                        d:Text="Buildings, infrastructures, and devices for generating, distributing, a!"
+                        Style="{StaticResource TextBoxStyle}"
+                        TextWrapping="Wrap"
+                        Height="55"
+                        Text="{Binding BuildupCreationVM.NewBuildupDescription}"/>
+                
                 <Border  Grid.Column="2"
                          Grid.Row="1"
                          Grid.RowSpan="2"
@@ -275,7 +262,7 @@
                         <Image Source="{Binding BuildupCreationVM.CurrentImage}" Width="500" Height="400"/>
                     </Border>
                 </Popup>
-                
+
             </Grid>
 
 
@@ -364,29 +351,20 @@
                                FontSize="10"/>
 
                     <Button Content="Reduce"
-                        Grid.Column="2"
-                        Grid.Row="1"
-                        Margin="2.5,0,0,0"
-                        Style="{StaticResource ButtonStyle}"
-                        Click="ReduceClicked"/>
+                            Grid.Column="2"
+                            Grid.Row="1"
+                            Margin="2.5,0,0,0"
+                           Style="{StaticResource ButtonStyle}"
+                            Click="ReduceClicked"/>
 
-                    <Border x:Name="RatioBorder"
-                        Grid.Column="1"
-                        Grid.Row="1"
-                        Margin="5,0,2.5,0"
-                        Height="25"
-                        BorderBrush="Silver"
-                        BorderThickness="1"
-                            Background="WhiteSmoke"
-                        CornerRadius="4">
                         <TextBox x:Name="RatioTextBox"
-                            Text="{Binding SubMaterialRatio}"
-                            BorderThickness="0"
-                            VerticalAlignment="Center"
-                            Background="Transparent"
-                            HorizontalAlignment="Stretch"/>
-                    </Border>
-
+                                 Grid.Column="1"
+                                 Grid.Row="1"
+                                 Margin="5,0,2.5,0"
+                                 Height="25"
+                                 Text="{Binding SubMaterialRatio}"
+                                 Style="{StaticResource TextBoxStyle}"/>
+                   
                     <Grid   x:Name="MaterialTabsGrid"
                         Grid.ColumnSpan="3"
                         Grid.Row="4"
@@ -501,11 +479,11 @@
 
                 <TextBlock Grid.Column="1" Grid.Row="1" Text="Total GE: " VerticalAlignment="Center" FontWeight="SemiBold"/>
                 <TextBlock Grid.Column="2" Grid.Row="1" VerticalAlignment="Center"  d:Text="1312.902">
-                        <TextBlock.Text>
-                            <Binding Path="BuildupCreationVM.BuildupGe"/>
-                        </TextBlock.Text>
-                    </TextBlock>
-                
+                    <TextBlock.Text>
+                        <Binding Path="BuildupCreationVM.BuildupGe"/>
+                    </TextBlock.Text>
+                </TextBlock>
+
                 <Border x:Name="PreviewCalculation"
                         BorderBrush="Silver"
                         BorderThickness="1"
@@ -564,10 +542,8 @@
                         Grid.Column="1"
                         Margin="0,0,10,0"/>
             </Grid>
-    
+
         </Grid>
-
-
 
         <Grid x:Name="MessageOverlayGrid"
              Background="Gainsboro"

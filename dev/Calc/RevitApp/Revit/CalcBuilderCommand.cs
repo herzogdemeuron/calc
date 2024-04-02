@@ -21,7 +21,6 @@ namespace Calc.RevitApp.Revit
     [Transaction(TransactionMode.Manual)]
     public class CalcBuilderCommand : IExternalCommand
     {
-        private Directus directusInstance;
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             try
@@ -31,20 +30,16 @@ namespace Calc.RevitApp.Revit
                 UIDocument uidoc = commandData.Application.ActiveUIDocument;
                 Document doc = commandData.Application.ActiveUIDocument.Document;
 
-                Logger.Log("Now authenticating.");
-                Task.Run(() => Authenticate()).Wait();
-                if (directusInstance == null)
-                {
-                    Logger.Log("Failed to get directus.");
-                    return Result.Cancelled;
-                }
-                Logger.Log("Authentication successful.");
+                LoginViewModel loginVM = new LoginViewModel("Calc Builder Login");
+                LoginView loginView = new LoginView(loginVM);
+                loginView.ShowDialog();
 
-                DirectusStore store = new DirectusStore(directusInstance);
+                if (!loginVM.FullyPrepared) return Result.Cancelled;
+
                 BuildupComponentCreator componentCreator = new BuildupComponentCreator(uidoc);
                 RevitImageCreator imageCreator = new RevitImageCreator(doc);
 
-                BuilderViewModel builderViewModel = new BuilderViewModel(store, componentCreator, imageCreator);
+                BuilderViewModel builderViewModel = new BuilderViewModel(loginVM.DirectusStore, componentCreator, imageCreator);
                 BuilderView builderView = new BuilderView(builderViewModel);
 
                 builderView.Show();
@@ -58,11 +53,6 @@ namespace Calc.RevitApp.Revit
             }
         }
 
-        private async Task Authenticate()
-        {
-            var authenticator = new DirectusAuthenticator();
-            directusInstance = await authenticator.ShowLoginWindowAsync().ConfigureAwait(false);
-        }
 
         private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {

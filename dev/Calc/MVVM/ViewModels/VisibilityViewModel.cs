@@ -97,6 +97,17 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
+        private Visibility loginOverlayVisibility;
+        public Visibility LoginOverlayVisibility
+        {
+            get { return loginOverlayVisibility; }
+            set
+            {
+                loginOverlayVisibility = value;
+                OnPropertyChanged(nameof(LoginOverlayVisibility));
+            }
+        }
+
         public VisibilityViewModel()
         {
             HideAllOverlays(false);

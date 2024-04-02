@@ -10,6 +10,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Net;
 using System.IO;
+using System.Linq;
 
 namespace Calc.Core.DirectusAPI
 {
@@ -17,15 +18,15 @@ namespace Calc.Core.DirectusAPI
     {
         public int StatusCode;
         public Dictionary<string, object> Response;
+        private string _token;
         public string Token { get { return _token; } }
+        private string _url;
         public string Url { get { return _url; } }
         public string GraphQlUrl { get { return $"{_url}/graphql"; } }
         public bool Authenticated { get; set; }
         public HttpClient HttpClient;
         public GraphQLHttpClient Client;
         public GraphQLHttpClient SystemClient { get; private set; }
-        private string _token;
-        private string _url;
         private string _refreshToken;
 
         public Directus()
@@ -33,29 +34,24 @@ namespace Calc.Core.DirectusAPI
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
         }
 
-        public async Task Authenticate(string url, string email, string password)
+        public async Task<string> Authenticate(string url, string email, string password)
         {
-            // if any of the inputs is null, set Authenticated to false and return
-            if (url == null || email == null || password == null)
+            if ( string.IsNullOrEmpty(url) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password) )
             {
                 this.Authenticated = false;
-                Debug.WriteLine("Authentication aborted, one or more of the inputs is null");
-                return;
+                return "Please provide complete details.";
             }
 
-            // check if url is valid URI
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
             {
                 this.Authenticated = false;
-                Debug.WriteLine("Authentication aborted, url is not a valid URI");
-                return;
+                return "Invalid URL.";
             }
 
             this._url = url;
 
             string requestBody = $"{{\"email\": \"{email}\", \"password\": \"{password}\"}}";
             HttpContent content = new StringContent(requestBody, Encoding.UTF8, "application/json");
-
             HttpClient httpClient = new();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -67,16 +63,19 @@ namespace Calc.Core.DirectusAPI
             catch (Exception e)
             {
                 this.Authenticated = false;
-                Debug.WriteLine($"Authentication aborted, error: {e.Message}");
-                return;
+                return e.Message;
             }
 
             var responseContent = await response.Content.ReadAsStringAsync();
-            Debug.WriteLine($"Authentication response: {responseContent}");
-            // Deserialize the response content into the custom class
-            var responseData = JsonConvert.DeserializeObject<Dictionary<string, LoginResponseData>>(responseContent);
 
-            // Access the content of the 'data' field
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorResponse = JsonConvert.DeserializeObject <Dictionary<string, List<LoginErrorResponse>>>(responseContent);
+                this.Authenticated = false;
+                return errorResponse.Values.FirstOrDefault()?.FirstOrDefault()?.Message ?? "Authentication failed";
+            }
+
+            var responseData = JsonConvert.DeserializeObject<Dictionary<string, LoginResponseData>>(responseContent);
             LoginResponseData data = responseData["data"];
 
             this._token = data.Access_token;
@@ -87,11 +86,13 @@ namespace Calc.Core.DirectusAPI
                 this.Authenticated = true;
                 Debug.WriteLine("Authentication successful");
                 ConfigureHttpClient();
+                return null;
             }
             else
             {
                 this.Authenticated = false;
                 Debug.WriteLine("Authentication failed");
+                return "Authentication failed";
             }
         }
 
@@ -159,6 +160,11 @@ namespace Calc.Core.DirectusAPI
         public string Access_token { get; set; }
         public int Expires { get; set; }
         public string Refresh_token { get; set; }
+    }
+
+    internal class LoginErrorResponse
+    {
+        public string Message { get; set; }
     }
 
     internal class DirectusFileUploadResponse

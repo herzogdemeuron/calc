@@ -18,6 +18,9 @@ namespace Calc.Core
 {
     public class DirectusStore
     {
+        public event EventHandler<int> ProgressChanged;
+
+        public bool AllDataLoaded { get; private set; } = false;
         public List<Unit> UnitsAll { get; set; }
         public List<MaterialFunction> MaterialFunctionsAll { get; set; }
         public List<Project> ProjectsAll { get { return this.ProjectDriver?.GotManyItems; } }
@@ -149,6 +152,7 @@ namespace Calc.Core
             MaterialFunctionsAll = Enum.GetValues(typeof(MaterialFunction)).Cast<MaterialFunction>().ToList();
         }
 
+
         public async Task<bool> GetProjects()
         {
             try
@@ -188,6 +192,7 @@ namespace Calc.Core
                     this.ForestManager.GetMany<ForestStorageDriver>(this.ForestDriver));
 
                 LinkFields();
+                AllDataLoaded = true;
                 return true;
             }
             catch (Exception e)
@@ -202,22 +207,29 @@ namespace Calc.Core
             {
                 this.StandardDriver = await _graphqlRetry.ExecuteAsync(() =>
                     this.StandardManager.GetMany<StandardStorageDriver>(this.StandardDriver));
+                OnProgressChanged(20);
 
                 this.MaterialDriver = await _graphqlRetry.ExecuteAsync(() =>
                     this.MaterialManager.GetMany<MaterialStorageDriver>(this.MaterialDriver));
+                OnProgressChanged(40);
 
                 this.BuildupGroupDriver = await _graphqlRetry.ExecuteAsync(() =>
                     this.BuildupGroupManager.GetMany<BuildupGroupStorageDriver>(this.BuildupGroupDriver));
+                OnProgressChanged(60);
 
                 this.BuildupDriver = await _graphqlRetry.ExecuteAsync(() =>
                     this.BuildupManager.GetMany<BuildupStorageDriver>(this.BuildupDriver));
+                OnProgressChanged(80);
 
                 this.FolderDriver = await _graphqlRetry.ExecuteAsync(() =>
                                  this.FolderManager.GetManySystem<FolderStorageDriver>(this.FolderDriver));
+                OnProgressChanged(100);
 
                 LinkFields();
                 SortMaterials();
                 InitStandardSelection();
+
+                AllDataLoaded = true;
                 return true;
             }
             catch (Exception e)
@@ -469,6 +481,10 @@ namespace Calc.Core
             string folderId = FolderDriver.GetFolderId("calc_buildup_images");
 
             return await Directus.UploadImageAsync(imagePath, folderId, newFileName);
+        }
+        protected virtual void OnProgressChanged(int progress)
+        {
+            ProgressChanged?.Invoke(this, progress);
         }
     }
 }
