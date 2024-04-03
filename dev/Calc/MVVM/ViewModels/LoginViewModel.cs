@@ -1,5 +1,6 @@
 ﻿using Calc.Core;
 using Calc.Core.DirectusAPI;
+using System;
 using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,6 +18,17 @@ namespace Calc.MVVM.ViewModels
         public string Password { get; set; }
         private readonly CancellationTokenSource cTokenSource = new CancellationTokenSource();
         public bool FullyPrepared => DirectusInstance.Authenticated && DirectusStore.AllDataLoaded;
+
+        private bool isNotSending = true;
+        public bool IsNotSending
+        {
+            get => isNotSending;
+            set
+            {
+                isNotSending = value;
+                OnPropertyChanged(nameof(IsNotSending));
+            }
+        }
 
         private Visibility loginVisibility = Visibility.Visible;
         public Visibility LoginVisibility
@@ -96,20 +108,33 @@ namespace Calc.MVVM.ViewModels
 
         public async Task<bool> AuthenticateAndLoad()
         {
-            Message = await DirectusInstance.Authenticate(Url, Email, Password);
-            if (!DirectusInstance.Authenticated) return false;
+            try
+            {
+                IsNotSending = false;
+                await DirectusInstance.Authenticate(Url, Email, Password);
+                if (!DirectusInstance.Authenticated) return false;
 
-            Properties.Settings.Default.Config1 = Url;
-            Properties.Settings.Default.Config2 = Email;
-            Properties.Settings.Default.Config3 = Password;
-            Properties.Settings.Default.Save();
+                Properties.Settings.Default.Config1 = Url;
+                Properties.Settings.Default.Config2 = Email;
+                Properties.Settings.Default.Config3 = Password;
+                Properties.Settings.Default.Save();
 
-            LoginVisibility = Visibility.Collapsed;
-            LoadVisibility = Visibility.Visible;
+                LoginVisibility = Visibility.Collapsed;
+                LoadVisibility = Visibility.Visible;
 
-            await LoadData();
+                await LoadData();
 
-            return true;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Message = ex.Message;
+                return false;
+            }
+            finally
+            {
+                IsNotSending = true;
+            }
         }
 
         public async Task LoadData()

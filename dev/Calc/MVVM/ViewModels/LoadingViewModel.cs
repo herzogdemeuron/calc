@@ -19,10 +19,6 @@ namespace Calc.MVVM.ViewModels
             store = directusStore;
         }
 
-        public async Task HandleBuilderLoading()
-        {
-            //await store.GetBuilderData();
-        }
         public async Task HandleLoadingProjectsAsync()
         {
             await store.GetProjects();

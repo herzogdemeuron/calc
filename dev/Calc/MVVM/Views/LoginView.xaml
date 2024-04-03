@@ -52,15 +52,18 @@
                     VerticalAlignment="Center">
 
             <Button Content="OK"
-                      Width="60"
+                    Width="60"
                     Margin="0,0,10,0"
-                      Style="{StaticResource ButtonStyle}"
-                      Click="LoginOkClicked"/>
+                    IsEnabled="{Binding IsNotSending}"
+                    Style="{StaticResource ButtonStyle}"
+                    IsDefault="True"
+                    Click="LoginOkClicked"/>
 
             <Button Content="Quit"
-           Width="60"
-           Style="{StaticResource ButtonStyle}"
-           Click="LoginQuitClicked"/>
+                   Width="60"
+                   Style="{StaticResource ButtonStyle}"
+                   IsCancel="True"
+                   Click="LoginQuitClicked"/>
         </StackPanel>
 
         <Label x:Name="MessageLabel"
@@ -100,7 +103,6 @@
                  Grid.Column="2"
                  Grid.Row="0"
                  Height="25"
-                 IsEnabled="False"
                  HorizontalAlignment="Stretch"/>
             
             <Label Content="Email:"

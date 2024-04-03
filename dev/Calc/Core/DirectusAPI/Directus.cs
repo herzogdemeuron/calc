@@ -44,18 +44,18 @@ namespace Calc.Core.DirectusAPI
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
         }
 
-        public async Task<string> Authenticate(string url, string email, string password)
+        public async Task Authenticate(string url, string email, string password)
         {
             if ( string.IsNullOrEmpty(url) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password) )
             {
                 this.Authenticated = false;
-                return "Please provide complete details.";
+                throw new ArgumentException("Invalid input.");
             }
 
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
             {
                 this.Authenticated = false;
-                return "Invalid URL.";
+                throw new ArgumentException("Invalid URL.");
             }
 
             this._url = url;
@@ -65,17 +65,10 @@ namespace Calc.Core.DirectusAPI
             HttpClient httpClient = new();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var response = new HttpResponseMessage();
-            try
-            {
-                response = await _httpRetryPolicy.ExecuteAsync(() =>
-                httpClient.PostAsync($"{this._url}/auth/login", content));
-            }
-            catch (Exception e)
-            {
-                this.Authenticated = false;
-                return e.Message;
-            }
+        
+            var response = await _httpRetryPolicy.ExecuteAsync(() =>
+            httpClient.PostAsync($"{this._url}/auth/login", content));
+            
 
             var responseContent = await response.Content.ReadAsStringAsync();
 
@@ -83,7 +76,8 @@ namespace Calc.Core.DirectusAPI
             {
                 var errorResponse = JsonConvert.DeserializeObject <Dictionary<string, List<LoginErrorResponse>>>(responseContent);
                 this.Authenticated = false;
-                return errorResponse.Values.FirstOrDefault()?.FirstOrDefault()?.Message ?? "Authentication failed";
+                string message = errorResponse.Values.FirstOrDefault()?.FirstOrDefault()?.Message ?? "Authentication failed";
+                throw new ApplicationException(message);
             }
 
             var responseData = JsonConvert.DeserializeObject<Dictionary<string, LoginResponseData>>(responseContent);
@@ -97,13 +91,12 @@ namespace Calc.Core.DirectusAPI
                 this.Authenticated = true;
                 Debug.WriteLine("Authentication successful");
                 ConfigureHttpClient();
-                return null;
             }
             else
             {
                 this.Authenticated = false;
                 Debug.WriteLine("Authentication failed");
-                return "Authentication failed";
+                throw new ApplicationException("Authentication failed");
             }
         }
 
