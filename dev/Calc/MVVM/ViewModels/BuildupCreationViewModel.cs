@@ -16,6 +16,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace Calc.MVVM.ViewModels
@@ -99,6 +100,7 @@ namespace Calc.MVVM.ViewModels
                 if (newBuildupName == value) return;
                 newBuildupName = value;
                 OnPropertyChanged(nameof(NewBuildupName));
+                OnPropertyChanged(nameof(CanSave));
             }
         }
 
@@ -139,7 +141,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(SelectedStandard));
                 UpdateLayerColors();
                 UpdateCalculationComponents();
-
             }
         }
 
@@ -167,6 +168,7 @@ namespace Calc.MVVM.ViewModels
                 if (selectedBuildupGroup == value) return;
                 selectedBuildupGroup = value;
                 OnPropertyChanged(nameof(SelectedBuildupGroup));
+                OnPropertyChanged(nameof(CanSave));
             }
         }
 
@@ -192,6 +194,57 @@ namespace Calc.MVVM.ViewModels
                 if (captureText == value) return;
                 captureText = value;
                 OnPropertyChanged(nameof(CaptureText));
+            }
+        }
+
+        private string saveMessage;
+        public string SaveMessage
+        {
+            get => saveMessage;
+            set
+            {
+                if (saveMessage == value) return;
+                saveMessage = value;
+                OnPropertyChanged(nameof(SaveMessage));
+            }
+        }
+
+        private SolidColorBrush saveMessageColor;
+        public SolidColorBrush SaveMessageColor
+        {
+            get => saveMessageColor;
+            set
+            {
+                if (saveMessageColor == value) return;
+                saveMessageColor = value;
+                OnPropertyChanged(nameof(SaveMessageColor));
+            }
+        }
+
+        public bool CanSave { get => CheckCanSave(); }
+
+        private bool isNotSaving = true;
+        public bool IsNotSaving
+        {
+            get => isNotSaving;
+            set
+            {
+                if (isNotSaving == value) return;
+                isNotSaving = value;
+                OnPropertyChanged(nameof(IsNotSaving));
+                OnPropertyChanged(nameof(CanSave));
+            }
+        }
+
+        private Visibility savingVisibility = Visibility.Collapsed;
+        public Visibility SavingVisibility
+        {
+            get => savingVisibility;
+            set
+            {
+                if (savingVisibility == value) return;
+                savingVisibility = value;
+                OnPropertyChanged(nameof(SavingVisibility));
             }
         }
 
@@ -374,6 +427,7 @@ namespace Calc.MVVM.ViewModels
             OnPropertyChanged(nameof(AllCalculationComponents));
             OnPropertyChanged(nameof(BuildupGwp));
             OnPropertyChanged(nameof(BuildupGe));
+            OnPropertyChanged(nameof(CanSave));
         }
 
 
@@ -401,19 +455,51 @@ namespace Calc.MVVM.ViewModels
                 BuildupUnit = (Unit)SelectedBuildupUnit,
                 CalculationComponents = AllCalculationComponents,
                 BuildupGwp = BuildupGwp??0,
-                BuildupGe = BuildupGe??0,
-                Image = imageUuid
+                BuildupGe = BuildupGe??0
             };
+
+            if (!string.IsNullOrEmpty(imageUuid))
+            {
+                buildup.Image = imageUuid;
+            }
+
             return buildup;
         }
 
         public async Task<bool> HandleSaveBuildup()
         {
-            string imageUuid = await store.UploadImageAsync(currentImagePath, NewBuildupName); // todo: make this more robust
-            var buildup = CreateBuildup(imageUuid);
-            bool response = await store.SaveSingleBuildup(buildup);
-            return response;
+            IsNotSaving = false;
+            SavingVisibility = Visibility.Visible;
+            SaveMessage = "";
 
+            try
+            {
+                string imageUuid = await store.UploadImageAsync(currentImagePath, NewBuildupName); // todo: make this more robust
+                var buildup = CreateBuildup(imageUuid);
+                await store.SaveSingleBuildup(buildup);
+            }
+            catch (Exception ex)
+            {
+                SaveMessage = $"{ex.Message}";
+                SaveMessageColor = Brushes.Crimson;
+                SavingVisibility = Visibility.Collapsed;
+                IsNotSaving = true;
+                return false;
+            }
+
+
+            SaveMessage = "New Buildup saved.";
+            SaveMessageColor = Brushes.ForestGreen;
+            SavingVisibility = Visibility.Collapsed;
+            IsNotSaving = true;
+
+            return true;
+
+        }
+
+        private bool CheckCanSave()
+        {
+            return !string.IsNullOrEmpty(NewBuildupName) && SelectedBuildupGroup != null && AllCalculationComponents.Count > 0 && IsNotSaving;
         }
 
         public void MoveBuildupComponent(int oldIndex, int newIndex)

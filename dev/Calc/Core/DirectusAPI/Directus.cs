@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Net;
 using System.IO;
 using System.Linq;
+using Polly;
 
 namespace Calc.Core.DirectusAPI
 {
@@ -28,6 +29,15 @@ namespace Calc.Core.DirectusAPI
         public GraphQLHttpClient Client;
         public GraphQLHttpClient SystemClient { get; private set; }
         private string _refreshToken;
+
+        private readonly IAsyncPolicy<HttpResponseMessage> _httpRetryPolicy =
+                        Policy.HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode) 
+                              .Or<HttpRequestException>()
+                              .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                                onRetry: (outcome, timespan, retryAttempt, context) =>
+                                {
+                                    Console.WriteLine($"Retry {retryAttempt} due to {outcome.Exception?.Message ?? "HTTP " + outcome.Result.StatusCode}");
+                                });
 
         public Directus()
         {
@@ -58,7 +68,8 @@ namespace Calc.Core.DirectusAPI
             var response = new HttpResponseMessage();
             try
             {
-                response = await httpClient.PostAsync($"{this._url}/auth/login", content);
+                response = await _httpRetryPolicy.ExecuteAsync(() =>
+                httpClient.PostAsync($"{this._url}/auth/login", content));
             }
             catch (Exception e)
             {
@@ -142,7 +153,9 @@ namespace Calc.Core.DirectusAPI
             content.Add(imageContent, "file", Path.GetFileName(imagePath));
 
             // Send the request to the Directus file upload endpoint
-            var response = await this.HttpClient.PostAsync($"{this.Url}/files", content);
+            HttpResponseMessage response = await _httpRetryPolicy.ExecuteAsync(() =>
+            this.HttpClient.PostAsync($"{this.Url}/files", content));
+
             if (!response.IsSuccessStatusCode)
             {
                 var errorResponse = await response.Content.ReadAsStringAsync();

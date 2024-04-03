@@ -539,8 +539,24 @@
                 <Button Content="Save Buildup"
                         Click="SaveBuildupClicked"
                         Style="{StaticResource ButtonStyle}"
+                        IsEnabled="{Binding BuildupCreationVM.CanSave}"
                         Grid.Column="1"
                         Margin="0,0,10,0"/>
+                <Image gif:ImageBehavior.AnimatedSource="/CalcMVVM;component/Resources/DT_logo.gif"
+                       Visibility="{Binding BuildupCreationVM.SavingVisibility}"
+                       HorizontalAlignment="Right"
+                       Margin="0,0,10,0"
+                       Width="30"
+                       Height="30"/>
+
+                <Label x:Name="SaveMessageLabel"
+                       Content="{Binding BuildupCreationVM.SaveMessage}"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
+                       d:Content="Saved"
+                       FontWeight="SemiBold"
+                       Foreground="{Binding BuildupCreationVM.SaveMessageColor}"/>
+
             </Grid>
 
         </Grid>

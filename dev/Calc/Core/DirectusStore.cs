@@ -110,14 +110,10 @@ namespace Calc.Core
         private FolderStorageDriver FolderDriver { get; set; }
 
         private readonly Polly.Retry.AsyncRetryPolicy _graphqlRetry = Policy.Handle<GraphQLHttpRequestException>()
-                .WaitAndRetryAsync(4, retryAttempt => TimeSpan.FromSeconds(5),
+                .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(5),
                 (exception, timeSpan, retryCount, context) =>
                 {
-
-                    if (retryCount == 4)
-                    {
-                        Environment.Exit(1);
-                    }
+                    Console.WriteLine($"Retry {retryCount} for {exception.Message}");
                 });
 
         public DirectusStore(Directus directus)
@@ -439,7 +435,7 @@ namespace Calc.Core
             }
         }
 
-        public async Task<bool> SaveSingleBuildup(Buildup buildup)
+        public async Task SaveSingleBuildup(Buildup buildup)
         {
             this.BuildupDriver.SendItem = buildup;
 
@@ -447,11 +443,9 @@ namespace Calc.Core
             {
                 await _graphqlRetry.ExecuteAsync(() =>
                                        this.BuildupManager.CreateSingle<BuildupStorageDriver>(this.BuildupDriver));
-                return true;
             }
             catch (Exception e)
             {
-                return false;
                 throw e;
             }
         }
@@ -489,6 +483,11 @@ namespace Calc.Core
             if (Directus.Authenticated == false)
             {
                 throw new Exception("DirectusStore: Directus not authenticated");
+            }
+
+            if (string.IsNullOrEmpty(imagePath))
+            {
+                return null;
             }
 
             string folderId = FolderDriver.GetFolderId("calc_buildup_images");
