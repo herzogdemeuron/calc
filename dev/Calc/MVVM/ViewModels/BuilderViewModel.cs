@@ -26,9 +26,8 @@ namespace Calc.MVVM.ViewModels
             BuildupCreationVM = new BuildupCreationViewModel(Store, builupComponentCreator, imageSnapshotCreator);
         }
 
-        public async Task HandleWindowLoadedAsync()
+        public void HandleWindowLoaded()
         {
-            await LoadingVM.HandleBuilderLoading();
             BuildupCreationVM.HandleLoaded();
         }
 
@@ -69,7 +68,6 @@ namespace Calc.MVVM.ViewModels
         public void HandleComponentSelectionChanged(ICalcComponent selectedCompo)
         {
             BuildupCreationVM.HandleComponentSelectionChanged(selectedCompo);
-            //NodeTreeVM.HandleNodeItemSelectionChanged(selectedBranch);
         }
 
         public void HandleSideClicked()

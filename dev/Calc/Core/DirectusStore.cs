@@ -13,6 +13,7 @@ using Calc.Core.Objects.Mappings;
 using Calc.Core.Objects.Results;
 using Calc.Core.Objects.Materials;
 using System.Collections.ObjectModel;
+using System.Threading;
 
 namespace Calc.Core
 {
@@ -201,41 +202,53 @@ namespace Calc.Core
             }
         }
 
-        public async Task<bool> GetBuilderData()
+        public async Task<bool> GetBuilderData(CancellationToken cancellationToken)
         {
             try
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 this.StandardDriver = await _graphqlRetry.ExecuteAsync(() =>
                     this.StandardManager.GetMany<StandardStorageDriver>(this.StandardDriver));
                 OnProgressChanged(20);
 
+                cancellationToken.ThrowIfCancellationRequested();
                 this.MaterialDriver = await _graphqlRetry.ExecuteAsync(() =>
                     this.MaterialManager.GetMany<MaterialStorageDriver>(this.MaterialDriver));
                 OnProgressChanged(40);
 
+                cancellationToken.ThrowIfCancellationRequested();
                 this.BuildupGroupDriver = await _graphqlRetry.ExecuteAsync(() =>
                     this.BuildupGroupManager.GetMany<BuildupGroupStorageDriver>(this.BuildupGroupDriver));
                 OnProgressChanged(60);
 
+                cancellationToken.ThrowIfCancellationRequested();
                 this.BuildupDriver = await _graphqlRetry.ExecuteAsync(() =>
                     this.BuildupManager.GetMany<BuildupStorageDriver>(this.BuildupDriver));
                 OnProgressChanged(80);
 
+                cancellationToken.ThrowIfCancellationRequested();
                 this.FolderDriver = await _graphqlRetry.ExecuteAsync(() =>
                                  this.FolderManager.GetManySystem<FolderStorageDriver>(this.FolderDriver));
-                OnProgressChanged(100);
+                OnProgressChanged(90);
 
+                cancellationToken.ThrowIfCancellationRequested();
                 LinkFields();
                 SortMaterials();
                 InitStandardSelection();
+                OnProgressChanged(100);
 
                 AllDataLoaded = true;
                 return true;
+            }
+            catch (OperationCanceledException e)
+            {
+                return false;
             }
             catch (Exception e)
             {
                 throw e;
             }
+      
         }
 
         /// <summary>

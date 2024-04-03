@@ -58,9 +58,9 @@ namespace Calc.MVVM.Views
             }
         }
 
-        private async void WindowLoaded(object sender, RoutedEventArgs e)
+        private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            await BuilderVM.HandleWindowLoadedAsync();
+            BuilderVM.HandleWindowLoaded();
         }
 
         private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)

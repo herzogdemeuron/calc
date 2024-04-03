@@ -21,7 +21,7 @@ namespace Calc.MVVM.ViewModels
 
         public async Task HandleBuilderLoading()
         {
-            await store.GetBuilderData();
+            //await store.GetBuilderData();
         }
         public async Task HandleLoadingProjectsAsync()
         {

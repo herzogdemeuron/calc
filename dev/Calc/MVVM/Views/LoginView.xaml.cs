@@ -1,14 +1,6 @@
-﻿using Calc.Core.Objects;
-using Calc.Core.Objects.Buildups;
-using Calc.MVVM.Helpers;
-using Calc.MVVM.Helpers.Mediators;
-using Calc.MVVM.Models;
-using Calc.MVVM.ViewModels;
-using System;
+﻿using Calc.MVVM.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
 
 namespace Calc.MVVM.Views
 {
@@ -24,16 +16,6 @@ namespace Calc.MVVM.Views
             this.PasswordBox.Password = LoginVM.Password;
         }
             
-        private async void WindowLoaded(object sender, RoutedEventArgs e)
-        {
-            //await BuilderVM.HandleWindowLoadedAsync();
-        }
-
-        private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            //BuilderVM.HandleWindowClosing();
-        }
-
         private void PasswordChanged(object sender, RoutedEventArgs e)
         {
           LoginVM.Password = PasswordBox.Password;
@@ -47,6 +29,7 @@ namespace Calc.MVVM.Views
 
         private void LoginQuitClicked(object sender, RoutedEventArgs e)
         {
+            LoginVM.CancelLoad();
             this.Close();
         }
 

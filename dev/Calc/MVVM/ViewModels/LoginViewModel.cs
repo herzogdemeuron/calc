@@ -1,6 +1,7 @@
 ﻿using Calc.Core;
 using Calc.Core.DirectusAPI;
 using System.ComponentModel;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -14,7 +15,7 @@ namespace Calc.MVVM.ViewModels
         public DirectusStore DirectusStore { get; set; }
         public string Title { get; set; }
         public string Password { get; set; }
-
+        private readonly CancellationTokenSource cTokenSource = new CancellationTokenSource();
         public bool FullyPrepared => DirectusInstance.Authenticated && DirectusStore.AllDataLoaded;
 
         private Visibility loginVisibility = Visibility.Visible;
@@ -121,7 +122,12 @@ namespace Calc.MVVM.ViewModels
                     ProgressValue = p;
                 });
             };
-            await DirectusStore.GetBuilderData();
+            await DirectusStore.GetBuilderData(cTokenSource.Token);
+        }
+
+        public void CancelLoad()
+        {
+            cTokenSource.Cancel();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

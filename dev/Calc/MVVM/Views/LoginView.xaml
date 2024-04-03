@@ -7,8 +7,6 @@
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:views="clr-namespace:Calc.MVVM.Views"
         d:DataContext="{d:DesignInstance Type=local:LoginViewModel}"
-        Loaded="WindowLoaded"
-        Closing="WindowClosing"
         mc:Ignorable="d"
         Height="240"
         Width="350"
