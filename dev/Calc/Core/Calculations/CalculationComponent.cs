@@ -31,7 +31,7 @@ namespace Calc.Core.Calculations
         [JsonProperty("cost")]
         public double? Cost { get; set; }
 
-        [JsonProperty("calc_builder_materials_id")]
+        [JsonProperty("calc_materials_id")]
         public Material Material { get; set; }
         public HslColor HslColor { get; set; }
         public bool HasError { get; set; }

@@ -320,6 +320,13 @@
                         <ComboBox.GroupStyle>
                             <StaticResource ResourceKey="ComboBoxGroupStyle"/>
                         </ComboBox.GroupStyle>
+                        <ComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel 
+                                    IsVirtualizing ="True"
+                                    VirtualizationMode="Recycling"/>
+                            </ItemsPanelTemplate>
+                        </ComboBox.ItemsPanel>
                     </views:SearchComboBox>
 
                     <views:SearchComboBox Tag="2"

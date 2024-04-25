@@ -95,7 +95,7 @@ namespace Calc.Core.Calculations
                 MaterialName = material.Name,
                 MaterialSource = material.Standard.Name,
                 //MaterialSourceCode = material.SourceCode,
-                MaterialCategory = material.Category,
+                MaterialCategory = material.MaterialType,
                 MaterialGwp = material.Gwp??0,
                 MaterialUnit = component.Material.MaterialUnit,
                 MaterialAmount = component.Amount??0,

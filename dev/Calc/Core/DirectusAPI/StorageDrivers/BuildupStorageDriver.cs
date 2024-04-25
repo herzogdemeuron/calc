@@ -15,7 +15,7 @@ namespace Calc.Core.DirectusAPI.Drivers
         public Buildup SendItem { get; set; }
         public string QueryGetMany { get; } = @"
             query GetBuildups {
-                calc_builder_buildups {
+                calc_buildups {
                     id
                     name
                     standard {
@@ -32,7 +32,7 @@ namespace Calc.Core.DirectusAPI.Drivers
                         amount
                         gwp
                         ge
-                        calc_builder_materials_id {
+                        calc_materials_id {
                             id
                         }           
                     }
@@ -43,8 +43,8 @@ namespace Calc.Core.DirectusAPI.Drivers
 
         // this is a sample query, should be adjusted
         public string QueryCreateSingle { get; } = @"
-            mutation CreateBuildup($input: create_calc_builder_buildups_input!) {
-              create_calc_builder_buildups_item(data: $input) {
+            mutation CreateBuildup($input: create_calc_buildups_input!) {
+              create_calc_buildups_item(data: $input) {
                 id
               }
             }";
@@ -52,18 +52,18 @@ namespace Calc.Core.DirectusAPI.Drivers
 
         // this is a sample query, should be adjusted
         public string QueryUpdateSingle { get; } = @"
-            mutation UpdateBuildup($id: ID!, $input: update_calc_builder_buildups_input!) {
-              update_calc_builder_buildups_item(id: $id, data: $input) {
+            mutation UpdateBuildup($id: ID!, $input: update_calc_buildups_input!) {
+              update_calc_buildups_item(id: $id, data: $input) {
                 id
               }
             }";
 
 
-        [JsonProperty("calc_builder_buildups")]
+        [JsonProperty("calc_buildups")]
         public List<Buildup> GotManyItems { get; set; }
-        [JsonProperty("create_calc_builder_buildups_item")]
+        [JsonProperty("create_calc_buildups_item")]
         public Buildup CreatedItem { get; set; }
-        [JsonProperty("update_calc_builder_buildups_item")]
+        [JsonProperty("update_calc_buildups_item")]
         public Buildup UpdatedItem { get; set; }
 
         public void LinkMaterials(List<Material> materials)
@@ -118,7 +118,7 @@ namespace Calc.Core.DirectusAPI.Drivers
                     amount = cc.Amount ?? 0,
                     gwp = cc.Gwp ?? 0,
                     ge = cc.Ge ?? 0,
-                    calc_builder_materials_id = new { id = cc.Material.Id}
+                    calc_materials_id = new { id = cc.Material.Id}
                 }).ToArray(),
                 buildup_gwp = SendItem.BuildupGwp,
                 buildup_ge = SendItem.BuildupGe

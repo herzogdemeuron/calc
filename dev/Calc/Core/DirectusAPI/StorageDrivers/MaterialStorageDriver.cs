@@ -12,19 +12,20 @@ namespace Calc.Core.DirectusAPI.Drivers
     {
         public string QueryGetMany { get; } = @"
             query GetMaterials {
-                calc_builder_materials {
+                calc_materials(limit: 5000) {
                     id
                     name
-                    material_category
+                    material_type
+                    product_type
+                    product_type
                     standard {
                         id
                     }
                     thickness
-                    valid_from
-                    valid_until
+                    updated
                     material_unit
-                    gwp
-                    ge
+                    carbon_a1a3
+                    grey_energy_fabrication_total
                     cost
                     description
                 }
@@ -38,7 +39,7 @@ namespace Calc.Core.DirectusAPI.Drivers
             }
         }
 
-        [JsonProperty("calc_builder_materials")]
+        [JsonProperty("calc_materials")]
         public List<Material> GotManyItems { get; set; }
 
         public Dictionary<string, object> GetVariables()

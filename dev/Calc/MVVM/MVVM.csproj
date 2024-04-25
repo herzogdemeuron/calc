@@ -16,6 +16,7 @@
     <None Remove="Views\LoginView.xaml" />
     <None Remove="Views\MainView.xaml" />
     <None Remove="Views\MainViewResources.xaml" />
+    <None Remove="Views\MaterialSelectionView.xaml" />
     <None Remove="Views\ToggleButtonResource.xaml" />
   </ItemGroup>
 
@@ -25,6 +26,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Include="Views\MaterialSelectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\LoginView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

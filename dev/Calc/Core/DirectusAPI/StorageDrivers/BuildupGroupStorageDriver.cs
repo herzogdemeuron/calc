@@ -13,14 +13,14 @@ namespace Calc.Core.DirectusAPI.Drivers
     {
         public string QueryGetMany { get; } = @"
             query GetBuildupGroups {
-                calc_groups {
+                calc_buildup_groups {
                     id
-                    group_name
+                    name
                 }
             }";
 
 
-        [JsonProperty("calc_groups")]
+        [JsonProperty("calc_buildup_groups")]
         public List<BuildupGroup> GotManyItems { get; set; }
 
         public Dictionary<string, object> GetVariables()

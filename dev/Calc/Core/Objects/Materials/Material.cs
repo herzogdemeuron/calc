@@ -13,8 +13,10 @@ namespace Calc.Core.Objects.Materials
         public string Name { get; set; }
         [JsonProperty("standard")]
         public LcaStandard Standard { get; set; }
-        [JsonProperty("material_category")]
-        public string Category { get; set; }
+        [JsonProperty("material_type")]
+        public string MaterialType { get; set; }
+        [JsonProperty("product_type")]
+        public string ProductType { get; set; }
         [JsonProperty("thickness")]
         public double? Thickness { get; set; }
 
@@ -24,14 +26,12 @@ namespace Calc.Core.Objects.Materials
 
         [JsonProperty("material_unit")]
         public Unit MaterialUnit { get; set; }
-        [JsonProperty("valid_from")]
-        public int? ValidFrom { get; set; }
-        [JsonProperty("valid_until")]
-        public int? ValidUntil { get; set; }
-        [JsonProperty("gwp")]
+        [JsonProperty("updated")]
+        public string? Updated { get; set; }
+        [JsonProperty("carbon_a1a3")]
         public double? Gwp { get; set; }
 
-        [JsonProperty("ge")]
+        [JsonProperty("grey_energy_fabrication_total")]
         public double? Ge { get; set; }
 
         [JsonProperty("cost")]
@@ -40,7 +40,7 @@ namespace Calc.Core.Objects.Materials
         [JsonProperty("description")]
         public string Description { get; set; }
 
-        public string GroupName => Category;
+        public string GroupName => MaterialType;
         //public string SourceCode { get; set; }
 
         public void LinkStandard(List<LcaStandard> standards)
@@ -53,7 +53,7 @@ namespace Calc.Core.Objects.Materials
 
         public override string ToString()
         {
-            return $"Material Id: {Id}, Material Name: {Name}, Category: {Category}";
+            return $"Material Id: {Id}, Material Name: {Name}, Material Type: {MaterialType}";
         }
     }
 
