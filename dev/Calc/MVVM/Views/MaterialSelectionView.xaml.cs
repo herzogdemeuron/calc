@@ -17,6 +17,15 @@ namespace Calc.MVVM.Views
             InitializeComponent();
         }
 
-           
+        private void OKClicked(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = true;
+            this.Close();
+        }
+
+        private void CancelClicked(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

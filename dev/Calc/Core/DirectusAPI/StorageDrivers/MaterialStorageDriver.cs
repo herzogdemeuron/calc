@@ -27,7 +27,6 @@ namespace Calc.Core.DirectusAPI.Drivers
                     carbon_a1a3
                     grey_energy_fabrication_total
                     cost
-                    description
                 }
             }";
 

@@ -18,7 +18,6 @@ namespace Calc.MVVM.Views
         private readonly BuilderViewModel BuilderVM;
         private Point _lastMouseDown;
         private object _draggedItem;
-        private readonly MaterialSelectionView materialSelectionView;
 
         public BuilderView(BuilderViewModel bvm)
         {
@@ -26,8 +25,6 @@ namespace Calc.MVVM.Views
             this.DataContext = BuilderVM;
             InitializeComponent();
             MediatorToView.Register("ViewDeselectTreeView", _=>DeselectTreeView());
-            materialSelectionView = new MaterialSelectionView(BuilderVM.MaterialSelectionVM);
-            materialSelectionView.Owner = this;
         }
 
         private void SelectClicked(object sender, RoutedEventArgs e)
@@ -95,6 +92,8 @@ namespace Calc.MVVM.Views
             bool setMain = tag == "Main";
 
             BuilderVM.HandleSelectingMaterial(setMain);
+
+            var materialSelectionView = new MaterialSelectionView(BuilderVM.MaterialSelectionVM);
 
             var result = materialSelectionView.ShowDialog();
             if(result == true)

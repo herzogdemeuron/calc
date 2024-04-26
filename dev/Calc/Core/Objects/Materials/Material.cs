@@ -37,9 +37,6 @@ namespace Calc.Core.Objects.Materials
         [JsonProperty("cost")]
         public double? Cost { get; set; }
 
-        [JsonProperty("description")]
-        public string Description { get; set; }
-
         public string GroupName => MaterialType;
         //public string SourceCode { get; set; }
 
