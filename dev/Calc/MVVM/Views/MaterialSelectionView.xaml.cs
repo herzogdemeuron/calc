@@ -1,4 +1,5 @@
-﻿using Calc.MVVM.ViewModels;
+﻿using Calc.Core.Objects.Materials;
+using Calc.MVVM.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -6,29 +7,16 @@ namespace Calc.MVVM.Views
 {
     public partial class MaterialSelectionView : Window
     {
-        private readonly LoginViewModel LoginVM;
+        private readonly MaterialSelectionViewModel MaterialSelectionVM;
+        public Material SelectedMaterial { get => MaterialSelectionVM.SelectedMaterial; }
 
-        public MaterialSelectionView(LoginViewModel viewModel)
+        public MaterialSelectionView(MaterialSelectionViewModel materialSelectionVM)
         {
-            this.LoginVM = viewModel;
-            this.DataContext = LoginVM;
+            this.MaterialSelectionVM = materialSelectionVM;
+            this.DataContext = MaterialSelectionVM;
             InitializeComponent();
         }
-            
 
-        private async void LoginOkClicked(object sender, RoutedEventArgs e)
-        {
-            bool directusAuth = await LoginVM.AuthenticateAndLoad();
-            if (directusAuth) this.Close();
-        }
-
-        private void LoginQuitClicked(object sender, RoutedEventArgs e)
-        {
-            LoginVM.CancelLoad();
-            this.Close();
-        }
-
-
-
+           
     }
 }

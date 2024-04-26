@@ -3,11 +3,13 @@ using Calc.Core.Interfaces;
 using Calc.Core.Objects;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.GraphNodes;
+using Calc.Core.Objects.Materials;
 using Calc.MVVM.Helpers.Mediators;
 using Calc.MVVM.Models;
 using System.ComponentModel;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using System.Windows.Media.Media3D;
 
 namespace Calc.MVVM.ViewModels
 {
@@ -17,12 +19,14 @@ namespace Calc.MVVM.ViewModels
         public BuildupCreationViewModel BuildupCreationVM { get; set; }
         public LoadingViewModel LoadingVM { get; set; }
         public VisibilityViewModel VisibilityVM { get; set; }
+        public MaterialSelectionViewModel MaterialSelectionVM { get; set; }
 
         public BuilderViewModel(DirectusStore store, IBuildupComponentCreator builupComponentCreator, IImageSnapshotCreator imageSnapshotCreator)
         {
             Store = store;
             VisibilityVM = new VisibilityViewModel();
             LoadingVM = new LoadingViewModel(store);
+            MaterialSelectionVM = new MaterialSelectionViewModel(store);
             BuildupCreationVM = new BuildupCreationViewModel(Store, builupComponentCreator, imageSnapshotCreator);
         }
 
@@ -73,6 +77,20 @@ namespace Calc.MVVM.ViewModels
         public void HandleSideClicked()
         {
             BuildupCreationVM.HandleDeselect();
+        }
+
+        public void HandleSelectingMaterial(bool setMain)
+        {
+            var currentLayer = BuildupCreationVM.CurrentLayerMaterialModel;
+            var material = setMain? currentLayer.MainMaterial : currentLayer.SubMaterial;
+            MaterialSelectionVM.PrepareMaterialSelection(material);
+        }
+
+        public void HandleMaterialSelected(bool setMain)
+        {
+            var material = MaterialSelectionVM.SelectedMaterial;
+            BuildupCreationVM.HandleSetMaterial(setMain, material);
+            MaterialSelectionVM.Reset();
         }
 
         public void HandleReduceMaterial()

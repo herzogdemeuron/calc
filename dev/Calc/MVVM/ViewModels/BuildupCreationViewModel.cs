@@ -76,6 +76,9 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
+        /// <summary>
+        /// Each layer component has a layer material model, which defines the material settings for the layer
+        /// </summary>
         private Dictionary<LayerComponent,  LayerMaterialModel> layerMaterialModels = new Dictionary<LayerComponent, LayerMaterialModel>();
         private LayerMaterialModel InvalidLayerMaterialModel { get => new LayerMaterialModel(); }
         public LayerMaterialModel CurrentLayerMaterialModel
@@ -360,12 +363,30 @@ namespace Calc.MVVM.ViewModels
             OnPropertyChanged(nameof(CurrentColor));
         }
 
+        public void HandleSetMaterial(bool setMain, Material material)
+        {
+            if (setMain)
+            {
+                if (CurrentLayerMaterialModel.MainMaterial == material) return;
+                CurrentLayerMaterialModel.MainMaterial = material;
+            }
+            else
+            {
+                if (CurrentLayerMaterialModel.SubMaterial == material) return;
+                CurrentLayerMaterialModel.SubMaterial = material;
+            }
+            UpdateAmounts();
+        }
+
         public void HandleReduceMaterial()
         {
             CurrentLayerMaterialModel.RemoveMaterial();
             UpdateAmounts();
         }
 
+        /// <summary>
+        /// reload all layer material models, when the standard changes or selected revit elements changed
+        /// </summary>
         private void UpdateLayerMaterialModels()
         {
             layerMaterialModels?.Clear();
@@ -374,7 +395,7 @@ namespace Calc.MVVM.ViewModels
                 foreach (var layer in component.LayerComponents)
                 {
                     var layerMaterialModel = new LayerMaterialModel(layer, CurrentMaterials, MaterialFunctionsAll);
-                    layerMaterialModel.MaterialPropertyChanged += HandleMaterialChanged;
+                    //layerMaterialModel.MaterialPropertyChanged += HandleMaterialChanged;
                     layerMaterialModels.Add(layer, layerMaterialModel);
                 }
             }
@@ -384,7 +405,6 @@ namespace Calc.MVVM.ViewModels
         }
 
         // on material changed
-        
         private void HandleMaterialChanged(object sender, EventArgs e)
         {
             if (sender is LayerMaterialModel changedModel)

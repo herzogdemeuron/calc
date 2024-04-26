@@ -15,7 +15,7 @@ namespace Calc.MVVM.Models
 {
     public class LayerMaterialModel : INotifyPropertyChanged
     {
-        public event EventHandler MaterialPropertyChanged;
+        //public event EventHandler MaterialPropertyChanged;
 
         private readonly LayerComponent layer;
         private readonly ObservableCollection<Material> materialsFromStandard;
@@ -152,7 +152,7 @@ namespace Calc.MVVM.Models
             OnPropertyChanged(nameof(MaterialMatchInfo));
             if (sendEvent)
             {
-                MaterialPropertyChanged?.Invoke(this, EventArgs.Empty);
+                //MaterialPropertyChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 

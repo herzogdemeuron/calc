@@ -1,5 +1,6 @@
 ﻿using Calc.Core.Objects;
 using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Results;
 using Calc.MVVM.Helpers;
 using Calc.MVVM.Helpers.Mediators;
 using Calc.MVVM.Models;
@@ -17,6 +18,7 @@ namespace Calc.MVVM.Views
         private readonly BuilderViewModel BuilderVM;
         private Point _lastMouseDown;
         private object _draggedItem;
+        private readonly MaterialSelectionView materialSelectionView;
 
         public BuilderView(BuilderViewModel bvm)
         {
@@ -24,6 +26,8 @@ namespace Calc.MVVM.Views
             this.DataContext = BuilderVM;
             InitializeComponent();
             MediatorToView.Register("ViewDeselectTreeView", _=>DeselectTreeView());
+            materialSelectionView = new MaterialSelectionView(BuilderVM.MaterialSelectionVM);
+            materialSelectionView.Owner = this;
         }
 
         private void SelectClicked(object sender, RoutedEventArgs e)
@@ -80,9 +84,23 @@ namespace Calc.MVVM.Views
             BuilderVM.HandleAmountClicked(tag);
         }
 
-        private void ReduceClicked(object sender, RoutedEventArgs e)
+        private void ReduceMaterialClicked(object sender, RoutedEventArgs e)
         {
             BuilderVM.HandleReduceMaterial();
+        }
+
+        private void SetMaterialClicked(object sender, RoutedEventArgs e)
+        {
+            string tag = (sender as Button).Tag.ToString();
+            bool setMain = tag == "Main";
+
+            BuilderVM.HandleSelectingMaterial(setMain);
+
+            var result = materialSelectionView.ShowDialog();
+            if(result == true)
+            {
+                BuilderVM.HandleMaterialSelected(setMain);
+            }
         }
 
 
@@ -91,9 +109,9 @@ namespace Calc.MVVM.Views
             BuilderVM.HandleMessageClose();
         }
 
-        private void SaveBuildupClicked(object sender, RoutedEventArgs e)
+        private async void SaveBuildupClicked(object sender, RoutedEventArgs e)
         {
-            BuilderVM.HandleSaveBuildup();
+            await BuilderVM.HandleSaveBuildup();
         }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)

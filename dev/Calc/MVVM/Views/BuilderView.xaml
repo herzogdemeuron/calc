@@ -183,6 +183,7 @@
                 </Grid.ColumnDefinitions>
 
                 <ComboBox   x:Name="StandardComboBox"
+                            IsEnabled="False"
                             Text="Standard"
                             Grid.Row="0"
                             Grid.Column="0"
@@ -307,27 +308,14 @@
                             SelectedItem="{Binding SelectedFunction}"
                             Style="{StaticResource RoundedComboBoxStyle}"/>
 
-                    <views:SearchComboBox Tag="1"
-                      x:Uid="ShowTextNote"
-                      Grid.Column="0"
-                      Grid.Row="0"
-                      Style="{StaticResource RoundedComboBoxStyle}"
-                      ItemsSource="{Binding AllMaterialsView1}"
-                      SelectedItem="{Binding MainMaterial}"
-                      DisplayMemberPath="Name"
-                      HorizontalAlignment="Stretch"
-                      VerticalAlignment="Top">
-                        <ComboBox.GroupStyle>
-                            <StaticResource ResourceKey="ComboBoxGroupStyle"/>
-                        </ComboBox.GroupStyle>
-                        <ComboBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <VirtualizingStackPanel 
-                                    IsVirtualizing ="True"
-                                    VirtualizationMode="Recycling"/>
-                            </ItemsPanelTemplate>
-                        </ComboBox.ItemsPanel>
-                    </views:SearchComboBox>
+                    <Button Content="{Binding MainMaterial.Name}"
+                            Tag="Main"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Top"
+                            Grid.Column="0"
+                            Grid.Row="0"
+                            Style="{StaticResource ButtonStyle}"
+                            Click="SetMaterialClicked"/>
 
                     <views:SearchComboBox Tag="2"
                       x:Uid="ShowTextNote"
@@ -362,7 +350,7 @@
                             Grid.Row="1"
                             Margin="2.5,0,0,0"
                            Style="{StaticResource ButtonStyle}"
-                            Click="ReduceClicked"/>
+                            Click="ReduceMaterialClicked"/>
 
                         <TextBox x:Name="RatioTextBox"
                                  Grid.Column="1"
