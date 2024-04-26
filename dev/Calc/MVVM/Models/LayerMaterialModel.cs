@@ -18,7 +18,6 @@ namespace Calc.MVVM.Models
         //public event EventHandler MaterialPropertyChanged;
 
         private readonly LayerComponent layer;
-        private readonly ObservableCollection<Material> materialsFromStandard;
         public string TargetMaterialName { get => layer.TargetMaterialName; }
         public List<MaterialFunction> MaterialFunctionsAll { get; }
         public bool IsEnabled { get => layer.IsValid; } // for ui to disable selection controls
@@ -80,36 +79,6 @@ namespace Calc.MVVM.Models
             }
         }
 
-        private ICollectionView _allMaterialsView1;
-        public ICollectionView AllMaterialsView1
-        {
-            get
-            {
-                if (materialsFromStandard != null)
-                {
-                    _allMaterialsView1 = CollectionViewSource.GetDefaultView(materialsFromStandard);
-                    var groupDescrip = _allMaterialsView1.GroupDescriptions;
-                    if (groupDescrip.Count == 0) groupDescrip.Add(new PropertyGroupDescription("GroupName"));
-                }
-                return _allMaterialsView1;
-            }
-        }
-
-        private ICollectionView _allMaterialsView2;
-        public ICollectionView AllMaterialsView2
-        {
-            get
-            {
-                if (materialsFromStandard != null)
-                {
-                    _allMaterialsView2 = CollectionViewSource.GetDefaultView(materialsFromStandard);
-                    var groupDescrip = _allMaterialsView2.GroupDescriptions;
-                    if (groupDescrip.Count == 0) groupDescrip.Add(new PropertyGroupDescription("GroupName"));
-                }
-                return _allMaterialsView2;
-            }
-        }
-
         public bool CanAddSecondMaterial
         {
             get
@@ -136,7 +105,6 @@ namespace Calc.MVVM.Models
         public LayerMaterialModel(LayerComponent layercompo, List<Material> allMaterials, List<MaterialFunction> materialFunctionsAll)
         {
             layer = layercompo;
-            materialsFromStandard = new ObservableCollection<Material>(allMaterials);
             MaterialFunctionsAll = materialFunctionsAll;
         }
 

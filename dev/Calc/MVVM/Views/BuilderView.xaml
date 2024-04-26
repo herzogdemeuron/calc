@@ -311,28 +311,19 @@
                     <Button Content="{Binding MainMaterial.Name}"
                             Tag="Main"
                             HorizontalAlignment="Stretch"
-                            VerticalAlignment="Top"
                             Grid.Column="0"
                             Grid.Row="0"
                             Style="{StaticResource ButtonStyle}"
                             Click="SetMaterialClicked"/>
-
-                    <views:SearchComboBox Tag="2"
-                      x:Uid="ShowTextNote"
-                      Grid.Column="0"
-                      Grid.Row="1"
-                      Margin="0,5,0,0"
-                      Style="{StaticResource RoundedComboBoxStyle}"
-                      ItemsSource="{Binding AllMaterialsView2}"
-                      SelectedItem="{Binding SubMaterial}"
-                      DisplayMemberPath="Name"
-                      IsEnabled="{Binding CanAddSecondMaterial}"
-                      HorizontalAlignment="Stretch"
-                      VerticalAlignment="Top">
-                        <ComboBox.GroupStyle>
-                            <StaticResource ResourceKey="ComboBoxGroupStyle"/>
-                        </ComboBox.GroupStyle>
-                    </views:SearchComboBox>
+                    
+                    <Button Content="{Binding SubMaterial.Name}"
+                            Tag="Sub"
+                            HorizontalAlignment="Stretch"
+                            Grid.Column="0"
+                            Grid.Row="1"
+                            Style="{StaticResource ButtonStyle}"
+                            IsEnabled="{Binding CanAddSecondMaterial}"
+                            Click="SetMaterialClicked"/>
 
                     <TextBlock Text="{Binding MaterialMatchInfo}"
                                d:Text="Material units don't match."

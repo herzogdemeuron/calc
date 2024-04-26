@@ -7,7 +7,7 @@ namespace Calc.Core.Objects.Buildups
 {
     public class BuildupGroup
     {
-        [JsonProperty("group_name")]
+        [JsonProperty("name")]
         public string Name { get; set; }
 
         [JsonProperty("id")]
