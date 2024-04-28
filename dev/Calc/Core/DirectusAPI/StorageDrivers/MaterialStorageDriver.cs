@@ -17,10 +17,11 @@ namespace Calc.Core.DirectusAPI.Drivers
                     name
                     material_type
                     product_type
-                    product_type
                     standard {
                         id
                     }
+                    data_source
+                    source_uuid
                     thickness
                     updated
                     material_unit

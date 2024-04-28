@@ -4,12 +4,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Calc.MVVM.ViewModels"
-        xmlns:gif="http://wpfanimatedgif.codeplex.com"
-        xmlns:views="clr-namespace:Calc.MVVM.Views"
         d:DataContext="{d:DesignInstance Type=local:MaterialSelectionViewModel}"
         mc:Ignorable="d"
-        Height="400"
-        Width="500"
+        Height="600"
+        Width="600"
+        MinHeight="400"
+        MinWidth="400"
         WindowStartupLocation="CenterScreen"
         Icon="pack://application:,,,/CalcMVVM;component/Resources/icon-01.png"
         Title="Material Selection"
@@ -28,9 +28,9 @@
         <Grid x:Name="MainGrid">
             <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="10"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -78,7 +78,7 @@
                    FontSize="16"
                    FontWeight="SemiBold"
                    VerticalAlignment="Top"/>
-           
+
 
         <Grid Grid.Column="3"
             Grid.Row="2"
@@ -89,26 +89,23 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <TextBox x:Name="SearchTextBox"
-          Height="25"
-          d:Text="filter"
-          Style="{StaticResource TextBoxStyle}"
-          TextChanged="SearchTextChanged"
-          FontWeight="SemiBold"/>
+                      Height="25"
+                      d:Text="filter"
+                      Style="{StaticResource TextBoxStyle}"
+                      TextChanged="SearchTextChanged"
+                      FontWeight="SemiBold"/>   
             <ListView x:Name="MaterialsListView"
                       Grid.Row="2"
-               ItemsSource="{Binding AllMaterialsView}"
-               SelectedItem="{Binding SelectedMaterial}"
-               Style="{StaticResource ListViewStyle}" 
-               ItemContainerStyle="{StaticResource ListViewItemMaterialStyle}"/>
-
+                       ItemsSource="{Binding AllMaterialsView}"
+                       SelectedItem="{Binding SelectedMaterial}"
+                       Style="{StaticResource ListViewStyle}">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemMaterialStyle}">
+                        <EventSetter Event="MouseDoubleClick" Handler="ListViewItemMaterialDoubleClick" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
         </Grid>
-            
-
-   
-
-   
-
-
 
         <Grid x:Name="ButtonGrid"
               Grid.Column="3"

@@ -350,6 +350,7 @@ namespace Calc.MVVM.ViewModels
 
             CurrentImage = null;
             CaptureText = "📷";
+            saveMessage = "";
         }
 
         /// <summary>
@@ -375,16 +376,11 @@ namespace Calc.MVVM.ViewModels
                 if (CurrentLayerMaterialModel.SubMaterial == material) return;
                 CurrentLayerMaterialModel.SubMaterial = material;
             }
-            UpdateMaterialModelSettings(CurrentLayerMaterialModel);
-            UpdateLayerColors();
-            UpdateCalculationComponents();
-            UpdateAmounts();
         }
 
         public void HandleReduceMaterial()
         {
             CurrentLayerMaterialModel.RemoveMaterial();
-            UpdateAmounts();
         }
 
         /// <summary>
@@ -398,16 +394,15 @@ namespace Calc.MVVM.ViewModels
                 foreach (var layer in component.LayerComponents)
                 {
                     var layerMaterialModel = new LayerMaterialModel(layer, CurrentMaterials, MaterialFunctionsAll);
-                    //layerMaterialModel.MaterialPropertyChanged += HandleMaterialChanged;
+                    layerMaterialModel.MaterialPropertyChanged += HandleMaterialChanged;
                     layerMaterialModels.Add(layer, layerMaterialModel);
                 }
             }
             OnPropertyChanged(nameof(CurrentLayerMaterialModel));
             CurrentLayerMaterialModel.NotifyPropertiesChange();
-            UpdateAmounts();
         }
 
-        // deprecated
+        // the properties change from layer material models should invoke this function to update ui
         private void HandleMaterialChanged(object sender, EventArgs e)
         {
             if (sender is LayerMaterialModel changedModel)
@@ -451,6 +446,7 @@ namespace Calc.MVVM.ViewModels
             OnPropertyChanged(nameof(BuildupGwp));
             OnPropertyChanged(nameof(BuildupGe));
             OnPropertyChanged(nameof(CanSave));
+            SaveMessage = "";
         }
 
 

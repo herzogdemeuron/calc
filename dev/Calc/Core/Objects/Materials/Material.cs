@@ -17,6 +17,10 @@ namespace Calc.Core.Objects.Materials
         public string MaterialType { get; set; }
         [JsonProperty("product_type")]
         public string ProductType { get; set; }
+        [JsonProperty("data_source")]
+        public string DataSource { get; set; }
+        [JsonProperty("source_uuid")]
+        public string SourceUuid { get; set; }
         [JsonProperty("thickness")]
         public double? Thickness { get; set; }
 

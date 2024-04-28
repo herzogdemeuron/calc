@@ -348,6 +348,7 @@
                                  Grid.Row="1"
                                  Margin="5,0,2.5,0"
                                  Height="25"
+                                 KeyDown="RatioTextBoxKeyDown"
                                  Text="{Binding SubMaterialRatio}"
                                  Style="{StaticResource TextBoxStyle}"/>
                    

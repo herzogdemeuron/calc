@@ -34,6 +34,12 @@ namespace Calc.MVVM.Views
             }
         }
 
+        private void ListViewItemMaterialDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            this.DialogResult = true;
+            this.Close();
+        }
+
         private void OKClicked(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;

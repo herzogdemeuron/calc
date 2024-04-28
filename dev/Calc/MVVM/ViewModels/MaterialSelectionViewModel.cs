@@ -40,7 +40,6 @@ namespace Calc.MVVM.ViewModels
             get => selectedMaterialTypeTag;
             set
             {
-                if (value == selectedMaterialTypeTag) return;
                 selectedMaterialTypeTag = value;
                 FilterMaterialsWithType();
                 UpdateDynamicCounts();
@@ -54,7 +53,6 @@ namespace Calc.MVVM.ViewModels
             get => selectedProductTypeTag;
             set
             {
-                if (value == selectedProductTypeTag) return;
                 selectedProductTypeTag = value;
                 FilterMaterialsWithType();
                 UpdateDynamicCounts();
@@ -79,10 +77,11 @@ namespace Calc.MVVM.ViewModels
 
         public void PrepareMaterialSelection(Material material)
         {
+            currentSearchText = "";
             SelectedMaterialTypeTag = null;
             SelectedProductTypeTag = null;
             SelectedMaterial = material;
-
+            // if a material was already selected, find the corresponding tags
             if (SelectedMaterial != null)
             {
                 SelectedMaterialTypeTag = MaterialTypeTags.Find(t => t.Name == SelectedMaterial.MaterialType);

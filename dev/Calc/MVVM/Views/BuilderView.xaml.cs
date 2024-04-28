@@ -81,6 +81,17 @@ namespace Calc.MVVM.Views
             BuilderVM.HandleAmountClicked(tag);
         }
 
+        private void RatioTextBoxKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                // move focus to the next element
+                e.Handled = true;
+                var element = e.OriginalSource as UIElement;
+                element.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+            }
+        }
+
         private void ReduceMaterialClicked(object sender, RoutedEventArgs e)
         {
             BuilderVM.HandleReduceMaterial();

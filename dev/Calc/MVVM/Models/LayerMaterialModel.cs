@@ -1,21 +1,15 @@
-﻿using Calc.Core.Color;
-using Calc.Core.Objects;
+﻿using Calc.Core.Objects;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Materials;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Security.RightsManagement;
-using System.Windows;
-using System.Windows.Data;
-using System.Windows.Media;
 
 namespace Calc.MVVM.Models
 {
     public class LayerMaterialModel : INotifyPropertyChanged
     {
-        //public event EventHandler MaterialPropertyChanged;
+        public event EventHandler MaterialPropertyChanged; // event to invoke ui change of the buildup creatiion vm
 
         private readonly LayerComponent layer;
         public string TargetMaterialName { get => layer.TargetMaterialName; }
@@ -50,6 +44,7 @@ namespace Calc.MVVM.Models
             set
             {
                 layer.SetMainMaterial(value);
+                if(value == null) SubMaterial = null; // remove sub material if main material is removed
                 ActiveMaterial = value;
                 OnPropertyChanged(nameof(MainMaterial));
                 NotifyPropertiesChange();
@@ -113,6 +108,7 @@ namespace Calc.MVVM.Models
             layer = new LayerComponent() { IsValid = false };
         }
 
+        // if property changed due to material learning, the event should not be triggered to prevent deadlock
         public void NotifyPropertiesChange(bool sendEvent = true)
         {
             OnPropertyChanged(nameof(CanAddSecondMaterial));
@@ -120,7 +116,7 @@ namespace Calc.MVVM.Models
             OnPropertyChanged(nameof(MaterialMatchInfo));
             if (sendEvent)
             {
-                //MaterialPropertyChanged?.Invoke(this, EventArgs.Empty);
+                MaterialPropertyChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -183,7 +179,7 @@ namespace Calc.MVVM.Models
 
             this.layer.SetSubMaterialRatio(otherModel.SubMaterialRatio);
             OnPropertyChanged(nameof(SubMaterialRatio));
-
+            // prevent deadlock
             NotifyPropertiesChange(false);
         }
 
