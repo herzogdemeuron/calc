@@ -375,6 +375,9 @@ namespace Calc.MVVM.ViewModels
                 if (CurrentLayerMaterialModel.SubMaterial == material) return;
                 CurrentLayerMaterialModel.SubMaterial = material;
             }
+            UpdateMaterialModelSettings(CurrentLayerMaterialModel);
+            UpdateLayerColors();
+            UpdateCalculationComponents();
             UpdateAmounts();
         }
 
@@ -404,7 +407,7 @@ namespace Calc.MVVM.ViewModels
             UpdateAmounts();
         }
 
-        // on material changed
+        // deprecated
         private void HandleMaterialChanged(object sender, EventArgs e)
         {
             if (sender is LayerMaterialModel changedModel)

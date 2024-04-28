@@ -2,6 +2,7 @@
 using Calc.MVVM.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Calc.MVVM.Views
 {
@@ -15,6 +16,22 @@ namespace Calc.MVVM.Views
             this.MaterialSelectionVM = materialSelectionVM;
             this.DataContext = MaterialSelectionVM;
             InitializeComponent();
+        }
+
+        private void SearchTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var currentText = (sender as TextBox).Text;
+            MaterialSelectionVM.HandleSearchTextChanged(currentText);
+        }
+
+        private void ListViewSelected(object sender, MouseButtonEventArgs e)
+        {
+            var item = (sender as ListView).ContainerFromElement(e.OriginalSource as DependencyObject) as ListViewItem;
+            if (item != null && item.IsSelected)
+            {
+                item.IsSelected = false;
+                e.Handled = true;
+            }
         }
 
         private void OKClicked(object sender, RoutedEventArgs e)

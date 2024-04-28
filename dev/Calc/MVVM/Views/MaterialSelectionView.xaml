@@ -12,15 +12,15 @@
         Width="500"
         WindowStartupLocation="CenterScreen"
         Icon="pack://application:,,,/CalcMVVM;component/Resources/icon-01.png"
-        Title="CALC"
+        Title="Material Selection"
         Topmost="True">
 
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="MainViewResources.xaml"/>
-                <ResourceDictionary Source="ToggleButtonResource.xaml"/>
                 <ResourceDictionary Source="ButtonResource.xaml"/>
+                <ResourceDictionary Source="ListViewResource.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -51,27 +51,16 @@
         <ListView x:Name="ProductTypeTags"
                   Grid.Column="1"
                   Grid.Row="2"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch"
+                  PreviewMouseLeftButtonDown="ListViewSelected"
                   ItemsSource="{Binding ProductTypeTags}"
                   SelectedItem="{Binding SelectedProductTypeTag}"
-                  SelectionMode="Single"
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                  ScrollViewer.VerticalScrollBarVisibility="Auto">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Name}" HorizontalAlignment="Left"/>
-                        <TextBlock Text="{Binding DynamicCount}" HorizontalAlignment="Right"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                  Style="{StaticResource ListViewStyle}" 
+                  ItemContainerStyle="{StaticResource ListViewItemTagStyle}"/>
 
         <Label Content="Material Type"
              Grid.Column="1"
              Grid.Row="3"
-               Padding="0"
+             Padding="0"
              HorizontalAlignment="Left"
              VerticalAlignment="Top"
              FontSize="27"
@@ -79,52 +68,31 @@
         <ListView x:Name="MaterialTypeTags"
                Grid.Column="1"
                Grid.Row="4"
-               HorizontalAlignment="Stretch"
-               VerticalAlignment="Stretch"
+               PreviewMouseLeftButtonDown="ListViewSelected"
                ItemsSource="{Binding MaterialTypeTags}"
                SelectedItem="{Binding SelectedMaterialTypeTag}"
-               SelectionMode="Single"
-               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-               ScrollViewer.VerticalScrollBarVisibility="Auto">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Name}" HorizontalAlignment="Left"/>
-                        <TextBlock Text="{Binding DynamicCount}" HorizontalAlignment="Right"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-            
-
+               Style="{StaticResource ListViewStyle}" 
+               ItemContainerStyle="{StaticResource ListViewItemTagStyle}"/>
+   
         <TextBox x:Name="SearchTextBox"
                  Grid.Column="3"
                  Grid.Row="1"
                  Height="25"
                  d:Text="filter"
                  Style="{StaticResource TextBoxStyle}"
+                 TextChanged="SearchTextChanged"
                  FontWeight="SemiBold"/>
 
         <ListView x:Name="MaterialsListView"
                   Grid.Column="3"
                   Grid.Row="2"
                   Grid.RowSpan="3"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch"
                   ItemsSource="{Binding AllMaterialsView}"
                   SelectedItem="{Binding SelectedMaterial}"
-                  SelectionMode="Single"
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                  ScrollViewer.VerticalScrollBarVisibility="Auto">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Name}" HorizontalAlignment="Left"/>
-                        <TextBlock Text="{Binding MaterialUnit}" HorizontalAlignment="Right"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                  Style="{StaticResource ListViewStyle}" 
+                  ItemContainerStyle="{StaticResource ListViewItemMaterialStyle}"/>
+
+
 
         <Grid x:Name="ButtonGrid"
               Grid.Column="3"

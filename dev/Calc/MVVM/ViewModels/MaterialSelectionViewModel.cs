@@ -9,6 +9,7 @@ using System.Windows.Data;
 using Calc.MVVM.Models;
 using Calc.Core;
 using Calc.Core.Objects.Materials;
+using Calc.Core.Objects.Results;
 
 namespace Calc.MVVM.ViewModels
 {
@@ -40,7 +41,7 @@ namespace Calc.MVVM.ViewModels
             {
                 if (value == selectedMaterialTypeTag) return;
                 selectedMaterialTypeTag = value;
-                FilterMaterials();
+                FilterMaterialsWithType();
                 UpdateDynamicCounts();
                 OnPropertyChanged(nameof(SelectedMaterialTypeTag));
             }
@@ -54,7 +55,7 @@ namespace Calc.MVVM.ViewModels
             {
                 if (value == selectedProductTypeTag) return;
                 selectedProductTypeTag = value;
-                FilterMaterials();
+                FilterMaterialsWithType();
                 UpdateDynamicCounts();
                 OnPropertyChanged(nameof(SelectedProductTypeTag));
             }
@@ -112,16 +113,21 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        private void FilterMaterials()
+        private void FilterMaterialsWithType(string containText = "")
         {
             AllMaterialsView.Filter = (obj) =>
             {
                 var material = obj as Material;
+                var name = material.Name.ToLower();
                 if (SelectedMaterialTypeTag != null && material.MaterialType != SelectedMaterialTypeTag.Name)
                 {
                     return false;
                 }
                 if (SelectedProductTypeTag != null && material.ProductType != SelectedProductTypeTag.Name)
+                {
+                    return false;
+                }
+                if (!string.IsNullOrEmpty(containText) && !name.Contains(containText.ToLower()))
                 {
                     return false;
                 }
@@ -162,7 +168,11 @@ namespace Calc.MVVM.ViewModels
                 }
             }
         }
-        
+
+        public void HandleSearchTextChanged(string currentText)
+        {
+            FilterMaterialsWithType(currentText);
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
