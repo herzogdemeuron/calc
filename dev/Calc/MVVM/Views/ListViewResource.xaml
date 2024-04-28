@@ -75,11 +75,11 @@
                                 <DataTemplate>
                                     <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="30" />
+                                            <RowDefinition Height="*" />
                                             <RowDefinition Height="12" />
                                         </Grid.RowDefinitions>
                                         <TextBlock Text="{Binding Name}" 
-                                                   FontSize="15"
+                                                   FontSize="12"
                                                    Height="30"
                                                    TextWrapping="Wrap"
                                                    Margin="5,0,0,0"/>

@@ -20,6 +20,7 @@ namespace Calc.MVVM.ViewModels
         public ICollectionView AllMaterialsView { get; set; }
         public List<FilterTagModel> MaterialTypeTags { get; set; }
         public List<FilterTagModel> ProductTypeTags { get; set; }
+        private string currentSearchText;
 
         private Material selectedMaterial;
         public Material SelectedMaterial
@@ -113,7 +114,7 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        private void FilterMaterialsWithType(string containText = "")
+        private void FilterMaterialsWithType()
         {
             AllMaterialsView.Filter = (obj) =>
             {
@@ -127,7 +128,7 @@ namespace Calc.MVVM.ViewModels
                 {
                     return false;
                 }
-                if (!string.IsNullOrEmpty(containText) && !name.Contains(containText.ToLower()))
+                if (!string.IsNullOrEmpty(currentSearchText) && !name.Contains(currentSearchText))
                 {
                     return false;
                 }
@@ -171,7 +172,8 @@ namespace Calc.MVVM.ViewModels
 
         public void HandleSearchTextChanged(string currentText)
         {
-            FilterMaterialsWithType(currentText);
+            currentSearchText = currentText.ToLower();
+            FilterMaterialsWithType();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

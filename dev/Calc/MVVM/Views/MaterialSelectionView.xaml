@@ -42,12 +42,12 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
-        <Label Content="Product Type"
+        <Label Content="Product Type:"
                 Grid.Column="1"
                 Grid.Row="1"
-                Padding="0"
-                FontSize="27"
-                FontWeight="Light"/>
+                FontSize="16"
+                FontWeight="SemiBold"
+                VerticalAlignment="Top"/>
         <ListView x:Name="ProductTypeTags"
                   Grid.Column="1"
                   Grid.Row="2"
@@ -57,14 +57,12 @@
                   Style="{StaticResource ListViewStyle}" 
                   ItemContainerStyle="{StaticResource ListViewItemTagStyle}"/>
 
-        <Label Content="Material Type"
+        <Label Content="Material Type:"
              Grid.Column="1"
              Grid.Row="3"
-             Padding="0"
-             HorizontalAlignment="Left"
-             VerticalAlignment="Top"
-             FontSize="27"
-             FontWeight="Light"/>
+             FontSize="16"
+            FontWeight="SemiBold"
+            VerticalAlignment="Top"/>
         <ListView x:Name="MaterialTypeTags"
                Grid.Column="1"
                Grid.Row="4"
@@ -73,24 +71,42 @@
                SelectedItem="{Binding SelectedMaterialTypeTag}"
                Style="{StaticResource ListViewStyle}" 
                ItemContainerStyle="{StaticResource ListViewItemTagStyle}"/>
-   
-        <TextBox x:Name="SearchTextBox"
-                 Grid.Column="3"
-                 Grid.Row="1"
-                 Height="25"
-                 d:Text="filter"
-                 Style="{StaticResource TextBoxStyle}"
-                 TextChanged="SearchTextChanged"
-                 FontWeight="SemiBold"/>
 
-        <ListView x:Name="MaterialsListView"
-                  Grid.Column="3"
-                  Grid.Row="2"
-                  Grid.RowSpan="3"
-                  ItemsSource="{Binding AllMaterialsView}"
-                  SelectedItem="{Binding SelectedMaterial}"
-                  Style="{StaticResource ListViewStyle}" 
-                  ItemContainerStyle="{StaticResource ListViewItemMaterialStyle}"/>
+            <Label Content="Search:"
+                   Grid.Column="3" 
+                   Grid.Row="1"
+                   FontSize="16"
+                   FontWeight="SemiBold"
+                   VerticalAlignment="Top"/>
+           
+
+        <Grid Grid.Column="3"
+            Grid.Row="2"
+            Grid.RowSpan="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBox x:Name="SearchTextBox"
+          Height="25"
+          d:Text="filter"
+          Style="{StaticResource TextBoxStyle}"
+          TextChanged="SearchTextChanged"
+          FontWeight="SemiBold"/>
+            <ListView x:Name="MaterialsListView"
+                      Grid.Row="2"
+               ItemsSource="{Binding AllMaterialsView}"
+               SelectedItem="{Binding SelectedMaterial}"
+               Style="{StaticResource ListViewStyle}" 
+               ItemContainerStyle="{StaticResource ListViewItemMaterialStyle}"/>
+
+        </Grid>
+            
+
+   
+
+   
 
 
 
