@@ -24,7 +24,7 @@ namespace Calc.MVVM.ViewModels
 
     public class BuildupCreationViewModel : INotifyPropertyChanged
     {
-        private DirectusStore store;
+        private readonly DirectusStore store;
         private List<Material> CurrentMaterials { get => store.CurrentMaterials; }
         private readonly IBuildupComponentCreator buildupComponentCreator;
         private readonly IImageSnapshotCreator imageSnapshotCreator;
@@ -102,6 +102,7 @@ namespace Calc.MVVM.ViewModels
             {
                 if (newBuildupName == value) return;
                 newBuildupName = value;
+                CheckSaveOrUpdate();
                 OnPropertyChanged(nameof(NewBuildupName));
                 OnPropertyChanged(nameof(CanSave));
             }
@@ -236,6 +237,19 @@ namespace Calc.MVVM.ViewModels
                 isNotSaving = value;
                 OnPropertyChanged(nameof(IsNotSaving));
                 OnPropertyChanged(nameof(CanSave));
+            }
+        }
+
+        private int? updateId;
+        private bool saveOrUpdate = true;
+        public bool SaveOrUpdate
+        {
+            get => saveOrUpdate;
+            set
+            {
+                if (saveOrUpdate == value) return;
+                saveOrUpdate = value;
+                OnPropertyChanged(nameof(SaveOrUpdate));
             }
         }
 
@@ -495,7 +509,18 @@ namespace Calc.MVVM.ViewModels
             {
                 string imageUuid = await store.UploadImageAsync(currentImagePath, NewBuildupName); // todo: make this more robust
                 var buildup = CreateBuildup(imageUuid);
-                await store.SaveSingleBuildup(buildup);
+                if (updateId != null)
+                {
+                    buildup.Id = updateId.Value;
+                    await store.UpdateSingleBuildup(buildup);
+                    SaveMessage = "Buildup updated.";
+                }
+                else
+                {
+                    await store.SaveSingleBuildup(buildup);
+                    SaveMessage = "New Buildup saved.";
+                    CheckSaveOrUpdate();
+                }
             }
             catch (Exception ex)
             {
@@ -506,8 +531,6 @@ namespace Calc.MVVM.ViewModels
                 return false;
             }
 
-
-            SaveMessage = "New Buildup saved.";
             SaveMessageColor = Brushes.ForestGreen;
             SavingVisibility = Visibility.Collapsed;
             IsNotSaving = true;
@@ -521,6 +544,22 @@ namespace Calc.MVVM.ViewModels
             return !string.IsNullOrEmpty(NewBuildupName) && SelectedBuildupGroup != null && AllCalculationComponents.Count > 0 && IsNotSaving;
         }
 
+        private void CheckSaveOrUpdate()
+        {
+            var allBuildups = store.BuildupsStandardRelated;
+            // find the id with the same tolower name as the newbuildupname
+            var existingBuildup = allBuildups.Find(b => b.Name.ToLower() == NewBuildupName.ToLower());
+            if(existingBuildup != null)
+            {
+                updateId = existingBuildup.Id;
+                SaveOrUpdate = false;
+            }
+            else
+            {
+                updateId = null;
+                SaveOrUpdate = true;
+            }
+        }
         public void MoveBuildupComponent(int oldIndex, int newIndex)
         {
             if (oldIndex < 0 || newIndex < 0 || oldIndex == newIndex) return;

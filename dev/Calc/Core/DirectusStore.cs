@@ -476,9 +476,11 @@ namespace Calc.Core
             }
         }
 
-        public async Task UpdateSingleBuildup(int id, Buildup buildup)
+        /// <summary>
+        /// update a buildup with an existing id assigned
+        /// </summary>
+        public async Task UpdateSingleBuildup(Buildup buildup)
         {
-            buildup.Id = id;
             this.BuildupDriver.SendItem = buildup;
 
             try
@@ -486,10 +488,14 @@ namespace Calc.Core
                 await _graphqlRetry.ExecuteAsync(() =>
                                        this.BuildupManager.UpdateSingle<BuildupStorageDriver>(this.BuildupDriver));
                 // replace the buildup in buildups all
-                var index = this.BuildupDriver.GotManyItems.FindIndex(b => b.Id == id);
+                var index = this.BuildupDriver.GotManyItems.FindIndex(b => b.Id == buildup.Id);
                 if (index != -1)
                 {
                     this.BuildupDriver.GotManyItems[index] = buildup;
+                }
+                else
+                {
+                    throw new Exception("Buildup not found, cannot update.");
                 }
             }
             catch (Exception e)

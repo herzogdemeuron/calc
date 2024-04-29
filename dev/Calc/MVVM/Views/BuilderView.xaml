@@ -523,12 +523,21 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Button Content="Save Buildup"
-                        Click="SaveBuildupClicked"
-                        Style="{StaticResource ButtonStyle}"
+                <Button Click="SaveBuildupClicked"
                         IsEnabled="{Binding BuildupCreationVM.CanSave}"
                         Grid.Column="1"
-                        Margin="0,0,10,0"/>
+                        Margin="0,0,10,0">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+                            <Setter Property="Content" Value="Create" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding BuildupCreationVM.SaveOrUpdate}" Value="False">
+                                    <Setter Property="Content" Value="Name exists, Update" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
                 <Image gif:ImageBehavior.AnimatedSource="/CalcMVVM;component/Resources/DT_logo.gif"
                        Visibility="{Binding BuildupCreationVM.SavingVisibility}"
                        HorizontalAlignment="Right"
