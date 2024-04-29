@@ -46,6 +46,10 @@ namespace Calc.Core
             }
         }
         public LcaStandard StandardSelected { get; set; }
+        public List<Buildup> BuildupsStandardRelated
+        {
+            get => BuildupsAll.FindAll(b => b.Standard?.Id == StandardSelected?.Id);
+        }
 
         private Mapping _mappingSelected = null;
         public Mapping MappingSelected
@@ -198,6 +202,7 @@ namespace Calc.Core
                                    this.CustomParamSettingManager.GetMany<CustomParamSettingStorageDriver>(this.CustomParamSettingDriver));
 
                 LinkFields();
+                InitStandardSelection();
                 AllDataLoaded = true;
                 return true;
             }
@@ -457,6 +462,35 @@ namespace Calc.Core
             {
                 await _graphqlRetry.ExecuteAsync(() =>
                                        this.BuildupManager.CreateSingle<BuildupStorageDriver>(this.BuildupDriver));
+                var id = this.BuildupDriver.CreatedItem?.Id;
+                // save the buildup back to buildups all
+                if (id != null)
+                {
+                    buildup.Id = id.Value;
+                    this.BuildupDriver.GotManyItems.Add(buildup);
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public async Task UpdateSingleBuildup(int id, Buildup buildup)
+        {
+            buildup.Id = id;
+            this.BuildupDriver.SendItem = buildup;
+
+            try
+            {
+                await _graphqlRetry.ExecuteAsync(() =>
+                                       this.BuildupManager.UpdateSingle<BuildupStorageDriver>(this.BuildupDriver));
+                // replace the buildup in buildups all
+                var index = this.BuildupDriver.GotManyItems.FindIndex(b => b.Id == id);
+                if (index != -1)
+                {
+                    this.BuildupDriver.GotManyItems[index] = buildup;
+                }
             }
             catch (Exception e)
             {

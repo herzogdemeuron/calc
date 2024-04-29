@@ -36,6 +36,8 @@ namespace Calc.Core.DirectusAPI.Drivers
             var request = CreateRequest(driver.QueryCreateSingle, driver.GetVariables());
             var response = await this._directus.Client.SendMutationAsync<TDriver>(request);
             CheckResponseForErrors(response);
+            // Update the driver with the created item
+            driver.CreatedItem = response?.Data?.CreatedItem;
             return response.Data;
         }
 
