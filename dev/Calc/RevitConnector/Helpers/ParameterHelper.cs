@@ -1,7 +1,9 @@
 ﻿using Autodesk.Revit.DB;
 using Calc.Core.Objects;
 using Calc.Core.Objects.BasicParameters;
+using Calc.Core.Objects.Elements;
 using Calc.Core.Objects.Results;
+using Calc.RevitConnector.Config;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -206,9 +208,29 @@ namespace Calc.RevitConnector.Helpers
                     Amount = value,
                     Unit = unit
                 };
-            }
+            }          
+        }
 
-          
+        /// <summary>
+        /// get the revit basic param config from the calc core custom param settings
+        /// return null if the category is invalid
+        /// </summary>
+        public static RevitBasicParamConfig ParseFromParamSetting(CustomParamSetting paramSetting)
+        {
+            BuiltInCategory category;
+            try
+            {
+                category = (BuiltInCategory)Enum.Parse(typeof(BuiltInCategory), paramSetting.Category);
+            }
+            catch
+            {
+                return null;
+            }
+            var lengthName = paramSetting.LengthCustomParamName;
+            var areaName = paramSetting.AreaCustomParamName;
+            var volumeName = paramSetting.VolumeCustomParamName;
+
+            return new RevitBasicParamConfig(category, lengthName, areaName, volumeName);
         }
     }
 }

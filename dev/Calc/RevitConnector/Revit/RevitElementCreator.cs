@@ -8,6 +8,7 @@ using Calc.Core.Objects;
 using Calc.Core.Objects.Results;
 using Calc.Core.Interfaces;
 using Calc.Core.Objects.BasicParameters;
+using Calc.Core.Objects.Elements;
 
 namespace Calc.RevitConnector.Revit
 {
@@ -25,14 +26,19 @@ namespace Calc.RevitConnector.Revit
         {
             this.doc = doc;
         }
-        public List<CalcElement> CreateCalcElements(List<string> parameterNameList)
+        public List<CalcElement> CreateCalcElements(List<CustomParamSetting> customParamSettings,List<string> parameterNameList)
         {
-            var doorParamConfig = new RevitBasicParamConfig(BuiltInCategory.OST_Doors, AreaName: ".Standard_Area");
-            var windowParamConfig = new RevitBasicParamConfig(BuiltInCategory.OST_Windows, AreaName: ".Area");
-            var paramConfigs = new List<RevitBasicParamConfig> { doorParamConfig, windowParamConfig };
+ 
+            var paramConfigs = new List<RevitBasicParamConfig>();
+            foreach (CustomParamSetting paramSetting in customParamSettings)
+            {
+                var setting = ParameterHelper.ParseFromParamSetting(paramSetting);
+                if (setting != null) paramConfigs.Add(setting);
+            }
+
             List<CalcElement> result = new List<CalcElement>();
 
-            var collector = new FilteredElementCollector(doc)
+            var elementDepot = new FilteredElementCollector(doc)
                   .WhereElementIsNotElementType()
                   .WhereElementIsViewIndependent()
                   .Where(x =>
@@ -45,13 +51,13 @@ namespace Calc.RevitConnector.Revit
 
                 result.AddRange
                     (
-                        CalcElementsFromParamConfig(collector, parameterNameList, paramConfig)
+                        CalcElementsFromParamConfig(elementDepot, parameterNameList, paramConfig)
                     );
             }
 
             result.AddRange
                 (
-                    CalcElementsFromParamConfig(collector, parameterNameList, new RevitBasicParamConfig())
+                    CalcElementsFromParamConfig(elementDepot, parameterNameList, new RevitBasicParamConfig())
                 );
 
             return result;
@@ -85,6 +91,8 @@ namespace Calc.RevitConnector.Revit
             elementList.RemoveAll(x => x.Category.Id.IntegerValue == (int)builtinCategory);
             return result;
         }
+
+       
 
         /// <summary>
         /// create a calc element using the element and the parameter name list

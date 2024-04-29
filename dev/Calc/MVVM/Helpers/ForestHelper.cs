@@ -1,5 +1,5 @@
 ﻿using Calc.Core.Interfaces;
-using Calc.Core.Objects;
+using Calc.Core.Objects.Elements;
 using Calc.Core.Objects.GraphNodes;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,12 +13,12 @@ namespace Calc.MVVM.Helpers
         /// <summary>
         /// creates calc elements from revit elements and sort them into trees
         /// </summary>
-        public static void PlantTrees(Forest forest, IElementCreator elementCreator)
+        public static void PlantTrees(Forest forest, IElementCreator elementCreator, List<CustomParamSetting> customParamSettings)
         {
             List<string> parameters = GetParameterList(forest);
 
            
-            List<CalcElement> calcElements = elementCreator.CreateCalcElements(parameters);
+            List<CalcElement> calcElements = elementCreator.CreateCalcElements(customParamSettings,parameters);
             var leftElements = forest.PlantTrees(calcElements);
 
             //Debug.WriteLine("Left overs: " + leftElements);

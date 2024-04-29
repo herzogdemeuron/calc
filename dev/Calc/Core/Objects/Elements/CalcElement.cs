@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Collections.ObjectModel;
 using Calc.Core.Objects.BasicParameters;
 
-namespace Calc.Core.Objects
+namespace Calc.Core.Objects.Elements
 {
     public struct CalcElement
     {
@@ -26,11 +26,11 @@ namespace Calc.Core.Objects
                 BasicParameter areaParam,
                 BasicParameter volParam
              )
-            {
-            this.Id = id;
-            this.TypeName = type;
-            this.Fields = fields;
-            this._quantities 
+        {
+            Id = id;
+            TypeName = type;
+            Fields = fields;
+            _quantities
                 = new Dictionary<Unit, BasicParameter>
                     {
                         { Unit.piece, new BasicParameter() { Amount = 1, Unit = Unit.piece } },
@@ -38,7 +38,7 @@ namespace Calc.Core.Objects
                         { Unit.m2, areaParam },
                         { Unit.m3, volParam }
                     };
-            }
+        }
 
         public readonly BasicParameter GetBasicUnitParameter(Unit unit)
         {

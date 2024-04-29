@@ -2,6 +2,7 @@
 using Calc.Core.Color;
 using Calc.Core.Helpers;
 using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Elements;
 using Calc.Core.Objects.Mappings;
 using Calc.Core.Objects.Results;
 using Speckle.Newtonsoft.Json;

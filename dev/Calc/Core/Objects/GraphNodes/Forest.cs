@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Calc.Core.Color;
+using Calc.Core.Objects.Elements;
 
 namespace Calc.Core.Objects.GraphNodes
 {

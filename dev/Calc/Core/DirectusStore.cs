@@ -14,6 +14,7 @@ using Calc.Core.Objects.Results;
 using Calc.Core.Objects.Materials;
 using System.Collections.ObjectModel;
 using System.Threading;
+using Calc.Core.Objects.Elements;
 
 namespace Calc.Core
 {
@@ -30,6 +31,7 @@ namespace Calc.Core
         public List<BuildupGroup> BuildupGroupsAll { get { return this.BuildupGroupDriver?.GotManyItems; } }
         public List<Buildup> BuildupsAll { get { return this.BuildupDriver?.GotManyItems; } }
         public List<Mapping> MappingsAll { get { return this.MappingDriver?.GotManyItems; } }
+        public List<CustomParamSetting> CustomParamSettingsAll { get { return this.CustomParamSettingDriver?.GotManyItems; } }
         private List<Material> MaterialsAll { get { return this.MaterialDriver?.GotManyItems; } }
         private Dictionary<LcaStandard, List<Material>> MaterialsOfStandards { get; set; }
         public List<Material> CurrentMaterials
@@ -98,6 +100,7 @@ namespace Calc.Core
         private DirectusManager<Forest> ForestManager { get; set; }
         private DirectusManager<Snapshot> SnapshotManager { get; set; }
         private DirectusManager<DirectusFolder> FolderManager { get; set; }
+        private DirectusManager<CustomParamSetting> CustomParamSettingManager { get; set; }
 
         private ProjectStorageDriver ProjectDriver { get; set; }
         private StandardStorageDriver StandardDriver { get; set; }
@@ -108,6 +111,7 @@ namespace Calc.Core
         private ForestStorageDriver ForestDriver { get; set; }
         private SnapshotStorageDriver SnapshotDriver { get; set; }
         private FolderStorageDriver FolderDriver { get; set; }
+        private CustomParamSettingStorageDriver CustomParamSettingDriver { get; set; }
 
         private readonly Polly.Retry.AsyncRetryPolicy _graphqlRetry = Policy.Handle<GraphQLHttpRequestException>()
                 .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(5),
@@ -134,6 +138,7 @@ namespace Calc.Core
             this.ForestManager = new DirectusManager<Forest>(this.Directus);
             this.SnapshotManager = new DirectusManager<Snapshot>(this.Directus);
             this.FolderManager = new DirectusManager<DirectusFolder>(this.Directus);
+            this.CustomParamSettingManager = new DirectusManager<CustomParamSetting>(this.Directus);
 
             this.ProjectDriver = new ProjectStorageDriver();
             this.StandardDriver = new StandardStorageDriver();
@@ -144,6 +149,7 @@ namespace Calc.Core
             this.ForestDriver = new ForestStorageDriver();
             this.SnapshotDriver = new SnapshotStorageDriver();
             this.FolderDriver = new FolderStorageDriver();
+            this.CustomParamSettingDriver = new CustomParamSettingStorageDriver();
 
             UnitsAll =   Enum.GetValues(typeof(Unit)).Cast<Unit>().ToList();
             MaterialFunctionsAll = Enum.GetValues(typeof(MaterialFunction)).Cast<MaterialFunction>().ToList();
@@ -188,6 +194,9 @@ namespace Calc.Core
                 this.ForestDriver = await _graphqlRetry.ExecuteAsync(() => 
                     this.ForestManager.GetMany<ForestStorageDriver>(this.ForestDriver));
 
+                this.CustomParamSettingDriver = await _graphqlRetry.ExecuteAsync(() => 
+                                   this.CustomParamSettingManager.GetMany<CustomParamSettingStorageDriver>(this.CustomParamSettingDriver));
+
                 LinkFields();
                 AllDataLoaded = true;
                 return true;
@@ -206,6 +215,11 @@ namespace Calc.Core
                 this.StandardDriver = await _graphqlRetry.ExecuteAsync(() =>
                     this.StandardManager.GetMany<StandardStorageDriver>(this.StandardDriver));
                 OnProgressChanged(20);
+
+                cancellationToken.ThrowIfCancellationRequested();
+                this.CustomParamSettingDriver = await _graphqlRetry.ExecuteAsync(() =>
+                                   this.CustomParamSettingManager.GetMany<CustomParamSettingStorageDriver>(this.CustomParamSettingDriver));
+                OnProgressChanged(30);
 
                 cancellationToken.ThrowIfCancellationRequested();
                 this.MaterialDriver = await _graphqlRetry.ExecuteAsync(() =>

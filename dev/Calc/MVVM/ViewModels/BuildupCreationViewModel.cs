@@ -340,7 +340,7 @@ namespace Calc.MVVM.ViewModels
         /// </summary>
         public void HandleSelectingElements()
         {
-            var components = buildupComponentCreator.CreateBuildupComponentsFromSelection();
+            var components = buildupComponentCreator.CreateBuildupComponentsFromSelection(store.CustomParamSettingsAll);
             BuildupComponents = new ObservableCollection<BuildupComponent>(components);
 
             UpdateLayerMaterialModels();

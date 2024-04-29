@@ -4,6 +4,7 @@ using Calc.Core.Interfaces;
 using Calc.Core.Objects;
 using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Elements;
 using Calc.Core.Objects.Results;
 using Calc.RevitConnector.Config;
 using Calc.RevitConnector.Helpers;
@@ -18,13 +19,7 @@ namespace Calc.RevitConnector.Revit
     {
         private readonly Document Doc;
         private readonly UIDocument Uidoc;
-        private readonly List<RevitBasicParamConfig> basicParamConfigs =  // todo: this should be taken from directus
-            new List<RevitBasicParamConfig>
-            {
-            new RevitBasicParamConfig(BuiltInCategory.OST_Doors, AreaName: ".Area"),
-            new RevitBasicParamConfig(BuiltInCategory.OST_Windows, AreaName: ".Area")
-            };
-
+        private List<RevitBasicParamConfig> basicParamConfigs;
         public BuildupComponentCreator(UIDocument uidoc)
         {
             Doc = uidoc.Document;
@@ -34,8 +29,15 @@ namespace Calc.RevitConnector.Revit
         /// <summary>
         /// prompt the user to select elements from revit, and return a list of buildup components.
         /// </summary>
-        public List<BuildupComponent> CreateBuildupComponentsFromSelection()
+        public List<BuildupComponent> CreateBuildupComponentsFromSelection(List<CustomParamSetting> customParamSettings)
         {
+            basicParamConfigs = new List<RevitBasicParamConfig>();
+            foreach (CustomParamSetting paramSetting in customParamSettings)
+            {
+                var setting = ParameterHelper.ParseFromParamSetting(paramSetting);
+                if (setting != null) basicParamConfigs.Add(setting);
+            }
+
             var ids = SelectionHelper.SelectElements(Uidoc);
             return CreateBuildupComponents(ids);
         }

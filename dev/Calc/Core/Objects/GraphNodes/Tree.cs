@@ -5,6 +5,7 @@ using Calc.Core.Filtering;
 using Speckle.Newtonsoft.Json;
 using Calc.Core.Objects.Mappings;
 using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Elements;
 
 namespace Calc.Core.Objects.GraphNodes;
 

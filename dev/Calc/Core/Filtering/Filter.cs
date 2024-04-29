@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
-using Calc.Core.Objects;
 using Speckle.Newtonsoft.Json;
-
+using Calc.Core.Objects.Elements;
 
 namespace Calc.Core.Filtering;
 

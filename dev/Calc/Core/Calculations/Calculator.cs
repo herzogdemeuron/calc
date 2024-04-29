@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Calc.Core.Helpers;
-using Calc.Core.Objects;
 using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Elements;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Results;
 
