@@ -99,11 +99,13 @@ namespace Calc.MVVM.ViewModels
                 var pType = material.ProductType;
                 if (!MaterialTypeTags.Exists(t => t.Name == mType))
                 {
-                    MaterialTypeTags.Add(new FilterTagModel(mType));
+                    var family = material.MaterialTypeFamily;
+                    MaterialTypeTags.Add(new FilterTagModel(mType, family));
                 }
                 if (!ProductTypeTags.Exists(t => t.Name == pType))
                 {
-                    ProductTypeTags.Add(new FilterTagModel(pType));
+                    var family = material.ProductTypeFamily;
+                    ProductTypeTags.Add(new FilterTagModel(pType, family));
                 }
                 // add relation count to each other
                 var mTag = MaterialTypeTags.Find(t => t.Name == mType);

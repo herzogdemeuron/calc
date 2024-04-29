@@ -20,6 +20,19 @@
         </Setter>
     </Style>
 
+    <GroupStyle x:Key="CollapsibleListViewGroupStyle">
+        <GroupStyle.HeaderTemplate>
+            <DataTemplate>
+                <Expander IsExpanded="True">
+                    <Expander.Header>
+                        <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="Gray"/>
+                    </Expander.Header>
+                    <ItemsPresenter/>
+                </Expander>
+            </DataTemplate>
+        </GroupStyle.HeaderTemplate>
+    </GroupStyle>
+
     <Style x:Key="ListViewItemTagStyle" TargetType="ListViewItem">
         <Setter Property="Template">
             <Setter.Value>

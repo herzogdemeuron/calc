@@ -52,10 +52,11 @@
                   Grid.Column="1"
                   Grid.Row="2"
                   PreviewMouseLeftButtonDown="ListViewSelected"
-                  ItemsSource="{Binding ProductTypeTags}"
+                  ItemsSource="{Binding ProductTypeTagsView}"
                   SelectedItem="{Binding SelectedProductTypeTag}"
                   Style="{StaticResource ListViewStyle}" 
                   ItemContainerStyle="{StaticResource ListViewItemTagStyle}"/>
+
 
         <Label Content="Material Type:"
              Grid.Column="1"
@@ -67,12 +68,12 @@
                Grid.Column="1"
                Grid.Row="4"
                PreviewMouseLeftButtonDown="ListViewSelected"
-               ItemsSource="{Binding MaterialTypeTags}"
+               ItemsSource="{Binding MaterialTypeTagsView}"
                SelectedItem="{Binding SelectedMaterialTypeTag}"
                Style="{StaticResource ListViewStyle}" 
                ItemContainerStyle="{StaticResource ListViewItemTagStyle}"/>
 
-            <Label Content="Search:"
+        <Label Content="Search:"
                    Grid.Column="3" 
                    Grid.Row="1"
                    FontSize="16"

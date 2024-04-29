@@ -10,6 +10,7 @@ namespace Calc.MVVM.Models
     public class FilterTagModel: INotifyPropertyChanged
     {
         public string Name { get; set; }
+        public string Family { get; set; }
         private bool isSelected = false;
         public bool IsSelected
         {
@@ -34,9 +35,10 @@ namespace Calc.MVVM.Models
 
         private Dictionary<FilterTagModel,int> relationCount = new Dictionary<FilterTagModel, int>();
 
-        public FilterTagModel(string name)
+        public FilterTagModel(string name, string family)
         {
             Name = name;
+            Family = family;
         }
 
         public void AddRelationCount(FilterTagModel tagModel)

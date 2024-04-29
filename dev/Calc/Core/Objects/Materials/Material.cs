@@ -13,8 +13,12 @@ namespace Calc.Core.Objects.Materials
         public string Name { get; set; }
         [JsonProperty("standard")]
         public LcaStandard Standard { get; set; }
+        [JsonProperty("material_type_family")]
+        public string MaterialTypeFamily { get; set; }
         [JsonProperty("material_type")]
         public string MaterialType { get; set; }
+        [JsonProperty("product_type_family")]
+        public string ProductTypeFamily { get; set; }
         [JsonProperty("product_type")]
         public string ProductType { get; set; }
         [JsonProperty("data_source")]

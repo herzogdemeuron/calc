@@ -15,7 +15,9 @@ namespace Calc.Core.DirectusAPI.Drivers
                 calc_materials(limit: 5000) {
                     id
                     name
+                    material_type_family
                     material_type
+                    product_type_family
                     product_type
                     standard {
                         id
