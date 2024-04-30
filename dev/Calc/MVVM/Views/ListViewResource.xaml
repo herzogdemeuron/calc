@@ -20,18 +20,7 @@
         </Setter>
     </Style>
 
-    <GroupStyle x:Key="CollapsibleListViewGroupStyle">
-        <GroupStyle.HeaderTemplate>
-            <DataTemplate>
-                <Expander IsExpanded="True">
-                    <Expander.Header>
-                        <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="Gray"/>
-                    </Expander.Header>
-                    <ItemsPresenter/>
-                </Expander>
-            </DataTemplate>
-        </GroupStyle.HeaderTemplate>
-    </GroupStyle>
+
 
     <Style x:Key="ListViewItemTagStyle" TargetType="ListViewItem">
         <Setter Property="Template">
@@ -39,21 +28,28 @@
                 <ControlTemplate TargetType="ListViewItem">
                     <Border x:Name="Bd" 
                             Background="Transparent"
-                            Margin="2,0,0,2">
+                            Margin="2,0,2,0">
                         <ContentPresenter>
                             <ContentPresenter.ContentTemplate>
                                 <DataTemplate>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="20" />
-                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="20"/>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition Width="12"/>
+                                            <ColumnDefinition Width="auto"/>
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Text="{Binding DynamicCount}"
                                                    VerticalAlignment="Center"
-                                                   Foreground="Gray"
+                                                   Foreground="DimGray"
                                                    FontSize="9"/>
-                                        <TextBlock Text="{Binding Name}"
+                                        <TextBlock Text="{Binding Family}"
+                                                   FontWeight="DemiBold"
+                                                   Foreground="DimGray"
                                                    Grid.Column="1"
+                                                   FontSize="12"/>
+                                        <TextBlock Text="{Binding Name}"
+                                                   Grid.Column="3"
                                                    FontSize="12"/>
                                     </Grid>
                                 </DataTemplate>
@@ -64,9 +60,13 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="Bd" Property="Background" Value="LightGray" />
                         </Trigger>
+                        <DataTrigger Binding="{Binding HasCount}" Value="False">
+                            <Setter Property="Foreground" Value="DarkGray"/>
+                        </DataTrigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="LightGray" />
+                            <Setter TargetName="Bd" Property="Background" Value="MediumSeaGreen" />
                             <Setter Property="FontWeight" Value="SemiBold" />
+                            <Setter Property="Foreground" Value="Black"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -87,6 +87,7 @@
                                 <DataTemplate>
                                     <Grid Margin="5">
                                         <Grid.RowDefinitions>
+                                            <RowDefinition Height="11" />
                                             <RowDefinition Height="auto" />
                                             <RowDefinition Height="11" />
                                             <RowDefinition Height="11" />
@@ -96,7 +97,18 @@
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
-                                        <TextBlock Text="{Binding Name}"
+                                        <TextBlock Grid.Row="0"
+                                                   FontSize="9"
+                                                   Foreground="DimGray">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat=" {0} - {1} ">
+                                                    <Binding Path="MaterialType" />
+                                                    <Binding Path="MaterialTypeFamily" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>                                              
+                                        <TextBlock Grid.Row="1"
+                                                   Text="{Binding Name}"
                                                    VerticalAlignment="Top"
                                                    Grid.ColumnSpan="2"
                                                    FontSize="12"
@@ -104,29 +116,29 @@
                                                    LineHeight="13"
                                                    LineStackingStrategy="BlockLineHeight" 
                                                    TextWrapping="Wrap"/>
-                                        <TextBlock Grid.Row="1"
+                                        <TextBlock Grid.Row="2"
                                                    FontSize="9"
                                                    Foreground="DimGray"
                                                    Text="{Binding MaterialUnit, StringFormat='Unit: {0}'}"/>
-                                        <TextBlock Grid.Row="2"
-                                                   FontSize="9"
-                                                   Foreground="DimGray"
-                                                   Text="{Binding SourceUuid, StringFormat='UUID: {0}'}"/>
                                         <TextBlock Grid.Row="3"
                                                    FontSize="9"
                                                    Foreground="DimGray"
+                                                   Text="{Binding SourceUuid, StringFormat='UUID: {0}'}"/>
+                                        <TextBlock Grid.Row="4"
+                                                   FontSize="9"
+                                                   Foreground="DimGray"
                                                    Text="{Binding DataSource}"/>
-                                        <TextBlock Grid.Row="1"
+                                        <TextBlock Grid.Row="2"
                                                    Grid.Column="1"
                                                    FontSize="9"
                                                    Foreground="DimGray"
-                                                   Text="{Binding Thickness, StringFormat='Thickness: {0}'}"/>
-                                        <TextBlock Grid.Row="2"
+                                                   Text="{Binding Thickness, StringFormat='Thickness: {0}', TargetNullValue='Thickness: -'}"/>
+                                        <TextBlock Grid.Row="3"
                                                    Grid.Column="1"
                                                    FontSize="9"
                                                    Foreground="DimGray"
                                                    Text="{Binding Gwp, StringFormat='GWP: {0}'}"/>
-                                        <TextBlock Grid.Row="3"
+                                        <TextBlock Grid.Row="4"
                                                    Grid.Column="1"
                                                    FontSize="9"
                                                    Foreground="DimGray"
@@ -149,6 +161,5 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
+    
 </ResourceDictionary>

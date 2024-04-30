@@ -22,6 +22,8 @@ namespace Calc.MVVM.Models
             }
         }
 
+        public bool HasCount => DynamicCount != "0";
+
         private string dynamicCount;
         public string DynamicCount
         {
@@ -30,6 +32,7 @@ namespace Calc.MVVM.Models
             {
                 dynamicCount = value;
                 OnPropertyChanged(nameof(DynamicCount));
+                OnPropertyChanged(nameof(HasCount));
             }
         }
 

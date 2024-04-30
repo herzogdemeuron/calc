@@ -34,6 +34,15 @@ namespace Calc.MVVM.Views
             }
         }
 
+        private void ListViewLoaded(object sender, RoutedEventArgs e)
+        {
+            var listView = sender as ListView;
+            if(listView.SelectedItem!=null)
+            {
+                listView.ScrollIntoView(listView.SelectedItem);
+            }
+        }
+
         private void ListViewItemMaterialDoubleClick(object sender, MouseButtonEventArgs e)
         {
             this.DialogResult = true;

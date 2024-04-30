@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:Calc.MVVM.ViewModels"
         d:DataContext="{d:DesignInstance Type=local:MaterialSelectionViewModel}"
         mc:Ignorable="d"
-        Height="600"
-        Width="600"
+        Height="700"
+        Width="700"
         MinHeight="400"
         MinWidth="400"
         WindowStartupLocation="CenterScreen"
@@ -28,9 +28,9 @@
         <Grid x:Name="MainGrid">
             <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10"/>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="10"/>
             <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="4*"/>
             <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -52,10 +52,12 @@
                   Grid.Column="1"
                   Grid.Row="2"
                   PreviewMouseLeftButtonDown="ListViewSelected"
+                  Loaded="ListViewLoaded"
                   ItemsSource="{Binding ProductTypeTagsView}"
                   SelectedItem="{Binding SelectedProductTypeTag}"
                   Style="{StaticResource ListViewStyle}" 
                   ItemContainerStyle="{StaticResource ListViewItemTagStyle}"/>
+
 
 
         <Label Content="Material Type:"
@@ -68,10 +70,12 @@
                Grid.Column="1"
                Grid.Row="4"
                PreviewMouseLeftButtonDown="ListViewSelected"
+               Loaded="ListViewLoaded"
                ItemsSource="{Binding MaterialTypeTagsView}"
                SelectedItem="{Binding SelectedMaterialTypeTag}"
                Style="{StaticResource ListViewStyle}" 
                ItemContainerStyle="{StaticResource ListViewItemTagStyle}"/>
+
 
         <Label Content="Search:"
                    Grid.Column="3" 
@@ -97,6 +101,7 @@
                       FontWeight="SemiBold"/>   
             <ListView x:Name="MaterialsListView"
                       Grid.Row="2"
+                      Loaded="ListViewLoaded"
                        ItemsSource="{Binding AllMaterialsView}"
                        SelectedItem="{Binding SelectedMaterial}"
                        Style="{StaticResource ListViewStyle}">

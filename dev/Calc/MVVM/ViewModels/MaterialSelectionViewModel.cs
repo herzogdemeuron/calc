@@ -10,6 +10,7 @@ using Calc.MVVM.Models;
 using Calc.Core;
 using Calc.Core.Objects.Materials;
 using Calc.Core.Objects.Results;
+using Calc.MVVM.Helpers;
 
 namespace Calc.MVVM.ViewModels
 {
@@ -18,8 +19,32 @@ namespace Calc.MVVM.ViewModels
     {
         private readonly List<Material> allMaterials;
         public ICollectionView AllMaterialsView { get; set; }
-        public List<FilterTagModel> MaterialTypeTags { get; set; }
-        public List<FilterTagModel> ProductTypeTags { get; set; }
+        private List<FilterTagModel> materialTypeTags;
+        public ICollectionView MaterialTypeTagsView
+        {
+            get
+            {
+                var view = CollectionViewSource.GetDefaultView(materialTypeTags);
+                if(view is ListCollectionView listCollectionView)
+                {
+                    listCollectionView.CustomSort = new FilterTagComparer();
+                }
+                return view;
+            }
+        }
+        private List<FilterTagModel> productTypeTags;
+        public ICollectionView ProductTypeTagsView
+        {
+            get
+            {
+                var view = CollectionViewSource.GetDefaultView(productTypeTags);
+                if (view is ListCollectionView listCollectionView)
+                {
+                    listCollectionView.CustomSort = new FilterTagComparer();
+                }
+                return view;
+            }
+        }
         private string currentSearchText;
 
         private Material selectedMaterial;
@@ -84,34 +109,36 @@ namespace Calc.MVVM.ViewModels
             // if a material was already selected, find the corresponding tags
             if (SelectedMaterial != null)
             {
-                SelectedMaterialTypeTag = MaterialTypeTags.Find(t => t.Name == SelectedMaterial.MaterialType);
-                SelectedProductTypeTag = ProductTypeTags.Find(t => t.Name == SelectedMaterial.ProductType);
+                SelectedMaterialTypeTag = materialTypeTags.Find(t => t.Name == SelectedMaterial.MaterialType);
+                SelectedProductTypeTag = productTypeTags.Find(t => t.Name == SelectedMaterial.ProductType);
             }
         }
 
         private void InitTypeTags()
         {
-            MaterialTypeTags = new List<FilterTagModel>();
-            ProductTypeTags = new List<FilterTagModel>();
+            materialTypeTags = new List<FilterTagModel>();
+            productTypeTags = new List<FilterTagModel>();
             foreach (var material in allMaterials)
             {
                 var mType = material.MaterialType;
                 var pType = material.ProductType;
-                if (!MaterialTypeTags.Exists(t => t.Name == mType))
+                if (!materialTypeTags.Exists(t => t.Name == mType))
                 {
                     var family = material.MaterialTypeFamily;
-                    MaterialTypeTags.Add(new FilterTagModel(mType, family));
+                    materialTypeTags.Add(new FilterTagModel(mType, family));
                 }
-                if (!ProductTypeTags.Exists(t => t.Name == pType))
+                if (!productTypeTags.Exists(t => t.Name == pType))
                 {
                     var family = material.ProductTypeFamily;
-                    ProductTypeTags.Add(new FilterTagModel(pType, family));
+                    productTypeTags.Add(new FilterTagModel(pType, family));
                 }
+
                 // add relation count to each other
-                var mTag = MaterialTypeTags.Find(t => t.Name == mType);
-                var pTag = ProductTypeTags.Find(t => t.Name == pType);
+                var mTag = materialTypeTags.Find(t => t.Name == mType);
+                var pTag = productTypeTags.Find(t => t.Name == pType);
                 mTag.AddRelationCount(pTag);
                 pTag.AddRelationCount(mTag);
+
             }
         }
 
@@ -120,7 +147,10 @@ namespace Calc.MVVM.ViewModels
             AllMaterialsView.Filter = (obj) =>
             {
                 var material = obj as Material;
-                var name = material.Name.ToLower();
+                // either name, material type or material type family contains the search text
+                var name = material.Name?.ToLower() ?? "";
+                var mType = material.MaterialType?.ToLower() ?? "";
+                var mFamily = material.MaterialTypeFamily?.ToLower() ?? "";
                 if (SelectedMaterialTypeTag != null && material.MaterialType != SelectedMaterialTypeTag.Name)
                 {
                     return false;
@@ -129,7 +159,7 @@ namespace Calc.MVVM.ViewModels
                 {
                     return false;
                 }
-                if (!string.IsNullOrEmpty(currentSearchText) && !name.Contains(currentSearchText))
+                if (!string.IsNullOrEmpty(currentSearchText) && !name.Contains(currentSearchText) && !mType.Contains(currentSearchText) && !mFamily.Contains(currentSearchText))
                 {
                     return false;
                 }
@@ -146,10 +176,10 @@ namespace Calc.MVVM.ViewModels
         /// </summary>
         private void UpdateDynamicCounts()
         {
-            UpdateOtherGroupDynamicCounts(selectedProductTypeTag, MaterialTypeTags);
-            UpdateOtherGroupDynamicCounts(selectedMaterialTypeTag, ProductTypeTags);
-            UpdateSameGroupDynamicCounts(selectedMaterialTypeTag, MaterialTypeTags);
-            UpdateSameGroupDynamicCounts(selectedProductTypeTag, ProductTypeTags);
+            UpdateOtherGroupDynamicCounts(selectedProductTypeTag, materialTypeTags);
+            UpdateOtherGroupDynamicCounts(selectedMaterialTypeTag, productTypeTags);
+            UpdateSameGroupDynamicCounts(selectedMaterialTypeTag, materialTypeTags);
+            UpdateSameGroupDynamicCounts(selectedProductTypeTag, productTypeTags);
         }
 
         private void UpdateOtherGroupDynamicCounts(FilterTagModel selectedTag, List<FilterTagModel> allTags)
