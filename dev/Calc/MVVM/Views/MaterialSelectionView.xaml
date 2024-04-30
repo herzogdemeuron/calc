@@ -42,7 +42,7 @@
             <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
 
-        <Label Content="Function:"
+        <Label Content="Application:"
                 Grid.Column="1"
                 Grid.Row="1"
                 FontSize="27"               
