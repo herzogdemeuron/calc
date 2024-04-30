@@ -24,9 +24,9 @@ namespace Calc.Core.Calculations
         public MaterialFunction? Function { get; set; }
         [JsonProperty("amount")]
         public double? Amount { get; set; }
-        [JsonProperty("gwp")]
+        [JsonProperty("carbon_a1a3")]
         public double? Gwp { get; set; }
-        [JsonProperty("ge")]
+        [JsonProperty("grey_energy_fabrication_total")]
         public double? Ge { get; set; }
         [JsonProperty("cost")]
         public double? Cost { get; set; }

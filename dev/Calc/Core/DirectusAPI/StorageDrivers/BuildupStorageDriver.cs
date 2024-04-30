@@ -28,16 +28,17 @@ namespace Calc.Core.DirectusAPI.Drivers
                     description
                     calculation_components {
                         id
+                        position
                         function
                         amount
-                        gwp
-                        ge
+                        carbon_a1a3
+                        grey_energy_fabrication_total
                         calc_materials_id {
                             id
                         }           
                     }
-                    buildup_gwp
-                    buildup_ge
+                    carbon_a1a3
+                    grey_energy_fabrication_total
                 }
             }";
 
@@ -116,12 +117,12 @@ namespace Calc.Core.DirectusAPI.Drivers
                     position = cc.Position,
                     function = cc.Function,
                     amount = cc.Amount ?? 0,
-                    gwp = cc.Gwp ?? 0,
-                    ge = cc.Ge ?? 0,
+                    carbon_a1a3 = cc.Gwp ?? 0,
+                    grey_energy_fabrication_total = cc.Ge ?? 0,
                     calc_materials_id = new { id = cc.Material.Id}
                 }).ToArray(),
-                buildup_gwp = SendItem.BuildupGwp,
-                buildup_ge = SendItem.BuildupGe
+                carbon_a1a3 = SendItem.BuildupGwp,
+                grey_energy_fabrication_total = SendItem.BuildupGe
             };
 
             var variables = new Dictionary<string, object>();

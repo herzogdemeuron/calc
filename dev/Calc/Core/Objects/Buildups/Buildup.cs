@@ -52,10 +52,10 @@ namespace Calc.Core.Objects.Buildups
 
         public string GroupName => Group?.Name;
 
-        [JsonProperty("buildup_gwp")]
+        [JsonProperty("carbon_a1a3")]
         public double? BuildupGwp { get; set; }
 
-        [JsonProperty("buildup_ge")]
+        [JsonProperty("grey_energy_fabrication_total")]
         public double? BuildupGe { get; set; }
 
         [JsonProperty("description")]
