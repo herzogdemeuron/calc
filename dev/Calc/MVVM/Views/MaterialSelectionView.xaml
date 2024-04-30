@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:Calc.MVVM.ViewModels"
         d:DataContext="{d:DesignInstance Type=local:MaterialSelectionViewModel}"
         mc:Ignorable="d"
-        Height="700"
-        Width="700"
+        Height="600"
+        Width="600"
         MinHeight="500"
         MinWidth="500"
         WindowStartupLocation="CenterScreen"
@@ -28,9 +28,9 @@
         <Grid x:Name="MainGrid">
             <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10"/>
-            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="10"/>
-            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="4*"/>
             <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -54,8 +54,8 @@
                   Grid.Row="2"
                   PreviewMouseLeftButtonDown="ListViewSelected"
                   Loaded="ListViewLoaded"
-                  ItemsSource="{Binding ProductTypeTagsView}"
-                  SelectedItem="{Binding SelectedProductTypeTag}"
+                  ItemsSource="{Binding ProductTagsView}"
+                  SelectedItem="{Binding SelectedProductTag}"
                   Style="{StaticResource ListViewStyle}" 
                   ItemContainerStyle="{StaticResource ListViewItemTagStyle}"/>
 
@@ -73,8 +73,8 @@
                Grid.Row="4"
                PreviewMouseLeftButtonDown="ListViewSelected"
                Loaded="ListViewLoaded"
-               ItemsSource="{Binding MaterialTypeTagsView}"
-               SelectedItem="{Binding SelectedMaterialTypeTag}"
+               ItemsSource="{Binding MaterialTagsView}"
+               SelectedItem="{Binding SelectedMaterialTag}"
                Style="{StaticResource ListViewStyle}" 
                ItemContainerStyle="{StaticResource ListViewItemTagStyle}"/>
 

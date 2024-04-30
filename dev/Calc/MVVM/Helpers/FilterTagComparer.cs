@@ -16,12 +16,12 @@ namespace Calc.MVVM.Helpers
             var itemY = y as FilterTagModel;
 
             // Handle nulls last
-            if (string.IsNullOrEmpty(itemX?.Family) && string.IsNullOrEmpty(itemY?.Family)) return 0;
-            if (string.IsNullOrEmpty(itemX?.Family)) return 1;
-            if (string.IsNullOrEmpty(itemY?.Family)) return -1;
+            if (itemX?.TagName == "?" && itemY?.TagName == "?") return 0;
+            if (itemX?.TagName == "?") return 1;
+            if (itemY?.TagName == "?") return -1;
 
             // Compare two non-null/non-empty strings
-            return string.Compare(itemX.Family, itemY.Family);
+            return string.Compare(itemX.TagName, itemY.TagName);
         }
     }
 }
