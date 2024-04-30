@@ -20,8 +20,6 @@
         </Setter>
     </Style>
 
-
-
     <Style x:Key="ListViewItemTagStyle" TargetType="ListViewItem">
         <Setter Property="Template">
             <Setter.Value>
@@ -108,30 +106,26 @@
                                                    LineStackingStrategy="BlockLineHeight" 
                                                    TextWrapping="Wrap"/>
 
-                                        <TextBlock Grid.Row="2"
-                                                   Grid.ColumnSpan="2"
-                                                   FontSize="10"                                                   
-                                                   VerticalAlignment="Top"
+                                        <TextBlock Grid.Row="2" 
+                                                   Grid.ColumnSpan="2" 
+                                                   FontSize="10" 
+                                                   VerticalAlignment="Top" 
                                                    Foreground="DimGray">
-                                            <TextBlock.Text>
-                                                <MultiBinding StringFormat="Material Type: {0} - {1}">
-                                                    <Binding Path="MaterialType" />
-                                                    <Binding Path="MaterialTypeFamily" />
-                                                </MultiBinding>
-                                            </TextBlock.Text>
+                                            <Run FontWeight="SemiBold" Text="Material Type: "/>
+                                            <Run Text="{Binding MaterialType}"/>
+                                            <Run Text=" - "/>
+                                            <Run Text="{Binding MaterialTypeFamily}"/>
                                         </TextBlock>
 
-                                        <TextBlock Grid.Row="3"
-                                                   Grid.ColumnSpan="2"
-                                                   FontSize="10"                                                   
-                                                   VerticalAlignment="Top"
+                                        <TextBlock Grid.Row="3" 
+                                                   Grid.ColumnSpan="2" 
+                                                   FontSize="10" 
+                                                   VerticalAlignment="Top" 
                                                    Foreground="DimGray">
-                                            <TextBlock.Text>
-                                                <MultiBinding StringFormat="Application: {0} - {1}">
-                                                    <Binding Path="ProductType" />
-                                                    <Binding Path="ProductTypeFamily" />
-                                                </MultiBinding>
-                                            </TextBlock.Text>
+                                            <Run FontWeight="SemiBold" Text="Application: "/>
+                                            <Run Text="{Binding ProductType}"/>
+                                            <Run Text=" - "/>
+                                            <Run Text="{Binding ProductTypeFamily}"/>
                                         </TextBlock>
 
                                         <TextBlock Grid.Row="5"
