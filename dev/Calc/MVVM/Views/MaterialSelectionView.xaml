@@ -41,36 +41,17 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
-
-        <Label Content="Application:"
-                Grid.Column="1"
-                Grid.Row="1"
-                FontSize="27"               
-                Margin="0,5,0,0"
-                FontWeight="Light"
-                VerticalAlignment="Top"/>
-        <ListView x:Name="ProductTypeTags"
-                  Grid.Column="1"
-                  Grid.Row="2"
-                  PreviewMouseLeftButtonDown="ListViewSelected"
-                  Loaded="ListViewLoaded"
-                  ItemsSource="{Binding ProductTagsView}"
-                  SelectedItem="{Binding SelectedProductTag}"
-                  Style="{StaticResource ListViewStyle}" 
-                  ItemContainerStyle="{StaticResource ListViewItemTagStyle}"/>
-
-
-
+            
         <Label Content="Material Type:"
              Grid.Column="1"
-             Grid.Row="3"
+             Grid.Row="1"
              FontSize="27"
              Margin="0,5,0,0"
             FontWeight="Light"
             VerticalAlignment="Top"/>
         <ListView x:Name="MaterialTypeTags"
                Grid.Column="1"
-               Grid.Row="4"
+               Grid.Row="2"
                PreviewMouseLeftButtonDown="ListViewSelected"
                Loaded="ListViewLoaded"
                ItemsSource="{Binding MaterialTagsView}"
@@ -78,6 +59,22 @@
                Style="{StaticResource ListViewStyle}" 
                ItemContainerStyle="{StaticResource ListViewItemTagStyle}"/>
 
+        <Label Content="Application:"
+                Grid.Column="1"
+                Grid.Row="3"
+                FontSize="27"               
+                Margin="0,5,0,0"
+                FontWeight="Light"
+                VerticalAlignment="Top"/>
+        <ListView x:Name="ProductTypeTags"
+                  Grid.Column="1"
+                  Grid.Row="4"
+                  PreviewMouseLeftButtonDown="ListViewSelected"
+                  Loaded="ListViewLoaded"
+                  ItemsSource="{Binding ProductTagsView}"
+                  SelectedItem="{Binding SelectedProductTag}"
+                  Style="{StaticResource ListViewStyle}" 
+                  ItemContainerStyle="{StaticResource ListViewItemTagStyle}"/>
 
         <Label Content="Search:"
                    Grid.Column="3" 
