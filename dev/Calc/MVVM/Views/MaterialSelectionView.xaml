@@ -34,10 +34,10 @@
             <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="10"/>
-            <RowDefinition Height="45"/>
+            <RowDefinition Height="0"/>
+            <RowDefinition Height="55"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="45"/>
+            <RowDefinition Height="55"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
@@ -45,8 +45,8 @@
         <Label Content="Product Type:"
                 Grid.Column="1"
                 Grid.Row="1"
-                FontSize="27"
-               Padding="0"
+                FontSize="27"               
+                Margin="0,5,0,0"
                 FontWeight="Light"
                 VerticalAlignment="Top"/>
         <ListView x:Name="ProductTypeTags"
@@ -65,7 +65,7 @@
              Grid.Column="1"
              Grid.Row="3"
              FontSize="27"
-               Padding="0"
+             Margin="0,5,0,0"
             FontWeight="Light"
             VerticalAlignment="Top"/>
         <ListView x:Name="MaterialTypeTags"
@@ -82,9 +82,9 @@
         <Label Content="Search:"
                    Grid.Column="3" 
                    Grid.Row="1"
-                   FontSize="27"
+                   FontSize="27"               
+                   Margin="0,5,0,0"
                    FontWeight="Light"
-               Padding="0"
                    VerticalAlignment="Top"/>
 
 
