@@ -217,8 +217,7 @@ namespace Calc.Core
             try
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                this.StandardDriver = await _graphqlRetry.ExecuteAsync(() =>
-                    this.StandardManager.GetMany<StandardStorageDriver>(this.StandardDriver));
+                this.StandardDriver = await StandardManager.GetMany<StandardStorageDriver>(this.StandardDriver);
                 OnProgressChanged(20);
 
                 cancellationToken.ThrowIfCancellationRequested();

@@ -17,16 +17,14 @@ namespace Calc.Core.DirectusAPI.Drivers
         public async Task<TDriver> GetMany<TDriver>(IDriverGetMany<T> driver) where TDriver : IDriverGetMany<T>
         {
             var request = CreateRequest(driver.QueryGetMany, driver.GetVariables());
-            var response = await this._directus.GraphQlClient.SendQueryAsync<TDriver>(request);
-            CheckResponseForErrors(response);
+            var response = await this._directus.GraphQlQueryWithRetry<GraphQLResponse<TDriver>>(request);
             return response.Data;
         }
 
         public async Task<TDriver> GetManySystem<TDriver>(IDriverGetManySystem<T> driver) where TDriver : IDriverGetManySystem<T>
         {
             var request = CreateRequest(driver.QueryGetManySystem, driver.GetVariables());
-            var response = await this._directus.GraphQlSysClient.SendQueryAsync<TDriver>(request);
-            CheckResponseForErrors(response);
+            var response = await this._directus.GraphQlSysQueryWithRetry<GraphQLResponse<TDriver>>(request);
             return response.Data;
         }
 
@@ -34,8 +32,7 @@ namespace Calc.Core.DirectusAPI.Drivers
         {
             CheckDriverPropertyIsNotNull(driver, "SendItem");
             var request = CreateRequest(driver.QueryCreateSingle, driver.GetVariables());
-            var response = await Directus.GraphQlClient.SendMutationAsync<TDriver>(request);
-            CheckResponseForErrors(response);
+            var response = await _directus.GraphQlMutationWithRetry<GraphQLResponse<TDriver>>(request);
             // Update the driver with the created item
             driver.CreatedItem = response?.Data?.CreatedItem;
             return response.Data;
@@ -45,8 +42,7 @@ namespace Calc.Core.DirectusAPI.Drivers
         {
             CheckDriverPropertyIsNotNull(driver, "SendItems");
             var request = CreateRequest(driver.QueryCreateMany, driver.GetVariables());
-            var response = await this._directus.GraphQlClient.SendMutationAsync<TDriver>(request);
-            CheckResponseForErrors(response);
+            var response = await _directus.GraphQlMutationWithRetry<GraphQLResponse<TDriver>>(request);
             return response.Data;
         }
 
@@ -54,8 +50,7 @@ namespace Calc.Core.DirectusAPI.Drivers
         {
             CheckDriverPropertyIsNotNull(driver, "SendItem");
             var request = CreateRequest(driver.QueryUpdateSingle, driver.GetVariables());
-            var response = await this._directus.GraphQlClient.SendMutationAsync<TDriver>(request);
-            CheckResponseForErrors(response);
+            var response = await _directus.GraphQlMutationWithRetry<GraphQLResponse<TDriver>>(request);
             return response.Data;
         }
 
@@ -72,15 +67,6 @@ namespace Calc.Core.DirectusAPI.Drivers
             }
             var property = typeof(TDriver).GetProperty(propertyName) ?? throw new Exception($"Property {propertyName} does not exist on driver {typeof(TDriver).Name}.");
             _ = property.GetValue(driver) ?? throw new Exception($"Property {propertyName} on driver {typeof(TDriver).Name} is null.");
-        }
-
-        private void CheckResponseForErrors<TReturnedDriver>(GraphQLResponse<TReturnedDriver> response)
-        {
-            if (response.Errors != null)
-            {
-                throw new Exception(JsonConvert.SerializeObject(response.Errors, Formatting.Indented));
-            }
-            //Console.WriteLine(JsonConvert.SerializeObject(response, Formatting.Indented));
         }
     }
 }

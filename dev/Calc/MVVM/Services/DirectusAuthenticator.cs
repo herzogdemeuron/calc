@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace Calc.MVVM.Services
 {
-    public class DirectusAuthenticator
+    public class DirectusAuthenticator // deprecated
     {
         public async Task<Directus> ShowLoginWindowAsync(string _url = null, string _email = null, string _password = null)
         {
