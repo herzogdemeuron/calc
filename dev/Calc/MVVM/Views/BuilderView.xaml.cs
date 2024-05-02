@@ -100,6 +100,13 @@ namespace Calc.MVVM.Views
         private void SetMaterialClicked(object sender, RoutedEventArgs e)
         {
             string tag = (sender as Button).Tag.ToString();
+            SetMaterialWithTag(tag);
+        }
+
+        // set the main or sub material calling the material selection view
+        // decide which material to set based on the tag
+        private void SetMaterialWithTag(string tag)
+        {
             bool setMain = tag == "Main";
 
             BuilderVM.HandleSelectingMaterial(setMain);
@@ -107,7 +114,7 @@ namespace Calc.MVVM.Views
             var materialSelectionView = new MaterialSelectionView(BuilderVM.MaterialSelectionVM);
 
             var result = materialSelectionView.ShowDialog();
-            if(result == true)
+            if (result == true)
             {
                 BuilderVM.HandleMaterialSelected(setMain);
             }
@@ -145,7 +152,6 @@ namespace Calc.MVVM.Views
         {
             this.Close();
         }
-
 
         private void OnCaputureClicked(object sender, RoutedEventArgs e)
         {
@@ -234,10 +240,16 @@ namespace Calc.MVVM.Views
         private void TreeViewDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var treeViewItem = FindAncestorOrSelf<TreeViewItem>(e.OriginalSource as DependencyObject);
+            // if the double clicked item is not a treeviewitem, expand/collapse all
             if (treeViewItem == null)
             {
                 bool shouldExpand = ShouldExpandItems(TreeView);
                 ExpandAll(TreeView, shouldExpand);
+            }
+            // if the double clicked item is a treeviewitem, call set main material
+            else if (!treeViewItem.HasItems)
+            {
+                SetMaterialWithTag("Main");
             }
         }
 
@@ -257,6 +269,7 @@ namespace Calc.MVVM.Views
             return true;
         }
 
+        // Expand/Collapse all items in the treeview
         private void ExpandAll(ItemsControl items, bool expand)
         {
             foreach (object obj in items.Items)

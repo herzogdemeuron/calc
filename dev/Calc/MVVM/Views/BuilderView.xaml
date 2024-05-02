@@ -138,7 +138,7 @@
                             BorderThickness="0"
                             AllowDrop="True"
                             MouseLeftButtonDown="SideClickDown"
-                              MouseDoubleClick="TreeViewDoubleClick"
+                            MouseDoubleClick="TreeViewDoubleClick"
                             MouseMove="TreeViewMouseMove"
                             DragOver="TreeViewDragOver"
                             Drop="TreeViewDrop"
