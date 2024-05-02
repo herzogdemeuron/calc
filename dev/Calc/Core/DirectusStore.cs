@@ -217,32 +217,27 @@ namespace Calc.Core
             try
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                this.StandardDriver = await StandardManager.GetMany<StandardStorageDriver>(this.StandardDriver);
+                StandardDriver = await StandardManager.GetMany<StandardStorageDriver>(StandardDriver);
                 OnProgressChanged(20);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                this.CustomParamSettingDriver = await _graphqlRetry.ExecuteAsync(() =>
-                                   this.CustomParamSettingManager.GetMany<CustomParamSettingStorageDriver>(this.CustomParamSettingDriver));
+                CustomParamSettingDriver = await CustomParamSettingManager.GetMany<CustomParamSettingStorageDriver>(CustomParamSettingDriver);
                 OnProgressChanged(30);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                this.MaterialDriver = await _graphqlRetry.ExecuteAsync(() =>
-                    this.MaterialManager.GetMany<MaterialStorageDriver>(this.MaterialDriver));
+                MaterialDriver = await MaterialManager.GetMany<MaterialStorageDriver>(MaterialDriver);
                 OnProgressChanged(40);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                this.BuildupGroupDriver = await _graphqlRetry.ExecuteAsync(() =>
-                    this.BuildupGroupManager.GetMany<BuildupGroupStorageDriver>(this.BuildupGroupDriver));
+                BuildupGroupDriver = await BuildupGroupManager.GetMany<BuildupGroupStorageDriver>(BuildupGroupDriver);
                 OnProgressChanged(60);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                this.BuildupDriver = await _graphqlRetry.ExecuteAsync(() =>
-                    this.BuildupManager.GetMany<BuildupStorageDriver>(this.BuildupDriver));
+                BuildupDriver = await BuildupManager.GetMany<BuildupStorageDriver>(BuildupDriver);
                 OnProgressChanged(80);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                this.FolderDriver = await _graphqlRetry.ExecuteAsync(() =>
-                                 this.FolderManager.GetManySystem<FolderStorageDriver>(this.FolderDriver));
+                FolderDriver = await FolderManager.GetManySystem<FolderStorageDriver>(FolderDriver);
                 OnProgressChanged(90);
 
                 cancellationToken.ThrowIfCancellationRequested();

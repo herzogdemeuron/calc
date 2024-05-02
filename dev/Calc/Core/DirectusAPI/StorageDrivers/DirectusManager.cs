@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Speckle.Newtonsoft.Json;
 using GraphQL;
+using GraphQL.Client.Http;
+using Polly;
 
 namespace Calc.Core.DirectusAPI.Drivers
 {
@@ -17,14 +19,14 @@ namespace Calc.Core.DirectusAPI.Drivers
         public async Task<TDriver> GetMany<TDriver>(IDriverGetMany<T> driver) where TDriver : IDriverGetMany<T>
         {
             var request = CreateRequest(driver.QueryGetMany, driver.GetVariables());
-            var response = await this._directus.GraphQlQueryWithRetry<GraphQLResponse<TDriver>>(request);
+            var response = await _directus.GraphQlQueryWithRetry<TDriver>(request);
             return response.Data;
         }
 
         public async Task<TDriver> GetManySystem<TDriver>(IDriverGetManySystem<T> driver) where TDriver : IDriverGetManySystem<T>
         {
             var request = CreateRequest(driver.QueryGetManySystem, driver.GetVariables());
-            var response = await this._directus.GraphQlSysQueryWithRetry<GraphQLResponse<TDriver>>(request);
+            var response = await this._directus.GraphQlSysQueryWithRetry<TDriver>(request);
             return response.Data;
         }
 
@@ -32,7 +34,7 @@ namespace Calc.Core.DirectusAPI.Drivers
         {
             CheckDriverPropertyIsNotNull(driver, "SendItem");
             var request = CreateRequest(driver.QueryCreateSingle, driver.GetVariables());
-            var response = await _directus.GraphQlMutationWithRetry<GraphQLResponse<TDriver>>(request);
+            var response = await _directus.GraphQlMutationWithRetry<TDriver>(request);
             // Update the driver with the created item
             driver.CreatedItem = response?.Data?.CreatedItem;
             return response.Data;
@@ -42,7 +44,7 @@ namespace Calc.Core.DirectusAPI.Drivers
         {
             CheckDriverPropertyIsNotNull(driver, "SendItems");
             var request = CreateRequest(driver.QueryCreateMany, driver.GetVariables());
-            var response = await _directus.GraphQlMutationWithRetry<GraphQLResponse<TDriver>>(request);
+            var response = await _directus.GraphQlMutationWithRetry<TDriver>(request);
             return response.Data;
         }
 
@@ -50,7 +52,7 @@ namespace Calc.Core.DirectusAPI.Drivers
         {
             CheckDriverPropertyIsNotNull(driver, "SendItem");
             var request = CreateRequest(driver.QueryUpdateSingle, driver.GetVariables());
-            var response = await _directus.GraphQlMutationWithRetry<GraphQLResponse<TDriver>>(request);
+            var response = await _directus.GraphQlMutationWithRetry<TDriver>(request);
             return response.Data;
         }
 
