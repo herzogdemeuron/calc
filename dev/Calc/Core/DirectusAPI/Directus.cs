@@ -17,6 +17,10 @@ using Polly.Retry;
 
 namespace Calc.Core.DirectusAPI
 {
+    /// <summary>
+    /// The core class for interacting with Directus API with retry policies.
+    /// Both HttpClient (auth and image) and GraphQLHttpClient are used for making requests to Directus API.
+    /// </summary>
     public class Directus
     {
         private string token ;
@@ -42,26 +46,10 @@ namespace Calc.Core.DirectusAPI
         public Directus()
         {
             httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12; // unless windows supports TLS 1.3, directus cloud enforces TLS 1.3
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        }
-
-        private void ConfigureHttpClients()
-        {
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            graphQlClient = new GraphQLHttpClient
-                (
-                new GraphQLHttpClientOptions{ EndPoint = new Uri($"{this.baseUrl}/graphql")}, 
-                new NewtonsoftJsonSerializer(), 
-                httpClient
-                );
-
-            graphQlSysClient = new GraphQLHttpClient
-                (
-                new GraphQLHttpClientOptions{ EndPoint = new Uri($"{this.baseUrl}/graphql/system") },
-                new NewtonsoftJsonSerializer(),
-                httpClient
-                );
         }
 
         public async Task<HttpResponseMessage> RequestWithRetry(string url, Func<HttpContent> contentFactory, bool reAuth = true)
@@ -166,11 +154,28 @@ namespace Calc.Core.DirectusAPI
             baseUrl = url;
             token = data.Access_token;
             refreshToken = data.Refresh_token;
-            ConfigureHttpClients();
+            ConfigureGraphQlClients();
             reAuthEmail = email;
             reAuthPassword = password;
             Authenticated = true;
 
+        }
+
+        private void ConfigureGraphQlClients()
+        {
+            graphQlClient = new GraphQLHttpClient
+                (
+                new GraphQLHttpClientOptions { EndPoint = new Uri($"{this.baseUrl}/graphql") },
+                new NewtonsoftJsonSerializer(),
+                httpClient
+                );
+
+            graphQlSysClient = new GraphQLHttpClient
+                (
+                new GraphQLHttpClientOptions { EndPoint = new Uri($"{this.baseUrl}/graphql/system") },
+                new NewtonsoftJsonSerializer(),
+                httpClient
+                );
         }
 
         public async Task<string> UploadImageAsync(string imagePath, string folderId, string newFileName)
