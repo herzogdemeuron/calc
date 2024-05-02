@@ -25,24 +25,24 @@ namespace Calc.Core
         public bool AllDataLoaded { get; private set; } = false;
         public List<Unit> UnitsAll { get; set; }
         public List<MaterialFunction> MaterialFunctionsAll { get; set; }
-        public List<Project> ProjectsAll { get { return this.ProjectDriver?.GotManyItems; } }
+        public List<Project> ProjectsAll { get { return ProjectDriver?.GotManyItems; } }
         public Project ProjectSelected { get; set; } // the current project
-        public List<LcaStandard> StandardsAll { get { return this.StandardDriver?.GotManyItems; } }
-        public List<BuildupGroup> BuildupGroupsAll { get { return this.BuildupGroupDriver?.GotManyItems; } }
-        public List<Buildup> BuildupsAll { get { return this.BuildupDriver?.GotManyItems; } }
-        public List<Mapping> MappingsAll { get { return this.MappingDriver?.GotManyItems; } }
-        public List<CustomParamSetting> CustomParamSettingsAll { get { return this.CustomParamSettingDriver?.GotManyItems; } }
-        private List<Material> MaterialsAll { get { return this.MaterialDriver?.GotManyItems; } }
+        public List<LcaStandard> StandardsAll { get { return StandardDriver?.GotManyItems; } }
+        public List<BuildupGroup> BuildupGroupsAll { get { return BuildupGroupDriver?.GotManyItems; } }
+        public List<Buildup> BuildupsAll { get { return BuildupDriver?.GotManyItems; } }
+        public List<Mapping> MappingsAll { get { return MappingDriver?.GotManyItems; } }
+        public List<CustomParamSetting> CustomParamSettingsAll { get { return CustomParamSettingDriver?.GotManyItems; } }
+        private List<Material> MaterialsAll { get { return MaterialDriver?.GotManyItems; } }
         private Dictionary<LcaStandard, List<Material>> MaterialsOfStandards { get; set; }
         public List<Material> CurrentMaterials
         {
             get
             {
-                if (this.StandardSelected == null)
+                if (StandardSelected == null)
                 {
                     return new List<Material>();
                 }
-                return MaterialsOfStandards[this.StandardSelected];
+                return MaterialsOfStandards[StandardSelected];
             }
         }
         public LcaStandard StandardSelected { get; set; }
@@ -68,7 +68,7 @@ namespace Calc.Core
             set => MappingDriver.GotManyItems = value;
         }
 
-        public List<Forest> Forests { get { return this.ForestDriver.GotManyItems; } }
+        public List<Forest> Forests { get { return ForestDriver.GotManyItems; } }
         private Forest _forestSelected;
         public Forest ForestSelected
         {
@@ -95,17 +95,6 @@ namespace Calc.Core
         }
 
         private Directus Directus { get; set; }
-        private DirectusManager<Project> ProjectManager { get; set; }
-        private DirectusManager<LcaStandard> StandardManager { get; set; }
-        private DirectusManager<Material> MaterialManager { get; set; }
-        private DirectusManager<BuildupGroup> BuildupGroupManager { get; set; }
-        private DirectusManager<Buildup> BuildupManager { get; set; }
-        private DirectusManager<Mapping> MappingManager { get; set; }
-        private DirectusManager<Forest> ForestManager { get; set; }
-        private DirectusManager<Snapshot> SnapshotManager { get; set; }
-        private DirectusManager<DirectusFolder> FolderManager { get; set; }
-        private DirectusManager<CustomParamSetting> CustomParamSettingManager { get; set; }
-
         private ProjectStorageDriver ProjectDriver { get; set; }
         private StandardStorageDriver StandardDriver { get; set; }
         private MaterialStorageDriver MaterialDriver { get; set; }
@@ -117,13 +106,6 @@ namespace Calc.Core
         private FolderStorageDriver FolderDriver { get; set; }
         private CustomParamSettingStorageDriver CustomParamSettingDriver { get; set; }
 
-        private readonly Polly.Retry.AsyncRetryPolicy _graphqlRetry = Policy.Handle<GraphQLHttpRequestException>()
-                .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(5),
-                (exception, timeSpan, retryCount, context) =>
-                {
-                    Console.WriteLine($"Retry {retryCount} for {exception.Message}");
-                });
-
         public DirectusStore(Directus directus)
         {
             if (directus.Authenticated == false)
@@ -131,80 +113,75 @@ namespace Calc.Core
                 throw new Exception("DirectusStore: Directus not authenticated");
             }
 
-            this.Directus = directus;
+            DirectusDriver.DirectusInstance = directus;
+            Directus = directus;
 
-            this.ProjectManager = new DirectusManager<Project>(this.Directus);
-            this.StandardManager = new DirectusManager<LcaStandard>(this.Directus);
-            this.MaterialManager = new DirectusManager<Material>(this.Directus);
-            this.BuildupManager = new DirectusManager<Buildup>(this.Directus);
-            this.MappingManager = new DirectusManager<Mapping>(this.Directus);
-            this.BuildupGroupManager = new DirectusManager<BuildupGroup>(this.Directus);
-            this.ForestManager = new DirectusManager<Forest>(this.Directus);
-            this.SnapshotManager = new DirectusManager<Snapshot>(this.Directus);
-            this.FolderManager = new DirectusManager<DirectusFolder>(this.Directus);
-            this.CustomParamSettingManager = new DirectusManager<CustomParamSetting>(this.Directus);
-
-            this.ProjectDriver = new ProjectStorageDriver();
-            this.StandardDriver = new StandardStorageDriver();
-            this.MaterialDriver = new MaterialStorageDriver();
-            this.BuildupDriver = new BuildupStorageDriver();
-            this.BuildupGroupDriver = new BuildupGroupStorageDriver();
-            this.MappingDriver = new MappingStorageDriver();
-            this.ForestDriver = new ForestStorageDriver();
-            this.SnapshotDriver = new SnapshotStorageDriver();
-            this.FolderDriver = new FolderStorageDriver();
-            this.CustomParamSettingDriver = new CustomParamSettingStorageDriver();
+            ProjectDriver = new ProjectStorageDriver();
+            StandardDriver = new StandardStorageDriver();
+            MaterialDriver = new MaterialStorageDriver();
+            BuildupDriver = new BuildupStorageDriver();
+            BuildupGroupDriver = new BuildupGroupStorageDriver();
+            MappingDriver = new MappingStorageDriver();
+            ForestDriver = new ForestStorageDriver();
+            SnapshotDriver = new SnapshotStorageDriver();
+            FolderDriver = new FolderStorageDriver();
+            CustomParamSettingDriver = new CustomParamSettingStorageDriver();
 
             UnitsAll =   Enum.GetValues(typeof(Unit)).Cast<Unit>().ToList();
-            MaterialFunctionsAll = Enum.GetValues(typeof(MaterialFunction)).Cast<MaterialFunction>().ToList();
+            MaterialFunctionsAll = Enum.GetValues(typeof(MaterialFunction)).Cast<MaterialFunction>().ToList(); // should this source on directus?
         }
 
 
-        public async Task<bool> GetProjects()
+        public async Task GetProjects() // todo: catch exception from here
         {
-            try
-            {
-                this.ProjectDriver = await _graphqlRetry.ExecuteAsync(() => 
-                    this.ProjectManager.GetMany<ProjectStorageDriver>(this.ProjectDriver));
-                return true;
-            }
-            catch (Exception e)
-            {
-                return false;
-                throw e;
-            }
+            ProjectDriver = await DirectusDriver.GetMany<ProjectStorageDriver,Project>(ProjectDriver);
         }
-        public async Task<bool> GetModelCheckerData()
+
+        public async Task<bool> GetModelCheckerData(CancellationToken cancellationToken)
         {
             CheckIfProjectSelected();
 
             try
             {
-                this.StandardDriver = await _graphqlRetry.ExecuteAsync(() =>
-                    this.StandardManager.GetMany<StandardStorageDriver>(this.StandardDriver));
+                cancellationToken.ThrowIfCancellationRequested();
+                StandardDriver = await DirectusDriver.GetMany<StandardStorageDriver, LcaStandard>(StandardDriver);
+                OnProgressChanged(20);
 
-                this.MaterialDriver = await _graphqlRetry.ExecuteAsync(() =>
-                    this.MaterialManager.GetMany<MaterialStorageDriver>(this.MaterialDriver));
+                cancellationToken.ThrowIfCancellationRequested();
+                CustomParamSettingDriver = await DirectusDriver.GetMany<CustomParamSettingStorageDriver, CustomParamSetting>(CustomParamSettingDriver);
+                OnProgressChanged(30);
 
-                this.BuildupGroupDriver = await _graphqlRetry.ExecuteAsync(() =>
-                    this.BuildupGroupManager.GetMany<BuildupGroupStorageDriver>(this.BuildupGroupDriver));
+                cancellationToken.ThrowIfCancellationRequested();
+                MaterialDriver = await DirectusDriver.GetMany<MaterialStorageDriver, Material>(MaterialDriver);
+                OnProgressChanged(40);
 
-                this.BuildupDriver = await _graphqlRetry.ExecuteAsync(() => 
-                    this.BuildupManager.GetMany<BuildupStorageDriver>(this.BuildupDriver));
+                cancellationToken.ThrowIfCancellationRequested();
+                BuildupGroupDriver = await DirectusDriver.GetMany<BuildupGroupStorageDriver, BuildupGroup>(BuildupGroupDriver);
+                OnProgressChanged(60);
 
-                this.MappingDriver = await _graphqlRetry.ExecuteAsync(() => 
-                    this.MappingManager.GetMany<MappingStorageDriver>(this.MappingDriver));
+                cancellationToken.ThrowIfCancellationRequested();
+                BuildupDriver = await DirectusDriver.GetMany<BuildupStorageDriver, Buildup>(BuildupDriver);
+                OnProgressChanged(80);
 
-                this.ForestDriver = await _graphqlRetry.ExecuteAsync(() => 
-                    this.ForestManager.GetMany<ForestStorageDriver>(this.ForestDriver));
+                cancellationToken.ThrowIfCancellationRequested();
+                MappingDriver = await DirectusDriver.GetMany<MappingStorageDriver, Mapping>(MappingDriver);
+                OnProgressChanged(90);
 
-                this.CustomParamSettingDriver = await _graphqlRetry.ExecuteAsync(() => 
-                                   this.CustomParamSettingManager.GetMany<CustomParamSettingStorageDriver>(this.CustomParamSettingDriver));
+                cancellationToken.ThrowIfCancellationRequested();
+                ForestDriver = await DirectusDriver.GetMany<ForestStorageDriver, Forest>(ForestDriver);
+                OnProgressChanged(99);
 
                 LinkFields();
+                SortMaterials();
                 InitStandardSelection();
+                OnProgressChanged(100);
+
                 AllDataLoaded = true;
                 return true;
+            }
+            catch (OperationCanceledException e)
+            {
+                return false;
             }
             catch (Exception e)
             {
@@ -212,33 +189,33 @@ namespace Calc.Core
             }
         }
 
-        public async Task<bool> GetBuilderData(CancellationToken cancellationToken)
+        public async Task<bool> GetBuilderData(CancellationToken cancellationToken = default)
         {
             try
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                StandardDriver = await StandardManager.GetMany<StandardStorageDriver>(StandardDriver);
+                StandardDriver = await DirectusDriver.GetMany<StandardStorageDriver,LcaStandard>(StandardDriver);
                 OnProgressChanged(20);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                CustomParamSettingDriver = await CustomParamSettingManager.GetMany<CustomParamSettingStorageDriver>(CustomParamSettingDriver);
+                CustomParamSettingDriver = await DirectusDriver.GetMany<CustomParamSettingStorageDriver,CustomParamSetting>(CustomParamSettingDriver);
                 OnProgressChanged(30);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                MaterialDriver = await MaterialManager.GetMany<MaterialStorageDriver>(MaterialDriver);
+                MaterialDriver = await DirectusDriver.GetMany<MaterialStorageDriver,Material>(MaterialDriver);
                 OnProgressChanged(40);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                BuildupGroupDriver = await BuildupGroupManager.GetMany<BuildupGroupStorageDriver>(BuildupGroupDriver);
+                BuildupGroupDriver = await DirectusDriver.GetMany<BuildupGroupStorageDriver,BuildupGroup>(BuildupGroupDriver);
                 OnProgressChanged(60);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                BuildupDriver = await BuildupManager.GetMany<BuildupStorageDriver>(BuildupDriver);
+                BuildupDriver = await DirectusDriver.GetMany<BuildupStorageDriver,Buildup>(BuildupDriver);
                 OnProgressChanged(80);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                FolderDriver = await FolderManager.GetManySystem<FolderStorageDriver>(FolderDriver);
-                OnProgressChanged(90);
+                FolderDriver = await DirectusDriver.GetManySystem<FolderStorageDriver,DirectusFolder>(FolderDriver);
+                OnProgressChanged(99);
 
                 cancellationToken.ThrowIfCancellationRequested();
                 LinkFields();
@@ -279,9 +256,9 @@ namespace Calc.Core
 
         private void InitStandardSelection()
         {
-            if (this.StandardsAll.Count > 0)
+            if (StandardsAll.Count > 0)
             {
-                this.StandardSelected = this.StandardsAll[0];
+                StandardSelected = StandardsAll[0];
             }
         }
         
@@ -302,31 +279,30 @@ namespace Calc.Core
         private void SetSelectedMapping(Mapping mapping)
         {
             CheckIfProjectSelected();
-            mapping.Project = this.ProjectSelected;
-            this._mappingSelected = mapping;
+            mapping.Project = ProjectSelected;
+            _mappingSelected = mapping;
         }
 
         public async Task<bool> UpdateSelectedMapping(Forest additionalForest = null)
         {             
-            if (this.MappingSelected == null)
+            if (MappingSelected == null)
             {
                 throw new Exception("No mapping selected");
             }
 
             // refresh the mapping with the selected forest
-            var sendMapping = new Mapping(this.MappingSelected.Name, this.ForestSelected, additionalForest)
+            var sendMapping = new Mapping(MappingSelected.Name, ForestSelected, additionalForest)
             {
-                Project = this.ProjectSelected,
-                Id = this.MappingSelected.Id
+                Project = ProjectSelected,
+                Id = MappingSelected.Id
             };
 
-            this.MappingDriver.SendItem = sendMapping;
+            MappingDriver.SendItem = sendMapping;
 
             try
             {
-                await _graphqlRetry.ExecuteAsync(() => 
-                        this.MappingManager.UpdateSingle<MappingStorageDriver>(this.MappingDriver));
-                this.MappingSelected.MappingItems = sendMapping.MappingItems;
+                await DirectusDriver.UpdateSingle<MappingStorageDriver, Mapping>(MappingDriver);
+                MappingSelected.MappingItems = sendMapping.MappingItems;
                 return true;
             }
             catch (Exception e)
@@ -338,19 +314,18 @@ namespace Calc.Core
 
         public async Task<bool> SaveSelectedMapping()
         {
-            if (this.MappingSelected == null)
+            if (MappingSelected == null)
             {
                 throw new Exception("No mapping selected");
             }
 
-            this.MappingDriver.SendItem = this.MappingSelected;
+            MappingDriver.SendItem = MappingSelected;
 
             try
             {
-                var mappingDriver = await _graphqlRetry.ExecuteAsync(() =>
-                        this.MappingManager.CreateSingle<MappingStorageDriver>(this.MappingDriver));
-                this.MappingSelected.Id = mappingDriver.CreatedItem.Id;
-                this.MappingDriver.GotManyItems.Add(this.MappingSelected);
+                var mappingDriver = await DirectusDriver.CreateSingle<MappingStorageDriver, Mapping>(MappingDriver);
+                MappingSelected.Id = mappingDriver.CreatedItem.Id; // todo: check if is working?
+                MappingDriver.GotManyItems.Add(MappingSelected);
                 return true;
             }
             catch (Exception e)
@@ -363,23 +338,22 @@ namespace Calc.Core
         private void SetSelectedForest(Forest forest)
         {
             CheckIfProjectSelected();
-            forest.Project = this.ProjectSelected;
-            this._forestSelected = forest;
+            forest.Project = ProjectSelected;
+            _forestSelected = forest;
         }
 
         public async Task UpdateSelectedForest()
         {
-            if (this.ForestSelected == null)
+            if (ForestSelected == null)
             {
                 throw new Exception("No forest selected");
             }
 
-            this.ForestDriver.SendItem = this.ForestSelected;
+            ForestDriver.SendItem = ForestSelected;
 
             try
             {
-                await _graphqlRetry.ExecuteAsync(() =>
-                        this.ForestManager.UpdateSingle<ForestStorageDriver>(this.ForestDriver));
+                await DirectusDriver.UpdateSingle<ForestStorageDriver, Forest>(ForestDriver);
             }
             catch (Exception e)
             {
@@ -389,18 +363,17 @@ namespace Calc.Core
 
         public async Task<int?> SaveSelectedForest()
         {
-            if (this.ForestSelected == null)
+            if (ForestSelected == null)
             {
                 throw new Exception("No forest selected");
             }
 
-            this.ForestDriver.SendItem = this.ForestSelected;
+            ForestDriver.SendItem = ForestSelected;
 
             try
             {
-                await _graphqlRetry.ExecuteAsync(() =>
-                        this.ForestManager.CreateSingle<ForestStorageDriver>(this.ForestDriver));
-                return this.ForestDriver.CreatedItem?.Id;
+                await DirectusDriver.CreateSingle<ForestStorageDriver, Forest>(ForestDriver);
+                return ForestDriver.CreatedItem?.Id;
             }
             catch (Exception e)
             {
@@ -408,37 +381,37 @@ namespace Calc.Core
             }
         }
 
-        private void SetResults(List<Result> results)
+        private void SetResults(List<Result> results) // todo: simplify this
         {
             CheckIfProjectSelected();
-            if (this.SnapshotName == null)
+            if (SnapshotName == null)
             {
                 throw new Exception("Set SnapshotName first!");
             }
 
-            this._results = results;
+            _results = results;
         }
 
         public async Task<bool> SaveSnapshot()
         {
-            if (this.Results == null)
+            if (Results == null)
             {
                 throw new Exception("Set Results first!");
             }
 
-            this.SnapshotDriver = new SnapshotStorageDriver
+            SnapshotDriver = new SnapshotStorageDriver
             {
                 SendItem = new Snapshot 
                 { 
                     Results = this.Results,
-                    Name = this.SnapshotName,
-                    Project = this.ProjectSelected
+                    Name = SnapshotName,
+                    Project = ProjectSelected
                 }
             };
             
             try
             {
-                await this.SnapshotManager.CreateSingle<SnapshotStorageDriver>(this.SnapshotDriver);
+                await DirectusDriver.CreateSingle<SnapshotStorageDriver, Snapshot>(SnapshotDriver);
                 return true;
             }
             catch (Exception e)
@@ -450,18 +423,17 @@ namespace Calc.Core
 
         public async Task SaveSingleBuildup(Buildup buildup)
         {
-            this.BuildupDriver.SendItem = buildup;
+            BuildupDriver.SendItem = buildup;
 
             try
             {
-                await _graphqlRetry.ExecuteAsync(() =>
-                                       this.BuildupManager.CreateSingle<BuildupStorageDriver>(this.BuildupDriver));
-                var id = this.BuildupDriver.CreatedItem?.Id;
+                await DirectusDriver.CreateSingle<BuildupStorageDriver, Buildup>(BuildupDriver);
+                var id = BuildupDriver.CreatedItem?.Id;
                 // save the buildup back to buildups all
                 if (id != null)
                 {
                     buildup.Id = id.Value;
-                    this.BuildupDriver.GotManyItems.Add(buildup);
+                    BuildupDriver.GotManyItems.Add(buildup);
                 }
             }
             catch (Exception e)
@@ -475,17 +447,16 @@ namespace Calc.Core
         /// </summary>
         public async Task UpdateSingleBuildup(Buildup buildup)
         {
-            this.BuildupDriver.SendItem = buildup;
+            BuildupDriver.SendItem = buildup;
 
             try
             {
-                await _graphqlRetry.ExecuteAsync(() =>
-                                       this.BuildupManager.UpdateSingle<BuildupStorageDriver>(this.BuildupDriver));
+                await DirectusDriver.UpdateSingle<BuildupStorageDriver, Buildup>(BuildupDriver);
                 // replace the buildup in buildups all
-                var index = this.BuildupDriver.GotManyItems.FindIndex(b => b.Id == buildup.Id);
+                var index = BuildupDriver.GotManyItems.FindIndex(b => b.Id == buildup.Id);
                 if (index != -1)
                 {
-                    this.BuildupDriver.GotManyItems[index] = buildup;
+                    BuildupDriver.GotManyItems[index] = buildup;
                 }
                 else
                 {
@@ -500,27 +471,27 @@ namespace Calc.Core
 
         private List<T> GetProjectRelated<T>(IDriverGetMany<T> driver) where T : IHasProject
         {
-            if (this.ProjectSelected == null)
+            if (ProjectSelected == null)
             {
                 throw new Exception("No project selected");
             }
 
-            return driver.GotManyItems.FindAll(m => m.Project?.Id == this.ProjectSelected.Id);
+            return driver.GotManyItems.FindAll(m => m.Project?.Id == ProjectSelected.Id);
         }
 
         private List<T> GetProjectUnrelated<T>(IDriverGetMany<T> driver) where T : IHasProject
         {
-            if (this.ProjectSelected == null)
+            if (ProjectSelected == null)
             {
                 throw new Exception("No project selected");
             }
 
-            return driver.GotManyItems.FindAll(m => m.Project?.Id != this.ProjectSelected.Id);
+            return driver.GotManyItems.FindAll(m => m.Project?.Id != ProjectSelected.Id);
         }
 
         private void CheckIfProjectSelected()
         {
-            if (this.ProjectSelected == null)
+            if (ProjectSelected == null)
             {
                 throw new Exception("No project selected");
             }
@@ -542,6 +513,7 @@ namespace Calc.Core
 
             return await Directus.UploadImageAsync(imagePath, folderId, newFileName);
         }
+
         protected virtual void OnProgressChanged(int progress)
         {
             ProgressChanged?.Invoke(this, progress);

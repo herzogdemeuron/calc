@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Calc.MVVM.ViewModels
 {
@@ -38,7 +39,7 @@ namespace Calc.MVVM.ViewModels
 
             try
             {
-                bool dataGot = await store.GetModelCheckerData();
+                bool dataGot = await store.GetModelCheckerData(new CancellationTokenSource().Token); //todo: add cancellation token source 
                 MediatorToView.Broadcast("ShowMainView");
 
             }
