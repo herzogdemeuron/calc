@@ -14,7 +14,7 @@
         Width="900" MinWidth="750"
         WindowStartupLocation="CenterScreen"
 
-        Icon="pack://application:,,,/CalcMVVM;component/Resources/icon-01.png"
+        Icon="pack://application:,,,/CalcMVVM;component/Resources/icon_main_small.png"
         Title="CALC"
         Topmost="True">
 

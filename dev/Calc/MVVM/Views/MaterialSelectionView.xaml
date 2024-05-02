@@ -11,7 +11,7 @@
         MinHeight="500"
         MinWidth="500"
         WindowStartupLocation="CenterScreen"
-        Icon="pack://application:,,,/CalcMVVM;component/Resources/icon-01.png"
+        Icon="pack://application:,,,/CalcMVVM;component/Resources/icon_builder_small.png"
         Title="Material Selection"
         Topmost="True">
 

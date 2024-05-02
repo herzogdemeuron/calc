@@ -9,7 +9,8 @@
 
   <ItemGroup>
     <None Remove="Resources\DT_logo.gif" />
-    <None Remove="Resources\icon-01.png" />
+    <None Remove="Resources\icon_builder_small.png" />
+    <None Remove="Resources\icon_main_small.png" />
     <None Remove="ToggleButtonTemplate.xaml" />
     <None Remove="Views\ButtonResource.xaml" />
     <None Remove="Views\ComboBoxResource.xaml" />
@@ -73,7 +74,8 @@
 
   <ItemGroup>
     <Resource Include="Resources\DT_logo.gif" />
-    <Resource Include="Resources\icon-01.png" />
+    <Resource Include="Resources\icon_builder_small.png" />
+    <Resource Include="Resources\icon_main_small.png" />
   </ItemGroup>
 
   <ItemGroup>

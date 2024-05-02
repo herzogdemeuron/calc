@@ -19,7 +19,7 @@ namespace Calc.RevitApp.Revit
                 Assembly.GetExecutingAssembly().Location,
                "Calc.ConnectorRevit.Revit.StartCommand");
             PushButton button = panel.AddItem(buttonData) as PushButton;
-            Uri uriImage = new Uri("pack://application:,,,/RevitApp;component/Resources/icon-01.png", UriKind.Absolute);
+            Uri uriImage = new Uri("pack://application:,,,/RevitApp;component/Resources/icon_main_small.png", UriKind.Absolute);
 
             button.LargeImage = new BitmapImage(uriImage);
         }
