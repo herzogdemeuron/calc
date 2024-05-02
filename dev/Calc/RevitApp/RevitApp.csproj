@@ -62,7 +62,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\icon-01.png" />
+    <Folder Include="Resources\" />
   </ItemGroup>
 
 <PropertyGroup>

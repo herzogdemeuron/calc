@@ -48,7 +48,12 @@ namespace Calc.MVVM.Models
         {
             if (basicParameterSet == null) return "-";
             var param = basicParameterSet.GetAmountParam(unit);
-            if(!param.HasError) return param.Amount.ToString();
+            if(!param.HasError)
+            {
+                var v = param.Amount.ToString();
+                var u = param.Unit.ToString();
+                return $"{v} {u}";
+            }
             switch (param.ErrorType)
             {
                 case ParameterErrorType.Missing:

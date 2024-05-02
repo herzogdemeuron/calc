@@ -194,7 +194,7 @@
                         VerticalAlignment="Stretch">
 
                 <TextBlock x:Name="ThicknessMark"
-                 Text="{Binding Thickness}"
+                 Text="{Binding Thickness, StringFormat='{}{0} mm', TargetNullValue=''}"
                  FontSize="8"
                  FontWeight="SemiBold"
                  VerticalAlignment="Top"
@@ -430,7 +430,7 @@
                             Background="WhiteSmoke"
                             BorderThickness="1"
                             CornerRadius="4">
-                        <ScrollViewer x:Name="PART_ContentHost" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                        <ScrollViewer x:Name="PART_ContentHost" HorizontalAlignment="Stretch" VerticalAlignment="{TemplateBinding VerticalAlignment}"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

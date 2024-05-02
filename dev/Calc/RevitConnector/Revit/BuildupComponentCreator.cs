@@ -281,7 +281,7 @@ namespace Calc.RevitConnector.Revit
         }
 
         /// <summary>
-        /// get the compound material thicknesses of the element with the right order,
+        /// get the compound material thicknesses (mm) of the element with the right order,
         /// returning the material, its thickness and the proportion of area and volume of the same material
         /// </summary>
         private List<(Material,double,double,double)> GetCompoundMaterialThicknesses(Element elem)
@@ -300,7 +300,7 @@ namespace Calc.RevitConnector.Revit
                 {
                     var materialId = layer.MaterialId;
                     var material = Doc.GetElement(materialId) as Material;
-                    var width = ParameterHelper.ToMetricValue(layer.Width, Unit.m);
+                    var width = ParameterHelper.ToMetricValue(layer.Width, Unit.m) * 1000; // convert to mm
                     materials.Add((material, width));
                 }
                 foreach (var material in materials)
@@ -336,6 +336,9 @@ namespace Calc.RevitConnector.Revit
             return (areaProportion, volumeProportion);
         }
 
+        /// <summary>
+        /// get the thickness of the element type in mm
+        /// </summary>
         private double? GetTypeThickness(Element elem, bool isCompound)
         {
             if (isCompound)
@@ -349,7 +352,7 @@ namespace Calc.RevitConnector.Revit
                 
                 if (thickness == 0) return null;
 
-                return ParameterHelper.ToMetricValue(thickness, Unit.m);
+                return ParameterHelper.ToMetricValue(thickness, Unit.m) * 1000; // convert to mm
             }
             return null;
         }

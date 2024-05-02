@@ -112,9 +112,9 @@
                                                    VerticalAlignment="Top" 
                                                    Foreground="DimGray">
                                             <Run FontWeight="SemiBold" Text="Material Type: "/>
-                                            <Run Text="{Binding MaterialType}"/>
-                                            <Run Text=" - "/>
                                             <Run Text="{Binding MaterialTypeFamily}"/>
+                                            <Run Text=" → "/>
+                                            <Run Text="{Binding MaterialType}"/>
                                         </TextBlock>
 
                                         <TextBlock Grid.Row="3" 
@@ -123,9 +123,9 @@
                                                    VerticalAlignment="Top" 
                                                    Foreground="DimGray">
                                             <Run FontWeight="SemiBold" Text="Application: "/>
-                                            <Run Text="{Binding ProductType}"/>
-                                            <Run Text=" - "/>
                                             <Run Text="{Binding ProductTypeFamily}"/>
+                                            <Run Text=" → "/>
+                                            <Run Text="{Binding ProductType}"/>
                                         </TextBlock>
 
                                         <TextBlock Grid.Row="5"
@@ -144,17 +144,17 @@
                                                    Grid.Column="1"
                                                    FontSize="10"
                                                    Foreground="DimGray"
-                                                   Text="{Binding Thickness, StringFormat='Thickness: {0}', TargetNullValue='Thickness: -'}"/>
+                                                   Text="{Binding Thickness, StringFormat='Thickness: {0} mm', TargetNullValue='Thickness: -'}"/>
                                         <TextBlock Grid.Row="6"
                                                    Grid.Column="1"
                                                    FontSize="10"
                                                    Foreground="DimGray"
-                                                   Text="{Binding Gwp, StringFormat='GWP: {0}'}"/>
+                                                   Text="{Binding Gwp, StringFormat='Unit GWP: {0} kgCO₂eq'}"/>
                                         <TextBlock Grid.Row="7"
                                                    Grid.Column="1"
                                                    FontSize="10"
                                                    Foreground="DimGray"
-                                                   Text="{Binding Ge, StringFormat='GE: {0}'}"/>
+                                                   Text="{Binding Ge, StringFormat='Unit GE: {0} kWhOileq'}"/>
                                     </Grid>
                                 </DataTemplate>
                             </ContentPresenter.ContentTemplate>

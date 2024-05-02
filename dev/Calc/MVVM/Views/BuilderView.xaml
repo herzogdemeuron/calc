@@ -42,7 +42,7 @@
                 <RowDefinition Height="60"/>
                 <RowDefinition Height="2*"/>
                 <RowDefinition Height="60"/>
-                <RowDefinition Height="2*"/>
+                <RowDefinition Height="3*"/>
                 <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
 
@@ -226,8 +226,9 @@
                         Grid.Row="1"
                         Grid.RowSpan="2"
                         Margin="5,5,0,0"
-                        d:Text="Buildings, infrastructures, and devices for generating, distributing, a!"
+                        d:Text="Buildings, infrastructures"
                         Style="{StaticResource TextBoxStyle}"
+                        VerticalAlignment="Top"
                         TextWrapping="Wrap"
                         Height="55"
                         Text="{Binding BuildupCreationVM.NewBuildupDescription}"/>
@@ -294,7 +295,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="25"/>
                         <RowDefinition Height="35"/>
-                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="15"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
@@ -327,8 +328,7 @@
 
                     <TextBlock Text="{Binding MaterialMatchInfo}"
                                d:Text="Material units don't match."
-                               VerticalAlignment="Bottom"
-                               HorizontalAlignment="Right"
+                               HorizontalAlignment="Left"
                                Grid.Column="0"
                                Grid.Row="2"
                                Margin="5,0,0,0"
@@ -378,17 +378,22 @@
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="15"/>
-                                            <RowDefinition Height="15"/>
-                                            <RowDefinition Height="15"/>
-                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="20"/>
+                                            <RowDefinition Height="20"/>
+                                            <RowDefinition Height="20"/>
                                         </Grid.RowDefinitions>
 
                                         <TextBlock Grid.Row="0" Grid.Column="0"
                                                FontWeight="SemiBold"
-                                               Text="Material Group"/>
-                                        <TextBlock Grid.Row="0" Grid.Column="1"
-                                               Text="{Binding GroupName}"/>
+                                               Text="Material Type: "/>
+                                        <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} → {1}">
+                                                    <Binding Path="MaterialTypeFamily"/>
+                                                    <Binding Path="MaterialType"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
 
                                         <TextBlock Grid.Row="1" Grid.Column="0"
                                                FontWeight="SemiBold"
@@ -398,27 +403,21 @@
 
                                         <TextBlock Grid.Row="2" Grid.Column="0"
                                                    FontWeight="SemiBold"
-                                                   Text="Thickness"/>
+                                                   Text="Thickness: "/>
                                         <TextBlock Grid.Row="2" Grid.Column="1" 
-                                                   Text="{Binding  Thickness}"/>
-
-                                        <TextBlock Grid.Row="0" Grid.Column="2"
-                                              FontWeight="SemiBold"
-                                              Text="GWP (kgCO2eq)"/>
-                                        <TextBlock Grid.Row="0" Grid.Column="3"
-                                              Text="{Binding Gwp}"/>
+                                                   Text="{Binding Thickness, StringFormat='{}{0} mm', TargetNullValue='-'}"/>
 
                                         <TextBlock Grid.Row="1" Grid.Column="2"
                                               FontWeight="SemiBold"
-                                              Text="GE (kWhOileq)"/>
+                                              Text="Unit GWP: "/>
                                         <TextBlock Grid.Row="1" Grid.Column="3"
-                                              Text="{Binding Ge}"/>
+                                              Text="{Binding Gwp, StringFormat='{}{0} kgCO₂eq'}"/>
 
-                                        <TextBlock Grid.Row="3" Grid.Column="0"
-                                               FontWeight="SemiBold"
-                                               Text="Description"/>
-                                        <TextBlock Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"
-                                               Text="{Binding  Description}" TextWrapping="Wrap"/>
+                                        <TextBlock Grid.Row="2" Grid.Column="2"
+                                              FontWeight="SemiBold"
+                                              Text="Unit GE: "/>
+                                        <TextBlock Grid.Row="2" Grid.Column="3"
+                                              Text="{Binding Ge, StringFormat='{}{0} kWhOileq'}"/>
                                     </Grid>
 
                                 </DataTemplate>
@@ -440,42 +439,40 @@
                      Grid.Row="5" 
                      Grid.Column="2">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="18"/>
-                    <RowDefinition Height="18"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="65"/>
                     <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="80"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock d:Text="This is a Buildup name"
+                <TextBlock d:Text="This is a Buildup name, and it is really long so that it has to be wrapepd."
                            Grid.RowSpan="2"
-                            FontSize="16"
-                            FontWeight="SemiBold"
-                            VerticalAlignment="Top"
-                            Text="{Binding BuildupCreationVM.NewBuildupName}"/>
+                           FontSize="15"
+                           TextWrapping="Wrap"
+                           FontWeight="SemiBold"
+                           LineHeight="17"
+                           Margin="0,0,10,0"
+                           LineStackingStrategy="BlockLineHeight" 
+                           Text="{Binding BuildupCreationVM.NewBuildupName}"/>
 
-                <TextBlock Grid.Column="1" Text="Total GWP: " VerticalAlignment="Center" FontWeight="SemiBold"/>
-                <TextBlock Grid.Column="2" VerticalAlignment="Center" d:Text="177.902">
-                    <TextBlock.Text>
-                        <Binding Path="BuildupCreationVM.BuildupGwp"/>
-                    </TextBlock.Text>
-                </TextBlock>
+                <TextBlock Grid.Column="1" Text="Total GWP: " VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="2" Text="{Binding BuildupCreationVM.BuildupGwp}" FontWeight="SemiBold" VerticalAlignment="Center" d:Text="98.902"/>
+                <TextBlock Grid.Column="3" Text="{Binding BuildupCreationVM.SelectedBuildupUnit, StringFormat='kgCO₂eq/{0}'}" d:Text="kgCO₂eq/m2" Margin="5,0,0,0" VerticalAlignment="Center"/>
 
-                <TextBlock Grid.Column="1" Grid.Row="1" Text="Total GE: " VerticalAlignment="Center" FontWeight="SemiBold"/>
-                <TextBlock Grid.Column="2" Grid.Row="1" VerticalAlignment="Center"  d:Text="1312.902">
-                    <TextBlock.Text>
-                        <Binding Path="BuildupCreationVM.BuildupGe"/>
-                    </TextBlock.Text>
-                </TextBlock>
+                <TextBlock Grid.Column="1" Grid.Row="1" Text="Total GE: " VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding BuildupCreationVM.BuildupGe}" FontWeight="SemiBold" VerticalAlignment="Center" d:Text="177.902"/>
+                <TextBlock Grid.Column="3" Grid.Row="1" Text="{Binding BuildupCreationVM.SelectedBuildupUnit, StringFormat='kWhOileq/{0}'}" d:Text="kWhOileq/m2" Margin="5,0,0,0" VerticalAlignment="Center"/>
 
                 <Border x:Name="PreviewCalculation"
                         BorderBrush="Silver"
                         BorderThickness="1"
                         Grid.Row="2"
-                        Grid.ColumnSpan="3"
+                        Grid.ColumnSpan="4"
                         CornerRadius="4">
                     <DataGrid x:Name="Calculations"
                               Style="{StaticResource DataGridStyle}"
