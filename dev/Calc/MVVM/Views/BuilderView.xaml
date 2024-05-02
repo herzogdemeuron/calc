@@ -512,11 +512,11 @@
             </Grid>
 
             <Grid  x:Name="SaveButtonGrid"
-                    Grid.Column="2"
+                   Grid.ColumnSpan="5"
                     Grid.Row="6">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="200" />
                 </Grid.ColumnDefinitions>
                 <Button Click="SaveBuildupClicked"
                         IsEnabled="{Binding BuildupCreationVM.CanSave}"

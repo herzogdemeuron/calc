@@ -19,16 +19,14 @@ namespace Calc.Core.DirectusAPI
     {
         public int StatusCode;
         public Dictionary<string, object> Response;
-        private string _token;
-        public string Token { get { return _token; } }
-        private string _url;
-        public string Url { get { return _url; } }
-        public string GraphQlUrl { get { return $"{_url}/graphql"; } }
-        public bool Authenticated { get; set; }
-        public static HttpClient HttpClient = new HttpClient(); // Singleton HttpClient
-        public GraphQLHttpClient Client;
-        public GraphQLHttpClient SystemClient { get; private set; }
+        public string Token { get; private set; }
+        public string Url { get; private set; }
         private string _refreshToken;
+        public string GraphQlUrl { get { return $"{Token}/graphql"; } }
+        public bool Authenticated { get; set; }
+        public static HttpClient HttpClient { get; private set; } = new HttpClient(); // Singleton HttpClient
+        public static GraphQLHttpClient GraphQlClient { get; private set; }
+        public static GraphQLHttpClient GraphQlSysClient { get; private set; }
 
         private readonly IAsyncPolicy<HttpResponseMessage> _httpRetryPolicy =
                         Policy.HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
@@ -59,11 +57,11 @@ namespace Calc.Core.DirectusAPI
                 throw new ArgumentException("Invalid URL.");
             }
 
-            this._url = url;
+            Url = url;
             string requestBody = $"{{\"email\": \"{email}\", \"password\": \"{password}\"}}";
             HttpContent content = new StringContent(requestBody, Encoding.UTF8, "application/json");
 
-            var response = await SendRequestWithTokenRefresh(() => HttpClient.PostAsync($"{this._url}/auth/login", content));
+            var response = await SendRequestWithTokenRefresh(() => HttpClient.PostAsync($"{Url}/auth/login", content));
 
             var responseContent = await response.Content.ReadAsStringAsync();
 
@@ -78,7 +76,7 @@ namespace Calc.Core.DirectusAPI
             var responseData = JsonConvert.DeserializeObject<Dictionary<string, LoginResponseData>>(responseContent);
             LoginResponseData data = responseData["data"];
 
-            this._token = data.Access_token;
+            Token = data.Access_token;
             this._refreshToken = data.Refresh_token;
 
             if (this.Token != null)
@@ -98,7 +96,7 @@ namespace Calc.Core.DirectusAPI
         private async Task RefreshToken()
         {
             var content = new StringContent(JsonConvert.SerializeObject(new { refresh_token = _refreshToken }), Encoding.UTF8, "application/json");
-            var response = await HttpClient.PostAsync($"{this._url}/auth/refresh", content);
+            var response = await HttpClient.PostAsync($"{Url}/auth/refresh", content);
             if (!response.IsSuccessStatusCode)
             {
                 var errorResponse = await response.Content.ReadAsStringAsync();
@@ -107,7 +105,7 @@ namespace Calc.Core.DirectusAPI
 
             var responseContent = await response.Content.ReadAsStringAsync();
             var responseData = JsonConvert.DeserializeObject<Dictionary<string, LoginResponseData>>(responseContent);
-            this._token = responseData["data"].Access_token;
+            Token = responseData["data"].Access_token;
             this._refreshToken = responseData["data"].Refresh_token;
 
             ConfigureHttpClient();  // Reconfigure HttpClient to use new token
@@ -127,12 +125,12 @@ namespace Calc.Core.DirectusAPI
         private void ConfigureHttpClient()
         {
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.Token);
-            this.Client = new GraphQLHttpClient(new GraphQLHttpClientOptions
+            GraphQlClient = new GraphQLHttpClient(new GraphQLHttpClientOptions
             {
                 EndPoint = new Uri(this.GraphQlUrl)
             }, new NewtonsoftJsonSerializer(), HttpClient);
 
-            this.SystemClient = new GraphQLHttpClient(new GraphQLHttpClientOptions
+            GraphQlSysClient = new GraphQLHttpClient(new GraphQLHttpClientOptions
             {
                 EndPoint = new Uri($"{this.Url}/graphql/system")
             }, new NewtonsoftJsonSerializer(), HttpClient);
