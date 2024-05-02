@@ -497,12 +497,9 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock>
-                                            <TextBlock.Text>
-                                                <MultiBinding StringFormat="{}{0} {1}">
-                                                    <Binding Path="Amount"/>
-                                                    <Binding Path="Material.MaterialUnit"/>
-                                                </MultiBinding>
-                                            </TextBlock.Text>
+                                            <Run Text="{Binding Amount, StringFormat={}{0:F3}}"/>
+                                            <Run Text=" "/>
+                                            <Run Text="{Binding Material.MaterialUnit}"/>
                                         </TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>

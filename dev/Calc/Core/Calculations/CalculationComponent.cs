@@ -73,7 +73,7 @@ namespace Calc.Core.Calculations
             {
                 Material = getMain ? layer.MainMaterial : layer.SubMaterial,
                 Function = layer.Function,
-                Amount = Math.Round((layerAmount * materialRatio).Value, 3),
+                Amount = (layerAmount * materialRatio).Value,
                 HasError = layerAmountParam.HasError,
                 Gwp = Math.Round(materialGwp.Value,3),
                 Ge = Math.Round(materialGe.Value,3),
