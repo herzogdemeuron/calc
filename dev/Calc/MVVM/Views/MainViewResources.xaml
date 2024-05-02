@@ -53,7 +53,7 @@
 
     <Style x:Key="MappingErrorBorderStyle" TargetType="Border">
         <Setter Property="BorderThickness" Value="2"/>
-        <Setter Property="BorderBrush" Value="SeaGreen"/>
+        <Setter Property="BorderBrush" Value="MediumSeaGreen"/>
         <Setter Property="CornerRadius" Value="4"/>
         <Style.Triggers>
             <DataTrigger Binding="{Binding MappingErrorVM.HasBrokenItems}" Value="True">
@@ -63,7 +63,7 @@
     </Style>
 
     <Style x:Key="MappingErrorPathStyle" TargetType="Path">
-        <Setter Property="Stroke" Value="SeaGreen"/>
+        <Setter Property="Stroke" Value="MediumSeaGreen"/>
         <Setter Property="StrokeThickness" Value="2"/>
         <Style.Triggers>
             <DataTrigger Binding="{Binding MappingErrorVM.HasBrokenItems}" Value="True">
@@ -74,7 +74,7 @@
 
     <Style x:Key="MappingErrorTextStyle" TargetType="TextBlock">
         <Setter Property="Text" Value="All Mappings Clear 😃"/>
-        <Setter Property="Foreground" Value="SeaGreen"/>
+        <Setter Property="Foreground" Value="MediumSeaGreen"/>
         <Style.Triggers>
             <DataTrigger Binding="{Binding MappingErrorVM.HasBrokenItems}" Value="True">
                 <Setter Property="Text" Value="Missing Mappings:"/>
