@@ -315,6 +315,7 @@
                             Grid.Column="0"
                             Grid.Row="0"
                             Style="{StaticResource ButtonStyle}"
+                            d:Content="this is a test material name"
                             Click="SetMaterialClicked"/>
                     
                     <Button Content="{Binding SubMaterial.Name}"
@@ -352,10 +353,10 @@
                                  Text="{Binding SubMaterialRatio}"
                                  Style="{StaticResource TextBoxStyle}"/>
                    
-                    <Grid   x:Name="MaterialTabsGrid"
-                        Grid.ColumnSpan="3"
-                        Grid.Row="4"
-                        DockPanel.Dock="Top">
+                    <Grid x:Name="MaterialTabsGrid"
+                          Grid.ColumnSpan="3"
+                          Grid.Row="4"
+                          DockPanel.Dock="Top">
                         <Border Margin="0,21,0,0"
                                 BorderBrush="Silver"
                                 Background="White"
@@ -370,7 +371,7 @@
                             <TabControl.ContentTemplate>
                                 <DataTemplate>
 
-                                    <Grid Margin="10,0,0,10">
+                                    <Grid Margin="10,0,10,0">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="100"/>
                                             <ColumnDefinition Width="*"/>
