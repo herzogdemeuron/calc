@@ -21,9 +21,9 @@ namespace Calc.RevitConnector.Config
             )
         {
             this.category = category;
-            this.LengthName = LengthName ?? "Length";
-            this.AreaName = AreaName ?? "Area";
-            this.VolumeName = VolumeName ?? "Volume";
+            this.LengthName = string.IsNullOrEmpty(LengthName) ? "Length" : LengthName;
+            this.AreaName = string.IsNullOrEmpty(AreaName) ? "Area" : AreaName;
+            this.VolumeName = string.IsNullOrEmpty(VolumeName) ? "Volume" : VolumeName;
         }
     }
 }
