@@ -24,7 +24,7 @@ namespace Calc.Core
 
         public bool AllDataLoaded { get; private set; } = false;
         public List<Unit> UnitsAll { get; set; }
-        public List<MaterialFunction> MaterialFunctionsAll { get; set; }
+        public List<MaterialFunction> MaterialFunctionsAll { get { return MaterialFunctionStorageDriver?.GotManyItems; } }
         public List<Project> ProjectsAll { get { return ProjectDriver?.GotManyItems; } }
         public Project ProjectSelected { get; set; } // the current project
         public List<LcaStandard> StandardsAll { get { return StandardDriver?.GotManyItems; } }
@@ -98,6 +98,7 @@ namespace Calc.Core
         private ProjectStorageDriver ProjectDriver { get; set; }
         private StandardStorageDriver StandardDriver { get; set; }
         private MaterialStorageDriver MaterialDriver { get; set; }
+        private MaterialFunctionStorageDriver MaterialFunctionStorageDriver { get; set; }
         private BuildupGroupStorageDriver BuildupGroupDriver { get; set; }
         private BuildupStorageDriver BuildupDriver { get; set; }
         private MappingStorageDriver MappingDriver { get; set; }
@@ -126,9 +127,9 @@ namespace Calc.Core
             SnapshotDriver = new SnapshotStorageDriver();
             FolderDriver = new FolderStorageDriver();
             CustomParamSettingDriver = new CustomParamSettingStorageDriver();
+            MaterialFunctionStorageDriver = new MaterialFunctionStorageDriver();
 
             UnitsAll =   Enum.GetValues(typeof(Unit)).Cast<Unit>().ToList();
-            MaterialFunctionsAll = Enum.GetValues(typeof(MaterialFunction)).Cast<MaterialFunction>().ToList(); // should this source on directus?
         }
 
 
@@ -145,15 +146,19 @@ namespace Calc.Core
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 StandardDriver = await DirectusDriver.GetMany<StandardStorageDriver, LcaStandard>(StandardDriver);
-                OnProgressChanged(20);
+                OnProgressChanged(10);
 
                 cancellationToken.ThrowIfCancellationRequested();
                 CustomParamSettingDriver = await DirectusDriver.GetMany<CustomParamSettingStorageDriver, CustomParamSetting>(CustomParamSettingDriver);
+                OnProgressChanged(20);
+
+                cancellationToken.ThrowIfCancellationRequested();
+                MaterialFunctionStorageDriver = await DirectusDriver.GetMany<MaterialFunctionStorageDriver, MaterialFunction>(MaterialFunctionStorageDriver);
                 OnProgressChanged(30);
 
                 cancellationToken.ThrowIfCancellationRequested();
                 MaterialDriver = await DirectusDriver.GetMany<MaterialStorageDriver, Material>(MaterialDriver);
-                OnProgressChanged(40);
+                OnProgressChanged(50);
 
                 cancellationToken.ThrowIfCancellationRequested();
                 BuildupGroupDriver = await DirectusDriver.GetMany<BuildupGroupStorageDriver, BuildupGroup>(BuildupGroupDriver);
@@ -195,15 +200,19 @@ namespace Calc.Core
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 StandardDriver = await DirectusDriver.GetMany<StandardStorageDriver,LcaStandard>(StandardDriver);
-                OnProgressChanged(20);
+                OnProgressChanged(10);
 
                 cancellationToken.ThrowIfCancellationRequested();
                 CustomParamSettingDriver = await DirectusDriver.GetMany<CustomParamSettingStorageDriver,CustomParamSetting>(CustomParamSettingDriver);
+                OnProgressChanged(20);
+
+                cancellationToken.ThrowIfCancellationRequested();
+                MaterialFunctionStorageDriver = await DirectusDriver.GetMany<MaterialFunctionStorageDriver, MaterialFunction>(MaterialFunctionStorageDriver);
                 OnProgressChanged(30);
 
                 cancellationToken.ThrowIfCancellationRequested();
                 MaterialDriver = await DirectusDriver.GetMany<MaterialStorageDriver,Material>(MaterialDriver);
-                OnProgressChanged(40);
+                OnProgressChanged(50);
 
                 cancellationToken.ThrowIfCancellationRequested();
                 BuildupGroupDriver = await DirectusDriver.GetMany<BuildupGroupStorageDriver,BuildupGroup>(BuildupGroupDriver);
@@ -270,10 +279,10 @@ namespace Calc.Core
         /// </summary>
         private void LinkFields()
         {
-            MaterialDriver.LinkStandards(StandardDriver.GotManyItems);
-            BuildupDriver.LinkStandards(StandardDriver.GotManyItems);
+            //MaterialDriver.LinkStandards(StandardDriver.GotManyItems);
+            //BuildupDriver.LinkStandards(StandardDriver.GotManyItems);
             BuildupDriver.LinkMaterials(MaterialDriver.GotManyItems);
-            BuildupDriver.LinkBuildupGroups(BuildupGroupDriver.GotManyItems);
+            //BuildupDriver.LinkBuildupGroups(BuildupGroupDriver.GotManyItems);
         }
 
         private void SetSelectedMapping(Mapping mapping)

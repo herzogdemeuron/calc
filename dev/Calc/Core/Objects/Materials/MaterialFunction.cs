@@ -1,23 +1,22 @@
-﻿using Calc.Core.Objects.Materials;
-using Speckle.Newtonsoft.Json;
+﻿using Speckle.Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Calc.Core.Objects
+namespace Calc.Core.Objects.Materials
 {
-    public class LcaStandard
+    public class MaterialFunction
     {
-        [JsonProperty("name")]
-        public string Name { get; set; }
         [JsonProperty("id")]
         public int Id { get; set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
 
         public override bool Equals(object obj)
         {
-            if (obj is LcaStandard standard)
+            if (obj is MaterialFunction mFunction)
             {
-                return standard.Name == Name;
+                return mFunction.Name == Name;
             }
             return false;
         }
@@ -26,6 +25,5 @@ namespace Calc.Core.Objects
         {
             return Name.GetHashCode();
         }
-
     }
 }

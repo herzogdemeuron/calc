@@ -306,6 +306,7 @@
                             Grid.ColumnSpan="2"
                             Margin="5,0,0,0"
                             ItemsSource="{Binding MaterialFunctionsAll}"
+                            DisplayMemberPath="Name"
                             SelectedItem="{Binding SelectedFunction}"
                             Style="{StaticResource RoundedComboBoxStyle}"/>
 
@@ -492,7 +493,7 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" Width="3*" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Function" Binding="{Binding Function}" Width="*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Function" Binding="{Binding Function.Name}" Width="*" IsReadOnly="True"/>
                             <DataGridTemplateColumn Header="Amount" Width="*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>

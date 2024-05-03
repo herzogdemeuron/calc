@@ -27,7 +27,7 @@ namespace Calc.MVVM.Models
             }
         }
 
-        public MaterialFunction? SelectedFunction
+        public MaterialFunction SelectedFunction
         {
             get => layer.Function;
             set

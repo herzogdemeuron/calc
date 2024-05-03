@@ -21,6 +21,7 @@ namespace Calc.Core.DirectusAPI.Drivers
                     product_type
                     standard {
                         id
+                        name
                     }
                     data_source
                     source_uuid
@@ -32,14 +33,6 @@ namespace Calc.Core.DirectusAPI.Drivers
                     cost
                 }
             }";
-
-        public void LinkStandards(List<LcaStandard> standards)
-        {
-            foreach (var material in GotManyItems)
-            {
-                material.LinkStandard(standards);
-            }
-        }
 
         [JsonProperty("calc_materials")]
         public List<Material> GotManyItems { get; set; }

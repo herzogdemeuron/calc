@@ -21,7 +21,7 @@ namespace Calc.Core.Calculations
         [JsonProperty("position")]
         public int Position { get; set; }
         [JsonProperty("function")]
-        public MaterialFunction? Function { get; set; }
+        public MaterialFunction Function { get; set; }
         [JsonProperty("amount")]
         public double? Amount { get; set; }
         [JsonProperty("carbon_a1a3")]

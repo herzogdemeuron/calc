@@ -20,16 +20,21 @@ namespace Calc.Core.DirectusAPI.Drivers
                     name
                     standard {
                         id
+                        name
                     }
                     buildup_unit
                     group {
                         id
+                        name
                     }
                     description
                     calculation_components {
                         id
                         position
-                        function
+                        function {
+                            id
+                            name
+                        }
                         amount
                         carbon_a1a3
                         grey_energy_fabrication_total
@@ -67,6 +72,11 @@ namespace Calc.Core.DirectusAPI.Drivers
         [JsonProperty("update_calc_buildups_item")]
         public Buildup UpdatedItem { get; set; }
 
+        /// <summary>
+        /// assign materials from the store to the calculation components with their ids
+        /// to simplify the query structure
+        /// </summary>
+        /// <param name="materials"></param>
         public void LinkMaterials(List<Material> materials)
         {
             foreach (var buildup in GotManyItems)
@@ -77,21 +87,7 @@ namespace Calc.Core.DirectusAPI.Drivers
                 }
             }
         }
-        public void LinkBuildupGroups(List<BuildupGroup> buildupGroups)
-        {
-            foreach (var buildup in GotManyItems)
-            {
-                buildup.LinkGroup(buildupGroups);
-            }
-        }
 
-        public void LinkStandards(List<LcaStandard> standards)
-        {
-            foreach (var buildup in GotManyItems)
-            {
-                buildup.LinkStandard(standards);
-            }
-        }
 
         public Dictionary<string, object> GetVariables()
         {

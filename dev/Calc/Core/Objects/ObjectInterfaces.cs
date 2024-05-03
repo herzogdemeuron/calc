@@ -18,12 +18,6 @@ namespace Calc.Core.Objects
         piece, m, m2, m3
     }
 
-    [JsonConverter(typeof(StringEnumConverter))]
-    public enum MaterialFunction
-    {
-        Structural, Facade, InteriorFinishes
-    }
-
     public interface IHasProject
     {
         Project Project { get; set; }
