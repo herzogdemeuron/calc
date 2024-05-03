@@ -216,9 +216,9 @@
                         Grid.ColumnSpan="2"
                         Height="25"
                         Margin="5,0,0,0"
-                        d:Text="test name"
+                        Tag="Buildup Name"
                         Style="{StaticResource TextBoxStyle}"
-                        FontWeight="SemiBold"
+                        FontWeight="SemiBold"                        
                         TextChanged="BuildupNameTextChanged"/>
 
                 <TextBox x:Name="DescriptionTextBox"
@@ -226,7 +226,7 @@
                         Grid.Row="1"
                         Grid.RowSpan="2"
                         Margin="5,5,0,0"
-                        d:Text="Buildings, infrastructures"
+                        Tag="Buildup Description"
                         Style="{StaticResource TextBoxStyle}"
                         VerticalAlignment="Top"
                         TextWrapping="Wrap"
@@ -311,16 +311,17 @@
                             Style="{StaticResource RoundedComboBoxStyle}"/>
 
                     <Button Content="{Binding MainMaterial.Name}"
-                            Tag="Main"
+                            d:Content=""
+                            Tag="Choose Main"
                             HorizontalAlignment="Stretch"
                             Grid.Column="0"
                             Grid.Row="0"
                             Style="{StaticResource ButtonStyle}"
-                            d:Content="this is a test material name"
                             Click="SetMaterialClicked"/>
                     
                     <Button Content="{Binding SubMaterial.Name}"
-                            Tag="Sub"
+                            Tag="Choose Second"
+                            d:Content=""
                             HorizontalAlignment="Stretch"
                             Grid.Column="0"
                             Grid.Row="1"

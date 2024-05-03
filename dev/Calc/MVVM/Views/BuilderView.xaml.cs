@@ -107,7 +107,7 @@ namespace Calc.MVVM.Views
         // decide which material to set based on the tag
         private void SetMaterialWithTag(string tag)
         {
-            bool setMain = tag == "Main";
+            bool setMain = tag.Contains("Main");
 
             BuilderVM.HandleSelectingMaterial(setMain);
 

@@ -137,6 +137,7 @@ namespace Calc.MVVM.Models
             {
                 MainMaterial = null;
                 SubMaterialRatio = 0;
+                SelectedFunction = null;
                 return;
             }
         }

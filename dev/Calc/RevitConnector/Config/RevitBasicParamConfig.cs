@@ -15,15 +15,15 @@ namespace Calc.RevitConnector.Config
 
         public RevitBasicParamConfig(
             BuiltInCategory category = BuiltInCategory.INVALID,
-            string LengthName = "Length", 
-            string AreaName = "Area",
-            string VolumeName = "Volume"
+            string LengthName = null, 
+            string AreaName = null,
+            string VolumeName = null
             )
         {
             this.category = category;
-            this.LengthName = LengthName;
-            this.AreaName = AreaName;
-            this.VolumeName = VolumeName;
+            this.LengthName = LengthName ?? "Length";
+            this.AreaName = AreaName ?? "Area";
+            this.VolumeName = VolumeName ?? "Volume";
         }
     }
 }
