@@ -36,6 +36,9 @@ namespace Calc.Core.Objects.BasicParameters
             }
         }
 
+        /// <summary>
+        /// add a given basic parameter set to this one
+        /// </summary>
         public void Add(BasicParameterSet other)
         {
             pieceParam = pieceParam.PerformOperation(Operation.Add, other.pieceParam);
@@ -44,6 +47,9 @@ namespace Calc.Core.Objects.BasicParameters
             volParam = volParam.PerformOperation(Operation.Add, other.volParam);
         }
 
+        /// <summary>
+        /// force set a basic parameter with a given one
+        /// </summary>
         public void Set(BasicParameter param)
         {
             var unit = param.Unit;
