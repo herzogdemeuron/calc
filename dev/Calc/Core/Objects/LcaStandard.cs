@@ -12,6 +12,7 @@ namespace Calc.Core.Objects
         public string Name { get; set; }
         [JsonProperty("id")]
         public int Id { get; set; }
+        [JsonIgnore]
         public string ShowName { get => Name; }
 
         public override bool Equals(object obj)
