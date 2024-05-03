@@ -46,8 +46,6 @@ namespace Calc.Core.DirectusAPI
         public Directus()
         {
             httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12; // unless windows supports TLS 1.3, directus cloud enforces TLS 1.3
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
@@ -163,6 +161,8 @@ namespace Calc.Core.DirectusAPI
 
         private void ConfigureGraphQlClients()
         {
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
             graphQlClient = new GraphQLHttpClient
                 (
                 new GraphQLHttpClientOptions { EndPoint = new Uri($"{this.baseUrl}/graphql") },
