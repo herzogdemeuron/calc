@@ -1,8 +1,10 @@
 ﻿using Calc.Core.Objects.Materials;
+using Calc.MVVM.Helpers;
 using Calc.MVVM.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Calc.MVVM.Views
 {
@@ -59,5 +61,26 @@ namespace Calc.MVVM.Views
         {
             this.Close();
         }
+
+        /// <summary>
+        /// Enables scrolling item by item in the list view
+        /// </summary>
+        private void ListViewPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer viewer = ViewHelper.FindVisualChild<ScrollViewer>(sender as ListView);
+
+            if (e.Delta > 0)
+            {
+                viewer.LineUp();
+            }
+            if (e.Delta < 0)
+            {
+                viewer.LineDown();
+            }
+            e.Handled = true;
+        }
+
+       
+
     }
 }

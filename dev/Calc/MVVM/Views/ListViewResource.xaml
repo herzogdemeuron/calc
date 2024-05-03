@@ -18,6 +18,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+
     </Style>
 
     <Style x:Key="ListViewItemTagStyle" TargetType="ListViewItem">

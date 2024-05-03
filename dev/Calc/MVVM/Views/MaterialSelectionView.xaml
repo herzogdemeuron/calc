@@ -102,6 +102,7 @@
             <ListView x:Name="MaterialsListView"
                       Grid.Row="2"
                       Loaded="ListViewLoaded"
+                      PreviewMouseWheel="ListViewPreviewMouseWheel"
                        ItemsSource="{Binding AllMaterialsView}"
                        SelectedItem="{Binding SelectedMaterial}"
                        Style="{StaticResource ListViewStyle}">
