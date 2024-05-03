@@ -5,11 +5,16 @@ using System.Text;
 
 namespace Calc.Core.Objects
 {
-    public class Project
+    public class Project : IShowName
     {
-        [JsonProperty(PropertyName = "id", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public int Id { get; set; } = -1;
-        [JsonProperty(PropertyName = "project_number")]
-        public string ProjectNumber { get; set; }
+        [JsonProperty("id")]
+        public int Id { get; set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
+        [JsonProperty("number")]
+        public string Number { get; set; }
+        [JsonProperty("standard")]
+        public LcaStandard Standard { get; set; }
+        public string ShowName => $"{Number} - {Name}";
     }
 }

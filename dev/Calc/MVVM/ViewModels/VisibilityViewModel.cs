@@ -112,7 +112,6 @@ namespace Calc.MVVM.ViewModels
         {
             HideAllOverlays(false);
             MediatorToView.Register("ShowMainView", _ => HideAllOverlays());
-            MediatorToView.Register("ShowProjectOverlay", _ => ShowProjectOverlay());
             MediatorToView.Register("ShowWaitingOverlay", message => ShowWaitingOverlay((string)message));
             MediatorToView.Register("ShowSavingOverlay", message => ShowSavingOverlay((string)message));
             MediatorToView.Register("ShowMessageOverlay", args => ShowMessageOverlay((List<object>)args));
@@ -122,11 +121,6 @@ namespace Calc.MVVM.ViewModels
             
         }
 
-        private void ShowProjectOverlay()
-        {
-            HideAllOverlays();
-            ProjectOverlayVisibility = Visibility.Visible;
-        }
 
         private void ShowSavingOverlay(string message)
         {

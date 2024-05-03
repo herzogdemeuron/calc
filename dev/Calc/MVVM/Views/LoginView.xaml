@@ -21,6 +21,7 @@
                 <ResourceDictionary Source="MainViewResources.xaml"/>
                 <ResourceDictionary Source="ToggleButtonResource.xaml"/>
                 <ResourceDictionary Source="ButtonResource.xaml"/>
+                <ResourceDictionary Source="ComboBoxResource.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -46,7 +47,7 @@
                FontWeight="light"/>
 
         <StackPanel Grid.ColumnSpan="5"
-                    Grid.Row="4"
+                    Grid.Row="2"
                     Orientation="Horizontal"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
@@ -54,10 +55,10 @@
             <Button Content="OK"
                     Width="60"
                     Margin="0,0,10,0"
-                    IsEnabled="{Binding IsNotSending}"
+                    IsEnabled="{Binding CanForward}"
                     Style="{StaticResource ButtonStyle}"
                     IsDefault="True"
-                    Click="LoginOkClicked"/>
+                    Click="OkClicked"/>
 
             <Button Content="Quit"
                    Width="60"
@@ -68,9 +69,9 @@
 
         <Label x:Name="MessageLabel"
          Content="{Binding Message}"
-         Grid.Row="3"
+         Grid.Row="2"
          Grid.ColumnSpan="3"
-               Padding="0,10,0,0"
+         Padding="0,10,0,0"
          HorizontalAlignment="Center"
          VerticalAlignment="Bottom"
          Foreground="Crimson"
@@ -80,7 +81,7 @@
               Grid.Row="1"
               Grid.Column="1"
               Visibility="{Binding LoginVisibility}"
-             d:Visibility="Visible">
+             d:Visibility="Collapsed">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="65"/>
                 <ColumnDefinition Width="5"/>
@@ -148,6 +149,7 @@
         <Grid x:Name="LoadGrid"
                Grid.Row="1"
                Grid.Column="1"
+              d:Visibility="Collapsed"
              Visibility="{Binding LoadVisibility}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
@@ -155,15 +157,12 @@
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
 
-            
-
-                <ProgressBar x:Name="LoadProgressBar"
+            <ProgressBar x:Name="LoadProgressBar"
                              Grid.Row="1"
                              Height="25"
                              d:Value="50"
                              Value="{Binding ProgressValue}"
                              Style="{StaticResource ProgressBarStyle}"/>
-           
 
             <TextBlock x:Name="progressText"
                        VerticalAlignment="Center"
@@ -173,8 +172,35 @@
 
         </Grid>
 
+        <Grid x:Name="SelectionGrid"
+              Grid.Row="1"
+                Grid.Column="1"
+                Visibility="{Binding SelectionVisibility}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
 
+            <ComboBox x:Name="SelectionCombobox"
+                     Grid.Row="1"
+                     Height="25"
+                     ItemsSource="{Binding SelectionList}"
+                     SelectedItem="{Binding Selected}"
+                     DisplayMemberPath="ShowName"
+                     Style="{StaticResource RoundedComboBoxStyle}"/>
+
+            <TextBlock x:Name="SelectionText"
+                       Text="{Binding SelectionText}"
+                       Grid.Row="0"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"            
+                       d:Text="Select Standard"/>   
 
         </Grid>
+
+
+
+    </Grid>
 
 </Window>

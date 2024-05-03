@@ -6,12 +6,13 @@ using System.Text;
 
 namespace Calc.Core.Objects
 {
-    public class LcaStandard
+    public class LcaStandard : IShowName
     {
         [JsonProperty("name")]
         public string Name { get; set; }
         [JsonProperty("id")]
         public int Id { get; set; }
+        public string ShowName { get => Name; }
 
         public override bool Equals(object obj)
         {

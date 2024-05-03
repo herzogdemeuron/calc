@@ -1,7 +1,10 @@
 ﻿using Calc.Core;
 using Calc.Core.DirectusAPI;
+using Calc.Core.Objects;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,21 +15,23 @@ namespace Calc.MVVM.ViewModels
 
     public class LoginViewModel : INotifyPropertyChanged
     {
+        private readonly bool MainOrBuilder;
         public Directus DirectusInstance { get; set; }
         public DirectusStore DirectusStore { get; set; }
         public string Title { get; set; }
         public string Password { get; set; }
         private readonly CancellationTokenSource cTokenSource = new CancellationTokenSource();
         public bool FullyPrepared => DirectusInstance.Authenticated && DirectusStore.AllDataLoaded;
+        private bool authenticated = false;
 
-        private bool isNotSending = true;
-        public bool IsNotSending
+        private bool canOK = true;
+        public bool CanOK
         {
-            get => isNotSending;
+            get => canOK;
             set
             {
-                isNotSending = value;
-                OnPropertyChanged(nameof(IsNotSending));
+                canOK = value;
+                OnPropertyChanged(nameof(CanOK));
             }
         }
 
@@ -49,6 +54,17 @@ namespace Calc.MVVM.ViewModels
             {
                 loadVisibility = value;
                 OnPropertyChanged(nameof(LoadVisibility));
+            }
+        }
+
+        private Visibility selectionVisibility = Visibility.Collapsed;
+        public Visibility SelectionVisibility
+        {
+            get => selectionVisibility;
+            set
+            {
+                selectionVisibility = value;
+                OnPropertyChanged(nameof(SelectionVisibility));
             }
         }
 
@@ -96,9 +112,43 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-
-        public LoginViewModel(string title)
+        private List<IShowName> selectionList;
+        public List<IShowName> SelectionList
         {
+            get => selectionList;
+            set
+            {
+                selectionList = value;
+                OnPropertyChanged(nameof(SelectionList));
+            }
+        }
+
+        private IShowName selected;
+        public IShowName Selected
+        {
+            get => selected;
+            set
+            {
+                selected = value;
+                OnPropertyChanged(nameof(Selected));
+            }
+        }
+
+        private string selectionText;
+        public string SelectionText
+        {
+            get => selectionText;
+            set
+            {
+                selectionText = value;
+                OnPropertyChanged(nameof(SelectionText));
+            }
+        }
+
+
+        public LoginViewModel(bool mainOrBuilder, string title)
+        {
+            MainOrBuilder = mainOrBuilder;
             DirectusInstance = new Directus();
             Url = Properties.Settings.Default.Config1;
             Email = Properties.Settings.Default.Config2;
@@ -106,40 +156,22 @@ namespace Calc.MVVM.ViewModels
             Title = title;
         }
 
-        public async Task<bool> AuthenticateAndLoad()
+        private async Task<bool> Authenticate()
         {
-            try
-            {
-                IsNotSending = false;
-                await DirectusInstance.Authenticate(Url, Email, Password);
-                if (!DirectusInstance.Authenticated) return false;
+            await DirectusInstance.Authenticate(Url, Email, Password);
+            if (!DirectusInstance.Authenticated) return false;
 
-                Properties.Settings.Default.Config1 = Url;
-                Properties.Settings.Default.Config2 = Email;
-                Properties.Settings.Default.Config3 = Password;
-                Properties.Settings.Default.Save();
-
-                LoginVisibility = Visibility.Collapsed;
-                LoadVisibility = Visibility.Visible;
-
-                await LoadData();
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Message = ex.Message;
-                return false;
-            }
-            finally
-            {
-                IsNotSending = true;
-            }
+            Properties.Settings.Default.Config1 = Url;
+            Properties.Settings.Default.Config2 = Email;
+            Properties.Settings.Default.Config3 = Password;
+            Properties.Settings.Default.Save();
+            return true;
         }
 
-        public async Task LoadData()
+        private async Task LoadData()
         {
             DirectusStore = new DirectusStore(DirectusInstance);
+
             DirectusStore.ProgressChanged += (s, p) =>
             {
                 Dispatcher.CurrentDispatcher.Invoke(() =>
@@ -147,8 +179,92 @@ namespace Calc.MVVM.ViewModels
                     ProgressValue = p;
                 });
             };
-            await DirectusStore.GetBuilderData(cTokenSource.Token);
+
+            if (MainOrBuilder)
+            {
+                await DirectusStore.GetMainData(cTokenSource.Token);
+            }
+            else
+            {
+                await DirectusStore.GetBuilderData(cTokenSource.Token);
+            }
         }
+
+        private void PrepareSelection()
+        {
+            if(MainOrBuilder)
+            {
+                SelectionList = DirectusStore.ProjectsAll.OfType<IShowName>().ToList();
+                SelectionText = "Select Project:";
+            }
+            else
+            {
+                SelectionList = DirectusStore.StandardsAll.OfType<IShowName>().ToList();
+                SelectionText = "Select LCA Standard:";
+            }
+        }
+
+        public async Task<bool> HandleOK()
+        {
+
+            if (!authenticated)
+            {
+                try
+                {
+                    CanOK = false;
+                    authenticated = await Authenticate();
+
+                    if (authenticated)
+                    {
+                        LoginVisibility = Visibility.Collapsed;
+                        LoadVisibility = Visibility.Visible;
+
+                        await LoadData();
+
+                        LoadVisibility = Visibility.Collapsed;
+                        SelectionVisibility = Visibility.Visible;
+
+                        PrepareSelection();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Message = ex.Message;
+                }
+
+                CanOK = true;
+                return false;
+            }
+
+            if (selected != null)
+            {
+                SetSelection();
+                return true;
+            }
+            else
+            {
+                Message = "Please select an item.";
+                return false;
+            }
+
+        }
+
+        private void SetSelection()
+        {
+            if (MainOrBuilder)
+            {
+                var project = (Project)Selected;
+                var standard = project.Standard;
+                DirectusStore.ProjectSelected = project;
+                DirectusStore.StandardSelected = standard;
+            }
+            else
+            {
+                DirectusStore.StandardSelected = (LcaStandard)Selected;
+            }
+        }
+
+
 
         public void CancelLoad()
         {

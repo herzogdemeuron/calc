@@ -10,7 +10,7 @@ using System.Threading;
 namespace Calc.MVVM.ViewModels
 {
 
-    public class LoadingViewModel : INotifyPropertyChanged
+    public class LoadingViewModel : INotifyPropertyChanged  // deprecated
     {
         private readonly DirectusStore store;
         public List<Project> AllProjects { get => store?.ProjectsAll;}
@@ -18,13 +18,6 @@ namespace Calc.MVVM.ViewModels
         public LoadingViewModel(DirectusStore directusStore)
         {
             store = directusStore;
-        }
-
-        public async Task HandleLoadingProjectsAsync()
-        {
-            await store.GetProjects();
-            OnPropertyChanged(nameof(AllProjects));
-            MediatorToView.Broadcast("ShowProjectOverlay");
         }
 
         public async Task HandleProjectSelectedAsync(Project project)
@@ -39,14 +32,13 @@ namespace Calc.MVVM.ViewModels
 
             try
             {
-                bool dataGot = await store.GetModelCheckerData(new CancellationTokenSource().Token); //todo: add cancellation token source 
+                bool dataGot = await store.GetMainData(new CancellationTokenSource().Token); //todo: add cancellation token source 
                 MediatorToView.Broadcast("ShowMainView");
 
             }
             catch (Exception ex)
             {
                 MediatorToView.Broadcast("ShowMessageOverlay", new List<object> { null, $"Error occured while getting project data:{ex.Message}" });
-                MediatorToView.Broadcast("ShowProjectOverlay");
             }
         }
 

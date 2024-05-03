@@ -13,7 +13,12 @@ namespace Calc.Core.DirectusAPI.Drivers
                 query GetProjects { 
                     calc_architecture_projects { 
                         id
-                        project_number
+                        number
+                        name    
+                        standard { 
+                            id
+                            name
+                        }
                     }
                 }";
 

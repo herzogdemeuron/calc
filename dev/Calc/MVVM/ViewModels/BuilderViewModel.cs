@@ -17,7 +17,6 @@ namespace Calc.MVVM.ViewModels
     {
         public DirectusStore Store { get; set; }
         public BuildupCreationViewModel BuildupCreationVM { get; set; }
-        public LoadingViewModel LoadingVM { get; set; }
         public VisibilityViewModel VisibilityVM { get; set; }
         public MaterialSelectionViewModel MaterialSelectionVM { get; set; }
 
@@ -25,7 +24,6 @@ namespace Calc.MVVM.ViewModels
         {
             Store = store;
             VisibilityVM = new VisibilityViewModel();
-            LoadingVM = new LoadingViewModel(store);
             MaterialSelectionVM = new MaterialSelectionViewModel(store);
             BuildupCreationVM = new BuildupCreationViewModel(Store, builupComponentCreator, imageSnapshotCreator);
         }

@@ -25,6 +25,11 @@ namespace Calc.MVVM.Views
             MediatorToView.Register("ViewSelectBrokenNodesTreeView", node => SelectNodeTreeView((NodeModel)node));
         }
 
+        private void MainWindowLoaded(object sender, RoutedEventArgs e)
+        {
+            MainVM.HandleWindowLoaded();
+        }
+
         private void DeselectTreeView()
         {
             if (TreeView.SelectedItem != null)
@@ -64,24 +69,12 @@ namespace Calc.MVVM.Views
             }
         }
 
-
-
-        private async void WindowLoaded(object sender, RoutedEventArgs e)
-        {
-            await MainVM.HandleWindowLoadedAsync();
-        }
-
         private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             MainVM.HandleWindowClosing();
         }
 
-        private async void ProjectOKClicked(object sender, RoutedEventArgs e)
-        {
-            var project = ProjectsComboBox.SelectedItem;
-            await MainVM.HandleProjectSelectedAsync(project as Project);
-        }
-        
+
         private void ForestSelectionChanged (object sender, SelectionChangedEventArgs e)
         {
             var forest = ForestsComboBox.SelectedItem;

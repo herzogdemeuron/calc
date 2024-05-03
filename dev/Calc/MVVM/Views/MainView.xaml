@@ -7,8 +7,8 @@
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:views="clr-namespace:Calc.MVVM.Views"
         d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
-        Loaded="WindowLoaded"
         Closing="WindowClosing"
+        Loaded="MainWindowLoaded"
         mc:Ignorable="d"
         Height="900" MinHeight="700"
         Width="900" MinWidth="750"
@@ -237,7 +237,7 @@
                         Grid.ColumnSpan="3"
                         BorderBrush="Silver"
                         BorderThickness="1"
-                        CornerRadius="4">           
+                        CornerRadius="4">
                     <TreeView x:Name="TreeView"
                             Background="Transparent"
                             BorderThickness="0"
@@ -245,17 +245,17 @@
                             TreeViewItem.Selected="TreeViewItemSelected"
                             MouseLeftButtonDown="SideClickDown"
                             ItemContainerStyle="{StaticResource TreeViewItemStyle}">
-                    <TreeView.ItemTemplate>
-                        <HierarchicalDataTemplate ItemsSource="{Binding SubNodeItems}">
-                            <ContentControl Content="{Binding}"
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding SubNodeItems}">
+                                <ContentControl Content="{Binding}"
                                     ContentTemplate="{StaticResource BranchItemTemplate}">
-                                <ContentControl.ToolTip>
-                                    <TextBlock Text="{Binding Name}"/>
-                                </ContentControl.ToolTip>
-                            </ContentControl>
-                        </HierarchicalDataTemplate>
-                    </TreeView.ItemTemplate>
-                </TreeView>
+                                    <ContentControl.ToolTip>
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </ContentControl.ToolTip>
+                                </ContentControl>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
                 </Border>
 
                 <Border Grid.ColumnSpan="3" Grid.Row="0" CornerRadius="4" Background="LightGray">
@@ -355,7 +355,7 @@
                                 <StaticResource ResourceKey="ComboBoxGroupStyle"/>
                             </ComboBox.GroupStyle>
                         </views:SearchComboBox>
-                        
+
                         <views:SearchComboBox Tag="2"
                                               x:Uid="ShowTextNote"
                                               Style="{StaticResource RoundedComboBoxStyle}"
@@ -375,12 +375,12 @@
                 <Grid Grid.Row="2"
                         Margin="0,0,0,10"
                         DockPanel.Dock="Top">
-                <Border Margin="0,21,0,0"
+                    <Border Margin="0,21,0,0"
                         BorderBrush="Silver"
                         BorderThickness="1,1,1,1"
                         
                         CornerRadius="4"/>
-                <TabControl x:Name="BuildupTabs"
+                    <TabControl x:Name="BuildupTabs"
                             BorderThickness="0"
                             Background="Transparent"
                             ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CurrentBuildups}"
@@ -548,31 +548,6 @@
             </Grid>
         </Grid>
 
-        <Grid x:Name="ProjectOverlay"
-              d:IsHidden="true"
-              Background="Gainsboro"
-              Margin="5"
-              Visibility="{Binding VisibilityVM.ProjectOverlayVisibility}"
-              >
-            <StackPanel VerticalAlignment="Center">
-                <TextBlock HorizontalAlignment="Center"
-                            Text="Choose Project:"
-                           Margin="10"/>
-                <ComboBox x:Name="ProjectsComboBox"
-                          Style="{StaticResource RoundedComboBoxStyle}"
-                          HorizontalAlignment="Center"
-                          ItemsSource= "{Binding LoadingVM.AllProjects}"
-                          DisplayMemberPath="ProjectNumber"
-                          Width="90"/>
-                <Button Style="{StaticResource ButtonStyle}"
-                        Content="OK" 
-                        HorizontalAlignment="Center"
-                        Width="90"
-                        Margin="10"
-                        Click="ProjectOKClicked"/>
-            </StackPanel>
-        </Grid>
-
         <Grid x:Name="NewMappingOverlay"
              Background="Gainsboro"
               d:IsHidden="True"
@@ -652,8 +627,7 @@
                         Content="Quit" 
                         IsEnabled="False"
                     HorizontalAlignment="Center"
-                    Width="90"
-                    Click="ProjectOKClicked"/>
+                    Width="90"/>
             </StackPanel>
         </Grid>
 

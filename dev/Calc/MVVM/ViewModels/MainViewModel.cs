@@ -13,7 +13,6 @@ namespace Calc.MVVM.ViewModels
     public class MainViewModel: INotifyPropertyChanged
     {
         public DirectusStore Store { get; set; }
-        public LoadingViewModel LoadingVM { get; set; }
         public ForestViewModel ForestVM { get; set; }
         public MappingViewModel MappingVM { get; set; }
         public MappingErrorViewModel MappingErrorVM { get; set; }
@@ -28,7 +27,6 @@ namespace Calc.MVVM.ViewModels
             Store = store;
             VisibilityVM = new VisibilityViewModel();
 
-            LoadingVM = new LoadingViewModel(store);
             ForestVM = new ForestViewModel(store, elementCreator);
             MappingVM = new MappingViewModel(store);
             NewMappingVM = new NewMappingViewModel(store);
@@ -39,20 +37,14 @@ namespace Calc.MVVM.ViewModels
             SavingVM = new SavingViewModel(CalculationVM);
         }
 
-        public async Task HandleWindowLoadedAsync()
+        public void HandleWindowLoaded()
         {
-            await LoadingVM.HandleLoadingProjectsAsync();
+            NotifyStoreChange();
         }
 
         public void HandleWindowClosing()
         {
             NodeTreeVM.DeselectNodes();
-        }
-
-        public async Task HandleProjectSelectedAsync(Project project)
-        {
-            await LoadingVM.HandleProjectSelectedAsync(project);
-            NotifyStoreChange();
         }
 
         public void HandleForestSelectionChanged(Forest forest)

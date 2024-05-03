@@ -3,9 +3,8 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Calc.Core;
 using Calc.Core.DirectusAPI;
-//using Calc.MVVM.Services;
-//using Calc.MVVM.ViewModels;
-//using Calc.MVVM.Views;
+using Calc.MVVM.ViewModels;
+using Calc.MVVM.Views;
 using Calc.RevitConnector.Revit;
 using System;
 using System.Diagnostics;
@@ -16,9 +15,8 @@ using System.Threading.Tasks;
 namespace Calc.RevitApp.Revit
 {
     [Transaction(TransactionMode.Manual)]
-    public class CalcModelCheckerCommand : IExternalCommand
+    public class CalcMainCommand : IExternalCommand
     {
-        private Directus directusInstance;
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             try
@@ -27,23 +25,16 @@ namespace Calc.RevitApp.Revit
                 AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
                 Document doc = commandData.Application.ActiveUIDocument.Document;
 
-                Task.Run(() => Authenticate()).Wait();
-
-                if (directusInstance == null)
-                {
-                    Logger.Log("Failed to get directus.");
-                    return Result.Cancelled;
-                }
-                Logger.Log("Authentication successful.");
-
-                DirectusStore store = new DirectusStore(directusInstance);
+                LoginViewModel loginVM = new LoginViewModel(true, "Calc Login");
+                LoginView loginView = new LoginView(loginVM);
+                loginView.ShowDialog();
 
                 RevitElementCreator elementCreator = new RevitElementCreator(doc);
                 RevitVisualizer visualizer = new RevitVisualizer( doc, new RevitExternalEventHandler());
-                //MainViewModel mainViewModel = new MainViewModel(store, elementCreator, visualizer);
-                //MainView mainView = new MainView(mainViewModel);
+                MainViewModel mainViewModel = new MainViewModel(loginVM.DirectusStore, elementCreator, visualizer);
+                MainView mainView = new MainView(mainViewModel);
 
-                //mainView.Show();
+                mainView.Show();
                 return Result.Succeeded;
             }
             catch (Exception ex)

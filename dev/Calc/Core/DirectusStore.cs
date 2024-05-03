@@ -22,17 +22,18 @@ namespace Calc.Core
     {
         public event EventHandler<int> ProgressChanged;
 
+        public LcaStandard StandardSelected { get; set; }
+        public Project ProjectSelected { get; set; } // the current project
         public bool AllDataLoaded { get; private set; } = false;
         public List<Unit> UnitsAll { get; set; }
-        public List<MaterialFunction> MaterialFunctionsAll { get { return MaterialFunctionStorageDriver?.GotManyItems; } }
         public List<Project> ProjectsAll { get { return ProjectDriver?.GotManyItems; } }
-        public Project ProjectSelected { get; set; } // the current project
         public List<LcaStandard> StandardsAll { get { return StandardDriver?.GotManyItems; } }
         public List<BuildupGroup> BuildupGroupsAll { get { return BuildupGroupDriver?.GotManyItems; } }
         public List<Buildup> BuildupsAll { get { return BuildupDriver?.GotManyItems; } }
         public List<Mapping> MappingsAll { get { return MappingDriver?.GotManyItems; } }
         public List<CustomParamSetting> CustomParamSettingsAll { get { return CustomParamSettingDriver?.GotManyItems; } }
         private List<Material> MaterialsAll { get { return MaterialDriver?.GotManyItems; } }
+        public List<MaterialFunction> MaterialFunctionsAll { get { return MaterialFunctionStorageDriver?.GotManyItems; } }
         private Dictionary<LcaStandard, List<Material>> MaterialsOfStandards { get; set; }
         public List<Material> CurrentMaterials
         {
@@ -45,7 +46,6 @@ namespace Calc.Core
                 return MaterialsOfStandards[StandardSelected];
             }
         }
-        public LcaStandard StandardSelected { get; set; }
         public List<Buildup> BuildupsStandardRelated
         {
             get => BuildupsAll.FindAll(b => b.Standard?.Id == StandardSelected?.Id);
@@ -133,17 +133,16 @@ namespace Calc.Core
         }
 
 
-        public async Task GetProjects() // todo: catch exception from here
-        {
-            ProjectDriver = await DirectusDriver.GetMany<ProjectStorageDriver,Project>(ProjectDriver);
-        }
 
-        public async Task<bool> GetModelCheckerData(CancellationToken cancellationToken)
+        public async Task<bool> GetMainData(CancellationToken cancellationToken = default)
         {
-            CheckIfProjectSelected();
 
             try
             {
+                cancellationToken.ThrowIfCancellationRequested();
+                ProjectDriver = await DirectusDriver.GetMany<ProjectStorageDriver, Project>(ProjectDriver);
+                OnProgressChanged(5);
+
                 cancellationToken.ThrowIfCancellationRequested();
                 StandardDriver = await DirectusDriver.GetMany<StandardStorageDriver, LcaStandard>(StandardDriver);
                 OnProgressChanged(10);
@@ -176,9 +175,9 @@ namespace Calc.Core
                 ForestDriver = await DirectusDriver.GetMany<ForestStorageDriver, Forest>(ForestDriver);
                 OnProgressChanged(99);
 
-                LinkFields();
-                SortMaterials();
-                InitStandardSelection();
+                LinkMaterials();
+                //SortMaterials();
+                //InitStandardSelection();
                 OnProgressChanged(100);
 
                 AllDataLoaded = true;
@@ -227,9 +226,8 @@ namespace Calc.Core
                 OnProgressChanged(99);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                LinkFields();
+                LinkMaterials();
                 SortMaterials();
-                InitStandardSelection();
                 OnProgressChanged(100);
 
                 AllDataLoaded = true;
@@ -263,31 +261,18 @@ namespace Calc.Core
             }
         }
 
-        private void InitStandardSelection()
-        {
-            if (StandardsAll.Count > 0)
-            {
-                StandardSelected = StandardsAll[0];
-            }
-        }
-        
-
-
         /// <summary>
         /// the first query got materials, buildups and some other fields with id separately
         /// link the fields with the right objects with id
         /// </summary>
-        private void LinkFields()
+        private void LinkMaterials()
         {
-            //MaterialDriver.LinkStandards(StandardDriver.GotManyItems);
-            //BuildupDriver.LinkStandards(StandardDriver.GotManyItems);
             BuildupDriver.LinkMaterials(MaterialDriver.GotManyItems);
-            //BuildupDriver.LinkBuildupGroups(BuildupGroupDriver.GotManyItems);
         }
 
         private void SetSelectedMapping(Mapping mapping)
         {
-            CheckIfProjectSelected();
+            //CheckIfProjectSelected();
             mapping.Project = ProjectSelected;
             _mappingSelected = mapping;
         }
@@ -346,7 +331,7 @@ namespace Calc.Core
 
         private void SetSelectedForest(Forest forest)
         {
-            CheckIfProjectSelected();
+            //CheckIfProjectSelected();
             forest.Project = ProjectSelected;
             _forestSelected = forest;
         }
@@ -392,7 +377,7 @@ namespace Calc.Core
 
         private void SetResults(List<Result> results) // todo: simplify this
         {
-            CheckIfProjectSelected();
+            //CheckIfProjectSelected();
             if (SnapshotName == null)
             {
                 throw new Exception("Set SnapshotName first!");
@@ -498,13 +483,6 @@ namespace Calc.Core
             return driver.GotManyItems.FindAll(m => m.Project?.Id != ProjectSelected.Id);
         }
 
-        private void CheckIfProjectSelected()
-        {
-            if (ProjectSelected == null)
-            {
-                throw new Exception("No project selected");
-            }
-        }
 
         public async Task<string> UploadImageAsync(string imagePath, string newFileName)
         {

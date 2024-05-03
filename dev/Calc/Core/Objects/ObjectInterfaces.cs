@@ -23,6 +23,11 @@ namespace Calc.Core.Objects
         Project Project { get; set; }
     }
 
+    public interface IShowName
+    {
+        string ShowName { get; }
+    }
+
     public interface IGraphNode
     {
         List<CalcElement> Elements { get; }

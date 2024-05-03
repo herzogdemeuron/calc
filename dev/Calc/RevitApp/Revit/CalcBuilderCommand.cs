@@ -30,7 +30,7 @@ namespace Calc.RevitApp.Revit
                 UIDocument uidoc = commandData.Application.ActiveUIDocument;
                 Document doc = commandData.Application.ActiveUIDocument.Document;
 
-                LoginViewModel loginVM = new LoginViewModel("Calc Builder Login");
+                LoginViewModel loginVM = new LoginViewModel(false,"Calc Builder Login");
                 LoginView loginView = new LoginView(loginVM);
                 loginView.ShowDialog();
 

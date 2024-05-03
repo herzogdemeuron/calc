@@ -21,10 +21,10 @@ namespace Calc.MVVM.Views
           LoginVM.Password = PasswordBox.Password;
         }
 
-        private async void LoginOkClicked(object sender, RoutedEventArgs e)
+        private async void OkClicked(object sender, RoutedEventArgs e)
         {
-            bool directusAuth = await LoginVM.AuthenticateAndLoad();
-            if (directusAuth) this.Close();
+            bool c = await LoginVM.HandleOK();
+            if (c) this.Close();
         }
 
         private void LoginQuitClicked(object sender, RoutedEventArgs e)

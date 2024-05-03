@@ -16,7 +16,8 @@ namespace Calc.Core.DirectusAPI.Drivers
                         trees
                         project_id {
                             id
-                            project_number
+                            name
+                            number
                         }
                         }
                     }";
