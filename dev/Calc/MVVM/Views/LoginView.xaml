@@ -1,0 +1,206 @@
+﻿<Window x:Class="Calc.MVVM.Views.LoginView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Calc.MVVM.ViewModels"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
+        xmlns:views="clr-namespace:Calc.MVVM.Views"
+        d:DataContext="{d:DesignInstance Type=local:LoginViewModel}"
+        mc:Ignorable="d"
+        Height="240"
+        Width="350"
+        WindowStartupLocation="CenterScreen"
+        Icon="pack://application:,,,/CalcMVVM;component/Resources/icon_builder_small.png"
+        Title="CALC"
+        Topmost="True">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="MainViewResources.xaml"/>
+                <ResourceDictionary Source="ToggleButtonResource.xaml"/>
+                <ResourceDictionary Source="ButtonResource.xaml"/>
+                <ResourceDictionary Source="ComboBoxResource.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+        <Grid x:Name="MainGrid">
+            <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="270"/>
+                <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="90"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Label Content="{Binding Title}"
+               d:Content="Calc Builder Login"
+               HorizontalAlignment="Center"
+               Grid.Column="1"
+               FontSize="27"
+               FontWeight="light"/>
+
+        <StackPanel Grid.ColumnSpan="5"
+                    Grid.Row="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+
+            <Button Content="OK"
+                    Width="60"
+                    Margin="0,0,10,0"
+                    IsEnabled="{Binding CanOK}"
+                    Style="{StaticResource ButtonStyle}"
+                    IsDefault="True"
+                    Click="OkClicked"/>
+
+            <Button Content="Quit"
+                   Width="60"
+                   Style="{StaticResource ButtonStyle}"
+                   IsCancel="True"
+                   Click="LoginQuitClicked"/>
+        </StackPanel>
+
+        <Label x:Name="MessageLabel"
+         Content="{Binding Message}"
+         Grid.Row="2"
+         Grid.ColumnSpan="3"
+         Padding="0,10,0,0"
+         HorizontalAlignment="Center"
+         VerticalAlignment="Bottom"
+         Foreground="Crimson"
+         d:Content="Error while login!"/>
+
+        <Grid x:Name="LoginGrid"
+              Grid.Row="1"
+              Grid.Column="1"
+              Visibility="{Binding LoginVisibility}"
+             d:Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="65"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="200"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            
+            <Label Content="Url:"
+               VerticalAlignment="Center"
+               Grid.Row="0"
+               Grid.Column="0"/>
+            
+            <TextBox Text="{Binding Url}"
+                 Style="{StaticResource TextBoxStyle}"
+                 d:Text="www.google.com"
+                 Grid.Column="2"
+                 Grid.Row="0"
+                 Height="25"
+                 HorizontalAlignment="Stretch"/>
+            
+            <Label Content="Email:"
+               Grid.Row="1"
+               Grid.Column="0"
+               VerticalAlignment="Center"
+               Margin="0"/>
+
+            <TextBox Text="{Binding Email}"
+             Style="{StaticResource TextBoxStyle}"
+             d:Text="keke@keke.com"
+             Grid.Column="2"
+             Grid.Row="1"
+             Height="25"
+             HorizontalAlignment="Stretch"/>
+
+            <Label Content="Password:"
+               Grid.Row="2"
+               Grid.Column="0"
+               VerticalAlignment="Center"
+               Margin="0"/>
+
+            <Border Grid.Column="2"
+                    Grid.Row="2"
+                    Height="25"
+                    BorderBrush="Silver"
+                    Background="WhiteSmoke"
+                    BorderThickness="1"
+                    CornerRadius="4">
+                <PasswordBox x:Name="PasswordBox"
+                         PasswordChar="〰"
+                         FontSize="15"
+                         d:Password="kjguielcisd"
+                         Height="25"
+                         PasswordChanged="PasswordChanged"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         VerticalContentAlignment="Center"
+                         HorizontalAlignment="Stretch"/>
+            </Border>
+        </Grid>
+
+        <Grid x:Name="LoadGrid"
+               Grid.Row="1"
+               Grid.Column="1"
+              d:Visibility="Collapsed"
+             Visibility="{Binding LoadVisibility}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+
+            <ProgressBar x:Name="LoadProgressBar"
+                             Grid.Row="1"
+                             Height="25"
+                             d:Value="50"
+                             Value="{Binding ProgressValue}"
+                             Style="{StaticResource ProgressBarStyle}"/>
+
+            <TextBlock x:Name="progressText"
+                       VerticalAlignment="Center"
+                       Grid.Row="1"
+                       HorizontalAlignment="Center"
+                       Text="Loading..."/>
+
+        </Grid>
+
+        <Grid x:Name="SelectionGrid"
+              Grid.Row="1"
+                Grid.Column="1"
+                Visibility="{Binding SelectionVisibility}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+
+            <ComboBox x:Name="SelectionCombobox"
+                     Grid.Row="1"
+                     Height="25"
+                     ItemsSource="{Binding SelectionList}"
+                     SelectedItem="{Binding Selected}"
+                     DisplayMemberPath="ShowName"
+                     Style="{StaticResource RoundedComboBoxStyle}"/>
+
+            <TextBlock x:Name="SelectionText"
+                       Text="{Binding SelectionText}"
+                       Grid.Row="0"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"            
+                       d:Text="Select Standard"/>   
+
+        </Grid>
+
+
+
+    </Grid>
+
+</Window>
