@@ -17,10 +17,12 @@
             <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="Black" />
         </Style.Resources>
     </Style>
+    
 
     <Style x:Key="NumberColumn" TargetType="TextBlock">
         <Setter Property="HorizontalAlignment" Value="Right" />
     </Style>
+    
 
     <Style x:Key="MappingErrorButtonStyle" TargetType="Button"  BasedOn="{StaticResource ButtonStyle}">
         <Setter Property="Content" Value="👌"/>
@@ -50,6 +52,7 @@
 
         </Style.Triggers>
     </Style>
+    
 
     <Style x:Key="MappingErrorBorderStyle" TargetType="Border">
         <Setter Property="BorderThickness" Value="2"/>
@@ -62,6 +65,7 @@
         </Style.Triggers>
     </Style>
 
+    
     <Style x:Key="MappingErrorPathStyle" TargetType="Path">
         <Setter Property="Stroke" Value="MediumSeaGreen"/>
         <Setter Property="StrokeThickness" Value="2"/>
@@ -72,6 +76,7 @@
         </Style.Triggers>
     </Style>
 
+    
     <Style x:Key="MappingErrorTextStyle" TargetType="TextBlock">
         <Setter Property="Text" Value="All Mappings Clear 😃"/>
         <Setter Property="Foreground" Value="MediumSeaGreen"/>
@@ -85,14 +90,14 @@
 
 
     <DataTemplate x:Key="LayerItemTemplate">
-        
+
         <StackPanel Orientation="Horizontal"
                     Margin="-6,0,0,0">
 
             <Grid x:Name="ErrorGrid"
                   Margin="1,0,0,0"
                   Width="12">
-                
+
                 <TextBlock Text="💔"
                           FontSize="10"
                           FontWeight="SemiBold"
@@ -110,7 +115,7 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                
+
                 <TextBlock Text="🖍️"
                           FontSize="10"
                           FontWeight="SemiBold"
@@ -131,7 +136,6 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                
             </Grid>
 
             <Border x:Name="LabelBorder"
@@ -152,7 +156,6 @@
                         </Style.Triggers>
                     </Style>
                 </Border.Style>
-
 
                 <StackPanel Orientation="Vertical">
                     <TextBlock x:Name="txtName">
@@ -188,7 +191,7 @@
                     </Grid>
                 </StackPanel>
             </Border>
-            
+
             <StackPanel Orientation="Vertical"
                         Margin="2,0,0,0"
                         VerticalAlignment="Stretch">
@@ -219,9 +222,7 @@
 
             </StackPanel>
         </StackPanel>
-
     </DataTemplate>
-    
     
 
     <DataTemplate x:Key="BranchItemTemplate">
@@ -282,11 +283,24 @@
                 Padding="4,2,4,3"
                 Margin="4,2,2,2"
                 CornerRadius="4">
-                
 
-                <Border.Background>
-                    <SolidColorBrush Color="{Binding LabelColor}"/>
-                </Border.Background>
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Background" Value="WhiteSmoke" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding LabelColorVisible}" Value="True">
+                                <Setter Property="Background" Value="{Binding Host.HslColor, Converter={StaticResource ColorConverter}}" />
+                            </DataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding LabelColorVisible}" Value="False"/>
+                                    <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Background" Value="LightGray"/>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
 
                 <StackPanel Orientation="Vertical">
                     <TextBlock x:Name="txtName">
@@ -307,10 +321,9 @@
                             Height="3" 
                             VerticalAlignment="Bottom" 
                             CornerRadius="2" 
-                            Visibility="{Binding UnderlineVisibility}">
-                            <Border.Background>
-                                <SolidColorBrush Color="{Binding IdentifierColor}"/>
-                            </Border.Background>
+                            Visibility="{Binding UnderlineVisibility}"
+                            Background="{Binding Host.HslColor, Converter={StaticResource ColorConverter}}">
+
                         </Border>
                     </Grid>
                 </StackPanel>
@@ -333,10 +346,10 @@
                 </TextBlock.Style>
             </TextBlock>
 
-
         </StackPanel>
     </DataTemplate>
 
+    
     <Style TargetType="TabItem" x:Key="TabItemStyle">
         
         <Setter Property="HeaderTemplate">
@@ -359,8 +372,9 @@
                 <Setter Property="Visibility" Value="Collapsed"/>
             </DataTrigger>
         </Style.Triggers>
-        
+
     </Style>
+    
 
     <Style TargetType="DataGrid" x:Key="DataGridStyle">
 
@@ -381,7 +395,6 @@
         <Setter Property="Margin" Value="5"/>
         <Setter Property="IsTabStop" Value="False"/>
 
-
         <Setter Property="ColumnHeaderStyle">
             <Setter.Value>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
@@ -399,6 +412,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
 
     <Style x:Key="ResultDataGridStyle" TargetType="DataGrid" BasedOn="{StaticResource DataGridStyle}">
         <Setter Property="Visibility" Value="Collapsed"/>
@@ -412,6 +426,7 @@
             </MultiDataTrigger>
         </Style.Triggers>
     </Style>
+    
 
     <Style x:Key="ErrorDataGridStyle" TargetType="DataGrid" BasedOn="{StaticResource DataGridStyle}">
         <Setter Property="Visibility" Value="Collapsed"/>
@@ -421,6 +436,7 @@
             </DataTrigger>
         </Style.Triggers>
     </Style>
+    
 
     <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
         <Setter Property="Template">
@@ -462,6 +478,7 @@
         <Setter Property="Background" Value="Transparent"/>
     </Style>
 
+    
     <Style x:Key="ProgressBarStyle" TargetType="ProgressBar">
         <Setter Property="Template">
             <Setter.Value>
@@ -479,5 +496,6 @@
         </Setter>
         <Setter Property="Foreground" Value="MediumSeaGreen"/>
     </Style>
+    
 
 </ResourceDictionary>

@@ -157,7 +157,7 @@ namespace Calc.Core.Objects.GraphNodes
             Parameter = "No Parameter";
             Method = "No Method";
             Value = "No Value";
-            HslColor = new HslColor(0, 0, 85);
+            //HslColor = new HslColor(0, 0, 85);
         }
 
         public Branch(List<CalcElement> elements) : this()

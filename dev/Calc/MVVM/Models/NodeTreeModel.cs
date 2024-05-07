@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Calc.Core.Interfaces;
 using System.Linq;
+using Calc.Core.Color;
 
 namespace Calc.MVVM.Models
 {
@@ -21,6 +22,7 @@ namespace Calc.MVVM.Models
         public bool BranchesSwitch { get; set; }
 
         private IVisualizer visualizer;
+        public HslColor CurrentColor { get => SelectedNodeItem?.Host?.HslColor ?? ItemPainter.DefaultColor; }
 
         private NodeModel selectedNodeItem;
         public NodeModel SelectedNodeItem
@@ -34,7 +36,7 @@ namespace Calc.MVVM.Models
         }
 
         public NodeModel CurrentForestItem { get; set; }
-        public NodeModel CurrentBrokenForestItem { get; set; }
+        //public NodeModel CurrentBrokenForestItem { get; set; }
 
         public ObservableCollection<NodeModel> NodeSource
         { get => new ObservableCollection<NodeModel> { CurrentForestItem }; }

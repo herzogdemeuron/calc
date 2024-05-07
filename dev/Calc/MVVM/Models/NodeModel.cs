@@ -38,7 +38,6 @@ namespace Calc.MVVM.Models
                 {
                     host = value;
                     OnPropertyChanged(nameof(Host));
-                    OnPropertyChanged(nameof(LabelColor));
                     OnPropertyChanged(nameof(CategorizedCalculation));
                 }
             }
@@ -82,15 +81,6 @@ namespace Calc.MVVM.Models
             }
         }
 
-        private Color IdentifierColor
-        {
-            get
-            {
-                var hsl = Host.HslColor;
-                var rgb = CalcColorConverter.HslToRgb(hsl);
-                return Color.FromArgb(255, rgb.R, rgb.G, rgb.B);
-            }
-        }
 
         public Visibility UnderlineVisibility
         {
@@ -100,20 +90,6 @@ namespace Calc.MVVM.Models
             }
         }
 
-        public Color LabelColor
-        {
-            get
-            {
-                if (LabelColorVisible || Host is Forest)
-                {
-                    return IdentifierColor;
-                }
-                else
-                {
-                    return Color.FromArgb(100, 219, 219, 219);
-                }
-            }
-        }
 
         public NodeModel(IGraphNode node, NodeTreeModel parentTreeView = null, NodeModel parentNodeItem = null)
         {
@@ -187,9 +163,7 @@ namespace Calc.MVVM.Models
         }
         public void NotifyNodePropertyChange()
         {
-            OnPropertyChanged(nameof(IdentifierColor));
             OnPropertyChanged(nameof(UnderlineVisibility));
-            OnPropertyChanged(nameof(LabelColor));
             OnPropertyChanged(nameof(LabelColorVisible));
 
             OnPropertyChanged(nameof(Host));

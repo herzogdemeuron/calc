@@ -20,7 +20,7 @@ namespace Calc.Core.Objects.GraphNodes
         [JsonIgnore]
         public List<Branch> SubBranches => Trees.ConvertAll(tree => (Branch)tree);
         [JsonIgnore]
-        public HslColor HslColor { get; set; } = new HslColor(0, 0, 83);
+        public HslColor HslColor { get; set; } = ItemPainter.DefaultColor;
         [JsonProperty("id")]
         public int Id { get; set; } = -1;
         [JsonProperty("forest_name")]

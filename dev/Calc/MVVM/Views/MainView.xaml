@@ -259,11 +259,9 @@
                 </Border>
 
                 <Border Grid.ColumnSpan="3" Grid.Row="0" CornerRadius="4" Background="LightGray">
-                    <Border BorderThickness="0" CornerRadius="4">
-                        <Border.Background>
-                            <SolidColorBrush Color="{Binding NodeTreeVM.SelectedNodeItem.LabelColor}"/>
-                        </Border.Background>
-                    </Border>
+                    <Border BorderThickness="0" CornerRadius="4"
+                            Visibility="{Binding NodeTreeVM.SelectedNodeItem.UnderlineVisibility}"
+                           Background="{Binding NodeTreeVM.SelectedNodeItem.Host.HslColor, Converter={StaticResource ColorConverter}}"/>
                 </Border>
 
                 <StackPanel Grid.Row="0"
@@ -452,10 +450,10 @@
                          Grid.Row="4" 
                          CornerRadius="4" 
                          Background="LightGray">
-                    <Border CornerRadius="4">
-                        <Border.Background>
-                            <SolidColorBrush Color="{Binding NodeTreeVM.SelectedNodeItem.LabelColor}"/>
-                        </Border.Background>
+                    <Grid>
+                    <Border x:Name="LabelColorBorder"
+                            Visibility="{Binding NodeTreeVM.SelectedNodeItem.UnderlineVisibility}"
+                            Background="{Binding NodeTreeVM.SelectedNodeItem.Host.HslColor, Converter={StaticResource ColorConverter}}"/>
 
                         <Grid>
                             <Grid.RowDefinitions>
@@ -499,7 +497,8 @@
                                 </DataGrid.Columns>
                             </DataGrid>
                         </Grid>
-                    </Border>
+                    </Grid>
+
                 </Border>
 
             </Grid>

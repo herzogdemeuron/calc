@@ -6,6 +6,8 @@ namespace Calc.MVVM.Helpers
     {
         public static void HideAllLabelColor(NodeModel forestItem)
         {    
+            forestItem.LabelColorVisible = false;
+
             foreach (NodeModel nodeItem in forestItem.SubNodeItems)
             {
                 HideNodeLabelColor(nodeItem);
