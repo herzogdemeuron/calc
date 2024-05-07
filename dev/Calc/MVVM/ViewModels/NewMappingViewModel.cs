@@ -51,7 +51,7 @@ namespace Calc.MVVM.ViewModels
         {
             List<Mapping> allMappings = new List<Mapping>(store.MappingsAll);
             MappingsListView = CollectionViewSource.GetDefaultView(allMappings);
-            MappingsListView.GroupDescriptions?.Add(new PropertyGroupDescription("Project.ProjectNumber"));
+            MappingsListView.GroupDescriptions?.Add(new PropertyGroupDescription("Project.Number"));
         }
 
 

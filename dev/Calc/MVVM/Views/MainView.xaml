@@ -620,7 +620,7 @@
                         <GroupStyle>
                             <GroupStyle.HeaderTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="DimGray" />
+                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="DimGray"/>
                                 </DataTemplate>
                             </GroupStyle.HeaderTemplate>
                         </GroupStyle>
