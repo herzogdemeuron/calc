@@ -3,6 +3,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Calc.Core;
 using Calc.Core.DirectusAPI;
+using Calc.MVVM.Helpers.Mediators;
 using Calc.MVVM.ViewModels;
 using Calc.MVVM.Views;
 using Calc.RevitConnector.Revit;
@@ -28,6 +29,9 @@ namespace Calc.RevitApp.Revit
         {
             try
             {
+                MediatorFromVM.Reset();
+                MediatorToView.Reset();
+
                 App.RevitVersion = commandData.Application.Application.VersionNumber;
                 AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
                 Document doc = commandData.Application.ActiveUIDocument.Document;

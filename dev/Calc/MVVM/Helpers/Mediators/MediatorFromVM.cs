@@ -10,8 +10,14 @@ namespace Calc.MVVM.Helpers.Mediators
         /// The events are named from the source view model 
         /// Broadcast happens in the source view model, Register and Unregister happens in the target view model
         /// ViewModels => NodeTreeViewModel(triggered) => RevitVisualizer(triggered) 
+        /// **should be deprecated and replaced with event aggregator**
         /// </summary>
         private static IDictionary<string, List<Action<object>>> dictionary = new Dictionary<string, List<Action<object>>>();
+
+        public static void Reset()
+        {
+            dictionary.Clear();
+        }
 
         public static void Register(string token, Action<object> callback)
         {

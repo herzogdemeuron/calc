@@ -7,8 +7,14 @@ namespace Calc.MVVM.Helpers.Mediators
     {
         /// <summary>
         /// Broadcasts messages to main view
+        /// should be deprecated and replaced with event aggregator
         /// </summary>
         private static IDictionary<string, List<Action<object>>> dictionary = new Dictionary<string, List<Action<object>>>();
+
+        public static void Reset()
+        {
+            dictionary.Clear();
+        }
 
         public static void Register(string token, Action<object> callback)
         {
