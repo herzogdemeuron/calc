@@ -209,9 +209,9 @@ namespace Calc.MVVM.ViewModels
 
             if (!authenticated)
             {
+                CanOK = false;
                 try
                 {
-                    CanOK = false;
                     authenticated = await Authenticate();
 
                     if (authenticated)
