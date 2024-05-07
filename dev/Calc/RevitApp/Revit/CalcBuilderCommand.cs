@@ -51,7 +51,6 @@ namespace Calc.RevitApp.Revit
             }
         }
 
-
         private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
             // for general case

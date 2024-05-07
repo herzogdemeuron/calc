@@ -17,6 +17,13 @@ namespace Calc.RevitApp.Revit
     [Transaction(TransactionMode.Manual)]
     public class CalcMainCommand : IExternalCommand
     {
+        static CalcMainCommand()
+        {
+            // dependencies are resolved at the point of command loading rather than command execution
+            // so we implement the assembly resolve event here
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+        }
+
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             try
@@ -45,24 +52,27 @@ namespace Calc.RevitApp.Revit
             }
         }
 
-        private async Task Authenticate()
+        private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            //var authenticator = new DirectusAuthenticator();
-            //directusInstance = await authenticator.ShowLoginWindowAsync().ConfigureAwait(false);
-        }
+            // for general case
+            string assemblyLocation = Assembly.GetExecutingAssembly().Location;
+            // for pyrevit invoked case
+            string assemblyLocationHdM = "C:\\HdM-DT\\RevitCSharpExtensions\\calc-test-bin\\bin";
 
-        private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            // depending on the build mode, use different paths
-            string assemblyFolder = @"C:\source\calc\ConnectorRevit\ConnectorRevit2023\bin\Debug";
-            //string assemblyFolder = $"C:\\ProgramData\\Autodesk\\Revit\\Addins\\{App.RevitVersion}\\CalcRevit"; // Specify the directory where your DLLs are located
+            string assemblyFolder = string.IsNullOrEmpty(assemblyLocation) ?
+                assemblyLocationHdM : Path.GetDirectoryName(assemblyLocation);
             string assemblyName = new AssemblyName(args.Name).Name;
             string assemblyPath = Path.Combine(assemblyFolder, assemblyName + ".dll");
 
             if (File.Exists(assemblyPath))
+            {
                 return Assembly.LoadFrom(assemblyPath);
 
-            return null;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
