@@ -26,9 +26,6 @@ namespace Calc.Core.DirectusAPI
         private string token ;
         private string baseUrl;
         private string refreshToken;
-
-        private string reAuthEmail;
-        private string reAuthPassword;
         public bool Authenticated { get; private set; } = false;
         private readonly HttpClient httpClient;
         private GraphQLHttpClient graphQlClient;
@@ -58,7 +55,7 @@ namespace Calc.Core.DirectusAPI
             // re-authenticate and retry the request if the response is "Unauthorized"
             if (response.StatusCode == HttpStatusCode.Unauthorized && reAuth)
             {
-                await Authenticate(baseUrl, reAuthEmail, reAuthPassword);
+                await RefreshAuthentication();
                 response = await httpRetryPolicy.ExecuteAsync(action);
             }
             return response;
@@ -84,7 +81,7 @@ namespace Calc.Core.DirectusAPI
             bool isUnauthorized = response.Errors != null && response.Errors.Any(e => e.Message.Contains("Unauthorized"));
             if (isUnauthorized)
             {
-                await Authenticate(baseUrl, reAuthEmail, reAuthPassword);
+                await RefreshAuthentication();
                 response = await graphQlRetryPolicy.ExecuteAsync(async () => await graphQlClient.SendQueryAsync<TDriver>(request));
             }
             if (response.Errors != null && response.Data == null)
@@ -102,7 +99,7 @@ namespace Calc.Core.DirectusAPI
             bool isUnauthorized = response.Errors != null && response.Errors.Any(e => e.Message.Contains("Unauthorized"));
             if (isUnauthorized)
             {
-                await Authenticate(baseUrl, reAuthEmail, reAuthPassword);
+                await RefreshAuthentication();
                 response = await graphQlRetryPolicy.ExecuteAsync(async () => await graphQlClient.SendQueryAsync<TDriver>(request));
             }
             if (response.Errors != null && response.Data == null)
@@ -120,7 +117,7 @@ namespace Calc.Core.DirectusAPI
             bool isUnauthorized = response.Errors != null && response.Errors.Any(e => e.Message.Contains("Unauthorized"));
             if (isUnauthorized)
             {
-                await Authenticate(baseUrl, reAuthEmail, reAuthPassword);
+                await RefreshAuthentication();
                 response = await graphQlRetryPolicy.ExecuteAsync(async () => await graphQlClient.SendQueryAsync<TDriver>(request));
             }
             if (response.Errors != null && response.Data == null)
@@ -153,11 +150,30 @@ namespace Calc.Core.DirectusAPI
             token = data.Access_token;
             refreshToken = data.Refresh_token;
             ConfigureGraphQlClients();
-            reAuthEmail = email;
-            reAuthPassword = password;
             Authenticated = true;
 
         }
+
+        public async Task RefreshAuthentication()
+        {
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                throw new InvalidOperationException("Refresh token is missing.");
+            }
+
+            string requestBody = JsonConvert.SerializeObject(new { refresh_token = refreshToken });
+            var contentFactory = () => new StringContent(requestBody, Encoding.UTF8, "application/json");
+            var response = await RequestWithRetry($"{baseUrl}/auth/refresh", contentFactory, false);
+            var responseContent = await ReadResponseContent(response);
+            var responseData = JsonConvert.DeserializeObject<Dictionary<string, LoginResponseData>>(responseContent);
+            LoginResponseData data = responseData["data"];
+
+            token = data.Access_token;
+            refreshToken = data.Refresh_token;
+            ConfigureGraphQlClients();
+            Authenticated = true;
+        }
+
 
         private void ConfigureGraphQlClients()
         {
