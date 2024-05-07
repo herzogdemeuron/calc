@@ -19,13 +19,22 @@ namespace Calc.Core.Objects.GraphNodes
         [JsonIgnore]
         public List<CalcElement> Elements { get; set; } = new();
         [JsonIgnore]
+        public double TotalLength
+        {
+            get => Math.Round(
+                Elements.Sum(
+                    e => e.GetBasicUnitParameter(Unit.m).Amount ?? 0
+                    ),
+                3); 
+        }
+        [JsonIgnore]
         public double TotalArea 
         { 
             get => Math.Round(
                 Elements.Sum(
                     e => e.GetBasicUnitParameter(Unit.m2).Amount ?? 0
                     ),
-                0); 
+                3); 
         }
         [JsonIgnore]
         public double TotalVolume 
@@ -34,7 +43,7 @@ namespace Calc.Core.Objects.GraphNodes
                 Elements.Sum(
                     e => e.GetBasicUnitParameter(Unit.m3).Amount ?? 0
                     ),
-                0); 
+                3); 
         }
 
         [JsonIgnore]

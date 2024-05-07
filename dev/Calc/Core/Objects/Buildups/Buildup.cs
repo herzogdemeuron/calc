@@ -89,40 +89,6 @@ namespace Calc.Core.Objects.Buildups
             set => SetProperty(ref calculationComponents, value);
         }
 
-
-
-        /// <summary>
-        /// receive a set of BuildupComponents from revit/rhino, create the current buildup components
-        /// </summary>
-       /* public void CreateBuildupComponents(List<BuildupComponent> newBuildupComponents)
-        {
-            var currentComponents = new List<BuildupComponent>(Components);
-            Components = newBuildupComponents;
-
-            foreach (var newComponent in Components)
-            {
-                var source = currentComponents.FirstOrDefault(c => c.CheckSource(newComponent));
-                if (source != null)
-                {
-                    var missingComponent = newComponent.ApplySource(source);
-                    if (missingComponent.HasLayers)
-                    {
-                        MissingComponents.Add(missingComponent);
-                    }
-
-                    currentComponents.Remove(source);
-                }
-            }
-            MissingComponents.AddRange(currentComponents);
-        }*/
-
-        /// <summary>
-        /// get the total ratio of the whole buildup when generating calculation components
-        /// is 1 divides the quantity of the normalizer of the buildup unit
-        /// </summary>
-
-
-
         public void Copy(Buildup other)
         {
             Id = other.Id;

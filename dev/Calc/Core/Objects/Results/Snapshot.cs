@@ -8,11 +8,11 @@ namespace Calc.Core.Objects.Results
 
     public class Snapshot : IHasProject
     {
-        [JsonProperty(PropertyName = "id", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "id")]
         public int Id { get; set; } = -1;
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
-        [JsonProperty(PropertyName = "project_id", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "project")]
         public Project Project { get; set; }
         [JsonProperty(PropertyName = "results")]
         public List<Result> Results { get; set; }

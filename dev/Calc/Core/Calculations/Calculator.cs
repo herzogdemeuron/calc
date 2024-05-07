@@ -14,8 +14,8 @@ namespace Calc.Core.Calculations
     public class Calculator
     {
         /// <summary>
-        /// calculate gwp and cost for one branch
-        /// store back the calculation to it
+        /// calculate gwp and ge for one branch
+        /// store back the calculation
         /// this should only happen for dead end branches
         /// </summary>
         public static void Calculate(Branch branch)
@@ -74,8 +74,8 @@ namespace Calc.Core.Calculations
         private static Result GetResult(Branch branch, CalcElement element, Buildup buildup, CalculationComponent component, double quantity)
         {
             var material = component.Material;
-            var gwpA123 = component.Gwp * quantity;
-            var geA123 = component.Ge * quantity;
+            var gwp = component.Gwp * quantity;
+            var ge = component.Ge * quantity;
             var cost = component.Cost * quantity;
 
             var calculationResult = new Result
@@ -93,15 +93,17 @@ namespace Calc.Core.Calculations
                 BuildupUnit = buildup.BuildupUnit,
 
                 MaterialName = material.Name,
-                MaterialSource = material.Standard.Name,
-                //MaterialSourceCode = material.SourceCode,
-                MaterialCategory = material.MaterialType,
-                MaterialGwp = material.Gwp??0,
                 MaterialUnit = component.Material.MaterialUnit,
                 MaterialAmount = component.Amount??0,
+                MaterialStandard = material.Standard.Name,
+                MaterialSource = material.DataSource,
+                MaterialSourceUuid = material.SourceUuid,
+                MaterialFunction = component.Function.Name,
+                MaterialGwp = material.Gwp??0,
+                MaterialGe = material.Ge??0,
 
-                Gwp = gwpA123??0,
-                Ge = geA123??0,
+                Gwp = gwp??0,
+                Ge = ge??0,
                 Cost = cost??0,
                 Color = branch.HslColor
             };

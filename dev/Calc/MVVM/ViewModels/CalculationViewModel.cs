@@ -71,8 +71,8 @@ namespace Calc.MVVM.ViewModels
                         calculation.Add(new CategorizedResultModel
                         {
                             GroupName = result.GroupName,
-                            Gwp = Math.Round(result.Gwp, 3),
-                            Ge = Math.Round(result.Ge, 3)
+                            Gwp = Math.Round(result.Gwp, 0),
+                            Ge = Math.Round(result.Ge, 0)
                         });
                     }
                 }

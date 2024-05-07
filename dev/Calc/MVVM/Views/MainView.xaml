@@ -233,9 +233,10 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Border Grid.Row="2"
-                        Grid.ColumnSpan="3"
+                        Grid.ColumnSpan="4"
                         BorderBrush="Silver"
                         BorderThickness="1"
                         CornerRadius="4">
@@ -259,7 +260,7 @@
                     </TreeView>
                 </Border>
 
-                <Border Grid.ColumnSpan="3" Grid.Row="0" CornerRadius="4" Background="LightGray">
+                <Border Grid.ColumnSpan="4" Grid.Row="0" CornerRadius="4" Background="LightGray">
                     <Border BorderThickness="0" CornerRadius="4"
                             Visibility="{Binding NodeTreeVM.SelectedNodeItem.UnderlineVisibility}"
                            Background="{Binding NodeTreeVM.SelectedNodeItem.Host.HslColor, Converter={StaticResource ColorConverter}}"/>
@@ -278,22 +279,33 @@
                 <StackPanel Grid.Row="0"
                             Grid.Column="1"
                             Margin="0,5,0,0">
-                    <TextBlock Text="Area"
+                    <TextBlock Text="Length"
                                FontWeight="SemiBold"
                                HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding CalculationVM.CurrentNodeItem.Host.TotalArea,
-                                        StringFormat={}{0} m²}"
-                               HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding CalculationVM.CurrentNodeItem.Host.TotalLength,
+                                StringFormat={}{0:F1} m}"
+                                HorizontalAlignment="Center"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="0"
                             Grid.Column="2"
                             Margin="0,5,0,0">
+                    <TextBlock Text="Area"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding CalculationVM.CurrentNodeItem.Host.TotalArea,
+                                        StringFormat={}{0:F1} m²}"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="0"
+                            Grid.Column="3"
+                            Margin="0,5,0,0">
                     <TextBlock Text="Volume"
                                FontWeight="SemiBold"
                                HorizontalAlignment="Center"/>
                     <TextBlock Text="{Binding CalculationVM.CurrentNodeItem.Host.TotalVolume,
-                                              StringFormat={}{0} m³}"
+                                              StringFormat={}{0:F1} m³}"
                                HorizontalAlignment="Center"/>
                 </StackPanel>
 
@@ -394,6 +406,8 @@
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="100"/>
                                             <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="100"/>
+                                            <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="15"/>
@@ -401,21 +415,36 @@
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
 
-                                        <TextBlock Grid.Row="0"
+                                        <TextBlock Grid.Row="0" Grid.Column="0"
                                                FontWeight="SemiBold"
-                                               Text="Buildup Group: "/>
-                                        <TextBlock Grid.Row="1"
+                                               Text="Buildup Unit: "/>                                               
+                                        <TextBlock Grid.Row="0" Grid.Column="1"
+                                               Text="{Binding  BuildupUnit}"/>
+
+                                        <TextBlock Grid.Row="1" Grid.Column="0" 
                                                FontWeight="SemiBold"
-                                               Text="Buildup Unit: "/>
+                                                   Text="Buildup Group: "/>
+                                        <TextBlock Grid.Row="1" Grid.Column="1" 
+                                               Text="{Binding Group.Name}"/>
+
+                                        <TextBlock Grid.Row="0" Grid.Column="2" 
+                                                FontWeight="SemiBold"
+                                                Text="Buildup GWP: "/>
+                                        <TextBlock Grid.Row="0"  Grid.Column="3"  
+                                                Text="{Binding  BuildupGwp}"/>
+
+                                        <TextBlock Grid.Row="1" Grid.Column="2" 
+                                                 FontWeight="SemiBold"
+                                                 Text="Buildup GE: "/>
+                                        <TextBlock Grid.Row="1"  Grid.Column="3"  
+                                                Text="{Binding  BuildupGe}"/>
+
                                         <TextBlock Grid.Row="2"
                                                FontWeight="SemiBold"
                                                Text="Description: "/>
-                                        <TextBlock Grid.Column="1" Grid.Row="0"
-                                               Text="{Binding Group.Name}"/>
-                                        <TextBlock Grid.Column="1" Grid.Row="1"
-                                               Text="{Binding  Unit}"/>
-                                        <TextBlock Grid.Column="1" Grid.Row="2"
+                                        <TextBlock Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3"
                                                Text="{Binding  Description}" TextWrapping="Wrap"/>
+                                                   
                                     </Grid>
                                     <Separator DockPanel.Dock="Bottom"
                                            BorderBrush="LightGray"
@@ -423,13 +452,20 @@
                                            Margin="50,5,50,10"/>
 
                                     <DataGrid Style="{StaticResource DataGridStyle}"
-                                          ItemsSource="{Binding Components}"
+                                          ItemsSource="{Binding CalculationComponents}"
                                           DockPanel.Dock="Top">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" Width="4*"  IsReadOnly="True" />
-                                            <DataGridTextColumn Header="Amount" Binding="{Binding FormattedAmount}" Width="1*"  IsReadOnly="True" />
-                                            <DataGridTextColumn Header="GWP (kgCO2 eq)" Binding="{Binding FormattedGWP}" Width="2*"  IsReadOnly="True" />
-                                            <DataGridTextColumn Header="GE (kWh oil eq)" Binding="{Binding FormattedGE}" Width="2*"  IsReadOnly="True" />
+                                            <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" Width="2*"  IsReadOnly="True" />
+                                            <DataGridTextColumn Header="Amount" Width="*"  IsReadOnly="True">
+                                                <DataGridTextColumn.Binding>
+                                                    <MultiBinding  StringFormat="{}{0:F3} {1}">
+                                                        <Binding Path="Amount"/>
+                                                        <Binding Path="Material.MaterialUnit"/>
+                                                    </MultiBinding>
+                                                </DataGridTextColumn.Binding>
+                                            </DataGridTextColumn>
+                                            <DataGridTextColumn Header="GWP (kgCO2eq)" Binding="{Binding Gwp}" Width="*"  IsReadOnly="True" />
+                                            <DataGridTextColumn Header="GE (kWhOileq)" Binding="{Binding Ge}" Width="*"  IsReadOnly="True" />
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </DockPanel>
@@ -473,8 +509,8 @@
                                       ItemsSource="{Binding CalculationVM.CategorizedResults}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Buildup Group" Binding="{Binding GroupName}" Width="3*"  IsReadOnly="True" />
-                                    <DataGridTextColumn Header="GWP (kgCO2)" Binding="{Binding Gwp}" Width="1*"  IsReadOnly="True" />
-                                    <DataGridTextColumn Header="GE (kWh oil)" Binding="{Binding Ge}" Width="1*"  IsReadOnly="True" />
+                                    <DataGridTextColumn Header="GWP (kgCO2eq)" Binding="{Binding Gwp}" Width="1*"  IsReadOnly="True" />
+                                    <DataGridTextColumn Header="GE (kWhOileq)" Binding="{Binding Ge}" Width="1*"  IsReadOnly="True" />
                                 </DataGrid.Columns>
                             </DataGrid>
 
@@ -547,9 +583,26 @@
              Margin="5"
              Visibility="{Binding VisibilityVM.NewMappingOverlayVisibility}">
             <StackPanel VerticalAlignment="Center">
+                
+                <Label HorizontalAlignment="Center"
+                       Content="New Mapping Name"
+                       FontSize="27"
+                       Margin="10"
+                       FontWeight="light"/>
+                
+                <TextBox Margin="10"
+                         x:Name="NewNameText"
+                         Height="25"
+                         Width="180"
+                         HorizontalAlignment="Center"
+                         Style="{StaticResource TextBoxStyle}"
+                         Text="{Binding NewMappingVM.NewName}"/>
 
                 <Label HorizontalAlignment="Center"
-                           Content="Mappings to duplicate:"/>
+                       Content="Dupliacate From?"
+                       FontSize="27"
+                       Margin="10"
+                       FontWeight="light"/>
 
                 <ListView x:Name="MappingListView"
                          HorizontalAlignment="Center"
@@ -572,33 +625,23 @@
                     </ListView.GroupStyle>
                 </ListView>
 
-                <Label HorizontalAlignment="Center"
-                           Content="New mapping name:"/>
                 
-                <TextBox Grid.Row="3"
-                         Margin="10"
-                         x:Name="NewNameText"
-                         Height="25"
-                         Width="180"
-                         HorizontalAlignment="Center"
-                         Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding NewMappingVM.NewName}"/>
                 <StackPanel Orientation="Horizontal"
                             Width="180"
                             Margin="0,10,0,0"
                             HorizontalAlignment="Stretch">
                     
-                <Button Style="{StaticResource ButtonStyle}"                        
-                        HorizontalAlignment="Center"
-                        Width="80"
-                        Content="Confirm" 
-                        Click="NewMappingConfirmed"/>
-                <Button Style="{StaticResource ButtonStyle}"
-                        HorizontalAlignment="Center"
-                        Width="80"
-                        Margin="20,0,0,0"
-                        Content="Cancel" 
-                        Click="NewMappingCanceld"/>
+                    <Button Style="{StaticResource ButtonStyle}"                        
+                            HorizontalAlignment="Center"
+                            Width="85"
+                            Content="Confirm" 
+                            Click="NewMappingConfirmed"/>
+                    <Button Style="{StaticResource ButtonStyle}"
+                            HorizontalAlignment="Center"
+                            Width="85"
+                            Margin="10,0,0,0"
+                            Content="Cancel" 
+                            Click="NewMappingCanceld"/>
                 </StackPanel>
             </StackPanel>
         </Grid>
@@ -607,7 +650,7 @@
              Background="Gainsboro"
              Margin="5"              
              Visibility="{Binding VisibilityVM.WaitingOverlayVisibility}"
-              d:IsHidden="True">
+             d:IsHidden="True">
             <StackPanel VerticalAlignment="Center">
                 <TextBlock x:Name="WaitingTextBlock"
                     HorizontalAlignment="Center"
@@ -627,47 +670,62 @@
         <Grid x:Name="SavingOverlay"
              Background="Gainsboro"
              Margin="5"
-             d:IsHidden="true"
+             d:IsHidden="True"
              Visibility="{Binding VisibilityVM.SavingOverlayVisibility}"
              >
             <StackPanel VerticalAlignment="Center">
-                <TextBlock HorizontalAlignment="Center"
-                    Text="Save result name:"/>
+                <Label HorizontalAlignment="Center"
+                       Content="New Snapshot Name"
+                       FontSize="27"
+                       Margin="10"
+                       FontWeight="light"/>
                 <TextBox x:Name="NewResultNameTextBox"
                         HorizontalAlignment="Center"
-                        MinWidth="90"
+                        Width="180"
+                         Height="25"
+                        Style="{StaticResource TextBoxStyle}"
                         Margin="10"/>
                 <TextBlock HorizontalAlignment="Center"
+                           FontWeight="SemiBold"
+                           d:Text="You are about to save 1880 elements, this may take a while."
                            Text="{Binding VisibilityVM.SavingMessage}"/>
-                <Button Style="{StaticResource ButtonStyle}"
-                        Content="Confirm" 
-                        HorizontalAlignment="Center"
-                        Width="90"
-                        Margin="10"
-                        Click="SaveResultOKClicked"/>
-                <Button Style="{StaticResource ButtonStyle}"
-                        Content="Cancel" 
-                        HorizontalAlignment="Center"
-                        Width="90"
-                        Click="SaveResultCancelClicked"/>
+
+                <StackPanel Orientation="Horizontal"
+                            Width="180"
+                             Margin="0,30,0,0"
+                             HorizontalAlignment="Stretch">
+
+                    <Button Style="{StaticResource ButtonStyle}"                        
+                             HorizontalAlignment="Center"
+                             Width="85"
+                             Content="Confirm"
+                             Click="SaveResultOKClicked"/>  
+                    <Button Style="{StaticResource ButtonStyle}"
+                             HorizontalAlignment="Center"
+                             Width="85"
+                             Margin="10,0,0,0"
+                             Content="Cancel" 
+                             Click="SaveResultCancelClicked"/>
+                </StackPanel>                
+                
             </StackPanel>
         </Grid>
 
         <Grid x:Name="MessageOverlay"
              Background="Gainsboro"
              Margin="5"
-             Visibility="{Binding VisibilityVM.MessageOverlayVisibility}"
-             
-              d:IsHidden="true">
+             Visibility="{Binding VisibilityVM.MessageOverlayVisibility}"             
+              d:IsHidden="True">
             <StackPanel VerticalAlignment="Center">
                 <TextBlock x:Name="MessageTextBlock"
                             Text="{Binding VisibilityVM.MessageText}"
+                            d:Text="This is a message shown to the user"
                             HorizontalAlignment="Center"/>
                 <Button Style="{StaticResource ButtonStyle}"
                         Content="OK" 
                         HorizontalAlignment="Center"
                         Width="90"
-                        Margin="10"
+                        Margin="20"
                         Click="MessageOKClicked"/>
             </StackPanel>
         </Grid>

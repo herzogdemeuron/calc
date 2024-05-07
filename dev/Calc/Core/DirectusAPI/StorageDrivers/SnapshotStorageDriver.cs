@@ -11,11 +11,12 @@ namespace Calc.Core.DirectusAPI.Drivers
         public Snapshot SendItem { get; set; }
 
         public string QueryCreateSingle { get; } = @"
-                    mutation ($name: String!, $results: JSON!, $projectInput: create_calc_architecture_projects_input) {
-                        create_calc_snapshots_item(data: {name: $name, results: $results, project_id: $projectInput}) {
-                            id
-                        }   
-                    }";
+            mutation CreateSnapshot($input: create_calc_snapshots_input!) {
+              create_calc_snapshots_item(data: $input) {
+                id
+              }
+            }";
+
 
         [JsonProperty("create_calc_snapshots_item")]
         public Snapshot CreatedItem { get; set; }
@@ -27,17 +28,15 @@ namespace Calc.Core.DirectusAPI.Drivers
                 return new Dictionary<string, object>();
             }
 
-            var variables = new Dictionary<string, object>
+            var input = new
             {
-                { "name", this.SendItem.Name },
-                { "results", JsonConvert.SerializeObject(this.SendItem.Results) }
+                name = SendItem.Name,
+                project = new { id = SendItem.Project.Id },
+                results = JsonConvert.SerializeObject(SendItem.Results)
             };
 
-            if (this.SendItem.Project.Id >= 0)
-            {
-                variables["projectInput"] = new { id = this.SendItem.Project.Id };
-            }
-
+            var variables = new Dictionary<string, object>();
+            variables.Add("input", input);
             return variables;
         }
     }

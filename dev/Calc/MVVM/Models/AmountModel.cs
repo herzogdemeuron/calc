@@ -48,11 +48,30 @@ namespace Calc.MVVM.Models
         {
             if (basicParameterSet == null) return "-";
             var param = basicParameterSet.GetAmountParam(unit);
+            string unitSting;
+            switch (unit)
+            {
+                case Unit.piece:
+                    unitSting = "piece";
+                    break;
+                case Unit.m3:
+                    unitSting = "m³";
+                    break;
+                case Unit.m2:
+                    unitSting = "m²";
+                    break;
+                case Unit.m:
+                    unitSting = "m";
+                    break;
+                default:
+                    unitSting = "?";
+                    break;
+            }
+
             if(!param.HasError)
             {
                 var v = param.Amount.ToString();
-                var u = param.Unit.ToString();
-                return $"{v} {u}";
+                return $"{v} {unitSting}";
             }
             switch (param.ErrorType)
             {
