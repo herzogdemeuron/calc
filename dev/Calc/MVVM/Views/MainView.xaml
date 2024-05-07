@@ -25,6 +25,7 @@
                 <ResourceDictionary Source="ToggleButtonResource.xaml"/>
                 <ResourceDictionary Source="ButtonResource.xaml"/>
                 <ResourceDictionary Source="ComboBoxResource.xaml"/>
+                <ResourceDictionary Source="ListViewResource.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -99,7 +100,7 @@
                         Click="NewMappingClicked"
                         DockPanel.Dock="Right"/>
                     <Button Style="{StaticResource ButtonStyle}"
-                        Content="Save" 
+                        Content="Update" 
                         Width="70" 
                         Click="UpdateMappingClicked"
                         Margin="10,0,10,0"
@@ -340,8 +341,7 @@
                                 Click="RemoveClicked"/>
                     </StackPanel>
                     <StackPanel DockPanel.Dock="Left">
-                        <views:SearchComboBox Tag="1"
-                                              x:Uid="ShowTextNote"
+                        <views:SearchComboBox x:Uid="ShowTextNote"
                                               Style="{StaticResource RoundedComboBoxStyle}"
                                               ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.AllBuildupsView1}"
                                               SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup1}"
@@ -354,8 +354,7 @@
                             </ComboBox.GroupStyle>
                         </views:SearchComboBox>
 
-                        <views:SearchComboBox Tag="2"
-                                              x:Uid="ShowTextNote"
+                        <views:SearchComboBox x:Uid="ShowTextNote"
                                               Style="{StaticResource RoundedComboBoxStyle}"
                                               ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.AllBuildupsView2}"
                                               SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup2}"
@@ -531,14 +530,9 @@
                     Grid.Column="2"
                     Grid.Row="4">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="2*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Button Style="{StaticResource ButtonStyle}"
-                        Grid.Column="0" 
-                        Content="Start CalcLive"
-                        IsEnabled="False"
-                        Click="StartCalcLiveClicked" Margin="10,0,5,10" />
                 <Button Style="{StaticResource ButtonStyle}"
                         Grid.Column="1"
                         Content="Save Results"
@@ -549,63 +543,63 @@
 
         <Grid x:Name="NewMappingOverlay"
              Background="Gainsboro"
-              d:IsHidden="True"
+             d:IsHidden="True"
              Margin="5"
-             Visibility="{Binding VisibilityVM.NewMappingOverlayVisibility}"
-             >
+             Visibility="{Binding VisibilityVM.NewMappingOverlayVisibility}">
             <StackPanel VerticalAlignment="Center">
 
-                <TextBlock Grid.Row="0"
-                           HorizontalAlignment="Center"
-                           Text="Mappings to duplicate:"/>
+                <Label HorizontalAlignment="Center"
+                           Content="Mappings to duplicate:"/>
 
-                <ListBox Grid.Row="1"
-                         x:Name="MappingListBox"
+                <ListView x:Name="MappingListView"
                          HorizontalAlignment="Center"
                          Margin="10"
                          Width="180"
                          Height="180"
                          ScrollViewer.VerticalScrollBarVisibility="Auto"
-                         SelectionChanged="MappingSelectionChanged"
+                         PreviewMouseLeftButtonDown="MappingListViewSelected"
+                         Style="{StaticResource ListViewStyle}" 
+                         ItemContainerStyle="{StaticResource ListViewItemMappingStyle}"
                          ItemsSource="{Binding NewMappingVM.MappingsListView}">
-                    <ListBox.GroupStyle>
+                    <ListView.GroupStyle>
                         <GroupStyle>
                             <GroupStyle.HeaderTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Name}" Foreground="Gray" />
+                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="DimGray" />
                                 </DataTemplate>
                             </GroupStyle.HeaderTemplate>
                         </GroupStyle>
-                    </ListBox.GroupStyle>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Name}"/>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                    </ListView.GroupStyle>
+                </ListView>
 
-                <TextBlock Grid.Row="2"
-                           HorizontalAlignment="Center"
-                           Text="New mapping name:"/>
+                <Label HorizontalAlignment="Center"
+                           Content="New mapping name:"/>
+                
                 <TextBox Grid.Row="3"
                          Margin="10"
-                         x:Name="NewNameText" 
-                         MinWidth="90"
+                         x:Name="NewNameText"
+                         Height="25"
+                         Width="180"
                          HorizontalAlignment="Center"
+                         Style="{StaticResource TextBoxStyle}"
                          Text="{Binding NewMappingVM.NewName}"/>
-                <Button Style="{StaticResource ButtonStyle}"
-                        Grid.Row="4"
+                <StackPanel Orientation="Horizontal"
+                            Width="180"
+                            Margin="0,10,0,0"
+                            HorizontalAlignment="Stretch">
+                    
+                <Button Style="{StaticResource ButtonStyle}"                        
                         HorizontalAlignment="Center"
-                        Width="90"
+                        Width="80"
                         Content="Confirm" 
                         Click="NewMappingConfirmed"/>
                 <Button Style="{StaticResource ButtonStyle}"
-                        Grid.Row="4"
                         HorizontalAlignment="Center"
-                        Margin="10"
-                        Width="90"
+                        Width="80"
+                        Margin="20,0,0,0"
                         Content="Cancel" 
                         Click="NewMappingCanceld"/>
+                </StackPanel>
             </StackPanel>
         </Grid>
 

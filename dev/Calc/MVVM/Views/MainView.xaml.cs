@@ -86,6 +86,16 @@ namespace Calc.MVVM.Views
             MainVM.HandleMappingSelectionChanged(MappingsComboBox.SelectedItem as Mapping);
         }
 
+        private void MappingListViewSelected(object sender, MouseButtonEventArgs e)
+        {
+            var item = (sender as ListView).ContainerFromElement(e.OriginalSource as DependencyObject) as ListViewItem;
+            if (item != null && item.IsSelected)
+            {
+                item.IsSelected = false;
+                e.Handled = true;
+            }
+        }
+
         private void NewMappingClicked(object sender, RoutedEventArgs e)
         {
             MainVM.HandleNewMappingClicked();
@@ -94,14 +104,14 @@ namespace Calc.MVVM.Views
         private async void NewMappingConfirmed(object sender, RoutedEventArgs e)
         {
             string newName = this.NewNameText.Text.Trim();
-            Mapping selectedMapping = this.MappingListBox.SelectedItem as Mapping;
+            Mapping selectedMapping = this.MappingListView.SelectedItem as Mapping;
             await MainVM.HandleNewMappingCreateAsync(selectedMapping, newName);
         }
 
         private void NewMappingCanceld(object sender, RoutedEventArgs e)
         {
             this.NewNameText.Text = "";
-            MappingListBox.SelectedItem = null;
+            MappingListView.SelectedItem = null;
             MainVM.HandleNewMappingCanceled();
         }
 
@@ -178,10 +188,6 @@ namespace Calc.MVVM.Views
             var forest = ForestsComboBox.SelectedItem;
             MainVM.HandleUpdateRevitClicked(forest as Forest);
         }
-        private void StartCalcLiveClicked(object sender, RoutedEventArgs e)
-        {
-        }
-
 
         private void SaveResultsClicked(object sender, RoutedEventArgs e)
         {

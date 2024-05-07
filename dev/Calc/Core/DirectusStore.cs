@@ -51,12 +51,16 @@ namespace Calc.Core
             get => BuildupsAll.FindAll(b => b.Standard?.Id == StandardSelected?.Id);
         }
 
-        private Mapping _mappingSelected = null;
+        private Mapping _mappingSelected;
         public Mapping MappingSelected
         {
             get => _mappingSelected;
-            set => SetSelectedMapping(value);
-        }
+            set
+            {
+                _mappingSelected = value;
+                _mappingSelected.Project = ProjectSelected; // needed?
+            }
+            }
         public List<Mapping> MappingsProjectRelated
         {
             get => GetProjectRelated(MappingDriver);
@@ -270,18 +274,13 @@ namespace Calc.Core
             BuildupDriver.LinkMaterials(MaterialDriver.GotManyItems);
         }
 
-        private void SetSelectedMapping(Mapping mapping)
-        {
-            //CheckIfProjectSelected();
-            mapping.Project = ProjectSelected;
-            _mappingSelected = mapping;
-        }
+
 
         public async Task<bool> UpdateSelectedMapping(Forest additionalForest = null)
         {             
             if (MappingSelected == null)
             {
-                throw new Exception("No mapping selected");
+                throw new Exception("Please firstly create a new mapping.");
             }
 
             // refresh the mapping with the selected forest
@@ -306,20 +305,17 @@ namespace Calc.Core
             }
         }
 
-        public async Task<bool> SaveSelectedMapping()
+        public async Task<bool> CreateMapping(Mapping newMapping)
         {
-            if (MappingSelected == null)
-            {
-                throw new Exception("No mapping selected");
-            }
-
-            MappingDriver.SendItem = MappingSelected;
-
+            newMapping.Project = ProjectSelected;
+            newMapping.Updated = DateTime.Now;
+            MappingDriver.SendItem = newMapping;
             try
             {
                 var mappingDriver = await DirectusDriver.CreateSingle<MappingStorageDriver, Mapping>(MappingDriver);
-                MappingSelected.Id = mappingDriver.CreatedItem.Id; // todo: check if is working?
-                MappingDriver.GotManyItems.Add(MappingSelected);
+                newMapping.Id = mappingDriver.CreatedItem.Id; // todo: check if is working?
+                MappingDriver.GotManyItems.Add(newMapping);
+                MappingSelected = newMapping;
                 return true;
             }
             catch (Exception e)

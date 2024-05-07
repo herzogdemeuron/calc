@@ -12,31 +12,32 @@ namespace Calc.Core.DirectusAPI.Drivers
                     query GetAllMappings {
                         calc_mappings {
                             id
-                            mapping_name
+                            name
                             mappings
-                            project_id {
+                            updated
+                            project {
                                 id
                                 name
                                 number
                             }
                         }
                     }";
+
         public string QueryCreateSingle { get; } = @"
-                mutation ($mappingName: String!, $mappings: JSON!, $projectInput: create_calc_architecture_projects_input) {
-                    create_calc_mappings_item(data: {mapping_name: $mappingName, mappings: $mappings, project_id: $projectInput}) {
-                        id
-                    }
-                }";
+            mutation CreateMapping($input: create_calc_mappings_input!) {
+              create_calc_mappings_item(data: $input) {
+                id
+              }
+            }";
+
         public string QueryUpdateSingle { get; } = @"
-                mutation ($id: ID!, $mappingName: String!, $mappings: JSON!, $projectInput: update_calc_architecture_projects_input) {
-                    update_calc_mappings_item(id: $id, data: {
-                        mapping_name: $mappingName,
-                        mappings: $mappings,
-                        project_id: $projectInput
-                        }) {
-                        id
-                    }
-                }";
+            mutation UpdateMapping($id: ID!, $input: update_calc_mappings_input!) {
+              update_calc_mappings_item(id: $id, data: $input) {
+                id
+              }
+            }";
+
+
 
         [JsonProperty("calc_mappings")]
         public List<Mapping> GotManyItems { get; set; }
@@ -52,21 +53,22 @@ namespace Calc.Core.DirectusAPI.Drivers
                 return new Dictionary<string, object>();
             }
 
-            var variables = new Dictionary<string, object>
+            var input = new
             {
-                { "mappingName", this.SendItem.Name },
-                { "mappings", this.SendItem.SerializeMappingItems() }
+                name = SendItem.Name,
+                mappings = this.SendItem.SerializeMappingItems(),
+                project = new { id = SendItem.Project.Id },
+                updated = SendItem.Updated
             };
 
-            if (this.SendItem.Project != null && this.SendItem.Project.Id >= 0)
-            {
-                variables.Add("projectInput", new { id = this.SendItem.Project.Id });
-            }
+            var variables = new Dictionary<string, object>();
 
-            if (this.SendItem.Id >= 0)
+            // if id is set, we are updating an existing item
+            if (SendItem.Id > 0)
             {
-                variables.Add("id", this.SendItem.Id);
+                variables.Add("id", SendItem.Id);
             }
+            variables.Add("input", input);
 
             return variables;
         }

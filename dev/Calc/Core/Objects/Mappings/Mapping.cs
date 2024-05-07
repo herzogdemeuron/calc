@@ -14,10 +14,12 @@ namespace Calc.Core.Objects.Mappings
     {
         [JsonProperty("id")]
         public int Id { get; set; } = -1;
-        [JsonProperty("mapping_name")]
+        [JsonProperty("name")]
         public string Name { get; set; }
-        [JsonProperty("project_id")]
+        [JsonProperty("project")]
         public Project Project { get; set; }
+        [JsonProperty("updated")]
+        public DateTime Updated { get; set; }
         [JsonProperty("mappings")]
         public List<MappingItem> MappingItems { get; set; }
 

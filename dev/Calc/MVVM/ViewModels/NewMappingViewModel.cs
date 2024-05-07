@@ -60,11 +60,11 @@ namespace Calc.MVVM.ViewModels
             bool? feedback;
             string error = "";
 
-            if (selectedMapping == null) 
+/*            if (selectedMapping == null) 
             {
                 MediatorToView.Broadcast("ShowMessageOverlay", new List<object> { null, "Please choose a mapping to duplicate." });
                 return;
-            }
+            }*/
             
             if (string.IsNullOrEmpty(newName))
             {
@@ -82,9 +82,18 @@ namespace Calc.MVVM.ViewModels
             try
             {
                 MediatorToView.Broadcast("ShowWaitingOverlay", "Creating new mapping...");
-                Mapping newMapping = selectedMapping.Copy(newName);
-                store.MappingSelected = newMapping;
-                feedback = await store.SaveSelectedMapping();
+                // choose if save current mapping or duplicate from selected
+                Mapping newMapping;
+                // if no mapping selected, create new mapping from current forest
+                if (selectedMapping == null)
+                {
+                    newMapping = new Mapping(newName, store.ForestSelected);
+                }
+                else
+                {
+                    newMapping = selectedMapping.Copy(newName);
+                }
+                feedback = await store.CreateMapping(newMapping);
                 MediatorFromVM.Broadcast("MappingSelectionChanged", store.MappingSelected);
 
             }

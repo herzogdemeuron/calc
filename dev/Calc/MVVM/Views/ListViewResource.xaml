@@ -21,6 +21,42 @@
 
     </Style>
 
+
+    <Style x:Key="ListViewItemMappingStyle" TargetType="ListViewItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListViewItem">
+                    <Border x:Name="Bd" 
+                            Background="Transparent"
+                            Height="20"
+                            CornerRadius="3"
+                            Margin="2,0,2,0">
+                        <ContentPresenter>
+                            <ContentPresenter.ContentTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="12"/>
+                                </DataTemplate>
+                            </ContentPresenter.ContentTemplate>
+                        </ContentPresenter>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="LightGray" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="MediumSeaGreen" />
+                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter Property="FontWeight" Value="SemiBold" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
     <Style x:Key="ListViewItemTagStyle" TargetType="ListViewItem">
         <Setter Property="Template">
             <Setter.Value>
