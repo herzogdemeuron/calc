@@ -287,7 +287,7 @@ namespace Calc.Core
             var sendMapping = new Mapping(MappingSelected.Name, ForestSelected, additionalForest)
             {
                 Project = ProjectSelected,
-                Id = MappingSelected.Id
+                Id = MappingSelected.Id,
             };
 
             MappingDriver.SendItem = sendMapping;
@@ -308,7 +308,6 @@ namespace Calc.Core
         public async Task<bool> CreateMapping(Mapping newMapping)
         {
             newMapping.Project = ProjectSelected;
-            newMapping.Updated = DateTime.Now;
             MappingDriver.SendItem = newMapping;
             try
             {

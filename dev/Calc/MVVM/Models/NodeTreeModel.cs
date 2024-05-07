@@ -35,7 +35,7 @@ namespace Calc.MVVM.Models
             }
         }
 
-        public NodeModel CurrentForestItem { get; set; }
+        public NodeModel CurrentForestItem { get; set; } = new NodeModel(null, null);
         //public NodeModel CurrentBrokenForestItem { get; set; }
 
         public ObservableCollection<NodeModel> NodeSource
@@ -104,9 +104,9 @@ namespace Calc.MVVM.Models
         public void HandleNodeItemSelectionChanged(NodeModel nodeItem)
         {
             if (nodeItem == null) return;
+            if (nodeItem.Host == null) return;
             if (CurrentForestItem == null) return;
             SelectedNodeItem = nodeItem;
-            var host = nodeItem.Host as Branch;
             NodeHelper.HideAllLabelColor(CurrentForestItem);
 
             if (BranchesSwitch)

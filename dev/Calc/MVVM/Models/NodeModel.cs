@@ -97,12 +97,13 @@ namespace Calc.MVVM.Models
             ParentTreeView = parentTreeView;
             SubNodeItems = new ObservableCollection<NodeModel>();
             NodeBuildupItem = new BuildupViewModel(this);
+            ParentNodeItem = parentNodeItem;
 
+            if(node == null) return;
             foreach (var subNode in node.SubBranches)
             {
                 SubNodeItems.Add(new NodeModel(subNode, parentTreeView, this));
             }
-            ParentNodeItem = parentNodeItem;
         }
 
         /// <summary>
@@ -138,7 +139,7 @@ namespace Calc.MVVM.Models
             else if (Host is Forest forest)
                 return forest.Name;
             else
-                return "Unknown";
+                return "Please select an element group";
         }
 
         public string GetParameterName()

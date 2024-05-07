@@ -187,7 +187,7 @@ namespace Calc.MVVM.ViewModels
 
         private void UpdateBuildup(int index, Buildup buildup)
         {
-            if (_node == null || !(_node.Host is Branch))
+            if (_node == null || !(_node.Host is Branch) || _node.Host == null)
                 return;
             var branch = _node.Host as Branch;
 
@@ -224,7 +224,7 @@ namespace Calc.MVVM.ViewModels
                 {
                     CanAddSecondBuildup = false;
                 }
-              
+
             }
             else
             {
@@ -233,7 +233,7 @@ namespace Calc.MVVM.ViewModels
             }
 
 
-            
+
         }
 
         public void CheckInheritEnabled()
@@ -257,12 +257,12 @@ namespace Calc.MVVM.ViewModels
             }
             var branch = _node.Host as Branch;
 
-            RemoveEnabled = branch.Buildups?.Count > 0;
+            RemoveEnabled = branch?.Buildups?.Count > 0;
         }
 
         public void HandleRemove()
         {
-            if (_node == null)
+            if (_node == null || _node.Host ==null)
                 return;
             var branch = _node.Host as Branch;
             var newBuildups = new List<Buildup>(branch.Buildups);
@@ -277,7 +277,7 @@ namespace Calc.MVVM.ViewModels
 
         public void HandleInherit()
         {
-            if (_node == null)
+            if (_node == null || _node.Host == null)
                 return;
             IGraphNode host = _node.Host;
             if (!(host is Branch branch))

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Calc.Core.Objects.Mappings;
 using Speckle.Newtonsoft.Json;
 
@@ -38,7 +39,6 @@ namespace Calc.Core.DirectusAPI.Drivers
             }";
 
 
-
         [JsonProperty("calc_mappings")]
         public List<Mapping> GotManyItems { get; set; }
         [JsonProperty("create_calc_mappings_item")]
@@ -58,7 +58,7 @@ namespace Calc.Core.DirectusAPI.Drivers
                 name = SendItem.Name,
                 mappings = this.SendItem.SerializeMappingItems(),
                 project = new { id = SendItem.Project.Id },
-                updated = SendItem.Updated
+                updated = DateTime.UtcNow
             };
 
             var variables = new Dictionary<string, object>();
