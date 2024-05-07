@@ -36,6 +36,8 @@ namespace Calc.RevitApp.Revit
                 LoginView loginView = new LoginView(loginVM);
                 loginView.ShowDialog();
 
+                if (!loginVM.FullyPrepared) return Result.Cancelled;
+
                 RevitElementCreator elementCreator = new RevitElementCreator(doc);
                 RevitVisualizer visualizer = new RevitVisualizer( doc, new RevitExternalEventHandler());
                 MainViewModel mainViewModel = new MainViewModel(loginVM.DirectusStore, elementCreator, visualizer);

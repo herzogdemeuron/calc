@@ -55,7 +55,7 @@
             <Button Content="OK"
                     Width="60"
                     Margin="0,0,10,0"
-                    IsEnabled="{Binding CanForward}"
+                    IsEnabled="{Binding CanOK}"
                     Style="{StaticResource ButtonStyle}"
                     IsDefault="True"
                     Click="OkClicked"/>
