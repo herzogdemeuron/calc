@@ -40,23 +40,21 @@
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="0"/>
-                <RowDefinition Height="110"/>
+                <RowDefinition Height="105"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="15"/>
             </Grid.RowDefinitions>
 
-
-
-            <Button Style="{StaticResource ButtonStyle}"
-                    Grid.Column="2"
-                    HorizontalAlignment="Right"
-                    Margin="5"
-                    Width="25"
-                    Content="✕"
-                    Click="OnCloseClicked"/>
-
-
+            <Label Content="DT @ Herzog &amp; de Meuron"
+                Grid.Row="5"
+                FontSize="9"
+                Padding="0"
+                Margin="10,0,0,3"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Left"
+                Foreground="Gray"/>
 
             <StackPanel x:Name="ForestPanel"
                        Grid.Column="0"
@@ -65,27 +63,30 @@
                 <Label Content="Element Groups"
                        FontSize="27"
                        Margin="10"
+                       Padding="0"
                        FontWeight="light"/>
 
                 <ComboBox x:Name="ForestsComboBox"
+                          Text="Choose Element Group"
                           Style="{StaticResource RoundedComboBoxStyle}"
                           ItemsSource="{Binding Store.ForestProjectRelated}"
                           DisplayMemberPath="Name"
-                          Margin="10,5,10,10"
+                          Margin="10,10,10,10"
                           SelectionChanged="ForestSelectionChanged"
                           HorizontalAlignment="Stretch"/>
             </StackPanel>
 
-            <StackPanel x:Name="MappingSectoin"
+            <StackPanel x:Name="MappingSection"
                         Grid.Column="2" 
                         Grid.Row="1">
                 <Label Content="Mapping Settings" 
                         Margin="10"
+                       Padding="0"
                         FontSize="27"
                        FontWeight="Light"/>
 
                 <DockPanel x:Name="MappingPanel"
-                       Margin="10,5,10,10"
+                       Margin="10,10,10,10"
                        HorizontalAlignment="Stretch"
                        LastChildFill="True">
                     <Button Style="{StaticResource MappingErrorButtonStyle}"
@@ -106,6 +107,7 @@
                         Margin="10,0,10,0"
                         DockPanel.Dock="Right"/>
                     <ComboBox x:Name="MappingsComboBox"
+                              Text="Choose Mapping"
                               Style="{StaticResource RoundedComboBoxStyle}"
                               ItemsSource="{Binding Store.MappingsProjectRelated}"
                               SelectedItem="{Binding Store.MappingSelected}"
@@ -431,13 +433,13 @@
                                                 FontWeight="SemiBold"
                                                 Text="Buildup GWP: "/>
                                         <TextBlock Grid.Row="0"  Grid.Column="3"  
-                                                Text="{Binding  BuildupGwp}"/>
+                                                Text="{Binding  BuildupGwp, StringFormat={}{0:F2} kgCO2eq}"/>
 
                                         <TextBlock Grid.Row="1" Grid.Column="2" 
                                                  FontWeight="SemiBold"
                                                  Text="Buildup GE: "/>
                                         <TextBlock Grid.Row="1"  Grid.Column="3"  
-                                                Text="{Binding  BuildupGe}"/>
+                                                Text="{Binding BuildupGe, StringFormat={}{0:F2} kWhOileq}"/>
 
                                         <TextBlock Grid.Row="2"
                                                FontWeight="SemiBold"
@@ -455,7 +457,7 @@
                                           ItemsSource="{Binding CalculationComponents}"
                                           DockPanel.Dock="Top">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" Width="2*"  IsReadOnly="True" />
+                                            <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" Width="3*"  IsReadOnly="True" />
                                             <DataGridTextColumn Header="Amount" Width="*"  IsReadOnly="True">
                                                 <DataGridTextColumn.Binding>
                                                     <MultiBinding  StringFormat="{}{0:F3} {1}">
@@ -464,8 +466,8 @@
                                                     </MultiBinding>
                                                 </DataGridTextColumn.Binding>
                                             </DataGridTextColumn>
-                                            <DataGridTextColumn Header="GWP (kgCO2eq)" Binding="{Binding Gwp}" Width="*"  IsReadOnly="True" />
-                                            <DataGridTextColumn Header="GE (kWhOileq)" Binding="{Binding Ge}" Width="*"  IsReadOnly="True" />
+                                            <DataGridTextColumn Header="GWP (kgCO2eq)" Binding="{Binding Gwp, StringFormat={}{0:F2}}" Width="*"  IsReadOnly="True" />
+                                            <DataGridTextColumn Header="GE (kWhOileq)" Binding="{Binding Ge, StringFormat={}{0:F2}}" Width="*"  IsReadOnly="True" />
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </DockPanel>
@@ -509,8 +511,8 @@
                                       ItemsSource="{Binding CalculationVM.CategorizedResults}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Buildup Group" Binding="{Binding GroupName}" Width="3*"  IsReadOnly="True" />
-                                    <DataGridTextColumn Header="GWP (kgCO2eq)" Binding="{Binding Gwp}" Width="1*"  IsReadOnly="True" />
-                                    <DataGridTextColumn Header="GE (kWhOileq)" Binding="{Binding Ge}" Width="1*"  IsReadOnly="True" />
+                                    <DataGridTextColumn Header="GWP (kgCO2eq)" Binding="{Binding Gwp, StringFormat={}{0:F0}}" Width="1*"  IsReadOnly="True" />
+                                    <DataGridTextColumn Header="GE (kWhOileq)" Binding="{Binding Ge, StringFormat={}{0:F0}}" Width="1*"  IsReadOnly="True" />
                                 </DataGrid.Columns>
                             </DataGrid>
 
@@ -729,5 +731,8 @@
                         Click="MessageOKClicked"/>
             </StackPanel>
         </Grid>
+        
+
+        
     </Grid>
 </Window>
