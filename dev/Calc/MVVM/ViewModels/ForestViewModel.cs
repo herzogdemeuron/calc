@@ -5,6 +5,7 @@ using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Mappings;
 using System.ComponentModel;
 using Calc.Core.Interfaces;
+using System.Threading.Tasks;
 
 namespace Calc.MVVM.ViewModels
 {
@@ -17,7 +18,7 @@ namespace Calc.MVVM.ViewModels
             store = directusStore;
             this.elementCreator = elementCreator;
         }
-        public void HandleForestSelectionChanged(Forest forest)
+        public async Task HandleForestSelectionChanged(Forest forest)
         {
             if (forest != null)
             {
@@ -26,30 +27,20 @@ namespace Calc.MVVM.ViewModels
                 {
                     // if the same forest is selected, update the current forest presering the mapping
                     Mapping currentMapping = new Mapping("CurrentMapping", store.ForestSelected);
-                    ForestHelper.PlantTrees(store.ForestSelected, elementCreator, store.CustomParamSettingsAll);
+                    await ForestHelper.PlantTreesAsync(store.ForestSelected, elementCreator, store.CustomParamSettingsAll);
                     mapping = currentMapping;
                 }
                 else
                 {
                     // otherwise create new forest and reset mapping
                     store.ForestSelected = forest;
-                    ForestHelper.PlantTrees(forest, elementCreator, store.CustomParamSettingsAll);
+                    await ForestHelper.PlantTreesAsync(forest, elementCreator, store.CustomParamSettingsAll);
                     mapping = store.MappingSelected;
                 }
                 MediatorFromVM.Broadcast("ForestSelectionChanged", mapping);
             }
         }
 
-        public void HandleUpdateCurrentForest(Forest forest)
-        {
-            if (forest != null)
-            {
-                Mapping currentMapping = new Mapping("CurrentMapping", store.ForestSelected);
-                ForestHelper.PlantTrees(store.ForestSelected, elementCreator, store.CustomParamSettingsAll);
-                store.MappingSelected = currentMapping;
-                MediatorFromVM.Broadcast("ForestSelectionChanged");
-            }
-        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)

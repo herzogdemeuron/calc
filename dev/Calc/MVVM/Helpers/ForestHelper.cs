@@ -4,6 +4,7 @@ using Calc.Core.Objects.GraphNodes;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Calc.MVVM.Helpers
 {
@@ -13,12 +14,14 @@ namespace Calc.MVVM.Helpers
         /// <summary>
         /// creates calc elements from revit elements and sort them into trees
         /// </summary>
-        public static void PlantTrees(Forest forest, IElementCreator elementCreator, List<CustomParamSetting> customParamSettings)
+        public static async Task PlantTreesAsync(Forest forest, IElementCreator elementCreator, List<CustomParamSetting> customParamSettings)
         {
             List<string> parameters = GetParameterList(forest);
 
-           
-            List<CalcElement> calcElements = elementCreator.CreateCalcElements(customParamSettings,parameters);
+            List<CalcElement> calcElements = await Task.Run(() => elementCreator.CreateCalcElements(customParamSettings, parameters));
+
+
+            //List<CalcElement> calcElements = elementCreator.CreateCalcElements(customParamSettings,parameters);
             var leftElements = forest.PlantTrees(calcElements);
 
             //Debug.WriteLine("Left overs: " + leftElements);

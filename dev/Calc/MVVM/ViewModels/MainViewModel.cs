@@ -47,9 +47,9 @@ namespace Calc.MVVM.ViewModels
             NodeTreeVM.DeselectNodes();
         }
 
-        public void HandleForestSelectionChanged(Forest forest)
+        public async void HandleForestSelectionChanged(Forest forest)
         {
-            ForestVM.HandleForestSelectionChanged(forest);
+            await ForestVM.HandleForestSelectionChanged(forest);
         }
 
         public void HandleMappingSelectionChanged(Mapping mapping)
@@ -137,9 +137,9 @@ namespace Calc.MVVM.ViewModels
             MediatorFromVM.Broadcast("MainViewToggleToBranch");
         }
 
-        public void HandleUpdateRevitClicked(Forest forest)
+        public async void HandleUpdateRevitClicked(Forest forest)
         {
-            ForestVM.HandleForestSelectionChanged(forest);
+            await ForestVM.HandleForestSelectionChanged(forest);
         }
 
         public void HandleSavingResults()
