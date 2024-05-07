@@ -6,6 +6,7 @@ using Calc.Core.Objects.Mappings;
 using System.ComponentModel;
 using Calc.Core.Interfaces;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Calc.MVVM.ViewModels
 {
@@ -22,22 +23,31 @@ namespace Calc.MVVM.ViewModels
         {
             if (forest != null)
             {
-                Mapping mapping;
-                if (store.ForestSelected == forest)
+                try
                 {
-                    // if the same forest is selected, update the current forest presering the mapping
-                    Mapping currentMapping = new Mapping("CurrentMapping", store.ForestSelected);
-                    await ForestHelper.PlantTreesAsync(store.ForestSelected, elementCreator, store.CustomParamSettingsAll);
-                    mapping = currentMapping;
+                    Mapping mapping;
+                    if (store.ForestSelected == forest)
+                    {
+                        // if the same forest is selected, update the current forest presering the mapping
+                        Mapping currentMapping = new Mapping("CurrentMapping", store.ForestSelected);
+                        await ForestHelper.PlantTreesAsync(store.ForestSelected, elementCreator, store.CustomParamSettingsAll);
+                        mapping = currentMapping;
+                    }
+                    else
+                    {
+                        // otherwise create new forest and reset mapping
+                        store.ForestSelected = forest;
+                        await ForestHelper.PlantTreesAsync(forest, elementCreator, store.CustomParamSettingsAll);
+                        mapping = store.MappingSelected;
+                    }
+                    MediatorFromVM.Broadcast("ForestSelectionChanged", mapping);
                 }
-                else
+                catch (System.Exception e)
                 {
-                    // otherwise create new forest and reset mapping
-                    store.ForestSelected = forest;
-                    await ForestHelper.PlantTreesAsync(forest, elementCreator, store.CustomParamSettingsAll);
-                    mapping = store.MappingSelected;
+                    // show error message if something goes wrong
+                    MediatorToView.Broadcast("ShowMessageOverlay", new List<object> { null, e.Message });
+                    store.ForestSelected = null;
                 }
-                MediatorFromVM.Broadcast("ForestSelectionChanged", mapping);
             }
         }
 

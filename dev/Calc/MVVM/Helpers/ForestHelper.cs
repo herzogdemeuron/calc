@@ -20,8 +20,6 @@ namespace Calc.MVVM.Helpers
 
             List<CalcElement> calcElements = await Task.Run(() => elementCreator.CreateCalcElements(customParamSettings, parameters));
 
-
-            //List<CalcElement> calcElements = elementCreator.CreateCalcElements(customParamSettings,parameters);
             var leftElements = forest.PlantTrees(calcElements);
 
             //Debug.WriteLine("Left overs: " + leftElements);

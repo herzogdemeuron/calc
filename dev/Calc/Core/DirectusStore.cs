@@ -73,12 +73,7 @@ namespace Calc.Core
         }
 
         public List<Forest> Forests { get { return ForestDriver.GotManyItems; } }
-        private Forest _forestSelected;
-        public Forest ForestSelected
-        {
-            get => _forestSelected;
-            set => SetSelectedForest(value);
-        }
+        public Forest ForestSelected { get; set; }
         public List<Forest> ForestProjectRelated
         {
             get => GetProjectRelated(ForestDriver);
@@ -322,13 +317,6 @@ namespace Calc.Core
                 return false;
                 throw e;
             }
-        }
-
-        private void SetSelectedForest(Forest forest)
-        {
-            //CheckIfProjectSelected();
-            forest.Project = ProjectSelected;
-            _forestSelected = forest;
         }
 
         public async Task UpdateSelectedForest()

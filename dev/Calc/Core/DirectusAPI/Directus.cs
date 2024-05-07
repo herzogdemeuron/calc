@@ -26,6 +26,9 @@ namespace Calc.Core.DirectusAPI
         private string token ;
         private string baseUrl;
         private string refreshToken;
+
+        private string reEmail;
+        private string rePassword;
         public bool Authenticated { get; private set; } = false;
         private readonly HttpClient httpClient;
         private GraphQLHttpClient graphQlClient;
@@ -55,6 +58,8 @@ namespace Calc.Core.DirectusAPI
             // re-authenticate and retry the request if the response is "Unauthorized"
             if (response.StatusCode == HttpStatusCode.Unauthorized && reAuth)
             {
+                // waite for sevaral seconds before retrying
+                await Task.Delay(5000);
                 await RefreshAuthentication();
                 response = await httpRetryPolicy.ExecuteAsync(action);
             }
@@ -149,6 +154,8 @@ namespace Calc.Core.DirectusAPI
             baseUrl = url;
             token = data.Access_token;
             refreshToken = data.Refresh_token;
+            reEmail = email;
+            rePassword = password;
             ConfigureGraphQlClients();
             Authenticated = true;
 
@@ -164,6 +171,13 @@ namespace Calc.Core.DirectusAPI
             string requestBody = JsonConvert.SerializeObject(new { refresh_token = refreshToken });
             var contentFactory = () => new StringContent(requestBody, Encoding.UTF8, "application/json");
             var response = await RequestWithRetry($"{baseUrl}/auth/refresh", contentFactory, false);
+            // if the refresh token is expired, re-authenticate
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await Task.Delay(5000);
+                await Authenticate(baseUrl, reEmail, rePassword);
+                return;
+            }
             var responseContent = await ReadResponseContent(response);
             var responseData = JsonConvert.DeserializeObject<Dictionary<string, LoginResponseData>>(responseContent);
             LoginResponseData data = responseData["data"];
