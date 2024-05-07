@@ -22,8 +22,8 @@ namespace Calc.Core.Objects.Results
         public string ElementType { get; set; }
         [JsonProperty(PropertyName = "element_unit")]
         public Unit ElementUnit { get; set; }
-        [JsonProperty(PropertyName = "element_quantity")]
-        public double ElementQuantity { get; set; }
+        [JsonProperty(PropertyName = "element_amount")]
+        public double ElementAmount { get; set; }
 
         // buildup infos
         [JsonProperty(PropertyName = "buildup_name")]

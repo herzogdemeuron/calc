@@ -70,13 +70,13 @@ namespace Calc.Core.Calculations
             }
         }
 
-        // needs to be validaed. amount instead of quantity?
-        private static Result GetResult(Branch branch, CalcElement element, Buildup buildup, CalculationComponent component, double quantity)
+
+        private static Result GetResult(Branch branch, CalcElement element, Buildup buildup, CalculationComponent component, double amount)
         {
             var material = component.Material;
-            var gwp = component.Gwp * quantity;
-            var ge = component.Ge * quantity;
-            var cost = component.Cost * quantity;
+            var gwp = component.Gwp * amount;
+            var ge = component.Ge * amount;
+            var cost = component.Cost * amount;
 
             var calculationResult = new Result
             {
@@ -86,7 +86,7 @@ namespace Calc.Core.Calculations
                 ElementId = element.Id,
                 ElementType = element.TypeName,
                 ElementUnit = buildup.BuildupUnit,
-                ElementQuantity = quantity,
+                ElementAmount = amount,
 
                 BuildupName = buildup.Name,
                 GroupName = buildup.Group?.Name,
