@@ -1,0 +1,101 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <AssemblyName>CalcMVVM</AssemblyName>
+    <RootNamespace>Calc.MVVM</RootNamespace>
+    <BaseOutputPath></BaseOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\DT_logo.gif" />
+    <None Remove="Resources\icon_builder_small.png" />
+    <None Remove="Resources\icon_main_small.png" />
+    <None Remove="ToggleButtonTemplate.xaml" />
+    <None Remove="Views\ButtonResource.xaml" />
+    <None Remove="Views\ComboBoxResource.xaml" />
+    <None Remove="Views\ListViewResource.xaml" />
+    <None Remove="Views\LoginView.xaml" />
+    <None Remove="Views\MainView.xaml" />
+    <None Remove="Views\MainViewResources.xaml" />
+    <None Remove="Views\MaterialSelectionView.xaml" />
+    <None Remove="Views\ToggleButtonResource.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Polly" Version="7.2.4" />
+    <PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="Views\ListViewResource.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MaterialSelectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LoginView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ComboBoxResource.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BuilderView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainViewResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ButtonResource.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ToggleButtonResource.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System.Xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\DT_logo.gif" />
+    <Resource Include="Resources\icon_builder_small.png" />
+    <Resource Include="Resources\icon_main_small.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+<PropertyGroup>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+</PropertyGroup>
+
+</Project>

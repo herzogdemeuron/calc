@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>CalcCore</AssemblyName>
+    <RootNamespace>Calc.Core</RootNamespace>
+    <PackageId>Calc.Core</PackageId>
+	  <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GraphQL.Client" Version="5.1.1" />
+    <PackageReference Include="Polly.Extensions.Http" Version="3.0.0" />
+    <PackageReference Include="RestSharp" Version="110.2.0" />
+    <PackageReference Include="Speckle.Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="System.Text.Json" Version="7.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+
+</Project>

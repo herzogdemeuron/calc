@@ -1,0 +1,132 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <Style x:Key="ButtonStyle" TargetType="Button">
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="Background" Value="WhiteSmoke"/>
+        <Setter Property="BorderBrush" Value="Silver"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="border" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4">
+                        <Grid>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="PlaceholderText" 
+                                       Foreground="DimGray"
+                                        Text="{TemplateBinding Tag}"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        FontWeight="Regular"
+                                        IsHitTestVisible="False"
+                                        Visibility="Collapsed"/>
+                            <TextBlock x:Name="DisabledText" 
+                                       Foreground="LightGray"
+                                        Text=" - "
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        FontWeight="Regular"
+                                        IsHitTestVisible="False"
+                                        Visibility="Collapsed"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+
+                        <Trigger Property="Content" Value="{x:Null}">
+                            <Setter TargetName="PlaceholderText" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="PlaceholderText" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="DisabledText" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="border" Property="Background" Value="white"/>
+                            <Setter TargetName="border" Property="BorderBrush" Value="LightGray"/>
+                            <Setter Property="Foreground" Value="LightGray"/>
+                        </Trigger>
+
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="LightGray"/>
+                        </Trigger>
+                        
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="Silver"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="UnitButtonStyle" TargetType="Button">
+        <Setter Property="IsEnabled" Value="False"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Black"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="border" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Margin="2"
+                            CornerRadius="2">
+                        <Grid VerticalAlignment="Center">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="15"/>
+                                <RowDefinition Height="15"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" 
+                                       Text="{TemplateBinding Tag}" 
+                                       FontWeight="SemiBold" 
+                                       TextAlignment="Center"/>
+                            <ContentPresenter Content="{Binding AmountString}"
+                                              Grid.Row="1" 
+                                              HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+
+                        <DataTrigger Binding="{Binding IsNormalizable}" Value="True">
+                            <Setter Property="IsEnabled" Value="True"/>
+                        </DataTrigger>
+
+                        <DataTrigger Binding="{Binding IsNormalizer}" Value="True">
+                            <Setter Property="BorderThickness" Value="1"/>
+                        </DataTrigger>
+
+                        <DataTrigger Binding="{Binding IsUsed}" Value="False">
+                            <Setter Property="Foreground" Value="Gray"/>
+                        </DataTrigger>
+
+                        <DataTrigger Binding="{Binding WarningActive}" Value="True">
+                            <Setter Property="Foreground" Value="Crimson"/>
+                        </DataTrigger>
+
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="BorderThickness" Value="1"/>
+                            <Setter Property="Foreground" Value="Black"/>
+                        </Trigger>
+                        
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="BorderThickness" Value="2"/>
+                            <Setter Property="Foreground" Value="Black"/>
+
+                        </Trigger>
+
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
