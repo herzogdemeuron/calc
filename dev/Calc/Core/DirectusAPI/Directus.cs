@@ -23,9 +23,9 @@ namespace Calc.Core.DirectusAPI
     /// </summary>
     public class Directus
     {
-        private string token ;
+        private string token;
         private string baseUrl;
-        private string refreshToken;
+        private string refresh_token;
 
         private string reEmail;
         private string rePassword;
@@ -153,28 +153,26 @@ namespace Calc.Core.DirectusAPI
 
             baseUrl = url;
             token = data.Access_token;
-            refreshToken = data.Refresh_token;
+            refresh_token = data.Refresh_token;
             reEmail = email;
             rePassword = password;
             ConfigureGraphQlClients();
             Authenticated = true;
-
         }
 
         public async Task RefreshAuthentication()
         {
-            if (string.IsNullOrEmpty(refreshToken))
+            if (string.IsNullOrEmpty(refresh_token))
             {
                 throw new InvalidOperationException("Refresh token is missing.");
             }
 
-            string requestBody = JsonConvert.SerializeObject(new { refresh_token = refreshToken });
+            string requestBody = JsonConvert.SerializeObject(new {refresh_token });
             var contentFactory = () => new StringContent(requestBody, Encoding.UTF8, "application/json");
             var response = await RequestWithRetry($"{baseUrl}/auth/refresh", contentFactory, false);
             // if the refresh token is expired, re-authenticate
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                await Task.Delay(5000);
                 await Authenticate(baseUrl, reEmail, rePassword);
                 return;
             }
@@ -183,10 +181,12 @@ namespace Calc.Core.DirectusAPI
             LoginResponseData data = responseData["data"];
 
             token = data.Access_token;
-            refreshToken = data.Refresh_token;
+            refresh_token = data.Refresh_token;
             ConfigureGraphQlClients();
             Authenticated = true;
         }
+
+
 
 
         private void ConfigureGraphQlClients()
