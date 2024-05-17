@@ -40,10 +40,10 @@ namespace Calc.MVVM.ViewModels
                 else
                 {
                     var forest = NodeTreeVM.CurrentForestItem.Host as Forest;
-                    var branches = forest.Trees.SelectMany(tree => tree.Flatten());
-                    if (branches == null || branches.Count() == 0)
+                    var trees = forest.Trees;
+                    if (trees == null || trees.Count() == 0)
                         return null;
-                    return branches.SelectMany(b => b.CalculationResults).ToList();
+                    return trees.SelectMany(t => t.CalculationResults).ToList();
                 }
 
             }
