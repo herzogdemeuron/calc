@@ -56,8 +56,6 @@ namespace Calc.Core.DirectusAPI
             // re-authenticate and retry the request if the response is "Unauthorized"
             if (response.StatusCode == HttpStatusCode.Unauthorized && reAuth)
             {
-                // waite for sevaral seconds before retrying
-                await Task.Delay(5000);
                 await RefreshAuthentication();
                 action = new Func<Task<HttpResponseMessage>>(() => httpClient.PostAsync(url, contentFactory()));
                 response = await httpRetryPolicy.ExecuteAsync(action);
