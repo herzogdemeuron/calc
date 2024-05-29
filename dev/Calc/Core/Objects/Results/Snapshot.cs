@@ -14,8 +14,10 @@ namespace Calc.Core.Objects.Results
         public string Name { get; set; }
         [JsonProperty(PropertyName = "project")]
         public Project Project { get; set; }
-        [JsonProperty(PropertyName = "results")]
-        public List<Result> Results { get; set; }
+        //[JsonProperty(PropertyName = "results")]
+        //public List<LayerResult> Results { get; set; }
+        [JsonProperty(PropertyName = "result_file")]
+        public string JsonUuid { get; set; }
     }
 
 }

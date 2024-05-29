@@ -28,7 +28,7 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        public List<Result> Results
+        public List<LayerResult> Results
         {
             get
             {

@@ -62,7 +62,7 @@ namespace Calc.Core.Objects.Buildups
         public string Description { get; set; }
 
         [JsonProperty("image")]
-        public string Image { get; set; }
+        public string ImageUuid { get; set; }
 
 
         public void LinkGroup(List<BuildupGroup> buildupGroups)

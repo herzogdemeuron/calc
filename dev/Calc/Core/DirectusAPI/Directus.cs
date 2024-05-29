@@ -227,19 +227,32 @@ namespace Calc.Core.DirectusAPI
                 );
         }
 
-        public async Task<string> UploadImageAsync(string imagePath, string folderId, string newFileName)
+        public async Task<string> UploadFileAsync(string fileType, string filePath, string folderId, string newFileName)
         {
-            if (!File.Exists(imagePath))
+            if (!File.Exists(filePath))
             {
-                throw new FileNotFoundException("Image file not found.", imagePath);
+                throw new FileNotFoundException("Image file not found.", filePath);
             }
 
             // Prepare the multipart/form-data request
             var content = new MultipartFormDataContent();
-            var imageContent = new StreamContent(File.OpenRead(imagePath));
-            imageContent.Headers.ContentType = new MediaTypeHeaderValue("image/png");
+            var fileContent = new StreamContent(File.OpenRead(filePath));
+
+            // Set content type based on the file type
+            switch (fileType.ToLower())
+            {
+                case "image":
+                    fileContent.Headers.ContentType = new MediaTypeHeaderValue("image/png");
+                    break;
+                case "json":
+                    fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    break;
+                default:
+                    throw new ArgumentException("Unsupported file type", nameof(fileType));
+            }
+
             // Specify the filename in the Content-Disposition header
-            imageContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+            fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
             {
                 Name = "\"file\"",
                 FileName = $"\"{newFileName}\""
@@ -249,7 +262,8 @@ namespace Calc.Core.DirectusAPI
             {
                 content.Add(new StringContent(folderId), "folder");
             }
-            content.Add(imageContent, "file", Path.GetFileName(imagePath));
+            content.Add(fileContent, "file", Path.GetFileName(filePath));
+
             var contentFactory = () => content;
             HttpResponseMessage response = await RequestWithRetry($"{baseUrl}/files", contentFactory);
             var responseContent = await ReadResponseContent(response);

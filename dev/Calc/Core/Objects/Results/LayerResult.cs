@@ -7,7 +7,7 @@ using System.Text;
 namespace Calc.Core.Objects.Results
 {
 
-    public class Result
+    public class LayerResult
     {
         // parent infos
         [JsonProperty(PropertyName = "forest")]

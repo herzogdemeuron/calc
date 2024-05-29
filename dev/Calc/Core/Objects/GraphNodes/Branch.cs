@@ -141,15 +141,15 @@ namespace Calc.Core.Objects.GraphNodes
         [JsonIgnore]
         public bool HasCalculationResults => (CalculationResults != null && CalculationResults.Count > 0);
 
-        private List<Result> _calculationResults = new();
+        private List<LayerResult> _calculationResults = new();
         [JsonIgnore]
-        public List<Result> CalculationResults
+        public List<LayerResult> CalculationResults
         {
             get
             {
                 if (SubBranches.Count > 0)
                 {
-                    return SubBranches.SelectMany(sb => sb.CalculationResults ?? new List<Result>()).ToList();
+                    return SubBranches.SelectMany(sb => sb.CalculationResults ?? new List<LayerResult>()).ToList();
                 }
                 return _calculationResults;
             }

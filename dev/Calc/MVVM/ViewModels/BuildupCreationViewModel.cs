@@ -493,7 +493,7 @@ namespace Calc.MVVM.ViewModels
 
             if (!string.IsNullOrEmpty(imageUuid))
             {
-                buildup.Image = imageUuid;
+                buildup.ImageUuid = imageUuid;
             }
 
             return buildup;

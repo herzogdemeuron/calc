@@ -22,7 +22,7 @@ namespace Calc.Core.Calculations
         {
             if (branch == null) return;
 
-            var results = new List<Result>();
+            var results = new List<LayerResult>();
             var errorList = new List<ParameterError>();
             CalculateBranch(branch, results, errorList);
 
@@ -30,7 +30,7 @@ namespace Calc.Core.Calculations
             branch.ParameterErrors = errorList;
         }
 
-        private static void CalculateBranch(Branch branch, List<Result> resultList, List<ParameterError> errorList)
+        private static void CalculateBranch(Branch branch, List<LayerResult> resultList, List<ParameterError> errorList)
         {
             var buildups = branch.Buildups;
             if (buildups == null) return;
@@ -71,14 +71,14 @@ namespace Calc.Core.Calculations
         }
 
 
-        private static Result GetResult(Branch branch, CalcElement element, Buildup buildup, CalculationComponent component, double amount)
+        private static LayerResult GetResult(Branch branch, CalcElement element, Buildup buildup, CalculationComponent component, double amount)
         {
             var material = component.Material;
             var gwp = component.Gwp * amount;
             var ge = component.Ge * amount;
             var cost = component.Cost * amount;
 
-            var calculationResult = new Result
+            var calculationResult = new LayerResult
             {
                 Forest = branch.ParentForest.Name,
                 Tree = branch.ParentTree.Name,

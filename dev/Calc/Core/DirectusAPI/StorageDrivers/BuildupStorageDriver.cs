@@ -104,7 +104,7 @@ namespace Calc.Core.DirectusAPI.Drivers
                 description = SendItem.Description,
                 image = new
                 {
-                    id = SendItem.Image,
+                    id = SendItem.ImageUuid,
                     storage = "cloud",
                     filename_download = $"{SendItem.Name}.png"
                 },

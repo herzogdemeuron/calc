@@ -86,8 +86,8 @@ namespace Calc.Core
         }
 
         public string SnapshotName { get; set; }
-        private List<Result> _results;
-        public List<Result> Results
+        private List<LayerResult> _results;
+        public List<LayerResult> Results
         {
             get => _results;
             set => SetResults(value);
@@ -164,14 +164,18 @@ namespace Calc.Core
 
                 cancellationToken.ThrowIfCancellationRequested();
                 BuildupDriver = await DirectusDriver.GetMany<BuildupStorageDriver, Buildup>(BuildupDriver);
-                OnProgressChanged(80);
+                OnProgressChanged(70);
 
                 cancellationToken.ThrowIfCancellationRequested();
                 MappingDriver = await DirectusDriver.GetMany<MappingStorageDriver, Mapping>(MappingDriver);
-                OnProgressChanged(90);
+                OnProgressChanged(80);
 
                 cancellationToken.ThrowIfCancellationRequested();
                 ForestDriver = await DirectusDriver.GetMany<ForestStorageDriver, Forest>(ForestDriver);
+                OnProgressChanged(90);
+
+                cancellationToken.ThrowIfCancellationRequested();
+                FolderDriver = await DirectusDriver.GetManySystem<FolderStorageDriver, DirectusFolder>(FolderDriver);
                 OnProgressChanged(99);
 
                 LinkMaterials();
@@ -358,7 +362,7 @@ namespace Calc.Core
             }
         }
 
-        private void SetResults(List<Result> results) // todo: simplify this
+        private void SetResults(List<LayerResult> results) // todo: simplify this
         {
             //CheckIfProjectSelected();
             if (SnapshotName == null)
@@ -369,27 +373,16 @@ namespace Calc.Core
             _results = results;
         }
 
-        public async Task<bool> SaveSnapshot()
+        public async Task<bool> SaveSnapshot(Snapshot snapshot)
         {
-            if (Results == null)
-            {
-                throw new Exception("Set Results first!");
-            }
 
-            SnapshotDriver = new SnapshotStorageDriver
-            {
-                SendItem = new Snapshot 
-                { 
-                    Results = this.Results,
-                    Name = SnapshotName,
-                    Project = ProjectSelected
-                }
-            };
+            SnapshotDriver.SendItem = snapshot;
+            
             
             try
             {
                 await DirectusDriver.CreateSingle<SnapshotStorageDriver, Snapshot>(SnapshotDriver);
-                return true;
+
             }
             catch (Exception e)
             {
@@ -481,7 +474,24 @@ namespace Calc.Core
 
             string folderId = FolderDriver.GetFolderId("calc_buildup_images");
 
-            return await Directus.UploadImageAsync(imagePath, folderId, newFileName);
+            return await Directus.UploadFileAsync("image", imagePath, folderId, newFileName);
+        }
+
+        public async Task<string> UploadResultAsync(string jsonPath, string newFileName)
+        {
+            if (Directus.Authenticated == false)
+            {
+                throw new Exception("DirectusStore: Directus not authenticated");
+            }
+
+            if (string.IsNullOrEmpty(jsonPath))
+            {
+                return null;
+            }
+
+            string folderId = FolderDriver.GetFolderId("calc_results");
+
+            return await Directus.UploadFileAsync("json", jsonPath, folderId, newFileName);
         }
 
         protected virtual void OnProgressChanged(int progress)

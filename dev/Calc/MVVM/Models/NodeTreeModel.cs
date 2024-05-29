@@ -55,7 +55,7 @@ namespace Calc.MVVM.Models
 
             MediatorFromVM.Register("MainViewToggleToBranch", _ => BranchesSwitch = true);
             MediatorFromVM.Register("MainViewToggleToBranch", _ => ColorNodesToBranch());
-            new ResultSender();
+            //new ResultSender();
             //changing priority: Forest => Mapping => Buildup
         }
 
