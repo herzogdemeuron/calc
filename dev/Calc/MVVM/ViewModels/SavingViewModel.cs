@@ -41,16 +41,18 @@ namespace Calc.MVVM.ViewModels
         {
             
             MediatorToView.Broadcast("ShowWaitingOverlay", "Saving results...");
-            ResultSender resultSender = new ResultSender();
-            bool? feedback =  await resultSender.SaveResults(calculationVM.Store,calculationVM.Results,newName);
+
+            var feedback =  await SnapshotSender.SaveSnapshot(calculationVM.Store,calculationVM.Results,newName);
+            bool? saved = feedback.Item1;
+            string error = feedback.Item2;
             MediatorToView.Broadcast("ShowMainView");
             MediatorToView.Broadcast
                 ("ShowMessageOverlay",
                 new List<object> 
-                    {   feedback,
-                        "No element is saved",
+                    {   saved,
+                        "No element saved",
                         "Saved results successfully.",
-                        "Error occured while saving." 
+                        error??"Error occured while saving." 
                     }
                  );
         }

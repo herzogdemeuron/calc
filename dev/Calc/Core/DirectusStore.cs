@@ -85,13 +85,6 @@ namespace Calc.Core
             set => ForestDriver.GotManyItems = value;
         }
 
-        public string SnapshotName { get; set; }
-        private List<LayerResult> _results;
-        public List<LayerResult> Results
-        {
-            get => _results;
-            set => SetResults(value);
-        }
 
         private Directus Directus { get; set; }
         private ProjectStorageDriver ProjectDriver { get; set; }
@@ -362,32 +355,21 @@ namespace Calc.Core
             }
         }
 
-        private void SetResults(List<LayerResult> results) // todo: simplify this
-        {
-            //CheckIfProjectSelected();
-            if (SnapshotName == null)
-            {
-                throw new Exception("Set SnapshotName first!");
-            }
-
-            _results = results;
-        }
-
-        public async Task<bool> SaveSnapshot(Snapshot snapshot)
+        public async Task<(bool,string)> SaveSnapshot(Snapshot snapshot)
         {
 
             SnapshotDriver.SendItem = snapshot;
-            
-            
+            snapshot.Project = ProjectSelected;
+
             try
             {
                 await DirectusDriver.CreateSingle<SnapshotStorageDriver, Snapshot>(SnapshotDriver);
+                return (true, null);
 
             }
             catch (Exception e)
             {
-                return false;
-                throw e;
+                return (false, e.Message);
             }
         }
 
