@@ -38,7 +38,8 @@ namespace Calc.Core.DirectusAPI.Drivers
                     storage = "cloud",
                     filename_download = $"{SendItem.Name}.json",
                     description = SendItem.Description
-                }
+                },
+                description = SendItem.Description
             };
 
             var variables = new Dictionary<string, object>
