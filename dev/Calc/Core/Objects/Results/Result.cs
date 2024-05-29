@@ -66,11 +66,11 @@ namespace Calc.Core.Objects.Results
         public double Gwp { get; set; }
         [JsonProperty(PropertyName = "calculated_grey_energy_fabrication_total")]
         public double Ge { get; set; }
-        [JsonProperty(PropertyName = "calculated_cost")]
-        public double Cost { get; set; }
+        //[JsonProperty(PropertyName = "calculated_cost")]
+        //public double Cost { get; set; }
 
         // others
-        [JsonProperty(PropertyName = "color")]
-        public HslColor Color { get; set; }
+        //[JsonProperty(PropertyName = "color")]
+        //public HslColor Color { get; set; }
     }
 }

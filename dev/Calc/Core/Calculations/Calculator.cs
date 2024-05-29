@@ -104,8 +104,8 @@ namespace Calc.Core.Calculations
 
                 Gwp = gwp??0,
                 Ge = ge??0,
-                Cost = cost??0,
-                Color = branch.HslColor
+                //Cost = cost??0,
+                //Color = branch.HslColor
             };
             return calculationResult;
         }
