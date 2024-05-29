@@ -45,6 +45,7 @@ namespace Calc.MVVM.ViewModels
             var feedback =  await SnapshotSender.SaveSnapshot(calculationVM.Store,calculationVM.Results,newName);
             bool? saved = feedback.Item1;
             string error = feedback.Item2;
+
             MediatorToView.Broadcast("ShowMainView");
             MediatorToView.Broadcast
                 ("ShowMessageOverlay",

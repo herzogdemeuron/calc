@@ -22,11 +22,18 @@ namespace Calc.MVVM.Services
 
             var jsonPath = CreateResultJsonFile(newName, layerResults);
             string ResultUuid = await store.UploadResultAsync(jsonPath, newName);
+            int count = layerResults.Count;
+            var selectedProject = store.ProjectSelected;
+            var projectName = selectedProject?.Name;
+            var mappingName = store.MappingSelected?.Name;
+            var description = $"Project: {projectName}\nMapping: {mappingName}\nLayer count: {count}";
 
             var snapshot = new Snapshot()
             {
                 Name = newName,
-                JsonUuid = ResultUuid
+                JsonUuid = ResultUuid,
+                Project = store.ProjectSelected,
+                Description = description
             };
 
             return await store.SaveSnapshot(snapshot);
@@ -43,11 +50,10 @@ namespace Calc.MVVM.Services
         {
             string filePath = GetFilePath(baseName);
 
-            var json = JsonConvert.SerializeObject(results);
+            var json = JsonConvert.SerializeObject(results, Formatting.Indented);
             // save the json as the path
             File.WriteAllText(filePath, json);
             return filePath;
-
         }
     }
 }

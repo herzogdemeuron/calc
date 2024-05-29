@@ -32,13 +32,13 @@ namespace Calc.Core.DirectusAPI.Drivers
             {
                 name = SendItem.Name,
                 project = new { id = SendItem.Project.Id },
-                calculation = new
+                result_file = new
                 {
                     id = SendItem.JsonUuid,
                     storage = "cloud",
-                    filename_download = $"{SendItem.Name}.png"
+                    filename_download = $"{SendItem.Name}.json",
+                    description = SendItem.Description
                 }
-                //results = JsonConvert.SerializeObject(SendItem.Results)
             };
 
             var variables = new Dictionary<string, object>

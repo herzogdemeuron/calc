@@ -359,7 +359,6 @@ namespace Calc.Core
         {
 
             SnapshotDriver.SendItem = snapshot;
-            snapshot.Project = ProjectSelected;
 
             try
             {
@@ -471,7 +470,7 @@ namespace Calc.Core
                 return null;
             }
 
-            string folderId = FolderDriver.GetFolderId("calc_results");
+            string folderId = FolderDriver.GetFolderId("calc_result_files");
 
             return await Directus.UploadFileAsync("json", jsonPath, folderId, newFileName);
         }
