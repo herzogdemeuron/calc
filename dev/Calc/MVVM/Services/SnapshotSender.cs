@@ -25,8 +25,9 @@ namespace Calc.MVVM.Services
             int count = layerResults.Count;
             var selectedProject = store.ProjectSelected;
             var projectName = selectedProject?.Name;
+            var forestName = store.ForestSelected?.Name;
             var mappingName = store.MappingSelected?.Name;
-            var description = $"Project: {projectName}\nMapping: {mappingName}\nLayer count: {count}";
+            var description = $"Project: {projectName}\nForest: {forestName}\nMapping: {mappingName}\nLayer count: {count}";
 
             var snapshot = new Snapshot()
             {
