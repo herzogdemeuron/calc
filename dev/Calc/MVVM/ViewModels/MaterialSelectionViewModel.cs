@@ -87,8 +87,7 @@ namespace Calc.MVVM.ViewModels
 
         public MaterialSelectionViewModel(DirectusStore store)
         {
-            allMaterials = store.CurrentMaterials;
-            AllMaterialsView = CollectionViewSource.GetDefaultView(allMaterials);
+            AllMaterialsView = CollectionViewSource.GetDefaultView(store.MaterialsAll);
             InitTypeTags();
 
         }

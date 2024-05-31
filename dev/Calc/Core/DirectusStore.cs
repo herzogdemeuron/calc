@@ -22,7 +22,6 @@ namespace Calc.Core
     {
         public event EventHandler<int> ProgressChanged;
 
-        public LcaStandard StandardSelected { get; set; }
         public Project ProjectSelected { get; set; } // the current project
         public bool AllDataLoaded { get; private set; } = false;
         public List<Unit> UnitsAll { get; set; }
@@ -32,24 +31,10 @@ namespace Calc.Core
         public List<Buildup> BuildupsAll { get { return BuildupDriver?.GotManyItems; } }
         public List<Mapping> MappingsAll { get { return MappingDriver?.GotManyItems; } }
         public List<CustomParamSetting> CustomParamSettingsAll { get { return CustomParamSettingDriver?.GotManyItems; } }
-        private List<Material> MaterialsAll { get { return MaterialDriver?.GotManyItems; } }
+        public List<Material> MaterialsAll { get { return MaterialDriver?.GotManyItems; } }
         public List<MaterialFunction> MaterialFunctionsAll { get { return MaterialFunctionStorageDriver?.GotManyItems; } }
         private Dictionary<LcaStandard, List<Material>> MaterialsOfStandards { get; set; }
-        public List<Material> CurrentMaterials
-        {
-            get
-            {
-                if (StandardSelected == null)
-                {
-                    return new List<Material>();
-                }
-                return MaterialsOfStandards[StandardSelected];
-            }
-        }
-        public List<Buildup> BuildupsStandardRelated
-        {
-            get => BuildupsAll.FindAll(b => b.Standard?.Id == StandardSelected?.Id);
-        }
+
 
         private Mapping _mappingSelected;
         public Mapping MappingSelected

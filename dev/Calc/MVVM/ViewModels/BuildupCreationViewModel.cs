@@ -25,7 +25,6 @@ namespace Calc.MVVM.ViewModels
     public class BuildupCreationViewModel : INotifyPropertyChanged
     {
         private readonly DirectusStore store;
-        private List<Material> CurrentMaterials { get => store.CurrentMaterials; }
         private readonly IBuildupComponentCreator buildupComponentCreator;
         private readonly IImageSnapshotCreator imageSnapshotCreator;
 
@@ -134,18 +133,10 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        public LcaStandard SelectedStandard
+        public List<LcaStandard> Standards
         {
-            get => store.StandardSelected;
-            set
-            {
-                if (store.StandardSelected == value) return;
-                store.StandardSelected = value;
-                UpdateLayerMaterialModels();
-                OnPropertyChanged(nameof(SelectedStandard));
-                UpdateLayerColors();
-                UpdateCalculationComponents();
-            }
+            get => // todo: get all standards from materials or calculation components?
+
         }
 
         private Unit? selectedBuildupUnit;
@@ -279,7 +270,7 @@ namespace Calc.MVVM.ViewModels
         public void HandleLoaded()
         {
             OnPropertyChanged(nameof(StandardsAll));
-            OnPropertyChanged(nameof(SelectedStandard));
+            OnPropertyChanged(nameof(Standards));
             OnPropertyChanged(nameof(BuildupUnitsAll));
             OnPropertyChanged(nameof(BuildupGroupsAll));
             UpadteMainWarning();
@@ -407,7 +398,7 @@ namespace Calc.MVVM.ViewModels
             {
                 foreach (var layer in component.LayerComponents)
                 {
-                    var layerMaterialModel = new LayerMaterialModel(layer, CurrentMaterials, MaterialFunctionsAll);
+                    var layerMaterialModel = new LayerMaterialModel(layer, store.MaterialsAll, MaterialFunctionsAll);
                     layerMaterialModel.MaterialPropertyChanged += HandleMaterialChanged;
                     layerMaterialModels.Add(layer, layerMaterialModel);
                 }
@@ -483,7 +474,7 @@ namespace Calc.MVVM.ViewModels
             {
                 Name = NewBuildupName,
                 Description = NewBuildupDescription,
-                Standard = SelectedStandard,
+                Standards = Standards,
                 Group = SelectedBuildupGroup,
                 BuildupUnit = (Unit)SelectedBuildupUnit,
                 CalculationComponents = AllCalculationComponents,
@@ -546,7 +537,7 @@ namespace Calc.MVVM.ViewModels
 
         private void CheckSaveOrUpdate()
         {
-            var allBuildups = store.BuildupsStandardRelated;
+            var allBuildups = store.BuildupsStandardRelated; // todo: get the current standards and find the same name with same standards list
             // find the id with the same tolower name as the newbuildupname
             var existingBuildup = allBuildups.Find(b => b.Name.ToLower() == NewBuildupName.ToLower());
             if(existingBuildup != null)

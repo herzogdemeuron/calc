@@ -18,12 +18,12 @@ namespace Calc.Core.Objects.Buildups
             set => SetProperty(ref id, value);
         }
 
-        private LcaStandard standard;
-        [JsonProperty("standard")]
-        public LcaStandard Standard
+        private List<LcaStandard> standards;
+        [JsonProperty("standards")]
+        public List<LcaStandard> Standards
         {
-            get => standard;
-            set => SetProperty(ref standard, value);
+            get => standards;
+            set => SetProperty(ref standards, value);
         }
 
         private string name;
@@ -65,6 +65,7 @@ namespace Calc.Core.Objects.Buildups
         public string ImageUuid { get; set; }
 
 
+        /*
         public void LinkGroup(List<BuildupGroup> buildupGroups)
         {
             if (Group != null)
@@ -79,7 +80,7 @@ namespace Calc.Core.Objects.Buildups
             {
                 Standard = standards.Find(s => s.Id == Standard.Id);
             }
-        }
+        }*/
 
         private List<CalculationComponent> calculationComponents = new List<CalculationComponent>();
         [JsonProperty("calculation_components")]

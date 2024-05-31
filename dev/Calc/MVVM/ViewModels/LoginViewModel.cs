@@ -194,13 +194,9 @@ namespace Calc.MVVM.ViewModels
         {
             if(MainOrBuilder)
             {
+                SelectionVisibility = Visibility.Visible;
                 SelectionList = DirectusStore.ProjectsAll.OfType<IShowName>().ToList();
                 SelectionText = "Select Project:";
-            }
-            else
-            {
-                SelectionList = DirectusStore.StandardsAll.OfType<IShowName>().ToList();
-                SelectionText = "Select LCA Standard:";
             }
         }
 
@@ -222,8 +218,6 @@ namespace Calc.MVVM.ViewModels
                         await LoadData();
 
                         LoadVisibility = Visibility.Collapsed;
-                        SelectionVisibility = Visibility.Visible;
-
                         PrepareSelection();
                     }
                 }
@@ -254,13 +248,7 @@ namespace Calc.MVVM.ViewModels
             if (MainOrBuilder)
             {
                 var project = (Project)Selected;
-                var standard = project.Standard;
                 DirectusStore.ProjectSelected = project;
-                DirectusStore.StandardSelected = standard;
-            }
-            else
-            {
-                DirectusStore.StandardSelected = (LcaStandard)Selected;
             }
         }
 
