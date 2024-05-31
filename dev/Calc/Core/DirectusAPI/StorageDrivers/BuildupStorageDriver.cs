@@ -22,13 +22,13 @@ namespace Calc.Core.DirectusAPI.Drivers
                         calc_standards_id {
                         id
                         name
-                    {
+                        {
                     }
                     buildup_unit
                     group {
                         id
                         name
-                    }
+                        }
                     description
                     calculation_components {
                         id

@@ -15,6 +15,7 @@ using Calc.Core.Objects.Materials;
 using System.Collections.ObjectModel;
 using System.Threading;
 using Calc.Core.Objects.Elements;
+using Calc.Core.Objects.Standards;
 
 namespace Calc.Core
 {

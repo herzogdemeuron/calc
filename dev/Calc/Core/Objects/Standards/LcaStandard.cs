@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Calc.Core.Objects
+namespace Calc.Core.Objects.Standards
 {
     public class LcaStandard : IShowName
     {

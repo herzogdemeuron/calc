@@ -1,4 +1,5 @@
 ﻿using Calc.Core.Calculations;
+using Calc.Core.Objects.Standards;
 using Speckle.Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,7 +8,7 @@ using System.Runtime.CompilerServices;
 
 namespace Calc.Core.Objects.Buildups
 {
-    public class Buildup : INotifyPropertyChanged, ISearchable
+    public class Buildup : INotifyPropertyChanged, ISearchable  // check: notify property needed?
     {
 
         private int id = -1;
@@ -18,13 +19,10 @@ namespace Calc.Core.Objects.Buildups
             set => SetProperty(ref id, value);
         }
 
-        private List<LcaStandard> standards;
         [JsonProperty("standards")]
-        public List<LcaStandard> Standards
-        {
-            get => standards;
-            set => SetProperty(ref standards, value);
-        }
+        internal List<StandardItem> StandardItems { get; set; } // this is only for deserialization
+
+        public List<LcaStandard> Standards { get => StandardItems.Select(x => x.Standard).ToList(); }
 
         private string name;
         [JsonProperty("name")]
@@ -66,7 +64,7 @@ namespace Calc.Core.Objects.Buildups
 
 
         /*
-        public void LinkGroup(List<BuildupGroup> buildupGroups)
+        public void LinkGroup(List<BuildupGroup> buildupGroups) // deprecated
         {
             if (Group != null)
             {
@@ -74,7 +72,7 @@ namespace Calc.Core.Objects.Buildups
             }
         }
 
-        public void LinkStandard(List<LcaStandard> standards)
+        public void LinkStandard(List<LcaStandard> standards) // deprecated
         {
             if (Standard != null)
             {
@@ -90,7 +88,7 @@ namespace Calc.Core.Objects.Buildups
             set => SetProperty(ref calculationComponents, value);
         }
 
-        public void Copy(Buildup other)
+       /* public void Copy(Buildup other) // deprecated
         {
             Id = other.Id;
             Name = other.Name;
@@ -99,7 +97,7 @@ namespace Calc.Core.Objects.Buildups
             BuildupUnit = other.BuildupUnit;
         }
 
-        public Buildup Copy()
+        public Buildup Copy() // deprecated
         {
             return new Buildup()
             {
@@ -109,7 +107,7 @@ namespace Calc.Core.Objects.Buildups
                 CalculationComponents = CalculationComponents,
                 BuildupUnit = BuildupUnit
             };
-        }
+        }*/
         protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
         {
             if (EqualityComparer<T>.Default.Equals(storage, value))

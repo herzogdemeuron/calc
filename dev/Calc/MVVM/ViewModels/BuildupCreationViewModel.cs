@@ -6,6 +6,7 @@ using Calc.Core.Interfaces;
 using Calc.Core.Objects;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Materials;
+using Calc.Core.Objects.Standards;
 using Calc.MVVM.Helpers.Mediators;
 using Calc.MVVM.Models;
 using Speckle.Newtonsoft.Json;
