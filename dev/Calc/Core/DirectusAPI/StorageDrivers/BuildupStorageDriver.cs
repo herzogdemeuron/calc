@@ -15,14 +15,16 @@ namespace Calc.Core.DirectusAPI.Drivers
         public Buildup SendItem { get; set; }
         public string QueryGetMany { get; } = @"
             query GetBuildups {
+
                 calc_buildups {
+
                     id
                     name
                     standards {
                         calc_standards_id {
                         id
                         name
-                        {
+                        }
                     }
                     buildup_unit
                     group {
@@ -46,7 +48,9 @@ namespace Calc.Core.DirectusAPI.Drivers
                     }
                     carbon_a1a3
                     grey_energy_fabrication_total
+
                 }
+
             }";
 
         // this is a sample query, should be adjusted
@@ -104,11 +108,10 @@ namespace Calc.Core.DirectusAPI.Drivers
                 group = new { id = SendItem.Group.Id},
                 description = SendItem.Description,
 
-                standards = SendItem.Standards.Select(
+                standards = SendItem.StandardItems.Select(
                     s => new
                     {
-                        id = s.Id,
-                        name = s.Name
+                        calc_standards_id = new { id = s.Standard.Id }
                     }
                     ).ToArray(),
 

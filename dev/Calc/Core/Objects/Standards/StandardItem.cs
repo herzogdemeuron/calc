@@ -9,9 +9,9 @@ namespace Calc.Core.Objects.Standards
     /// This class is exclusively used to map the junction item, from many to many relations: buildup - standard
     /// each standard item contains one LcaStandard that are related to a buildup 
     /// </summary>
-    internal class StandardItem
+    public class StandardItem
     {
-        [JsonProperty("standard")]
+        [JsonProperty("calc_standards_id")]
         public LcaStandard Standard { get; set; }
     }
 }

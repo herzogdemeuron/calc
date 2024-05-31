@@ -20,9 +20,10 @@ namespace Calc.Core.Objects.Buildups
         }
 
         [JsonProperty("standards")]
-        internal List<StandardItem> StandardItems { get; set; } // this is only for deserialization
+        public List<StandardItem> StandardItems { get; set; } // this is only for deserialization
 
-        public List<LcaStandard> Standards { get => StandardItems.Select(x => x.Standard).ToList(); }
+        //[JsonIgnore]
+        //public List<LcaStandard> Standards { get => StandardItems.Select(x => x.Standard).ToList(); }
 
         private string name;
         [JsonProperty("name")]

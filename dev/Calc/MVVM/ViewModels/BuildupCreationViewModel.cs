@@ -480,7 +480,7 @@ namespace Calc.MVVM.ViewModels
             {
                 Name = NewBuildupName,
                 Description = NewBuildupDescription,
-                Standards = Standards,
+                StandardItems = Standards.Select(s => new StandardItem { Standard = s }).ToList(),
                 Group = SelectedBuildupGroup,
                 BuildupUnit = (Unit)SelectedBuildupUnit,
                 CalculationComponents = AllCalculationComponents,
