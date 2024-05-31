@@ -86,6 +86,10 @@ namespace Calc.Core.Calculations
             return Function != null && Amount != null && Amount > 0;
         }
 
+        /// <summary>
+        /// update the position number of the components
+        /// </summary>
+        /// <param name="components"></param>
         public static void UpdatePosition(List<CalculationComponent> components)
         {
             if (components == null) return;

@@ -133,10 +133,15 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
+        /// <summary>
+        /// the set of standard from the materials in the AllCalculationComponents
+        /// </summary>
         public List<LcaStandard> Standards
         {
-            get => // todo: get all standards from materials or calculation components?
-
+            get => AllCalculationComponents?
+                .Where(c => c.Material != null)
+                .Select(c => c.Material.Standard)
+                .Distinct().ToList();
         }
 
         private Unit? selectedBuildupUnit;
@@ -168,7 +173,7 @@ namespace Calc.MVVM.ViewModels
         }
 
         private string currentImagePath;
-        private BitmapImage currentImage;
+        private BitmapImage currentImage; 
         public BitmapImage CurrentImage
         {
             get => currentImage;
@@ -537,7 +542,7 @@ namespace Calc.MVVM.ViewModels
 
         private void CheckSaveOrUpdate()
         {
-            var allBuildups = store.BuildupsStandardRelated; // todo: get the current standards and find the same name with same standards list
+            var allBuildups = store.BuildupsAll;
             // find the id with the same tolower name as the newbuildupname
             var existingBuildup = allBuildups.Find(b => b.Name.ToLower() == NewBuildupName.ToLower());
             if(existingBuildup != null)

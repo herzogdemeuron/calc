@@ -19,8 +19,10 @@ namespace Calc.Core.DirectusAPI.Drivers
                     id
                     name
                     standards {
+                        calc_standards_id {
                         id
                         name
+                    {
                     }
                     buildup_unit
                     group {

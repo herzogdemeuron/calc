@@ -197,7 +197,6 @@
                             Grid.Row="0"
                             Grid.Column="0"
                             ItemsSource="{Binding BuildupCreationVM.StandardsAll}"
-                            SelectedItem="{Binding BuildupCreationVM.SelectedStandard}"
                             Style="{StaticResource RoundedComboBoxStyle}"
                             DisplayMemberPath="Name"/>
 

@@ -20,7 +20,7 @@ namespace Calc.Core.Objects.Buildups
         public string Title { get => TargetMaterialName?? "No Material"; }
         public string TargetMaterialName { get; }
         public double? Thickness { get; }
-        public MaterialFunction? Function { get; set; }
+        public MaterialFunction Function { get; set; }
         public BasicParameterSet BasicParameterSet { get; set; }
 
         // calculation components

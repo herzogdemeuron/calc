@@ -15,6 +15,7 @@ namespace Calc.Core.Objects.Buildups
 {
     /// <summary>
     /// All instances of a revit/rhino type in the builder group.
+    /// Includes all the layers and basic parameters.
     /// </summary>
     public class BuildupComponent : INotifyPropertyChanged, ICalcComponent
     {
