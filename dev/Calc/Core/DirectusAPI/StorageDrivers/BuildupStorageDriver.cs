@@ -105,7 +105,7 @@ namespace Calc.Core.DirectusAPI.Drivers
             {
                 name = SendItem.Name,
                 buildup_unit = SendItem.BuildupUnit,
-                group = new { id = SendItem.Group.Id},
+                group = new { id = SendItem.Group.Id },
                 description = SendItem.Description,
 
                 standards = SendItem.StandardItems.Select(
@@ -116,11 +116,11 @@ namespace Calc.Core.DirectusAPI.Drivers
                     ).ToArray(),
 
                 image = new
-                    {
-                        id = SendItem.ImageUuid,
-                        storage = "cloud",
-                        filename_download = $"{SendItem.Name}.png"
-                    },
+                {
+                    id = SendItem.ImageUuid,
+                    storage = "cloud",
+                    filename_download = $"{SendItem.Name}.png"
+                },
 
                 calculation_components = SendItem.CalculationComponents.Select(
                     cc => new
@@ -130,12 +130,13 @@ namespace Calc.Core.DirectusAPI.Drivers
                         amount = cc.Amount ?? 0,
                         carbon_a1a3 = cc.Gwp ?? 0,
                         grey_energy_fabrication_total = cc.Ge ?? 0,
-                        calc_materials_id = new { id = cc.Material.Id}
+                        calc_materials_id = new { id = cc.Material.Id }
                     }
                     ).ToArray(),
 
                 carbon_a1a3 = SendItem.BuildupGwp,
-                grey_energy_fabrication_total = SendItem.BuildupGe
+                grey_energy_fabrication_total = SendItem.BuildupGe,
+                layer_snapshot = JsonConvert.SerializeObject(SendItem.LayerSnapshot)
             };
 
             var variables = new Dictionary<string, object>();

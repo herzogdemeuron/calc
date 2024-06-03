@@ -1,4 +1,5 @@
 ﻿using Calc.Core.Calculations;
+using Calc.Core.Objects.Results;
 using Calc.Core.Objects.Standards;
 using Speckle.Newtonsoft.Json;
 using System.Collections.Generic;
@@ -62,6 +63,9 @@ namespace Calc.Core.Objects.Buildups
 
         [JsonProperty("image")]
         public string ImageUuid { get; set; }
+
+        [JsonIgnore]
+        public List<LayerResult> LayerSnapshot { get; set; }
 
 
         /*

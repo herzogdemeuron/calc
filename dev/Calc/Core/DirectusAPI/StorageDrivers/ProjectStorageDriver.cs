@@ -14,11 +14,7 @@ namespace Calc.Core.DirectusAPI.Drivers
                     calc_architecture_projects { 
                         id
                         number
-                        name    
-                        standard { 
-                            id
-                            name
-                        }
+                        name
                     }
                 }";
 

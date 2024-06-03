@@ -45,6 +45,7 @@ namespace Calc.RevitApp.Revit
                 BuilderView builderView = new BuilderView(builderViewModel);
 
                 builderView.Show();
+
                 return Result.Succeeded;
             }
             catch (Exception ex)

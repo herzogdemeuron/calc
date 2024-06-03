@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using Calc.Core.Helpers;
+using Calc.Core.Objects;
 using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Elements;
@@ -109,6 +111,54 @@ namespace Calc.Core.Calculations
             };
             return calculationResult;
         }
+
+        /// <summary>
+        /// get the layer result from a buildup component
+        /// </summary>
+        public static List<LayerResult> GetResult(double totalRatio, BuildupComponent buildupComponent, Unit buildupUnit, string buildupName, string buildupGroup)
+        {
+            var result = new List<LayerResult>();
+            var layerComponents = buildupComponent.LayerComponents;
+            if (layerComponents == null) return result;
+            foreach ( var layerComponent in layerComponents)
+            {
+                var calculationComponents = layerComponent.CalculationComponents;
+                if (calculationComponents == null) continue;
+                foreach (var component in calculationComponents)
+                {
+                    var calculationResult = new LayerResult
+                    {
+                        ElementId = buildupComponent.TypeIdentifier.ToString(),
+                        ElementType = $"{buildupComponent.Title} : {layerComponent.Title}",
+                        ElementUnit = component.Material.MaterialUnit,
+                        ElementAmount = (double)layerComponent.GetLayerAmount(totalRatio), // the layer amount is normalized to the total ratio
+
+                        BuildupName = buildupName,
+                        GroupName = buildupGroup,
+                        BuildupUnit = buildupUnit,
+
+                        MaterialName = component.Material.Name,
+                        MaterialUnit = component.Material.MaterialUnit,
+                        MaterialAmount = component.Amount ?? 0,
+                        MaterialStandard = component.Material.Standard.Name,
+                        MaterialSource = component.Material.DataSource,
+                        MaterialSourceUuid = component.Material.SourceUuid,
+                        MaterialFunction = component.Function.Name,
+                        MaterialGwp = component.Material.Gwp ?? 0,
+                        MaterialGe = component.Material.Ge ?? 0,
+
+                        Gwp = component.Gwp ?? 0,
+                        Ge = component.Ge ?? 0
+                    };
+                    result.Add(calculationResult);
+                }
+            }
+
+            return result;
+
+        }
+
+
 
        
     }

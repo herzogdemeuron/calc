@@ -6,6 +6,7 @@ using Calc.Core.Interfaces;
 using Calc.Core.Objects;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Materials;
+using Calc.Core.Objects.Results;
 using Calc.Core.Objects.Standards;
 using Calc.MVVM.Helpers.Mediators;
 using Calc.MVVM.Models;
@@ -474,6 +475,25 @@ namespace Calc.MVVM.ViewModels
             return 0;
         }
 
+        private List<LayerResult> CreateLayerSnapshot()
+        {
+            var quantityRatio = GetQuantityRatio();
+            var results = new List<LayerResult>();
+            foreach (var component in BuildupComponents)
+            {
+                var compoResults = Calculator.GetResult(
+                    quantityRatio,
+                    component,
+                    (Unit)SelectedBuildupUnit, 
+                    NewBuildupName, 
+                    SelectedBuildupGroup.Name
+                    );
+                results.AddRange(compoResults);
+            }
+            return results;
+        }
+
+
         private Buildup CreateBuildup(string imageUuid)
         {
             var buildup = new Buildup
@@ -484,8 +504,9 @@ namespace Calc.MVVM.ViewModels
                 Group = SelectedBuildupGroup,
                 BuildupUnit = (Unit)SelectedBuildupUnit,
                 CalculationComponents = AllCalculationComponents,
-                BuildupGwp = BuildupGwp??0,
-                BuildupGe = BuildupGe??0
+                BuildupGwp = BuildupGwp ?? 0,
+                BuildupGe = BuildupGe ?? 0,
+                LayerSnapshot = CreateLayerSnapshot()
             };
 
             if (!string.IsNullOrEmpty(imageUuid))

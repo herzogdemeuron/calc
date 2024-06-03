@@ -13,6 +13,7 @@
         WindowStartupLocation="CenterScreen"
         Icon="pack://application:,,,/CalcMVVM;component/Resources/icon_builder_small.png"
         Title="CALC"
+        Loaded="WindowLoaded"
         Topmost="True">
 
     <Window.Resources>

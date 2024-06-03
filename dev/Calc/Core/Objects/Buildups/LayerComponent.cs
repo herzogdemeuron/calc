@@ -89,6 +89,13 @@ namespace Calc.Core.Objects.Buildups
             return BasicParameterSet.GetAmountParam((Unit)unit);
         }
 
+        public double? GetLayerAmount(double totalRatio)
+        {
+            var layerAmountParam = GetAmountParam();
+            var layerAmount = (layerAmountParam?.Amount != null) ? layerAmountParam.Amount * totalRatio : 0;
+            return layerAmount;
+        }
+
         private string GetColorIdentifier()
         {
             var result = "";

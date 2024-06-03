@@ -14,8 +14,6 @@ namespace Calc.Core.Objects
         public string Name { get; set; }
         [JsonProperty("number")]
         public string Number { get; set; }
-        [JsonProperty("standard")]
-        public LcaStandard Standard { get; set; }
         [JsonIgnore]
         public string ShowName => $"{Number} - {Name}";
     }

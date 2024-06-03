@@ -26,36 +26,36 @@ namespace Calc.RevitApp.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Config1 {
+        public string Url {
             get {
-                return ((string)(this["Config1"]));
+                return ((string)(this["Url"]));
             }
             set {
-                this["Config1"] = value;
+                this["Url"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Config2 {
+        public string Email {
             get {
-                return ((string)(this["Config2"]));
+                return ((string)(this["Email"]));
             }
             set {
-                this["Config2"] = value;
+                this["Email"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Config3 {
+        public string Password {
             get {
-                return ((string)(this["Config3"]));
+                return ((string)(this["Password"]));
             }
             set {
-                this["Config3"] = value;
+                this["Password"] = value;
             }
         }
     }

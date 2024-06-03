@@ -63,7 +63,7 @@ namespace Calc.Core.Calculations
        public static CalculationComponent FromLayerMaterial(LayerComponent layer, double totalRatio, HslColor hslColor, bool getMain = true)
         {
             var layerAmountParam = layer.GetAmountParam();
-            var layerAmount = (layerAmountParam?.Amount != null) ? layerAmountParam.Amount * totalRatio : 0;
+            var layerAmount = layer.GetLayerAmount(totalRatio);
             var materialRatio = getMain ? layer.MainMaterialRatio : layer.SubMaterialRatio;
 
             var materialGwp = layer.GetMaterialGwp(getMain) * layerAmount;
