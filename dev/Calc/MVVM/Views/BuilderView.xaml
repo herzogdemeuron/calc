@@ -193,12 +193,10 @@
 
                 <ComboBox   x:Name="StandardComboBox"
                             IsEnabled="False"
-                            Text="Standard"
+                            Text="-"
                             Grid.Row="0"
                             Grid.Column="0"
-                            ItemsSource="{Binding BuildupCreationVM.StandardsAll}"
-                            Style="{StaticResource RoundedComboBoxStyle}"
-                            DisplayMemberPath="Name"/>
+                            Style="{StaticResource RoundedComboBoxStyle}"/>
 
                 <ComboBox   x:Name="BuildupGroupComboBox"
                             Text = "Buildup Group"
@@ -210,13 +208,11 @@
                             DisplayMemberPath="Name"/>
 
                 <ComboBox   x:Name="BuildupUnitComboBox"
-                            Text="Buildup Unit"
+                            IsEnabled="False"
+                            Text="-"
                             Grid.Row="2"
                             Grid.Column="0"
-                            ItemsSource="{Binding BuildupCreationVM.BuildupUnitsAll}"
-                            SelectedItem="{Binding BuildupCreationVM.SelectedBuildupUnit}"
                             Style="{StaticResource RoundedComboBoxStyle}"/>
-
 
 
                 <TextBox x:Name="BuildupNameTextBox"

@@ -276,8 +276,6 @@ namespace Calc.MVVM.ViewModels
 
         public void HandleLoaded()
         {
-            OnPropertyChanged(nameof(StandardsAll));
-            OnPropertyChanged(nameof(Standards));
             OnPropertyChanged(nameof(BuildupUnitsAll));
             OnPropertyChanged(nameof(BuildupGroupsAll));
             UpadteMainWarning();
