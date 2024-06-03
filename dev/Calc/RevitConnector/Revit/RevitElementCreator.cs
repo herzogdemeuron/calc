@@ -114,10 +114,7 @@ namespace Calc.RevitConnector.Revit
                 parameterDictionary[parameterName] = result.Item2;
             }
 
-            ElementId typeId = elem.GetTypeId();
-            string type = doc.GetElement(typeId).Name;
-            string typeName = $"{type} ({typeId.IntegerValue})";
-
+            var typeName = elem.LookupParameter("Family and Type")?.AsValueString() ?? doc.GetElement(elem.GetTypeId()).Name;
             var lenParam = ParameterHelper.CreateBasicUnitParameter(elem, lenName, Unit.m);
             var areaParam = ParameterHelper.CreateBasicUnitParameter(elem, areaName, Unit.m2);
             var volParam = ParameterHelper.CreateBasicUnitParameter(elem, volName, Unit.m3);
@@ -133,5 +130,6 @@ namespace Calc.RevitConnector.Revit
                 volParam
                 );
         }
+
     }
 }
