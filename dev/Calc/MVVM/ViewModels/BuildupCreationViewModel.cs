@@ -146,6 +146,11 @@ namespace Calc.MVVM.ViewModels
                 .Distinct().ToList();
         }
 
+        public string StandardsString
+        {
+            get => Standards == null ? "" : string.Join(", ", Standards.Select(s => s.Name));
+        }
+
         private Unit? selectedBuildupUnit;
         public Unit? SelectedBuildupUnit
         {
@@ -452,6 +457,7 @@ namespace Calc.MVVM.ViewModels
             {
                 component.UpdateCalculationComponents(quantityRatio);
             }
+            OnPropertyChanged(nameof(StandardsString));
             OnPropertyChanged(nameof(AllCalculationComponents));
             OnPropertyChanged(nameof(BuildupGwp));
             OnPropertyChanged(nameof(BuildupGe));

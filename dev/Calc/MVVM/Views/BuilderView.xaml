@@ -186,50 +186,41 @@
                     <RowDefinition Height="25"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="120"/>
                 </Grid.ColumnDefinitions>
 
-                <ComboBox   x:Name="StandardComboBox"
-                            IsEnabled="False"
-                            Text="-"
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            Style="{StaticResource RoundedComboBoxStyle}"/>
+  
 
                 <ComboBox   x:Name="BuildupGroupComboBox"
                             Text = "Buildup Group"
-                            Grid.Row="1"
-                            Grid.Column="0"
+                            Margin="0,0,5,0"
+                            Grid.Row="0"
+                            Grid.Column="1"
                             ItemsSource="{Binding BuildupCreationVM.BuildupGroupsAll}"
                             SelectedItem="{Binding BuildupCreationVM.SelectedBuildupGroup}"
                             Style="{StaticResource RoundedComboBoxStyle}"
                             DisplayMemberPath="Name"/>
 
-                <ComboBox   x:Name="BuildupUnitComboBox"
-                            IsEnabled="False"
-                            Text="-"
-                            Grid.Row="2"
-                            Grid.Column="0"
-                            Style="{StaticResource RoundedComboBoxStyle}"/>
+
 
 
                 <TextBox x:Name="BuildupNameTextBox"
-                        Grid.Column="1"
-                        Grid.ColumnSpan="2"
+                        Grid.Column="0"
                         Height="25"
-                        Margin="5,0,0,0"
+                        Margin="0,0,5,0"
                         Tag="Buildup Name"
                         Style="{StaticResource TextBoxStyle}"
                         FontWeight="SemiBold"                        
                         TextChanged="BuildupNameTextChanged"/>
 
                 <TextBox x:Name="DescriptionTextBox"
-                        Grid.Column="1"
+                        Grid.Column="0"
+                         Grid.ColumnSpan="2"
                         Grid.Row="1"
                         Grid.RowSpan="2"
-                        Margin="5,5,0,0"
+                        Margin="0,5,5,0"
                         Tag="Buildup Description"
                         Style="{StaticResource TextBoxStyle}"
                         VerticalAlignment="Top"
@@ -238,10 +229,8 @@
                         Text="{Binding BuildupCreationVM.NewBuildupDescription}"/>
                 
                 <Border  Grid.Column="2"
-                         Grid.Row="1"
-                         Grid.RowSpan="2"
-                         Height="55"
-                         Margin="5,5,0,0"
+                         Grid.Row="0"
+                         Grid.RowSpan="3"
                          BorderBrush="Silver"
                          BorderThickness="1"
                          Background="WhiteSmoke"
@@ -452,34 +441,44 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="65"/>
+                    <ColumnDefinition Width="45"/>
                     <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="35"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="45"/>
                 </Grid.ColumnDefinitions>
 
                 <TextBlock d:Text="This is a Buildup name, and it is really long so that it has to be wrapepd."
+                           Grid.Column="0"
                            Grid.RowSpan="2"
-                           FontSize="15"
+                           FontSize="13"
                            TextWrapping="Wrap"
                            FontWeight="SemiBold"
                            LineHeight="17"
-                           Margin="0,0,10,0"
+                           Margin="0,0,20,0"
                            LineStackingStrategy="BlockLineHeight" 
                            Text="{Binding BuildupCreationVM.NewBuildupName}"/>
 
-                <TextBlock Grid.Column="1" Text="Total GWP: " VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="2" Text="{Binding BuildupCreationVM.BuildupGwp}" FontWeight="SemiBold" VerticalAlignment="Center" d:Text="98.902"/>
-                <TextBlock Grid.Column="3" Text="{Binding BuildupCreationVM.SelectedBuildupUnit, StringFormat='kgCO₂eq/{0}'}" d:Text="kgCO₂eq/m2" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="1" Text="Unit: " FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="2" Text="{Binding BuildupCreationVM.SelectedBuildupUnit}" VerticalAlignment="Center" d:Text="m2"/>
 
-                <TextBlock Grid.Column="1" Grid.Row="1" Text="Total GE: " VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding BuildupCreationVM.BuildupGe}" FontWeight="SemiBold" VerticalAlignment="Center" d:Text="177.902"/>
-                <TextBlock Grid.Column="3" Grid.Row="1" Text="{Binding BuildupCreationVM.SelectedBuildupUnit, StringFormat='kWhOileq/{0}'}" d:Text="kWhOileq/m2" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="1" Grid.Row="1" Text="Source: " FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding BuildupCreationVM.StandardsString}" VerticalAlignment="Center" d:Text="KBOB"/>
+
+                <TextBlock Grid.Column="4" Text="GWP: " FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="5" Text="{Binding BuildupCreationVM.BuildupGwp}" VerticalAlignment="Center" d:Text="98.902"/>
+                <TextBlock Grid.Column="6" FontSize="9" Text="kgCO₂eq" Margin="5,0,0,0" VerticalAlignment="Center"/>
+
+                <TextBlock Grid.Column="4" Grid.Row="1" Text="GE: " FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="5" Grid.Row="1" Text="{Binding BuildupCreationVM.BuildupGe, StringFormat='kWhOileq'}" VerticalAlignment="Center" d:Text="177.902"/>
+                <TextBlock Grid.Column="6" FontSize="9" Grid.Row="1" Text="kWhOileq" Margin="5,0,0,0" VerticalAlignment="Center"/>
 
                 <Border x:Name="PreviewCalculation"
                         BorderBrush="Silver"
                         BorderThickness="1"
                         Grid.Row="2"
-                        Grid.ColumnSpan="4"
+                        Grid.ColumnSpan="7"
                         CornerRadius="4">
                     <DataGrid x:Name="Calculations"
                               Style="{StaticResource DataGridStyle}"
