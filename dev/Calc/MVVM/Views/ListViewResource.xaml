@@ -135,19 +135,34 @@
                                                                                
                                         <TextBlock Grid.Row="0"
                                                    Text="{Binding Name}"
+                                                   Foreground="Black"
                                                    VerticalAlignment="Top"
                                                    Grid.ColumnSpan="2"
                                                    FontSize="15"
+                                                   FontWeight="SemiBold"
                                                    Margin="0,3,0,3"
                                                    LineHeight="18"
-                                                   LineStackingStrategy="BlockLineHeight" 
+                                                   LineStackingStrategy="BlockLineHeight"
                                                    TextWrapping="Wrap"/>
+
+                                        <TextBlock Grid.Row="0"
+                                                   Text="{Binding Standard.Name}"
+                                                   VerticalAlignment="Top"
+                                                   HorizontalAlignment="Right"
+                                                   Grid.Column="1"
+                                                   FontSize="27"
+                                                   Margin="0,5,0,0"
+                                                   LineHeight="18"
+                                                   LineStackingStrategy="BlockLineHeight">
+                                            <TextBlock.Foreground>
+                                                <SolidColorBrush Color="Black" Opacity="0.15"/>
+                                            </TextBlock.Foreground>
+                                        </TextBlock>
 
                                         <TextBlock Grid.Row="2" 
                                                    Grid.ColumnSpan="2" 
                                                    FontSize="10" 
-                                                   VerticalAlignment="Top" 
-                                                   Foreground="DimGray">
+                                                   VerticalAlignment="Top">
                                             <Run FontWeight="SemiBold" Text="Material Type: "/>
                                             <Run Text="{Binding MaterialTypeFamily}"/>
                                             <Run Text=" → "/>
@@ -157,8 +172,7 @@
                                         <TextBlock Grid.Row="3" 
                                                    Grid.ColumnSpan="2" 
                                                    FontSize="10" 
-                                                   VerticalAlignment="Top" 
-                                                   Foreground="DimGray">
+                                                   VerticalAlignment="Top">
                                             <Run FontWeight="SemiBold" Text="Application: "/>
                                             <Run Text="{Binding ProductTypeFamily}"/>
                                             <Run Text=" → "/>
@@ -167,30 +181,24 @@
 
                                         <TextBlock Grid.Row="5"
                                                    FontSize="10"
-                                                   Foreground="DimGray"
                                                    Text="{Binding MaterialUnit, StringFormat='Unit: {0}'}"/>
                                         <TextBlock Grid.Row="6"
                                                    FontSize="10"
-                                                   Foreground="DimGray"
                                                    Text="{Binding SourceUuid, StringFormat='UUID: {0}'}"/>
                                         <TextBlock Grid.Row="7"
                                                    FontSize="10"
-                                                   Foreground="DimGray"
                                                    Text="{Binding DataSource}"/>
                                         <TextBlock Grid.Row="5"
                                                    Grid.Column="1"
                                                    FontSize="10"
-                                                   Foreground="DimGray"
                                                    Text="{Binding Thickness, StringFormat='Thickness: {0} mm', TargetNullValue='Thickness: -'}"/>
                                         <TextBlock Grid.Row="6"
                                                    Grid.Column="1"
                                                    FontSize="10"
-                                                   Foreground="DimGray"
                                                    Text="{Binding Gwp, StringFormat='Unit GWP: {0} kgCO₂eq'}"/>
                                         <TextBlock Grid.Row="7"
                                                    Grid.Column="1"
                                                    FontSize="10"
-                                                   Foreground="DimGray"
                                                    Text="{Binding Ge, StringFormat='Unit GE: {0} kWhOileq'}"/>
                                     </Grid>
                                 </DataTemplate>
@@ -203,7 +211,10 @@
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="Bd" Property="Background" Value="MediumSeaGreen" />
-                            <Setter Property="FontWeight" Value="SemiBold" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="False">
+                            <Setter Property="Foreground" Value="DimGray" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
