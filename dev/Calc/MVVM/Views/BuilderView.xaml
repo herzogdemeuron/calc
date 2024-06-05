@@ -281,9 +281,9 @@
                       DataContext="{Binding BuildupCreationVM.CurrentLayerMaterialModel}"
                       IsEnabled="{Binding IsEnabled}">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="4*"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="80"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="25"/>
