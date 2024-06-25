@@ -26,6 +26,14 @@ namespace Calc.Core.Objects.Buildups
         //[JsonIgnore]
         //public List<LcaStandard> Standards { get => StandardItems.Select(x => x.Standard).ToList(); }
 
+        private string code;
+        [JsonProperty("code")]
+        public string Code
+        {
+            get => code;
+            set => SetProperty(ref code, value);
+        }
+
         private string name;
         [JsonProperty("name")]
         public string Name
@@ -113,7 +121,7 @@ namespace Calc.Core.Objects.Buildups
                 BuildupUnit = BuildupUnit
             };
         }*/
-        protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
+        protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null) // is this needed?
         {
             if (EqualityComparer<T>.Default.Equals(storage, value))
             {

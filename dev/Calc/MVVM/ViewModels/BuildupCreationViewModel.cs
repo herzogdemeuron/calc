@@ -102,9 +102,23 @@ namespace Calc.MVVM.ViewModels
             set
             {
                 if (newBuildupName == value) return;
-                newBuildupName = value;
+                newBuildupName = value.Trim();
                 CheckSaveOrUpdate();
                 OnPropertyChanged(nameof(NewBuildupName));
+                OnPropertyChanged(nameof(CanSave));
+            }
+        }
+
+        private string newBuildupCode;
+        public string NewBuildupCode
+        {
+            get => newBuildupCode;
+            set
+            {
+                if (newBuildupCode == value) return;
+                newBuildupCode = value.Trim();
+                CheckSaveOrUpdate();
+                OnPropertyChanged(nameof(NewBuildupCode));
                 OnPropertyChanged(nameof(CanSave));
             }
         }
@@ -489,7 +503,8 @@ namespace Calc.MVVM.ViewModels
                     quantityRatio,
                     component,
                     (Unit)SelectedBuildupUnit, 
-                    NewBuildupName, 
+                    NewBuildupName,
+                    newBuildupCode,
                     SelectedBuildupGroup.Name
                     );
                 results.AddRange(compoResults);
@@ -503,6 +518,7 @@ namespace Calc.MVVM.ViewModels
             var buildup = new Buildup
             {
                 Name = NewBuildupName,
+                Code = NewBuildupCode,
                 Description = NewBuildupDescription,
                 StandardItems = Standards.Select(s => new StandardItem { Standard = s }).ToList(),
                 Group = SelectedBuildupGroup,
@@ -563,14 +579,14 @@ namespace Calc.MVVM.ViewModels
 
         private bool CheckCanSave()
         {
-            return !string.IsNullOrEmpty(NewBuildupName) && SelectedBuildupGroup != null && AllCalculationComponents.Count > 0 && IsNotSaving;
+            return !string.IsNullOrEmpty(NewBuildupCode) && !string.IsNullOrEmpty(NewBuildupName) && SelectedBuildupGroup != null && AllCalculationComponents.Count > 0 && IsNotSaving;
         }
 
         private void CheckSaveOrUpdate()
         {
             var allBuildups = store.BuildupsAll;
-            // find the id with the same tolower name as the newbuildupname
-            var existingBuildup = allBuildups.Find(b => b.Name.ToLower() == NewBuildupName.ToLower());
+            // find the id with the same code
+            var existingBuildup = allBuildups.Find(b => b.Code != null && b.Code == NewBuildupCode);
             if(existingBuildup != null)
             {
                 updateId = existingBuildup.Id;

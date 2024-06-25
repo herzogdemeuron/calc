@@ -18,6 +18,8 @@ namespace Calc.Core.Objects.Results
         // element infos
         [JsonProperty(PropertyName = "element_id")]
         public string ElementId { get; set; }
+        [JsonProperty(PropertyName = "element_type_id")]
+        public string ElementTypeId { get; set; }
         [JsonProperty(PropertyName = "element_type")]
         public string ElementType { get; set; }
         [JsonProperty(PropertyName = "element_unit")]
@@ -28,6 +30,8 @@ namespace Calc.Core.Objects.Results
         // buildup infos
         [JsonProperty(PropertyName = "buildup_name")]
         public string BuildupName { get; set; }
+        [JsonProperty(PropertyName = "buildup_code")]
+        public string BuildupCode { get; set; }
         [JsonProperty(PropertyName = "buildup_group")]
         public string GroupName { get; set; }
         [JsonProperty(PropertyName = "buildup_unit")]

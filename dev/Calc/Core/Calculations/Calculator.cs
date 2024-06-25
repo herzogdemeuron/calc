@@ -91,6 +91,7 @@ namespace Calc.Core.Calculations
                 ElementAmount = amount,
 
                 BuildupName = buildup.Name,
+                BuildupCode = buildup.Code,
                 GroupName = buildup.Group?.Name,
                 BuildupUnit = buildup.BuildupUnit,
 
@@ -115,7 +116,7 @@ namespace Calc.Core.Calculations
         /// <summary>
         /// get the layer result from a buildup component
         /// </summary>
-        public static List<LayerResult> GetResult(double totalRatio, BuildupComponent buildupComponent, Unit buildupUnit, string buildupName, string buildupGroup)
+        public static List<LayerResult> GetResult(double totalRatio, BuildupComponent buildupComponent, Unit buildupUnit, string buildupName, string buildupCode, string buildupGroup)
         {
             var result = new List<LayerResult>();
             var layerComponents = buildupComponent.LayerComponents;
@@ -128,12 +129,13 @@ namespace Calc.Core.Calculations
                 {
                     var calculationResult = new LayerResult
                     {
-                        ElementId = buildupComponent.TypeIdentifier.ToString(),
+                        ElementTypeId = buildupComponent.TypeIdentifier.ToString(),
                         ElementType = $"{buildupComponent.Title} : {layerComponent.Title}",
                         ElementUnit = component.Material.MaterialUnit,
                         ElementAmount = (double)layerComponent.GetLayerAmount(totalRatio), // the layer amount is normalized to the total ratio
 
                         BuildupName = buildupName,
+                        BuildupCode = buildupCode,
                         GroupName = buildupGroup,
                         BuildupUnit = buildupUnit,
 

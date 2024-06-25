@@ -20,6 +20,7 @@ namespace Calc.Core.DirectusAPI.Drivers
 
                     id
                     name
+                    code
                     standards {
                         calc_standards_id {
                         id
@@ -104,6 +105,7 @@ namespace Calc.Core.DirectusAPI.Drivers
             var input = new
             {
                 name = SendItem.Name,
+                code = SendItem.Code,
                 buildup_unit = SendItem.BuildupUnit,
                 group = new { id = SendItem.Group.Id },
                 description = SendItem.Description,

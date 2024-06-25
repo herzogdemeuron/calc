@@ -186,7 +186,7 @@
                     <RowDefinition Height="25"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="120"/>
                 </Grid.ColumnDefinitions>
@@ -195,9 +195,8 @@
 
                 <ComboBox   x:Name="BuildupGroupComboBox"
                             Text = "Buildup Group"
-                            Margin="0,0,5,0"
                             Grid.Row="0"
-                            Grid.Column="1"
+                            Grid.Column="2"
                             ItemsSource="{Binding BuildupCreationVM.BuildupGroupsAll}"
                             SelectedItem="{Binding BuildupCreationVM.SelectedBuildupGroup}"
                             Style="{StaticResource RoundedComboBoxStyle}"
@@ -215,6 +214,15 @@
                         FontWeight="SemiBold"                        
                         TextChanged="BuildupNameTextChanged"/>
 
+                <TextBox x:Name="BuildupCodeTextBox"
+                        Grid.Column="1"
+                        Height="25"
+                        Margin="0,0,5,0"
+                        Tag="Buildup Code"
+                        Style="{StaticResource TextBoxStyle}"
+                        FontWeight="SemiBold"
+                        TextChanged="BuildupCodeTextChanged"/>
+
                 <TextBox x:Name="DescriptionTextBox"
                         Grid.Column="0"
                          Grid.ColumnSpan="2"
@@ -229,8 +237,9 @@
                         Text="{Binding BuildupCreationVM.NewBuildupDescription}"/>
                 
                 <Border  Grid.Column="2"
-                         Grid.Row="0"
-                         Grid.RowSpan="3"
+                         Grid.Row="1"
+                         Grid.RowSpan="2"
+                         Margin="0,5,0,0"
                          BorderBrush="Silver"
                          BorderThickness="1"
                          Background="WhiteSmoke"
@@ -532,7 +541,7 @@
                             <Setter Property="Content" Value="Create" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding BuildupCreationVM.SaveOrUpdate}" Value="False">
-                                    <Setter Property="Content" Value="Name exists, Update" />
+                                    <Setter Property="Content" Value="Code exists, Update" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>

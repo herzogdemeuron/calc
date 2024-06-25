@@ -117,6 +117,11 @@ namespace Calc.MVVM.ViewModels
             BuildupCreationVM.NewBuildupName = text;
         }
 
+        public void HandleBuildupCodeChanged(string text)
+        {
+            BuildupCreationVM.NewBuildupCode = text;
+        }
+
         public async Task HandleSendingResults(string newName)
         {
             //await SavingVM.HandleSendingResults(newName);
