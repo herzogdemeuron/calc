@@ -1,0 +1,202 @@
+﻿<Window x:Class="Calc.MVVM.Views.BuildupSelectionView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Calc.MVVM.ViewModels"
+        d:DataContext="{d:DesignInstance Type=local:BuildupSelectionViewModel}"
+        mc:Ignorable="d"
+        Height="600"
+        Width="450"        
+        MinHeight="500"
+        MinWidth="450"
+        WindowStartupLocation="CenterScreen"
+        Icon="pack://application:,,,/CalcMVVM;component/Resources/icon_builder_small.png"
+        Title="Material Selection"
+        Topmost="True"
+        LocationChanged="WindowLocationChanged"
+        Loaded="WindowLocationChanged">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="MainViewResources.xaml"/>
+                <ResourceDictionary Source="ButtonResource.xaml"/>
+                <ResourceDictionary Source="ListViewResource.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+        <Grid x:Name="MainGrid">
+            <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="55"/>
+            <RowDefinition Height="0"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="45"/>
+        </Grid.RowDefinitions>
+
+        <Label Content="Material Selection"
+                   Grid.Column="1"
+                   Grid.ColumnSpan="3"
+                   Grid.Row="0"
+                   FontSize="27"
+                   FontWeight="Light"/>
+
+        <Grid x:Name="LeftGrid"
+              Grid.Column="1"
+              Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Content="Source:"
+                   Grid.Column="0"
+                   Grid.Row="0"
+                   VerticalAlignment="Center"
+                   FontWeight="SemiBold"/>
+
+            <ItemsControl Grid.Column="2"
+                          Grid.Row="0"
+                          VerticalAlignment="Center"
+                          ItemsSource="{Binding AllStandards}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox Content="{Binding Name}"
+                                  Margin="0,0,5,0"
+                                  IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                  Checked="SourceCheckChanged"
+                                  Unchecked="SourceCheckChanged"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            
+
+            <Label Content="Search:"
+                   Grid.Column="0"
+                   Grid.Row="1"
+                   VerticalAlignment="Center"
+                   FontWeight="SemiBold"/>
+
+            <TextBox x:Name="SearchTextBox"
+                     Grid.Column="2"
+                     Grid.Row="1"
+                     Height="25"
+                     d:Text="filter"
+                     Style="{StaticResource TextBoxStyle}"
+                     TextChanged="SearchTextChanged"
+                     FontWeight="SemiBold"/>
+
+            <ListView x:Name="MaterialsListView"
+                        Grid.ColumnSpan="3"
+                        Grid.Row="2"                  
+                        Loaded="ListViewLoaded"
+                        PreviewMouseWheel="ListViewPreviewMouseWheel"
+                        ItemsSource="{Binding AllMaterialsView}"
+                        SelectedItem="{Binding SelectedMaterial}"
+                        Style="{StaticResource ListViewStyle}" d:ItemsSource="{d:SampleData ItemCount=5}">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemMaterialStyle}">
+                        <EventSetter Event="MouseDoubleClick" Handler="ListViewItemMaterialDoubleClick" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
+
+        </Grid>
+            
+        <Expander Grid.Column="3"
+                  Grid.Row="2"
+                  Margin="0,5,0,0"
+                  ExpandDirection="Right" 
+                  HorizontalAlignment="Stretch"
+                  Expanded="Expander_Expanded"
+                  Collapsed="Expander_Collapsed">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="210"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <Label Content="Material Type:"
+                       Grid.Row="0"
+                       Grid.Column="1"
+                       FontWeight="SemiBold"/>
+            
+                <ListView x:Name="MaterialTypeTags"
+                       Grid.Row="1"
+                       Grid.Column="1"
+                       PreviewMouseLeftButtonDown="ListViewSelected"
+                       Loaded="ListViewLoaded"
+                       ItemsSource="{Binding MaterialTagsView}"
+                       SelectedItem="{Binding SelectedMaterialTag}"
+                       Style="{StaticResource ListViewStyle}" 
+                       ItemContainerStyle="{StaticResource ListViewItemTagStyle}" d:ItemsSource="{d:SampleData ItemCount=5}"/>
+
+            
+                <Label Content="Application:"
+                       Grid.Row="2"
+                       Grid.Column="1"
+                       FontWeight="SemiBold"/>
+            
+                <ListView x:Name="ProductTypeTags"
+                          Grid.Row="3"
+                          Grid.Column="1"
+                          PreviewMouseLeftButtonDown="ListViewSelected"
+                          Loaded="ListViewLoaded"
+                          ItemsSource="{Binding ProductTagsView}"
+                          SelectedItem="{Binding SelectedProductTag}"
+                          Style="{StaticResource ListViewStyle}" 
+                          ItemContainerStyle="{StaticResource ListViewItemTagStyle}" d:ItemsSource="{d:SampleData ItemCount=5}"/>
+            
+            </Grid>
+
+        </Expander>
+
+        <Grid x:Name="ButtonGrid"
+              Grid.Column="1"
+              Grid.Row="7">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="60"/>
+            </Grid.ColumnDefinitions>
+            <Button Content="OK"
+                    Grid.Column="1"
+                    IsDefault="True" 
+                    Style="{StaticResource ButtonStyle}"
+                    Click="OKClicked"/>
+            <Button Content="Cancel"
+                    Grid.Column="3"
+                    Style="{StaticResource ButtonStyle}"
+                    Click="CancelClicked"/>
+
+        </Grid>
+
+
+    </Grid>
+
+</Window>

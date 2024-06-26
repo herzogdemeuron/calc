@@ -12,6 +12,7 @@
     <None Remove="Resources\icon_builder_small.png" />
     <None Remove="Resources\icon_main_small.png" />
     <None Remove="ToggleButtonTemplate.xaml" />
+    <None Remove="Views\BuildupSelectionView.xaml" />
     <None Remove="Views\ButtonResource.xaml" />
     <None Remove="Views\ComboBoxResource.xaml" />
     <None Remove="Views\ListViewResource.xaml" />
@@ -29,6 +30,10 @@
 
   <ItemGroup>
     <Page Include="Views\ListViewResource.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BuildupSelectionView.xaml">
+      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MaterialSelectionView.xaml">
