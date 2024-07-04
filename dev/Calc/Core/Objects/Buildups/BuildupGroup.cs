@@ -14,10 +14,6 @@ namespace Calc.Core.Objects.Buildups
         [JsonProperty("id")]
         public int Id { get; set; }
 
-        public override string ToString()
-        {
-            return $"Buildup Group Name: {Name}";
-        }
 
         public override bool Equals(object obj)
         {

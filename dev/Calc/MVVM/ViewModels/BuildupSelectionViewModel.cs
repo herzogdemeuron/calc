@@ -13,10 +13,25 @@ namespace Calc.MVVM.ViewModels
 
     public class BuildupSelectionViewModel : INotifyPropertyChanged
     {
-        public ICollectionView AllBuildupsView { get; set; }
-        public List<StandardModel> AllStandards { get; set; }
-        
+        public ICollectionView AllBuildupsView { get; }
+        public List<StandardModel> AllStandards { get; }
+        public List<BuildupGroup> AllBuildupGroups { get; }
+
         private string currentSearchText;
+        private BuildupGroup defaultGroup = new BuildupGroup() { Name = "All Groups", Id = 0 };
+
+        private BuildupGroup selectedBuildupGroup;
+        public BuildupGroup SelectedBuildupGroup
+        {
+            get => selectedBuildupGroup;
+            set
+            {
+                if (value == selectedBuildupGroup) return;
+                selectedBuildupGroup = value;
+                FilterBuildupsWithType();
+                OnPropertyChanged(nameof(SelectedBuildupGroup));
+            }
+        }
 
         private Buildup selectedBuildup;
         public Buildup SelectedBuildup
@@ -24,9 +39,22 @@ namespace Calc.MVVM.ViewModels
             get => selectedBuildup;
             set
             {
+                CanOk = value != null;
                 if (value == selectedBuildup) return;
                 selectedBuildup = value;
                 OnPropertyChanged(nameof(SelectedBuildup));
+            }
+        }
+
+        private bool canOk;
+        public bool CanOk
+        {
+            get => canOk;
+            set
+            {
+                if (value == canOk) return;
+                canOk = value;
+                OnPropertyChanged(nameof(CanOk));
             }
         }
 
@@ -35,11 +63,15 @@ namespace Calc.MVVM.ViewModels
             AllBuildupsView = CollectionViewSource.GetDefaultView(store.BuildupsAll);
             AllStandards = new List<StandardModel>(store.StandardsAll.Select(s => new StandardModel(s)));
 
+            AllBuildupGroups = new List<BuildupGroup>() { defaultGroup };
+            AllBuildupGroups.AddRange(store.BuildupGroupsAll);
+            SelectedBuildupGroup = defaultGroup;
         }
 
         public void Reset()
         {
             SelectedBuildup = null;
+            SelectedBuildupGroup = defaultGroup;
         }
 
         public void PrepareBuildupSelection(Buildup buildup)
@@ -64,18 +96,19 @@ namespace Calc.MVVM.ViewModels
                 var name = buildup.Name?.ToLower() ?? "";
                 var standards = buildup.StandardItems.Select(i => i.Standard.Name).ToList();
                 var code = buildup.Code?.ToLower() ?? "";
-                var group = buildup.Group.Name ?? "";
+                var description = buildup.Description?.ToLower() ?? "";
+                var groupEqual = SelectedBuildupGroup.Id == 0 || buildup.Group.Name == SelectedBuildupGroup.Name;
 
+                if (!groupEqual) return false;
 
-                /*if (!AllStandards.Where(s => s.IsSelected).Any(s => s.Name == standard))
+                if (!AllStandards.Where(s => !s.IsSelected).All(s => !standards.Contains(s.Name)))
                 {
                     return false;
-                }*/
+                }
 
                 if (!string.IsNullOrEmpty(currentSearchText)
                     && !name.Contains(currentSearchText)
-                    && !code.Contains(currentSearchText)
-                    && !group.Contains(currentSearchText))
+                    && !code.Contains(currentSearchText))
 
                 {
                     return false;

@@ -11,8 +11,8 @@
         MinHeight="500"
         MinWidth="450"
         WindowStartupLocation="CenterScreen"
-        Icon="pack://application:,,,/CalcMVVM;component/Resources/icon_builder_small.png"
-        Title="Material Selection"
+        Icon="pack://application:,,,/CalcMVVM;component/Resources/icon_main_small.png"
+        Title="Buildup Selection"
         Topmost="True">
 
     <Window.Resources>
@@ -21,6 +21,7 @@
                 <ResourceDictionary Source="MainViewResources.xaml"/>
                 <ResourceDictionary Source="ButtonResource.xaml"/>
                 <ResourceDictionary Source="ListViewResource.xaml"/>
+                <ResourceDictionary Source="ComboBoxResource.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -58,6 +59,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"/>
                 <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Content="Source:"
@@ -85,17 +87,31 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-            
 
-            <Label Content="Search:"
+            <Label Content="Group:"
                    Grid.Column="0"
                    Grid.Row="1"
                    VerticalAlignment="Center"
                    FontWeight="SemiBold"/>
 
+            <ComboBox x:Name="GroupComboBox"
+                      Grid.Column="2"
+                      Grid.Row="1"
+                      Style="{StaticResource RoundedComboBoxStyle}"
+                      ItemsSource="{Binding AllBuildupGroups}"
+                      SelectedItem="{Binding SelectedBuildupGroup, Mode=TwoWay}"
+                      DisplayMemberPath="Name"/>
+
+
+            <Label Content="Search:"
+                   Grid.Column="0"
+                   Grid.Row="2"
+                   VerticalAlignment="Center"
+                   FontWeight="SemiBold"/>
+
             <TextBox x:Name="SearchTextBox"
                      Grid.Column="2"
-                     Grid.Row="1"
+                     Grid.Row="2"
                      Height="25"
                      d:Text="filter"
                      Style="{StaticResource TextBoxStyle}"
@@ -104,7 +120,7 @@
 
             <ListView x:Name="BuildupsListView"
                         Grid.ColumnSpan="3"
-                        Grid.Row="2"                  
+                        Grid.Row="3"                  
                         Loaded="ListViewLoaded"
                         PreviewMouseWheel="ListViewPreviewMouseWheel"
                         ItemsSource="{Binding AllBuildupsView}"
@@ -130,7 +146,8 @@
             </Grid.ColumnDefinitions>
             <Button Content="OK"
                     Grid.Column="1"
-                    IsDefault="True" 
+                    IsDefault="True"
+                    IsEnabled="{Binding CanOk}"
                     Style="{StaticResource ButtonStyle}"
                     Click="OKClicked"/>
             <Button Content="Cancel"

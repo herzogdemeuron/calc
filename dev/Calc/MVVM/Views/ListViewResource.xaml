@@ -238,7 +238,7 @@
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="auto" />
                                             <RowDefinition Height="10" />
-                                            <RowDefinition Height="15" />
+                                            <RowDefinition Height="auto" />
                                             <RowDefinition Height="10" />
                                             <RowDefinition Height="15" />
                                             <RowDefinition Height="15" />
@@ -263,21 +263,27 @@
 
                                         <TextBlock Grid.Row="2" 
                                                    Grid.ColumnSpan="2" 
-                                                   Text="{Binding Code}"
+                                                   Text="{Binding Description}"
                                                    Foreground="Black"
                                                    VerticalAlignment="Top"
+                                                   TextWrapping="Wrap"
                                                    />
-
+                                        
+                                        
                                         <TextBlock Grid.Row="4"
                                                    FontSize="10"
-                                                   Text="{Binding BuildupUnit, StringFormat='Unit: {0}'}"/>
+                                                   Text="{Binding Code, StringFormat='Code: {0}'}"/>
                                         <TextBlock Grid.Row="5"
                                                    FontSize="10"
-                                                   Text="{Binding BuildupGroup.Name, StringFormat='Group: {0}'}"/>
+                                                   Text="{Binding Group.Name, StringFormat='Group: {0}'}"/>
                                         <TextBlock Grid.Row="6"
                                                    FontSize="10"
-                                                   Text="{Binding StandardsString}"/>
-                                       
+                                                   Text="{Binding StandardsString, StringFormat='Source: {0}'}"/>
+                                        
+                                        <TextBlock Grid.Row="4"
+                                                   Grid.Column="1"
+                                                   FontSize="10"
+                                                   Text="{Binding BuildupUnit, StringFormat='Unit: {0}'}"/>
                                         <TextBlock Grid.Row="5"
                                                    Grid.Column="1"
                                                    FontSize="10"
