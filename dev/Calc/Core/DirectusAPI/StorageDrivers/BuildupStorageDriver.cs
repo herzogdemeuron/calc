@@ -33,6 +33,9 @@ namespace Calc.Core.DirectusAPI.Drivers
                         name
                         }
                     description
+                    image {
+                        id
+                        }
                     calculation_components {
                         id
                         position
@@ -119,7 +122,7 @@ namespace Calc.Core.DirectusAPI.Drivers
 
                 image = new
                 {
-                    id = SendItem.ImageUuid,
+                    id = SendItem.BuildupImage.Id,
                     storage = "cloud",
                     filename_download = $"{SendItem.Name}.png"
                 },

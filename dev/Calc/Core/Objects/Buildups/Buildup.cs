@@ -70,7 +70,7 @@ namespace Calc.Core.Objects.Buildups
         public string Description { get; set; }
 
         [JsonProperty("image")]
-        public string ImageUuid { get; set; }
+        public BuildupImage BuildupImage { get; set; }
 
         [JsonIgnore]
         public List<LayerResult> LayerSnapshot { get; set; }

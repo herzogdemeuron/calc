@@ -117,6 +117,14 @@ namespace Calc.MVVM.ViewModels
             };
         }
 
+        public void LoadImage(Buildup buildup)
+        {
+        }
+
+        public void ResetImage()
+        {
+
+        }
 
         public void HandleSearchTextChanged(string currentText)
         {

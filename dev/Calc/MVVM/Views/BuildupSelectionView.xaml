@@ -128,10 +128,19 @@
                         Style="{StaticResource ListViewStyle}" d:ItemsSource="{d:SampleData ItemCount=5}">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemBuildupStyle}">
-                        <EventSetter Event="MouseDoubleClick" Handler="ListViewItemMaterialDoubleClick" />
+                        <EventSetter Event="MouseDoubleClick" Handler="ListViewItemBuildupDoubleClick"/>
+                        <EventSetter Event="MouseEnter" Handler="ListViewItemMouseEnter"/>
+                        <EventSetter Event="MouseLeave" Handler="ListViewItemMouseLeave"/>
+                        <EventSetter Event="MouseMove" Handler="ListViewItemMouseMove"/>
                     </Style>
                 </ListView.ItemContainerStyle>
             </ListView>
+            
+            <Popup x:Name="ImagePreviewPopup" AllowsTransparency="True">
+                <Border BorderThickness="0" Background="Transparent" CornerRadius="4">
+                    <Image Source="{Binding BuildupCreationVM.CurrentImage}" Width="500" Height="400"/>
+                </Border>
+            </Popup>
 
         </Grid>
             

@@ -2,7 +2,6 @@
 using Calc.Core.Objects.Materials;
 using Calc.MVVM.Helpers;
 using Calc.MVVM.ViewModels;
-using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -49,7 +48,7 @@ namespace Calc.MVVM.Views
             }
         }
 
-        private void ListViewItemMaterialDoubleClick(object sender, MouseButtonEventArgs e)
+        private void ListViewItemBuildupDoubleClick(object sender, MouseButtonEventArgs e)
         {
             this.DialogResult = true;
             this.Close();
@@ -87,6 +86,35 @@ namespace Calc.MVVM.Views
         private void SourceCheckChanged(object sender, RoutedEventArgs e)
         {
             BuildupSelectionVM.HandleSourceCheckChanged();
+        }
+
+
+        private void ListViewItemMouseEnter(object sender, MouseEventArgs e)
+        {
+            if (sender is ListViewItem item)
+            {
+                var buildup = item.DataContext as Buildup;
+
+                BuildupSelectionVM.LoadImage(buildup);
+                
+                ImagePreviewPopup.IsOpen = true;
+                
+            }
+        }
+
+        private void ListViewItemMouseLeave(object sender, MouseEventArgs e)
+        {
+            ImagePreviewPopup.IsOpen = false;
+            BuildupSelectionVM.ResetImage();
+        }
+
+        private void ListViewItemMouseMove(object sender, MouseEventArgs e)
+        {
+            if (!ImagePreviewPopup.IsOpen) return;
+
+            ImagePreviewPopup.Placement = System.Windows.Controls.Primitives.PlacementMode.Relative;
+            ImagePreviewPopup.HorizontalOffset = e.GetPosition(this).X;
+            ImagePreviewPopup.VerticalOffset = e.GetPosition(this).Y;
         }
 
 
