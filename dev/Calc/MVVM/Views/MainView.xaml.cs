@@ -157,7 +157,30 @@ namespace Calc.MVVM.Views
                 e.Handled = true;
             }
         }
-        
+
+        private void SetBuildupClicked(object sender, RoutedEventArgs e)
+        {
+            string tag = (sender as Button).Tag.ToString();
+            SetBuildupWithTag(tag);
+        }
+
+        // set the main or sub buildup calling the buildup selection view
+        // decide which buildup to set based on the tag
+        private void SetBuildupWithTag(string tag)
+        {
+            bool setMain = tag.Contains("Main");
+
+            MainVM.HandleSelectingBuildup(setMain);
+
+            var buildupSelectionView = new BuildupSelectionView(MainVM.BuildupSelectionVM);
+
+            var result = buildupSelectionView.ShowDialog();
+            if (result == true)
+            {
+                MainVM.HandleBuildupSelected(setMain);
+            }
+        }
+
         private void SideClickDown(object sender, MouseButtonEventArgs e)
         {
             MainVM.HandleSideClicked();

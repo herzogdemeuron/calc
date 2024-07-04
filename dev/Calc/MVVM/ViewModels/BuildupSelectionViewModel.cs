@@ -1,4 +1,5 @@
 ﻿using Calc.Core;
+using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Materials;
 using Calc.MVVM.Helpers;
 using Calc.MVVM.Models;
@@ -12,162 +13,70 @@ namespace Calc.MVVM.ViewModels
 
     public class BuildupSelectionViewModel : INotifyPropertyChanged
     {
-        private readonly List<Material> allMaterials;
-        public ICollectionView AllMaterialsView { get; set; }
+        public ICollectionView AllBuildupsView { get; set; }
         public List<StandardModel> AllStandards { get; set; }
-        private List<FilterTagModel> materialTags;
-        public ICollectionView MaterialTagsView
-        {
-            get
-            {
-                var view = CollectionViewSource.GetDefaultView(materialTags);
-                if(view is ListCollectionView listCollectionView)
-                {
-                    listCollectionView.CustomSort = new FilterTagComparer();
-                }
-                return view;
-            }
-        }
-        private List<FilterTagModel> productTags;
-        public ICollectionView ProductTagsView
-        {
-            get
-            {
-                var view = CollectionViewSource.GetDefaultView(productTags);
-                if (view is ListCollectionView listCollectionView)
-                {
-                    listCollectionView.CustomSort = new FilterTagComparer();
-                }
-                return view;
-            }
-        }
+        
         private string currentSearchText;
 
-        private Material selectedMaterial;
-        public Material SelectedMaterial
+        private Buildup selectedBuildup;
+        public Buildup SelectedBuildup
         {
-            get => selectedMaterial;
+            get => selectedBuildup;
             set
             {
-                if (value == selectedMaterial) return;
-                selectedMaterial = value;
-                OnPropertyChanged(nameof(SelectedMaterial));
-            }
-        }
-
-        private FilterTagModel selectedMaterialTag;
-        public FilterTagModel SelectedMaterialTag
-        {
-            get => selectedMaterialTag;
-            set
-            {
-                selectedMaterialTag = value;
-                FilterMaterialsWithType();
-                UpdateDynamicCounts();
-                OnPropertyChanged(nameof(SelectedMaterialTag));
-            }
-        }
-
-        private FilterTagModel selectedProductTag;
-        public FilterTagModel SelectedProductTag
-        {
-            get => selectedProductTag;
-            set
-            {
-                selectedProductTag = value;
-                FilterMaterialsWithType();
-                UpdateDynamicCounts();
-                OnPropertyChanged(nameof(SelectedProductTag));
+                if (value == selectedBuildup) return;
+                selectedBuildup = value;
+                OnPropertyChanged(nameof(SelectedBuildup));
             }
         }
 
         public BuildupSelectionViewModel(DirectusStore store)
         {
-            AllMaterialsView = CollectionViewSource.GetDefaultView(store.MaterialsAll);
-            allMaterials = store.MaterialsAll;
+            AllBuildupsView = CollectionViewSource.GetDefaultView(store.BuildupsAll);
             AllStandards = new List<StandardModel>(store.StandardsAll.Select(s => new StandardModel(s)));
-            InitTypeTags();
 
         }
 
         public void Reset()
         {
-            SelectedMaterialTag = null;
-            SelectedProductTag = null;
-            SelectedMaterial = null;
+            SelectedBuildup = null;
         }
 
-        public void PrepareMaterialSelection(Material material)
+        public void PrepareBuildupSelection(Buildup buildup)
         {
             currentSearchText = "";
-            SelectedMaterialTag = null;
-            SelectedProductTag = null;
-            SelectedMaterial = material;
+            SelectedBuildup = buildup;
         }
 
         public void HandleSourceCheckChanged()
         {
-            FilterMaterialsWithType();
+            FilterBuildupsWithType();
         }
 
-        private void InitTypeTags()
+
+        private void FilterBuildupsWithType()
         {
-            materialTags = new List<FilterTagModel>();
-            productTags = new List<FilterTagModel>();
-            foreach (var material in allMaterials)
+            AllBuildupsView.Filter = (obj) =>
             {
-                var mType = material.MaterialTypeFamily ?? "?";
-                var pType = material.ProductTypeFamily ?? "?";
-                if (!materialTags.Exists(t => t.TagName == mType))
-                {
-                    materialTags.Add(new FilterTagModel(mType));
-                }
-                if (!productTags.Exists(t => t.TagName == pType))
-                {
-                    productTags.Add(new FilterTagModel(pType));
-                }
-
-                // add relation count to each other
-                var mTag = materialTags.Find(t => t.TagName == mType);
-                var pTag = productTags.Find(t => t.TagName == pType);
-                mTag.AddRelationCount(pTag);
-                pTag.AddRelationCount(mTag);
-
-            }
-        }
-
-        private void FilterMaterialsWithType()
-        {
-            AllMaterialsView.Filter = (obj) =>
-            {
-                var material = obj as Material;
+                var buildup = obj as Buildup;
+               
                 // either name, material type or material type family contains the search text
-                var name = material.Name?.ToLower() ?? "";
-                var standard = material.Standard.Name ?? "";
-                var mType = material.MaterialType?.ToLower() ?? "";
-                var mFamily = material.MaterialTypeFamily?.ToLower() ?? "";
-                var pType = material.ProductTypeFamily?.ToLower() ?? "";
-                var pFamily = material.ProductTypeFamily?.ToLower() ?? "";
+                var name = buildup.Name?.ToLower() ?? "";
+                var standards = buildup.StandardItems.Select(i => i.Standard.Name).ToList();
+                var code = buildup.Code?.ToLower() ?? "";
+                var group = buildup.Group.Name ?? "";
 
-                if (!AllStandards.Where(s => s.IsSelected).Any(s => s.Name == standard))
-                {
-                    return false;
-                }
 
-                if (SelectedMaterialTag != null && (material.MaterialTypeFamily ??"?") != SelectedMaterialTag.TagName)
+                /*if (!AllStandards.Where(s => s.IsSelected).Any(s => s.Name == standard))
                 {
                     return false;
-                }
-                if (SelectedProductTag != null && (material.ProductTypeFamily ?? "?") != SelectedProductTag.TagName)
-                {
-                    return false;
-                }
-                if (!string.IsNullOrEmpty(currentSearchText) 
-                    && !name.Contains(currentSearchText) 
-                    && !mType.Contains(currentSearchText) 
-                    && !mFamily.Contains(currentSearchText)
-                    && !pType.Contains(currentSearchText)
-                    && !pFamily.Contains(currentSearchText))
+                }*/
+
+                if (!string.IsNullOrEmpty(currentSearchText)
+                    && !name.Contains(currentSearchText)
+                    && !code.Contains(currentSearchText)
+                    && !group.Contains(currentSearchText))
+
                 {
                     return false;
                 }
@@ -175,44 +84,11 @@ namespace Calc.MVVM.ViewModels
             };
         }
 
-        /// <summary>
-        /// dynamic count is the count of each tag where the other type is selected
-        /// if a tag of material type is selected, 
-        /// the dynamic count of product type is the count of all materials with the selected material type.
-        /// if a tag of the same type group is selected, all the other tags of the same type group will have null dynamic count
-        /// the dynamic count is filtered with both selected tags
-        /// </summary>
-        private void UpdateDynamicCounts()
-        {
-            UpdateOtherGroupDynamicCounts(selectedProductTag, materialTags);
-            UpdateOtherGroupDynamicCounts(selectedMaterialTag, productTags);
-            UpdateSameGroupDynamicCounts(selectedMaterialTag, materialTags);
-            UpdateSameGroupDynamicCounts(selectedProductTag, productTags);
-        }
-
-        private void UpdateOtherGroupDynamicCounts(FilterTagModel selectedTag, List<FilterTagModel> allTags)
-        {
-            foreach (var tag in allTags)
-            {
-                tag.UpdateDynamicCount(selectedTag);
-            }
-        }
-
-        private void UpdateSameGroupDynamicCounts(FilterTagModel selectedTag, List<FilterTagModel> allTags)
-        {
-            foreach(var tag in allTags)
-            {
-                if (tag != selectedTag && selectedTag!=null)
-                {
-                    tag.CleanDynamicCount();
-                }
-            }
-        }
 
         public void HandleSearchTextChanged(string currentText)
         {
             currentSearchText = currentText.ToLower();
-            FilterMaterialsWithType();
+            FilterBuildupsWithType();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

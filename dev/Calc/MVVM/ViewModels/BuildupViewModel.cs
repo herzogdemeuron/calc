@@ -60,45 +60,7 @@ namespace Calc.MVVM.ViewModels
         }
 
 
-        private ICollectionView _allBuildupsView1;
-        public ICollectionView AllBuildupsView1
-        {
-            get
-            {
-                if (_buildupsAll != null)
-                {
-                    _allBuildupsView1 = CollectionViewSource.GetDefaultView
-                        (
-                            new ObservableCollection<Buildup>(_buildupsAll)
-                        );
-                    if (_allBuildupsView1.GroupDescriptions.Count == 0)
-                    {
-                        _allBuildupsView1.GroupDescriptions.Add(new PropertyGroupDescription("GroupName"));
-                    }
-                }
-                return _allBuildupsView1;
-            }
-        }
-
-        private ICollectionView _allBuildupsView2;
-        public ICollectionView AllBuildupsView2
-        {
-            get
-            {
-                if (_buildupsAll != null)
-                {
-                    _allBuildupsView2 = CollectionViewSource.GetDefaultView
-                        (
-                            new ObservableCollection<Buildup>(_buildupsAll)
-                        );
-                    if (_allBuildupsView2.GroupDescriptions.Count == 0)
-                    {
-                        _allBuildupsView2.GroupDescriptions.Add(new PropertyGroupDescription("GroupName"));
-                    }
-                }
-                return _allBuildupsView2;
-            }
-        }
+       
 
         public Buildup Buildup1
         {
@@ -149,6 +111,18 @@ namespace Calc.MVVM.ViewModels
             MediatorFromVM.Register("NodeItemSelectionChanged", _ => UpdateBuildupSection()); // if not, the buildup section sometimes not update,(parent reduced to zero, children remain all enabled), how to solve?
             MediatorFromVM.Register("MappingSelectionChanged", _ => UpdateBuildupSection());
             _node = node;
+        }
+
+        public void SetBuildup(bool setMain, Buildup buildup)
+        {
+            if (setMain)
+            {
+                Buildup1 = buildup;
+            }
+            else
+            {
+                Buildup2 = buildup;
+            }
         }
 
         /// <summary>

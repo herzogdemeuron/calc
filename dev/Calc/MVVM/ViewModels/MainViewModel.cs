@@ -21,6 +21,7 @@ namespace Calc.MVVM.ViewModels
         public NewMappingViewModel NewMappingVM { get; set; }
         public VisibilityViewModel VisibilityVM { get; set; }
         public CalculationViewModel CalculationVM { get; set; }
+        public BuildupSelectionViewModel BuildupSelectionVM { get; set; }
 
         public MainViewModel(DirectusStore store, IElementCreator elementCreator, IVisualizer visualizer)
         {
@@ -35,6 +36,8 @@ namespace Calc.MVVM.ViewModels
             MappingErrorVM = new MappingErrorViewModel(MappingVM);
             CalculationVM = new CalculationViewModel(NodeTreeVM);
             SavingVM = new SavingViewModel(CalculationVM);
+
+            BuildupSelectionVM = new BuildupSelectionViewModel(store);
         }
 
         public void HandleWindowLoaded()
@@ -106,6 +109,20 @@ namespace Calc.MVVM.ViewModels
         public void HandleNodeItemSelectionChanged(NodeModel selectedBranch)
         {
             NodeTreeVM.HandleNodeItemSelectionChanged(selectedBranch);
+        }
+
+        public void HandleSelectingBuildup(bool setMain)
+        {
+            var buildupItem = NodeTreeVM.SelectedNodeItem.NodeBuildupItem;
+            var buildup = setMain ? buildupItem.Buildup1 : buildupItem.Buildup2;
+            BuildupSelectionVM.PrepareBuildupSelection(buildup);
+        }
+
+        public void HandleBuildupSelected(bool setMain)
+        {
+            var buildup = BuildupSelectionVM.SelectedBuildup;
+            NodeTreeVM.SelectedNodeItem.NodeBuildupItem.SetBuildup(setMain,buildup);
+            BuildupSelectionVM.Reset();
         }
 
         public void HandleSideClicked()

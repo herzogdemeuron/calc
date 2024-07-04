@@ -1,4 +1,5 @@
-﻿using Calc.Core.Objects.Materials;
+﻿using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Materials;
 using Calc.MVVM.Helpers;
 using Calc.MVVM.ViewModels;
 using System;
@@ -11,26 +12,16 @@ namespace Calc.MVVM.Views
 {
     public partial class BuildupSelectionView : Window
     {
-        private double originalLeft; // used to store the original left position of the window, for window ajustment when expander is expanded or collapsed
 
-        private void WindowLocationChanged(object sender, RoutedEventArgs e)
-        {
-            originalLeft = this.Left;
-        }
-
-        private void WindowLocationChanged(object sender, EventArgs e)
-        {
-            originalLeft = this.Left;
-        }
 
         private readonly BuildupSelectionViewModel BuildupSelectionVM;
-        public Material SelectedMaterial { get => BuildupSelectionVM.SelectedMaterial; }
+        public Buildup SelectedBuildup { get => BuildupSelectionVM.SelectedBuildup; }
 
         public BuildupSelectionView(BuildupSelectionViewModel buildupSelectionVM)
         {
             this.BuildupSelectionVM = buildupSelectionVM;
             this.DataContext = BuildupSelectionVM;
-            //InitializeComponent();
+            InitializeComponent();
         }
 
         private void SearchTextChanged(object sender, TextChangedEventArgs e)
@@ -98,24 +89,6 @@ namespace Calc.MVVM.Views
             BuildupSelectionVM.HandleSourceCheckChanged();
         }
 
-        private void Expander_Expanded(object sender, RoutedEventArgs e)
-        {
-            Expander expander = sender as Expander;
-            if (expander != null)
-            {
-                this.Width += 220;
-                this.Left = originalLeft; // Keep the left position fixed
-            }
-        }
 
-        private void Expander_Collapsed(object sender, RoutedEventArgs e)
-        {
-            Expander expander = sender as Expander;
-            if (expander != null)
-            {
-                this.Width -= 220;
-                this.Left = originalLeft; // Keep the left position fixed
-            }
-        }
     }
 }

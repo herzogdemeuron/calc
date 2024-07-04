@@ -355,32 +355,24 @@
                                 Click="RemoveClicked"/>
                     </StackPanel>
                     <StackPanel DockPanel.Dock="Left">
-                        <views:SearchComboBox x:Uid="ShowTextNote"
-                                              Style="{StaticResource RoundedComboBoxStyle}"
-                                              ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.AllBuildupsView1}"
-                                              SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup1}"
-                                              DisplayMemberPath="Name"
-                                              IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CanAddFirstBuildup}"
-                                              HorizontalAlignment="Stretch"
-                                              VerticalAlignment="Top">
-                            <ComboBox.GroupStyle>
-                                <StaticResource ResourceKey="ComboBoxGroupStyle"/>
-                            </ComboBox.GroupStyle>
-                        </views:SearchComboBox>
+                        
+                        <Button Content="{Binding  NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup1.Name}"
+                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CanAddFirstBuildup}"
+                                d:Content=""
+                                Tag="Choose Main"
+                                HorizontalAlignment="Stretch"
+                                Style="{StaticResource ButtonStyle}"
+                                Click="SetBuildupClicked"/>
 
-                        <views:SearchComboBox x:Uid="ShowTextNote"
-                                              Style="{StaticResource RoundedComboBoxStyle}"
-                                              ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.AllBuildupsView2}"
-                                              SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup2}"
-                                              DisplayMemberPath="Name"
-                                              IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CanAddSecondBuildup}"
-                                              Margin="0,5,0,0"
-                                              HorizontalAlignment="Stretch"
-                                              VerticalAlignment="Top">
-                            <ComboBox.GroupStyle>
-                                <StaticResource ResourceKey="ComboBoxGroupStyle"/>
-                            </ComboBox.GroupStyle>
-                        </views:SearchComboBox>
+                        <Button Content="{Binding  NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup2.Name}"
+                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CanAddSecondBuildup}"
+                                d:Content=""
+                                Margin="0,5,0,0"
+                                Tag="Choose Second"
+                                HorizontalAlignment="Stretch"
+                                Style="{StaticResource ButtonStyle}"
+                                Click="SetBuildupClicked"/>
+
                     </StackPanel>
                 </DockPanel>
                 <Grid Grid.Row="2"

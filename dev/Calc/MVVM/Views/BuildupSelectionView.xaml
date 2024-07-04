@@ -13,9 +13,7 @@
         WindowStartupLocation="CenterScreen"
         Icon="pack://application:,,,/CalcMVVM;component/Resources/icon_builder_small.png"
         Title="Material Selection"
-        Topmost="True"
-        LocationChanged="WindowLocationChanged"
-        Loaded="WindowLocationChanged">
+        Topmost="True">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -42,7 +40,7 @@
             <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
 
-        <Label Content="Material Selection"
+        <Label Content="Buildup Selection"
                    Grid.Column="1"
                    Grid.ColumnSpan="3"
                    Grid.Row="0"
@@ -104,16 +102,16 @@
                      TextChanged="SearchTextChanged"
                      FontWeight="SemiBold"/>
 
-            <ListView x:Name="MaterialsListView"
+            <ListView x:Name="BuildupsListView"
                         Grid.ColumnSpan="3"
                         Grid.Row="2"                  
                         Loaded="ListViewLoaded"
                         PreviewMouseWheel="ListViewPreviewMouseWheel"
-                        ItemsSource="{Binding AllMaterialsView}"
-                        SelectedItem="{Binding SelectedMaterial}"
+                        ItemsSource="{Binding AllBuildupsView}"
+                        SelectedItem="{Binding SelectedBuildup}"
                         Style="{StaticResource ListViewStyle}" d:ItemsSource="{d:SampleData ItemCount=5}">
                 <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemMaterialStyle}">
+                    <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemBuildupStyle}">
                         <EventSetter Event="MouseDoubleClick" Handler="ListViewItemMaterialDoubleClick" />
                     </Style>
                 </ListView.ItemContainerStyle>
@@ -121,60 +119,6 @@
 
         </Grid>
             
-        <Expander Grid.Column="3"
-                  Grid.Row="2"
-                  Margin="0,5,0,0"
-                  ExpandDirection="Right" 
-                  HorizontalAlignment="Stretch"
-                  Expanded="Expander_Expanded"
-                  Collapsed="Expander_Collapsed">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="10"/>
-                    <ColumnDefinition Width="210"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="25"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="25"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                
-                <Label Content="Material Type:"
-                       Grid.Row="0"
-                       Grid.Column="1"
-                       FontWeight="SemiBold"/>
-            
-                <ListView x:Name="MaterialTypeTags"
-                       Grid.Row="1"
-                       Grid.Column="1"
-                       PreviewMouseLeftButtonDown="ListViewSelected"
-                       Loaded="ListViewLoaded"
-                       ItemsSource="{Binding MaterialTagsView}"
-                       SelectedItem="{Binding SelectedMaterialTag}"
-                       Style="{StaticResource ListViewStyle}" 
-                       ItemContainerStyle="{StaticResource ListViewItemTagStyle}" d:ItemsSource="{d:SampleData ItemCount=5}"/>
-
-            
-                <Label Content="Application:"
-                       Grid.Row="2"
-                       Grid.Column="1"
-                       FontWeight="SemiBold"/>
-            
-                <ListView x:Name="ProductTypeTags"
-                          Grid.Row="3"
-                          Grid.Column="1"
-                          PreviewMouseLeftButtonDown="ListViewSelected"
-                          Loaded="ListViewLoaded"
-                          ItemsSource="{Binding ProductTagsView}"
-                          SelectedItem="{Binding SelectedProductTag}"
-                          Style="{StaticResource ListViewStyle}" 
-                          ItemContainerStyle="{StaticResource ListViewItemTagStyle}" d:ItemsSource="{d:SampleData ItemCount=5}"/>
-            
-            </Grid>
-
-        </Expander>
-
         <Grid x:Name="ButtonGrid"
               Grid.Column="1"
               Grid.Row="7">

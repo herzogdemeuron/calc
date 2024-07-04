@@ -221,5 +221,91 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
+
+    <Style x:Key="ListViewItemBuildupStyle" TargetType="ListViewItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListViewItem">
+                    <Border x:Name="Bd" 
+                            Background="WhiteSmoke" 
+                            CornerRadius="4"
+                            Margin="10,5,10,5">
+                        <ContentPresenter>
+                            <ContentPresenter.ContentTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto" />
+                                            <RowDefinition Height="10" />
+                                            <RowDefinition Height="15" />
+                                            <RowDefinition Height="10" />
+                                            <RowDefinition Height="15" />
+                                            <RowDefinition Height="15" />
+                                            <RowDefinition Height="15" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Row="0"
+                                                   Text="{Binding Name}"
+                                                   Foreground="Black"
+                                                   VerticalAlignment="Top"
+                                                   Grid.ColumnSpan="2"
+                                                   FontSize="15"
+                                                   FontWeight="SemiBold"
+                                                   Margin="0,3,0,0"
+                                                   LineHeight="18"
+                                                   LineStackingStrategy="BlockLineHeight"
+                                                   TextWrapping="Wrap"/>
+
+                                        <TextBlock Grid.Row="2" 
+                                                   Grid.ColumnSpan="2" 
+                                                   Text="{Binding Code}"
+                                                   Foreground="Black"
+                                                   VerticalAlignment="Top"
+                                                   />
+
+                                        <TextBlock Grid.Row="4"
+                                                   FontSize="10"
+                                                   Text="{Binding BuildupUnit, StringFormat='Unit: {0}'}"/>
+                                        <TextBlock Grid.Row="5"
+                                                   FontSize="10"
+                                                   Text="{Binding BuildupGroup.Name, StringFormat='Group: {0}'}"/>
+                                        <TextBlock Grid.Row="6"
+                                                   FontSize="10"
+                                                   Text="{Binding StandardsString}"/>
+                                       
+                                        <TextBlock Grid.Row="5"
+                                                   Grid.Column="1"
+                                                   FontSize="10"
+                                                   Text="{Binding BuildupGwp, StringFormat='Unit GWP: {0} kgCO₂eq'}"/>
+                                        <TextBlock Grid.Row="6"
+                                                   Grid.Column="1"
+                                                   FontSize="10"
+                                                   Text="{Binding BuildupGe, StringFormat='Unit GE: {0} kWhOileq'}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ContentPresenter.ContentTemplate>
+                        </ContentPresenter>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="LightGray" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="MediumSeaGreen" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="False">
+                            <Setter Property="Foreground" Value="DimGray" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

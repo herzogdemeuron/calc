@@ -23,8 +23,8 @@ namespace Calc.Core.Objects.Buildups
         [JsonProperty("standards")]
         public List<StandardItem> StandardItems { get; set; } // this is only for deserialization
 
-        //[JsonIgnore]
-        //public List<LcaStandard> Standards { get => StandardItems.Select(x => x.Standard).ToList(); }
+        [JsonIgnore]
+        public string StandardsString { get => StandardItems.Select(x => x.Standard.Name).Aggregate((x, y) => x + ", " + y); }
 
         private string code;
         [JsonProperty("code")]
