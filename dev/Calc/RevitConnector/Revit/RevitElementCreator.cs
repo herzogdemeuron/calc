@@ -113,6 +113,8 @@ namespace Calc.RevitConnector.Revit
                 if (result.Item1 == false) continue;
                 parameterDictionary[parameterName] = result.Item2;
             }
+            var category = elem.Category.Name;
+            parameterDictionary["Category"] = category; // add category to the dictionary, for dark forest grouping
 
             var typeName = elem.LookupParameter("Family and Type")?.AsValueString() ?? doc.GetElement(elem.GetTypeId()).Name;
             var lenParam = ParameterHelper.CreateBasicUnitParameter(elem, lenName, Unit.m);
@@ -123,6 +125,7 @@ namespace Calc.RevitConnector.Revit
             return new CalcElement
                 (
                 elem.Id.ToString(),
+                category,
                 typeName,
                 parameterDictionary,
                 lenParam,

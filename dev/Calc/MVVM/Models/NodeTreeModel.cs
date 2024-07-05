@@ -36,10 +36,10 @@ namespace Calc.MVVM.Models
         }
 
         public NodeModel CurrentForestItem { get; set; } = new NodeModel(null, null);
-        //public NodeModel CurrentBrokenForestItem { get; set; }
+        public NodeModel CurrentDarkForestItem { get; set; } = new NodeModel(null, null);
 
         public ObservableCollection<NodeModel> NodeSource
-        { get => new ObservableCollection<NodeModel> { CurrentForestItem }; }
+        { get => new ObservableCollection<NodeModel> { CurrentForestItem, CurrentDarkForestItem }; }
 
         public NodeTreeModel(DirectusStore directusStore, IVisualizer visualizer)
         {
@@ -63,6 +63,7 @@ namespace Calc.MVVM.Models
         public void UpdateNodeSource(Mapping mapping)
         {
             CurrentForestItem = new NodeModel(Store.ForestSelected, this);
+            CurrentDarkForestItem = new NodeModel(Store.DarkForestSelected, this);
             RemapAllNodes(mapping);
             OnPropertyChanged(nameof(NodeSource));
             RecolorAllNodes(true);

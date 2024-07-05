@@ -60,6 +60,7 @@ namespace Calc.Core
 
         public List<Forest> Forests { get { return ForestDriver.GotManyItems; } }
         public Forest ForestSelected { get; set; }
+        public Forest DarkForestSelected { get; set; }
         public List<Forest> ForestProjectRelated
         {
             get => GetProjectRelated(ForestDriver);
