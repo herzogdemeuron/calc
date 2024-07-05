@@ -91,7 +91,7 @@ namespace Calc.Core.Objects.GraphNodes
                 return GetColorIdentifier(Buildups.ToList());
             }
         }
-        private HslColor _hslColor;
+        private HslColor _hslColor = new(0, 0, 85); // default color
         [JsonIgnore]
         public HslColor HslColor
         {
