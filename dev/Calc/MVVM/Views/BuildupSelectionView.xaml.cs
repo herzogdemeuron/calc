@@ -13,19 +13,13 @@ namespace Calc.MVVM.Views
 {
     public partial class BuildupSelectionView : Window
     {
-
-        private readonly DispatcherTimer hoverTimer;
-        private ListViewItem currentItem;
+        private double originalLeft;
         private readonly BuildupSelectionViewModel BuildupSelectionVM;
 
         public BuildupSelectionView(BuildupSelectionViewModel buildupSelectionVM)
         {
             this.BuildupSelectionVM = buildupSelectionVM;
             this.DataContext = BuildupSelectionVM;
-
-            hoverTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(0.5)};
-            hoverTimer.Tick += HoverTimerTick;
-
             InitializeComponent();
         }
 
@@ -95,49 +89,39 @@ namespace Calc.MVVM.Views
         }
 
 
-        private void ListViewItemMouseEnter(object sender, MouseEventArgs e)
+        private void WindowLocationChanged(object sender, RoutedEventArgs e)
         {
-            if (sender is ListViewItem item)
+            originalLeft = this.Left;
+        }
+
+        private void WindowLocationChanged(object sender, EventArgs e)
+        {
+            originalLeft = this.Left;
+        }
+
+        private async void BuildupSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            await BuildupSelectionVM.HandleBuilupSelectionChangedAsync();
+        }
+
+        private void Expander_Expanded(object sender, RoutedEventArgs e)
+        {
+            Expander expander = sender as Expander;
+            if (expander != null)
             {
-                if (item == currentItem) return;
-                ImagePreviewPopup.IsOpen = false;
-                currentItem = item;
-                hoverTimer.Stop();
-                hoverTimer.Start();                
+                this.Width += 670; // border width + margin
+                this.Left = originalLeft; // Keep the left position fixed
             }
         }
 
-        private void ListViewItemMouseLeave(object sender, MouseEventArgs e)
+        private void Expander_Collapsed(object sender, RoutedEventArgs e)
         {
-            ImagePreviewPopup.IsOpen = false;
-            currentItem = null;
-            hoverTimer.Stop();
-        }
-
-        private void ListViewItemMouseMove(object sender, MouseEventArgs e)
-        {
-            if (!ImagePreviewPopup.IsOpen) return;
-            ImagePreviewPopup.Placement = System.Windows.Controls.Primitives.PlacementMode.Relative;
-            ImagePreviewPopup.HorizontalOffset = e.GetPosition(this).X;
-            ImagePreviewPopup.VerticalOffset = e.GetPosition(this).Y;
-        }
-
-        private async void HoverTimerTick(object sender, EventArgs e)
-        {
-            hoverTimer.Stop();
-            if (currentItem != null && IsMouseOverTarget(currentItem))
+            Expander expander = sender as Expander;
+            if (expander != null)
             {
-                ImagePreviewPopup.IsOpen = true;
-                var buildup = currentItem.DataContext as Buildup;
-                await BuildupSelectionVM.LoadImage(buildup);
+                this.Width -= 670;
+                this.Left = originalLeft; // Keep the left position fixed
             }
-        }
-
-        private bool IsMouseOverTarget(UIElement target)
-        {
-            Point position = Mouse.GetPosition(target);
-            Rect bounds = VisualTreeHelper.GetDescendantBounds(target);
-            return bounds.Contains(position);
         }
 
 

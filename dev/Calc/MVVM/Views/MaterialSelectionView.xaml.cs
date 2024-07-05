@@ -13,16 +13,6 @@ namespace Calc.MVVM.Views
     {
         private double originalLeft; // used to store the original left position of the window, for window ajustment when expander is expanded or collapsed
 
-        private void WindowLocationChanged(object sender, RoutedEventArgs e)
-        {
-            originalLeft = this.Left;
-        }
-
-        private void WindowLocationChanged(object sender, EventArgs e)
-        {
-            originalLeft = this.Left;
-        }
-
         private readonly MaterialSelectionViewModel MaterialSelectionVM;
         public Material SelectedMaterial { get => MaterialSelectionVM.SelectedMaterial; }
 
@@ -96,6 +86,16 @@ namespace Calc.MVVM.Views
         private void SourceCheckChanged(object sender, RoutedEventArgs e)
         {
             MaterialSelectionVM.HandleSourceCheckChanged();
+        }
+
+        private void WindowLocationChanged(object sender, RoutedEventArgs e)
+        {
+            originalLeft = this.Left;
+        }
+
+        private void WindowLocationChanged(object sender, EventArgs e)
+        {
+            originalLeft = this.Left;
         }
 
         private void Expander_Expanded(object sender, RoutedEventArgs e)

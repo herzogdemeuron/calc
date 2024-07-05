@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 
@@ -74,6 +75,30 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
+        private Visibility loadingVisibility = Visibility.Collapsed;
+        public Visibility LoadingVisibility
+        {
+            get => loadingVisibility;
+            set
+            {
+                if (value == loadingVisibility) return;
+                loadingVisibility = value;
+                OnPropertyChanged(nameof(LoadingVisibility));
+            }
+        }
+
+        private string imageText;
+        public string ImageText
+        {
+            get => imageText;
+            set
+            {
+                if (value == imageText) return;
+                imageText = value;
+                OnPropertyChanged(nameof(ImageText));
+            }
+        }
+
         public BuildupSelectionViewModel(DirectusStore store)
         {
             directusStore = store;
@@ -90,6 +115,9 @@ namespace Calc.MVVM.ViewModels
 
         public void PrepareBuildupSelection(Buildup buildup)
         {
+            CurrentImage = null;
+            ImageText = "Image Preview";
+
             currentSearchText = "";
             SelectedBuildup = buildup;
             SelectedBuildupGroup = defaultGroup;
@@ -132,27 +160,55 @@ namespace Calc.MVVM.ViewModels
             };
         }
 
-        public async Task LoadImage(Buildup buildup)
+        private async Task LoadBuildupImageAsync(Buildup buildup)
         {
-            CurrentImage = null;
-            var imageItem = buildup.BuildupImage;
+            if (buildup == null) return;
 
             // try to load image if should
-            if (imageItem != null && imageItem.Id != null && imageItem.ImageData == null)
+            var imageItem = buildup.BuildupImage;
+
+            if (imageItem != null && imageItem.Id != null && !imageItem.ImageLoaded)
             {
                 var data = await directusStore.LoadImageAsync(imageItem.Id);
                 imageItem.ImageData = data;
+                imageItem.ImageLoaded = true;
+            }
+        }
+
+        public async Task HandleBuilupSelectionChangedAsync()
+        {
+
+            CurrentImage = null;
+            ImageText = "";
+
+            if (SelectedBuildup == null)
+            {
+                LoadingVisibility = Visibility.Collapsed;
+                ImageText = "Image Preview";
+                return;
+            }
+            else
+            {
+                LoadingVisibility = Visibility.Visible;
+                ImageText = "";
             }
 
-            // get the image data
-            var imageData = imageItem?.ImageData;
+
+            var loadId = SelectedBuildup?.Id;
+            await LoadBuildupImageAsync(SelectedBuildup);
+
+            // refresh the current image if the selected buildup has not changed
+            if (SelectedBuildup?.Id != loadId) return;
+
+            var imageData = SelectedBuildup.BuildupImage.ImageData;
             if (imageData != null)
             {
                 CurrentImage = ImageHelper.ByteArrayToBitmap(imageData);
             }
             else
             {
-                CurrentImage = ImageHelper.GetNoImage();
+                LoadingVisibility = Visibility.Collapsed;
+                ImageText = "No Image Available";
             }
         }
 

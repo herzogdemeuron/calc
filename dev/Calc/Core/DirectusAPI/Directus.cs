@@ -277,7 +277,7 @@ namespace Calc.Core.DirectusAPI
 
             try
             {
-                byte[] imageData = await httpRetryPolicy.ExecuteAsync(async () => await httpClient.GetByteArrayAsync(imageUrl));
+                byte[] imageData = await httpClient.GetByteArrayAsync(imageUrl);
                 return imageData;
             }
             catch

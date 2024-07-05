@@ -8,13 +8,15 @@
         d:DataContext="{d:DesignInstance Type=local:BuildupSelectionViewModel}"
         mc:Ignorable="d"
         Height="600"
-        Width="450"        
+        Width="400"        
         MinHeight="500"
         MinWidth="450"
         WindowStartupLocation="CenterScreen"
         Icon="pack://application:,,,/CalcMVVM;component/Resources/icon_main_small.png"
         Title="Buildup Selection"
-        Topmost="True">
+        Topmost="True"
+        LocationChanged="WindowLocationChanged"
+        Loaded="WindowLocationChanged">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -31,9 +33,7 @@
             <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="0"/>
             <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="55"/>
@@ -56,6 +56,7 @@
                 <ColumnDefinition Width="60"/>
                 <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"/>
@@ -126,30 +127,37 @@
                         PreviewMouseWheel="ListViewPreviewMouseWheel"
                         ItemsSource="{Binding AllBuildupsView}"
                         SelectedItem="{Binding SelectedBuildup}"
+                        SelectionChanged="BuildupSelectionChanged"
                         Style="{StaticResource ListViewStyle}" d:ItemsSource="{d:SampleData ItemCount=5}">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemBuildupStyle}">
                         <EventSetter Event="MouseDoubleClick" Handler="ListViewItemBuildupDoubleClick"/>
-                        <EventSetter Event="MouseEnter" Handler="ListViewItemMouseEnter"/>
-                        <EventSetter Event="MouseLeave" Handler="ListViewItemMouseLeave"/>
-                        <EventSetter Event="MouseMove" Handler="ListViewItemMouseMove"/>
                     </Style>
                 </ListView.ItemContainerStyle>
             </ListView>
-            
-            <Popup x:Name="ImagePreviewPopup" AllowsTransparency="True">
-                <Border Background="Transparent" BorderThickness="1" CornerRadius="4">
-                    <Grid>
-                        <Image gif:ImageBehavior.AnimatedSource="/CalcMVVM;component/Resources/DT_logo.gif"
-                               HorizontalAlignment="Center"
-                               Width="50" Height="50"/>
-                        <Image Source="{Binding CurrentImage}" Width="800" Height="600"/>
-                    </Grid>                    
-                </Border>
-            </Popup>
-
         </Grid>
-            
+
+        <Expander Grid.Column="2"
+          Grid.Row="2"
+          Grid.RowSpan="2"
+          Margin="0,5,0,10"
+          ExpandDirection="Right" 
+          HorizontalAlignment="Stretch"
+          Expanded="Expander_Expanded"
+          Collapsed="Expander_Collapsed">
+            <Border Margin="10,0,10,0" Width="650" Background="Transparent" BorderThickness="1" BorderBrush="Silver" CornerRadius="4">
+                <Grid>
+                    <Image gif:ImageBehavior.AnimatedSource="/CalcMVVM;component/Resources/DT_logo.gif"
+                           HorizontalAlignment="Center"
+                           Visibility="{Binding LoadingVisibility}"
+                           Width="50" Height="50"/>
+                    <Image Source="{Binding CurrentImage}"/>
+                    <Label Content="{Binding ImageText}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
+                </Grid>
+            </Border>
+
+        </Expander>
+
         <Grid x:Name="ButtonGrid"
               Grid.Column="1"
               Grid.Row="7">
@@ -158,6 +166,7 @@
                 <ColumnDefinition Width="60"/>
                 <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="10"/>
             </Grid.ColumnDefinitions>
             <Button Content="OK"
                     Grid.Column="1"
@@ -169,10 +178,6 @@
                     Grid.Column="3"
                     Style="{StaticResource ButtonStyle}"
                     Click="CancelClicked"/>
-
         </Grid>
-
-
     </Grid>
-
 </Window>
