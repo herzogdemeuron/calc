@@ -2,24 +2,30 @@
 using Calc.Core.Objects.Materials;
 using Calc.MVVM.Helpers;
 using Calc.MVVM.ViewModels;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace Calc.MVVM.Views
 {
     public partial class BuildupSelectionView : Window
     {
 
-
+        private readonly DispatcherTimer hoverTimer;
+        private ListViewItem currentItem;
         private readonly BuildupSelectionViewModel BuildupSelectionVM;
-        public Buildup SelectedBuildup { get => BuildupSelectionVM.SelectedBuildup; }
 
         public BuildupSelectionView(BuildupSelectionViewModel buildupSelectionVM)
         {
             this.BuildupSelectionVM = buildupSelectionVM;
             this.DataContext = BuildupSelectionVM;
+
+            hoverTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(0.5)};
+            hoverTimer.Tick += HoverTimerTick;
+
             InitializeComponent();
         }
 
@@ -93,28 +99,45 @@ namespace Calc.MVVM.Views
         {
             if (sender is ListViewItem item)
             {
-                var buildup = item.DataContext as Buildup;
-
-                BuildupSelectionVM.LoadImage(buildup);
-                
-                ImagePreviewPopup.IsOpen = true;
-                
+                if (item == currentItem) return;
+                ImagePreviewPopup.IsOpen = false;
+                currentItem = item;
+                hoverTimer.Stop();
+                hoverTimer.Start();                
             }
         }
 
         private void ListViewItemMouseLeave(object sender, MouseEventArgs e)
         {
             ImagePreviewPopup.IsOpen = false;
-            BuildupSelectionVM.ResetImage();
+            currentItem = null;
+            hoverTimer.Stop();
         }
 
         private void ListViewItemMouseMove(object sender, MouseEventArgs e)
         {
             if (!ImagePreviewPopup.IsOpen) return;
-
             ImagePreviewPopup.Placement = System.Windows.Controls.Primitives.PlacementMode.Relative;
             ImagePreviewPopup.HorizontalOffset = e.GetPosition(this).X;
             ImagePreviewPopup.VerticalOffset = e.GetPosition(this).Y;
+        }
+
+        private async void HoverTimerTick(object sender, EventArgs e)
+        {
+            hoverTimer.Stop();
+            if (currentItem != null && IsMouseOverTarget(currentItem))
+            {
+                ImagePreviewPopup.IsOpen = true;
+                var buildup = currentItem.DataContext as Buildup;
+                await BuildupSelectionVM.LoadImage(buildup);
+            }
+        }
+
+        private bool IsMouseOverTarget(UIElement target)
+        {
+            Point position = Mouse.GetPosition(target);
+            Rect bounds = VisualTreeHelper.GetDescendantBounds(target);
+            return bounds.Contains(position);
         }
 
 

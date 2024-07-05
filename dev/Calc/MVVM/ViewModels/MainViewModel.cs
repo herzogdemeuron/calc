@@ -124,7 +124,6 @@ namespace Calc.MVVM.ViewModels
         {
             var buildup = BuildupSelectionVM.SelectedBuildup;
             NodeTreeVM.SelectedNodeItem.NodeBuildupItem.SetBuildup(setMain,buildup);
-            //BuildupSelectionVM.Reset();
         }
 
         public void HandleSideClicked()

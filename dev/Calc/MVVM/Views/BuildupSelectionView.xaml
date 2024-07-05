@@ -4,6 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Calc.MVVM.ViewModels"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
         d:DataContext="{d:DesignInstance Type=local:BuildupSelectionViewModel}"
         mc:Ignorable="d"
         Height="600"
@@ -137,8 +138,13 @@
             </ListView>
             
             <Popup x:Name="ImagePreviewPopup" AllowsTransparency="True">
-                <Border BorderThickness="0" Background="Transparent" CornerRadius="4">
-                    <Image Source="{Binding BuildupCreationVM.CurrentImage}" Width="500" Height="400"/>
+                <Border Background="Transparent" BorderThickness="1" CornerRadius="4">
+                    <Grid>
+                        <Image gif:ImageBehavior.AnimatedSource="/CalcMVVM;component/Resources/DT_logo.gif"
+                               HorizontalAlignment="Center"
+                               Width="50" Height="50"/>
+                        <Image Source="{Binding CurrentImage}" Width="800" Height="600"/>
+                    </Grid>                    
                 </Border>
             </Popup>
 

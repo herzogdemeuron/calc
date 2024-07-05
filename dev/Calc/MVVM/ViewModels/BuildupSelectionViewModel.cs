@@ -6,19 +6,23 @@ using Calc.MVVM.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Media.Imaging;
 
 namespace Calc.MVVM.ViewModels
 {
 
     public class BuildupSelectionViewModel : INotifyPropertyChanged
     {
+
+        private readonly DirectusStore directusStore;
         public ICollectionView AllBuildupsView { get; }
         public List<StandardModel> AllStandards { get; }
         public List<BuildupGroup> AllBuildupGroups { get; }
 
         private string currentSearchText;
-        private BuildupGroup defaultGroup = new BuildupGroup() { Name = "All Groups", Id = 0 };
+        private readonly BuildupGroup defaultGroup = new BuildupGroup() { Name = "All Groups", Id = 0 };
 
         private BuildupGroup selectedBuildupGroup;
         public BuildupGroup SelectedBuildupGroup
@@ -58,14 +62,30 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
+        private BitmapImage currentImage;
+        public BitmapImage CurrentImage
+        {
+            get => currentImage;
+            set
+            {
+                if (value == currentImage) return;
+                currentImage = value;
+                OnPropertyChanged(nameof(CurrentImage));
+            }
+        }
+
         public BuildupSelectionViewModel(DirectusStore store)
         {
+            directusStore = store;
+
             AllBuildupsView = CollectionViewSource.GetDefaultView(store.BuildupsAll);
             AllStandards = new List<StandardModel>(store.StandardsAll.Select(s => new StandardModel(s)));
 
             AllBuildupGroups = new List<BuildupGroup>() { defaultGroup };
             AllBuildupGroups.AddRange(store.BuildupGroupsAll);
             SelectedBuildupGroup = defaultGroup;
+
+            
         }
 
         public void PrepareBuildupSelection(Buildup buildup)
@@ -112,14 +132,30 @@ namespace Calc.MVVM.ViewModels
             };
         }
 
-        public void LoadImage(Buildup buildup)
+        public async Task LoadImage(Buildup buildup)
         {
+            CurrentImage = null;
+            var imageItem = buildup.BuildupImage;
+
+            // try to load image if should
+            if (imageItem != null && imageItem.Id != null && imageItem.ImageData == null)
+            {
+                var data = await directusStore.LoadImageAsync(imageItem.Id);
+                imageItem.ImageData = data;
+            }
+
+            // get the image data
+            var imageData = imageItem?.ImageData;
+            if (imageData != null)
+            {
+                CurrentImage = ImageHelper.ByteArrayToBitmap(imageData);
+            }
+            else
+            {
+                CurrentImage = ImageHelper.GetNoImage();
+            }
         }
 
-        public void ResetImage()
-        {
-
-        }
 
         public void HandleSearchTextChanged(string currentText)
         {

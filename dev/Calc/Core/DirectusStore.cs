@@ -461,6 +461,16 @@ namespace Calc.Core
             return await Directus.UploadFileAsync("json", jsonPath, folderId, newFileName);
         }
 
+        public async Task<byte[]> LoadImageAsync(string imageId)
+        {
+            if (Directus.Authenticated == false)
+            {
+                return null;
+            }
+
+            return await Directus.LoadImageByIdAsync(imageId);
+        }
+
         protected virtual void OnProgressChanged(int progress)
         {
             ProgressChanged?.Invoke(this, progress);

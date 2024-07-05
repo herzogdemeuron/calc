@@ -10,7 +10,8 @@ namespace Calc.Core.Objects.Buildups
         [JsonProperty("id")]
         public string Id { get; set; }
 
-        //[JsonIgnore]
-        //public BitmapImage
+        [JsonIgnore]
+        public byte[] ImageData { get; set; }
+
     }
 }

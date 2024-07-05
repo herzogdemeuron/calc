@@ -270,6 +270,22 @@ namespace Calc.Core.DirectusAPI
             var uploadResponse = JsonConvert.DeserializeObject<DirectusFileUploadResponse>(responseContent);
             return uploadResponse?.Data?.Id; // Return the UUID of the uploaded image
         }
+
+        public async Task<byte[]> LoadImageByIdAsync(string imageId)
+        {
+            string imageUrl = $"{baseUrl}/assets/{imageId}";
+
+            try
+            {
+                byte[] imageData = await httpRetryPolicy.ExecuteAsync(async () => await httpClient.GetByteArrayAsync(imageUrl));
+                return imageData;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
     }
 
     internal class LoginResponseData
