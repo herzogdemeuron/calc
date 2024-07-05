@@ -169,12 +169,13 @@ namespace Calc.MVVM.Views
         private void SetBuildupWithTag(string tag)
         {
             bool setMain = tag.Contains("Main");
+            var canSelect = MainVM.HandleSelectingBuildup(setMain);
 
-            MainVM.HandleSelectingBuildup(setMain);
+            if (!canSelect) return;
 
             var buildupSelectionView = new BuildupSelectionView(MainVM.BuildupSelectionVM);
-
             var result = buildupSelectionView.ShowDialog();
+
             if (result == true)
             {
                 MainVM.HandleBuildupSelected(setMain);

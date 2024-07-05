@@ -68,23 +68,18 @@ namespace Calc.MVVM.ViewModels
             SelectedBuildupGroup = defaultGroup;
         }
 
-        public void Reset()
-        {
-            SelectedBuildup = null;
-            SelectedBuildupGroup = defaultGroup;
-        }
-
         public void PrepareBuildupSelection(Buildup buildup)
         {
             currentSearchText = "";
             SelectedBuildup = buildup;
+            SelectedBuildupGroup = defaultGroup;
+            FilterBuildupsWithType();
         }
 
         public void HandleSourceCheckChanged()
         {
             FilterBuildupsWithType();
         }
-
 
         private void FilterBuildupsWithType()
         {

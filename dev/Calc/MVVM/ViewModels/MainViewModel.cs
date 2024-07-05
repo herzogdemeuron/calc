@@ -111,18 +111,20 @@ namespace Calc.MVVM.ViewModels
             NodeTreeVM.HandleNodeItemSelectionChanged(selectedBranch);
         }
 
-        public void HandleSelectingBuildup(bool setMain)
+        public bool HandleSelectingBuildup(bool setMain)
         {
+            if (NodeTreeVM.SelectedNodeItem == null) return false;
             var buildupItem = NodeTreeVM.SelectedNodeItem.NodeBuildupItem;
             var buildup = setMain ? buildupItem.Buildup1 : buildupItem.Buildup2;
             BuildupSelectionVM.PrepareBuildupSelection(buildup);
+            return true;
         }
 
         public void HandleBuildupSelected(bool setMain)
         {
             var buildup = BuildupSelectionVM.SelectedBuildup;
             NodeTreeVM.SelectedNodeItem.NodeBuildupItem.SetBuildup(setMain,buildup);
-            BuildupSelectionVM.Reset();
+            //BuildupSelectionVM.Reset();
         }
 
         public void HandleSideClicked()
