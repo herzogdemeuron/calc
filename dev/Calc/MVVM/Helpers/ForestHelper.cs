@@ -23,7 +23,7 @@ namespace Calc.MVVM.Helpers
             List<CalcElement> calcElements = await Task.Run(() => elementCreator.CreateCalcElements(customParamSettings, parameters));
 
             var leftElements = forest.PlantTrees(calcElements);
-            var darkForest = CreateDarkForest("Left Over Elements", leftElements);
+            var darkForest = CreateDarkForest("Residues", leftElements);
 
             return darkForest;
         }
@@ -37,12 +37,12 @@ namespace Calc.MVVM.Helpers
         public static Forest CreateDarkForest(string name, List<CalcElement> calcElements)
         {
 
-            Forest darkForest = new Forest() { Name = name, Trees = new List<Tree>() };
+            Forest darkForest = new Forest() { Name = name, IsDark = true, Trees = new List<Tree>() };
 
             //create trees for each category
             foreach (var category in calcElements.Select(e => e.Category).Distinct())
             {
-                Tree tree = MakeCategoryTree(category);
+                Tree tree = MakeCategoryTree(category, darkForest);
                 darkForest.Trees.Add(tree);
             }
 
@@ -55,9 +55,9 @@ namespace Calc.MVVM.Helpers
         /// make a tree for a category
         /// </summary>
         /// <param name="categoryName"></param>
-        private static Tree MakeCategoryTree(string categoryName)
+        private static Tree MakeCategoryTree(string categoryName, Forest forest)
         {
-            Tree tree = new Tree();
+            Tree tree = new Tree() { ParentForest = forest };
             tree.Name = categoryName;
 
             SimpleCondition condition = new SimpleCondition() { Method = "equals", Parameter = "Category", Value = categoryName };

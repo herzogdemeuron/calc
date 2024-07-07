@@ -10,6 +10,8 @@ namespace Calc.Core.Objects.GraphNodes
     public class Forest : IHasProject, IGraphNode
     {
         [JsonIgnore]
+        public bool IsDark { get; set; } = false; // if the forest is a dark forest ( for left over elements )
+        [JsonIgnore]
         public List<CalcElement> Elements { get => GetElements(); }
         [JsonIgnore]
         public double TotalArea { get => SubBranches.Sum(s => s.TotalArea); }

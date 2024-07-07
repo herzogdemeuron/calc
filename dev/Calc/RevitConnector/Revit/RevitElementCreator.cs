@@ -38,13 +38,17 @@ namespace Calc.RevitConnector.Revit
 
             List<CalcElement> result = new List<CalcElement>();
 
+            var opt = new Options();
             var elementDepot = new FilteredElementCollector(doc)
                   .WhereElementIsNotElementType()
-                  .WhereElementIsViewIndependent()
+                  .WhereElementIsViewIndependent()                  
                   .Where(x =>
                   x.Category != null &&
+                  x.Category.BuiltInCategory != BuiltInCategory.OST_IOSModelGroups &&
+                  x.Category.BuiltInCategory != BuiltInCategory.OST_Cameras &&
                   x.GetTypeId() != null &&
-                  x.GetTypeId() != ElementId.InvalidElementId).ToList();
+                  x.GetTypeId() != ElementId.InvalidElementId &&
+                  x.get_Geometry(opt) != null).ToList();
 
             foreach (RevitBasicParamConfig paramConfig in paramConfigs)
             {

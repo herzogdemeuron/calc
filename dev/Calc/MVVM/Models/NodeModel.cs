@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Dynamic;
 using System.Windows;
 using System.Windows.Media;
 
@@ -18,6 +19,7 @@ namespace Calc.MVVM.Models
     }
     public class NodeModel : INotifyPropertyChanged
     {
+        public bool IsDark { get => GetIsDark(); }
         public string Name { get => GetNodeName(); }
         public string BranchParameterName { get => GetParameterName(); }
         public bool? BranchParameterIsInstance { get => CheckIfParameterIsInstance(); }
@@ -130,6 +132,14 @@ namespace Calc.MVVM.Models
             }
         }
 
+        public bool GetIsDark()
+        {
+            if (Host is Forest forest)
+                return forest.IsDark;
+            else
+                return ParentNodeItem.IsDark;
+        }
+
         public string GetNodeName()
         {
             if (Host is Tree tree)
@@ -166,7 +176,6 @@ namespace Calc.MVVM.Models
         {
             OnPropertyChanged(nameof(UnderlineVisibility));
             OnPropertyChanged(nameof(LabelColorVisible));
-
             OnPropertyChanged(nameof(Host));
             OnPropertyChanged(nameof(CategorizedCalculation));
 

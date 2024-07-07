@@ -91,7 +91,7 @@ namespace Calc.Core.Objects.GraphNodes
                 return GetColorIdentifier(Buildups.ToList());
             }
         }
-        private HslColor _hslColor = new(0, 0, 85); // default color
+        private HslColor _hslColor = new(0, 0, 85);
         [JsonIgnore]
         public HslColor HslColor
         {
@@ -166,7 +166,7 @@ namespace Calc.Core.Objects.GraphNodes
             Parameter = "No Parameter";
             Method = "No Method";
             Value = "No Value";
-            //HslColor = new HslColor(0, 0, 85);
+            HslColor = new HslColor(0, 0, 85); // default color
         }
 
         public Branch(List<CalcElement> elements) : this()

@@ -38,6 +38,7 @@ namespace Calc.MVVM.Models
         public NodeModel CurrentForestItem { get; set; } = new NodeModel(null, null);
         public NodeModel CurrentDarkForestItem { get; set; } = new NodeModel(null, null);
 
+        private List<NodeModel> ForestSelectionRecord = new List<NodeModel>(); // record which forest were selected, then to reset the color, for performance
         public ObservableCollection<NodeModel> NodeSource
         { get => new ObservableCollection<NodeModel> { CurrentForestItem, CurrentDarkForestItem }; }
 
@@ -99,6 +100,7 @@ namespace Calc.MVVM.Models
             }
 
             CurrentForestItem.NotifyNodePropertyChange();
+            CurrentDarkForestItem.NotifyNodePropertyChange();
 
         }
 
@@ -109,6 +111,7 @@ namespace Calc.MVVM.Models
             if (CurrentForestItem == null) return;
             SelectedNodeItem = nodeItem;
             NodeHelper.HideAllLabelColor(CurrentForestItem);
+            NodeHelper.HideAllLabelColor(CurrentDarkForestItem);
 
             if (BranchesSwitch)
             {
@@ -123,7 +126,20 @@ namespace Calc.MVVM.Models
             }
 
             CurrentForestItem.NotifyNodePropertyChange();
+            CurrentDarkForestItem.NotifyNodePropertyChange();
+
             MediatorFromVM.Broadcast("NodeItemSelectionChanged");
+
+            // add the forest to the record
+            if (selectedNodeItem.IsDark)
+            {
+                ForestSelectionRecord.Add(CurrentDarkForestItem);
+            }
+            else
+            {
+                ForestSelectionRecord.Add(CurrentForestItem);
+            }
+
         }
 
         public void ColorNodesToBuildup()
@@ -146,11 +162,19 @@ namespace Calc.MVVM.Models
         {
             if (CurrentForestItem == null) return;
             NodeHelper.HideAllLabelColor(CurrentForestItem);
+            NodeHelper.HideAllLabelColor(CurrentDarkForestItem);
+
             MediatorToView.Broadcast("ViewDeselectTreeView"); //send command to the view to deselect treeview
             SelectedNodeItem = null;
             CurrentForestItem.NotifyNodePropertyChange(); //better ways to do this?
+            CurrentDarkForestItem.NotifyNodePropertyChange();
+
             MediatorFromVM.Broadcast("NodeItemSelectionChanged");
-            visualizer.ResetView(CurrentForestItem.SubNodeItems.Select(x => x.Host).ToList());
+            // take the unique forest from the record
+            var forestItems = ForestSelectionRecord.Distinct().ToList();
+            var resetItems = forestItems.SelectMany(f => f.SubNodeItems).Select(n => n.Host).ToList();
+            visualizer.ResetView(resetItems);
+            ForestSelectionRecord.Clear();
         }
 
 
