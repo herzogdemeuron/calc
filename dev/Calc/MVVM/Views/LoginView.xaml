@@ -37,7 +37,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="90"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
         <Label Content="{Binding Title}"
@@ -68,15 +69,17 @@
                    Click="LoginQuitClicked"/>
         </StackPanel>
 
-        <Label x:Name="MessageLabel"
-         Content="{Binding Message}"
-         Grid.Row="2"
+        <TextBlock x:Name="MessageLabel"
+         Text="{Binding Message}"
+         Grid.Row="3"
          Grid.ColumnSpan="3"
          Padding="0,10,0,0"
          HorizontalAlignment="Center"
          VerticalAlignment="Bottom"
          Foreground="Crimson"
-         d:Content="Error while login!"/>
+         Width="330"
+         TextWrapping="Wrap"
+         d:Text="Error while login! Error while login! Error while login! Error while login!"/>
 
         <Grid x:Name="LoginGrid"
               Grid.Row="1"
