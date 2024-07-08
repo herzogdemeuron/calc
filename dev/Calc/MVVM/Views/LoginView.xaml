@@ -12,7 +12,7 @@
         Width="350"
         WindowStartupLocation="CenterScreen"
         Icon="pack://application:,,,/CalcMVVM;component/Resources/icon_main_small.png"
-        Title="CALC"
+        Title="Calc Login"
         Loaded="WindowLoaded"
         Topmost="True">
 

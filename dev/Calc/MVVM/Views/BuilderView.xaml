@@ -14,7 +14,7 @@
         Width="900" MinWidth="800"
         WindowStartupLocation="CenterScreen"
         Icon="pack://application:,,,/CalcMVVM;component/Resources/icon_builder_small.png"
-        Title="CALC BUILDER"
+        Title="Calc Builder"
         Topmost="True">
 
     <Window.Resources>
@@ -191,7 +191,7 @@
                     <ColumnDefinition Width="120"/>
                 </Grid.ColumnDefinitions>
 
-  
+
 
                 <ComboBox   x:Name="BuildupGroupComboBox"
                             Text = "Buildup Group"
@@ -201,9 +201,6 @@
                             SelectedItem="{Binding BuildupCreationVM.SelectedBuildupGroup}"
                             Style="{StaticResource RoundedComboBoxStyle}"
                             DisplayMemberPath="Name"/>
-
-
-
 
                 <TextBox x:Name="BuildupNameTextBox"
                         Grid.Column="0"
