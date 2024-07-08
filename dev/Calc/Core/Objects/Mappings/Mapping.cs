@@ -1,6 +1,6 @@
 ﻿using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.GraphNodes;
-using Speckle.Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;

@@ -10,7 +10,7 @@ using Calc.Core.Objects.Results;
 using Calc.Core.Objects.Standards;
 using Calc.MVVM.Helpers.Mediators;
 using Calc.MVVM.Models;
-using Speckle.Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

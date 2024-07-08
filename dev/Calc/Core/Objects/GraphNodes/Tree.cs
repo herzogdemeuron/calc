@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using Calc.Core.Filtering;
-using Speckle.Newtonsoft.Json;
+using Newtonsoft.Json;
 using Calc.Core.Objects.Mappings;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Elements;

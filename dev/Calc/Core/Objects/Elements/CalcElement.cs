@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Speckle.Newtonsoft.Json;
+using Newtonsoft.Json;
 using Calc.Core.Color;
 using System;
-using Speckle.Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Converters;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Collections.ObjectModel;

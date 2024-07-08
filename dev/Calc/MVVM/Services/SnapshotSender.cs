@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.IO;
-using Speckle.Newtonsoft.Json;
+using Newtonsoft.Json;
 
 namespace Calc.MVVM.Services
 {

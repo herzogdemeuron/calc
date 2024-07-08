@@ -5,7 +5,7 @@ using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Elements;
 using Calc.Core.Objects.Mappings;
 using Calc.Core.Objects.Results;
-using Speckle.Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

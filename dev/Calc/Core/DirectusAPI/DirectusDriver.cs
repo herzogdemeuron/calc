@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Speckle.Newtonsoft.Json;
+using Newtonsoft.Json;
 using GraphQL;
 using GraphQL.Client.Http;
 using Polly;

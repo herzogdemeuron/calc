@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Collections.Generic;
 using GraphQL;
-using Speckle.Newtonsoft.Json;
+using Newtonsoft.Json;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Mappings;
 using System.Linq;

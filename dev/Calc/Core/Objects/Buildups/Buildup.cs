@@ -1,7 +1,7 @@
 ﻿using Calc.Core.Calculations;
 using Calc.Core.Objects.Results;
 using Calc.Core.Objects.Standards;
-using Speckle.Newtonsoft.Json;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;

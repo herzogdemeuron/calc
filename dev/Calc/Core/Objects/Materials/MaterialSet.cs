@@ -1,6 +1,6 @@
 ﻿using Calc.Core.Calculations;
 using Calc.Core.Objects.Buildups;
-using Speckle.Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;

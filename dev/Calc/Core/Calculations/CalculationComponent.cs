@@ -4,7 +4,7 @@ using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Materials;
 using Calc.Core.Objects.Results;
-using Speckle.Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;

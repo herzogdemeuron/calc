@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
-using Speckle.Newtonsoft.Json;
+using Newtonsoft.Json;
 using Calc.Core.Filtering;
 using Calc.Core.Objects;
 
