@@ -8,7 +8,7 @@ namespace Calc.MVVM.Helpers
 {
     public class MappingHelper
     {
-        public static Forest ApplyMappingToForestItem(NodeModel ForestItem,DirectusStore store, Mapping newMapping, int maxBuildups)
+        public static Forest ApplyMappingToForestItem(NodeModel ForestItem,CalcStore store, Mapping newMapping, int maxBuildups)
         {
             var brokenForest = new Forest()
             {
@@ -28,7 +28,7 @@ namespace Calc.MVVM.Helpers
             return brokenForest;
         }
 
-        public static Mapping CopyCurrentMapping(DirectusStore store)
+        public static Mapping CopyCurrentMapping(CalcStore store)
         {
             return new Mapping("CurrentMapping", store.ForestSelected);
         }

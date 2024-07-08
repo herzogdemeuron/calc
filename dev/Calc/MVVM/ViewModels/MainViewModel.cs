@@ -12,7 +12,7 @@ namespace Calc.MVVM.ViewModels
 {
     public class MainViewModel: INotifyPropertyChanged
     {
-        public DirectusStore Store { get; set; }
+        public CalcStore Store { get; set; }
         public ForestViewModel ForestVM { get; set; }
         public MappingViewModel MappingVM { get; set; }
         public MappingErrorViewModel MappingErrorVM { get; set; }
@@ -23,7 +23,7 @@ namespace Calc.MVVM.ViewModels
         public CalculationViewModel CalculationVM { get; set; }
         public BuildupSelectionViewModel BuildupSelectionVM { get; set; }
 
-        public MainViewModel(DirectusStore store, IElementCreator elementCreator, IVisualizer visualizer)
+        public MainViewModel(CalcStore store, IElementCreator elementCreator, IVisualizer visualizer)
         {
             Store = store;
             VisibilityVM = new VisibilityViewModel();

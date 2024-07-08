@@ -17,7 +17,7 @@ namespace Calc.MVVM.ViewModels
     public class BuildupSelectionViewModel : INotifyPropertyChanged
     {
 
-        private readonly DirectusStore directusStore;
+        private readonly CalcStore calcStore;
         public ICollectionView AllBuildupsView { get; }
         public List<StandardModel> AllStandards { get; }
         public List<BuildupGroup> AllBuildupGroups { get; }
@@ -99,9 +99,9 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        public BuildupSelectionViewModel(DirectusStore store)
+        public BuildupSelectionViewModel(CalcStore store)
         {
-            directusStore = store;
+            calcStore = store;
 
             AllBuildupsView = CollectionViewSource.GetDefaultView(store.BuildupsAll);
             AllStandards = new List<StandardModel>(store.StandardsAll.Select(s => new StandardModel(s)));
@@ -169,7 +169,7 @@ namespace Calc.MVVM.ViewModels
 
             if (imageItem != null && imageItem.Id != null && !imageItem.ImageLoaded)
             {
-                var data = await directusStore.LoadImageAsync(imageItem.Id);
+                var data = await calcStore.LoadImageAsync(imageItem.Id);
                 imageItem.ImageData = data;
                 imageItem.ImageLoaded = true;
             }

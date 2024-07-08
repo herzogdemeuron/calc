@@ -12,11 +12,11 @@ namespace Calc.MVVM.ViewModels
 {
     public class MappingViewModel : INotifyPropertyChanged
     {
-        private DirectusStore store;
+        private CalcStore store;
         public Forest BrokenMappingForest { get; set; }
-        public MappingViewModel(DirectusStore directusStore)
+        public MappingViewModel(CalcStore calcStore)
         {
-            store = directusStore;
+            store = calcStore;
         }
 
         public void HandleMappingSelectionChanged(Mapping mapping)

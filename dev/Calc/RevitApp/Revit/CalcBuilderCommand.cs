@@ -41,7 +41,7 @@ namespace Calc.RevitApp.Revit
                 BuildupComponentCreator componentCreator = new BuildupComponentCreator(uidoc);
                 RevitImageCreator imageCreator = new RevitImageCreator(doc);
 
-                BuilderViewModel builderViewModel = new BuilderViewModel(loginVM.DirectusStore, componentCreator, imageCreator);
+                BuilderViewModel builderViewModel = new BuilderViewModel(loginVM.CalcStore, componentCreator, imageCreator);
                 BuilderView builderView = new BuilderView(builderViewModel);
 
                 builderView.Show();

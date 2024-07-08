@@ -14,7 +14,7 @@ namespace Calc.MVVM.Services
         /// <summary>
         /// save the snapshot, returns if saved and the error message
         /// </summary>
-        public static async Task<(bool?,string)> SaveSnapshot(DirectusStore store, List<LayerResult> layerResults, string newName)
+        public static async Task<(bool?,string)> SaveSnapshot(CalcStore store, List<LayerResult> layerResults, string newName)
         {
             if (layerResults == null) return (null, null);
             if (layerResults.Count == 0) return (null, null);

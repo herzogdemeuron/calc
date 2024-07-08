@@ -16,9 +16,9 @@ using System.Threading.Tasks;
 namespace Calc.RevitApp.Revit
 {
     [Transaction(TransactionMode.Manual)]
-    public class CalcMainCommand : IExternalCommand
+    public class CalcProjectCommand : IExternalCommand
     {
-        static CalcMainCommand()
+        static CalcProjectCommand()
         {
             // dependencies are resolved at the point of command loading rather than command execution
             // so we implement the assembly resolve event here
@@ -36,7 +36,7 @@ namespace Calc.RevitApp.Revit
                 AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
                 Document doc = commandData.Application.ActiveUIDocument.Document;
 
-                LoginViewModel loginVM = new LoginViewModel(true, "Calc Login");
+                LoginViewModel loginVM = new LoginViewModel(true, "Calc Project Login");
                 LoginView loginView = new LoginView(loginVM);
                 loginView.ShowDialog();
 
@@ -44,7 +44,7 @@ namespace Calc.RevitApp.Revit
 
                 RevitElementCreator elementCreator = new RevitElementCreator(doc);
                 RevitVisualizer visualizer = new RevitVisualizer( doc, new RevitExternalEventHandler());
-                MainViewModel mainViewModel = new MainViewModel(loginVM.DirectusStore, elementCreator, visualizer);
+                MainViewModel mainViewModel = new MainViewModel(loginVM.CalcStore, elementCreator, visualizer);
                 MainView mainView = new MainView(mainViewModel);
 
                 mainView.Show();

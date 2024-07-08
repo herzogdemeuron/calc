@@ -14,7 +14,7 @@ namespace Calc.MVVM.ViewModels
     public class CalculationViewModel : INotifyPropertyChanged
     {
         private readonly NodeTreeModel NodeTreeVM;
-        public DirectusStore Store => NodeTreeVM.Store;
+        public CalcStore Store => NodeTreeVM.Store;
         public NodeModel CurrentNodeItem => NodeTreeVM.SelectedNodeItem ?? NodeTreeVM.CurrentForestItem;
         private IGraphNode HostNode => CurrentNodeItem?.Host;
         public string Name

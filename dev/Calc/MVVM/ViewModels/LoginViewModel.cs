@@ -17,11 +17,11 @@ namespace Calc.MVVM.ViewModels
     {
         private readonly bool MainOrBuilder;
         public Directus DirectusInstance { get; set; }
-        public DirectusStore DirectusStore { get; set; }
+        public CalcStore CalcStore { get; set; }
         public string Title { get; set; }
         public string Password { get; set; }
         private readonly CancellationTokenSource cTokenSource = new CancellationTokenSource();
-        public bool FullyPrepared => DirectusInstance.Authenticated && DirectusStore.AllDataLoaded;
+        public bool FullyPrepared => DirectusInstance.Authenticated && CalcStore.AllDataLoaded;
         private bool authenticated = false;
 
         private bool canOK = true;
@@ -175,9 +175,9 @@ namespace Calc.MVVM.ViewModels
 
         private async Task LoadData()
         {
-            DirectusStore = new DirectusStore(DirectusInstance);
+            CalcStore = new CalcStore(DirectusInstance);
 
-            DirectusStore.ProgressChanged += (s, p) =>
+            CalcStore.ProgressChanged += (s, p) =>
             {
                 Dispatcher.CurrentDispatcher.Invoke(() =>
                 {
@@ -187,11 +187,11 @@ namespace Calc.MVVM.ViewModels
 
             if (MainOrBuilder)
             {
-                await DirectusStore.GetMainData(cTokenSource.Token);
+                await CalcStore.GetMainData(cTokenSource.Token);
             }
             else
             {
-                await DirectusStore.GetBuilderData(cTokenSource.Token);
+                await CalcStore.GetBuilderData(cTokenSource.Token);
             }
         }
 
@@ -246,7 +246,7 @@ namespace Calc.MVVM.ViewModels
 
                 // for main prepare for project selection
                 CanOK = true;
-                SelectionList = DirectusStore.ProjectsAll.OfType<IShowName>().ToList();
+                SelectionList = CalcStore.ProjectsAll.OfType<IShowName>().ToList();
                 SelectionText = "Select Project:";
                 SelectionVisibility = Visibility.Visible;
                 LoginVisibility = Visibility.Collapsed;
@@ -259,7 +259,7 @@ namespace Calc.MVVM.ViewModels
                 if (Selected != null)
                 {
                     var project = (Project)Selected;
-                    DirectusStore.ProjectSelected = project;
+                    CalcStore.ProjectSelected = project;
                     return true;
                 }
                 else

@@ -19,7 +19,7 @@ using Calc.Core.Objects.Standards;
 
 namespace Calc.Core
 {
-    public class DirectusStore
+    public class CalcStore
     {
         public event EventHandler<int> ProgressChanged;
 
@@ -86,11 +86,11 @@ namespace Calc.Core
         private FolderStorageDriver FolderDriver { get; set; }
         private CustomParamSettingStorageDriver CustomParamSettingDriver { get; set; }
 
-        public DirectusStore(Directus directus)
+        public CalcStore(Directus directus)
         {
             if (directus.Authenticated == false)
             {
-                throw new Exception("DirectusStore: Directus not authenticated");
+                throw new Exception("CalcStore: Directus not authenticated");
             }
 
             DirectusDriver.DirectusInstance = directus;
@@ -432,7 +432,7 @@ namespace Calc.Core
         {
             if (Directus.Authenticated == false)
             {
-                throw new Exception("DirectusStore: Directus not authenticated");
+                throw new Exception("CalcStore: Directus not authenticated");
             }
 
             if (string.IsNullOrEmpty(imagePath))
@@ -449,7 +449,7 @@ namespace Calc.Core
         {
             if (Directus.Authenticated == false)
             {
-                throw new Exception("DirectusStore: Directus not authenticated");
+                throw new Exception("CalcStore: Directus not authenticated");
             }
 
             if (string.IsNullOrEmpty(jsonPath))

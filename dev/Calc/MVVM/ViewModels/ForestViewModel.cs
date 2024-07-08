@@ -12,11 +12,11 @@ namespace Calc.MVVM.ViewModels
 {
     public class ForestViewModel : INotifyPropertyChanged
     {
-        private readonly DirectusStore store;
+        private readonly CalcStore store;
         private IElementCreator elementCreator;
-        public ForestViewModel(DirectusStore directusStore, IElementCreator elementCreator)
+        public ForestViewModel(CalcStore calcStore, IElementCreator elementCreator)
         {
-            store = directusStore;
+            store = calcStore;
             this.elementCreator = elementCreator;
         }
         public async Task HandleForestSelectionChanged(Forest forest)

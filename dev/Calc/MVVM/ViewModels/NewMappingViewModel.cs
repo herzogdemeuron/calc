@@ -13,7 +13,7 @@ namespace Calc.MVVM.ViewModels
 {
     public class NewMappingViewModel : INotifyPropertyChanged
     {
-        private DirectusStore store;
+        private CalcStore store;
 
 
         private string newName;
@@ -37,9 +37,9 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(MappingsListView));
             }
         }
-        public NewMappingViewModel(DirectusStore directusStore)
+        public NewMappingViewModel(CalcStore calcStore)
         {
-            store = directusStore;
+            store = calcStore;
         }
         public void HandleNewMappingClicked()
         {

@@ -15,12 +15,12 @@ namespace Calc.MVVM.ViewModels
 {
     public class BuilderViewModel: INotifyPropertyChanged
     {
-        public DirectusStore Store { get; set; }
+        public CalcStore Store { get; set; }
         public BuildupCreationViewModel BuildupCreationVM { get; set; }
         public VisibilityViewModel VisibilityVM { get; set; }
         public MaterialSelectionViewModel MaterialSelectionVM { get; set; }
 
-        public BuilderViewModel(DirectusStore store, IBuildupComponentCreator builupComponentCreator, IImageSnapshotCreator imageSnapshotCreator)
+        public BuilderViewModel(CalcStore store, IBuildupComponentCreator builupComponentCreator, IImageSnapshotCreator imageSnapshotCreator)
         {
             Store = store;
             VisibilityVM = new VisibilityViewModel();

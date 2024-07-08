@@ -12,12 +12,12 @@ namespace Calc.MVVM.ViewModels
 
     public class LoadingViewModel : INotifyPropertyChanged  // deprecated
     {
-        private readonly DirectusStore store;
+        private readonly CalcStore store;
         public List<Project> AllProjects { get => store?.ProjectsAll;}
 
-        public LoadingViewModel(DirectusStore directusStore)
+        public LoadingViewModel(CalcStore calcStore)
         {
-            store = directusStore;
+            store = calcStore;
         }
 
         public async Task HandleProjectSelectedAsync(Project project)

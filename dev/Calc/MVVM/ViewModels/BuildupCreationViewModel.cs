@@ -26,7 +26,7 @@ namespace Calc.MVVM.ViewModels
 
     public class BuildupCreationViewModel : INotifyPropertyChanged
     {
-        private readonly DirectusStore store;
+        private readonly CalcStore store;
         private readonly IBuildupComponentCreator buildupComponentCreator;
         private readonly IImageSnapshotCreator imageSnapshotCreator;
 
@@ -286,7 +286,7 @@ namespace Calc.MVVM.ViewModels
         public double? BuildupGe { get => AllCalculationComponents?.Where(c => c.Amount.HasValue).Sum(c => c.Ge); }
 
 
-        public BuildupCreationViewModel(DirectusStore store, IBuildupComponentCreator bcCreator, IImageSnapshotCreator imgCreator)
+        public BuildupCreationViewModel(CalcStore store, IBuildupComponentCreator bcCreator, IImageSnapshotCreator imgCreator)
         {
             this.store = store;
             buildupComponentCreator = bcCreator;

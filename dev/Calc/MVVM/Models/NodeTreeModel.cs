@@ -16,7 +16,7 @@ namespace Calc.MVVM.Models
 {
     public class NodeTreeModel : INotifyPropertyChanged
     {
-        public DirectusStore Store;
+        public CalcStore Store;
         public List<Buildup> AllBuildups => Store.BuildupsAll;
         public int MaxBuildups { get; set; } = 2;
         public bool BranchesSwitch { get; set; }
@@ -42,9 +42,9 @@ namespace Calc.MVVM.Models
         public ObservableCollection<NodeModel> NodeSource
         { get => new ObservableCollection<NodeModel> { CurrentForestItem, CurrentDarkForestItem }; }
 
-        public NodeTreeModel(DirectusStore directusStore, IVisualizer visualizer)
+        public NodeTreeModel(CalcStore calcStore, IVisualizer visualizer)
         {
-            Store = directusStore;
+            Store = calcStore;
             this.visualizer = visualizer;
             BranchesSwitch = true;
             MediatorFromVM.Register("ForestSelectionChanged", mapping => UpdateNodeSource((Mapping)mapping));
