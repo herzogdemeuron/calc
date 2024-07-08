@@ -12,12 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="gong-wpf-dragdrop" Version="3.2.1" />
-    <PackageReference Include="Polly" Version="7.2.4" />
-    <PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
 
