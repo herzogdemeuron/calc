@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
+﻿using GraphQL;
 using GraphQL.Client.Http;
-using Calc.Core.GraphQL.Serializer;
-using System.Threading.Tasks;
+using GraphQL.Client.Serializer.Newtonsoft;
 using Newtonsoft.Json;
-using System.Text;
-using System.Diagnostics;
-using System.Net;
+using Polly;
+using Polly.Retry;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Polly;
-using GraphQL;
-using Polly.Retry;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading.Tasks;
+
 
 namespace Calc.Core.DirectusAPI
 {
