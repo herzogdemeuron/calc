@@ -30,8 +30,26 @@ namespace Calc.Core.Objects.Buildups
         private bool MaterialUnitsMatch { get => CheckUnitsMatch(); }
 
         // material mappings
-        public Material MainMaterial { get; set; }
-        public Material SubMaterial { get; set; }
+        private Material mainMaterial;
+        public Material MainMaterial
+        {
+            get => mainMaterial;
+            set
+            {
+                mainMaterial = value;
+                OnPropertyChanged(nameof(MainMaterial));
+            }
+        }
+        private Material subMaterial;
+        public Material SubMaterial
+            {
+            get => subMaterial;
+            set
+            {
+                subMaterial = value;
+                OnPropertyChanged(nameof(SubMaterial));
+            }
+        }
         public double SubMaterialRatio { get; set; } = 0;
         public double MainMaterialRatio { get => 1 - SubMaterialRatio; }
         public bool HasMainMaterial { get => MainMaterial != null; }

@@ -54,15 +54,27 @@ namespace Calc.MVVM.Helpers
         /// <summary>
         /// make a tree for a category
         /// </summary>
-        /// <param name="categoryName"></param>
         private static Tree MakeCategoryTree(string categoryName, Forest forest)
         {
             Tree tree = new Tree() { ParentForest = forest };
             tree.Name = categoryName;
 
-            SimpleCondition condition = new SimpleCondition() { Method = "equals", Parameter = "Category", Value = categoryName };
-            ConditionContainer conditionContainer = new ConditionContainer() { Type = "SimpleCondition", Condition = condition };
-            tree.FilterConfig = new GroupCondition() { Conditions = new List<ConditionContainer>() { conditionContainer }, Operator = "and" };
+            SimpleCondition condition = new SimpleCondition() 
+            { 
+                Method = "equals", 
+                Parameter = "Category", 
+                Value = categoryName 
+            };
+            ConditionContainer conditionContainer = new ConditionContainer() 
+            { 
+                Type = "SimpleCondition", 
+                Condition = condition 
+            };
+            tree.FilterConfig = new GroupCondition() 
+            { 
+                Conditions = new List<ConditionContainer>() { conditionContainer }, 
+                Operator = "and" 
+            };
             tree.BranchConfig = new List<string>() { "type:Type Name" };
 
             return tree;

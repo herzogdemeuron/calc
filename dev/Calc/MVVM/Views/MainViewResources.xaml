@@ -157,57 +157,56 @@
                     </Style>
                 </Border.Style>
 
-                <StackPanel Orientation="Vertical">
-                    <TextBlock x:Name="txtName">
-                        <TextBlock.Style>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="Text" Value="{Binding Title}" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True">
-                                        <Setter Property="FontWeight" Value="Bold" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Style>
-                    </TextBlock>
-
-                    <Grid x:Name="UnderlineGrid"
-                        Height="3">
-                        <Border Height="3" 
-                            VerticalAlignment="Bottom" 
-                            CornerRadius="2" 
-                            Background="{Binding HslColor, Converter={StaticResource ColorConverter}}">
-                            <Border.Style>
-                                <Style TargetType="Border">
-                                    <Setter Property="Visibility" Value="Hidden" />
+                <StackPanel Orientation="Horizontal">
+                    
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock x:Name="txtName">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="{Binding Title}" />
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsValid}" Value="True">
-                                            <Setter Property="Visibility" Value="Visible"/>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True">
+                                            <Setter Property="FontWeight" Value="Bold" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
-                            </Border.Style>
-                        </Border>
-                    </Grid>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <Grid x:Name="UnderlineGrid"
+                            Height="3">
+                            <Border Height="3" 
+                                VerticalAlignment="Bottom" 
+                                CornerRadius="2" 
+                                Background="{Binding HslColor, Converter={StaticResource ColorConverter}}">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Visibility" Value="Hidden" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsValid}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+
+                    <TextBlock x:Name="ThicknessMark"
+                              Text="{Binding Thickness, StringFormat='{}{0} mm', TargetNullValue=''}"
+                              FontSize="8"
+                              Foreground="DimGray"
+                              Margin="5,0,0,0"
+                              VerticalAlignment="Center"/>                    
                 </StackPanel>
             </Border>
 
-            <StackPanel Orientation="Vertical"
-                        Margin="2,0,0,0"
-                        VerticalAlignment="Stretch">
-
-                <TextBlock x:Name="ThicknessMark"
-                 Text="{Binding Thickness, StringFormat='{}{0} mm', TargetNullValue=''}"
-                 FontSize="8"
-                 FontWeight="SemiBold"
-                 VerticalAlignment="Top"
-                 Margin="0,5,0,0"/>
+            <Grid Margin="3,3,0,0">
 
                 <TextBlock x:Name="NormalizerMark"
                             Text="Normalizer"
                             FontSize="8"
-                           FontWeight="SemiBold"
-                           VerticalAlignment="Bottom">
+                           FontWeight="SemiBold">
                     <TextBlock.Style>
                         <Style TargetType="TextBlock">
                             <Setter Property="Visibility" Value="Collapsed"/>
@@ -220,7 +219,22 @@
                     </TextBlock.Style>
                 </TextBlock>
 
-            </StackPanel>
+                <StackPanel Orientation="Vertical">
+                    <TextBlock x:Name="MaterialName1"
+                               Text="{Binding MainMaterial.Name}"
+                               Height="10"
+                               FontWeight="SemiBold"
+                               Foreground="DimGray"
+                               FontSize="8"/>
+                    <TextBlock x:Name="MaterialName2"
+                               Text="{Binding SubMaterial.Name}"
+                               Height="10"
+                               FontWeight="SemiBold"
+                               Foreground="DimGray"
+                               FontSize="8"/>
+                </StackPanel>
+                
+            </Grid>
         </StackPanel>
     </DataTemplate>
     
@@ -334,6 +348,7 @@
                        VerticalAlignment="Center"
                        FontSize="11"
                        Margin="5,0,0,0"
+                       FontWeight="SemiBold"
                        Foreground ="Gray">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">
