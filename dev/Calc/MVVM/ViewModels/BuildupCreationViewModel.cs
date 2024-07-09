@@ -29,6 +29,7 @@ namespace Calc.MVVM.ViewModels
         private readonly CalcStore store;
         private readonly IBuildupComponentCreator buildupComponentCreator;
         private readonly IImageSnapshotCreator imageSnapshotCreator;
+        private readonly IElementSender elementSender;
 
         public List<LcaStandard> StandardsAll { get => store.StandardsAll; }
         public List<Unit> BuildupUnitsAll { get => store.UnitsAll; }
@@ -49,7 +50,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(MainWarning));
             }
         }
-
 
         private ObservableCollection<BuildupComponent> buildupComponents = new ObservableCollection<BuildupComponent>();
         public ObservableCollection<BuildupComponent> BuildupComponents
@@ -286,11 +286,12 @@ namespace Calc.MVVM.ViewModels
         public double? BuildupGe { get => AllCalculationComponents?.Where(c => c.Amount.HasValue).Sum(c => c.Ge); }
 
 
-        public BuildupCreationViewModel(CalcStore store, IBuildupComponentCreator bcCreator, IImageSnapshotCreator imgCreator)
+        public BuildupCreationViewModel(CalcStore store, IBuildupComponentCreator bcCreator, IImageSnapshotCreator imgCreator, IElementSender elemSender)
         {
             this.store = store;
             buildupComponentCreator = bcCreator;
             imageSnapshotCreator = imgCreator;
+            elementSender = elemSender;
         }
 
         public void HandleLoaded()
@@ -547,6 +548,8 @@ namespace Calc.MVVM.ViewModels
             {
                 string imageUuid = await store.UploadImageAsync(currentImagePath, NewBuildupName); // todo: make this more robust
                 var buildup = CreateBuildup(imageUuid);
+                var speckleId = await SendElementsToSpeckle();
+
                 if (updateId != null)
                 {
                     buildup.Id = updateId.Value;
@@ -559,6 +562,7 @@ namespace Calc.MVVM.ViewModels
                     SaveMessage = "New Buildup saved.";
                     CheckSaveOrUpdate();
                 }
+
             }
             catch (Exception ex)
             {
@@ -573,8 +577,16 @@ namespace Calc.MVVM.ViewModels
             SavingVisibility = Visibility.Collapsed;
             IsNotSaving = true;
 
+
             return true;
 
+        }
+
+        private async Task<string> SendElementsToSpeckle()
+        {
+            var elementIds = BuildupComponents.SelectMany(c => c.ElementIds).ToList();
+            var modelName = NewBuildupName;
+            return await elementSender.SendToSpeckle(elementIds, modelName);
         }
 
         private bool CheckCanSave()

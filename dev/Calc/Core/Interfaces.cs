@@ -23,6 +23,14 @@ namespace Calc.Core.Interfaces
     {
         public string CreateImageSnapshot(string baseName);
     }
+
+    /// <summary>
+    /// send elements to speckle
+    /// </summary>
+    public interface IElementSender
+    {
+        public Task<string> SendToSpeckle(List<int> elementIds, string modelName);
+    }
     
 
     public interface IVisualizer

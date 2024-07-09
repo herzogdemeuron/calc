@@ -5,6 +5,7 @@ using Calc.MVVM.Helpers.Mediators;
 using Calc.MVVM.ViewModels;
 using Calc.MVVM.Views;
 using Calc.RevitConnector.Revit;
+using SpeckleSender;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -40,8 +41,9 @@ namespace Calc.RevitApp.Revit
 
                 BuildupComponentCreator componentCreator = new BuildupComponentCreator(uidoc);
                 RevitImageCreator imageCreator = new RevitImageCreator(doc);
+                ElementSender elementSender = new ElementSender(doc);
 
-                BuilderViewModel builderViewModel = new BuilderViewModel(loginVM.CalcStore, componentCreator, imageCreator);
+                BuilderViewModel builderViewModel = new BuilderViewModel(loginVM.CalcStore, componentCreator, imageCreator, elementSender);
                 BuilderView builderView = new BuilderView(builderViewModel);
 
                 builderView.Show();

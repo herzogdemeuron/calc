@@ -20,12 +20,12 @@ namespace Calc.MVVM.ViewModels
         public VisibilityViewModel VisibilityVM { get; set; }
         public MaterialSelectionViewModel MaterialSelectionVM { get; set; }
 
-        public BuilderViewModel(CalcStore store, IBuildupComponentCreator builupComponentCreator, IImageSnapshotCreator imageSnapshotCreator)
+        public BuilderViewModel(CalcStore store, IBuildupComponentCreator builupComponentCreator, IImageSnapshotCreator imageSnapshotCreator, IElementSender elementSender)
         {
             Store = store;
             VisibilityVM = new VisibilityViewModel();
             MaterialSelectionVM = new MaterialSelectionViewModel(store);
-            BuildupCreationVM = new BuildupCreationViewModel(Store, builupComponentCreator, imageSnapshotCreator);
+            BuildupCreationVM = new BuildupCreationViewModel(Store, builupComponentCreator, imageSnapshotCreator, elementSender);
         }
 
         public void HandleWindowLoaded()

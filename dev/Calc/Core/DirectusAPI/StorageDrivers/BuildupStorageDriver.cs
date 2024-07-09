@@ -121,8 +121,8 @@ namespace Calc.Core.DirectusAPI.Drivers
                     ).ToArray(),
 
                 image = new
-                {
-                    id = SendItem.BuildupImage.Id,
+                { 
+                    id = SendItem.BuildupImage?.Id??null,  // fix null image bug
                     storage = "cloud",
                     filename_download = $"{SendItem.Name}.png"
                 },
@@ -143,6 +143,7 @@ namespace Calc.Core.DirectusAPI.Drivers
                 grey_energy_fabrication_total = SendItem.BuildupGe,
                 layer_snapshot = JsonConvert.SerializeObject(SendItem.LayerSnapshot)
             };
+
 
             var variables = new Dictionary<string, object>();
 
