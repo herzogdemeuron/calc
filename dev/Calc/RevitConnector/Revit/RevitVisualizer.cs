@@ -82,6 +82,11 @@ namespace Calc.RevitConnector.Revit
         {
             view.TemporaryViewModes.DeactivateMode(TemporaryViewMode.TemporaryHideIsolate);
             List<string> elementIds = node?.ElementIds ?? new List<string>();
+            var sectionBoxId = GetSectionBoxId(view);
+            if (sectionBoxId != null)
+            {
+                elementIds.Add(sectionBoxId);
+            }
             view.IsolateElementsTemporary(StringsToElementIds(elementIds));
             
         }
@@ -138,6 +143,18 @@ namespace Calc.RevitConnector.Revit
             {
                 view.SetElementOverrides(elementId, overrideSettings);
             }
+        }
+
+        private string GetSectionBoxId(View view)
+        {
+            // the section box id is the view id - 1
+            // see: https://forums.autodesk.com/t5/revit-api-forum/get-section-box-of-3d-view/td-p/9795973
+            if (view is View3D view3D && view3D.IsSectionBoxActive)
+            {
+                var sid = view3D.Id.IntegerValue - 1;
+                return sid.ToString();
+            }
+            return null;
         }
 
         private ElementId GetPatternId()
