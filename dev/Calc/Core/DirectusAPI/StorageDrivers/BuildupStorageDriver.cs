@@ -36,6 +36,7 @@ namespace Calc.Core.DirectusAPI.Drivers
                     image {
                         id
                         }
+                    speckle_model_id  
                     calculation_components {
                         id
                         position
@@ -134,7 +135,8 @@ namespace Calc.Core.DirectusAPI.Drivers
 
                 carbon_a1a3 = SendItem.BuildupGwp,
                 grey_energy_fabrication_total = SendItem.BuildupGe,
-                layer_snapshot = JsonConvert.SerializeObject(SendItem.LayerSnapshot)
+                layer_snapshot = JsonConvert.SerializeObject(SendItem.LayerSnapshot),
+                speckle_model_id = SendItem.SpeckleModelId
             };
 
             var inputDict = input.GetType()

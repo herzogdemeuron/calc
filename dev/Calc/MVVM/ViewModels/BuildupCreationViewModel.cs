@@ -514,7 +514,7 @@ namespace Calc.MVVM.ViewModels
         }
 
 
-        private Buildup CreateBuildup(string imageUuid)
+        private Buildup CreateBuildup(string imageUuid, string speckleModelId)
         {
             var buildup = new Buildup
             {
@@ -535,6 +535,11 @@ namespace Calc.MVVM.ViewModels
                 buildup.BuildupImage = new BuildupImage() { Id = imageUuid };
             }
 
+            if (!string.IsNullOrEmpty(speckleModelId))
+            {
+                buildup.SpeckleModelId = speckleModelId;
+            }
+
             return buildup;
         }
 
@@ -547,8 +552,8 @@ namespace Calc.MVVM.ViewModels
             try
             {
                 string imageUuid = await store.UploadImageAsync(currentImagePath, NewBuildupName); // todo: make this more robust
-                var buildup = CreateBuildup(imageUuid);
-                var speckleId = await SendElementsToSpeckle();
+                var speckleModelId = await SendElementsToSpeckle();
+                var buildup = CreateBuildup(imageUuid, speckleModelId);
 
                 if (updateId != null)
                 {
@@ -582,11 +587,13 @@ namespace Calc.MVVM.ViewModels
 
         }
 
+        /// <summary>
+        /// send elements to speckle, get the branch id 
+        /// </summary>
         private async Task<string> SendElementsToSpeckle()
         {
             var elementIds = BuildupComponents.SelectMany(c => c.ElementIds).ToList();
-            var modelName = NewBuildupName;
-            return await elementSender.SendToSpeckle(elementIds, modelName);
+            return await elementSender.SendToSpeckle(elementIds, NewBuildupCode, NewBuildupDescription);
         }
 
         private bool CheckCanSave()

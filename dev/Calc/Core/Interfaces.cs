@@ -29,7 +29,7 @@ namespace Calc.Core.Interfaces
     /// </summary>
     public interface IElementSender
     {
-        public Task<string> SendToSpeckle(List<int> elementIds, string modelName);
+        public Task<string> SendToSpeckle(List<int> elementIds, string modelName, string description);
     }
     
 
