@@ -57,7 +57,9 @@ namespace SpeckleSender
             speckleConverter.SetContextDocument(new RevitDocumentAggregateCache(doc));
             var speckleBases = speckleConverter.ConvertToSpeckle(elementList);
             var commitObject = new Base();
-            commitObject["@all"] = speckleBases;
+            commitObject["@elements"] = speckleBases;
+            commitObject["model_code"] = modelCode;
+            commitObject["description"] = description;
 
             var transport = new ServerTransport(account, builderProjectId);
             var objectId = await Operations.Send(commitObject, transport, true);
