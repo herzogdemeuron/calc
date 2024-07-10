@@ -118,14 +118,7 @@ namespace Calc.Core.DirectusAPI.Drivers
                     {
                         calc_standards_id = new { id = s.Standard.Id }
                     }
-                    ).ToArray(),
-
-                image = new
-                { 
-                    id = SendItem.BuildupImage?.Id??null,  // fix null image bug
-                    storage = "cloud",
-                    filename_download = $"{SendItem.Name}.png"
-                },
+                    ).ToArray(),          
 
                 calculation_components = SendItem.CalculationComponents.Select(
                     cc => new
@@ -144,6 +137,19 @@ namespace Calc.Core.DirectusAPI.Drivers
                 layer_snapshot = JsonConvert.SerializeObject(SendItem.LayerSnapshot)
             };
 
+            var inputDict = input.GetType()
+                        .GetProperties()
+                        .ToDictionary(prop => prop.Name, prop => prop.GetValue(input, null));
+
+            if (SendItem.BuildupImage != null)
+            {
+                inputDict.Add("image", new
+                {
+                    id = SendItem.BuildupImage.Id,
+                    storage = "cloud",
+                    filename_download = $"{SendItem.Name}.png"
+                });
+            }
 
             var variables = new Dictionary<string, object>();
 
@@ -151,7 +157,7 @@ namespace Calc.Core.DirectusAPI.Drivers
             {
                 variables.Add("id", SendItem.Id);
             }
-            variables.Add("input", input);
+            variables.Add("input", inputDict);
 
             return variables;
         }
