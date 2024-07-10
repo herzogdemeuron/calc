@@ -26,6 +26,19 @@ namespace Calc.Core.DirectusAPI.Drivers
             return response.Data;
         }
 
+        public static async Task<TDriver> GetSingle<TDriver, T>(IDriverGetSingle<T> storageDriver) where TDriver : IDriverGetSingle<T>
+        {
+            var request = CreateRequest(storageDriver.QueryGetSingle, storageDriver.GetVariables());
+            var response = await DirectusInstance.GraphQlQueryWithRetry<TDriver>(request);
+            if (response.Errors != null)
+            {
+                throw new Exception($"Error: {response.Errors[0].Message}");
+            }
+            // Update the driver with the retrieved item
+            storageDriver.GotItem = response.Data.GotItem;
+            return response.Data;
+        }
+
         public static async Task<TDriver> GetManySystem<TDriver,T>(IDriverGetManySystem<T> storageDriver) where TDriver : IDriverGetManySystem<T>
         {
             var request = CreateRequest(storageDriver.QueryGetManySystem, storageDriver.GetVariables());

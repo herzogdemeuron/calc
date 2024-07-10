@@ -22,7 +22,7 @@ namespace Calc.Core
     public class CalcStore
     {
         public event EventHandler<int> ProgressChanged;
-
+        public CalcConfig Config { get; set; }
         public Project ProjectSelected { get; set; } // the current project
         public bool AllDataLoaded { get; private set; } = false;
         public List<Unit> UnitsAll { get; set; }
@@ -74,6 +74,7 @@ namespace Calc.Core
 
 
         private Directus Directus { get; set; }
+        private CalcConfigStorageDriver CalcConfigDriver { get; set; }
         private ProjectStorageDriver ProjectDriver { get; set; }
         private StandardStorageDriver StandardDriver { get; set; }
         private MaterialStorageDriver MaterialDriver { get; set; }
@@ -96,6 +97,7 @@ namespace Calc.Core
             DirectusDriver.DirectusInstance = directus;
             Directus = directus;
 
+            CalcConfigDriver = new CalcConfigStorageDriver();
             ProjectDriver = new ProjectStorageDriver();
             StandardDriver = new StandardStorageDriver();
             MaterialDriver = new MaterialStorageDriver();
@@ -118,6 +120,14 @@ namespace Calc.Core
 
             try
             {
+                cancellationToken.ThrowIfCancellationRequested();
+                var configsDriver = await DirectusDriver.GetSingle<CalcConfigStorageDriver, CalcConfig>(CalcConfigDriver);
+                Config = configsDriver.GotItem;
+                if (Config == null)
+                {
+                    throw new Exception("No config found");
+                }
+
                 cancellationToken.ThrowIfCancellationRequested();
                 ProjectDriver = await DirectusDriver.GetMany<ProjectStorageDriver, Project>(ProjectDriver);
                 OnProgressChanged(5);
@@ -180,6 +190,14 @@ namespace Calc.Core
         {
             try
             {
+                cancellationToken.ThrowIfCancellationRequested();
+                var configsDriver = await DirectusDriver.GetSingle<CalcConfigStorageDriver, CalcConfig>(CalcConfigDriver);
+                Config = configsDriver.GotItem;
+                if (Config == null)
+                {
+                    throw new Exception("No config found");
+                }
+
                 cancellationToken.ThrowIfCancellationRequested();
                 StandardDriver = await DirectusDriver.GetMany<StandardStorageDriver,LcaStandard>(StandardDriver);
                 OnProgressChanged(10);

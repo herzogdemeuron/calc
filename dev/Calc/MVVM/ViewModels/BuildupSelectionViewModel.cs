@@ -200,7 +200,7 @@ namespace Calc.MVVM.ViewModels
             // refresh the current image if the selected buildup has not changed
             if (SelectedBuildup?.Id != loadId) return;
 
-            var imageData = SelectedBuildup.BuildupImage.ImageData;
+            var imageData = SelectedBuildup.BuildupImage?.ImageData;
             if (imageData != null)
             {
                 CurrentImage = ImageHelper.ByteArrayToBitmap(imageData);

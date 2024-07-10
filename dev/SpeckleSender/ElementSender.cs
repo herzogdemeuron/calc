@@ -1,4 +1,5 @@
 ﻿using Autodesk.Revit.DB;
+using Calc.Core;
 using Calc.Core.Interfaces;
 using Speckle.Core.Api;
 using Speckle.Core.Credentials;
@@ -18,10 +19,10 @@ namespace SpeckleSender
         private readonly string revitAppName;
         private readonly Client client;
         private readonly Account account;
-        private readonly string streamId = "edbf5f099d"; // hardcoded for now
+        private readonly string builderProjectId;
         private readonly Document doc;
 
-        public ElementSender(Document doc)
+        public ElementSender(Document doc, CalcConfig config)
         {
             this.doc = doc;
             revitAppName = HostApplications.Revit.GetVersion(HostAppVersion.v2023);
@@ -35,9 +36,10 @@ namespace SpeckleSender
 
             // make client
             account = new Account();
-            account.token = Environment.GetEnvironmentVariable("SPECKLE_TOKEN");
-            account.serverInfo = new ServerInfo { url = "https://herzogdemeuron.speckle.xyz/" };
+            account.token = config.SpeckleToken;
+            account.serverInfo = new ServerInfo { url = config.SpeckleServerUrl };
             client = new Client(account);
+            builderProjectId = config.SpeckleBuilderProjectId;
         }
 
 
@@ -57,12 +59,12 @@ namespace SpeckleSender
             var commitObject = new Base();
             commitObject["@all"] = speckleBases;
 
-            var transport = new ServerTransport(account, streamId);
+            var transport = new ServerTransport(account, builderProjectId);
             var objectId = await Operations.Send(commitObject, transport, true);
 
             string branchId;
             // ensure branch exists
-            var branch = await client.BranchGet(streamId, modelCode);
+            var branch = await client.BranchGet(builderProjectId, modelCode);
 
             if (branch == null)
             {
@@ -70,7 +72,7 @@ namespace SpeckleSender
                 branchId = await client.BranchCreate(
                     new BranchCreateInput
                     {
-                        streamId = streamId,
+                        streamId = builderProjectId,
                         name = modelCode,
                         description = description
                     });                
@@ -83,7 +85,7 @@ namespace SpeckleSender
                     await client.BranchUpdate( 
                         new BranchUpdateInput 
                         {
-                            streamId = streamId,
+                            streamId = builderProjectId,
                             id = branch.id,
                             name = modelCode,
                             description = description 
@@ -97,7 +99,7 @@ namespace SpeckleSender
             var commitId = await client.CommitCreate(
                                   new CommitCreateInput
                                   {
-                                      streamId = streamId,
+                                      streamId = builderProjectId,
                                       branchName = modelCode,
                                       objectId = objectId,
                                       message = $"[{revitUserName}]{revitFilePath}",
