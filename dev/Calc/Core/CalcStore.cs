@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
-using GraphQL.Client.Http;
-using Polly;
-using Calc.Core.DirectusAPI;
+﻿using Calc.Core.DirectusAPI;
 using Calc.Core.DirectusAPI.Drivers;
 using Calc.Core.Objects;
-using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Buildups;
-using Calc.Core.Objects.Mappings;
-using Calc.Core.Objects.Results;
-using Calc.Core.Objects.Materials;
-using System.Collections.ObjectModel;
-using System.Threading;
 using Calc.Core.Objects.Elements;
+using Calc.Core.Objects.GraphNodes;
+using Calc.Core.Objects.Mappings;
+using Calc.Core.Objects.Materials;
+using Calc.Core.Objects.Results;
 using Calc.Core.Objects.Standards;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Calc.Core
 {

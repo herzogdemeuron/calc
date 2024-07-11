@@ -122,11 +122,6 @@ namespace Calc.MVVM.ViewModels
             BuildupCreationVM.NewBuildupCode = text;
         }
 
-        public async Task HandleSendingResults(string newName)
-        {
-            //await SavingVM.HandleSendingResults(newName);
-        }
-
         public void HandleMessageClose()
         {
             MediatorToView.Broadcast("HideMessageOverlay");

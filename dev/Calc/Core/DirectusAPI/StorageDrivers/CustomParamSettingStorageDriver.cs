@@ -1,11 +1,6 @@
-﻿using System.Threading.Tasks;
-using System.Collections.Generic;
-using GraphQL;
+﻿using Calc.Core.Objects.Elements;
 using Newtonsoft.Json;
-using Calc.Core.Objects.Buildups;
-using Calc.Core.Objects.Materials;
-using Calc.Core.Objects;
-using Calc.Core.Objects.Elements;
+using System.Collections.Generic;
 
 namespace Calc.Core.DirectusAPI.Drivers
 {

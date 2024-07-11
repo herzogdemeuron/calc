@@ -1,7 +1,6 @@
 ﻿using Calc.Core;
 using Calc.Core.Calculations;
 using Calc.Core.Color;
-using Calc.Core.Helpers;
 using Calc.Core.Interfaces;
 using Calc.Core.Objects;
 using Calc.Core.Objects.Buildups;
@@ -10,7 +9,6 @@ using Calc.Core.Objects.Results;
 using Calc.Core.Objects.Standards;
 using Calc.MVVM.Helpers.Mediators;
 using Calc.MVVM.Models;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

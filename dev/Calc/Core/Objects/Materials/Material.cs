@@ -1,8 +1,6 @@
 ﻿using Calc.Core.Objects.Standards;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Calc.Core.Objects.Materials
 {
@@ -29,14 +27,10 @@ namespace Calc.Core.Objects.Materials
         [JsonProperty("thickness")]
         public double? Thickness { get; set; }
 
-        // deprecated
-/*        [JsonProperty("density")]
-        public double? Density { get; set; }*/
-
         [JsonProperty("material_unit")]
         public Unit MaterialUnit { get; set; }
         [JsonProperty("updated")]
-        public string? Updated { get; set; }
+        public string Updated { get; set; }
         [JsonProperty("carbon_a1a3")]
         public double? Gwp { get; set; }
 
@@ -47,7 +41,6 @@ namespace Calc.Core.Objects.Materials
         public double? Cost { get; set; }
 
         public string GroupName => MaterialType;
-        //public string SourceCode { get; set; }
 
         public void LinkStandard(List<LcaStandard> standards)
         {

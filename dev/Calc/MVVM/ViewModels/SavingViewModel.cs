@@ -7,13 +7,9 @@ using System.Threading.Tasks;
 
 namespace Calc.MVVM.ViewModels
 {
-
-    public class SavingViewModel : INotifyPropertyChanged
+    public class SavingViewModel
     {
-        private readonly NodeTreeModel nodetreeVM;
         private readonly CalculationViewModel calculationVM;
-        public double ElementCount { get; set; }
-
 
         public SavingViewModel(CalculationViewModel calVM)
         
@@ -63,19 +59,5 @@ namespace Calc.MVVM.ViewModels
             MediatorToView.Broadcast("ShowMainView");
         }
 
-        private NodeModel GetNodeToCalculate()
-        {
-            NodeModel CurrentForestItem = nodetreeVM.CurrentForestItem;
-            NodeModel SelectedNodeItem = nodetreeVM.SelectedNodeItem;
-            if (CurrentForestItem == null) return null;
-            NodeModel nodeToCalculate = SelectedNodeItem ?? CurrentForestItem;
-            return nodeToCalculate;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }
