@@ -1,12 +1,10 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Calc.Core.Objects;
+using Newtonsoft.Json;
 
-namespace Calc.Core.Objects.Results
+namespace Calc.Core.Snapshots
 {
 
-    public class Snapshot : IHasProject
+    public class ProjectResult : IHasProject
     {
         [JsonProperty("id")]
         public int Id { get; set; }

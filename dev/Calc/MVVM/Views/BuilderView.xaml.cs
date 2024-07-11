@@ -64,11 +64,6 @@ namespace Calc.MVVM.Views
             BuilderVM.HandleWindowLoaded();
         }
 
-        private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            BuilderVM.HandleWindowClosing();
-        }
-
         private void BuildupNameTextChanged(object sender, TextChangedEventArgs e)
         {
             var currentText = (sender as TextBox).Text;

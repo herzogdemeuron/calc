@@ -1,5 +1,5 @@
 ﻿using Calc.Core.Objects;
-using Calc.Core.Calculations;
+using Calc.Core.Calculation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 

@@ -1,5 +1,5 @@
 ﻿using Calc.Core;
-using Calc.Core.Calculations;
+using Calc.Core.Calculation;
 using Calc.Core.Color;
 using Calc.Core.Interfaces;
 using Calc.Core.Objects;

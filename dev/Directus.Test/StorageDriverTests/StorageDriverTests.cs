@@ -7,7 +7,7 @@ using CCalc.DirectusTest.StorageDriverTests;
 using System.Collections.Generic;
 using System.Text.Json;
 using System;
-using Calc.Core.Calculations;
+using Calc.Core.Calculation;
 using Calc.Core.Objects;
 using Calc.Core.Objects.Materials;
 using GraphQL.Client.Http;

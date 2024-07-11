@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
-using Calc.Core.Calculations;
+using Calc.Core.Calculation;
 using Calc.Core.Color;
 using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Materials;

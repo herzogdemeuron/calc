@@ -1,15 +1,9 @@
 ﻿using Calc.Core;
 using Calc.Core.Interfaces;
 using Calc.Core.Objects;
-using Calc.Core.Objects.Buildups;
-using Calc.Core.Objects.GraphNodes;
-using Calc.Core.Objects.Materials;
 using Calc.MVVM.Helpers.Mediators;
-using Calc.MVVM.Models;
 using System.ComponentModel;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
-using System.Windows.Media.Media3D;
 
 namespace Calc.MVVM.ViewModels
 {
@@ -36,11 +30,6 @@ namespace Calc.MVVM.ViewModels
         public async Task HandleSaveBuildup()
         {
             await BuildupCreationVM.HandleSaveBuildup();
-        }
-
-        public void HandleWindowClosing()
-        {
-            //NodeTreeVM.DeselectNodes();
         }
 
         public void HandleAmountClicked(string unit)

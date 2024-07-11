@@ -1,4 +1,4 @@
-﻿using Calc.Core.Calculations;
+﻿using Calc.Core.Calculation;
 using Calc.Core.Objects.Buildups;
 using Newtonsoft.Json;
 using System;

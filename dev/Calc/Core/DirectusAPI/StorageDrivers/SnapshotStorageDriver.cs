@@ -2,13 +2,13 @@
 using System.Linq;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using Calc.Core.Objects.Results;
+using Calc.Core.Snapshots;
 
 namespace Calc.Core.DirectusAPI.Drivers
 {
-    public class SnapshotStorageDriver : IDriverCreateSingle<Snapshot>
+    public class SnapshotStorageDriver : IDriverCreateSingle<ProjectResult>
     {
-        public Snapshot SendItem { get; set; }
+        public ProjectResult SendItem { get; set; }
 
         public string QueryCreateSingle { get; } = @"
             mutation CreateSnapshot($input: create_calc_snapshots_input!) {
@@ -19,7 +19,7 @@ namespace Calc.Core.DirectusAPI.Drivers
 
 
         [JsonProperty("create_calc_snapshots_item")]
-        public Snapshot CreatedItem { get; set; }
+        public ProjectResult CreatedItem { get; set; }
 
         public Dictionary<string, object> GetVariables()
         {

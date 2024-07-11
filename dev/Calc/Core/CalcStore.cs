@@ -6,8 +6,8 @@ using Calc.Core.Objects.Elements;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Mappings;
 using Calc.Core.Objects.Materials;
-using Calc.Core.Objects.Results;
 using Calc.Core.Objects.Standards;
+using Calc.Core.Snapshots;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -357,14 +357,14 @@ namespace Calc.Core
             }
         }
 
-        public async Task<(bool,string)> SaveSnapshot(Snapshot snapshot)
+        public async Task<(bool,string)> SaveSnapshot(ProjectResult snapshot)
         {
 
             SnapshotDriver.SendItem = snapshot;
 
             try
             {
-                await DirectusDriver.CreateSingle<SnapshotStorageDriver, Snapshot>(SnapshotDriver);
+                await DirectusDriver.CreateSingle<SnapshotStorageDriver, ProjectResult>(SnapshotDriver);
                 return (true, null);
 
             }

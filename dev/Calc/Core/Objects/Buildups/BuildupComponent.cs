@@ -1,14 +1,9 @@
-﻿using Calc.Core.Calculations;
+﻿using Calc.Core.Calculation;
 using Calc.Core.Color;
 using Calc.Core.Objects.BasicParameters;
-using Calc.Core.Objects.Materials;
-using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 
 namespace Calc.Core.Objects.Buildups
 

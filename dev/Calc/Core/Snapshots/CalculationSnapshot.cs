@@ -1,0 +1,28 @@
+﻿using Calc.Core.Objects;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+
+namespace Calc.Core.Snapshots
+{
+    public class CalculationSnapshot
+    {
+        [JsonProperty("project_number")]
+        public string ProjectNumber { get; set; }
+        [JsonProperty("project_name")]
+        public string ProjectName { get; set; }
+        [JsonProperty("classification_system")]
+        public string ClassificationSystem { get; set; } // forest
+        [JsonProperty("location")]
+        public string Location { get; set; }
+        [JsonProperty("lca_method")]
+        public string LcaMethod { get; set; }
+        [JsonProperty("life_span")]
+        public int LifeSpan { get; set; }
+        [JsonProperty("stages")]
+        public List<string> Stages { get; set; }
+        [JsonProperty("impact_categories")]
+        public List<string> ImpactCategories { get; set; }
+        [JsonProperty("buildups")]
+        public List<BuildupSnapshot> BuildupSnapshots { get; set; }
+    }
+}

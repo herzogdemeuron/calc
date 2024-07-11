@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using Calc.Core.Helpers;
+﻿using Calc.Core.Helpers;
 using Calc.Core.Objects;
 using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Elements;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Results;
+using System.Collections.Generic;
 
-namespace Calc.Core.Calculations
+namespace Calc.Core.Calculation
 {
     public class Calculator
     {
@@ -24,18 +20,20 @@ namespace Calc.Core.Calculations
         {
             if (branch == null) return;
 
-            var results = new List<LayerResult>();
-            var errorList = new List<ParameterError>();
-            CalculateBranch(branch, results, errorList);
+            (var resultList, var errorList) = CalculateBranch(branch);
 
-            branch.CalculationResults = results;
+            branch.CalculationResults = resultList;
             branch.ParameterErrors = errorList;
         }
 
-        private static void CalculateBranch(Branch branch, List<LayerResult> resultList, List<ParameterError> errorList)
+        private static (List<LayerResult>, List<ParameterError>) CalculateBranch(Branch branch)
         {
+            var resultList = new List<LayerResult>();
+            var errorList = new List<ParameterError>();
+
             var buildups = branch.Buildups;
-            if (buildups == null) return;
+            if (buildups == null) return (resultList, errorList);
+
 
             foreach (var element in branch.Elements)
             {
@@ -70,6 +68,8 @@ namespace Calc.Core.Calculations
                     }
                 }
             }
+
+            return (resultList, errorList);
         }
 
 

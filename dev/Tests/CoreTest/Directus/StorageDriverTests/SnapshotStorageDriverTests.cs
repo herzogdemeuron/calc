@@ -1,10 +1,10 @@
 ﻿using Calc.Core.Objects;
-using Calc.Core.Calculations;
+using Calc.Core.Calculation;
 using Calc.Core.DirectusAPI.Drivers;
 using Calc.Core.DirectusAPI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Calc.Core.Objects.GraphNodes;
-using Calc.Core.Objects.Results;
+using Calc.Core.Snapshots;
 
 namespace Calc.Core.TestIntegration.Drivers
 {
@@ -34,14 +34,14 @@ namespace Calc.Core.TestIntegration.Drivers
             }
 
             var results = Calculator.Calculate(branches);
-            var snapshot = new Snapshot
+            var snapshot = new ProjectResult
             { 
                 Results = results,
                 Project = new CalcProject() { Id = 1 },
                 Name = "Test"
             };
 
-            var storageManager = new DirectusManager<Snapshot>(this.directus);
+            var storageManager = new DirectusManager<ProjectResult>(this.directus);
 
             // Act
             var response = await storageManager.CreateSingle<SnapshotStorageDriver>(new SnapshotStorageDriver() { SendItem = snapshot });

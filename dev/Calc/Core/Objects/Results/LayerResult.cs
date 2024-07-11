@@ -1,8 +1,4 @@
-﻿using Calc.Core.Color;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Newtonsoft.Json;
 
 namespace Calc.Core.Objects.Results
 {
@@ -10,71 +6,66 @@ namespace Calc.Core.Objects.Results
     public class LayerResult
     {
         // parent infos
-        [JsonProperty(PropertyName = "forest")]
+        [JsonProperty("forest")]
         public string Forest { get; set; }
-        [JsonProperty(PropertyName = "tree")]
+        [JsonProperty("tree")]
         public string Tree { get; set; }
 
         // element infos
-        [JsonProperty(PropertyName = "element_id")]
+        [JsonProperty("element_id")]
         public string ElementId { get; set; }
-        [JsonProperty(PropertyName = "element_type_id")]
+        [JsonProperty("element_type_id")]
         public string ElementTypeId { get; set; }
-        [JsonProperty(PropertyName = "element_type")]
+        [JsonProperty("element_type")]
         public string ElementType { get; set; }
-        [JsonProperty(PropertyName = "element_unit")]
+        [JsonProperty("element_unit")]
         public Unit ElementUnit { get; set; }
-        [JsonProperty(PropertyName = "element_amount")]
+        [JsonProperty("element_amount")]
         public double ElementAmount { get; set; }
 
         // buildup infos
-        [JsonProperty(PropertyName = "buildup_name")]
+        [JsonProperty("buildup_name")]
         public string BuildupName { get; set; }
-        [JsonProperty(PropertyName = "buildup_code")]
+        [JsonProperty("buildup_code")]
         public string BuildupCode { get; set; }
-        [JsonProperty(PropertyName = "buildup_group")]
+        [JsonProperty("buildup_group")]
         public string GroupName { get; set; }
-        [JsonProperty(PropertyName = "buildup_unit")]
+        [JsonProperty("buildup_unit")]
         public Unit BuildupUnit { get; set; }
 
         // material key data
-        [JsonProperty(PropertyName = "material_name")]
+        [JsonProperty("material_name")]
         public string MaterialName { get; set; }
 
-        [JsonProperty(PropertyName = "material_unit")]
+        [JsonProperty("material_unit")]
         public Unit MaterialUnit { get; set; }
 
-        [JsonProperty(PropertyName = "material_amount")]
+        [JsonProperty("material_amount")]
         public double MaterialAmount { get; set; }
 
-        [JsonProperty(PropertyName = "material_standard")]
+        [JsonProperty("material_standard")]
         public string MaterialStandard { get; set; }
 
-        [JsonProperty(PropertyName = "material_source")]
+        [JsonProperty("material_source")]
         public string MaterialSource { get; set; }
 
-        [JsonProperty(PropertyName = "material_source_uuid")]
+        [JsonProperty("material_source_uuid")]
         public string MaterialSourceUuid { get; set; }
 
-        [JsonProperty(PropertyName = "material_function")]
+        [JsonProperty("material_function")]
         public string MaterialFunction { get; set; }
 
         // material values
-        [JsonProperty(PropertyName = "material_carbon_a1a3")]
+        [JsonProperty("material_carbon_a1a3")]
         public double MaterialGwp { get; set; }
-        [JsonProperty(PropertyName = "material_grey_energy_fabrication_total")]
+        [JsonProperty("material_grey_energy_fabrication_total")]
         public double MaterialGe { get; set; }
 
         // material layer calculation
-        [JsonProperty(PropertyName = "calculated_carbon_a1a3")]
+        [JsonProperty("calculated_carbon_a1a3")]
         public double Gwp { get; set; }
-        [JsonProperty(PropertyName = "calculated_grey_energy_fabrication_total")]
+        [JsonProperty("calculated_grey_energy_fabrication_total")]
         public double Ge { get; set; }
-        //[JsonProperty(PropertyName = "calculated_cost")]
-        //public double Cost { get; set; }
 
-        // others
-        //[JsonProperty(PropertyName = "color")]
-        //public HslColor Color { get; set; }
     }
 }
