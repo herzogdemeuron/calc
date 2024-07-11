@@ -1,8 +1,6 @@
 ﻿using Calc.MVVM.Helpers.Mediators;
-using Calc.MVVM.Models;
 using Calc.MVVM.Services;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace Calc.MVVM.ViewModels
