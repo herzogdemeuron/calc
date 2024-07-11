@@ -1,7 +1,6 @@
 ﻿using Calc.Core.Objects;
 using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Buildups;
-using Calc.Core.Objects.Results;
 using System.Collections.Generic;
 
 namespace CalcBuilderTest.MockData

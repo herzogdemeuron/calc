@@ -1,4 +1,5 @@
-﻿using Calc.Core.Helpers;
+﻿using Calc.Core.Calculation;
+using Calc.Core.Helpers;
 using Calc.Core.Objects;
 using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Buildups;
@@ -7,33 +8,30 @@ using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Results;
 using System.Collections.Generic;
 
-namespace Calc.Core.Calculation
+namespace Calc.Core.Snapshots
 {
-    public class Calculator
+    public class SnapshotMaker
     {
         /// <summary>
         /// calculate gwp and ge for one branch
         /// store back the calculation
         /// this should only happen for dead end branches
         /// </summary>
-        public static void Calculate(Branch branch)
+        public static void Snap(Branch branch)
         {
             if (branch == null) return;
-
-            (var resultList, var errorList) = CalculateBranch(branch);
-
-            branch.CalculationResults = resultList;
+            (var resultList, var errorList) = SnapBranch(branch);
+            branch.BuildupSnapshots = resultList;
             branch.ParameterErrors = errorList;
         }
 
-        private static (List<LayerResult>, List<ParameterError>) CalculateBranch(Branch branch)
+        private static (List<BuildupSnapshot>, List<ParameterError>) SnapBranch(Branch branch)
         {
-            var resultList = new List<LayerResult>();
+            var resultList = new List<BuildupSnapshot>();
             var errorList = new List<ParameterError>();
 
             var buildups = branch.Buildups;
             if (buildups == null) return (resultList, errorList);
-
 
             foreach (var element in branch.Elements)
             {
@@ -49,14 +47,14 @@ namespace Calc.Core.Calculation
                         {
                             ParameterErrorHelper.AddToErrorList
                                 (
-                                errorList, 
+                                errorList,
                                 new ParameterError
-                                    {
-                                        ParameterName = param.Name,
-                                        Unit = param.Unit,
-                                        ErrorType = param.ErrorType,
-                                        ElementIds = new List<string> { element.Id }
-                                    }
+                                {
+                                    ParameterName = param.Name,
+                                    Unit = param.Unit,
+                                    ErrorType = param.ErrorType,
+                                    ElementIds = new List<string> { element.Id }
+                                }
                                 );
                             continue;
                         }
@@ -97,16 +95,16 @@ namespace Calc.Core.Calculation
 
                 MaterialName = material.Name,
                 MaterialUnit = component.Material.MaterialUnit,
-                MaterialAmount = component.Amount??0,
+                MaterialAmount = component.Amount ?? 0,
                 MaterialStandard = material.Standard.Name,
                 MaterialSource = material.DataSource,
                 MaterialSourceUuid = material.SourceUuid,
                 MaterialFunction = component.Function.Name,
-                MaterialGwp = material.Gwp??0,
-                MaterialGe = material.Ge??0,
+                MaterialGwp = material.Gwp ?? 0,
+                MaterialGe = material.Ge ?? 0,
 
-                Gwp = gwp??0,
-                Ge = ge??0,
+                Gwp = gwp ?? 0,
+                Ge = ge ?? 0,
                 //Cost = cost??0,
                 //Color = branch.HslColor
             };
@@ -121,7 +119,7 @@ namespace Calc.Core.Calculation
             var result = new List<LayerResult>();
             var layerComponents = buildupComponent.LayerComponents;
             if (layerComponents == null) return result;
-            foreach ( var layerComponent in layerComponents)
+            foreach (var layerComponent in layerComponents)
             {
                 var calculationComponents = layerComponent.CalculationComponents;
                 if (calculationComponents == null) continue;
@@ -162,6 +160,6 @@ namespace Calc.Core.Calculation
 
 
 
-       
+
     }
 }

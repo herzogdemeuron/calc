@@ -1,5 +1,4 @@
-﻿using Calc.Core.Objects.Results;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;

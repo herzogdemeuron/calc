@@ -52,7 +52,7 @@ namespace Calc.MVVM.Models
                 var calculation = new Dictionary<string, double>();
                 if (Host != null && Host is Branch branch)
                 {
-                    var results = branch.CalculationResults;
+                    var results = branch.BuildupSnapshots;
                     foreach (var result in results)
                     {
                         if (calculation.ContainsKey(result.GroupName))

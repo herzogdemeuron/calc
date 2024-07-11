@@ -7,6 +7,7 @@ using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Materials;
 using Calc.Core.Objects.Results;
 using Calc.Core.Objects.Standards;
+using Calc.Core.Snapshots;
 using Calc.MVVM.Helpers.Mediators;
 using Calc.MVVM.Models;
 using System;
@@ -498,7 +499,7 @@ namespace Calc.MVVM.ViewModels
             var results = new List<LayerResult>();
             foreach (var component in BuildupComponents)
             {
-                var compoResults = Calculator.GetResult(
+                var compoResults = SnapshotMaker.GetResult(
                     quantityRatio,
                     component,
                     (Unit)SelectedBuildupUnit, 

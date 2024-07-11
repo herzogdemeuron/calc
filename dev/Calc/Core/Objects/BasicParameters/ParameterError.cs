@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Calc.Core.Objects.Results
+namespace Calc.Core.Objects.BasicParameters
 {
     public enum ParameterErrorType
     {
@@ -56,15 +56,15 @@ namespace Calc.Core.Objects.Results
         /// </summary>
         public ParameterError(ParameterError other)
         {
-            this.ParameterName = other.ParameterName;
-            this.Unit = other.Unit;
-            this.ErrorType = other.ErrorType;
-            this.ElementIds = new List<string>(other.ElementIds);
+            ParameterName = other.ParameterName;
+            Unit = other.Unit;
+            ErrorType = other.ErrorType;
+            ElementIds = new List<string>(other.ElementIds);
         }
 
         public ParameterError()
         {
-            this.ElementIds = new List<string>();
+            ElementIds = new List<string>();
         }
     }
 }

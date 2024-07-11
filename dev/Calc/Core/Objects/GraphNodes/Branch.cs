@@ -1,10 +1,10 @@
-﻿using Calc.Core.Calculation;
-using Calc.Core.Color;
+﻿using Calc.Core.Color;
 using Calc.Core.Helpers;
+using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Elements;
 using Calc.Core.Objects.Mappings;
-using Calc.Core.Objects.Results;
+using Calc.Core.Snapshots;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -78,7 +78,7 @@ namespace Calc.Core.Objects.GraphNodes
                 _buildups = value;
                 if (SubBranches.Count == 0)
                 {
-                    Calculator.Calculate(this);
+                    SnapshotMaker.Snap(this);
                 }
                 OnPropertyChanged(nameof(Buildups));
             }
@@ -139,24 +139,24 @@ namespace Calc.Core.Objects.GraphNodes
         }
 
         [JsonIgnore]
-        public bool HasCalculationResults => (CalculationResults != null && CalculationResults.Count > 0);
+        public bool HasCalculationResults => (BuildupSnapshots != null && BuildupSnapshots.Count > 0);
 
-        private List<LayerResult> _calculationResults = new();
+        private List<BuildupSnapshot> buildupSnapshots = new();
         [JsonIgnore]
-        public List<LayerResult> CalculationResults
+        public List<BuildupSnapshot> BuildupSnapshots
         {
             get
             {
                 if (SubBranches.Count > 0)
                 {
-                    return SubBranches.SelectMany(sb => sb.CalculationResults ?? new List<LayerResult>()).ToList();
+                    return SubBranches.SelectMany(sb => sb.BuildupSnapshots ?? new List<BuildupSnapshot>()).ToList();
                 }
-                return _calculationResults;
+                return buildupSnapshots;
             }
             set
             {
-                _calculationResults = value;
-                OnPropertyChanged(nameof(CalculationResults));
+                buildupSnapshots = value;
+                OnPropertyChanged(nameof(BuildupSnapshots));
             }
         }
 

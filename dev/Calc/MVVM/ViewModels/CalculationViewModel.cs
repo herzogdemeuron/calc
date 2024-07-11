@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Calc.MVVM.Models;
+using Calc.Core.Objects.BasicParameters;
 
 namespace Calc.MVVM.ViewModels
 {
@@ -35,7 +36,7 @@ namespace Calc.MVVM.ViewModels
                 if (HostNode == null) return null;
                 if (HostNode is Branch branch)
                 {
-                    return branch.CalculationResults;
+                    return branch.BuildupSnapshots;
                 }
                 else
                 {
@@ -43,7 +44,7 @@ namespace Calc.MVVM.ViewModels
                     var trees = forest.Trees;
                     if (trees == null || trees.Count() == 0)
                         return null;
-                    return trees.SelectMany(t => t.CalculationResults).ToList();
+                    return trees.SelectMany(t => t.BuildupSnapshots).ToList();
                 }
 
             }

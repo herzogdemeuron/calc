@@ -1,5 +1,4 @@
 ﻿using Calc.Core.Objects;
-using Calc.Core.Calculation;
 using Calc.Core.DirectusAPI.Drivers;
 using Calc.Core.DirectusAPI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -33,7 +32,7 @@ namespace Calc.Core.TestIntegration.Drivers
                 branches.AddRange(tree.Flatten());
             }
 
-            var results = Calculator.Calculate(branches);
+            var results = SnapshotMaker.Calculate(branches);
             var snapshot = new ProjectResult
             { 
                 Results = results,
