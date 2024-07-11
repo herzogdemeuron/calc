@@ -19,7 +19,7 @@ namespace Calc.Core.Objects
         [JsonProperty("lca_method")]
         public string LcaMethod { get; set; }
         [JsonProperty("life_span")]
-        public int LifeSpan { get; set; }
+        public int? LifeSpan { get; set; }
         [JsonProperty("stages")]
         public List<string> Stages { get; set; }
         [JsonProperty("impact_categories")]

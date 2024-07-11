@@ -15,6 +15,11 @@ namespace Calc.Core.DirectusAPI.Drivers
                         id
                         number
                         name
+                        location
+                        lca_method
+                        life_span
+                        stages
+                        impact_categories
                     }
                 }";
 
