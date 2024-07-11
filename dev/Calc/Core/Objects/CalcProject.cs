@@ -1,8 +1,5 @@
-﻿using Calc.Core.Objects.Standards;
-using Newtonsoft.Json;
-using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Calc.Core.Objects
 {
