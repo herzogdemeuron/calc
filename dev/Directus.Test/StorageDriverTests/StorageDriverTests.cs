@@ -43,14 +43,14 @@ namespace Calc.DirectusTest.StorageDriverTests
         [TestMethod]
         public async Task GetProjects()
         {
-            var storageManager = new DirectusManager<Project>(this.directus);
+            var storageManager = new DirectusManager<CalcProject>(this.directus);
 
             // Act
             var response = await storageManager.GetMany<ProjectStorageDriver>(new ProjectStorageDriver());
 
             // Assert
             Assert.IsNotNull(response.GotManyItems);
-            Assert.IsInstanceOfType(response.GotManyItems, typeof(List<Project>));
+            Assert.IsInstanceOfType(response.GotManyItems, typeof(List<CalcProject>));
             Assert.IsTrue(response.GotManyItems.Count > 0);
 
             var json = System.Text.Json.JsonSerializer.Serialize(response, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });

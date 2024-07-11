@@ -49,7 +49,7 @@ namespace Calc.Core.TestIntegration.Drivers
             // Arrange
             var mapping = new Mapping(this.forest, "test mapping name with project")
             {
-                Project = new Project { Id = 1 }
+                Project = new CalcProject { Id = 1 }
             };
             var directusManager = new DirectusManager<Mapping>(this.directus);
 

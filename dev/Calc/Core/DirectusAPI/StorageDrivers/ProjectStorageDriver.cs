@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace Calc.Core.DirectusAPI.Drivers
 {
-    public class ProjectStorageDriver : IDriverGetMany<Project>
+    public class ProjectStorageDriver : IDriverGetMany<CalcProject>
     {
         public string QueryGetMany { get; } = @"
                 query GetProjects { 
@@ -19,7 +19,7 @@ namespace Calc.Core.DirectusAPI.Drivers
                 }";
 
         [JsonProperty("calc_architecture_projects")]
-        public List<Project> GotManyItems { get; set; }
+        public List<CalcProject> GotManyItems { get; set; }
 
         public Dictionary<string, object> GetVariables()
         {

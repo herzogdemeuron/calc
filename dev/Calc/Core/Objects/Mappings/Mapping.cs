@@ -17,7 +17,7 @@ namespace Calc.Core.Objects.Mappings
         [JsonProperty("name")]
         public string Name { get; set; }
         [JsonProperty("project")]
-        public Project Project { get; set; }
+        public CalcProject Project { get; set; }
         [JsonProperty("updated")]
         public DateTime? Updated { get; set; }
         [JsonProperty("mappings")]

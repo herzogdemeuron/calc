@@ -258,7 +258,7 @@ namespace Calc.MVVM.ViewModels
             {
                 if (Selected != null)
                 {
-                    var project = (Project)Selected;
+                    var project = (CalcProject)Selected;
                     CalcStore.ProjectSelected = project;
                     return true;
                 }

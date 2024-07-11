@@ -13,7 +13,7 @@ namespace Calc.Core.Objects.Results
         [JsonProperty("name")]
         public string Name { get; set; }
         [JsonProperty("project")]
-        public Project Project { get; set; }
+        public CalcProject Project { get; set; }
         [JsonProperty("description")]
         public string Description { get; set; }
 

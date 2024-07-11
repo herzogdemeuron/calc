@@ -20,7 +20,7 @@ namespace Calc.Core.Objects
 
     public interface IHasProject
     {
-        Project Project { get; set; }
+        CalcProject Project { get; set; }
     }
 
     public interface IShowName

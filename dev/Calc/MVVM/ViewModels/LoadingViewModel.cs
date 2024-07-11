@@ -13,14 +13,14 @@ namespace Calc.MVVM.ViewModels
     public class LoadingViewModel : INotifyPropertyChanged  // deprecated
     {
         private readonly CalcStore store;
-        public List<Project> AllProjects { get => store?.ProjectsAll;}
+        public List<CalcProject> AllProjects { get => store?.ProjectsAll;}
 
         public LoadingViewModel(CalcStore calcStore)
         {
             store = calcStore;
         }
 
-        public async Task HandleProjectSelectedAsync(Project project)
+        public async Task HandleProjectSelectedAsync(CalcProject project)
         {
             if (project == null)
             {

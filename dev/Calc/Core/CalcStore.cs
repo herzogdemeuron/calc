@@ -20,10 +20,10 @@ namespace Calc.Core
     {
         public event EventHandler<int> ProgressChanged;
         public CalcConfig Config { get; set; }
-        public Project ProjectSelected { get; set; } // the current project
+        public CalcProject ProjectSelected { get; set; } // the current project
         public bool AllDataLoaded { get; private set; } = false;
         public List<Unit> UnitsAll { get; set; }
-        public List<Project> ProjectsAll { get { return ProjectDriver?.GotManyItems; } }
+        public List<CalcProject> ProjectsAll { get { return ProjectDriver?.GotManyItems; } }
         public List<LcaStandard> StandardsAll { get { return StandardDriver?.GotManyItems; } }
         public List<BuildupGroup> BuildupGroupsAll { get { return BuildupGroupDriver?.GotManyItems; } }
         public List<Buildup> BuildupsAll { get { return BuildupDriver?.GotManyItems; } }
@@ -126,7 +126,7 @@ namespace Calc.Core
                 }
 
                 cancellationToken.ThrowIfCancellationRequested();
-                ProjectDriver = await DirectusDriver.GetMany<ProjectStorageDriver, Project>(ProjectDriver);
+                ProjectDriver = await DirectusDriver.GetMany<ProjectStorageDriver, CalcProject>(ProjectDriver);
                 OnProgressChanged(5);
 
                 cancellationToken.ThrowIfCancellationRequested();

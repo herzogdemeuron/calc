@@ -37,7 +37,7 @@ namespace Calc.Core.TestIntegration.Drivers
             var snapshot = new Snapshot
             { 
                 Results = results,
-                Project = new Project() { Id = 1 },
+                Project = new CalcProject() { Id = 1 },
                 Name = "Test"
             };
 

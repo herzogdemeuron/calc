@@ -260,7 +260,7 @@ public class MockData
 
     public void MakeMapping()
     {
-        var project = new Project
+        var project = new CalcProject
         {
             Id = 0,
             ProjectNumber = "123"

@@ -46,7 +46,7 @@ namespace Calc.Core.Objects.GraphNodes
             }
         }
         [JsonProperty("project_id")]
-        public Project Project { get; set; }
+        public CalcProject Project { get; set; }
 
         public void SetBranchColorsBy(string method)
         {
