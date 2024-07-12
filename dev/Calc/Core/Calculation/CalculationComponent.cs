@@ -27,6 +27,8 @@ namespace Calc.Core.Calculation
 
         [JsonProperty("calc_materials_id")]
         public Material Material { get; set; }
+        [JsonIgnore]
+        public string ElementTypeId { get; set; }
         public bool HasError { get; set; }
         public bool IsComplete { get => CheckComplete(); }
 
@@ -70,6 +72,7 @@ namespace Calc.Core.Calculation
                 HasError = layerAmountParam.HasError,
                 Gwp = Math.Round(materialGwp.Value,3),
                 Ge = Math.Round(materialGe.Value,3),
+                ElementTypeId = layer.TypeIdentifier
             };
         }
 

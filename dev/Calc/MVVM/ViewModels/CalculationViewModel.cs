@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Linq;
 using Calc.MVVM.Models;
 using Calc.Core.Objects.BasicParameters;
+using Calc.Core.Snapshots;
 
 namespace Calc.MVVM.ViewModels
 {
@@ -29,7 +30,7 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        public List<LayerResult> Results
+        public List<BuildupSnapshot> BuildupSnapshots
         {
             get
             {
@@ -49,29 +50,29 @@ namespace Calc.MVVM.ViewModels
 
             }
         }
-        public bool HasResults => (Results != null && Results.Count > 0);
+        public bool HasResults => (BuildupSnapshots != null && BuildupSnapshots.Count > 0);
         public List<CategorizedResultModel> CategorizedResults
         {
             get
             {
                 var calculation = new List<CategorizedResultModel>();
 
-                if (HostNode == null || Results == null)
+                if (HostNode == null || BuildupSnapshots == null)
                     return null;
 
-                foreach (var result in Results)
+                foreach (var result in BuildupSnapshots)
                 {
-                    var existingResult = calculation.FirstOrDefault(c => c.GroupName == result.GroupName);
+                    var existingResult = calculation.FirstOrDefault(c => c.MaterialFunction == result.GroupName);
                     if (existingResult != null)
                     {
-                        existingResult.Gwp += Math.Round(result.Gwp, 3);
-                        existingResult.Ge += Math.Round(result.Ge, 3);
+                        existingResult.Gwp += Math.Round(result.BuildupGwp??0, 3);
+                        existingResult.Ge += Math.Round(result.Ge??0, 3);
                     }
                     else
                     {
                         calculation.Add(new CategorizedResultModel
                         {
-                            GroupName = result.GroupName,
+                            MaterialFunction = result.GroupName,
                             Gwp = Math.Round(result.Gwp, 0),
                             Ge = Math.Round(result.Ge, 0)
                         });

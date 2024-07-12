@@ -23,6 +23,10 @@ namespace Calc.Core.Snapshots
         public List<string> ElementIds { get; set; }
         [JsonProperty("element_unit")]
         public double ElementAmount { get; set; } // uses the buildup unit
+        [JsonProperty("buildup_gwp")]
+        public double? BuildupGwp { get; set; }
+        [JsonProperty("buildup_ge")]
+        public double? BuildupGe { get; set; }
         [JsonProperty("materials")]
         public List<MaterialSnapshot> MaterialSnapshots { get; set; }
 
@@ -33,10 +37,18 @@ namespace Calc.Core.Snapshots
         {
             ElementAmount = element.GetBasicUnitParameter(BuildupUnit).Amount.Value;
             ElementIds = new List<string> { element.Id };
+            BuildupGwp = BuildupGwp * ElementAmount;
+            BuildupGe = BuildupGe * ElementAmount;
+
             foreach (var material in MaterialSnapshots)
             {
-                material.ClaimElementAmount(ElementAmount);
+                material.ApplyRatio(ElementAmount);
             }
+        }
+
+        public void ClaimElementTypeId(string elementTypeId)
+        {
+            ElementTypeIds = new List<string> { elementTypeId };
         }
 
     }

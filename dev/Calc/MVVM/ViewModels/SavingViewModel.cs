@@ -17,7 +17,7 @@ namespace Calc.MVVM.ViewModels
 
         public void HandleSavingResults()
         {
-            int count = calculationVM.Results?.Count??0;
+            int count = calculationVM.BuildupSnapshots?.Count??0;
             string message;
             if (count>100)
             {
@@ -36,7 +36,7 @@ namespace Calc.MVVM.ViewModels
             
             MediatorToView.Broadcast("ShowWaitingOverlay", "Saving results...");
 
-            var feedback =  await SnapshotSender.SaveSnapshot(calculationVM.Store,calculationVM.Results,newName);
+            var feedback =  await SnapshotSender.SaveSnapshot(calculationVM.Store,calculationVM.BuildupSnapshots,newName);
             bool? saved = feedback.Item1;
             string error = feedback.Item2;
 

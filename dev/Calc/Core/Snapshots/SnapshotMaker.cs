@@ -1,14 +1,10 @@
 ﻿using Calc.Core.Calculation;
-using Calc.Core.Helpers;
 using Calc.Core.Objects;
-using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Elements;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Results;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 
 namespace Calc.Core.Snapshots
 {
@@ -21,42 +17,52 @@ namespace Calc.Core.Snapshots
         /// <summary>
         /// generate the snapshots for a **dead end** branch, 
         /// </summary>
-        public static void Snap(Branch branch)
+        public static void Snap(Branch branch) //move this to branch?
         {
 
-            if (branch == null) return;
-            if (branch.SubBranches.Count == 0) return;
-
             var resultList = new List<BuildupSnapshot>();
-
-            var buildupList = branch.Buildups ?? new();
-
             foreach (var element in branch.Elements)
-            {
-                foreach (var buildup in buildupList)
+            
+                foreach (var buildup in branch.Buildups)
                 {               
                     var snapshots = GetBuildupSnapshot(buildup, element);
-                        resultList.AddRange(snapshots);                    
+                    resultList.AddRange(snapshots);                    
                 }
-            }
+            
 
             branch.BuildupSnapshots = resultList;
         }
 
+
         /// <summary>
-        /// make the snapshots for a branch, claim the element to the snapshots
+        /// generate the snapshots for a buildup, claim the element type id
         /// </summary>
-        private static List<BuildupSnapshot> GetBuildupSnapshot(Buildup buildup, CalcElement element)
+        /// <param name="buildup"></param>
+        public static void Snap(Buildup buildup)
+        {
+            var snapshots = GetBuildupSnapshot(buildup);
+            buildup.BuildupSnapshot = snapshots;
+        }
+
+
+        /// <summary>
+        /// make the snapshots for a branch, claim the element to the snapshots if given
+        /// </summary>
+        public static List<BuildupSnapshot> GetBuildupSnapshot(Buildup buildup, CalcElement? element=null)
         {
             var snapshots = new List<BuildupSnapshot>();
             foreach (var component in buildup.CalculationComponents)
             {
                 var snapshot = GetBuildupSnapshot(component, buildup);
-                snapshot.ClaimElement(element);
+                if (element != null)
+                {
+                    snapshot.ClaimElement(element.Value);
+                }
                 snapshots.Add(snapshot);
             }
             return snapshots;
         }
+
 
         /// <summary>
         /// get the buildup snapshot from a single calculation component
@@ -86,53 +92,39 @@ namespace Calc.Core.Snapshots
                 BuildupCode = buildup.Code,
                 BuildupGroup = buildup.Group.Name,
                 BuildupUnit = buildup.BuildupUnit,
+                BuildupGwp = buildup.BuildupGwp,
+                BuildupGe = buildup.BuildupGe,
                 MaterialSnapshots = new List<MaterialSnapshot> { materialSnapshot }
             };
+
+            if (component.ElementTypeId != null)
+            {
+                // the element type id should be claimed
+                // if the calculation component was generated from layer component
+                snapshot.ClaimElementTypeId(component.ElementTypeId);                                                                      
+            }
 
             return snapshot;
         }
 
 
 
-        private static BuildupSnapshot GetResult(string treeName, CalcElement element, Buildup buildup, CalculationComponent component, double amount)
-        {
-            var material = component.Material;
-            var gwp = component.Gwp * amount;
-            var ge = component.Ge * amount;
 
-            var calculationResult = new BuildupSnapshot
-            {
-                Tree = treeName,
 
-                ElementId = element.Id,
-                ElementType = element.TypeName,
-                ElementUnit = buildup.BuildupUnit,
-                ElementAmount = amount,
 
-                BuildupName = buildup.Name,
-                BuildupCode = buildup.Code,
-                GroupName = buildup.Group?.Name,
-                BuildupUnit = buildup.BuildupUnit,
 
-                MaterialName = material.Name,
-                MaterialUnit = component.Material.MaterialUnit,
-                MaterialAmount = component.Amount ?? 0,
-                MaterialStandard = material.Standard.Name,
-                MaterialSource = material.DataSource,
-                MaterialSourceUuid = material.SourceUuid,
-                MaterialFunction = component.Function.Name,
-                MaterialGwp = material.Gwp ?? 0,
-                MaterialGe = material.Ge ?? 0,
 
-                Gwp = gwp ?? 0,
-                Ge = ge ?? 0,
-            };
-            return calculationResult;
-        }
 
-        /// <summary>
-        /// get the layer result from a buildup component
-        /// </summary>
+
+
+
+
+
+
+
+
+
+        // deprecated
         public static List<LayerResult> GetResult(double totalRatio, BuildupComponent buildupComponent, Unit buildupUnit, string buildupName, string buildupCode, string buildupGroup)
         {
             var result = new List<LayerResult>();
@@ -158,7 +150,7 @@ namespace Calc.Core.Snapshots
 
                         MaterialName = component.Material.Name,
                         MaterialUnit = component.Material.MaterialUnit,
-                        MaterialAmount = component.Amount ?? 0,
+                        MaterialAmount = component.Amount,
                         MaterialStandard = component.Material.Standard.Name,
                         MaterialSource = component.Material.DataSource,
                         MaterialSourceUuid = component.Material.SourceUuid,

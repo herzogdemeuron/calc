@@ -17,6 +17,7 @@ namespace Calc.Core.Objects.Buildups
     public class LayerComponent : ICalcComponent, IColorizable, INotifyPropertyChanged
     {
         // general properties
+        public string TypeIdentifier { get; set; } // revit type id
         public bool IsValid { get; set; } = true;
         public string Title { get => TargetMaterialName?? "No Material"; }
         public string TargetMaterialName { get; }
@@ -25,7 +26,7 @@ namespace Calc.Core.Objects.Buildups
         public BasicParameterSet BasicParameterSet { get; set; }
 
         // calculation components
-        public List<CalculationComponent> CalculationComponents { get; set; } = new List<CalculationComponent>();
+        public List<CalculationComponent> CalculationComponents { get; set; } = new();
         public bool HasParamError { get => CalculationComponents.Exists(c => c.HasError); }
         public bool CalculationCompleted { get => CalculationComponents.TrueForAll(c => c.IsComplete) && MaterialUnitsMatch; }
         private bool MaterialUnitsMatch { get => CheckUnitsMatch(); }

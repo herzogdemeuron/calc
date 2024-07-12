@@ -62,7 +62,7 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        public List<CalculationComponent> AllCalculationComponents
+        private List<CalculationComponent> CurrentCalculationComponents
         {
             get
             {
@@ -153,7 +153,7 @@ namespace Calc.MVVM.ViewModels
         /// </summary>
         public List<LcaStandard> Standards
         {
-            get => AllCalculationComponents?
+            get => CurrentCalculationComponents?
                 .Where(c => c.Material != null)
                 .Select(c => c.Material.Standard)
                 .Distinct().ToList();
@@ -281,8 +281,8 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        public double? BuildupGwp { get => AllCalculationComponents?.Where(c => c.Amount.HasValue).Sum(c => c.Gwp); }
-        public double? BuildupGe { get => AllCalculationComponents?.Where(c => c.Amount.HasValue).Sum(c => c.Ge); }
+        public double? BuildupGwp { get => CurrentCalculationComponents?.Sum(c => c.Gwp); }
+        public double? BuildupGe { get => CurrentCalculationComponents?.Sum(c => c.Ge); }
 
 
         public BuildupCreationViewModel(CalcStore store, IBuildupComponentCreator bcCreator, IImageSnapshotCreator imgCreator, IElementSender elemSender)
@@ -472,7 +472,7 @@ namespace Calc.MVVM.ViewModels
                 component.UpdateCalculationComponents(quantityRatio);
             }
             OnPropertyChanged(nameof(StandardsString));
-            OnPropertyChanged(nameof(AllCalculationComponents));
+            OnPropertyChanged(nameof(CurrentCalculationComponents));
             OnPropertyChanged(nameof(BuildupGwp));
             OnPropertyChanged(nameof(BuildupGe));
             OnPropertyChanged(nameof(CanSave));
@@ -480,6 +480,9 @@ namespace Calc.MVVM.ViewModels
         }
 
 
+        /// <summary>
+        /// get the quantity ratio from the normalizer
+        /// </summary>
         private double GetQuantityRatio()
         {
             var normalizer = BuildupComponents.Where(c => c.IsNormalizer).ToList();
@@ -493,24 +496,6 @@ namespace Calc.MVVM.ViewModels
             return 0;
         }
 
-        private List<LayerResult> CreateLayerSnapshot(Buildup buildup)
-        {
-            var quantityRatio = GetQuantityRatio();
-            var results = new List<LayerResult>();
-            foreach (var component in BuildupComponents)
-            {
-                var compoResults = SnapshotMaker.GetResult(
-                    quantityRatio,
-                    component,
-                    (Unit)SelectedBuildupUnit, 
-                    NewBuildupName,
-                    newBuildupCode,
-                    SelectedBuildupGroup.Name
-                    );
-                results.AddRange(compoResults);
-            }
-            return results;
-        }
 
 
         private Buildup CreateBuildup(string imageUuid, string speckleModelId)
@@ -523,11 +508,11 @@ namespace Calc.MVVM.ViewModels
                 StandardItems = Standards.Select(s => new StandardItem { Standard = s }).ToList(),
                 Group = SelectedBuildupGroup,
                 BuildupUnit = (Unit)SelectedBuildupUnit,
-                CalculationComponents = AllCalculationComponents,
+                CalculationComponents = CurrentCalculationComponents,
                 BuildupGwp = BuildupGwp,
                 BuildupGe = BuildupGe,
             };
-            buildup.LayerSnapshot = CreateLayerSnapshot(buildup);
+            SnapshotMaker.Snap(buildup);
 
             if (!string.IsNullOrEmpty(imageUuid))
             {
@@ -597,7 +582,7 @@ namespace Calc.MVVM.ViewModels
 
         private bool CheckCanSave()
         {
-            return !string.IsNullOrEmpty(NewBuildupCode) && !string.IsNullOrEmpty(NewBuildupName) && SelectedBuildupGroup != null && AllCalculationComponents.Count > 0 && IsNotSaving;
+            return !string.IsNullOrEmpty(NewBuildupCode) && !string.IsNullOrEmpty(NewBuildupName) && SelectedBuildupGroup != null && CurrentCalculationComponents.Count > 0 && IsNotSaving;
         }
 
         private void CheckSaveOrUpdate()

@@ -30,12 +30,10 @@ namespace Calc.Core.Snapshots
         [JsonProperty("calculated_grey_energy_fabrication_total")]
         public double? Ge { get; set; }
 
-        /// <summary>
-        /// claim the material snapshot for the element, multiply the amount and calculations with the element amount
-        /// </summary>
-        public void ClaimElementAmount(double elementAmount)
+    
+        public void ApplyRatio(double ratio)
         {
-            MaterialAmount = MaterialAmount * elementAmount;
+            MaterialAmount = MaterialAmount * ratio;
             if (MaterialGwp.HasValue) Gwp = MaterialGwp * MaterialAmount;
             if (MaterialGe.HasValue) Ge = MaterialGe * MaterialAmount;
         }

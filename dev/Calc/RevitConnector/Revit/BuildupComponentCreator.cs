@@ -174,6 +174,7 @@ namespace Calc.RevitConnector.Revit
                         );
 
                     var layerComponent = new LayerComponent(material?.Name, newParamSet, thickness);
+                    layerComponent.TypeIdentifier = elem.GetTypeId().IntegerValue.ToString();
                     result.Add(layerComponent);
                 }
             }
@@ -183,6 +184,7 @@ namespace Calc.RevitConnector.Revit
                 foreach (var (material, paramSet) in materialAmounts)
                 {
                     var layerComponent = new LayerComponent(material?.Name, paramSet);
+                    layerComponent.TypeIdentifier = elem.GetTypeId().IntegerValue.ToString();
                     result.Add(layerComponent);
                 }
             }

@@ -1,6 +1,7 @@
 ﻿using Calc.Core.Calculation;
 using Calc.Core.Objects.Results;
 using Calc.Core.Objects.Standards;
+using Calc.Core.Snapshots;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -75,7 +76,7 @@ namespace Calc.Core.Objects.Buildups
         public string SpeckleModelId { get; set; }
 
         [JsonIgnore]
-        public List<LayerResult> LayerSnapshot { get; set; }
+        public List<BuildupSnapshot> BuildupSnapshot { get; set; }
 
 
         private List<CalculationComponent> calculationComponents = new List<CalculationComponent>();

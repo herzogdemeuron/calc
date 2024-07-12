@@ -126,7 +126,7 @@ namespace Calc.Core.DirectusAPI.Drivers
                     {
                         position = cc.Position,
                         function = cc.Function,
-                        amount = cc.Amount ?? 0,
+                        amount = cc.Amount,
                         carbon_a1a3 = cc.Gwp ?? 0,
                         grey_energy_fabrication_total = cc.Ge ?? 0,
                         calc_materials_id = new { id = cc.Material.Id }
@@ -135,7 +135,7 @@ namespace Calc.Core.DirectusAPI.Drivers
 
                 carbon_a1a3 = SendItem.BuildupGwp,
                 grey_energy_fabrication_total = SendItem.BuildupGe,
-                layer_snapshot = JsonConvert.SerializeObject(SendItem.LayerSnapshot),
+                buildup_snapshot = JsonConvert.SerializeObject(SendItem.BuildupSnapshot),
                 speckle_model_id = SendItem.SpeckleModelId
             };
 

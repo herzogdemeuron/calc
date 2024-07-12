@@ -76,9 +76,12 @@ namespace Calc.Core.Objects.GraphNodes
             private set
             {
                 _buildups = value;
+                OnPropertyChanged(nameof(Buildups));
+
+                // only for dead end branches:
+                if (SubBranches.Count == 0) return;
                 CheckParameterErrors(); // check for errors when buildups are set
                 SnapshotMaker.Snap(this); // update the buildup snapshots
-                OnPropertyChanged(nameof(Buildups));
             }
         }
         [JsonIgnore]
@@ -177,7 +180,6 @@ namespace Calc.Core.Objects.GraphNodes
         /// </summary>
         public void CheckParameterErrors()
         {
-            if (SubBranches.Count == 0) return;
             ParameterErrors = new();
 
             foreach (var element in Elements)
@@ -201,8 +203,7 @@ namespace Calc.Core.Objects.GraphNodes
                                     Unit = param.Unit,
                                     ErrorType = param.ErrorType,
                                     ElementIds = new() { element.Id }
-                                }
-                                );
+                                });
                         }
                     }
                 }
