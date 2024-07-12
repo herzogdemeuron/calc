@@ -76,10 +76,8 @@ namespace Calc.Core.Objects.GraphNodes
             private set
             {
                 _buildups = value;
-                if (SubBranches.Count == 0)
-                {
-                    SnapshotMaker.Snap(this);
-                }
+                CheckParameterErrors(); // check for errors when buildups are set
+                SnapshotMaker.Snap(this); // update the buildup snapshots
                 OnPropertyChanged(nameof(Buildups));
             }
         }
@@ -172,6 +170,43 @@ namespace Calc.Core.Objects.GraphNodes
         public Branch(List<CalcElement> elements) : this()
         {
             Elements = elements;
+        }
+
+        /// <summary>
+        /// check if parameters have error for the dead end branch
+        /// </summary>
+        public void CheckParameterErrors()
+        {
+            if (SubBranches.Count == 0) return;
+            ParameterErrors = new();
+
+            foreach (var element in Elements)
+            {
+                foreach (var buildup in Buildups)
+                {
+                    foreach (var component in buildup.CalculationComponents)
+                    {
+                        if (component == null) continue;
+
+                        BasicParameter param = element.GetBasicUnitParameter(buildup.BuildupUnit);
+
+                        if (param.ErrorType != null)
+                        {
+                            ParameterErrorHelper.AddToErrorList
+                                (
+                                ParameterErrors,
+                                new ParameterError
+                                {
+                                    ParameterName = param.Name,
+                                    Unit = param.Unit,
+                                    ErrorType = param.ErrorType,
+                                    ElementIds = new() { element.Id }
+                                }
+                                );
+                        }
+                    }
+                }
+            }
         }
 
 

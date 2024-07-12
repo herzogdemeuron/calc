@@ -1,4 +1,5 @@
 ﻿using Calc.Core.Objects;
+using Calc.Core.Objects.Elements;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
@@ -15,17 +16,28 @@ namespace Calc.Core.Snapshots
         [JsonProperty("buildup_group")]
         public string BuildupGroup { get; set; }
         [JsonProperty("buildup_unit")]
-        public string BuildupUnit { get; set; }
-        [JsonProperty("element_type_id")]
-        public string ElementTypeId { get; set; }
+        public Unit BuildupUnit { get; set; }
+        [JsonProperty("element_type_ids")]
+        public List<string> ElementTypeIds { get; set; }
         [JsonProperty("element_ids")]
         public List<string> ElementIds { get; set; }
         [JsonProperty("element_unit")]
-        public string ElementUnit { get; set; }
-        [JsonProperty("element_amount")]
-        public double ElementAmount { get; set; }
+        public double ElementAmount { get; set; } // uses the buildup unit
         [JsonProperty("materials")]
         public List<MaterialSnapshot> MaterialSnapshots { get; set; }
+
+        /// <summary>
+        /// claim the snapshot for the element, manipulate the the element amount and the material snapshots
+        /// </summary>
+        public void ClaimElement(CalcElement element)
+        {
+            ElementAmount = element.GetBasicUnitParameter(BuildupUnit).Amount.Value;
+            ElementIds = new List<string> { element.Id };
+            foreach (var material in MaterialSnapshots)
+            {
+                material.ClaimElementAmount(ElementAmount);
+            }
+        }
 
     }
 }

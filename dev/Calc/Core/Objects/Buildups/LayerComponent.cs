@@ -10,6 +10,7 @@ using Calc.Core.Objects.Materials;
 namespace Calc.Core.Objects.Buildups
 {
     /// <summary>
+    /// For calc builder.
     /// A layer or component of an element type in revit/rhino.
     /// A LayerComponent must have mapped infos，could have Ids to be targeted.
     /// </summary>

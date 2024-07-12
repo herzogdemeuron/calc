@@ -20,14 +20,24 @@ namespace Calc.Core.Snapshots
         [JsonProperty("material_unit")]
         public Unit MaterialUnit { get; set; }
         [JsonProperty("material_amount")]
-        public double MaterialAmount { get; set; }
+        public double MaterialAmount { get; set; } // the total amount of the whole buildup amount
         [JsonProperty("material_carbon_a1a3")]
-        public double MaterialGwp { get; set; }
+        public double? MaterialGwp { get; set; } // the unit gwp of the material
         [JsonProperty("material_grey_energy_fabrication_total")]
-        public double MaterialGe { get; set; }
+        public double? MaterialGe { get; set; } // the unit ge of the material
         [JsonProperty("calculated_carbon_a1a3")]
-        public double Gwp { get; set; }
+        public double? Gwp { get; set; }
         [JsonProperty("calculated_grey_energy_fabrication_total")]
-        public double Ge { get; set; }
+        public double? Ge { get; set; }
+
+        /// <summary>
+        /// claim the material snapshot for the element, multiply the amount and calculations with the element amount
+        /// </summary>
+        public void ClaimElementAmount(double elementAmount)
+        {
+            MaterialAmount = MaterialAmount * elementAmount;
+            if (MaterialGwp.HasValue) Gwp = MaterialGwp * MaterialAmount;
+            if (MaterialGe.HasValue) Ge = MaterialGe * MaterialAmount;
+        }
     }
 }

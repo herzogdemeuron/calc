@@ -493,7 +493,7 @@ namespace Calc.MVVM.ViewModels
             return 0;
         }
 
-        private List<LayerResult> CreateLayerSnapshot()
+        private List<LayerResult> CreateLayerSnapshot(Buildup buildup)
         {
             var quantityRatio = GetQuantityRatio();
             var results = new List<LayerResult>();
@@ -524,10 +524,10 @@ namespace Calc.MVVM.ViewModels
                 Group = SelectedBuildupGroup,
                 BuildupUnit = (Unit)SelectedBuildupUnit,
                 CalculationComponents = AllCalculationComponents,
-                BuildupGwp = BuildupGwp ?? 0,
-                BuildupGe = BuildupGe ?? 0,
-                LayerSnapshot = CreateLayerSnapshot()
+                BuildupGwp = BuildupGwp,
+                BuildupGe = BuildupGe,
             };
+            buildup.LayerSnapshot = CreateLayerSnapshot(buildup);
 
             if (!string.IsNullOrEmpty(imageUuid))
             {

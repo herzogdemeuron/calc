@@ -12,8 +12,8 @@ namespace Calc.Core.Objects.Buildups
     public class Buildup : INotifyPropertyChanged, ISearchable  // check: notify property needed?
     {
 
-        private int id = -1;
-        [JsonProperty("id", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        private int id;
+        [JsonProperty("id")]
         public int Id
         {
             get => id;
@@ -78,23 +78,6 @@ namespace Calc.Core.Objects.Buildups
         public List<LayerResult> LayerSnapshot { get; set; }
 
 
-        /*
-        public void LinkGroup(List<BuildupGroup> buildupGroups) // deprecated
-        {
-            if (Group != null)
-            {
-                Group = buildupGroups.Find(g => g.Id == Group.Id);
-            }
-        }
-
-        public void LinkStandard(List<LcaStandard> standards) // deprecated
-        {
-            if (Standard != null)
-            {
-                Standard = standards.Find(s => s.Id == Standard.Id);
-            }
-        }*/
-
         private List<CalculationComponent> calculationComponents = new List<CalculationComponent>();
         [JsonProperty("calculation_components")]
         public List<CalculationComponent> CalculationComponents
@@ -103,26 +86,6 @@ namespace Calc.Core.Objects.Buildups
             set => SetProperty(ref calculationComponents, value);
         }
 
-       /* public void Copy(Buildup other) // deprecated
-        {
-            Id = other.Id;
-            Name = other.Name;
-            Group = other.Group;
-            CalculationComponents = other.CalculationComponents;
-            BuildupUnit = other.BuildupUnit;
-        }
-
-        public Buildup Copy() // deprecated
-        {
-            return new Buildup()
-            {
-                Id = Id,
-                Name = Name,
-                Group = Group,
-                CalculationComponents = CalculationComponents,
-                BuildupUnit = BuildupUnit
-            };
-        }*/
         protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null) // is this needed?
         {
             if (EqualityComparer<T>.Default.Equals(storage, value))

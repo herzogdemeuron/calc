@@ -7,81 +7,102 @@ using Calc.Core.Objects.Elements;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Results;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace Calc.Core.Snapshots
 {
+    /// <summary>
+    /// make the flat snapshots for a branch (each element) or for a new buildup (each element type)
+    /// only merge the snapshots before sending to directus
+    /// </summary>
     public class SnapshotMaker
     {
         /// <summary>
-        /// calculate gwp and ge for one branch
-        /// store back the calculation
-        /// this should only happen for dead end branches
+        /// generate the snapshots for a **dead end** branch, 
         /// </summary>
         public static void Snap(Branch branch)
         {
+
             if (branch == null) return;
-            (var resultList, var errorList) = SnapBranch(branch);
-            branch.BuildupSnapshots = resultList;
-            branch.ParameterErrors = errorList;
-        }
+            if (branch.SubBranches.Count == 0) return;
 
-        private static (List<BuildupSnapshot>, List<ParameterError>) SnapBranch(Branch branch)
-        {
             var resultList = new List<BuildupSnapshot>();
-            var errorList = new List<ParameterError>();
 
-            var buildups = branch.Buildups;
-            if (buildups == null) return (resultList, errorList);
+            var buildupList = branch.Buildups ?? new();
 
             foreach (var element in branch.Elements)
             {
-                foreach (var buildup in buildups)
-                {
-                    foreach (var component in buildup.CalculationComponents)
-                    {
-                        if (component == null) continue;
-
-                        BasicParameter param = element.GetBasicUnitParameter(buildup.BuildupUnit);
-
-                        if (param.ErrorType != null)
-                        {
-                            ParameterErrorHelper.AddToErrorList
-                                (
-                                errorList,
-                                new ParameterError
-                                {
-                                    ParameterName = param.Name,
-                                    Unit = param.Unit,
-                                    ErrorType = param.ErrorType,
-                                    ElementIds = new List<string> { element.Id }
-                                }
-                                );
-                            continue;
-                        }
-
-                        var amount = param.Amount;
-                        var calculationResult = GetResult(branch, element, buildup, component, amount.Value);
-
-                        resultList.Add(calculationResult);
-                    }
+                foreach (var buildup in buildupList)
+                {               
+                    var snapshots = GetBuildupSnapshot(buildup, element);
+                        resultList.AddRange(snapshots);                    
                 }
             }
 
-            return (resultList, errorList);
+            branch.BuildupSnapshots = resultList;
+        }
+
+        /// <summary>
+        /// make the snapshots for a branch, claim the element to the snapshots
+        /// </summary>
+        private static List<BuildupSnapshot> GetBuildupSnapshot(Buildup buildup, CalcElement element)
+        {
+            var snapshots = new List<BuildupSnapshot>();
+            foreach (var component in buildup.CalculationComponents)
+            {
+                var snapshot = GetBuildupSnapshot(component, buildup);
+                snapshot.ClaimElement(element);
+                snapshots.Add(snapshot);
+            }
+            return snapshots;
+        }
+
+        /// <summary>
+        /// get the buildup snapshot from a single calculation component
+        /// </summary>
+        private static BuildupSnapshot GetBuildupSnapshot(CalculationComponent component, Buildup buildup)
+        {
+            var calculationComponents = buildup.CalculationComponents;
+
+            var material = component.Material;
+            var materialSnapshot = new MaterialSnapshot
+            {
+                MaterialFunction = component.Function.Name,
+                MaterialSourceUuid = material.SourceUuid,
+                MaterialSource = material.DataSource,
+                MaterialName = material.Name,
+                MaterialUnit = material.MaterialUnit,
+                MaterialAmount = component.Amount,
+                MaterialGwp = material.Gwp,
+                MaterialGe = material.Ge,
+                Gwp = component.Gwp,
+                Ge = component.Ge
+            };
+
+            var snapshot = new BuildupSnapshot
+            {
+                BuildupName = buildup.Name,
+                BuildupCode = buildup.Code,
+                BuildupGroup = buildup.Group.Name,
+                BuildupUnit = buildup.BuildupUnit,
+                MaterialSnapshots = new List<MaterialSnapshot> { materialSnapshot }
+            };
+
+            return snapshot;
         }
 
 
-        private static LayerResult GetResult(Branch branch, CalcElement element, Buildup buildup, CalculationComponent component, double amount)
+
+        private static BuildupSnapshot GetResult(string treeName, CalcElement element, Buildup buildup, CalculationComponent component, double amount)
         {
             var material = component.Material;
             var gwp = component.Gwp * amount;
             var ge = component.Ge * amount;
-            var cost = component.Cost * amount;
 
-            var calculationResult = new LayerResult
+            var calculationResult = new BuildupSnapshot
             {
-                Forest = branch.ParentForest.Name,
-                Tree = branch.ParentTree.Name,
+                Tree = treeName,
 
                 ElementId = element.Id,
                 ElementType = element.TypeName,
@@ -105,8 +126,6 @@ namespace Calc.Core.Snapshots
 
                 Gwp = gwp ?? 0,
                 Ge = ge ?? 0,
-                //Cost = cost??0,
-                //Color = branch.HslColor
             };
             return calculationResult;
         }

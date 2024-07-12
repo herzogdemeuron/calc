@@ -8,8 +8,7 @@ using System.Collections.Generic;
 namespace Calc.Core.Calculation
 {
     /// <summary>
-    /// A component used in calculation.
-    /// stands for the amount of a material layer
+    /// The calculation of a material in the buildup, amount per buildup unit.
     /// </summary>
     public class CalculationComponent
     {
@@ -18,7 +17,7 @@ namespace Calc.Core.Calculation
         [JsonProperty("function")]
         public MaterialFunction Function { get; set; }
         [JsonProperty("amount")]
-        public double? Amount { get; set; }
+        public double Amount { get; set; }
         [JsonProperty("carbon_a1a3")]
         public double? Gwp { get; set; }
         [JsonProperty("grey_energy_fabrication_total")]
@@ -28,7 +27,6 @@ namespace Calc.Core.Calculation
 
         [JsonProperty("calc_materials_id")]
         public Material Material { get; set; }
-        public HslColor HslColor { get; set; }
         public bool HasError { get; set; }
         public bool IsComplete { get => CheckComplete(); }
 
@@ -45,17 +43,17 @@ namespace Calc.Core.Calculation
             var result = new List<CalculationComponent>();
    
             if (!layer.HasMainMaterial) return result;
-            var mainCalculationComponent = FromLayerMaterial(layer, totalRatio, layer.HslColor, true);
+            var mainCalculationComponent = FromLayerMaterial(layer, totalRatio, true);
             result.Add(mainCalculationComponent);
 
             if (!layer.HasSubMaterial) return result;
-            var subCalculationComponent = FromLayerMaterial(layer, totalRatio, layer.HslColor, false);
+            var subCalculationComponent = FromLayerMaterial(layer, totalRatio, false);
             result.Add(subCalculationComponent);
             
             return result;
         }
 
-       private static CalculationComponent FromLayerMaterial(LayerComponent layer, double totalRatio, HslColor hslColor, bool getMain = true)
+       private static CalculationComponent FromLayerMaterial(LayerComponent layer, double totalRatio, bool getMain = true)
         {
             var layerAmountParam = layer.GetAmountParam();
             var layerAmount = layer.GetLayerAmount(totalRatio);
@@ -72,13 +70,12 @@ namespace Calc.Core.Calculation
                 HasError = layerAmountParam.HasError,
                 Gwp = Math.Round(materialGwp.Value,3),
                 Ge = Math.Round(materialGe.Value,3),
-                HslColor = hslColor
             };
         }
 
         public bool CheckComplete()
         {
-            return Function != null && Amount != null && Amount > 0;
+            return Function != null && Amount > 0;
         }
 
         /// <summary>
