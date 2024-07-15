@@ -169,8 +169,8 @@ namespace Calc.MVVM.Models
         /// </summary>
         public void LearnMaterialSetting(LayerMaterialModel otherModel)
         {
-            this.layer.Function = otherModel.SelectedFunction;
-            OnPropertyChanged(nameof(SelectedFunction));
+            //this.layer.Function = otherModel.SelectedFunction;
+            //OnPropertyChanged(nameof(SelectedFunction));
 
             this.layer.SetMainMaterial(otherModel.MainMaterial);
             OnPropertyChanged(nameof(MainMaterial));

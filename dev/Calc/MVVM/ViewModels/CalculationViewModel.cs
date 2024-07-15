@@ -2,7 +2,6 @@
 using Calc.Core.Objects;
 using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.GraphNodes;
-using Calc.Core.Objects.Materials;
 using Calc.Core.Snapshots;
 using Calc.MVVM.Helpers.Mediators;
 using Calc.MVVM.Models;
