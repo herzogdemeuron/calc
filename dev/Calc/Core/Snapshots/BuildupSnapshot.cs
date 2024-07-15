@@ -17,16 +17,13 @@ namespace Calc.Core.Snapshots
         public string BuildupGroup { get; set; }
         [JsonProperty("buildup_unit")]
         public Unit BuildupUnit { get; set; }
-        [JsonProperty("element_type_ids")]
-        public List<string> ElementTypeIds { get; set; }
+        [JsonProperty("element_type_id")]
+        public string ElementTypeId { get; set; }
         [JsonProperty("element_ids")]
-        public List<string> ElementIds { get; set; }
+        public List<string> ElementIds { get; set; } = new List<string>();
         [JsonProperty("element_unit")]
         public double ElementAmount { get; set; } // uses the buildup unit
-        [JsonProperty("buildup_gwp")]
-        public double? BuildupGwp { get; set; }
-        [JsonProperty("buildup_ge")]
-        public double? BuildupGe { get; set; }
+
         [JsonProperty("materials")]
         public List<MaterialSnapshot> MaterialSnapshots { get; set; }
 
@@ -37,18 +34,31 @@ namespace Calc.Core.Snapshots
         {
             ElementAmount = element.GetBasicUnitParameter(BuildupUnit).Amount.Value;
             ElementIds = new List<string> { element.Id };
-            BuildupGwp = BuildupGwp * ElementAmount;
-            BuildupGe = BuildupGe * ElementAmount;
-
             foreach (var material in MaterialSnapshots)
             {
-                material.ApplyRatio(ElementAmount);
+                material.ApplyAmountRatio(ElementAmount); // the element amount ratio equals element amount
             }
         }
 
         public void ClaimElementTypeId(string elementTypeId)
         {
-            ElementTypeIds = new List<string> { elementTypeId };
+            ElementTypeId = elementTypeId;
+        }
+
+        public BuildupSnapshot Copy()
+        {
+            return new BuildupSnapshot
+            {
+                ElementGroup = ElementGroup,
+                BuildupName = BuildupName,
+                BuildupCode = BuildupCode,
+                BuildupGroup = BuildupGroup,
+                BuildupUnit = BuildupUnit,
+                ElementTypeId = ElementTypeId,
+                ElementIds = ElementIds,
+                ElementAmount = ElementAmount,
+                MaterialSnapshots = MaterialSnapshots.ConvertAll(m => m.Copy())
+            };
         }
 
     }

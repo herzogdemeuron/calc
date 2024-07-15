@@ -109,10 +109,14 @@ namespace Calc.Core.Objects.Buildups
             return BasicParameterSet.GetAmountParam((Unit)unit);
         }
 
-        public double? GetLayerAmount(double totalRatio)
+        /// <summary>
+        /// get the real amount of the main/sub material in the layer, normalized
+        /// </summary>
+        public double? GetLayerAmount(double normalizeRatio, bool getMain)
         {
+            var ratio = getMain ? MainMaterialRatio : SubMaterialRatio;
             var layerAmountParam = GetAmountParam();
-            var layerAmount = (layerAmountParam?.Amount != null) ? layerAmountParam.Amount * totalRatio : 0;
+            var layerAmount = (layerAmountParam?.Amount != null) ? layerAmountParam.Amount * normalizeRatio * ratio : 0;
             return layerAmount;
         }
 
@@ -125,28 +129,34 @@ namespace Calc.Core.Objects.Buildups
             return result;
         }
 
+        /// <summary>
+        /// get the unit gwp of the main/sub material
+        /// </summary>
         public double GetMaterialGwp(bool getMain = true)
         {
             var hasMaterial = getMain ? HasMainMaterial : HasSubMaterial;
             if (hasMaterial)
             {
                 var material = getMain ? MainMaterial : SubMaterial;
-                var ratio = getMain ? MainMaterialRatio : SubMaterialRatio;
+                //var ratio = getMain ? MainMaterialRatio : SubMaterialRatio;
                 var gwp = material.Gwp ?? 0;
-                return gwp * ratio;
+                return gwp;
             };
             return 0;
         }
 
+        /// <summary>
+        /// get the unit ge of the main/sub material
+        /// </summary>
         public double GetMaterialGe(bool getMain = true)
         {
             var hasMaterial = getMain ? HasMainMaterial : HasSubMaterial;
             if (hasMaterial)
             {
                 var material = getMain ? MainMaterial : SubMaterial;
-                var ratio = getMain ? MainMaterialRatio : SubMaterialRatio;
+                //var ratio = getMain ? MainMaterialRatio : SubMaterialRatio;
                 var ge = material.Ge ?? 0;
-                return ge * ratio;
+                return ge;
             };
             return 0;
         }
@@ -160,10 +170,10 @@ namespace Calc.Core.Objects.Buildups
             return true;
         }
 
-        public void UpdateCalculation(double totalRation)
+        public void UpdateCalculation(double normalizeRatio)
         {
             CalculationComponents.Clear();
-            CalculationComponents = CalculationComponent.FromLayer(this, totalRation);
+            CalculationComponents = CalculationComponent.FromLayer(this, normalizeRatio);
             OnPropertyChanged(nameof(HasParamError));
             OnPropertyChanged(nameof(CalculationCompleted));
 

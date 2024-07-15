@@ -20,22 +20,44 @@ namespace Calc.Core.Snapshots
         [JsonProperty("material_unit")]
         public Unit MaterialUnit { get; set; }
         [JsonProperty("material_amount")]
-        public double MaterialAmount { get; set; } // the total amount of the whole buildup amount
+        public double MaterialAmount { get; set; }
         [JsonProperty("material_carbon_a1a3")]
         public double? MaterialGwp { get; set; } // the unit gwp of the material
         [JsonProperty("material_grey_energy_fabrication_total")]
-        public double? MaterialGe { get; set; } // the unit ge of the material
+        public double? MaterialGe { get; set; } // the unit ge of the material, for validation
         [JsonProperty("calculated_carbon_a1a3")]
-        public double? Gwp { get; set; }
+        public double? CalculatedGwp { get; set; }
         [JsonProperty("calculated_grey_energy_fabrication_total")]
-        public double? Ge { get; set; }
+        public double? CalculatedGe { get; set; }
 
     
-        public void ApplyRatio(double ratio)
+        /// <summary>
+        /// when claiming the element, the element amount ratio means
+        /// how many times buildup unit does this element have,
+        /// apply the ratio to the snapshot, calculated gwp and ge are multiplied
+        /// </summary>
+        public void ApplyAmountRatio(double amountRatio)
         {
-            MaterialAmount = MaterialAmount * ratio;
-            if (MaterialGwp.HasValue) Gwp = MaterialGwp * MaterialAmount;
-            if (MaterialGe.HasValue) Ge = MaterialGe * MaterialAmount;
+            MaterialAmount = MaterialAmount * amountRatio;
+            if (MaterialGwp.HasValue) CalculatedGwp = MaterialGwp * MaterialAmount; // this should equal CalculatedGwp * amountRatio
+            if (MaterialGe.HasValue) CalculatedGe = MaterialGe * MaterialAmount;
+        }
+
+        public MaterialSnapshot Copy()
+            {
+            return new MaterialSnapshot
+            {
+                MaterialFunction = MaterialFunction,
+                MaterialSourceUuid = MaterialSourceUuid,
+                MaterialSource = MaterialSource,
+                MaterialName = MaterialName,
+                MaterialUnit = MaterialUnit,
+                MaterialAmount = MaterialAmount,
+                MaterialGwp = MaterialGwp,
+                MaterialGe = MaterialGe,
+                CalculatedGwp = CalculatedGwp,
+                CalculatedGe = CalculatedGe
+            };
         }
     }
 }

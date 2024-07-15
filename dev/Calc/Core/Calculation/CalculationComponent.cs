@@ -40,26 +40,25 @@ namespace Calc.Core.Calculation
             }
         }
 
-        public static List<CalculationComponent> FromLayer(LayerComponent layer, double totalRatio)
+        public static List<CalculationComponent> FromLayer(LayerComponent layer, double normalizeRatio)
         {
             var result = new List<CalculationComponent>();
    
             if (!layer.HasMainMaterial) return result;
-            var mainCalculationComponent = FromLayerMaterial(layer, totalRatio, true);
+            var mainCalculationComponent = FromLayerMaterial(layer, normalizeRatio, true);
             result.Add(mainCalculationComponent);
 
             if (!layer.HasSubMaterial) return result;
-            var subCalculationComponent = FromLayerMaterial(layer, totalRatio, false);
+            var subCalculationComponent = FromLayerMaterial(layer, normalizeRatio, false);
             result.Add(subCalculationComponent);
             
             return result;
         }
 
-       private static CalculationComponent FromLayerMaterial(LayerComponent layer, double totalRatio, bool getMain = true)
+       private static CalculationComponent FromLayerMaterial(LayerComponent layer, double normalizeRatio, bool getMain = true)
         {
             var layerAmountParam = layer.GetAmountParam();
-            var layerAmount = layer.GetLayerAmount(totalRatio);
-            var materialRatio = getMain ? layer.MainMaterialRatio : layer.SubMaterialRatio;
+            var layerAmount = layer.GetLayerAmount(normalizeRatio, getMain);
 
             var materialGwp = layer.GetMaterialGwp(getMain) * layerAmount;
             var materialGe = layer.GetMaterialGe(getMain) * layerAmount;
@@ -68,7 +67,7 @@ namespace Calc.Core.Calculation
             {
                 Material = getMain ? layer.MainMaterial : layer.SubMaterial,
                 Function = layer.Function,
-                Amount = (layerAmount * materialRatio).Value,
+                Amount = layerAmount.Value,
                 HasError = layerAmountParam.HasError,
                 Gwp = Math.Round(materialGwp.Value,3),
                 Ge = Math.Round(materialGe.Value,3),

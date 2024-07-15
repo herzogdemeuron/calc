@@ -465,11 +465,11 @@ namespace Calc.MVVM.ViewModels
 
         public void UpdateCalculationComponents()
         {
-            var quantityRatio = GetQuantityRatio();
+            var normalizeRatio = GetNormalizeRatio();
 
             foreach (var component in BuildupComponents)
             {
-                component.UpdateCalculationComponents(quantityRatio);
+                component.UpdateCalculationComponents(normalizeRatio);
             }
             OnPropertyChanged(nameof(StandardsString));
             OnPropertyChanged(nameof(CurrentCalculationComponents));
@@ -481,9 +481,9 @@ namespace Calc.MVVM.ViewModels
 
 
         /// <summary>
-        /// get the quantity ratio from the normalizer
+        /// get the normalize ratio from the normalizer
         /// </summary>
-        private double GetQuantityRatio()
+        private double GetNormalizeRatio()
         {
             var normalizer = BuildupComponents.Where(c => c.IsNormalizer).ToList();
             if (normalizer.Count != 1) return 0;

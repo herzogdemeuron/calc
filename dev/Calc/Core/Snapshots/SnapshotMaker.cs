@@ -25,30 +25,29 @@ namespace Calc.Core.Snapshots
             
                 foreach (var buildup in branch.Buildups)
                 {               
-                    var snapshots = GetBuildupSnapshot(buildup, element);
+                    var snapshots = MakeBuildupSnapshot(buildup, element);
                     resultList.AddRange(snapshots);                    
-                }
-            
+                }            
 
             branch.BuildupSnapshots = resultList;
         }
 
 
         /// <summary>
-        /// generate the snapshots for a buildup, claim the element type id
+        /// generate the snapshots for a buildup, 
+        /// the element type id should already be claimed in GetBuildupSnapshot
         /// </summary>
-        /// <param name="buildup"></param>
         public static void Snap(Buildup buildup)
         {
-            var snapshots = GetBuildupSnapshot(buildup);
+            var snapshots = MakeBuildupSnapshot(buildup);
             buildup.BuildupSnapshot = snapshots;
         }
 
 
         /// <summary>
-        /// make the snapshots for a branch, claim the element to the snapshots if given
+        /// make the snapshots for a buildup (of unit amount), (for a branch) claim the element to the snapshot
         /// </summary>
-        public static List<BuildupSnapshot> GetBuildupSnapshot(Buildup buildup, CalcElement? element=null)
+        public static List<BuildupSnapshot> MakeBuildupSnapshot(Buildup buildup, CalcElement? element=null)
         {
             var snapshots = new List<BuildupSnapshot>();
             foreach (var component in buildup.CalculationComponents)
@@ -63,114 +62,115 @@ namespace Calc.Core.Snapshots
             return snapshots;
         }
 
-
         /// <summary>
-        /// get the buildup snapshot from a single calculation component
+        /// get the buildup snapshot from a single calculation component in a buildup
         /// </summary>
-        private static BuildupSnapshot GetBuildupSnapshot(CalculationComponent component, Buildup buildup)
+        private static BuildupSnapshot GetBuildupSnapshot(CalculationComponent caComponent, Buildup buildup)
         {
             var calculationComponents = buildup.CalculationComponents;
 
-            var material = component.Material;
+            var material = caComponent.Material;
             var materialSnapshot = new MaterialSnapshot
             {
-                MaterialFunction = component.Function.Name,
+                MaterialFunction = caComponent.Function.Name,
                 MaterialSourceUuid = material.SourceUuid,
                 MaterialSource = material.DataSource,
                 MaterialName = material.Name,
                 MaterialUnit = material.MaterialUnit,
-                MaterialAmount = component.Amount,
+                MaterialAmount = caComponent.Amount,
                 MaterialGwp = material.Gwp,
                 MaterialGe = material.Ge,
-                Gwp = component.Gwp,
-                Ge = component.Ge
+                CalculatedGwp = caComponent.Gwp,
+                CalculatedGe = caComponent.Ge
             };
 
-            var snapshot = new BuildupSnapshot
+            var bSnapshot = new BuildupSnapshot
             {
                 BuildupName = buildup.Name,
                 BuildupCode = buildup.Code,
                 BuildupGroup = buildup.Group.Name,
                 BuildupUnit = buildup.BuildupUnit,
-                BuildupGwp = buildup.BuildupGwp,
-                BuildupGe = buildup.BuildupGe,
                 MaterialSnapshots = new List<MaterialSnapshot> { materialSnapshot }
             };
 
-            if (component.ElementTypeId != null)
+            if (caComponent.ElementTypeId != null)
             {
                 // the element type id should be claimed
                 // if the calculation component was generated from layer component
-                snapshot.ClaimElementTypeId(component.ElementTypeId);                                                                      
+                bSnapshot.ClaimElementTypeId(caComponent.ElementTypeId);
             }
 
-            return snapshot;
+            return bSnapshot;
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // deprecated
-        public static List<LayerResult> GetResult(double totalRatio, BuildupComponent buildupComponent, Unit buildupUnit, string buildupName, string buildupCode, string buildupGroup)
+        /// <summary>
+        /// merge the buildup snapshots and their material snapshots
+        /// </summary>
+        private static List<BuildupSnapshot> MergeSnapshots(List<BuildupSnapshot> buildupSnapshots)
         {
-            var result = new List<LayerResult>();
-            var layerComponents = buildupComponent.LayerComponents;
-            if (layerComponents == null) return result;
-            foreach (var layerComponent in layerComponents)
+            var result = MergeBuildupSnapshots(buildupSnapshots);
+            foreach (var snapshot in result)
             {
-                var calculationComponents = layerComponent.CalculationComponents;
-                if (calculationComponents == null) continue;
-                foreach (var component in calculationComponents)
+                snapshot.MaterialSnapshots = MergeMaterialSnapshots(snapshot.MaterialSnapshots);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// merge buildup snapshots according to the same element_group && buildup_code && element_type_id
+        /// </summary>
+        private static List<BuildupSnapshot> MergeBuildupSnapshots(List<BuildupSnapshot> buildupSnapshots)
+        {
+            var result = new List<BuildupSnapshot>();
+
+            foreach (var bSnapshot in buildupSnapshots)
+            {
+                var existingSnapshot = result.Find(s =>
+                    s.ElementTypeId == bSnapshot.ElementTypeId &&
+                    s.BuildupCode == bSnapshot.BuildupCode &&
+                    s.ElementGroup == bSnapshot.ElementGroup);
+
+                if (existingSnapshot != null)
                 {
-                    var calculationResult = new LayerResult
-                    {
-                        ElementTypeId = buildupComponent.TypeIdentifier.ToString(),
-                        ElementType = $"{buildupComponent.Title} : {layerComponent.Title}",
-                        ElementUnit = component.Material.MaterialUnit,
-                        ElementAmount = (double)layerComponent.GetLayerAmount(totalRatio), // the layer amount is normalized to the total ratio
+                    existingSnapshot.ElementIds.AddRange(bSnapshot.ElementIds);
 
-                        BuildupName = buildupName,
-                        BuildupCode = buildupCode,
-                        GroupName = buildupGroup,
-                        BuildupUnit = buildupUnit,
-
-                        MaterialName = component.Material.Name,
-                        MaterialUnit = component.Material.MaterialUnit,
-                        MaterialAmount = component.Amount,
-                        MaterialStandard = component.Material.Standard.Name,
-                        MaterialSource = component.Material.DataSource,
-                        MaterialSourceUuid = component.Material.SourceUuid,
-                        MaterialFunction = component.Function.Name,
-                        MaterialGwp = component.Material.Gwp ?? 0,
-                        MaterialGe = component.Material.Ge ?? 0,
-
-                        Gwp = component.Gwp ?? 0,
-                        Ge = component.Ge ?? 0
-                    };
-                    result.Add(calculationResult);
+                    existingSnapshot.MaterialSnapshots.AddRange(bSnapshot.MaterialSnapshots);
+                }
+                else
+                {
+                    result.Add(bSnapshot.Copy());
                 }
             }
 
             return result;
-
         }
 
+        /// <summary>
+        /// merge the material snapshots with the same material_function && material_source_uuid && material_source
+        /// </summary>
+        private static List<MaterialSnapshot> MergeMaterialSnapshots(List<MaterialSnapshot> materialSnapshots)
+        {
+            var result = new List<MaterialSnapshot>();
 
+            foreach (var mSnapshot in materialSnapshots)
+            {
+                var existingMaterial = result.Find(m =>
+                    m.MaterialSourceUuid == mSnapshot.MaterialSourceUuid &&
+                    m.MaterialSource == mSnapshot.MaterialSource &&
+                    m.MaterialFunction == mSnapshot.MaterialFunction);
 
-
+                if (existingMaterial != null)
+                {
+                    existingMaterial.MaterialAmount += mSnapshot.MaterialAmount;
+                    existingMaterial.CalculatedGwp += mSnapshot.CalculatedGwp;
+                    existingMaterial.CalculatedGe += mSnapshot.CalculatedGe;
+                }
+                else
+                {
+                    result.Add(mSnapshot.Copy());
+                }
+            }
+            return result;
+        }       
     }
 }

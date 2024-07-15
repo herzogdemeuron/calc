@@ -47,11 +47,11 @@ namespace Calc.Core.Objects.Buildups
 
         public bool HasLayers => LayerComponents.Count > 0;
 
-        public void UpdateCalculationComponents(double totalRation)
+        public void UpdateCalculationComponents(double normalizeRatio)
         {
             foreach (var layer in LayerComponents)
             {
-                layer.UpdateCalculation(totalRation);
+                layer.UpdateCalculation(normalizeRatio);
             }
         }
 
