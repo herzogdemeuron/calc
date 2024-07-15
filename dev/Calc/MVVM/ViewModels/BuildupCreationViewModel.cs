@@ -497,7 +497,7 @@ namespace Calc.MVVM.ViewModels
 
 
 
-        private Buildup CreateBuildup(string imageUuid, string speckleModelId)
+        private Buildup CreateBuildup(string imageUuid,string speckleProjectId, string speckleModelId)
         {
             var buildup = new Buildup
             {
@@ -518,8 +518,9 @@ namespace Calc.MVVM.ViewModels
                 buildup.BuildupImage = new BuildupImage() { Id = imageUuid };
             }
 
-            if (!string.IsNullOrEmpty(speckleModelId))
+            if (!string.IsNullOrEmpty(speckleModelId) && !string.IsNullOrEmpty(speckleProjectId))
             {
+                buildup.SpeckleProjectId = speckleProjectId;
                 buildup.SpeckleModelId = speckleModelId;
             }
 
@@ -536,7 +537,8 @@ namespace Calc.MVVM.ViewModels
             {
                 string imageUuid = await store.UploadImageAsync(currentImagePath, NewBuildupName); // todo: make this more robust
                 var speckleModelId = await SendElementsToSpeckle();
-                var buildup = CreateBuildup(imageUuid, speckleModelId);
+                var speckleProjectId = store.Config.SpeckleBuilderProjectId;
+                var buildup = CreateBuildup(imageUuid, speckleProjectId, speckleModelId);
 
                 if (updateId != null)
                 {

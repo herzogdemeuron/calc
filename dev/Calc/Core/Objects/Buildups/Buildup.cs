@@ -71,6 +71,8 @@ namespace Calc.Core.Objects.Buildups
 
         [JsonProperty("image")]
         public BuildupImage BuildupImage { get; set; }
+        [JsonProperty("speckle_project_id")]
+        public string SpeckleProjectId { get; set; }
         [JsonProperty("speckle_model_id")]
         public string SpeckleModelId { get; set; }
 
