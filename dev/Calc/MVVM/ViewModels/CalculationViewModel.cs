@@ -1,15 +1,13 @@
-﻿using Calc.MVVM.Helpers.Mediators;
-using Calc.Core;
+﻿using Calc.Core;
 using Calc.Core.Objects;
+using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.GraphNodes;
-using Calc.Core.Objects.Results;
-using System;
+using Calc.Core.Snapshots;
+using Calc.MVVM.Helpers.Mediators;
+using Calc.MVVM.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using Calc.MVVM.Models;
-using Calc.Core.Objects.BasicParameters;
-using Calc.Core.Snapshots;
 
 namespace Calc.MVVM.ViewModels
 {
@@ -59,26 +57,16 @@ namespace Calc.MVVM.ViewModels
 
                 if (HostNode == null || BuildupSnapshots == null)
                     return null;
-
-                foreach (var bSnapshot in BuildupSnapshots)
+                var materialSnapshots = SnapshotMaker.FlattenBuilupSnapshots(BuildupSnapshots);
+                foreach(var mSnapshot in  materialSnapshots)
                 {
-                    var existingResult = calculation.FirstOrDefault(c => c.MaterialFunction == bSnapshot.GroupName);
-                    if (existingResult != null)
+                    calculation.Add(new CategorizedResultModel
                     {
-                        existingResult.Gwp += Math.Round(bSnapshot.BuildupGwp??0, 3);
-                        existingResult.Ge += Math.Round(bSnapshot.Ge??0, 3);
-                    }
-                    else
-                    {
-                        calculation.Add(new CategorizedResultModel
-                        {
-                            MaterialFunction = bSnapshot.GroupName,
-                            Gwp = Math.Round(bSnapshot.Gwp, 0),
-                            Ge = Math.Round(bSnapshot.Ge, 0)
-                        });
-                    }
+                        MaterialFunction = mSnapshot.MaterialFunction,
+                        Gwp = mSnapshot.CalculatedGwp.Value,
+                        Ge = mSnapshot.CalculatedGe.Value
+                    });
                 }
-
                 return calculation;
             }
         }

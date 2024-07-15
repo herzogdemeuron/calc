@@ -126,7 +126,9 @@ namespace Calc.Core.Snapshots
                 var existingSnapshot = result.Find(s =>
                     s.ElementTypeId == bSnapshot.ElementTypeId &&
                     s.BuildupCode == bSnapshot.BuildupCode &&
-                    s.ElementGroup == bSnapshot.ElementGroup);
+                    s.ElementGroup == bSnapshot.ElementGroup&&
+                    s.BuildupGroup == bSnapshot.BuildupGroup
+                    );
 
                 if (existingSnapshot != null)
                 {
