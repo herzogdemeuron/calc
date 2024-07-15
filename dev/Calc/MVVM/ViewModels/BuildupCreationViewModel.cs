@@ -62,7 +62,7 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        private List<CalculationComponent> CurrentCalculationComponents
+        public List<CalculationComponent> CurrentCalculationComponents
         {
             get
             {

@@ -2,6 +2,7 @@
 using Calc.Core.Objects;
 using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.GraphNodes;
+using Calc.Core.Objects.Materials;
 using Calc.Core.Snapshots;
 using Calc.MVVM.Helpers.Mediators;
 using Calc.MVVM.Models;
@@ -58,15 +59,34 @@ namespace Calc.MVVM.ViewModels
                 if (HostNode == null || BuildupSnapshots == null)
                     return null;
                 var materialSnapshots = SnapshotMaker.FlattenBuilupSnapshots(BuildupSnapshots);
+                var result = new Dictionary<string, (double, double)>();
                 foreach(var mSnapshot in  materialSnapshots)
                 {
-                    calculation.Add(new CategorizedResultModel
+                    var materialFunction = mSnapshot.MaterialFunction;
+                    var gwp = mSnapshot.CalculatedGwp.Value;
+                    var ge = mSnapshot.CalculatedGe.Value;
+                    if (result.ContainsKey(materialFunction))
                     {
-                        MaterialFunction = mSnapshot.MaterialFunction,
-                        Gwp = mSnapshot.CalculatedGwp.Value,
-                        Ge = mSnapshot.CalculatedGe.Value
-                    });
+                        var (gwpSum, geSum) = result[materialFunction];
+                        result[materialFunction] = (gwpSum + gwp, geSum + ge);
+                    }
+                    else
+                    {
+                        result[materialFunction] = (gwp, ge);
+                    }
                 }
+                foreach (var item in result)
+                {
+                    var materialFunction = item.Key;
+                    var (gwp, ge) = item.Value;
+                    calculation.Add(
+                        new CategorizedResultModel
+                        {
+                            MaterialFunction = materialFunction,
+                            Gwp = gwp,
+                            Ge = ge
+                        });
+                }                
                 return calculation;
             }
         }

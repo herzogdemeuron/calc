@@ -26,10 +26,8 @@ public class Tree : Branch, IGraphNode
     public List<CalcElement> Plant(List<CalcElement> searchElements)
     {
         Elements = new ElementFilter().FilterElements(searchElements, FilterConfig);
-        Elements.ForEach(e => e.ParentTree = this);
-
-        // clear subbranches
         SubBranches.Clear();
+        this.ParentTree = this;
 
         if (BranchConfig != null && BranchConfig.Count > 0)
         {
@@ -54,7 +52,6 @@ public class Tree : Branch, IGraphNode
             currentBranch = currentBranch.AddBranch(parameter, value, buildups);
         }
     }
-
 
     public string Serialize()
     {

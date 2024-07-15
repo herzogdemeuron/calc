@@ -79,7 +79,7 @@ namespace Calc.Core.Objects.GraphNodes
                 OnPropertyChanged(nameof(Buildups));
 
                 // only for dead end branches:
-                if (SubBranches.Count == 0) return;
+                if (SubBranches.Count > 0) return;
                 CheckParameterErrors(); // check for errors when buildups are set
                 SnapshotMaker.Snap(this); // update the buildup snapshots
             }
@@ -231,8 +231,8 @@ namespace Calc.Core.Objects.GraphNodes
                     Method = methodName,
                     ParentBranch = this,
                     // set the parent tree and forest of the subbranch
-                    ParentForest = ParentForest,
-                    ParentTree = BranchLevel == 0 ? this as Tree : ParentTree,
+                    ParentForest = this.ParentForest,
+                    ParentTree = this.BranchLevel == 0 ? this as Tree : this.ParentTree,
                 };
                 SubBranches.Add(branch);
             }

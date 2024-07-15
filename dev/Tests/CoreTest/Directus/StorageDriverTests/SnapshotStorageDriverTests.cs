@@ -43,7 +43,7 @@ namespace Calc.Core.TestIntegration.Drivers
             var storageManager = new DirectusManager<ProjectResult>(this.directus);
 
             // Act
-            var response = await storageManager.CreateSingle<SnapshotStorageDriver>(new SnapshotStorageDriver() { SendItem = snapshot });
+            var response = await storageManager.CreateSingle<ProjectResultStorageDriver>(new ProjectResultStorageDriver() { SendItem = snapshot });
             Console.WriteLine(response.CreatedItem.Id);
 
             // Assert

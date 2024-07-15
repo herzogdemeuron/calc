@@ -30,11 +30,11 @@ namespace Calc.Core.Snapshots
         /// <summary>
         /// claim the snapshot for the element, manipulate the the element amount and the material snapshots
         /// </summary>
-        public void ClaimElement(CalcElement element)
+        public void ClaimElement(CalcElement element, string elementGroup)
         {
             ElementAmount = element.GetBasicUnitParameter(BuildupUnit).Amount.Value;
             ElementIds = new List<string> { element.Id };
-            ElementGroup = element.ParentTree.Name;
+            ElementGroup = elementGroup;
             foreach (var material in MaterialSnapshots)
             {
                 material.ApplyAmountRatio(ElementAmount); // the element amount ratio equals element amount

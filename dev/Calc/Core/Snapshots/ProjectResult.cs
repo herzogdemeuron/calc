@@ -15,7 +15,7 @@ namespace Calc.Core.Snapshots
         [JsonProperty("description")]
         public string Description { get; set; }
 
-        [JsonProperty(PropertyName = "result_file")]
+        [JsonProperty("snapshot_file")]
         public string JsonUuid { get; set; }
     }
 

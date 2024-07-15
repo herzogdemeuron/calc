@@ -29,6 +29,7 @@ namespace Calc.Core.Calculation
         public Material Material { get; set; }
         [JsonIgnore]
         public string ElementTypeId { get; set; }
+        public HslColor HslColor { get; set; }
         public bool HasError { get; set; }
         public bool IsComplete { get => CheckComplete(); }
 
@@ -71,7 +72,8 @@ namespace Calc.Core.Calculation
                 HasError = layerAmountParam.HasError,
                 Gwp = Math.Round(materialGwp.Value,3),
                 Ge = Math.Round(materialGe.Value,3),
-                ElementTypeId = layer.TypeIdentifier
+                ElementTypeId = layer.TypeIdentifier,
+                HslColor = layer.HslColor
             };
         }
 

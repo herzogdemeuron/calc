@@ -452,7 +452,8 @@
                                           ItemsSource="{Binding CalculationComponents}"
                                           DockPanel.Dock="Top">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" Width="3*"  IsReadOnly="True" />
+                                            <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" Width="2*"  IsReadOnly="True" />
+                                            <DataGridTextColumn Header="Function" Binding="{Binding Function.Name}" Width="2*"  IsReadOnly="True" />
                                             <DataGridTextColumn Header="Amount" Width="*"  IsReadOnly="True">
                                                 <DataGridTextColumn.Binding>
                                                     <MultiBinding  StringFormat="{}{0:F3} {1}">
@@ -505,7 +506,7 @@
                                       Margin="10"
                                       ItemsSource="{Binding CalculationVM.CategorizedResults}">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Buildup Group" Binding="{Binding GroupName}" Width="3*"  IsReadOnly="True" />
+                                    <DataGridTextColumn Header="Material function" Binding="{Binding MaterialFunction}" Width="3*"  IsReadOnly="True" />
                                     <DataGridTextColumn Header="GWP (kgCO2eq)" Binding="{Binding Gwp, StringFormat={}{0:F0}}" Width="1*"  IsReadOnly="True" />
                                     <DataGridTextColumn Header="GE (kWhOileq)" Binding="{Binding Ge, StringFormat={}{0:F0}}" Width="1*"  IsReadOnly="True" />
                                 </DataGrid.Columns>

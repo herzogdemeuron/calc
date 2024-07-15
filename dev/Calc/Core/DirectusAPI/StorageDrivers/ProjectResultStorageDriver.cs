@@ -6,7 +6,7 @@ using Calc.Core.Snapshots;
 
 namespace Calc.Core.DirectusAPI.Drivers
 {
-    public class SnapshotStorageDriver : IDriverCreateSingle<ProjectResult>
+    public class ProjectResultStorageDriver : IDriverCreateSingle<ProjectResult>
     {
         public ProjectResult SendItem { get; set; }
 
@@ -32,7 +32,7 @@ namespace Calc.Core.DirectusAPI.Drivers
             {
                 name = SendItem.Name,
                 project = new { id = SendItem.Project.Id },
-                result_file = new
+                snapshot_file = new
                 {
                     id = SendItem.JsonUuid,
                     storage = "cloud",

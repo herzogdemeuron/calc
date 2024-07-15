@@ -20,7 +20,7 @@ namespace Calc.Core
     {
         public event EventHandler<int> ProgressChanged;
         public CalcConfig Config { get; set; }
-        public CalcProject ProjectSelected { get; set; } // the current project
+        public CalcProject ProjectSelected { get; set; }
         public bool AllDataLoaded { get; private set; } = false;
         public List<Unit> UnitsAll { get; set; }
         public List<CalcProject> ProjectsAll { get { return ProjectDriver?.GotManyItems; } }
@@ -80,7 +80,7 @@ namespace Calc.Core
         private BuildupStorageDriver BuildupDriver { get; set; }
         private MappingStorageDriver MappingDriver { get; set; }
         private ForestStorageDriver ForestDriver { get; set; }
-        private SnapshotStorageDriver SnapshotDriver { get; set; }
+        private ProjectResultStorageDriver ResultDriver { get; set; }
         private FolderStorageDriver FolderDriver { get; set; }
         private CustomParamSettingStorageDriver CustomParamSettingDriver { get; set; }
 
@@ -102,7 +102,7 @@ namespace Calc.Core
             BuildupGroupDriver = new BuildupGroupStorageDriver();
             MappingDriver = new MappingStorageDriver();
             ForestDriver = new ForestStorageDriver();
-            SnapshotDriver = new SnapshotStorageDriver();
+            ResultDriver = new ProjectResultStorageDriver();
             FolderDriver = new FolderStorageDriver();
             CustomParamSettingDriver = new CustomParamSettingStorageDriver();
             MaterialFunctionStorageDriver = new MaterialFunctionStorageDriver();
@@ -357,14 +357,14 @@ namespace Calc.Core
             }
         }
 
-        public async Task<(bool,string)> SaveSnapshot(ProjectResult snapshot)
+        public async Task<(bool,string)> SaveProjectResult(ProjectResult snapshot)
         {
 
-            SnapshotDriver.SendItem = snapshot;
+            ResultDriver.SendItem = snapshot;
 
             try
             {
-                await DirectusDriver.CreateSingle<SnapshotStorageDriver, ProjectResult>(SnapshotDriver);
+                await DirectusDriver.CreateSingle<ProjectResultStorageDriver, ProjectResult>(ResultDriver);
                 return (true, null);
 
             }

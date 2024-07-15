@@ -23,7 +23,7 @@ namespace Calc.Core.Snapshots
             
                 foreach (var buildup in branch.Buildups)
                 {               
-                    var s = MakeBuildupSnapshot(buildup, element);
+                    var s = MakeBuildupSnapshot(buildup, element, branch.ParentTree.Name);
                     snapshots.AddRange(s);                    
                 }            
 
@@ -45,15 +45,15 @@ namespace Calc.Core.Snapshots
         /// <summary>
         /// make the snapshots for a buildup (of unit amount), (for a branch) claim the element to the snapshot
         /// </summary>
-        private static List<BuildupSnapshot> MakeBuildupSnapshot(Buildup buildup, CalcElement? element=null)
+        private static List<BuildupSnapshot> MakeBuildupSnapshot(Buildup buildup, CalcElement? element=null, string elementGroup=null)
         {
             var snapshots = new List<BuildupSnapshot>();
             foreach (var component in buildup.CalculationComponents)
             {
                 var snapshot = GetBuildupSnapshot(component, buildup);
-                if (element != null)
+                if (element != null && elementGroup != null)
                 {
-                    snapshot.ClaimElement(element.Value);
+                    snapshot.ClaimElement(element.Value, elementGroup);
                 }
                 snapshots.Add(snapshot);
             }
