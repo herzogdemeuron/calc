@@ -34,6 +34,7 @@ namespace Calc.Core.Snapshots
         {
             ElementAmount = element.GetBasicUnitParameter(BuildupUnit).Amount.Value;
             ElementIds = new List<string> { element.Id };
+            ElementGroup = element.ParentTree.Name;
             foreach (var material in MaterialSnapshots)
             {
                 material.ApplyAmountRatio(ElementAmount); // the element amount ratio equals element amount

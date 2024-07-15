@@ -169,6 +169,19 @@ namespace Calc.Core.Snapshots
                 }
             }
             return result;
-        }       
+        }
+
+        /// <summary>
+        /// flatten the buildup snapshots to a list of merged material snapshots
+        /// </summary>
+        public static List<MaterialSnapshot> FlattenBuilupSnapshots(List<BuildupSnapshot> snapshots)
+        {
+            var result = new List<MaterialSnapshot>();
+            foreach (var snapshot in snapshots)
+            {
+                result.AddRange(snapshot.MaterialSnapshots);
+            }
+            return MergeMaterialSnapshots(result);
+        }
     }
 }

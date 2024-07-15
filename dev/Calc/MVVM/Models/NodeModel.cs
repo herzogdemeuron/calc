@@ -1,5 +1,4 @@
-﻿using Calc.Core.Color;
-using Calc.Core.Objects;
+﻿using Calc.Core.Objects;
 using Calc.Core.Objects.GraphNodes;
 using Calc.MVVM.Helpers;
 using Calc.MVVM.ViewModels;
@@ -7,9 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Dynamic;
 using System.Windows;
-using System.Windows.Media;
 
 namespace Calc.MVVM.Models
 {
@@ -40,34 +37,33 @@ namespace Calc.MVVM.Models
                 {
                     host = value;
                     OnPropertyChanged(nameof(Host));
-                    OnPropertyChanged(nameof(CategorizedCalculation));
+                    //OnPropertyChanged(nameof(CategorizedCalculation));
                 }
             }
         }
 
-        public Dictionary<string, double> CategorizedCalculation
+   /*     public Dictionary<string, double> CategorizedCalculation
         {
             get
             {
                 var calculation = new Dictionary<string, double>();
                 if (Host != null && Host is Branch branch)
                 {
-                    var results = branch.BuildupSnapshots;
-                    foreach (var result in results)
+                    foreach (var bSnapshot in branch.BuildupSnapshots)
                     {
-                        if (calculation.ContainsKey(result.GroupName))
+                        if (calculation.ContainsKey(bSnapshot.GroupName))
                         {
-                            calculation[result.GroupName] += Math.Round(result.Gwp, 3);
+                            calculation[bSnapshot.GroupName] += Math.Round(bSnapshot.Gwp, 3);
                         }
                         else
                         {
-                            calculation.Add(result.GroupName, Math.Round(result.Gwp, 3));
+                            calculation.Add(bSnapshot.GroupName, Math.Round(bSnapshot.Gwp, 3));
                         }
                     }
                 }
                 return calculation;
             }
-        }
+        }*/
 
         private bool _labelColorVisible;
         public bool LabelColorVisible
@@ -177,7 +173,7 @@ namespace Calc.MVVM.Models
             OnPropertyChanged(nameof(UnderlineVisibility));
             OnPropertyChanged(nameof(LabelColorVisible));
             OnPropertyChanged(nameof(Host));
-            OnPropertyChanged(nameof(CategorizedCalculation));
+            //OnPropertyChanged(nameof(CategorizedCalculation));
 
             foreach (var subBranch in SubNodeItems)
             {

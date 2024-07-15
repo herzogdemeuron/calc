@@ -26,9 +26,10 @@ public class Tree : Branch, IGraphNode
     public List<CalcElement> Plant(List<CalcElement> searchElements)
     {
         Elements = new ElementFilter().FilterElements(searchElements, FilterConfig);
+        Elements.ForEach(e => e.ParentTree = this);
 
         // clear subbranches
-        SubBranches = new List<Branch>();
+        SubBranches.Clear();
 
         if (BranchConfig != null && BranchConfig.Count > 0)
         {

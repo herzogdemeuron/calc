@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Collections.ObjectModel;
 using Calc.Core.Objects.BasicParameters;
+using Calc.Core.Objects.GraphNodes;
 
 namespace Calc.Core.Objects.Elements
 {
@@ -15,6 +16,7 @@ namespace Calc.Core.Objects.Elements
         public string Id;
         public string TypeName;
         public string Category;
+        public Tree ParentTree;
         public Dictionary<string, object> Fields;
         private Dictionary<Unit, BasicParameter> _quantities;
 

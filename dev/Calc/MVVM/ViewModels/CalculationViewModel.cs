@@ -60,21 +60,21 @@ namespace Calc.MVVM.ViewModels
                 if (HostNode == null || BuildupSnapshots == null)
                     return null;
 
-                foreach (var result in BuildupSnapshots)
+                foreach (var bSnapshot in BuildupSnapshots)
                 {
-                    var existingResult = calculation.FirstOrDefault(c => c.MaterialFunction == result.GroupName);
+                    var existingResult = calculation.FirstOrDefault(c => c.MaterialFunction == bSnapshot.GroupName);
                     if (existingResult != null)
                     {
-                        existingResult.Gwp += Math.Round(result.BuildupGwp??0, 3);
-                        existingResult.Ge += Math.Round(result.Ge??0, 3);
+                        existingResult.Gwp += Math.Round(bSnapshot.BuildupGwp??0, 3);
+                        existingResult.Ge += Math.Round(bSnapshot.Ge??0, 3);
                     }
                     else
                     {
                         calculation.Add(new CategorizedResultModel
                         {
-                            MaterialFunction = result.GroupName,
-                            Gwp = Math.Round(result.Gwp, 0),
-                            Ge = Math.Round(result.Ge, 0)
+                            MaterialFunction = bSnapshot.GroupName,
+                            Gwp = Math.Round(bSnapshot.Gwp, 0),
+                            Ge = Math.Round(bSnapshot.Ge, 0)
                         });
                     }
                 }
