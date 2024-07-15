@@ -329,7 +329,7 @@
                     <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
 
-                <Label Content="Buildups"
+                <Label Content="Assemblies"
                        Grid.Row="0"
                        Padding="0"
                        FontSize="27"

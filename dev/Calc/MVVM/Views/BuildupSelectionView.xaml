@@ -13,7 +13,7 @@
         MinWidth="450"
         WindowStartupLocation="CenterScreen"
         Icon="pack://application:,,,/CalcMVVM;component/Resources/icon_main_small.png"
-        Title="Buildup Selection"
+        Title="Assembly Selection"
         Topmost="True"
         LocationChanged="WindowLocationChanged"
         Loaded="WindowLocationChanged">
@@ -42,7 +42,7 @@
             <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
 
-        <Label Content="Buildup Selection"
+        <Label Content="Assembly Selection"
                    Grid.Column="1"
                    Grid.ColumnSpan="3"
                    Grid.Row="0"
