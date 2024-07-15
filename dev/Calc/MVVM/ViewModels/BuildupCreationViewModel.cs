@@ -542,12 +542,12 @@ namespace Calc.MVVM.ViewModels
                 {
                     buildup.Id = updateId.Value;
                     await store.UpdateSingleBuildup(buildup);
-                    SaveMessage = "Buildup updated.";
+                    SaveMessage = "Assembly updated.";
                 }
                 else
                 {
                     await store.SaveSingleBuildup(buildup);
-                    SaveMessage = "New Buildup saved.";
+                    SaveMessage = "New Assembly saved.";
                     CheckSaveOrUpdate();
                 }
 
