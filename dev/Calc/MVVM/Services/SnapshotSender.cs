@@ -1,12 +1,10 @@
 ﻿using Calc.Core;
-using Calc.Core.Objects.Results;
+using Calc.Core.Snapshots;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.IO;
-using Newtonsoft.Json;
-using Calc.Core.Snapshots;
+using System.Threading.Tasks;
 
 namespace Calc.MVVM.Services
 {
@@ -44,6 +42,7 @@ namespace Calc.MVVM.Services
 
         private static ProjectSnapshot MakeProjectSnapshot(CalcStore store, List<BuildupSnapshot> buildupSnapshots)
         {
+            var bSnapshot = SnapshotMaker.MergeSnapshots(buildupSnapshots);
             var snapshot = new ProjectSnapshot()
             {
                 ProjectNumber = store.ProjectSelected.Number,
@@ -54,7 +53,7 @@ namespace Calc.MVVM.Services
                 LifeSpan = store.ProjectSelected.LifeSpan,
                 Stages = store.ProjectSelected.Stages,
                 ImpactCategories = store.ProjectSelected.ImpactCategories,
-                BuildupSnapshots = buildupSnapshots
+                BuildupSnapshots = bSnapshot
             };
             return snapshot;
         }

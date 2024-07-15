@@ -1,9 +1,6 @@
 ﻿using Calc.Core.Objects;
 using Calc.Core.Objects.Buildups;
-using Calc.Core.Objects.Results;
-using Calc.MVVM.Helpers;
 using Calc.MVVM.Helpers.Mediators;
-using Calc.MVVM.Models;
 using Calc.MVVM.ViewModels;
 using System;
 using System.Windows;

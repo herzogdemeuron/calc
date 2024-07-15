@@ -5,7 +5,6 @@ using Calc.Core.Interfaces;
 using Calc.Core.Objects;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Materials;
-using Calc.Core.Objects.Results;
 using Calc.Core.Objects.Standards;
 using Calc.Core.Snapshots;
 using Calc.MVVM.Helpers.Mediators;

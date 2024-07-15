@@ -1,5 +1,4 @@
 ﻿using Calc.Core.Calculation;
-using Calc.Core.Objects.Results;
 using Calc.Core.Objects.Standards;
 using Calc.Core.Snapshots;
 using Newtonsoft.Json;

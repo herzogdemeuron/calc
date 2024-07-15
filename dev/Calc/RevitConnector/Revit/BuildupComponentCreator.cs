@@ -1,15 +1,13 @@
-﻿ using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Calc.Core.Interfaces;
 using Calc.Core.Objects;
 using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Elements;
-using Calc.Core.Objects.Results;
 using Calc.RevitConnector.Config;
 using Calc.RevitConnector.Helpers;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows.Documents;
 

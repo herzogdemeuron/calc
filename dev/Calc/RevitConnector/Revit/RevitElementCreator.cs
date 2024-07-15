@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.DB;
+using Calc.Core.Interfaces;
+using Calc.Core.Objects;
+using Calc.Core.Objects.Elements;
 using Calc.RevitConnector.Config;
 using Calc.RevitConnector.Helpers;
-using Calc.Core.Objects;
-using Calc.Core.Objects.Results;
-using Calc.Core.Interfaces;
-using Calc.Core.Objects.BasicParameters;
-using Calc.Core.Objects.Elements;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Calc.RevitConnector.Revit
 {

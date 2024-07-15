@@ -21,7 +21,7 @@ namespace Calc.Core.Snapshots
         public string ElementTypeId { get; set; }
         [JsonProperty("element_ids")]
         public List<string> ElementIds { get; set; } = new List<string>();
-        [JsonProperty("element_unit")]
+        [JsonProperty("element_amount")]
         public double ElementAmount { get; set; } // uses the buildup unit
 
         [JsonProperty("materials")]

@@ -3,6 +3,7 @@ using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Elements;
 using Calc.Core.Objects.GraphNodes;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Calc.Core.Snapshots
 {
@@ -104,7 +105,7 @@ namespace Calc.Core.Snapshots
         /// <summary>
         /// merge the buildup snapshots and their material snapshots
         /// </summary>
-        private static List<BuildupSnapshot> MergeSnapshots(List<BuildupSnapshot> buildupSnapshots)
+        public static List<BuildupSnapshot> MergeSnapshots(List<BuildupSnapshot> buildupSnapshots)
         {
             var result = MergeBuildupSnapshots(buildupSnapshots);
             foreach (var snapshot in result)
@@ -132,8 +133,7 @@ namespace Calc.Core.Snapshots
 
                 if (existingSnapshot != null)
                 {
-                    existingSnapshot.ElementIds.AddRange(bSnapshot.ElementIds);
-
+                    existingSnapshot.ElementIds.AddRange(bSnapshot.ElementIds.Except(existingSnapshot.ElementIds));
                     existingSnapshot.MaterialSnapshots.AddRange(bSnapshot.MaterialSnapshots);
                 }
                 else
