@@ -1,9 +1,7 @@
 ﻿using Calc.Core.Calculation;
-using Calc.Core.Objects;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Elements;
 using Calc.Core.Objects.GraphNodes;
-using Calc.Core.Objects.Results;
 using System.Collections.Generic;
 
 namespace Calc.Core.Snapshots
@@ -20,16 +18,16 @@ namespace Calc.Core.Snapshots
         public static void Snap(Branch branch) //move this to branch?
         {
 
-            var resultList = new List<BuildupSnapshot>();
+            var snapshots = new List<BuildupSnapshot>();
             foreach (var element in branch.Elements)
             
                 foreach (var buildup in branch.Buildups)
                 {               
-                    var snapshots = MakeBuildupSnapshot(buildup, element);
-                    resultList.AddRange(snapshots);                    
+                    var s = MakeBuildupSnapshot(buildup, element);
+                    snapshots.AddRange(s);                    
                 }            
 
-            branch.BuildupSnapshots = resultList;
+            branch.BuildupSnapshots = MergeSnapshots(snapshots);
         }
 
 
@@ -40,14 +38,14 @@ namespace Calc.Core.Snapshots
         public static void Snap(Buildup buildup)
         {
             var snapshots = MakeBuildupSnapshot(buildup);
-            buildup.BuildupSnapshot = snapshots;
+            buildup.BuildupSnapshot = MergeSnapshots(snapshots);
         }
 
 
         /// <summary>
         /// make the snapshots for a buildup (of unit amount), (for a branch) claim the element to the snapshot
         /// </summary>
-        public static List<BuildupSnapshot> MakeBuildupSnapshot(Buildup buildup, CalcElement? element=null)
+        private static List<BuildupSnapshot> MakeBuildupSnapshot(Buildup buildup, CalcElement? element=null)
         {
             var snapshots = new List<BuildupSnapshot>();
             foreach (var component in buildup.CalculationComponents)
