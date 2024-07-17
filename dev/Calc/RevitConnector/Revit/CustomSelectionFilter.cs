@@ -15,7 +15,8 @@ namespace Calc.RevitConnector.Revit
             typeof(FamilyInstance),
             typeof(Mullion),
             typeof(Panel),
-            typeof(ModelCurve)
+            typeof(ModelCurve),
+            typeof(Group)
         };
 
         public CustomSelectionFilter()
