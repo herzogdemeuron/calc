@@ -13,38 +13,25 @@ using System.Windows.Documents;
 
 namespace Calc.RevitConnector.Revit
 {
-    public class BuildupComponentCreator : IBuildupComponentCreator
+    public class BuildupComponentCreator 
     {
         private readonly Document Doc;
         private readonly UIDocument Uidoc;
         private List<RevitBasicParamConfig> basicParamConfigs;
+        private ElementSelectionSet ElementSelectionSet;
         public BuildupComponentCreator(UIDocument uidoc)
         {
             Doc = uidoc.Document;
             Uidoc = uidoc;
         }
 
-        /// <summary>
-        /// prompt the user to select elements from revit, and return a list of buildup components.
-        /// </summary>
-        public List<BuildupComponent> CreateBuildupComponentsFromSelection(List<CustomParamSetting> customParamSettings)
-        {
-            basicParamConfigs = new List<RevitBasicParamConfig>();
-            foreach (CustomParamSetting paramSetting in customParamSettings)
-            {
-                var setting = ParameterHelper.ParseFromParamSetting(paramSetting);
-                if (setting != null) basicParamConfigs.Add(setting);
-            }
-
-            var ids = SelectionHelper.SelectElements(Uidoc);
-            return CreateBuildupComponents(ids);
-        }
 
         /// <summary>
         /// create a list of buildup components from a list of element ids
         /// </summary>
-        private List<BuildupComponent> CreateBuildupComponents(List<ElementId> ids)
+        public List<BuildupComponent> CreateBuildupComponents(List<ElementId> ids, List<RevitBasicParamConfig> bParamConfigs)
         {
+            basicParamConfigs = bParamConfigs;
             var result = new List<BuildupComponent>();
             var elements = ids.Select(x => Doc.GetElement(x)).ToList();
             foreach (var element in elements)

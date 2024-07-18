@@ -25,10 +25,11 @@ namespace Calc.MVVM.ViewModels
     public class BuildupCreationViewModel : INotifyPropertyChanged
     {
         private readonly CalcStore store;
-        private readonly IBuildupComponentCreator buildupComponentCreator;
+        private readonly IElementSourceHandler elementSourceHandler;
         private readonly IImageSnapshotCreator imageSnapshotCreator;
         private readonly IElementSender elementSender;
 
+        private Dictionary<string, string> DynamicProperties = new Dictionary<string, string>();
         public List<LcaStandard> StandardsAll { get => store.StandardsAll; }
         public List<Unit> BuildupUnitsAll { get => store.UnitsAll; }
         public List<MaterialFunction> MaterialFunctionsAll { get => store.MaterialFunctionsAll; }
@@ -284,10 +285,10 @@ namespace Calc.MVVM.ViewModels
         public double? BuildupGe { get => CurrentCalculationComponents?.Sum(c => c.Ge); }
 
 
-        public BuildupCreationViewModel(CalcStore store, IBuildupComponentCreator bcCreator, IImageSnapshotCreator imgCreator, IElementSender elemSender)
+        public BuildupCreationViewModel(CalcStore store, IElementSourceHandler elemSrcHandler, IImageSnapshotCreator imgCreator, IElementSender elemSender)
         {
             this.store = store;
-            buildupComponentCreator = bcCreator;
+            elementSourceHandler = elemSrcHandler;
             imageSnapshotCreator = imgCreator;
             elementSender = elemSender;
         }
@@ -368,8 +369,10 @@ namespace Calc.MVVM.ViewModels
         /// </summary>
         public void HandleSelectingElements()
         {
-            var components = buildupComponentCreator.CreateBuildupComponentsFromSelection(store.CustomParamSettingsAll);
-            BuildupComponents = new ObservableCollection<BuildupComponent>(components);
+            var result = elementSourceHandler.SelectElements(store.CustomParamSettingsAll);
+            BuildupComponents = new ObservableCollection<BuildupComponent>(result.BuildupComponents);
+            DynamicProperties = result.Parameters;
+            if (result.GroupName != null)  NewBuildupCode = result.GroupName;
 
             UpdateLayerMaterialModels();
             UpdateLayerColors();
@@ -495,8 +498,6 @@ namespace Calc.MVVM.ViewModels
             return 0;
         }
 
-
-
         private Buildup CreateBuildup(string imageUuid,string speckleProjectId, string speckleModelId)
         {
             var buildup = new Buildup
@@ -578,7 +579,7 @@ namespace Calc.MVVM.ViewModels
         private async Task<string> SendElementsToSpeckle()
         {
             var elementIds = BuildupComponents.SelectMany(c => c.ElementIds).ToList();
-            return await elementSender.SendToSpeckle(elementIds, NewBuildupCode, NewBuildupDescription);
+            return await elementSender.SendToSpeckle(elementIds, NewBuildupCode, NewBuildupDescription, DynamicProperties);
         }
 
         private bool CheckCanSave()

@@ -14,9 +14,10 @@ namespace Calc.Core.Interfaces
         List<CalcElement> CreateCalcElements(List<CustomParamSetting> customParamSettings, List<string> parameterNameList);
     }
 
-    public interface IBuildupComponentCreator
+
+    public interface IElementSourceHandler
     {
-        public List<BuildupComponent> CreateBuildupComponentsFromSelection(List<CustomParamSetting> customParamSettings);
+        public ElementSourceSelectionResult SelectElements(List<CustomParamSetting> customParamSettings);
     }
 
     public interface IImageSnapshotCreator
@@ -29,7 +30,7 @@ namespace Calc.Core.Interfaces
     /// </summary>
     public interface IElementSender
     {
-        public Task<string> SendToSpeckle(List<int> elementIds, string modelName, string description);
+        public Task<string> SendToSpeckle(List<int> elementIds, string modelName, string description, Dictionary<string,string> dynamicProperties);
     }
     
 
