@@ -67,13 +67,23 @@ namespace Calc.Core.Objects.Buildups
         {
             HasParamError = BasicParameterSet?.GetAmountParam(unit)?.HasError ?? true;
         }
+
+        public bool HasMaterial => LayerComponents.Any(l => l.HasMainMaterial);
+
+        /// <summary>
+        /// serialize the buildup component with layers, whose main material is not null
+        /// </summary>
+        /// <returns></returns>
         public object SerializeRecord()
         {
             return new
             {
                 name = Name,
                 is_normalizer = IsNormalizer,
-                layers = LayerComponents.Select(l => l.SerializeRecord()).ToList()
+                layers = LayerComponents
+                .Where(l => l.HasMainMaterial)
+                .Select(l => l.SerializeRecord())
+                .ToList()
             };
         }
 
