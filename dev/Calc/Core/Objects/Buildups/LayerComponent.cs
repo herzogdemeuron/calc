@@ -178,18 +178,14 @@ namespace Calc.Core.Objects.Buildups
 
         }
 
-        /// <summary>
-        /// serialize this layer with: target_material_name, main_material_id, sub_material_id, sub_material_ratio, function
-        /// </summary>
-        /// <returns></returns>
         public object SerializeRecord()
         {
             return new
             {
                 target_material_name = TargetMaterialName,
                 function = new { id = Function?.Id},
-                main_material_id = new { id = MainMaterial?.Id},
-                sub_material_id = new { id = SubMaterial?.Id},
+                main_material = new { id = MainMaterial?.Id},
+                sub_material = new { id = SubMaterial?.Id},
                 sub_material_ratio = SubMaterialRatio,
             };
         }
