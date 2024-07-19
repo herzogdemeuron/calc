@@ -18,7 +18,8 @@ namespace Calc.Core.Interfaces
     public interface IElementSourceHandler
     {
         public ElementSourceSelectionResult SelectElements(List<CustomParamSetting> customParamSettings);
-        public void SaveBuildupRecord(string newCode, string name, BuildupGroup buildupGroup, string description, List<BuildupComponent> components);
+        public void SaveBuildupRecord(string buildupCode, string buildupName, BuildupGroup buildupGroup, string description, List<BuildupComponent> components);
+        public BuildupRecord GetBuildupRecord();
     }
 
     public interface IImageSnapshotCreator

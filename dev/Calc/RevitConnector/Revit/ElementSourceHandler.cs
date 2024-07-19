@@ -32,17 +32,20 @@ namespace Calc.RevitConnector.Revit
             ComponentCreator = new BuildupComponentCreator(uidoc);
         }
 
+        /// <summary>
+        /// select elements in revit, get the raw selection result
+        /// </summary>
+        /// <param name="customParamSettings"></param>
+        /// <returns></returns>
         public ElementSourceSelectionResult SelectElements(List<CustomParamSetting> customParamSettings)
         {
             var basicParamConfigs = GetParamSettings(customParamSettings);
             var elementSelectionSet = SelectionHelper.SelectElements(uidoc);
-
-            groupTypeId = elementSelectionSet.GroupTypeId;
-            var ids = elementSelectionSet.ElementIds;
-            var components = ComponentCreator.CreateBuildupComponents(ids, basicParamConfigs);
+            groupTypeId = elementSelectionSet.RevitGroupTypeId;
+            var components = ComponentCreator.CreateBuildupComponents(elementSelectionSet.ElementIds, basicParamConfigs);
             return new ElementSourceSelectionResult()
             {
-                GroupName = elementSelectionSet.GroupName,
+                BuildupCode = elementSelectionSet.RevitGroupName,
                 Parameters = elementSelectionSet.Parameters,
                 BuildupComponents = components
             };
@@ -57,8 +60,8 @@ namespace Calc.RevitConnector.Revit
             newCode = nCode;
             buildupRecord = new BuildupRecord()
             {
-                Name = newName,
-                BuildupGroupId = newBuildupGroup.Id,
+                BuildupName = newName,
+                BuildupGroup = newBuildupGroup,
                 Description = newDescription,
                 Components = newComponents
             };

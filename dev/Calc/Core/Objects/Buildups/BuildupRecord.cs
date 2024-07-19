@@ -13,10 +13,10 @@ namespace Calc.Core.Objects.Buildups
     /// </summary>
     public class BuildupRecord
     {
-        [JsonProperty("name")]
-        public string Name { get; set; }
-        [JsonProperty("buildup_group_id")]
-        public int BuildupGroupId { get; set; }
+        [JsonProperty("buildup_name")]
+        public string BuildupName { get; set; }
+        [JsonProperty("buildup_group")]
+        public BuildupGroup BuildupGroup { get; set; }
         [JsonProperty("description")]
         public string Description { get; set; }
         [JsonProperty("components")]
@@ -26,8 +26,8 @@ namespace Calc.Core.Objects.Buildups
         {
             return new
             {
-                name = Name,
-                buildup_group_id = BuildupGroupId,
+                buildup_name = BuildupName,
+                buildup_group = BuildupGroup,
                 description = Description,
                 components = Components
                 .Where(c => c.HasMaterial || c.IsNormalizer)

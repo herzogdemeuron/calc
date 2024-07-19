@@ -9,8 +9,8 @@ namespace Calc.RevitConnector.Revit
     /// </summary>
     public class ElementSelectionSet
     {
-        public string GroupName { get; set; }
-        public int GroupTypeId { get; set; }
+        public string RevitGroupName { get; set; }
+        public int RevitGroupTypeId { get; set; }
         public List<ElementId> ElementIds { get; set; } = new List<ElementId>();
         public Dictionary<string, string> Parameters { get; set; } = new Dictionary<string, string>();
 

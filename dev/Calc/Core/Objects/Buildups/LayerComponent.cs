@@ -180,14 +180,24 @@ namespace Calc.Core.Objects.Buildups
 
         public object SerializeRecord()
         {
-            return new
+            if (SubMaterial == null)
+            {
+                return new
+                {
+                    target_material_name = TargetMaterialName,
+                    function = new { id = Function?.Id },
+                    main_material = new { id = MainMaterial?.Id }
+                };
+            }
+             return new
             {
                 target_material_name = TargetMaterialName,
-                function = new { id = Function?.Id},
-                main_material = new { id = MainMaterial?.Id},
-                sub_material = new { id = SubMaterial?.Id},
+                function = new { id = Function?.Id },
+                main_material = new { id = MainMaterial?.Id },
+                sub_material = new { id = SubMaterial?.Id },
                 sub_material_ratio = SubMaterialRatio,
             };
+
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

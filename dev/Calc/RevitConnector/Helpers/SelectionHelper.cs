@@ -77,10 +77,10 @@ namespace Calc.RevitConnector.Helpers
             if (selectedGroups.Count == 1)
             {
                 var group = selectedGroups.First();
-                selectionSet.GroupTypeId = group.GetTypeId().IntegerValue;
+                selectionSet.RevitGroupTypeId = group.GetTypeId().IntegerValue;
                 var parameters = group.Parameters.Cast<Parameter>().ToList();
                 selectionSet.AddParameters(parameters);
-                selectionSet.GroupName = group.Name;
+                selectionSet.RevitGroupName = group.Name;
             }
 
             return selectionSet;

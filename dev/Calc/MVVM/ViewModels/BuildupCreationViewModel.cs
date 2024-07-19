@@ -165,7 +165,7 @@ namespace Calc.MVVM.ViewModels
         }
 
         private Unit? selectedBuildupUnit;
-        public Unit? SelectedBuildupUnit
+        public Unit? SelectedBuildupUnit // todo: put this to record
         {
             get => selectedBuildupUnit;
             set
@@ -365,14 +365,22 @@ namespace Calc.MVVM.ViewModels
         }
 
         /// <summary>
-        /// selecting elements from revit
+        /// selecting elements from revit, get the buildup components 
+        /// and try to restore buildup record to both the buildup components and the current view model
         /// </summary>
         public void HandleSelectingElements()
         {
+            // get the selection result from revit, including metadata and recorded materials
             var result = elementSourceHandler.SelectElements(store.CustomParamSettingsAll);
+            var record = elementSourceHandler.GetBuildupRecord();
+            result.ApplyBuildupRecord(record, store);
+
             BuildupComponents = new ObservableCollection<BuildupComponent>(result.BuildupComponents);
             DynamicProperties = result.Parameters;
-            if (result.GroupName != null)  NewBuildupCode = result.GroupName;
+            if (result.BuildupCode != null)  NewBuildupCode = result.BuildupCode;
+            if (result.BuildupName != null) NewBuildupName = result.BuildupName;
+            if (result.BuildupGroup != null) SelectedBuildupGroup = result.BuildupGroup;
+            if (result.Description != null) NewBuildupDescription = result.Description;
 
             UpdateLayerMaterialModels();
             UpdateLayerColors();
@@ -383,6 +391,7 @@ namespace Calc.MVVM.ViewModels
             CaptureText = "📷";
             saveMessage = "";
         }
+
 
         /// <summary>
         /// component selection from treeview changed
