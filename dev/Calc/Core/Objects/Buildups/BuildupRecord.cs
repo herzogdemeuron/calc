@@ -15,11 +15,11 @@ namespace Calc.Core.Objects.Buildups
     {
         [JsonProperty("name")]
         public string Name { get; set; }
-        [JsonProperty("group_id")]
-        public int GroupId { get; set; }
+        [JsonProperty("buildup_group_id")]
+        public int BuildupGroupId { get; set; }
         [JsonProperty("description")]
         public string Description { get; set; }
-        [JsonIgnore]
+        [JsonProperty("components")]
         public List<BuildupComponent> Components { get; set; }
 
         public object SerializeRecord()
@@ -27,7 +27,7 @@ namespace Calc.Core.Objects.Buildups
             return new
             {
                 name = Name,
-                group_id = GroupId,
+                buildup_group_id = BuildupGroupId,
                 description = Description,
                 components = Components.Select(c => c.SerializeRecord()).ToList()
             };

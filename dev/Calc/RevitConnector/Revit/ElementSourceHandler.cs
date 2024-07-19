@@ -58,7 +58,7 @@ namespace Calc.RevitConnector.Revit
             buildupRecord = new BuildupRecord()
             {
                 Name = newName,
-                GroupId = newBuildupGroup.Id,
+                BuildupGroupId = newBuildupGroup.Id,
                 Description = newDescription,
                 Components = newComponents
             };
