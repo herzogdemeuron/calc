@@ -207,8 +207,8 @@
                         Margin="0,0,5,0"
                         Tag="Assembly Name"
                         Style="{StaticResource TextBoxStyle}"
-                        FontWeight="SemiBold"                        
-                        TextChanged="BuildupNameTextChanged"/>
+                         Text="{Binding BuildupCreationVM.NewBuildupName}"
+                        FontWeight="SemiBold"/>
 
                 <TextBox x:Name="BuildupCodeTextBox"
                         Grid.Column="1"

@@ -9,6 +9,7 @@ namespace Calc.Core.Objects.Elements
     {
         public string BuildupCode { get; set; }
         public string BuildupName { get; set; }
+        public Unit BuildupUnit { get; set; }
         public BuildupGroup BuildupGroup { get; set; }
         public string Description { get; set; }
         public Dictionary<string, string> Parameters { get; set; }
@@ -26,6 +27,7 @@ namespace Calc.Core.Objects.Elements
 
             BuildupName = record.BuildupName;
             Description = record.Description;
+            BuildupUnit = record.BuildupUnit;
             BuildupGroup = store.BuildupGroupsAll.Find(g => g.Id == record.BuildupGroup.Id);
 
             if (BuildupComponents == null || BuildupComponents.Count == 0) return;

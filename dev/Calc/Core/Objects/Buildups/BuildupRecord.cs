@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Calc.Core.Objects.Buildups
 {
@@ -17,6 +15,8 @@ namespace Calc.Core.Objects.Buildups
         public string BuildupName { get; set; }
         [JsonProperty("buildup_group")]
         public BuildupGroup BuildupGroup { get; set; }
+        [JsonProperty("buildup_unit")]
+        public Unit BuildupUnit { get; set; }
         [JsonProperty("description")]
         public string Description { get; set; }
         [JsonProperty("components")]
@@ -28,6 +28,7 @@ namespace Calc.Core.Objects.Buildups
             {
                 buildup_name = BuildupName,
                 buildup_group = BuildupGroup,
+                buildup_unit = BuildupUnit,
                 description = Description,
                 components = Components
                 .Where(c => c.HasMaterial || c.IsNormalizer)

@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Calc.Core.Interfaces;
+using Calc.Core.Objects;
 using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Elements;
 using Calc.RevitConnector.Config;
@@ -55,13 +56,14 @@ namespace Calc.RevitConnector.Revit
         /// serialize the buildup record and store back to revit group type
         /// write record to group type parameter 'Type Comments' in a transaction
         /// </summary>
-        public void SaveBuildupRecord(string nCode, string newName, BuildupGroup newBuildupGroup, string newDescription, List<BuildupComponent> newComponents)
+        public void SaveBuildupRecord(string nCode, string newName, Unit newBuildupUnit,BuildupGroup newBuildupGroup, string newDescription, List<BuildupComponent> newComponents)
         {
             newCode = nCode;
             buildupRecord = new BuildupRecord()
             {
                 BuildupName = newName,
                 BuildupGroup = newBuildupGroup,
+                BuildupUnit = newBuildupUnit,
                 Description = newDescription,
                 Components = newComponents
             };

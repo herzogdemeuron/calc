@@ -381,6 +381,7 @@ namespace Calc.MVVM.ViewModels
             if (result.BuildupName != null) NewBuildupName = result.BuildupName;
             if (result.BuildupGroup != null) SelectedBuildupGroup = result.BuildupGroup;
             if (result.Description != null) NewBuildupDescription = result.Description;
+            SelectedBuildupUnit = result.BuildupUnit;
 
             UpdateLayerMaterialModels();
             UpdateLayerColors();
@@ -569,6 +570,7 @@ namespace Calc.MVVM.ViewModels
                     (
                         newBuildupCode, 
                         newBuildupName, 
+                        SelectedBuildupUnit.Value,
                         SelectedBuildupGroup, 
                         newBuildupDescription, 
                         BuildupComponents.ToList() 

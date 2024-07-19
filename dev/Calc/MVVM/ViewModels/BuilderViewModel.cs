@@ -101,11 +101,6 @@ namespace Calc.MVVM.ViewModels
             BuildupCreationVM.HandleCaptureMouseOver(isEnter);
         }
 
-        public void HandleBuildupNameChanged(string text)
-        {
-            BuildupCreationVM.NewBuildupName = text;
-        }
-
         public void HandleBuildupCodeChanged(string text)
         {
             BuildupCreationVM.NewBuildupCode = text;
