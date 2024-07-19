@@ -58,10 +58,10 @@ namespace SpeckleSender
             speckleConverter.SetContextDocument(new RevitDocumentAggregateCache(doc));
             var speckleBases = speckleConverter.ConvertToSpeckle(elementList);
             var commitObject = new Base();
-            commitObject["@elements"] = speckleBases;
-            commitObject["model_code"] = modelCode;
+            commitObject["assembly_code"] = modelCode;
             commitObject["assembly_name"] = buildupName;
             commitObject["description"] = description;
+            commitObject["@elements"] = speckleBases;
 
             foreach (var prop in dynamicProperties)
             {

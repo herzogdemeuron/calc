@@ -601,7 +601,7 @@ namespace Calc.MVVM.ViewModels
         private async Task<string> SendElementsToSpeckle()
         {
             var elementIds = BuildupComponents.SelectMany(c => c.ElementIds).ToList();
-            return await elementSender.SendToSpeckle(elementIds, NewBuildupCode, newBuildupName,NewBuildupDescription, DynamicProperties);
+            return await elementSender.SendToSpeckle(elementIds, NewBuildupCode, newBuildupName, NewBuildupDescription, DynamicProperties);
         }
 
         private bool CheckCanSave()
