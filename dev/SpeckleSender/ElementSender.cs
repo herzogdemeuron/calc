@@ -31,6 +31,7 @@ namespace SpeckleSender
             // this should be loading the revit converter from nuget Speckle.Objects.Converter.Revit2023 (priotized?)
             // or from the installed speckle app kit.
             // see: https://speckle.community/t/how-to-run-revit-to-speckle-conversions-in-c/1548/6
+
             speckleConverter = speckleKit.LoadConverter(revitAppName);
             speckleConverter.SetContextDocument(doc);
 

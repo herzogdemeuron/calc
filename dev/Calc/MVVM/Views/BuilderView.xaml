@@ -216,6 +216,7 @@
                         Margin="0,0,5,0"
                         Tag="Assembly Code"
                         Style="{StaticResource TextBoxStyle}"
+                        Text="{Binding BuildupCreationVM.NewBuildupCode}"
                         FontWeight="SemiBold"
                         TextChanged="BuildupCodeTextChanged"/>
 

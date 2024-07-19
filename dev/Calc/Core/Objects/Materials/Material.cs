@@ -6,7 +6,7 @@ namespace Calc.Core.Objects.Materials
 {
     public class Material : ISearchable
     {
-        [JsonProperty("id", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty("id")]
         public int Id { get; set; }
         [JsonProperty("name")]
         public string Name { get; set; }

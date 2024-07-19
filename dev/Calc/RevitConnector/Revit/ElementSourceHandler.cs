@@ -1,38 +1,43 @@
-﻿using Autodesk.Revit.UI;
+﻿using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
 using Calc.Core.Interfaces;
+using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Elements;
 using Calc.RevitConnector.Config;
-using System;
-using System.Collections.Generic;
 using Calc.RevitConnector.Helpers;
-
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Calc.RevitConnector.Revit
 {
+    /// <summary>
+    /// get buildup components from revit elements,
+    /// get and store the buildup record
+    /// </summary>
     public class ElementSourceHandler : IElementSourceHandler
     {
+        private UIDocument uidoc;
+        private readonly Document doc;
+        private readonly RevitExternalEventHandler eventHandler;
+        private int groupTypeId;
+        private string newCode;
+        private BuildupRecord buildupRecord;
         public BuildupComponentCreator ComponentCreator { get; }
-        private UIDocument Uidoc { get; }
 
-        public ElementSourceHandler(UIDocument uidoc)
+        public ElementSourceHandler(UIDocument udoc, RevitExternalEventHandler eHandler)
         {
-            Uidoc = uidoc;
+            uidoc = udoc;
+            doc = uidoc.Document;
+            eventHandler = eHandler;
             ComponentCreator = new BuildupComponentCreator(uidoc);
         }
 
         public ElementSourceSelectionResult SelectElements(List<CustomParamSetting> customParamSettings)
         {
-            var basicParamConfigs = new List<RevitBasicParamConfig>();
-            foreach (CustomParamSetting paramSetting in customParamSettings)
-            {
-                var setting = ParameterHelper.ParseFromParamSetting(paramSetting);
-                if (setting != null) basicParamConfigs.Add(setting);
-            }
+            var basicParamConfigs = GetParamSettings(customParamSettings);
+            var elementSelectionSet = SelectionHelper.SelectElements(uidoc);
 
-            var elementSelectionSet = SelectionHelper.SelectElements(Uidoc);
+            groupTypeId = elementSelectionSet.GroupTypeId;
             var ids = elementSelectionSet.ElementIds;
             var components = ComponentCreator.CreateBuildupComponents(ids, basicParamConfigs);
             return new ElementSourceSelectionResult()
@@ -41,6 +46,65 @@ namespace Calc.RevitConnector.Revit
                 Parameters = elementSelectionSet.Parameters,
                 BuildupComponents = components
             };
+        }
+
+        /// <summary>
+        /// serialize the buildup record and store back to revit group type
+        /// write record to group type parameter 'Type Comments' in a transaction
+        /// </summary>
+        public void SaveBuildupRecord(string nCode, string newName, BuildupGroup newBuildupGroup, string newDescription, List<BuildupComponent> newComponents)
+        {
+            newCode = nCode;
+            buildupRecord = new BuildupRecord()
+            {
+                Name = newName,
+                GroupId = newBuildupGroup.Id,
+                Description = newDescription,
+                Components = newComponents
+            };
+            eventHandler.Raise(StoreBuildupRecord);
+        }
+
+        public void StoreBuildupRecord()
+        {
+            var recordObject = buildupRecord.SerializeRecord();
+            var groupType = doc.GetElement(new ElementId(groupTypeId)) as GroupType;
+            try
+            {
+                var transaction = new Transaction(doc, "Store buildup to group type: " + groupType.Name);
+                transaction.Start();
+                groupType.Name = newCode;
+                var jsonString = JsonConvert.SerializeObject(recordObject);
+                groupType.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_COMMENTS).Set(jsonString);
+                transaction.Commit();
+            }
+            catch(System.Exception e)
+            {
+                throw e;
+            }
+        }
+
+        /// <summary>
+        /// get the buildup record from the group type parameter 'Type Comments'
+        /// </summary>
+        public BuildupRecord GetBuildupRecord()
+        {
+            var groupType = doc.GetElement(new ElementId(groupTypeId)) as GroupType;
+            var recordString = groupType?.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_COMMENTS)?.AsString();
+            if (recordString == null) return null;
+
+            return JsonConvert.DeserializeObject<BuildupRecord>(recordString);
+        }
+
+        private List<RevitBasicParamConfig> GetParamSettings(List<CustomParamSetting> customParamSettings)
+        {
+            var basicParamConfigs = new List<RevitBasicParamConfig>();
+            foreach (CustomParamSetting paramSetting in customParamSettings)
+            {
+                var setting = ParameterHelper.ParseFromParamSetting(paramSetting);
+                if (setting != null) basicParamConfigs.Add(setting);
+            }
+            return basicParamConfigs;
         }
 
     }

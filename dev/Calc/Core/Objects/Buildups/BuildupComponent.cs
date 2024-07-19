@@ -1,6 +1,7 @@
 ﻿using Calc.Core.Calculation;
 using Calc.Core.Color;
 using Calc.Core.Objects.BasicParameters;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -14,9 +15,11 @@ namespace Calc.Core.Objects.Buildups
     /// </summary>
     public class BuildupComponent : INotifyPropertyChanged, ICalcComponent
     {
-        public string Title { get; set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
         public int TypeIdentifier { get; set; } // revit type id
         private bool isNormalizer;
+        [JsonProperty("is_normalizer")]
         public bool IsNormalizer
         {
             get => isNormalizer;
@@ -42,9 +45,9 @@ namespace Calc.Core.Objects.Buildups
         public bool IsCompoundElement { get; set; }
         public double? Thickness { get; set; }
         public BasicParameterSet BasicParameterSet { get; set; }
+        [JsonProperty("layers")]
         public List<LayerComponent> LayerComponents { get; set; }
         public HslColor HslColor { get => ItemPainter.DefaultColor; }
-
         public bool HasLayers => LayerComponents.Count > 0;
 
         public void UpdateCalculationComponents(double normalizeRatio)
@@ -63,6 +66,15 @@ namespace Calc.Core.Objects.Buildups
         public void UpdateParamError(Unit unit)
         {
             HasParamError = BasicParameterSet?.GetAmountParam(unit)?.HasError ?? true;
+        }
+        public object SerializeRecord()
+        {
+            return new
+            {
+                name = Name,
+                is_normalizer = IsNormalizer,
+                layers = LayerComponents.Select(l => l.SerializeRecord()).ToList()
+            };
         }
 
         public bool Equals(BuildupComponent component)

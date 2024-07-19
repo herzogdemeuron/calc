@@ -9,6 +9,7 @@ using Calc.RevitConnector.Config;
 using Calc.RevitConnector.Helpers;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using System.Windows.Documents;
 
 namespace Calc.RevitConnector.Revit
@@ -56,7 +57,7 @@ namespace Calc.RevitConnector.Revit
                 Thickness = thickness,
                 ElementIds = new List<int> { element.Id.IntegerValue },
                 TypeIdentifier = element.GetTypeId().IntegerValue,
-                Title = GetElementType(element)?.Name,
+                Name = GetElementType(element)?.Name,
                 LayerComponents = layers,
                 IsCompoundElement = isCompound,
                 BasicParameterSet = GetTotalAmounts(element) //Total amount of the buildup component is not sumed up from the layers, but directly from the element
@@ -158,7 +159,12 @@ namespace Calc.RevitConnector.Revit
                         volumeParam.PerformOperation(Operation.Multiply, volumeProp)
                         );
 
-                    var layerComponent = new LayerComponent(material?.Name, newParamSet, thickness);
+                    var layerComponent = new LayerComponent()
+                    {
+                        TargetMaterialName = material?.Name,
+                        BasicParameterSet = newParamSet,
+                        Thickness = thickness
+                    };
                     layerComponent.TypeIdentifier = elem.GetTypeId().IntegerValue.ToString();
                     result.Add(layerComponent);
                 }
@@ -168,7 +174,11 @@ namespace Calc.RevitConnector.Revit
                 var materialAmounts = GetMaterialAmounts(elem, false);
                 foreach (var (material, paramSet) in materialAmounts)
                 {
-                    var layerComponent = new LayerComponent(material?.Name, paramSet);
+                    var layerComponent = new LayerComponent()
+                    {
+                        TargetMaterialName = material?.Name,
+                        BasicParameterSet = paramSet
+                    };
                     layerComponent.TypeIdentifier = elem.GetTypeId().IntegerValue.ToString();
                     result.Add(layerComponent);
                 }

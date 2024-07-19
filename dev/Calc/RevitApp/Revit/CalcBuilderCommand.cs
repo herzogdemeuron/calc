@@ -1,7 +1,6 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using Calc.Core.Interfaces;
 using Calc.MVVM.Helpers.Mediators;
 using Calc.MVVM.ViewModels;
 using Calc.MVVM.Views;
@@ -40,7 +39,7 @@ namespace Calc.RevitApp.Revit
 
                 if (!loginVM.FullyPrepared) return Result.Cancelled;
 
-                ElementSourceHandler elementSourceHandler = new ElementSourceHandler(uidoc);
+                ElementSourceHandler elementSourceHandler = new ElementSourceHandler(uidoc, new RevitExternalEventHandler());
                 RevitImageCreator imageCreator = new RevitImageCreator(doc);
                 ElementSender elementSender = new ElementSender(doc, loginVM.CalcStore.Config);
                 BuilderViewModel builderViewModel = new BuilderViewModel(loginVM.CalcStore, elementSourceHandler, imageCreator, elementSender);

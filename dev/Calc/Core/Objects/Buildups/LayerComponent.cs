@@ -6,6 +6,7 @@ using Calc.Core.Calculation;
 using Calc.Core.Color;
 using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Materials;
+using Newtonsoft.Json;
 
 namespace Calc.Core.Objects.Buildups
 {
@@ -19,9 +20,11 @@ namespace Calc.Core.Objects.Buildups
         // general properties
         public string TypeIdentifier { get; set; } // revit type id
         public bool IsValid { get; set; } = true;
-        public string Title { get => TargetMaterialName?? "No Material"; }
-        public string TargetMaterialName { get; }
-        public double? Thickness { get; }
+        public string Name { get => TargetMaterialName?? "No Material"; }
+        [JsonProperty("target_material_name")]
+        public string TargetMaterialName { get; set; }
+        public double? Thickness { get; set; }
+        [JsonProperty("function")]
         public MaterialFunction Function { get; set; }
         public BasicParameterSet BasicParameterSet { get; set; }
 
@@ -33,6 +36,7 @@ namespace Calc.Core.Objects.Buildups
 
         // material mappings
         private Material mainMaterial;
+        [JsonProperty("main_material")]
         public Material MainMaterial
         {
             get => mainMaterial;
@@ -43,6 +47,7 @@ namespace Calc.Core.Objects.Buildups
             }
         }
         private Material subMaterial;
+        [JsonProperty("sub_material")]
         public Material SubMaterial
             {
             get => subMaterial;
@@ -52,6 +57,7 @@ namespace Calc.Core.Objects.Buildups
                 OnPropertyChanged(nameof(SubMaterial));
             }
         }
+        [JsonProperty("sub_material_ratio")]
         public double SubMaterialRatio { get; set; } = 0;
         public double MainMaterialRatio { get => 1 - SubMaterialRatio; }
         public bool HasMainMaterial { get => MainMaterial != null; }
@@ -67,13 +73,6 @@ namespace Calc.Core.Objects.Buildups
                 hslColor = value;
                 OnPropertyChanged(nameof(HslColor));
             }
-        }
-
-        public LayerComponent(string materialName, BasicParameterSet basicParameterSet = null, double? thickness = null)
-        {
-            TargetMaterialName = materialName;
-            BasicParameterSet = basicParameterSet;
-            Thickness = thickness;
         }
 
         public LayerComponent(){}
@@ -177,6 +176,22 @@ namespace Calc.Core.Objects.Buildups
             OnPropertyChanged(nameof(HasParamError));
             OnPropertyChanged(nameof(CalculationCompleted));
 
+        }
+
+        /// <summary>
+        /// serialize this layer with: target_material_name, main_material_id, sub_material_id, sub_material_ratio, function
+        /// </summary>
+        /// <returns></returns>
+        public object SerializeRecord()
+        {
+            return new
+            {
+                target_material_name = TargetMaterialName,
+                function = new { id = Function?.Id},
+                main_material_id = new { id = MainMaterial?.Id},
+                sub_material_id = new { id = SubMaterial?.Id},
+                sub_material_ratio = SubMaterialRatio,
+            };
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

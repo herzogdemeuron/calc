@@ -163,7 +163,7 @@
                         <TextBlock x:Name="txtName">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
-                                    <Setter Property="Text" Value="{Binding Title}" />
+                                    <Setter Property="Text" Value="{Binding Name}" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True">
                                             <Setter Property="FontWeight" Value="Bold" />

@@ -554,6 +554,17 @@ namespace Calc.MVVM.ViewModels
                     CheckSaveOrUpdate();
                 }
 
+
+                // store the buildup record
+                elementSourceHandler.SaveBuildupRecord
+                    (
+                        newBuildupCode, 
+                        newBuildupName, 
+                        SelectedBuildupGroup, 
+                        newBuildupDescription, 
+                        BuildupComponents.ToList() 
+                    );
+
             }
             catch (Exception ex)
             {
