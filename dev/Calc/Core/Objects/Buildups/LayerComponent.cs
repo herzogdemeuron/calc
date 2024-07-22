@@ -23,6 +23,7 @@ namespace Calc.Core.Objects.Buildups
         public string Name { get => TargetMaterialName?? "No Material"; }
         [JsonProperty("target_material_name")]
         public string TargetMaterialName { get; set; }
+        [JsonProperty("thickness")]
         public double? Thickness { get; set; }
         [JsonProperty("function")]
         public MaterialFunction Function { get; set; }
@@ -180,18 +181,33 @@ namespace Calc.Core.Objects.Buildups
 
         public object SerializeRecord()
         {
+            // no material assigned
+            if (MainMaterial == null)
+            {
+                return new
+                {
+                    target_material_name = TargetMaterialName,
+                    thickness = Thickness
+                };
+            }
+
+            // no sub material assigned
             if (SubMaterial == null)
             {
                 return new
                 {
                     target_material_name = TargetMaterialName,
+                    thickness = Thickness,
                     function = new { id = Function?.Id },
                     main_material = new { id = MainMaterial?.Id }
                 };
             }
+
+            // both main and sub material assigned
              return new
             {
                 target_material_name = TargetMaterialName,
+                thickness = Thickness,
                 function = new { id = Function?.Id },
                 main_material = new { id = MainMaterial?.Id },
                 sub_material = new { id = SubMaterial?.Id },

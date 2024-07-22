@@ -1,7 +1,5 @@
 ﻿using Calc.Core.Objects.Buildups;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Calc.Core.Objects.Elements
 {
@@ -18,8 +16,8 @@ namespace Calc.Core.Objects.Elements
         /// <summary>
         /// apply the buildup record to current result, so that the buildup components are mapped with the same materials
         /// buildup code, parameters and buildup components are alread at hand in the raw selection result
-        /// apply the components from the record to the current component with the same name
-        /// apply the record components to the current components with the same order
+        /// apply the components from the record to the current component with the same name and same layers
+        /// duplicate current component names would be ignored to avoid confusion
         /// </summary>
         public void ApplyBuildupRecord(BuildupRecord record, CalcStore store)
         {
@@ -33,16 +31,37 @@ namespace Calc.Core.Objects.Elements
             if (BuildupComponents == null || BuildupComponents.Count == 0) return;
 
             // link materials to the record components
-            var recordComponents = new List<BuildupComponent>(record.Components);
-            recordComponents.ForEach(component => LinkMaterials(component, store));
+            record.Components.ForEach(component => LinkMaterials(component, store));
 
             foreach ( var currentComponent in BuildupComponents) 
             {
-                var recordComponent = recordComponents.Find(c => c.Name == currentComponent.Name);
+                var currentName = currentComponent.Name;
+                if (BuildupComponents.FindAll(c => c.Name == currentName).Count > 1) continue;
+
+                var recordComponent = record.Components.Find(c => CheckComponentEquality(currentComponent, c));
                 if (recordComponent == null) continue;
-                ApplyComponent(currentComponent, recordComponent);
-                recordComponents.Remove(recordComponent);
+                FollowComponent(currentComponent, recordComponent);
             }
+        }
+
+        /// <summary>
+        /// check if both components have the same name and the same layers
+        /// the target material and thickness must be identical to be the same layer
+        /// </summary>
+        private bool CheckComponentEquality(BuildupComponent currentComponent, BuildupComponent recordComponent)
+        {
+            if (currentComponent.Name != recordComponent.Name) return false;
+            if (currentComponent.LayerComponents.Count != recordComponent.LayerComponents.Count) return false;
+
+            for (int i = 0; i < currentComponent.LayerComponents.Count; i++)
+            {
+                var currentLayer = currentComponent.LayerComponents[i];
+                var recordLayer = recordComponent.LayerComponents[i];
+                if (currentLayer.TargetMaterialName != recordLayer.TargetMaterialName) return false;
+                if (currentLayer.Thickness != recordLayer.Thickness) return false;
+            }
+            return true;
+            
         }
 
         /// <summary>
@@ -50,22 +69,23 @@ namespace Calc.Core.Objects.Elements
         /// by applying isnormalizer and the materials of layers
         /// layers must have the same target material
         /// </summary>
-        private void ApplyComponent(BuildupComponent currentComponent, BuildupComponent recordComponent)
+        private void FollowComponent(BuildupComponent currentComponent, BuildupComponent recordComponent)
         {
             currentComponent.IsNormalizer = recordComponent.IsNormalizer;
-            var recordLayers = new List<LayerComponent>(recordComponent.LayerComponents);
+            var recordLayers = recordComponent.LayerComponents;
 
             if (currentComponent.LayerComponents == null) return;
-            foreach (var currentLayer in currentComponent.LayerComponents)
+            if (recordComponent.LayerComponents.Count != currentComponent.LayerComponents.Count) return;
+
+            for (int i = 0; i < currentComponent.LayerComponents.Count; i++)
             {
-                var recordLayer = recordLayers.Find(l => l.TargetMaterialName == currentLayer.TargetMaterialName);
-                if (recordLayer == null) continue;
-                ApplyLayer(currentLayer, recordLayer);
-                recordLayers.Remove(recordLayer);
+                var currentLayer = currentComponent.LayerComponents[i];
+                var recordLayer = recordLayers[i];
+                FollowLayer(currentLayer, recordLayer);
             }
         }
         
-        private void ApplyLayer(LayerComponent currentLayer, LayerComponent recordLayer)
+        private void FollowLayer(LayerComponent currentLayer, LayerComponent recordLayer)
         {
             currentLayer.Function = recordLayer.Function;
             currentLayer.MainMaterial = recordLayer.MainMaterial;

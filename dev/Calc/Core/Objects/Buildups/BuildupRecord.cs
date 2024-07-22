@@ -30,10 +30,7 @@ namespace Calc.Core.Objects.Buildups
                 buildup_group = BuildupGroup,
                 buildup_unit = BuildupUnit,
                 description = Description,
-                components = Components
-                .Where(c => c.HasMaterial || c.IsNormalizer)
-                .Select(c => c.SerializeRecord())
-                .ToList()
+                components = Components.Select(c => c.SerializeRecord()).ToList()
             };
         }    
     }

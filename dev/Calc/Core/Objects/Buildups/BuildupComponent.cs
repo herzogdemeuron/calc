@@ -81,7 +81,6 @@ namespace Calc.Core.Objects.Buildups
                 name = Name,
                 is_normalizer = IsNormalizer,
                 layers = LayerComponents
-                .Where(l => l.HasMainMaterial)
                 .Select(l => l.SerializeRecord())
                 .ToList()
             };
