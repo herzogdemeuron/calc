@@ -7,6 +7,7 @@ using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Elements;
 using Calc.RevitConnector.Config;
 using Calc.RevitConnector.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -281,7 +282,7 @@ namespace Calc.RevitConnector.Revit
         /// get the compound material thicknesses (mm) of the element with the right order,
         /// returning the material, its thickness and the proportion of area and volume of the same material
         /// </summary>
-        private List<(Material,double,double,double)> GetCompoundMaterialThicknesses(Element elem)
+        private List<(Material,double,double,double)> GetCompoundMaterialThicknesses(Element elem, int round=3)
         {
             var type = GetElementType(elem);
             if (type == null) return null;
@@ -298,6 +299,7 @@ namespace Calc.RevitConnector.Revit
                     var materialId = layer.MaterialId;
                     var material = Doc.GetElement(materialId) as Material;
                     var width = ParameterHelper.ToMetricValue(layer.Width, Unit.m) * 1000; // convert to mm
+                    width = Math.Round(width, round);
                     materials.Add((material, width));
                 }
                 foreach (var material in materials)
