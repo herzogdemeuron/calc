@@ -344,7 +344,7 @@ namespace Calc.MVVM.ViewModels
                 return;
             }
             var hasNormalizer = BuildupComponents.Where(c => c.IsNormalizer).ToList().Count == 1;
-            MainWarning = hasNormalizer ? "" : "Choose a type and set one unit as normalizer 🡩 ";
+            MainWarning = hasNormalizer ? "" : "Choose a type 🡫 and set one unit as normalizer 🡩 ";
         }
 
         private void UpdateBuildupComponentError()
