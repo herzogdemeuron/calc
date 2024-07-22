@@ -101,7 +101,7 @@ namespace Calc.MVVM.ViewModels
             set
             {
                 if (newBuildupName == value) return;
-                newBuildupName = value.Trim();
+                newBuildupName = value;
                 CheckSaveOrUpdate();
                 OnPropertyChanged(nameof(NewBuildupName));
                 OnPropertyChanged(nameof(CanSave));
@@ -115,7 +115,7 @@ namespace Calc.MVVM.ViewModels
             set
             {
                 if (newBuildupCode == value) return;
-                newBuildupCode = value.Trim();
+                newBuildupCode = value;
                 CheckSaveOrUpdate();
                 OnPropertyChanged(nameof(NewBuildupCode));
                 OnPropertyChanged(nameof(CanSave));

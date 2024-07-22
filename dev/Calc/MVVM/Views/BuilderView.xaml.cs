@@ -61,10 +61,26 @@ namespace Calc.MVVM.Views
             BuilderVM.HandleWindowLoaded();
         }
 
+        private void BuildupNameTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var currentText = (sender as TextBox).Text;
+            BuilderVM.HandleBuildupNameChanged(currentText);
+        }
+
+        private void BuildupNameFocusLost(object sender, RoutedEventArgs e)
+        {
+            BuilderVM.HandleBuildupNameSetFinished();
+        }
+
         private void BuildupCodeTextChanged(object sender, TextChangedEventArgs e)
         {
             var currentText = (sender as TextBox).Text;
             BuilderVM.HandleBuildupCodeChanged(currentText);
+        }
+
+        private void BuildupCodeFocusLost(object sender, RoutedEventArgs e)
+        {
+            BuilderVM.HandleBuildupCodeSetFinished();
         }
 
 
