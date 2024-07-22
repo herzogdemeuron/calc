@@ -97,8 +97,14 @@ namespace Calc.RevitConnector.Revit
             var groupType = doc.GetElement(new ElementId(groupTypeId)) as GroupType;
             var recordString = groupType?.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_COMMENTS)?.AsString();
             if (recordString == null) return null;
-
-            return JsonConvert.DeserializeObject<BuildupRecord>(recordString);
+            try
+            {
+                return JsonConvert.DeserializeObject<BuildupRecord>(recordString);
+            }
+            catch(JsonSerializationException e)
+            {
+                return null;
+            }
         }
 
         private List<RevitBasicParamConfig> GetParamSettings(List<CustomParamSetting> customParamSettings)

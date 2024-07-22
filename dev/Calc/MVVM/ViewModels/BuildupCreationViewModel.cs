@@ -370,27 +370,35 @@ namespace Calc.MVVM.ViewModels
         /// </summary>
         public void HandleSelectingElements()
         {
-            // get the selection result from revit, including metadata and recorded materials
-            var result = elementSourceHandler.SelectElements(store.CustomParamSettingsAll);
-            var record = elementSourceHandler.GetBuildupRecord();
-            result.ApplyBuildupRecord(record, store);
+            try
+            {
+                // get the selection result from revit, including metadata and recorded materials
+                var result = elementSourceHandler.SelectElements(store.CustomParamSettingsAll);
+                var record = elementSourceHandler.GetBuildupRecord();
+                if (record != null) result.ApplyBuildupRecord(record, store);
 
-            BuildupComponents = new ObservableCollection<BuildupComponent>(result.BuildupComponents);
-            DynamicProperties = result.Parameters;
-            if (result.BuildupCode != null)  NewBuildupCode = result.BuildupCode;
-            if (result.BuildupName != null) NewBuildupName = result.BuildupName;
-            if (result.BuildupGroup != null) SelectedBuildupGroup = result.BuildupGroup;
-            if (result.Description != null) NewBuildupDescription = result.Description;
-            SelectedBuildupUnit = result.BuildupUnit;
+                BuildupComponents = new ObservableCollection<BuildupComponent>(result.BuildupComponents);
+                DynamicProperties = result.Parameters;
+                if (result.BuildupCode != null)  NewBuildupCode = result.BuildupCode;
+                if (result.BuildupName != null) NewBuildupName = result.BuildupName;
+                if (result.BuildupGroup != null) SelectedBuildupGroup = result.BuildupGroup;
+                if (result.Description != null) NewBuildupDescription = result.Description;
+                SelectedBuildupUnit = result.BuildupUnit;
 
-            UpdateLayerMaterialModels();
-            UpdateLayerColors();
-            UpdateCalculationComponents();
-            UpadteMainWarning();
+                UpdateLayerMaterialModels();
+                UpdateLayerColors();
+                UpdateCalculationComponents();
+                UpadteMainWarning();
 
-            CurrentImage = null;
-            CaptureText = "📷";
-            saveMessage = "";
+                CurrentImage = null;
+                CaptureText = "📷";
+                saveMessage = "";
+            }
+            catch (Exception ex)
+            {
+                MainWarning = ex.Message;
+            }
+
         }
 
 
