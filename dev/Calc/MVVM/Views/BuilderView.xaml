@@ -76,7 +76,7 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Text="{Binding BuildupCreationVM.MainWarning}"
-                           d:Text="Choose a type and set one amount as normalizer."
+                           d:Text="Choose a type and set one amount as normalizer 🡩  "
                            Grid.ColumnSpan="5"
                            Grid.Row="1"
                            VerticalAlignment="Center"

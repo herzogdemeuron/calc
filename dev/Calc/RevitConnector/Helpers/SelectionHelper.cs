@@ -28,7 +28,6 @@ namespace Calc.RevitConnector.Helpers
             }
             catch (Exception)
             {
-                TaskDialog.Show("Error", "Error occured while selecting elements");
                 return new ElementSelectionSet();
             }
         }
