@@ -68,6 +68,8 @@ namespace Calc.Core.Objects.Buildups
 
         [JsonProperty("description")]
         public string Description { get; set; }
+        [JsonProperty("verified")]
+        public bool Verified { get; set; }
 
         [JsonProperty("image")]
         public BuildupImage BuildupImage { get; set; }

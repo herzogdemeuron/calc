@@ -17,8 +17,6 @@ namespace Calc.MVVM.Models
     public class NodeTreeModel : INotifyPropertyChanged
     {
         public CalcStore Store;
-        public List<Buildup> AllBuildups => Store.BuildupsAll;
-        public int MaxBuildups { get; set; } = 2;
         public bool BranchesSwitch { get; set; }
 
         private IVisualizer visualizer;
@@ -73,7 +71,7 @@ namespace Calc.MVVM.Models
         public void RemapAllNodes(Mapping mapping)
         {
             if (CurrentForestItem == null) return;
-            var brokenForest = MappingHelper.ApplyMappingToForestItem(CurrentForestItem, Store, mapping, MaxBuildups);
+            var brokenForest = MappingHelper.ApplyMappingToForestItem(CurrentForestItem, Store, mapping);
             MediatorFromVM.Broadcast("BrokenForestChanged", brokenForest);
             RecolorAllNodes();
         }

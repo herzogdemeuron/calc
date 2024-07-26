@@ -3,10 +3,8 @@ using Calc.Core.Objects.GraphNodes;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Calc.Core.Objects.Mappings
 {
@@ -56,7 +54,7 @@ namespace Calc.Core.Objects.Mappings
         /// Automatically determines which mapping to use based on the tree name.
         /// Returns a broken tree if the mapping path is not found.
         /// </summary>
-        public Tree ApplyToTree(Tree tree, List<Buildup> allBuildups, int maxBuildups)
+        public Tree ApplyToTree(Tree tree, List<Buildup> allBuildups)
         {
             var brokenTree = new Tree()
             {
@@ -74,7 +72,7 @@ namespace Calc.Core.Objects.Mappings
 
             foreach (var mappingItem in mappingItems)
             {
-                var buildupIds = mappingItem.BuildupIds.Take(maxBuildups).ToList();
+                var buildupIds = mappingItem.BuildupIds.Take(2).ToList();
                 var buildups = allBuildups.Where(b => buildupIds.Contains(b.Id)).ToList();
                 var match = MapBuildupsToBranch(tree, buildups, mappingItem.Path);
 

@@ -1,12 +1,8 @@
-﻿using System.Threading.Tasks;
-using System.Collections.Generic;
-using GraphQL;
-using Newtonsoft.Json;
-using Calc.Core.Objects.Buildups;
+﻿using Calc.Core.Objects.Buildups;
 using Calc.Core.Objects.Materials;
-using Calc.Core.Objects.Mappings;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Linq;
-using Calc.Core.Objects;
 
 namespace Calc.Core.DirectusAPI.Drivers
 {
@@ -33,6 +29,7 @@ namespace Calc.Core.DirectusAPI.Drivers
                         name
                         }
                     description
+                    verified
                     image {
                         id
                         }

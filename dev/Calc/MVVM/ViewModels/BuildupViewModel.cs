@@ -14,8 +14,6 @@ namespace Calc.MVVM.ViewModels
     public class BuildupViewModel : INotifyPropertyChanged
     {
         private readonly NodeModel _node;
-        private List<Buildup> _buildupsAll => _node.ParentTreeView.AllBuildups;
-
         private bool _inheritEnabled = false;
         public bool InheritEnabled
         {

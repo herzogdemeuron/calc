@@ -1,6 +1,5 @@
 ﻿using Calc.Core;
 using Calc.Core.Objects.Buildups;
-using Calc.Core.Objects.Materials;
 using Calc.MVVM.Helpers;
 using Calc.MVVM.Models;
 using System.Collections.Generic;
@@ -99,18 +98,17 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
+        /// <summary>
+        /// Only show verified buildups
+        /// </summary>
         public BuildupSelectionViewModel(CalcStore store)
         {
             calcStore = store;
-
-            AllBuildupsView = CollectionViewSource.GetDefaultView(store.BuildupsAll);
+            AllBuildupsView = CollectionViewSource.GetDefaultView(store.BuildupsAll.Where(b => b.Verified).ToList());
             AllStandards = new List<StandardModel>(store.StandardsAll.Select(s => new StandardModel(s)));
-
             AllBuildupGroups = new List<BuildupGroup>() { defaultGroup };
             AllBuildupGroups.AddRange(store.BuildupGroupsAll);
-            SelectedBuildupGroup = defaultGroup;
-
-            
+            SelectedBuildupGroup = defaultGroup;            
         }
 
         public void PrepareBuildupSelection(Buildup buildup)

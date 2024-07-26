@@ -3,12 +3,13 @@ using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Mappings;
 using System.Collections.Generic;
 using Calc.MVVM.Models;
+using System.Linq;
 
 namespace Calc.MVVM.Helpers
 {
     public class MappingHelper
     {
-        public static Forest ApplyMappingToForestItem(NodeModel ForestItem,CalcStore store, Mapping newMapping, int maxBuildups)
+        public static Forest ApplyMappingToForestItem(NodeModel ForestItem,CalcStore store, Mapping newMapping)
         {
             var brokenForest = new Forest()
             {
@@ -19,7 +20,8 @@ namespace Calc.MVVM.Helpers
             {
                 Tree tree = nodeItem.Host as Tree;
                 if (newMapping == null) continue;
-                var brokenTree = newMapping.ApplyToTree(tree, store.BuildupsAll, maxBuildups);
+                var verifiedBuildups = store.BuildupsAll.Where(b => b.Verified).ToList();
+                var brokenTree = newMapping.ApplyToTree(tree, verifiedBuildups);
                 if (brokenTree != null && brokenTree.SubBranches.Count > 0)
                 {
                     brokenForest.Trees.Add(brokenTree);
