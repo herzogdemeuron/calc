@@ -428,13 +428,13 @@
                                                 FontWeight="SemiBold"
                                                 Text="Buildup GWP: "/>
                                         <TextBlock Grid.Row="0"  Grid.Column="3"  
-                                                Text="{Binding  BuildupGwp, StringFormat={}{0:F2} kgCO2eq}"/>
+                                                Text="{Binding  BuildupGwp, StringFormat={}{0:F2} kgCO₂/yr}"/>
 
                                         <TextBlock Grid.Row="1" Grid.Column="2" 
                                                  FontWeight="SemiBold"
                                                  Text="Buildup GE: "/>
                                         <TextBlock Grid.Row="1"  Grid.Column="3"  
-                                                Text="{Binding BuildupGe, StringFormat={}{0:F2} kWhOileq}"/>
+                                                Text="{Binding BuildupGe, StringFormat={}{0:F2} kWhOil/yr}"/>
 
                                         <TextBlock Grid.Row="2"
                                                FontWeight="SemiBold"
@@ -462,8 +462,8 @@
                                                     </MultiBinding>
                                                 </DataGridTextColumn.Binding>
                                             </DataGridTextColumn>
-                                            <DataGridTextColumn Header="GWP (kgCO2eq)" Binding="{Binding Gwp, StringFormat={}{0:F2}}" Width="*"  IsReadOnly="True" />
-                                            <DataGridTextColumn Header="GE (kWhOileq)" Binding="{Binding Ge, StringFormat={}{0:F2}}" Width="*"  IsReadOnly="True" />
+                                            <DataGridTextColumn Header="GWP" Binding="{Binding Gwp, StringFormat={}{0:F2}}" Width="*"  IsReadOnly="True" />
+                                            <DataGridTextColumn Header="GE" Binding="{Binding Ge, StringFormat={}{0:F2}}" Width="*"  IsReadOnly="True" />
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </DockPanel>
@@ -507,8 +507,8 @@
                                       ItemsSource="{Binding CalculationVM.CategorizedResults}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Material function" Binding="{Binding MaterialFunction}" Width="3*"  IsReadOnly="True" />
-                                    <DataGridTextColumn Header="GWP (kgCO2eq)" Binding="{Binding Gwp, StringFormat={}{0:F0}}" Width="1*"  IsReadOnly="True" />
-                                    <DataGridTextColumn Header="GE (kWhOileq)" Binding="{Binding Ge, StringFormat={}{0:F0}}" Width="1*"  IsReadOnly="True" />
+                                    <DataGridTextColumn Header="GWP (kgCO₂/yr)" Binding="{Binding Gwp, StringFormat={}{0:F0}}" Width="1*"  IsReadOnly="True" />
+                                    <DataGridTextColumn Header="GE (kWhOil/yr)" Binding="{Binding Ge, StringFormat={}{0:F0}}" Width="1*"  IsReadOnly="True" />
                                 </DataGrid.Columns>
                             </DataGrid>
 

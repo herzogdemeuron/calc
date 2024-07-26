@@ -477,11 +477,11 @@
 
                 <TextBlock Grid.Column="4" Text="GWP: " FontWeight="SemiBold" VerticalAlignment="Center"/>
                 <TextBlock Grid.Column="5" Text="{Binding BuildupCreationVM.BuildupGwp}" VerticalAlignment="Center" d:Text="98.902"/>
-                <TextBlock Grid.Column="6" FontSize="9" Text="kgCO₂eq" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="6" FontSize="9" Text="kgCO₂/yr" Margin="5,0,0,0" VerticalAlignment="Center"/>
 
                 <TextBlock Grid.Column="4" Grid.Row="1" Text="GE: " FontWeight="SemiBold" VerticalAlignment="Center"/>
                 <TextBlock Grid.Column="5" Grid.Row="1" Text="{Binding BuildupCreationVM.BuildupGe}" VerticalAlignment="Center" d:Text="177.902"/>
-                <TextBlock Grid.Column="6" FontSize="9" Grid.Row="1" Text="kWhOileq" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="6" FontSize="9" Grid.Row="1" Text="kWhOil/yr" Margin="5,0,0,0" VerticalAlignment="Center"/>
 
                 <Border x:Name="PreviewCalculation"
                         BorderBrush="Silver"

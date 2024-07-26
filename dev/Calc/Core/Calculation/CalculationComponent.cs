@@ -19,9 +19,9 @@ namespace Calc.Core.Calculation
         [JsonProperty("amount")]
         public double Amount { get; set; }
         [JsonProperty("carbon_a1a3")]
-        public double? Gwp { get; set; }
+        public double? Gwp { get; set; } // calculated gwp
         [JsonProperty("grey_energy_fabrication_total")]
-        public double? Ge { get; set; }
+        public double? Ge { get; set; } // calculated ge
         [JsonProperty("cost")]
         public double? Cost { get; set; }
 
@@ -61,17 +61,18 @@ namespace Calc.Core.Calculation
             var layerAmountParam = layer.GetAmountParam();
             var layerAmount = layer.GetLayerAmount(normalizeRatio, getMain);
 
-            var materialGwp = layer.GetMaterialGwp(getMain) * layerAmount;
-            var materialGe = layer.GetMaterialGe(getMain) * layerAmount;
+            var amortizationFactor = layer.GetAmortizationFactor();
+            var calculatedGwp = layer.GetMaterialGwp(getMain) * layerAmount * amortizationFactor;
+            var calculatedGe = layer.GetMaterialGe(getMain) * layerAmount * amortizationFactor;
 
             return new CalculationComponent
             {
                 Material = getMain ? layer.MainMaterial : layer.SubMaterial,
                 Function = layer.Function,
-                Amount = layerAmount.Value,
+                Amount = Math.Round(layerAmount.Value, 5),
                 HasError = layerAmountParam.HasError,
-                Gwp = Math.Round(materialGwp.Value,3),
-                Ge = Math.Round(materialGe.Value,3),
+                Gwp = Math.Round(calculatedGwp.Value,5),
+                Ge = Math.Round(calculatedGe.Value,5),
                 ElementTypeId = layer.TypeIdentifier,
                 HslColor = layer.HslColor
             };

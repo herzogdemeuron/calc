@@ -120,6 +120,14 @@ namespace Calc.Core.Objects.Buildups
             return layerAmount;
         }
 
+        public double GetAmortizationFactor()
+        {
+            var result = Function?.Amortization ?? 0;
+            if (result == 0) return 0;
+            var factor = 1/(double)result;
+            return factor;
+        }
+
         private string GetColorIdentifier()
         {
             var result = "";
@@ -138,7 +146,6 @@ namespace Calc.Core.Objects.Buildups
             if (hasMaterial)
             {
                 var material = getMain ? MainMaterial : SubMaterial;
-                //var ratio = getMain ? MainMaterialRatio : SubMaterialRatio;
                 var gwp = material.Gwp ?? 0;
                 return gwp;
             };
@@ -154,7 +161,6 @@ namespace Calc.Core.Objects.Buildups
             if (hasMaterial)
             {
                 var material = getMain ? MainMaterial : SubMaterial;
-                //var ratio = getMain ? MainMaterialRatio : SubMaterialRatio;
                 var ge = material.Ge ?? 0;
                 return ge;
             };

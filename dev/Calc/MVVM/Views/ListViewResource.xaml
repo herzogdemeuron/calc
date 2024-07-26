@@ -287,11 +287,11 @@
                                         <TextBlock Grid.Row="5"
                                                    Grid.Column="1"
                                                    FontSize="10"
-                                                   Text="{Binding BuildupGwp, StringFormat='Unit GWP: {0} kgCO₂eq'}"/>
+                                                   Text="{Binding BuildupGwp, StringFormat='Unit GWP: {0} kgCO₂/yr'}"/>
                                         <TextBlock Grid.Row="6"
                                                    Grid.Column="1"
                                                    FontSize="10"
-                                                   Text="{Binding BuildupGe, StringFormat='Unit GE: {0} kWhOileq'}"/>
+                                                   Text="{Binding BuildupGe, StringFormat='Unit GE: {0} kWhOil/yr'}"/>
                                     </Grid>
                                 </DataTemplate>
                             </ContentPresenter.ContentTemplate>
