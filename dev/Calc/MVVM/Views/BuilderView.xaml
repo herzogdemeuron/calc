@@ -301,16 +301,24 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <ComboBox   x:Name="MaterialFunctionComboBox"
-                            Text="Material Function"
-                            Grid.Column="1"
-                            Grid.Row="0"
-                            Grid.ColumnSpan="2"
-                            Margin="5,0,0,0"
-                            ItemsSource="{Binding MaterialFunctionsAll}"
-                            DisplayMemberPath="Name"
-                            SelectedItem="{Binding SelectedFunction}"
-                            Style="{StaticResource RoundedComboBoxStyle}"/>
+                    <ComboBox x:Name="MaterialFunctionComboBox"
+                              Text="Material Function"
+                              Grid.Column="1"
+                              Grid.Row="0"
+                              Grid.ColumnSpan="2"
+                              Margin="5,0,0,0"
+                              ItemsSource="{Binding MaterialFunctionsAll}"
+                              SelectedItem="{Binding SelectedFunction}"
+                              Style="{StaticResource RoundedComboBoxStyle}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+                                    <TextBlock Text="{Binding Amortization}" Foreground="Gray" FontSize="9" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                    </ComboBox>
 
                     <Button Content="{Binding MainMaterial.Name}"
                             d:Content=""
