@@ -108,7 +108,7 @@ namespace Calc.MVVM.ViewModels
 
         public void HandleBuildupNameSetFinished()
         {
-            BuildupCreationVM.NewBuildupName = BuildupCreationVM.NewBuildupName.Trim();            
+            BuildupCreationVM.NewBuildupName = BuildupCreationVM.NewBuildupName?.Trim();            
         }
 
         public void HandleBuildupCodeChanged(string text)
@@ -118,7 +118,7 @@ namespace Calc.MVVM.ViewModels
 
         public void HandleBuildupCodeSetFinished()
         {
-            BuildupCreationVM.NewBuildupCode = BuildupCreationVM.NewBuildupCode.Trim();
+            BuildupCreationVM.NewBuildupCode = BuildupCreationVM.NewBuildupCode?.Trim();
         }
 
         public void HandleMessageClose()

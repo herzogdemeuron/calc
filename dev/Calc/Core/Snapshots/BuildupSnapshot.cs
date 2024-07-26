@@ -32,7 +32,7 @@ namespace Calc.Core.Snapshots
         /// </summary>
         public void ClaimElement(CalcElement element, string elementGroup)
         {
-            ElementAmount = element.GetBasicUnitParameter(BuildupUnit).Amount.Value;
+            ElementAmount = element.GetBasicUnitParameter(BuildupUnit).Amount??0;
             ElementIds = new List<string> { element.Id };
             ElementGroup = elementGroup;
             foreach (var material in MaterialSnapshots)

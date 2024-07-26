@@ -1,7 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Calc.Core.Objects.Materials
 {
@@ -11,6 +8,8 @@ namespace Calc.Core.Objects.Materials
         public int Id { get; set; }
         [JsonProperty("name")]
         public string Name { get; set; }
+        [JsonProperty("amortization")]
+        public int Amortization { get; set; }
 
         public override bool Equals(object obj)
         {
