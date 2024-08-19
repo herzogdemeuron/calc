@@ -2,6 +2,7 @@
 using Calc.Core;
 using Calc.Core.Interfaces;
 using Speckle.Core.Api;
+using Speckle.Core.Api.GraphQL.Models;
 using Speckle.Core.Credentials;
 using Speckle.Core.Kits;
 using Speckle.Core.Models;

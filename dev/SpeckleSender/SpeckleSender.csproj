@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RevitSharedResources2023" Version="2.19.2" />
-    <PackageReference Include="Speckle.Core" Version="2.19.2" />
-    <PackageReference Include="Speckle.Objects.Converter.Revit2023" Version="2.19.2" />
+    <PackageReference Include="RevitSharedResources2023" Version="2.20.1" />
+    <PackageReference Include="Speckle.Core" Version="2.20.1" />
+    <PackageReference Include="Speckle.Objects.Converter.Revit2023" Version="2.20.1" />
     <PackageReference Include="Speckle.Revit.API" Version="2023.0.0" />
   </ItemGroup>
 
