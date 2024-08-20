@@ -2,7 +2,6 @@
 using Calc.Core;
 using Calc.Core.Interfaces;
 using Speckle.Core.Api;
-using Speckle.Core.Api.GraphQL.Models;
 using Speckle.Core.Credentials;
 using Speckle.Core.Kits;
 using Speckle.Core.Models;
@@ -39,7 +38,7 @@ namespace SpeckleSender
             // make client
             account = new Account();
             account.token = config.SpeckleToken;
-            account.serverInfo = new ServerInfo { url = config.SpeckleServerUrl };
+            account.serverInfo = new Speckle.Core.Api.GraphQL.Models.ServerInfo { url = config.SpeckleServerUrl };
             client = new Client(account);
             builderProjectId = config.SpeckleBuilderProjectId;
         }
