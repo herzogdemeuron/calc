@@ -1,8 +1,5 @@
-﻿using Calc.Core.DirectusAPI.Drivers;
-using Calc.Core.Objects;
-using System;
+﻿using Calc.Core.Objects;
 using System.Collections.Generic;
-using System.Text;
 using Newtonsoft.Json;
 
 namespace Calc.Core.DirectusAPI.Drivers
@@ -18,6 +15,7 @@ namespace Calc.Core.DirectusAPI.Drivers
                         location
                         lca_method
                         life_span
+                        area
                         stages
                         impact_categories
                     }
