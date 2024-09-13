@@ -17,7 +17,7 @@ namespace Calc.MVVM.ViewModels
         public CalcStore Store => NodeTreeVM.Store;
         public NodeModel CurrentNodeItem => NodeTreeVM.SelectedNodeItem ?? NodeTreeVM.CurrentForestItem;
         private IGraphNode HostNode => CurrentNodeItem?.Host;
-        private double? ProjectArea => Store.ProjectSelected.Area;
+        public double? ProjectArea => Store.ProjectSelected.Area;
         public string Name  // used anywhere?
         {
             get
@@ -166,6 +166,7 @@ namespace Calc.MVVM.ViewModels
             OnPropertyChanged(nameof(CanSaveResults));
             OnPropertyChanged(nameof(ProjectGwp));
             OnPropertyChanged(nameof(ProjectGe));
+            OnPropertyChanged(nameof(ProjectArea));
         }
 
 

@@ -401,7 +401,7 @@
 
         <Setter Property="AutoGenerateColumns" Value="False"/>
         <Setter Property="HorizontalGridLinesBrush" Value="Transparent"/>
-        <Setter Property="VerticalGridLinesBrush" Value="LightGray"/>
+        <Setter Property="VerticalGridLinesBrush" Value="Transparent"/>
         <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="RowHeaderWidth" Value="0"/>
@@ -414,7 +414,8 @@
             <Setter.Value>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="FontStyle" Value="Italic"/>
                 </Style>
             </Setter.Value>
         </Setter>
@@ -434,7 +435,6 @@
         <Style.Triggers>
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding CalculationVM.HasErrors}" Value="False"/>
                     <Condition Binding="{Binding CalculationVM.HasResults}" Value="True"/>
                 </MultiDataTrigger.Conditions>
                 <Setter Property="Visibility" Value="Visible"/>
