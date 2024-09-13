@@ -102,18 +102,30 @@ namespace Calc.MVVM.ViewModels
         public double ProjectGwp => CategorizedResults?.Sum(c => c.Gwp) ?? 0;
         public double ProjectGe => CategorizedResults?.Sum(c => c.Ge) ?? 0;
 
+        /// <summary>
+        /// Show the errors for the current selection / forest
+        /// </summary>
         public List<ParameterError> Errors
         {
             get
             {
-                if (NodeTreeVM.CurrentForestItem?.Host == null) return null;
-                var forest = NodeTreeVM.CurrentForestItem.Host as Forest;
-                var branches = forest.Trees;
-                if (branches == null || branches.Count() == 0)
-                    return null;
-                return branches.SelectMany(b => b.ParameterErrors).ToList();
+                if (HostNode == null) return null;
+                if (HostNode is Branch branch)
+                {
+                    return branch.ParameterErrors;
+                }
+                else
+                {
+                    var forest = NodeTreeVM.CurrentForestItem.Host as Forest;
+                    var branches = forest.Trees;
+                    if (branches == null || branches.Count() == 0)
+                        return null;
+                    return branches.SelectMany(b => b.ParameterErrors).ToList();
+                }
+
             }
         }
+
 
         private bool IsFullyCalculated // deprecated
         {
