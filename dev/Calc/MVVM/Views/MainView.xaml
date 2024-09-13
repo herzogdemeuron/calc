@@ -410,51 +410,49 @@
                                 <DockPanel VerticalAlignment="Stretch">
 
                                     <Grid DockPanel.Dock="Bottom"
-                                      VerticalAlignment="Bottom"
-                                      Margin="10,0,0,10">
+                                          Width="350"
+                                          VerticalAlignment="Bottom">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="100"/>
                                             <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="100"/>
+                                            <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="15"/>
-                                            <RowDefinition Height="15"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
 
-                                        <TextBlock Grid.Row="0" Grid.Column="0"
-                                               FontWeight="SemiBold"
-                                               Text="Buildup Unit: "/>                                               
-                                        <TextBlock Grid.Row="0" Grid.Column="1"
-                                               Text="{Binding  BuildupUnit}"/>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="{Binding  BuildupUnit}"
+                                                       FontWeight="Bold"
+                                                       FontStyle="Italic"                                  
+                                                       HorizontalAlignment="Center"/>
+                                            <TextBlock Text="Unit"
+                                                   FontStyle="Italic"
+                                                   FontSize="10"
+                                                   HorizontalAlignment="Center"/>   
+                                        </StackPanel>
+                                        
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="{Binding  BuildupGwp, StringFormat={}{0:F2}}"
+                                                       FontWeight="Bold"
+                                                       FontStyle="Italic"                                  
+                                                       HorizontalAlignment="Center"/>
+                                            <TextBlock Text="GWP (kgCO²eg/yr)"
+                                                   FontStyle="Italic"
+                                                   FontSize="10"
+                                                   HorizontalAlignment="Center"/>
+                                        </StackPanel>
 
-                                        <TextBlock Grid.Row="1" Grid.Column="0" 
-                                               FontWeight="SemiBold"
-                                                   Text="Buildup Group: "/>
-                                        <TextBlock Grid.Row="1" Grid.Column="1" 
-                                               Text="{Binding Group.Name}"/>
-
-                                        <TextBlock Grid.Row="0" Grid.Column="2" 
-                                                FontWeight="SemiBold"
-                                                Text="Buildup GWP: "/>
-                                        <TextBlock Grid.Row="0"  Grid.Column="3"  
-                                                Text="{Binding  BuildupGwp, StringFormat={}{0:F2} kgCO₂/yr}"/>
-
-                                        <TextBlock Grid.Row="1" Grid.Column="2" 
-                                                 FontWeight="SemiBold"
-                                                 Text="Buildup GE: "/>
-                                        <TextBlock Grid.Row="1"  Grid.Column="3"  
-                                                Text="{Binding BuildupGe, StringFormat={}{0:F2} kWhOil/yr}"/>
-
-                                        <TextBlock Grid.Row="2"
-                                               FontWeight="SemiBold"
-                                               Text="Description: "/>
-                                        <TextBlock Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3"
-                                               Text="{Binding  Description}" TextWrapping="Wrap"/>
-                                                   
+                                        <StackPanel Grid.Column="2">
+                                            <TextBlock Text="{Binding  BuildupGe, StringFormat={}{0:F2}}"
+                                                        FontWeight="Bold"
+                                                        FontStyle="Italic"                                  
+                                                        HorizontalAlignment="Center"/>
+                                            <TextBlock Text="GE (kWhoil/yr)"
+                                                        FontStyle="Italic"
+                                                        FontSize="10"
+                                                        HorizontalAlignment="Center"/>
+                                        </StackPanel>
                                     </Grid>
+                                    
+                                    
                                     <Separator DockPanel.Dock="Bottom"
                                            BorderBrush="LightGray"
                                            BorderThickness="1"
@@ -516,7 +514,19 @@
                                 DockPanel.Dock="Bottom"
                                 ItemsSource="{Binding CalculationVM.Errors}">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Issues" FontSize="10" FontStyle="Italic" Binding="{Binding ErrorMessage, StringFormat=💔 {0}}" Width="1*" IsReadOnly="True"/>
+                                <DataGridTemplateColumn Header="Issues" Width="1*" IsReadOnly="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="pack://application:,,,/CalcMVVM;component/Resources/issue.png" 
+                                                        Width="12" Height="12" Margin="0,0,5,0"/>
+                                                <TextBlock Text="{Binding ErrorMessage}"
+                                                            FontSize="10" FontStyle="Italic" 
+                                                            VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                     </DockPanel>

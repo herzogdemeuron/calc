@@ -12,6 +12,7 @@
     <None Remove="Resources\icon_black_small.png" />
     <None Remove="Resources\icon_builder_small.png" />
     <None Remove="Resources\icon_main_small.png" />
+    <None Remove="Resources\issue.png" />
     <None Remove="Resources\no_image.png" />
     <None Remove="ToggleButtonTemplate.xaml" />
     <None Remove="Views\BuildupSelectionView.xaml" />
@@ -83,6 +84,7 @@
     <Resource Include="Resources\icon_black_small.png" />
     <Resource Include="Resources\icon_builder_small.png" />
     <Resource Include="Resources\icon_main_small.png" />
+    <Resource Include="Resources\issue.png" />
     <Resource Include="Resources\no_image.png" />
   </ItemGroup>
 

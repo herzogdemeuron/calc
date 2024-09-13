@@ -23,7 +23,7 @@ namespace Calc.MVVM.Helpers
             List<CalcElement> calcElements = await Task.Run(() => elementCreator.CreateCalcElements(customParamSettings, parameters));
 
             var leftElements = forest.PlantTrees(calcElements);
-            var darkForest = CreateDarkForest("Leftovers", leftElements);
+            var darkForest = CreateDarkForest("Unassigned", leftElements);
 
             return darkForest;
         }
