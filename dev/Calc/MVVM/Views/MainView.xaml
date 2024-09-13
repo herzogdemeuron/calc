@@ -61,10 +61,9 @@
                        Grid.Row="1">
 
                 <Label Content="Element Groups"
-                       FontSize="27"
+                       FontSize="18"
                        Margin="10"
-                       Padding="0"
-                       FontWeight="light"/>
+                       Padding="0"/>
 
                 <ComboBox x:Name="ForestsComboBox"
                           Text="Choose Element Group"
@@ -81,9 +80,8 @@
                         Grid.Row="1">
                 <Label Content="Mapping Settings" 
                         Margin="10"
-                       Padding="0"
-                        FontSize="27"
-                       FontWeight="Light"/>
+                        Padding="0"
+                        FontSize="18"/>
 
                 <DockPanel x:Name="MappingPanel"
                        Margin="10,10,10,10"
@@ -330,10 +328,10 @@
                 </Grid.RowDefinitions>
 
                 <Label Content="Assemblies"
+                       VerticalAlignment="Center"
                        Grid.Row="0"
                        Padding="0"
-                       FontSize="27"
-                       FontWeight="Light"/>
+                       FontSize="18"/>
 
                 <DockPanel x:Name="BuildupSelection"
                            Grid.Row="1"
@@ -474,10 +472,10 @@
 
 
                 <Label Content="Calculation Results"
+                       VerticalAlignment="Center"
                        Grid.Row="3"
                        Padding="0"
-                       FontSize="27"
-                       FontWeight="Light"/>
+                       FontSize="18"/>
 
                 <Border  x:Name="ResultSection"
                          Grid.Row="4" 

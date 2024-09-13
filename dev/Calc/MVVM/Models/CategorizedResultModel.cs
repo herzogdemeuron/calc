@@ -2,7 +2,7 @@
 {
     public class CategorizedResultModel
     {
-        public string MaterialFunction { get; set; }
+        public string Group { get; set; }
         public double Gwp { get; set; }
         public double Ge { get; set; }
     }

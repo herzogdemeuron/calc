@@ -16,7 +16,7 @@ namespace Calc.Core.Objects
         [JsonProperty("lca_method")]
         public string LcaMethod { get; set; }
         [JsonProperty("area")]
-        public decimal Area { get; set; }
+        public double Area { get; set; }
         [JsonProperty("life_span")]
         public int? LifeSpan { get; set; }
         [JsonProperty("stages")]

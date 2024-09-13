@@ -2,6 +2,7 @@
 using Calc.Core.Objects.Elements;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Calc.Core.Snapshots
 {
@@ -26,6 +27,9 @@ namespace Calc.Core.Snapshots
 
         [JsonProperty("materials")]
         public List<MaterialSnapshot> MaterialSnapshots { get; set; }
+        [JsonIgnore]
+        public double? TotalGwp => MaterialSnapshots.Sum(m => m.CalculatedGwp);
+        public double? TotalGe => MaterialSnapshots.Sum(m => m.CalculatedGe);
 
         /// <summary>
         /// claim the snapshot for the element, manipulate the the element amount and the material snapshots

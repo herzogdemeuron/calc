@@ -106,8 +106,9 @@ namespace Calc.Core.Objects.GraphNodes
 
         [JsonIgnore]
         public bool HasCalculationErrors => (ParameterErrors != null && ParameterErrors.Count > 0);
+
         [JsonIgnore]
-        public bool IsFullyCalculated
+        public bool IsFullyCalculated // deprecatd
         {
             get
             {
