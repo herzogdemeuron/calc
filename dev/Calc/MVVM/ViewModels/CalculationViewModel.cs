@@ -15,9 +15,9 @@ namespace Calc.MVVM.ViewModels
     {
         private readonly NodeTreeModel NodeTreeVM;
         public CalcStore Store => NodeTreeVM.Store;
-        private NodeModel CurrentNodeItem => NodeTreeVM.SelectedNodeItem ?? NodeTreeVM.CurrentForestItem;
+        public NodeModel CurrentNodeItem => NodeTreeVM.SelectedNodeItem ?? NodeTreeVM.CurrentForestItem;
         private IGraphNode HostNode => CurrentNodeItem?.Host;
-        private double ProjectArea => Store.ProjectSelected.Area;
+        private double? ProjectArea => Store.ProjectSelected.Area;
         public string Name  // used anywhere?
         {
             get
@@ -81,10 +81,10 @@ namespace Calc.MVVM.ViewModels
                 // post process: divide all values by the project area if it is not zero
                 foreach (var cal in calculation)
                 {
-                    if (ProjectArea != 0)
+                    if (ProjectArea.HasValue && ProjectArea.Value != 0)
                     {
-                        cal.Gwp /= ProjectArea;
-                        cal.Ge /= ProjectArea;
+                        cal.Gwp /= ProjectArea.Value;
+                        cal.Ge /= ProjectArea.Value;
                     }
                     else
                     {

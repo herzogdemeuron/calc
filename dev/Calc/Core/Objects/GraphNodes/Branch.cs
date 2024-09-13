@@ -142,7 +142,6 @@ namespace Calc.Core.Objects.GraphNodes
 
         [JsonIgnore]
         public bool HasCalculationResults => (BuildupSnapshots != null && BuildupSnapshots.Count > 0);
-
         private List<BuildupSnapshot> buildupSnapshots = new();
         [JsonIgnore]
         public List<BuildupSnapshot> BuildupSnapshots

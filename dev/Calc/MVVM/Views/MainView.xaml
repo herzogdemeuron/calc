@@ -504,9 +504,9 @@
                                       Margin="10"
                                       ItemsSource="{Binding CalculationVM.CategorizedResults}">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Material function" Binding="{Binding MaterialFunction}" Width="3*"  IsReadOnly="True" />
-                                    <DataGridTextColumn Header="GWP (kgCO₂/yr)" Binding="{Binding Gwp, StringFormat={}{0:F0}}" Width="1*"  IsReadOnly="True" />
-                                    <DataGridTextColumn Header="GE (kWhOil/yr)" Binding="{Binding Ge, StringFormat={}{0:F0}}" Width="1*"  IsReadOnly="True" />
+                                    <DataGridTextColumn Header="Material function" Binding="{Binding Group}" Width="3*"  IsReadOnly="True" />
+                                    <DataGridTextColumn Header="GWP (kgCO₂/yr)" Binding="{Binding Gwp, StringFormat={}{0:F1}}" Width="1*"  IsReadOnly="True" />
+                                    <DataGridTextColumn Header="GE (kWhOil/yr)" Binding="{Binding Ge, StringFormat={}{0:F1}}" Width="1*"  IsReadOnly="True" />
                                 </DataGrid.Columns>
                             </DataGrid>
 
