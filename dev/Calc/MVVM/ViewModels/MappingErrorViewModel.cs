@@ -99,13 +99,13 @@ namespace Calc.MVVM.ViewModels
                 if(nodeItem.Host is Tree)
                 {
                     Buildup1 = "-";
-                    Buildup2 = "-";
+                    Buildup2 = null;
                 }
                 else
                 {
                     var branch = nodeItem.Host as Branch;
                     Buildup1 = branch.Buildups?.Count > 0 ? branch.Buildups[0].ToString() : "-";
-                    Buildup2 = branch.Buildups?.Count > 1 ? branch.Buildups[1].ToString() : "-";
+                    Buildup2 = branch.Buildups?.Count > 1 ? branch.Buildups[1].ToString() : null;
                 }
             }
             else

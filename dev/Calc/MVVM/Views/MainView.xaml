@@ -39,8 +39,8 @@
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="0"/>
-                <RowDefinition Height="105"/>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="35"/>
@@ -61,7 +61,7 @@
 
                 <Label Content="Element Groups"
                        FontSize="18"
-                       Margin="10"
+                       Margin="10,0,0,10"
                        Padding="0"/>
 
                 <ComboBox x:Name="ForestsComboBox"
@@ -69,7 +69,7 @@
                           Style="{StaticResource RoundedComboBoxStyle}"
                           ItemsSource="{Binding Store.ForestProjectRelated}"
                           DisplayMemberPath="Name"
-                          Margin="10,10,10,10"
+                          Margin="10,0,10,10"
                           SelectionChanged="ForestSelectionChanged"
                           HorizontalAlignment="Stretch"/>
             </StackPanel>
@@ -78,28 +78,31 @@
                         Grid.Column="2" 
                         Grid.Row="1">
                 <Label Content="Mapping Settings" 
-                        Margin="10"
+                       Margin="10,0,0,10"
                         Padding="0"
                         FontSize="18"/>
 
                 <DockPanel x:Name="MappingPanel"
-                       Margin="10,10,10,10"
+                       Margin="10,0,10,10"
                        HorizontalAlignment="Stretch"
                        LastChildFill="True">
                     <Button Style="{StaticResource MappingErrorButtonStyle}"
                             Width="25"
-                            Margin="10,0,0,0"
+                            Margin="10,0,0,0"                           
                             DockPanel.Dock="Right"
                             Click="MappingErrorClicked">
                     </Button>
                     <Button Style="{StaticResource ButtonStyle}"
-                        Content="New" 
-                        Width="70"
+                            Uid="pack://application:,,,/CalcMVVM;component/Resources/button_add.png"
+                            
+                        Width="25"
                         Click="NewMappingClicked"
+                            
                         DockPanel.Dock="Right"/>
                     <Button Style="{StaticResource ButtonStyle}"
-                        Content="Update" 
-                        Width="70" 
+                        Uid="pack://application:,,,/CalcMVVM;component/Resources/button_save.png"
+                        Width="25"
+                            IsEnabled="False"
                         Click="UpdateMappingClicked"
                         Margin="10,0,10,0"
                         DockPanel.Dock="Right"/>
@@ -121,36 +124,26 @@
                     Height="220"
                   Visibility="{Binding MappingErrorVM.BrokenSectionVisibility}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="80"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="45"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="25"/>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="35"/>
-                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="45"/>
                 </Grid.RowDefinitions>
 
-                <Border Style="{StaticResource MappingErrorBorderStyle}"
+                <Border BorderBrush="Crimson"
+                        BorderThickness="2"
+                        CornerRadius="4"
                         Grid.ColumnSpan="2" 
-                        Grid.RowSpan="4"/>
+                        Grid.RowSpan="3"/>
 
-
-
-                <TextBlock Style="{StaticResource MappingErrorTextStyle}"
-                               Grid.Column="0"
-                               Grid.ColumnSpan="2"
-                               HorizontalAlignment="Left"
-                               VerticalAlignment="Center"
-                               FontSize="13"
-                               Margin="10,5,0,0"
-                               FontWeight="SemiBold"/>
                 <Border Grid.ColumnSpan="2"
-                        Grid.Row="1"
+                        Grid.Row="0"
                         Margin="10,10,10,0"
                         BorderBrush="Silver"
                         BorderThickness="1"
-                        CornerRadius="4">
+                        CornerRadius="2">
                     <TreeView x:Name="BrokenNodesTreeView"
                               Background="Transparent"
                               BorderThickness="0"
@@ -170,37 +163,34 @@
                         </TreeView.ItemTemplate>
                     </TreeView>
                 </Border>
-                <TextBlock Text="{Binding MappingErrorVM.Buildup1}"
-                           ToolTip="{Binding MappingErrorVM.Buildup1}"
-                            Grid.Column="2"
-                            Grid.Row="2"
-                            VerticalAlignment="Center"
-                            TextWrapping="WrapWithOverflow"
-                            Margin="20,0,10,0"/>
-                <TextBlock Text="{Binding MappingErrorVM.Buildup2}"
-                           ToolTip="{Binding MappingErrorVM.Buildup2}"
-                            Grid.Column="2"
-                            Grid.Row="3"
-                            VerticalAlignment="Center"
-                            Margin="20,0,10,10"/>
+                <TextBlock Grid.Row="1"
+                           VerticalAlignment="Center"
+                           TextWrapping="Wrap"
+                           Margin="10,0,0,0">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding MappingErrorVM.Buildup1}"/>
+                                                <TextBlock Text="{Binding MappingErrorVM.Buildup2}"/>
+                                            </StackPanel>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                    <TextBlock.Inlines>
+                        <Run Text="{Binding MappingErrorVM.Buildup1, Mode=OneWay}"/>
+                        <LineBreak/>
+                        <Run Text="{Binding MappingErrorVM.Buildup2, Mode=OneWay}"/>
+                    </TextBlock.Inlines>
+                </TextBlock>
 
                 <Button Style="{StaticResource ButtonStyle}"
-                        Content="Ignore"
-                        Grid.Row="2"
-                        Width="70"
-                        Margin="10,0,0,0"
+                        Uid="pack://application:,,,/CalcMVVM;component/Resources/button_trash.png"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Width="25"
+                        Margin="10"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Left"
                         Click="HandleIgnoreSelectedBrokenNode"/>
-
-                <Button Style="{StaticResource ButtonStyle}"
-                        Content="Ignore All"
-                        Grid.Row="3"
-                        Width="70"
-                        Margin="10,0,0,10"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Left"
-                        Click="HandleIgnoreAllBrokenNodes"/>
 
 
             </Grid>
@@ -216,7 +206,7 @@
                     <RowDefinition Height="10"/>
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="10"/>
-                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="25"/>
                 </Grid.RowDefinitions>
  
                 <Border Grid.Row="0"
@@ -304,11 +294,11 @@
                                HorizontalAlignment="Center"/>
                     </StackPanel>
                 </Grid>
-                
+
                 <Button Style="{StaticResource ButtonStyle}"
+                    Uid="pack://application:,,,/CalcMVVM;component/Resources/button_reload.png"
                     Grid.Row="4"
-                    Content="Reload"
-                    Width="70"
+                    Width="60"
                     Click="UpdateRevitClicked"
                     VerticalAlignment="Bottom"
                     HorizontalAlignment="Left"/>
@@ -335,17 +325,18 @@
                   Margin="10,10,10,10">
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="45"/>
-                    <RowDefinition Height="80"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
                     <RowDefinition Height="4*"/>
-                    <RowDefinition Height="55"/>
+                    <RowDefinition Height="auto"/>
                     <RowDefinition Height="2*"/>
-                    <RowDefinition Height="80"/>
+                    <RowDefinition Height="85"/>
                 </Grid.RowDefinitions>
 
                 <Label Content="Assemblies"
                        VerticalAlignment="Center"
                        Grid.Row="0"
+                       Margin="0,10,0,10"
                        Padding="0"
                        FontSize="18"/>
 
@@ -354,17 +345,17 @@
                            Height="60">
                     
                     <StackPanel DockPanel.Dock="Right"
-                                Width="70"
+                                Width="25"
                                 Margin="10,0,0,0">
-                        
+
                         <Button Style="{StaticResource ButtonStyle}"
-                                Content="Reset"
+                                Uid="pack://application:,,,/CalcMVVM;component/Resources/button_back.png"
                                 IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.InheritEnabled}"
                                 Click="InheritClicked"/>
 
                         <Button Style="{StaticResource ButtonStyle}"
-                                Content="Delete"
-                                Margin="0,5,0,0"
+                                Uid="pack://application:,,,/CalcMVVM;component/Resources/button_delete.png"
+                                Margin="0,10,0,0"
                                 IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.RemoveEnabled}"
                                 Click="RemoveClicked"/>
                         
@@ -382,7 +373,7 @@
                         <Button Content="{Binding  NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup2.Name}"
                                 IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CanAddSecondBuildup}"
                                 d:Content=""
-                                Margin="0,5,0,0"
+                                Margin="0,10,0,0"
                                 Tag="Choose Second"
                                 HorizontalAlignment="Stretch"
                                 Style="{StaticResource ButtonStyle}"
@@ -462,7 +453,7 @@
                                           ItemsSource="{Binding CalculationComponents}"
                                           DockPanel.Dock="Top">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Header="Function" Binding="{Binding Function.Name}" Width="2*"  IsReadOnly="True" />
+                                            <DataGridTextColumn Header="Function" Binding="{Binding Function.Name}" Width="*"  IsReadOnly="True" />
                                             <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" Width="2*"  IsReadOnly="True" />
                                             <DataGridTextColumn Header="Amount" Width="*"  IsReadOnly="True">
                                                 <DataGridTextColumn.Binding>
@@ -483,6 +474,7 @@
 
                 <Label Content="Calculation"
                        VerticalAlignment="Center"
+                       Margin="0,10,0,10"
                        Grid.Row="3"
                        Padding="0"
                        FontSize="18"/>
@@ -518,7 +510,7 @@
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
-                                                <Image Source="pack://application:,,,/CalcMVVM;component/Resources/issue.png" 
+                                                <Image Source="pack://application:,,,/CalcMVVM;component/Resources/button_issue.png" 
                                                         Width="12" Height="12" Margin="0,0,5,0"/>
                                                 <TextBlock Text="{Binding ErrorMessage}"
                                                             FontSize="10" FontStyle="Italic" 
@@ -604,9 +596,10 @@
                     Grid.Column="2"
                     Grid.Row="4"
                     Content="Save"
-                    Width="180"
+                    Width="95"
                     Margin="0,0,10,0"
                     HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
                     Click="SaveResultsClicked"
                     IsEnabled="{Binding CalculationVM.CanSaveResults}"/>
         </Grid>

@@ -14,6 +14,8 @@ namespace Calc.Core.Objects.GraphNodes
         [JsonIgnore]
         public List<CalcElement> Elements { get => GetElements(); }
         [JsonIgnore]
+        public double TotalLength { get => SubBranches.Sum(s => s.TotalLength); }
+        [JsonIgnore]
         public double TotalArea { get => SubBranches.Sum(s => s.TotalArea); }
         [JsonIgnore]
         public double TotalVolume { get => SubBranches.Sum(s => s.TotalVolume); }

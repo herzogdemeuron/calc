@@ -22,7 +22,7 @@
     <Style x:Key="NumberColumn" TargetType="TextBlock">
         <Setter Property="HorizontalAlignment" Value="Right" />
     </Style>
-    
+
 
     <Style x:Key="MappingErrorButtonStyle" TargetType="Button"  BasedOn="{StaticResource ButtonStyle}">
         <Setter Property="Content" Value="👌"/>
@@ -52,38 +52,14 @@
 
         </Style.Triggers>
     </Style>
-    
 
-    <Style x:Key="MappingErrorBorderStyle" TargetType="Border">
-        <Setter Property="BorderThickness" Value="2"/>
-        <Setter Property="BorderBrush" Value="MediumSeaGreen"/>
-        <Setter Property="CornerRadius" Value="4"/>
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding MappingErrorVM.HasBrokenItems}" Value="True">
-                <Setter Property="BorderBrush" Value="Crimson"/>
-            </DataTrigger>
-        </Style.Triggers>
-    </Style>
 
-    
     <Style x:Key="MappingErrorPathStyle" TargetType="Path">
         <Setter Property="Stroke" Value="MediumSeaGreen"/>
         <Setter Property="StrokeThickness" Value="2"/>
         <Style.Triggers>
             <DataTrigger Binding="{Binding MappingErrorVM.HasBrokenItems}" Value="True">
                 <Setter Property="Stroke" Value="Crimson"/>
-            </DataTrigger>
-        </Style.Triggers>
-    </Style>
-
-    
-    <Style x:Key="MappingErrorTextStyle" TargetType="TextBlock">
-        <Setter Property="Text" Value="All Mappings Clear 😃"/>
-        <Setter Property="Foreground" Value="MediumSeaGreen"/>
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding MappingErrorVM.HasBrokenItems}" Value="True">
-                <Setter Property="Text" Value="Missing Mappings:"/>
-                <Setter Property="Foreground" Value="Crimson"/>
             </DataTrigger>
         </Style.Triggers>
     </Style>

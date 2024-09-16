@@ -46,8 +46,8 @@
                             <Setter TargetName="Bd" Property="Background" Value="LightGray" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="MediumSeaGreen" />
-                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter TargetName="Bd" Property="Background" Value="#404040" />
+                            <Setter Property="Foreground" Value="White"/>
                             <Setter Property="FontWeight" Value="SemiBold" />
                         </Trigger>
                     </ControlTemplate.Triggers>
@@ -96,8 +96,8 @@
                             <Setter Property="Foreground" Value="DarkGray"/>
                         </DataTrigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="MediumSeaGreen" />
-                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter TargetName="Bd" Property="Background" Value="#404040" />
+                            <Setter Property="Foreground" Value="White"/>
                             <Setter Property="FontWeight" Value="SemiBold" />
                         </Trigger>
                     </ControlTemplate.Triggers>
@@ -135,7 +135,6 @@
                                                                                
                                         <TextBlock Grid.Row="0"
                                                    Text="{Binding Name}"
-                                                   Foreground="Black"
                                                    VerticalAlignment="Top"
                                                    Grid.ColumnSpan="2"
                                                    FontSize="15"
@@ -210,11 +209,8 @@
                             <Setter TargetName="Bd" Property="Background" Value="LightGray" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="MediumSeaGreen" />
-                            <Setter Property="Foreground" Value="Black" />
-                        </Trigger>
-                        <Trigger Property="IsSelected" Value="False">
-                            <Setter Property="Foreground" Value="DimGray" />
+                            <Setter TargetName="Bd" Property="Background" Value="#404040" />
+                            <Setter Property="Foreground" Value="White" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -249,9 +245,9 @@
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
 
-                                        <TextBlock Grid.Row="0"
+                                        <TextBlock x:Name="Name"
+                                                   Grid.Row="0"
                                                    Text="{Binding Name}"
-                                                   Foreground="Black"
                                                    VerticalAlignment="Top"
                                                    Grid.ColumnSpan="2"
                                                    FontSize="15"
@@ -264,7 +260,7 @@
                                         <TextBlock Grid.Row="2" 
                                                    Grid.ColumnSpan="2" 
                                                    Text="{Binding Description}"
-                                                   Foreground="Black"
+                                                   FontSize="10"
                                                    VerticalAlignment="Top"
                                                    TextWrapping="Wrap"
                                                    />
@@ -302,11 +298,8 @@
                             <Setter TargetName="Bd" Property="Background" Value="LightGray" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="MediumSeaGreen" />
-                            <Setter Property="Foreground" Value="Black" />
-                        </Trigger>
-                        <Trigger Property="IsSelected" Value="False">
-                            <Setter Property="Foreground" Value="DimGray" />
+                            <Setter TargetName="Bd" Property="Background" Value="#404040" />
+                            <Setter Property="Foreground" Value="White" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
