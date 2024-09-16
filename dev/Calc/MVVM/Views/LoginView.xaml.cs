@@ -23,6 +23,11 @@ namespace Calc.MVVM.Views
             if (c) this.Close();
         }
 
+        private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            LoginVM.CancelLoad();        
+        }
+
         private void PasswordChanged(object sender, RoutedEventArgs e)
         {
             LoginVM.Password = PasswordBox.Password;
@@ -34,7 +39,7 @@ namespace Calc.MVVM.Views
             if (c) this.Close();
         }
 
-        private void LoginQuitClicked(object sender, RoutedEventArgs e)
+        private void LoginQuitClicked(object sender, RoutedEventArgs e) // deprecated
         {
             LoginVM.CancelLoad();
             this.Close();

@@ -19,7 +19,9 @@
     <None Remove="Resources\button_trash.png" />
     <None Remove="Resources\DT_logo.gif" />
     <None Remove="Resources\icon_black_small.png" />
+    <None Remove="Resources\icon_builder.png" />
     <None Remove="Resources\icon_builder_small.png" />
+    <None Remove="Resources\icon_main.png" />
     <None Remove="Resources\icon_main_small.png" />
     <None Remove="Resources\no_image.png" />
     <None Remove="ToggleButtonTemplate.xaml" />
@@ -98,7 +100,9 @@
     <Resource Include="Resources\button_trash.png" />
     <Resource Include="Resources\DT_logo.gif" />
     <Resource Include="Resources\icon_black_small.png" />
+    <Resource Include="Resources\icon_builder.png" />
     <Resource Include="Resources\icon_builder_small.png" />
+    <Resource Include="Resources\icon_main.png" />
     <Resource Include="Resources\icon_main_small.png" />
     <Resource Include="Resources\button_issue.png" />
     <Resource Include="Resources\no_image.png" />

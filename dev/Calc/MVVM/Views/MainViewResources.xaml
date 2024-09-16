@@ -231,43 +231,10 @@
                         </Style.Triggers>
                     </Style>
                 </Grid.Style>
-                <TextBlock Text="💔"
-                           FontSize="10"
-                           FontWeight="SemiBold"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Center"
-                           Foreground="Crimson"/>
+                <Image Source="pack://application:,,,/CalcMVVM;component/Resources/button_issue.png" 
+                       Width="12" Height="12" HorizontalAlignment="Center"/>
             </Grid>
 
-            <Grid x:Name="ParameterNameGrid"
-                  Margin="4,0,0,0">
-                <Grid.Style>
-                    <Style TargetType="Grid">
-                        <Setter Property="Visibility" Value="Collapsed"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsBranch}" Value="True">
-                                <Setter Property="Visibility" Value="Visible"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Grid.Style>
-                <Rectangle Stroke="Gray"
-                           StrokeThickness="1"
-                           Margin="0,6,0,5"
-                           RadiusX="4"
-                           RadiusY="4">
-                    <Rectangle.Style>
-                        <Style TargetType="Rectangle">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding BranchParameterIsInstance}" Value="True">
-                                    <Setter Property="StrokeDashArray" Value="2,2"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Rectangle.Style>
-                </Rectangle>
-                <TextBlock Text="{Binding BranchParameterName}" VerticalAlignment="Center" FontSize="10" Margin="2"/>
-            </Grid>
 
             <Border x:Name="LabelBorder"
                 Padding="4,2,4,3"
@@ -292,51 +259,68 @@
                     </Style>
                 </Border.Style>
 
-                <StackPanel Orientation="Vertical">
-                    <TextBlock x:Name="txtName">
-                        <TextBlock.Style>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="Text" Value="{Binding Name}" />
+                <StackPanel Orientation="Horizontal">
+                    <Grid x:Name="ParameterNameGrid"
+                          VerticalAlignment="Center"
+                          Margin="4,0,0,0">
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="Visibility" Value="Collapsed"/>
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True">
-                                        <Setter Property="FontWeight" Value="Bold" />
+                                    <DataTrigger Binding="{Binding IsBranch}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
-                        </TextBlock.Style>
-                    </TextBlock>
-
-                    <Grid Height="3">
-                        <Border x:Name="Underline"
-                            Height="3" 
-                            VerticalAlignment="Bottom" 
-                            CornerRadius="2" 
-                            Visibility="{Binding UnderlineVisibility}"
-                            Background="{Binding Host.HslColor, Converter={StaticResource ColorConverter}}">
-
-                        </Border>
+                        </Grid.Style>
+                        <TextBlock Margin="2,0,0,0"
+                                   VerticalAlignment="Center"
+                                   FontStyle="Italic">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0}: ">
+                                    <Binding Path="BranchParameterName"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding BranchParameterIsInstance}" Value="False">
+                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
                     </Grid>
+
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock x:Name="txtName">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="{Binding Name}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" Value="True">
+                                            <Setter Property="FontWeight" Value="Bold" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <Grid Height="3">
+                            <Border x:Name="Underline"
+                                Height="3" 
+                                VerticalAlignment="Bottom" 
+                                CornerRadius="2" 
+                                Visibility="{Binding UnderlineVisibility}"
+                                Background="{Binding Host.HslColor, Converter={StaticResource ColorConverter}}">
+
+                            </Border>
+                        </Grid>
+                    </StackPanel>
                 </StackPanel>
             </Border>
-
-            <TextBlock x:Name="CountText"
-                       Text="{Binding Host.Elements.Count}"
-                       VerticalAlignment="Center"
-                       FontSize="11"
-                       Margin="5,0,0,0"
-                       FontWeight="SemiBold"
-                       Foreground ="Gray">
-                <TextBlock.Style>
-                    <Style TargetType="TextBlock">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsBrokenNode}" Value="True">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
-
+            
         </StackPanel>
     </DataTemplate>
 
@@ -485,7 +469,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="Foreground" Value="MediumSeaGreen"/>
+        <Setter Property="Foreground" Value="#404040"/>
     </Style>
     
 

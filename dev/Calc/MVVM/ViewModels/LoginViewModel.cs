@@ -15,7 +15,7 @@ namespace Calc.MVVM.ViewModels
 
     public class LoginViewModel : INotifyPropertyChanged
     {
-        private readonly bool MainOrBuilder;
+        public bool MainOrBuilder { get; }
         public Directus DirectusInstance { get; set; }
         public CalcStore CalcStore { get; set; }
         public string Title { get; set; }

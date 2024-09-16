@@ -59,13 +59,13 @@
                        Grid.Column="0"
                        Grid.Row="1">
 
-                <Label Content="Element Groups"
+                <Label Content="Element Grouping"
                        FontSize="18"
                        Margin="10,0,0,10"
                        Padding="0"/>
 
                 <ComboBox x:Name="ForestsComboBox"
-                          Text="Choose Element Group"
+                          Text="Select Element Grouping"
                           Style="{StaticResource RoundedComboBoxStyle}"
                           ItemsSource="{Binding Store.ForestProjectRelated}"
                           DisplayMemberPath="Name"
@@ -77,7 +77,7 @@
             <StackPanel x:Name="MappingSection"
                         Grid.Column="2" 
                         Grid.Row="1">
-                <Label Content="Mapping Settings" 
+                <Label Content="Mapping Setting" 
                        Margin="10,0,0,10"
                         Padding="0"
                         FontSize="18"/>
@@ -107,7 +107,7 @@
                         Margin="10,0,10,0"
                         DockPanel.Dock="Right"/>
                     <ComboBox x:Name="MappingsComboBox"
-                              Text="Choose Mapping"
+                              Text="Select Mapping Setting"
                               Style="{StaticResource RoundedComboBoxStyle}"
                               ItemsSource="{Binding Store.MappingsProjectRelated}"
                               SelectedItem="{Binding Store.MappingSelected}"
@@ -365,7 +365,7 @@
                         <Button Content="{Binding  NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup1.Name}"
                                 IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CanAddFirstBuildup}"
                                 d:Content=""
-                                Tag="Choose Main"
+                                Tag="Select First Assembly"
                                 HorizontalAlignment="Stretch"
                                 Style="{StaticResource ButtonStyle}"
                                 Click="SetBuildupClicked"/>
@@ -374,7 +374,7 @@
                                 IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CanAddSecondBuildup}"
                                 d:Content=""
                                 Margin="0,10,0,0"
-                                Tag="Choose Second"
+                                Tag="Select Second Assembly"
                                 HorizontalAlignment="Stretch"
                                 Style="{StaticResource ButtonStyle}"
                                 Click="SetBuildupClicked"/>
@@ -382,12 +382,12 @@
                     </StackPanel>
                 </DockPanel>
                 <Grid Grid.Row="2"
-                        Margin="0,0,0,10"
+                        Margin="0,10,0,10"
                         DockPanel.Dock="Top">
+                    
                     <Border Margin="0,21,0,0"
                         BorderBrush="Silver"
-                        BorderThickness="1,1,1,1"
-                        
+                        BorderThickness="1,1,1,1"                        
                         CornerRadius="4"/>
                     <TabControl x:Name="BuildupTabs"
                             BorderThickness="0"
@@ -488,7 +488,7 @@
                     <DockPanel LastChildFill="True">
 
                         <DataGrid x:Name="ResultGrid"
-                                    Style="{StaticResource DataGridStyle}"
+                                    Style="{StaticResource ResultDataGridStyle}"
                                     VerticalContentAlignment="Stretch"
                                     Margin="10"
                                     DockPanel.Dock="Top"
