@@ -22,7 +22,6 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="MainViewResources.xaml"/>
-                <ResourceDictionary Source="ToggleButtonResource.xaml"/>
                 <ResourceDictionary Source="ButtonResource.xaml"/>
                 <ResourceDictionary Source="ComboBoxResource.xaml"/>
                 <ResourceDictionary Source="ListViewResource.xaml"/>
@@ -335,12 +334,7 @@
                                 Width="65"
                                 Opacity="0.4"
                                 Click="ColorizeClicked"
-                                Style="{StaticResource ButtonStyle}"/>                                
-
-                        <ToggleButton x:Name="ViewToggleButton"
-                                      Style="{StaticResource ToggleButtonStyle}" 
-                                      Checked="ViewToggleButtonChecked"
-                                      Unchecked="ViewToggleButtonUnchecked"/>
+                                Style="{StaticResource ButtonStyle}"/>
 
                     </StackPanel>
 

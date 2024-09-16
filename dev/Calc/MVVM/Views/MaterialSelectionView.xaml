@@ -124,6 +124,7 @@
         <Expander Grid.Column="2"
                   Grid.Row="0"
                    Grid.RowSpan="4"
+                  Margin="0,0,10,10"
                   Uid="pack://application:,,,/CalcMVVM;component/Resources/button_filter.png"
                   ExpandDirection="Right" 
                   HorizontalAlignment="Stretch"

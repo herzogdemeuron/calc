@@ -20,7 +20,6 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="MainViewResources.xaml"/>
-                <ResourceDictionary Source="ToggleButtonResource.xaml"/>
                 <ResourceDictionary Source="ButtonResource.xaml"/>
                 <ResourceDictionary Source="ComboBoxResource.xaml"/>
             </ResourceDictionary.MergedDictionaries>
@@ -36,13 +35,13 @@
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="70"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="85"/>
-                <RowDefinition Height="60"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="2*"/>
-                <RowDefinition Height="60"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="3*"/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="45"/>
             </Grid.RowDefinitions>
 
             <Label Content="DT @ Herzog &amp; de Meuron"
@@ -55,9 +54,9 @@
                 Foreground="Gray"/>
 
             <Label Content="Revit Elements"
-                    FontSize="27"
-                    Margin="5,15,0,0"
-                    FontWeight="light"/>
+                   FontSize="18"
+                   Padding="0"
+                   Margin="10,10,0,10"/>
 
             <Grid x:Name="TreeviewGrid"
                       Grid.Column="0"
@@ -85,7 +84,8 @@
                            FontWeight="SemiBold"
                            FontSize="10"/>
 
-                <Button Content="Select"
+                <Button Content=" Select"
+                        Uid="pack://application:,,,/CalcMVVM;component/Resources/button_cursor.png"
                             Style="{StaticResource ButtonStyle}"
                             Grid.Column="0"
                             Grid.Row="0"
@@ -169,11 +169,11 @@
 
 
             <Label Content="Assembly Properties" 
-                Grid.Column="2"
-                Grid.Row="0"
-                FontSize="27"
-                Margin="5,15,0,0"
-                FontWeight="light"/>
+                    Grid.Column="2"
+                    Grid.Row="0"
+                    Padding="0"
+                    FontSize="18"
+                    Margin="10,10,0,10"/>
 
             <Grid x:Name="BuildupInfoGrid"
                     Grid.Column="2" 
@@ -271,11 +271,11 @@
 
 
             <Label Content="Materials"
-                       Grid.Column="2"
-                       Grid.Row="2"
-                       Margin="5,5,0,0"
-                       FontSize="27"
-                       FontWeight="Light"/>
+                    Grid.Column="2"
+                    Grid.Row="2"
+                    Padding="0"
+                    Margin="10,10,0,10"
+                    FontSize="18"/>
 
             <Border  x:Name="MaterialSection"
                      Grid.Column="2"
@@ -322,7 +322,7 @@
 
                     <Button Content="{Binding MainMaterial.Name}"
                             d:Content=""
-                            Tag="Choose Main"
+                            Tag="Select First Material"
                             HorizontalAlignment="Stretch"
                             Grid.Column="0"
                             Grid.Row="0"
@@ -330,7 +330,7 @@
                             Click="SetMaterialClicked"/>
                     
                     <Button Content="{Binding SubMaterial.Name}"
-                            Tag="Choose Second"
+                            Tag="Select Second Material"
                             d:Content=""
                             HorizontalAlignment="Stretch"
                             Grid.Column="0"
@@ -349,7 +349,8 @@
                                FontWeight="SemiBold"
                                FontSize="10"/>
 
-                    <Button Content="Reduce"
+                    <Button Content=" Delete"
+                            Uid="pack://application:,,,/CalcMVVM;component/Resources/button_delete.png"
                             Grid.Column="2"
                             Grid.Row="1"
                             Margin="2.5,0,0,0"
@@ -361,6 +362,7 @@
                                  Grid.Row="1"
                                  Margin="5,0,2.5,0"
                                  Height="25"
+                                 Tag="Ratio"
                                  KeyDown="RatioTextBoxKeyDown"
                                  Text="{Binding SubMaterialRatio}"
                                  Style="{StaticResource TextBoxStyle}"/>
@@ -443,9 +445,9 @@
             <Label Content="Assembly Preview"
                    Grid.Row="4"
                    Grid.Column="2"
-                   Margin="5,5,0,0"
-                   FontSize="27"
-                   FontWeight="Light"/>
+                   Padding="0"
+                   Margin="10,10,0,10"
+                   FontSize="18"/>
 
             <Grid x:Name="BuildupPreviewGrid"
                      Margin="10,0,10,0"

@@ -9,7 +9,7 @@
         d:DataContext="{d:DesignInstance Type=local:LoginViewModel}"
         mc:Ignorable="d"
         Height="290"
-        Width="300"
+        Width="320"
         WindowStartupLocation="CenterScreen"
         Icon="pack://application:,,,/CalcMVVM;component/Resources/icon_black_small.png"
         Title="Calc Login"
@@ -21,7 +21,6 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="MainViewResources.xaml"/>
-                <ResourceDictionary Source="ToggleButtonResource.xaml"/>
                 <ResourceDictionary Source="ButtonResource.xaml"/>
                 <ResourceDictionary Source="ComboBoxResource.xaml"/>
             </ResourceDictionary.MergedDictionaries>

@@ -24,47 +24,6 @@
     </Style>
 
 
-    <Style x:Key="MappingErrorButtonStyle" TargetType="Button"  BasedOn="{StaticResource ButtonStyle}">
-        <Setter Property="Content" Value="👌"/>
-        <Setter Property="FontSize" Value="14"/>
-
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding MappingErrorVM.BrokenSectionVisibility}" Value="Visible">
-                <Setter Property="BorderBrush" Value="SeaGreen"/>
-                <Setter Property="Foreground" Value="SeaGreen"/>
-                <Setter Property="BorderThickness" Value="2"/>
-            </DataTrigger>
-
-            <DataTrigger Binding="{Binding MappingErrorVM.HasBrokenItems}" Value="True">
-                <Setter Property="BorderBrush" Value="Crimson"/>
-                <Setter Property="Content" Value="💬"/>
-                <Setter Property="Foreground" Value="Crimson"/>
-            </DataTrigger>
-
-            <MultiDataTrigger>
-                <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding MappingErrorVM.HasBrokenItems}" Value="True"/>
-                    <Condition Binding="{Binding MappingErrorVM.BrokenSectionVisibility}" Value="Collapsed"/>
-                </MultiDataTrigger.Conditions>
-                <Setter Property="Background" Value="Crimson"/>
-                <Setter Property="Foreground" Value="White"/>
-            </MultiDataTrigger>
-
-        </Style.Triggers>
-    </Style>
-
-
-    <Style x:Key="MappingErrorPathStyle" TargetType="Path">
-        <Setter Property="Stroke" Value="MediumSeaGreen"/>
-        <Setter Property="StrokeThickness" Value="2"/>
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding MappingErrorVM.HasBrokenItems}" Value="True">
-                <Setter Property="Stroke" Value="Crimson"/>
-            </DataTrigger>
-        </Style.Triggers>
-    </Style>
-
-
     <DataTemplate x:Key="LayerItemTemplate">
 
         <StackPanel Orientation="Horizontal"
@@ -72,34 +31,31 @@
 
             <Grid x:Name="ErrorGrid"
                   Margin="1,0,0,0"
-                  Width="12">
+                  Width="12">                
 
-                <TextBlock Text="💔"
-                          FontSize="10"
-                          FontWeight="SemiBold"
-                          VerticalAlignment="Center"
-                          HorizontalAlignment="Center"
-                          Foreground="Crimson">
-                    <TextBlock.Style>
-                        <Style TargetType="TextBlock">
+                <Grid x:Name="BrokenHeartGrid">
+                    <Grid.Style>
+                        <Style TargetType="Grid">
                             <Setter Property="Visibility" Value="Hidden"/>
+                            <Setter Property="Margin" Value="1,0,0,0"/>
+                            <Setter Property="Width" Value="12"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding HasParamError}" Value="True">
                                     <Setter Property="Visibility" Value="Visible"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </TextBlock.Style>
-                </TextBlock>
+                    </Grid.Style>
+                    <Image Source="pack://application:,,,/CalcMVVM;component/Resources/button_issue.png" 
+                            Width="12" Height="12" HorizontalAlignment="Center"/>
+                </Grid>
 
-                <TextBlock Text="🖍️"
-                          FontSize="10"
-                          FontWeight="SemiBold"
-                          VerticalAlignment="Center"
-                          HorizontalAlignment="Center">
-                    <TextBlock.Style>
-                        <Style TargetType="TextBlock">
+                <Grid x:Name="EditGrid">
+                    <Grid.Style>
+                        <Style TargetType="Grid">
                             <Setter Property="Visibility" Value="Hidden"/>
+                            <Setter Property="Margin" Value="1,0,0,0"/>
+                            <Setter Property="Width" Value="12"/>
                             <Style.Triggers>
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
@@ -110,8 +66,12 @@
                                 </MultiDataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </TextBlock.Style>
-                </TextBlock>
+                    </Grid.Style>
+                    <Image Source="pack://application:,,,/CalcMVVM;component/Resources/button_edit.png" 
+                            Width="12" Height="12" HorizontalAlignment="Center"/>
+                </Grid>
+
+               
             </Grid>
 
             <Border x:Name="LabelBorder"

@@ -197,16 +197,6 @@ namespace Calc.MVVM.Views
             MainVM.HandleRemove();
         }
 
-        private void ViewToggleButtonChecked(object sender, RoutedEventArgs e)
-        {
-            MainVM.HandleViewToggleToBuildup();
-        }
-
-        private void ViewToggleButtonUnchecked(object sender, RoutedEventArgs e)
-        {
-            MainVM.HandleViewToggleToBranch();            
-        }
-
         private void ColorizeClicked(object sender, RoutedEventArgs e)
         {
             string tag = (sender as Button).Tag.ToString();
