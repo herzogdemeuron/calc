@@ -44,7 +44,7 @@ namespace Calc.MVVM.Models
         {
             Store = calcStore;
             this.visualizer = visualizer;
-            BranchesSwitch = true;
+            BranchesSwitch = false;
             MediatorFromVM.Register("ForestSelectionChanged", mapping => UpdateNodeSource((Mapping)mapping));
             MediatorFromVM.Register("MappingSelectionChanged", mapping => RemapAllNodes((Mapping)mapping));
             MediatorFromVM.Register("BuildupSelectionChanged", _ => RecolorAllNodes());

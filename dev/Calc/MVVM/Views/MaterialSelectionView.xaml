@@ -31,23 +31,21 @@
             <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="0"/>
             <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="55"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="0"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
 
         <Label Content="Material Selection"
-                   Grid.Column="1"
-                   Grid.ColumnSpan="3"
-                   Grid.Row="0"
-                   FontSize="27"
-                   FontWeight="Light"/>
+                Grid.Column="1"
+                Grid.Row="0"
+                Padding="0"
+               Margin="0,10,0,10"
+               FontSize="18"/>
 
         <Grid x:Name="LeftGrid"
               Grid.Column="1"
@@ -56,9 +54,10 @@
                 <ColumnDefinition Width="60"/>
                 <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="25"/>
+                <RowDefinition Height="35"/>
                 <RowDefinition Height="35"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
@@ -105,6 +104,7 @@
                      FontWeight="SemiBold"/>
 
             <ListView x:Name="MaterialsListView"
+                      Margin="0,5,0,0"
                         Grid.ColumnSpan="3"
                         Grid.Row="2"                  
                         Loaded="ListViewLoaded"
@@ -121,13 +121,15 @@
 
         </Grid>
             
-        <Expander Grid.Column="3"
-                  Grid.Row="2"
-                  Margin="0,5,0,0"
+        <Expander Grid.Column="2"
+                  Grid.Row="0"
+                   Grid.RowSpan="4"
+                  Uid="pack://application:,,,/CalcMVVM;component/Resources/button_filter.png"
                   ExpandDirection="Right" 
                   HorizontalAlignment="Stretch"
                   Expanded="Expander_Expanded"
-                  Collapsed="Expander_Collapsed">
+                  Collapsed="Expander_Collapsed"
+                  Style="{StaticResource ExpanderStyle}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="10"/>
@@ -180,17 +182,17 @@
               Grid.Row="7">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="60"/>
                 <ColumnDefinition Width="10"/>
-                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
             </Grid.ColumnDefinitions>
             <Button Content="OK"
-                    Grid.Column="1"
+                    Grid.Column="0"
                     IsDefault="True" 
                     Style="{StaticResource ButtonStyle}"
                     Click="OKClicked"/>
             <Button Content="Cancel"
-                    Grid.Column="3"
+                    Grid.Column="2"
                     Style="{StaticResource ButtonStyle}"
                     Click="CancelClicked"/>
 

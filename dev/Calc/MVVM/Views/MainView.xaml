@@ -90,20 +90,22 @@
                             Uid="pack://application:,,,/CalcMVVM;component/Resources/button_error.png"
                             IsEnabled="{Binding MappingErrorVM.HasBrokenItems}"
                             Width="25"
-                            Margin="10,0,0,0"                           
+                            Margin="10,0,0,0"
+                            ToolTip="Missing Mappings"
                             DockPanel.Dock="Right"
                             Click="MappingErrorClicked">
                     </Button>
                     <Button Style="{StaticResource ButtonStyle}"
-                            Uid="pack://application:,,,/CalcMVVM;component/Resources/button_add.png"
-                            
-                        Width="25"
-                        Click="NewMappingClicked"                            
-                        DockPanel.Dock="Right"/>
+                            Uid="pack://application:,,,/CalcMVVM;component/Resources/button_add.png"                            
+                            Width="25"
+                            Click="NewMappingClicked"
+                            ToolTip="Create New"
+                            DockPanel.Dock="Right"/>
                     <Button Style="{StaticResource ButtonStyle}"
                         Uid="pack://application:,,,/CalcMVVM;component/Resources/button_save.png"
                         Width="25"
                         Click="UpdateMappingClicked"
+                        ToolTip="Save Mapping"
                         Margin="10,0,10,0"
                         DockPanel.Dock="Right"/>
                     <ComboBox x:Name="MappingsComboBox"
@@ -183,6 +185,7 @@
                 </TextBlock>
 
                 <Button Style="{StaticResource ButtonStyle}"
+                        ToolTip="Ignore"
                         Uid="pack://application:,,,/CalcMVVM;component/Resources/button_trash.png"
                         Grid.Row="1"
                         Grid.Column="1"
@@ -297,24 +300,52 @@
 
                 <Button Style="{StaticResource ButtonStyle}"
                     Uid="pack://application:,,,/CalcMVVM;component/Resources/button_reload.png"
+                    Content=" Update"
                     Grid.Row="4"
-                    Width="60"
+                    Width="65"
                     Click="UpdateRevitClicked"
                     VerticalAlignment="Bottom"
                     HorizontalAlignment="Left"/>
-                
-                <StackPanel x:Name="TogglePanel"
-                        Grid.Row="4"
-                        Orientation="Horizontal"
-                        VerticalAlignment="Bottom"
-                        HorizontalAlignment="Right">
-                    <TextBlock Text="Default" FontSize="10" Margin="0,5,4,0"/>
-                    <ToggleButton x:Name="ViewToggleButton"
-                                  Style="{StaticResource ToggleButtonStyle}" 
-                                  Checked="ViewToggleButtonChecked"
-                                  Unchecked="ViewToggleButtonUnchecked"/>
-                    <TextBlock Text="By Buildup" FontSize="10" Margin="4,5,0,0"/>
-                </StackPanel>
+
+                <Grid Grid.Row="4" Width="225" HorizontalAlignment="Right">
+                    <Border CornerRadius="4" Background="Silver"/>
+                    <StackPanel x:Name="TogglePanel"                            
+                            Orientation="Horizontal"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Stretch">
+
+                        <Button x:Name="ColorByGroupButton"                                
+                                Content="Group"
+                                Tag="group"
+                                Width="65"
+                                Opacity="0.4"
+                                Click="ColorizeClicked"
+                                Style="{StaticResource ButtonStyle}"/>
+                        <Button x:Name="ColorByAssemblyButton"
+                                Content="Assemb." 
+                                Tag="assembly"
+                                Width="65" 
+                                Margin="15,0,15,0"
+                                Uid="pack://application:,,,/CalcMVVM;component/Resources/button_color.png"
+                                Click="ColorizeClicked"
+                                Style="{StaticResource ButtonStyle}"/>
+                        <Button x:Name="ColorByCO2Button"
+                                Content="CO²" 
+                                Tag="co2"
+                                Width="65"
+                                Opacity="0.4"
+                                Click="ColorizeClicked"
+                                Style="{StaticResource ButtonStyle}"/>                                
+
+                        <ToggleButton x:Name="ViewToggleButton"
+                                      Style="{StaticResource ToggleButtonStyle}" 
+                                      Checked="ViewToggleButtonChecked"
+                                      Unchecked="ViewToggleButtonUnchecked"/>
+
+                    </StackPanel>
+
+                </Grid>
+
 
             </Grid>
 
@@ -349,11 +380,13 @@
                                 Margin="10,0,0,0">
 
                         <Button Style="{StaticResource ButtonStyle}"
+                                ToolTip="Reset"
                                 Uid="pack://application:,,,/CalcMVVM;component/Resources/button_back.png"
                                 IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.InheritEnabled}"
                                 Click="InheritClicked"/>
 
                         <Button Style="{StaticResource ButtonStyle}"
+                                ToolTip="Remove"
                                 Uid="pack://application:,,,/CalcMVVM;component/Resources/button_delete.png"
                                 Margin="0,10,0,0"
                                 IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.RemoveEnabled}"
@@ -613,9 +646,8 @@
                 
                 <Label HorizontalAlignment="Center"
                        Content="New Mapping Name"
-                       FontSize="27"
-                       Margin="10"
-                       FontWeight="light"/>
+                       FontSize="18"
+                       Margin="10"/>
                 
                 <TextBox Margin="10"
                          x:Name="NewNameText"
@@ -627,9 +659,8 @@
 
                 <Label HorizontalAlignment="Center"
                        Content="Dupliacate From?"
-                       FontSize="27"
-                       Margin="10"
-                       FontWeight="light"/>
+                       FontSize="18"
+                       Margin="10"/>
 
                 <ListView x:Name="MappingListView"
                          HorizontalAlignment="Center"
@@ -703,9 +734,8 @@
             <StackPanel VerticalAlignment="Center">
                 <Label HorizontalAlignment="Center"
                        Content="New Snapshot Name"
-                       FontSize="27"
-                       Margin="10"
-                       FontWeight="light"/>
+                       FontSize="18"
+                       Margin="10"/>
                 <TextBox x:Name="NewResultNameTextBox"
                         HorizontalAlignment="Center"
                         Width="180"

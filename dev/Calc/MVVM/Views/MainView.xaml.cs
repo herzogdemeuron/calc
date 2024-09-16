@@ -207,6 +207,30 @@ namespace Calc.MVVM.Views
             MainVM.HandleViewToggleToBranch();            
         }
 
+        private void ColorizeClicked(object sender, RoutedEventArgs e)
+        {
+            string tag = (sender as Button).Tag.ToString();
+            switch (tag)
+            {
+                case "group":
+                    this.ColorByAssemblyButton.Opacity = 0.4;
+                    this.ColorByAssemblyButton.Uid = "";
+                    this.ColorByGroupButton.Opacity = 1.0;
+                    this.ColorByGroupButton.Uid = "pack://application:,,,/CalcMVVM;component/Resources/button_color.png";
+                    MainVM.HandleViewToggleToBranch();
+                    break;
+                case "assembly":
+                    this.ColorByAssemblyButton.Opacity = 1.0;
+                    this.ColorByAssemblyButton.Uid = "pack://application:,,,/CalcMVVM;component/Resources/button_color.png";
+                    this.ColorByGroupButton.Opacity = 0.4;
+                    this.ColorByGroupButton.Uid = "";
+                    MainVM.HandleViewToggleToBuildup();
+                    break;
+                case "co2":
+                    break;
+            }
+        }
+
         private void UpdateRevitClicked(object sender, RoutedEventArgs e)
         {
             var forest = ForestsComboBox.SelectedItem;

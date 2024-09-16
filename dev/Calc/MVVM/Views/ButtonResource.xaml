@@ -64,6 +64,7 @@
 
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="border" Property="Background" Value="LightGray"/>
+                            <Setter Property="Opacity" Value="1"/>
                             
                         </Trigger>
                         
@@ -184,7 +185,7 @@
                                   Grid.Column="0"
                                   ClickMode="Press"
                                   VerticalAlignment="Top"
-                                  Margin="-45,40,0,0"
+                                  Margin="-45,45,0,0"
                                   Tag="{Binding Uid, RelativeSource={RelativeSource TemplatedParent}}"
                                   IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                                   OverridesDefaultStyle="True"
