@@ -274,7 +274,7 @@
                             </Style>
                         </Grid.Style>
                         <TextBlock Margin="2,0,0,0"
-                                   VerticalAlignment="Center"
+                                   VerticalAlignment="Top"
                                    FontStyle="Italic">
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}{0}: ">

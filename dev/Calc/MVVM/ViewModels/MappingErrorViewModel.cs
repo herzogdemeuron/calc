@@ -83,6 +83,13 @@ namespace Calc.MVVM.ViewModels
             }
 
             mappingVM.BrokenMappingForest = BrokenForest;
+            
+            if (BrokenNodeSource.Count > 0)
+            {
+                BrokenSectionVisibility = Visibility.Visible;
+            }
+
+            OnPropertyChanged(nameof(BrokenSectionVisibility));
             OnPropertyChanged(nameof(BrokenNodeSource));
             OnPropertyChanged(nameof(HasBrokenItems));
         }
@@ -152,8 +159,14 @@ namespace Calc.MVVM.ViewModels
                 }
             }
 
+            if (BrokenNodeSource.Count == 0)
+            {
+                BrokenSectionVisibility = Visibility.Collapsed;
+            }
+
             OnPropertyChanged(nameof(BrokenNodeSource));
             OnPropertyChanged(nameof(HasBrokenItems));
+            OnPropertyChanged(nameof(BrokenSectionVisibility));
         }
 
         public void DeselectNodes()

@@ -86,7 +86,9 @@
                        Margin="10,0,10,10"
                        HorizontalAlignment="Stretch"
                        LastChildFill="True">
-                    <Button Style="{StaticResource MappingErrorButtonStyle}"
+                    <Button Style="{StaticResource ButtonStyle}"
+                            Uid="pack://application:,,,/CalcMVVM;component/Resources/button_error.png"
+                            IsEnabled="{Binding MappingErrorVM.HasBrokenItems}"
                             Width="25"
                             Margin="10,0,0,0"                           
                             DockPanel.Dock="Right"
@@ -96,13 +98,11 @@
                             Uid="pack://application:,,,/CalcMVVM;component/Resources/button_add.png"
                             
                         Width="25"
-                        Click="NewMappingClicked"
-                            
+                        Click="NewMappingClicked"                            
                         DockPanel.Dock="Right"/>
                     <Button Style="{StaticResource ButtonStyle}"
                         Uid="pack://application:,,,/CalcMVVM;component/Resources/button_save.png"
                         Width="25"
-                            IsEnabled="False"
                         Click="UpdateMappingClicked"
                         Margin="10,0,10,0"
                         DockPanel.Dock="Right"/>
@@ -133,7 +133,7 @@
                 </Grid.RowDefinitions>
 
                 <Border BorderBrush="Crimson"
-                        BorderThickness="2"
+                        BorderThickness="1"
                         CornerRadius="4"
                         Grid.ColumnSpan="2" 
                         Grid.RowSpan="3"/>

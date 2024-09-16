@@ -11,6 +11,7 @@ namespace Calc.MVVM.Helpers
     {
         public static Forest ApplyMappingToForestItem(NodeModel ForestItem,CalcStore store, Mapping newMapping)
         {
+            // todo: add missing mappings from missing trees to the dark forest
             var brokenForest = new Forest()
             {
                 Name = ForestItem.Name,
