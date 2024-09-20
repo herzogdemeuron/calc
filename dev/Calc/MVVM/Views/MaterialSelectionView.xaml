@@ -54,7 +54,6 @@
                 <ColumnDefinition Width="60"/>
                 <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="10"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="35"/>
@@ -185,7 +184,6 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="10"/>
             </Grid.ColumnDefinitions>
             <Button Content="OK"
                     Grid.Column="0"
