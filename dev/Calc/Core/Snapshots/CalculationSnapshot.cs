@@ -23,6 +23,6 @@ namespace Calc.Core.Snapshots
         [JsonProperty("impact_categories")]
         public List<string> ImpactCategories { get; set; }
         [JsonProperty("assemblies")]
-        public List<AssemblySnapshot> BuildupSnapshots { get; set; }
+        public List<AssemblySnapshot> AssemblySnapshots { get; set; }
     }
 }

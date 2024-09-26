@@ -61,26 +61,26 @@ namespace Calc.MVVM.Views
             BuilderVM.HandleWindowLoaded();
         }
 
-        private void BuildupNameTextChanged(object sender, TextChangedEventArgs e)
+        private void AssemblyNameTextChanged(object sender, TextChangedEventArgs e)
         {
             var currentText = (sender as TextBox).Text;
-            BuilderVM.HandleBuildupNameChanged(currentText);
+            BuilderVM.HandleAssemblyNameChanged(currentText);
         }
 
-        private void BuildupNameFocusLost(object sender, RoutedEventArgs e)
+        private void AssemblyNameFocusLost(object sender, RoutedEventArgs e)
         {
-            BuilderVM.HandleBuildupNameSetFinished();
+            BuilderVM.HandleAssemblyNameSetFinished();
         }
 
-        private void BuildupCodeTextChanged(object sender, TextChangedEventArgs e)
+        private void AssemblyCodeTextChanged(object sender, TextChangedEventArgs e)
         {
             var currentText = (sender as TextBox).Text;
-            BuilderVM.HandleBuildupCodeChanged(currentText);
+            BuilderVM.HandleAssemblyCodeChanged(currentText);
         }
 
-        private void BuildupCodeFocusLost(object sender, RoutedEventArgs e)
+        private void AssemblyCodeFocusLost(object sender, RoutedEventArgs e)
         {
-            BuilderVM.HandleBuildupCodeSetFinished();
+            BuilderVM.HandleAssemblyCodeSetFinished();
         }
 
 
@@ -135,9 +135,9 @@ namespace Calc.MVVM.Views
             BuilderVM.HandleMessageClose();
         }
 
-        private async void SaveBuildupClicked(object sender, RoutedEventArgs e)
+        private async void SaveAssemblyClicked(object sender, RoutedEventArgs e)
         {
-            await BuilderVM.HandleSaveBuildup();
+            await BuilderVM.HandleSaveAssembly();
         }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -239,10 +239,10 @@ namespace Calc.MVVM.Views
             if (targetData == null || ReferenceEquals(droppedData, targetData)) return;
 
             // Find indices
-            int oldIndex = BuilderVM.BuildupCreationVM.BuildupComponents.IndexOf(droppedData);
-            int newIndex = BuilderVM.BuildupCreationVM.BuildupComponents.IndexOf(targetData);
+            int oldIndex = BuilderVM.AssemblyCreationVM.AssemblyComponents.IndexOf(droppedData);
+            int newIndex = BuilderVM.AssemblyCreationVM.AssemblyComponents.IndexOf(targetData);
 
-            BuilderVM.BuildupCreationVM.MoveBuildupComponent(oldIndex, newIndex);
+            BuilderVM.AssemblyCreationVM.MoveAssemblyComponent(oldIndex, newIndex);
             _draggedItem = null;
         }
 

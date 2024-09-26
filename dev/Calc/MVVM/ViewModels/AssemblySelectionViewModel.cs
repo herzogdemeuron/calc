@@ -13,40 +13,40 @@ using System.Windows.Media.Imaging;
 namespace Calc.MVVM.ViewModels
 {
 
-    public class BuildupSelectionViewModel : INotifyPropertyChanged
+    public class AssemblySelectionViewModel : INotifyPropertyChanged
     {
 
         private readonly CalcStore calcStore;
         public ICollectionView AllAssembliesView { get; }
         public List<StandardModel> AllStandards { get; }
-        public List<AssemblyGroup> AllBuildupGroups { get; }
+        public List<AssemblyGroup> AllAssemblyGroups { get; }
 
         private string currentSearchText;
         private readonly AssemblyGroup defaultGroup = new AssemblyGroup() { Name = "All Groups", Id = 0 };
 
-        private AssemblyGroup selectedBuildupGroup;
-        public AssemblyGroup SelectedBuildupGroup
+        private AssemblyGroup selectedAssemblyGroup;
+        public AssemblyGroup SelectedAssemblyGroup
         {
-            get => selectedBuildupGroup;
+            get => selectedAssemblyGroup;
             set
             {
-                if (value == selectedBuildupGroup) return;
-                selectedBuildupGroup = value;
+                if (value == selectedAssemblyGroup) return;
+                selectedAssemblyGroup = value;
                 FilterAssembliesWithType();
-                OnPropertyChanged(nameof(SelectedBuildupGroup));
+                OnPropertyChanged(nameof(SelectedAssemblyGroup));
             }
         }
 
-        private Assembly selectedBuildup;
-        public Assembly SelectedBuildup
+        private Assembly selectedAssembly;
+        public Assembly SelectedAssembly
         {
-            get => selectedBuildup;
+            get => selectedAssembly;
             set
             {
                 CanOk = value != null;
-                if (value == selectedBuildup) return;
-                selectedBuildup = value;
-                OnPropertyChanged(nameof(SelectedBuildup));
+                if (value == selectedAssembly) return;
+                selectedAssembly = value;
+                OnPropertyChanged(nameof(SelectedAssembly));
             }
         }
 
@@ -101,24 +101,24 @@ namespace Calc.MVVM.ViewModels
         /// <summary>
         /// Only show verified assemblies
         /// </summary>
-        public BuildupSelectionViewModel(CalcStore store)
+        public AssemblySelectionViewModel(CalcStore store)
         {
             calcStore = store;
             AllAssembliesView = CollectionViewSource.GetDefaultView(store.AssembliesAll.Where(b => b.Verified).ToList());
             AllStandards = new List<StandardModel>(store.StandardsAll.Select(s => new StandardModel(s)));
-            AllBuildupGroups = new List<AssemblyGroup>() { defaultGroup };
-            AllBuildupGroups.AddRange(store.BuildupGroupsAll);
-            SelectedBuildupGroup = defaultGroup;            
+            AllAssemblyGroups = new List<AssemblyGroup>() { defaultGroup };
+            AllAssemblyGroups.AddRange(store.AssemblyGroupsAll);
+            SelectedAssemblyGroup = defaultGroup;            
         }
 
-        public void PrepareBuildupSelection(Assembly assembly)
+        public void PrepareAssemblySelection(Assembly assembly)
         {
             CurrentImage = null;
             ImageText = "Image Preview";
 
             currentSearchText = "";
-            SelectedBuildup = assembly;
-            SelectedBuildupGroup = defaultGroup;
+            SelectedAssembly = assembly;
+            SelectedAssemblyGroup = defaultGroup;
             FilterAssembliesWithType();
         }
 
@@ -138,7 +138,7 @@ namespace Calc.MVVM.ViewModels
                 var standards = assembly.StandardItems.Select(i => i.Standard.Name).ToList();
                 var code = assembly.Code?.ToLower() ?? "";
                 var description = assembly.Description?.ToLower() ?? "";
-                var groupEqual = SelectedBuildupGroup.Id == 0 || assembly.Group.Name == SelectedBuildupGroup.Name;
+                var groupEqual = SelectedAssemblyGroup.Id == 0 || assembly.Group.Name == SelectedAssemblyGroup.Name;
 
                 if (!groupEqual) return false;
 
@@ -158,12 +158,12 @@ namespace Calc.MVVM.ViewModels
             };
         }
 
-        private async Task LoadBuildupImageAsync(Assembly assembly)
+        private async Task LoadAssemblyImageAsync(Assembly assembly)
         {
             if (assembly == null) return;
 
             // try to load image if should
-            var imageItem = assembly.BuildupImage;
+            var imageItem = assembly.AssemblyImage;
 
             if (imageItem != null && imageItem.Id != null && !imageItem.ImageLoaded)
             {
@@ -179,7 +179,7 @@ namespace Calc.MVVM.ViewModels
             CurrentImage = null;
             ImageText = "";
 
-            if (SelectedBuildup == null)
+            if (SelectedAssembly == null)
             {
                 LoadingVisibility = Visibility.Collapsed;
                 ImageText = "Image Preview";
@@ -192,13 +192,13 @@ namespace Calc.MVVM.ViewModels
             }
 
 
-            var loadId = SelectedBuildup?.Id;
-            await LoadBuildupImageAsync(SelectedBuildup);
+            var loadId = SelectedAssembly?.Id;
+            await LoadAssemblyImageAsync(SelectedAssembly);
 
             // refresh the current image if the selected assembly has not changed
-            if (SelectedBuildup?.Id != loadId) return;
+            if (SelectedAssembly?.Id != loadId) return;
 
-            var imageData = SelectedBuildup.BuildupImage?.ImageData;
+            var imageData = SelectedAssembly.AssemblyImage?.ImageData;
             if (imageData != null)
             {
                 CurrentImage = ImageHelper.ByteArrayToBitmap(imageData);

@@ -17,12 +17,12 @@ namespace CalcBuilderTest
                 new Assembly
                 {
                     Id = 1,
-                    Name = "BuildupName1",
+                    Name = "AssemblyName1",
                     Standard = "Source1",
-                    BuildupUnit = Unit.m2,
-                    Group = new AssemblyGroup {Name = "BuildupGroup1" },
-                    Description = "This is Buildup1 Description.",
-                    BuildupComponents = new ObservableCollection<AssemblyComponent>
+                    AssemblyUnit = Unit.m2,
+                    Group = new AssemblyGroup {Name = "AssemblyGroup1" },
+                    Description = "This is Assembly1 Description.",
+                    AssemblyComponents = new ObservableCollection<AssemblyComponent>
                     {
                         new AssemblyComponent
                         {
@@ -47,12 +47,12 @@ namespace CalcBuilderTest
                 new Assembly
                 {
                     Id = 2,
-                    Name = "BuildupName2",
+                    Name = "AssemblyName2",
                     Standard = "Source1",
-                    BuildupUnit = Unit.m2,
-                    Group = new AssemblyGroup {Name = "BuildupGroup2" },
-                    Description = "This is Buildup2 Description.",
-                    BuildupComponents = new ObservableCollection<AssemblyComponent>
+                    AssemblyUnit = Unit.m2,
+                    Group = new AssemblyGroup {Name = "AssemblyGroup2" },
+                    Description = "This is Assembly2 Description.",
+                    AssemblyComponents = new ObservableCollection<AssemblyComponent>
                     {
                         new AssemblyComponent
                         {

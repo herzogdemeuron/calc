@@ -47,15 +47,15 @@ namespace Calc.MVVM.Models
             BranchesSwitch = false;
             MediatorFromVM.Register("ForestSelectionChanged", mapping => UpdateNodeSource((Mapping)mapping));
             MediatorFromVM.Register("MappingSelectionChanged", mapping => RemapAllNodes((Mapping)mapping));
-            MediatorFromVM.Register("BuildupSelectionChanged", _ => RecolorAllNodes());
+            MediatorFromVM.Register("AssemblySelectionChanged", _ => RecolorAllNodes());
 
-            MediatorFromVM.Register("MainViewToggleToBuildup", _ => BranchesSwitch = false);
-            MediatorFromVM.Register("MainViewToggleToBuildup", _ => ColorNodesToBuildup());
+            MediatorFromVM.Register("MainViewToggleToAssembly", _ => BranchesSwitch = false);
+            MediatorFromVM.Register("MainViewToggleToAssembly", _ => ColorNodesToAssembly());
 
             MediatorFromVM.Register("MainViewToggleToBranch", _ => BranchesSwitch = true);
             MediatorFromVM.Register("MainViewToggleToBranch", _ => ColorNodesToBranch());
             //new ResultSender();
-            //changing priority: Forest => Mapping => Buildup
+            //changing priority: Forest => Mapping => Assembly
         }
 
 
@@ -140,7 +140,7 @@ namespace Calc.MVVM.Models
 
         }
 
-        public void ColorNodesToBuildup()
+        public void ColorNodesToAssembly()
         {
             if (CurrentForestItem == null) return;
             Store.ForestSelected.SetBranchColorsBy("assemblies");

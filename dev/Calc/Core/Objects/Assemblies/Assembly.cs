@@ -44,7 +44,7 @@ namespace Calc.Core.Objects.Assemblies
 
         private Unit assemblyUnit;
         [JsonProperty("assembly_unit")]
-        public Unit BuildupUnit
+        public Unit AssemblyUnit
         {
             get => assemblyUnit;
             set => SetProperty(ref assemblyUnit, value);
@@ -61,10 +61,10 @@ namespace Calc.Core.Objects.Assemblies
         public string GroupName => Group?.Name;
 
         [JsonProperty("carbon_a1a3")]
-        public double? BuildupGwp { get; set; }
+        public double? AssemblyGwp { get; set; }
 
         [JsonProperty("grey_energy_fabrication_total")]
-        public double? BuildupGe { get; set; }
+        public double? AssemblyGe { get; set; }
 
         [JsonProperty("description")]
         public string Description { get; set; }
@@ -72,14 +72,14 @@ namespace Calc.Core.Objects.Assemblies
         public bool Verified { get; set; }
 
         [JsonProperty("image")]
-        public AssemblyImage BuildupImage { get; set; }
+        public AssemblyImage AssemblyImage { get; set; }
         [JsonProperty("speckle_project_id")]
         public string SpeckleProjectId { get; set; }
         [JsonProperty("speckle_model_id")]
         public string SpeckleModelId { get; set; }
 
         [JsonIgnore]
-        public List<AssemblySnapshot> BuildupSnapshot { get; set; }
+        public List<AssemblySnapshot> AssemblySnapshot { get; set; }
 
 
         private List<CalculationComponent> calculationComponents = new List<CalculationComponent>();

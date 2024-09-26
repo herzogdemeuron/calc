@@ -10,7 +10,7 @@ namespace Calc.MVVM.ViewModels
     public class BuilderViewModel: INotifyPropertyChanged
     {
         public CalcStore Store { get; set; }
-        public BuildupCreationViewModel BuildupCreationVM { get; set; }
+        public AssemblyCreationViewModel AssemblyCreationVM { get; set; }
         public VisibilityViewModel VisibilityVM { get; set; }
         public MaterialSelectionViewModel MaterialSelectionVM { get; set; }
 
@@ -19,56 +19,56 @@ namespace Calc.MVVM.ViewModels
             Store = store;
             VisibilityVM = new VisibilityViewModel();
             MaterialSelectionVM = new MaterialSelectionViewModel(store);
-            BuildupCreationVM = new BuildupCreationViewModel(Store, elementSourceHandler, imageSnapshotCreator, elementSender);
+            AssemblyCreationVM = new AssemblyCreationViewModel(Store, elementSourceHandler, imageSnapshotCreator, elementSender);
         }
 
         public void HandleWindowLoaded()
         {
-            BuildupCreationVM.HandleLoaded();
+            AssemblyCreationVM.HandleLoaded();
         }
 
-        public async Task HandleSaveBuildup()
+        public async Task HandleSaveAssembly()
         {
-            await BuildupCreationVM.HandleSaveBuildup();
+            await AssemblyCreationVM.HandleSaveAssembly();
         }
 
         public void HandleAmountClicked(string unit)
         {
-            Unit? newBuildupUnit;
+            Unit? newAssemblyUnit;
             switch (unit)
             {
                 case "Count":
-                    newBuildupUnit = Unit.piece;
+                    newAssemblyUnit = Unit.piece;
                     break;
                 case "Length":
-                    newBuildupUnit = Unit.m;
+                    newAssemblyUnit = Unit.m;
                     break;
                 case "Area":
-                    newBuildupUnit = Unit.m2;
+                    newAssemblyUnit = Unit.m2;
                     break;
                 case "Volume":
-                    newBuildupUnit = Unit.m3;
+                    newAssemblyUnit = Unit.m3;
                     break;
                 default:
                     return;
             }
 
-            BuildupCreationVM.HandleAmountClicked(newBuildupUnit);
+            AssemblyCreationVM.HandleAmountClicked(newAssemblyUnit);
         }
 
         public void HandleComponentSelectionChanged(ICalcComponent selectedCompo)
         {
-            BuildupCreationVM.HandleComponentSelectionChanged(selectedCompo);
+            AssemblyCreationVM.HandleComponentSelectionChanged(selectedCompo);
         }
 
         public void HandleSideClicked()
         {
-            BuildupCreationVM.HandleDeselect();
+            AssemblyCreationVM.HandleDeselect();
         }
 
         public void HandleSelectingMaterial(bool setMain)
         {
-            var currentLayer = BuildupCreationVM.CurrentLayerMaterialModel;
+            var currentLayer = AssemblyCreationVM.CurrentLayerMaterialModel;
             var material = setMain? currentLayer.MainMaterial : currentLayer.SubMaterial;
             MaterialSelectionVM.PrepareMaterialSelection(material);
         }
@@ -76,49 +76,49 @@ namespace Calc.MVVM.ViewModels
         public void HandleMaterialSelected(bool setMain)
         {
             var material = MaterialSelectionVM.SelectedMaterial;
-            BuildupCreationVM.HandleSetMaterial(setMain, material);
+            AssemblyCreationVM.HandleSetMaterial(setMain, material);
             MaterialSelectionVM.Reset();
         }
 
         public void HandleReduceMaterial()
         {
-            BuildupCreationVM.HandleReduceMaterial();
+            AssemblyCreationVM.HandleReduceMaterial();
         }
 
         public void HandleSelect()
         {
-            if (BuildupCreationVM == null) return;
-            BuildupCreationVM.HandleSelectingElements();
+            if (AssemblyCreationVM == null) return;
+            AssemblyCreationVM.HandleSelectingElements();
         }
 
         public void HandleCaptureClicked()
         {
-            BuildupCreationVM.HandleCaptureClicked();
+            AssemblyCreationVM.HandleCaptureClicked();
         }
 
         public void HandleCaptureMouseOver(bool isEnter)
         {
-            BuildupCreationVM.HandleCaptureMouseOver(isEnter);
+            AssemblyCreationVM.HandleCaptureMouseOver(isEnter);
         }
 
-        public void HandleBuildupNameChanged(string text)
+        public void HandleAssemblyNameChanged(string text)
         {
-            BuildupCreationVM.NewBuildupName = text;
+            AssemblyCreationVM.NewAssemblyName = text;
         }
 
-        public void HandleBuildupNameSetFinished()
+        public void HandleAssemblyNameSetFinished()
         {
-            BuildupCreationVM.NewBuildupName = BuildupCreationVM.NewBuildupName?.Trim();            
+            AssemblyCreationVM.NewAssemblyName = AssemblyCreationVM.NewAssemblyName?.Trim();            
         }
 
-        public void HandleBuildupCodeChanged(string text)
+        public void HandleAssemblyCodeChanged(string text)
         {
-            BuildupCreationVM.NewBuildupCode = text;
+            AssemblyCreationVM.NewAssemblyCode = text;
         }
 
-        public void HandleBuildupCodeSetFinished()
+        public void HandleAssemblyCodeSetFinished()
         {
-            BuildupCreationVM.NewBuildupCode = BuildupCreationVM.NewBuildupCode?.Trim();
+            AssemblyCreationVM.NewAssemblyCode = AssemblyCreationVM.NewAssemblyCode?.Trim();
         }
 
         public void HandleMessageClose()

@@ -11,22 +11,22 @@ using System.Windows.Threading;
 
 namespace Calc.MVVM.Views
 {
-    public partial class BuildupSelectionView : Window
+    public partial class AssemblySelectionView : Window
     {
         private double originalLeft;
-        private readonly BuildupSelectionViewModel BuildupSelectionVM;
+        private readonly AssemblySelectionViewModel AssemblySelectionVM;
 
-        public BuildupSelectionView(BuildupSelectionViewModel assemblySelectionVM)
+        public AssemblySelectionView(AssemblySelectionViewModel assemblySelectionVM)
         {
-            this.BuildupSelectionVM = assemblySelectionVM;
-            this.DataContext = BuildupSelectionVM;
+            this.AssemblySelectionVM = assemblySelectionVM;
+            this.DataContext = AssemblySelectionVM;
             InitializeComponent();
         }
 
         private void SearchTextChanged(object sender, TextChangedEventArgs e)
         {
             var currentText = (sender as TextBox).Text;
-            BuildupSelectionVM.HandleSearchTextChanged(currentText);
+            AssemblySelectionVM.HandleSearchTextChanged(currentText);
         }
 
         private void ListViewSelected(object sender, MouseButtonEventArgs e)
@@ -48,7 +48,7 @@ namespace Calc.MVVM.Views
             }
         }
 
-        private void ListViewItemBuildupDoubleClick(object sender, MouseButtonEventArgs e)
+        private void ListViewItemAssemblyDoubleClick(object sender, MouseButtonEventArgs e)
         {
             this.DialogResult = true;
             this.Close();
@@ -85,7 +85,7 @@ namespace Calc.MVVM.Views
 
         private void SourceCheckChanged(object sender, RoutedEventArgs e)
         {
-            BuildupSelectionVM.HandleSourceCheckChanged();
+            AssemblySelectionVM.HandleSourceCheckChanged();
         }
 
 
@@ -99,9 +99,9 @@ namespace Calc.MVVM.Views
             originalLeft = this.Left;
         }
 
-        private async void BuildupSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void AssemblySelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            await BuildupSelectionVM.HandleBuilupSelectionChangedAsync();
+            await AssemblySelectionVM.HandleBuilupSelectionChangedAsync();
         }
 
         private void Expander_Expanded(object sender, RoutedEventArgs e)

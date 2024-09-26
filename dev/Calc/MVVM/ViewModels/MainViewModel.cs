@@ -21,7 +21,7 @@ namespace Calc.MVVM.ViewModels
         public NewMappingViewModel NewMappingVM { get; set; }
         public VisibilityViewModel VisibilityVM { get; set; }
         public CalculationViewModel CalculationVM { get; set; }
-        public BuildupSelectionViewModel BuildupSelectionVM { get; set; }
+        public AssemblySelectionViewModel AssemblySelectionVM { get; set; }
 
         public MainViewModel(CalcStore store, IElementCreator elementCreator, IVisualizer visualizer)
         {
@@ -37,7 +37,7 @@ namespace Calc.MVVM.ViewModels
             CalculationVM = new CalculationViewModel(NodeTreeVM);
             SavingVM = new SavingViewModel(CalculationVM);
 
-            BuildupSelectionVM = new BuildupSelectionViewModel(store);
+            AssemblySelectionVM = new AssemblySelectionViewModel(store);
         }
 
         public void HandleWindowLoaded()
@@ -111,19 +111,19 @@ namespace Calc.MVVM.ViewModels
             NodeTreeVM.HandleNodeItemSelectionChanged(selectedBranch);
         }
 
-        public bool HandleSelectingBuildup(bool setMain)
+        public bool HandleSelectingAssembly(bool setMain)
         {
             if (NodeTreeVM.SelectedNodeItem == null) return false;
-            var assemblyItem = NodeTreeVM.SelectedNodeItem.NodeBuildupItem;
-            var assembly = setMain ? assemblyItem.Buildup1 : assemblyItem.Buildup2;
-            BuildupSelectionVM.PrepareBuildupSelection(assembly);
+            var assemblyItem = NodeTreeVM.SelectedNodeItem.NodeAssemblyItem;
+            var assembly = setMain ? assemblyItem.Assembly1 : assemblyItem.Assembly2;
+            AssemblySelectionVM.PrepareAssemblySelection(assembly);
             return true;
         }
 
-        public void HandleBuildupSelected(bool setMain)
+        public void HandleAssemblySelected(bool setMain)
         {
-            var assembly = BuildupSelectionVM.SelectedBuildup;
-            NodeTreeVM.SelectedNodeItem.NodeBuildupItem.SetBuildup(setMain,assembly);
+            var assembly = AssemblySelectionVM.SelectedAssembly;
+            NodeTreeVM.SelectedNodeItem.NodeAssemblyItem.SetAssembly(setMain,assembly);
         }
 
         public void HandleSideClicked()
@@ -135,19 +135,19 @@ namespace Calc.MVVM.ViewModels
         {
             if (NodeTreeVM.SelectedNodeItem == null)
                 return;
-            NodeTreeVM.SelectedNodeItem.NodeBuildupItem.HandleInherit();
+            NodeTreeVM.SelectedNodeItem.NodeAssemblyItem.HandleInherit();
         }
 
         public void HandleRemove()
         {
             if (NodeTreeVM.SelectedNodeItem == null)
                 return;
-            NodeTreeVM.SelectedNodeItem.NodeBuildupItem.HandleRemove();
+            NodeTreeVM.SelectedNodeItem.NodeAssemblyItem.HandleRemove();
         }
 
-        public void HandleViewToggleToBuildup()
+        public void HandleViewToggleToAssembly()
         {
-            MediatorFromVM.Broadcast("MainViewToggleToBuildup");
+            MediatorFromVM.Broadcast("MainViewToggleToAssembly");
         }
 
         public void HandleViewToggleToBranch()

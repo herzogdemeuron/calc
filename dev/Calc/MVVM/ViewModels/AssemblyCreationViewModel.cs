@@ -22,7 +22,7 @@ using System.Windows.Media.Imaging;
 namespace Calc.MVVM.ViewModels
 {
 
-    public class BuildupCreationViewModel : INotifyPropertyChanged
+    public class AssemblyCreationViewModel : INotifyPropertyChanged
     {
         private readonly CalcStore store;
         private readonly IElementSourceHandler elementSourceHandler;
@@ -31,9 +31,9 @@ namespace Calc.MVVM.ViewModels
 
         private Dictionary<string, string> DynamicProperties = new Dictionary<string, string>();
         public List<LcaStandard> StandardsAll { get => store.StandardsAll; }
-        public List<Unit> BuildupUnitsAll { get => store.UnitsAll; }
+        public List<Unit> AssemblyUnitsAll { get => store.UnitsAll; }
         public List<MaterialFunction> MaterialFunctionsAll { get => store.MaterialFunctionsAll; }
-        public List<AssemblyGroup> BuildupGroupsAll { get => store.BuildupGroupsAll; }
+        public List<AssemblyGroup> AssemblyGroupsAll { get => store.AssemblyGroupsAll; }
 
         public BasicAmountsModel AmountsModel { get; set; } = new BasicAmountsModel();
         public bool MaterialSelectionEnabled { get => SelectedComponent is LayerComponent; }
@@ -51,14 +51,14 @@ namespace Calc.MVVM.ViewModels
         }
 
         private ObservableCollection<AssemblyComponent> assemblyComponents = new ObservableCollection<AssemblyComponent>();
-        public ObservableCollection<AssemblyComponent> BuildupComponents
+        public ObservableCollection<AssemblyComponent> AssemblyComponents
         {
             get => assemblyComponents;
             set
             {
                 if (assemblyComponents == value) return;
                 assemblyComponents = value;
-                OnPropertyChanged(nameof(BuildupComponents));
+                OnPropertyChanged(nameof(AssemblyComponents));
             }
         }
 
@@ -67,7 +67,7 @@ namespace Calc.MVVM.ViewModels
             get
             {
                 var calcs = new List<CalculationComponent>();
-                foreach (var component in BuildupComponents)
+                foreach (var component in AssemblyComponents)
                 {
                     calcs.AddRange(component.GetCalculationComponents());
                 }
@@ -94,43 +94,43 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        private string newBuildupName;
-        public string NewBuildupName
+        private string newAssemblyName;
+        public string NewAssemblyName
         {
-            get => newBuildupName;
+            get => newAssemblyName;
             set
             {
-                if (newBuildupName == value) return;
-                newBuildupName = value;
+                if (newAssemblyName == value) return;
+                newAssemblyName = value;
                 CheckSaveOrUpdate();
-                OnPropertyChanged(nameof(NewBuildupName));
+                OnPropertyChanged(nameof(NewAssemblyName));
                 OnPropertyChanged(nameof(CanSave));
             }
         }
 
-        private string newBuildupCode;
-        public string NewBuildupCode
+        private string newAssemblyCode;
+        public string NewAssemblyCode
         {
-            get => newBuildupCode;
+            get => newAssemblyCode;
             set
             {
-                if (newBuildupCode == value) return;
-                newBuildupCode = value;
+                if (newAssemblyCode == value) return;
+                newAssemblyCode = value;
                 CheckSaveOrUpdate();
-                OnPropertyChanged(nameof(NewBuildupCode));
+                OnPropertyChanged(nameof(NewAssemblyCode));
                 OnPropertyChanged(nameof(CanSave));
             }
         }
 
-        private string newBuildupDescription;
-        public string NewBuildupDescription
+        private string newAssemblyDescription;
+        public string NewAssemblyDescription
         {
-            get => newBuildupDescription;
+            get => newAssemblyDescription;
             set
             {
-                if (newBuildupDescription == value) return;
-                newBuildupDescription = value;
-                OnPropertyChanged(nameof(NewBuildupDescription));
+                if (newAssemblyDescription == value) return;
+                newAssemblyDescription = value;
+                OnPropertyChanged(nameof(NewAssemblyDescription));
             }
         }
 
@@ -164,30 +164,30 @@ namespace Calc.MVVM.ViewModels
             get => Standards == null ? "" : string.Join(", ", Standards.Select(s => s.Name));
         }
 
-        private Unit? selectedBuildupUnit;
-        public Unit? SelectedBuildupUnit // todo: put this to record
+        private Unit? selectedAssemblyUnit;
+        public Unit? SelectedAssemblyUnit // todo: put this to record
         {
-            get => selectedBuildupUnit;
+            get => selectedAssemblyUnit;
             set
             {
-                selectedBuildupUnit = value;
-                OnPropertyChanged(nameof(SelectedBuildupUnit));
+                selectedAssemblyUnit = value;
+                OnPropertyChanged(nameof(SelectedAssemblyUnit));
                 UpdateAmounts();
-                UpdateBuildupComponentError();
+                UpdateAssemblyComponentError();
                 UpdateCalculationComponents();
                 OnPropertyChanged(nameof(MainWarning));
             }
         }
 
-        private AssemblyGroup selectedBuildupGroup;
-        public AssemblyGroup SelectedBuildupGroup
+        private AssemblyGroup selectedAssemblyGroup;
+        public AssemblyGroup SelectedAssemblyGroup
         {
-            get => selectedBuildupGroup;
+            get => selectedAssemblyGroup;
             set
             {
-                if (selectedBuildupGroup == value) return;
-                selectedBuildupGroup = value;
-                OnPropertyChanged(nameof(SelectedBuildupGroup));
+                if (selectedAssemblyGroup == value) return;
+                selectedAssemblyGroup = value;
+                OnPropertyChanged(nameof(SelectedAssemblyGroup));
                 OnPropertyChanged(nameof(CanSave));
             }
         }
@@ -281,11 +281,11 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        public double? BuildupGwp { get => CurrentCalculationComponents?.Sum(c => c.Gwp); }
-        public double? BuildupGe { get => CurrentCalculationComponents?.Sum(c => c.Ge); }
+        public double? AssemblyGwp { get => CurrentCalculationComponents?.Sum(c => c.Gwp); }
+        public double? AssemblyGe { get => CurrentCalculationComponents?.Sum(c => c.Ge); }
 
 
-        public BuildupCreationViewModel(CalcStore store, IElementSourceHandler elemSrcHandler, IImageSnapshotCreator imgCreator, IElementSender elemSender)
+        public AssemblyCreationViewModel(CalcStore store, IElementSourceHandler elemSrcHandler, IImageSnapshotCreator imgCreator, IElementSender elemSender)
         {
             this.store = store;
             elementSourceHandler = elemSrcHandler;
@@ -295,8 +295,8 @@ namespace Calc.MVVM.ViewModels
 
         public void HandleLoaded()
         {
-            OnPropertyChanged(nameof(BuildupUnitsAll));
-            OnPropertyChanged(nameof(BuildupGroupsAll));
+            OnPropertyChanged(nameof(AssemblyUnitsAll));
+            OnPropertyChanged(nameof(AssemblyGroupsAll));
             UpadteMainWarning();
         }
 
@@ -307,10 +307,10 @@ namespace Calc.MVVM.ViewModels
             OnPropertyChanged(nameof(CurrentColor));
         }
 
-        public void HandleAmountClicked(Unit? newBuildupUnit)
+        public void HandleAmountClicked(Unit? newAssemblyUnit)
         {
-            if(newBuildupUnit == null) return;
-            foreach (var component in BuildupComponents)
+            if(newAssemblyUnit == null) return;
+            foreach (var component in AssemblyComponents)
             {
                 component.IsNormalizer = false;
                 component.HasParamError = false;
@@ -319,13 +319,13 @@ namespace Calc.MVVM.ViewModels
             {
                 bc.IsNormalizer = true;
             }
-            SelectedBuildupUnit = newBuildupUnit;
+            SelectedAssemblyUnit = newAssemblyUnit;
             UpadteMainWarning();
         }
 
         public void HandleCaptureClicked()
         {
-            string filename = NewBuildupName ?? "CalcBuildup";
+            string filename = NewAssemblyName ?? "CalcAssembly";
             currentImagePath = imageSnapshotCreator.CreateImageSnapshot(filename);
             CurrentImage = new BitmapImage(new Uri(currentImagePath));
         }
@@ -338,20 +338,20 @@ namespace Calc.MVVM.ViewModels
 
         private void UpadteMainWarning()
         {
-            if (BuildupComponents.Count == 0)
+            if (AssemblyComponents.Count == 0)
             {
                 MainWarning = "Select elements to start.";
                 return;
             }
-            var hasNormalizer = BuildupComponents.Where(c => c.IsNormalizer).ToList().Count == 1;
+            var hasNormalizer = AssemblyComponents.Where(c => c.IsNormalizer).ToList().Count == 1;
             MainWarning = hasNormalizer ? "" : "Choose a type 🡫 and set one unit as normalizer 🡩 ";
         }
 
-        private void UpdateBuildupComponentError()
+        private void UpdateAssemblyComponentError()
         {
             if (SelectedComponent is AssemblyComponent bc)
             {
-                bc.UpdateParamError((Unit)SelectedBuildupUnit);
+                bc.UpdateParamError((Unit)SelectedAssemblyUnit);
             }
         }
 
@@ -361,7 +361,7 @@ namespace Calc.MVVM.ViewModels
         private void UpdateAmounts()
         {
             var materialUnit = CurrentLayerMaterialModel?.MainMaterial?.MaterialUnit;
-            AmountsModel.UpdateAmounts(SelectedComponent, SelectedBuildupUnit, materialUnit);
+            AmountsModel.UpdateAmounts(SelectedComponent, SelectedAssemblyUnit, materialUnit);
         }
 
         /// <summary>
@@ -374,16 +374,16 @@ namespace Calc.MVVM.ViewModels
             {
                 // get the selection result from revit, including metadata and recorded materials
                 var result = elementSourceHandler.SelectElements(store.CustomParamSettingsAll);
-                var record = elementSourceHandler.GetBuildupRecord();
-                if (record != null) result.ApplyBuildupRecord(record, store);
+                var record = elementSourceHandler.GetAssemblyRecord();
+                if (record != null) result.ApplyAssemblyRecord(record, store);
 
-                BuildupComponents = new ObservableCollection<AssemblyComponent>(result.BuildupComponents);
+                AssemblyComponents = new ObservableCollection<AssemblyComponent>(result.AssemblyComponents);
                 DynamicProperties = result.Parameters;
-                if (result.BuildupCode != null)  NewBuildupCode = result.BuildupCode;
-                if (result.BuildupName != null) NewBuildupName = result.BuildupName;
-                if (result.BuildupGroup != null) SelectedBuildupGroup = result.BuildupGroup;
-                if (result.Description != null) NewBuildupDescription = result.Description;
-                SelectedBuildupUnit = result.BuildupUnit;
+                if (result.AssemblyCode != null)  NewAssemblyCode = result.AssemblyCode;
+                if (result.AssemblyName != null) NewAssemblyName = result.AssemblyName;
+                if (result.AssemblyGroup != null) SelectedAssemblyGroup = result.AssemblyGroup;
+                if (result.Description != null) NewAssemblyDescription = result.Description;
+                SelectedAssemblyUnit = result.AssemblyUnit;
 
                 UpdateLayerMaterialModels();
                 UpdateLayerColors();
@@ -438,7 +438,7 @@ namespace Calc.MVVM.ViewModels
         private void UpdateLayerMaterialModels()
         {
             layerMaterialModels?.Clear();
-            foreach (var component in BuildupComponents.Where(c => c.HasLayers))
+            foreach (var component in AssemblyComponents.Where(c => c.HasLayers))
             {
                 foreach (var layer in component.LayerComponents)
                 {
@@ -479,7 +479,7 @@ namespace Calc.MVVM.ViewModels
 
         private void UpdateLayerColors()
         {
-            ItemPainter.ColorLayersByMaterial(BuildupComponents);
+            ItemPainter.ColorLayersByMaterial(AssemblyComponents);
             OnPropertyChanged(nameof(CurrentColor));
         }
 
@@ -487,14 +487,14 @@ namespace Calc.MVVM.ViewModels
         {
             var normalizeRatio = GetNormalizeRatio();
 
-            foreach (var component in BuildupComponents)
+            foreach (var component in AssemblyComponents)
             {
                 component.UpdateCalculationComponents(normalizeRatio);
             }
             OnPropertyChanged(nameof(StandardsString));
             OnPropertyChanged(nameof(CurrentCalculationComponents));
-            OnPropertyChanged(nameof(BuildupGwp));
-            OnPropertyChanged(nameof(BuildupGe));
+            OnPropertyChanged(nameof(AssemblyGwp));
+            OnPropertyChanged(nameof(AssemblyGe));
             OnPropertyChanged(nameof(CanSave));
             SaveMessage = "";
         }
@@ -505,10 +505,10 @@ namespace Calc.MVVM.ViewModels
         /// </summary>
         private double GetNormalizeRatio()
         {
-            var normalizer = BuildupComponents.Where(c => c.IsNormalizer).ToList();
+            var normalizer = AssemblyComponents.Where(c => c.IsNormalizer).ToList();
             if (normalizer.Count != 1) return 0;
-            if (SelectedBuildupUnit == null) return 0;
-            var value = normalizer[0].BasicParameterSet.GetAmountParam((Unit)SelectedBuildupUnit).Amount;
+            if (SelectedAssemblyUnit == null) return 0;
+            var value = normalizer[0].BasicParameterSet.GetAmountParam((Unit)SelectedAssemblyUnit).Amount;
             if (value.HasValue)
             {
                 return 1 / value.Value;
@@ -516,25 +516,25 @@ namespace Calc.MVVM.ViewModels
             return 0;
         }
 
-        private Assembly CreateBuildup(string imageUuid,string speckleProjectId, string speckleModelId)
+        private Assembly CreateAssembly(string imageUuid,string speckleProjectId, string speckleModelId)
         {
             var assembly = new Assembly
             {
-                Name = NewBuildupName,
-                Code = NewBuildupCode,
-                Description = NewBuildupDescription,
+                Name = NewAssemblyName,
+                Code = NewAssemblyCode,
+                Description = NewAssemblyDescription,
                 StandardItems = Standards.Select(s => new StandardItem { Standard = s }).ToList(),
-                Group = SelectedBuildupGroup,
-                BuildupUnit = (Unit)SelectedBuildupUnit,
+                Group = SelectedAssemblyGroup,
+                AssemblyUnit = (Unit)SelectedAssemblyUnit,
                 CalculationComponents = CurrentCalculationComponents,
-                BuildupGwp = BuildupGwp,
-                BuildupGe = BuildupGe,
+                AssemblyGwp = AssemblyGwp,
+                AssemblyGe = AssemblyGe,
             };
             SnapshotMaker.Snap(assembly);
 
             if (!string.IsNullOrEmpty(imageUuid))
             {
-                assembly.BuildupImage = new AssemblyImage() { Id = imageUuid };
+                assembly.AssemblyImage = new AssemblyImage() { Id = imageUuid };
             }
 
             if (!string.IsNullOrEmpty(speckleModelId) && !string.IsNullOrEmpty(speckleProjectId))
@@ -546,7 +546,7 @@ namespace Calc.MVVM.ViewModels
             return assembly;
         }
 
-        public async Task<bool> HandleSaveBuildup()
+        public async Task<bool> HandleSaveAssembly()
         {
             IsNotSaving = false;
             SavingVisibility = Visibility.Visible;
@@ -554,34 +554,34 @@ namespace Calc.MVVM.ViewModels
 
             try
             {
-                string imageUuid = await store.UploadImageAsync(currentImagePath, NewBuildupName); // todo: make this more robust
+                string imageUuid = await store.UploadImageAsync(currentImagePath, NewAssemblyName); // todo: make this more robust
                 var speckleModelId = await SendElementsToSpeckle();
                 var speckleProjectId = store.Config.SpeckleBuilderProjectId;
-                var assembly = CreateBuildup(imageUuid, speckleProjectId, speckleModelId);
+                var assembly = CreateAssembly(imageUuid, speckleProjectId, speckleModelId);
 
                 if (updateId != null)
                 {
                     assembly.Id = updateId.Value;
-                    await store.UpdateSingleBuildup(assembly);
+                    await store.UpdateSingleAssembly(assembly);
                     SaveMessage = "Assembly updated.";
                 }
                 else
                 {
-                    await store.SaveSingleBuildup(assembly);
+                    await store.SaveSingleAssembly(assembly);
                     SaveMessage = "New Assembly saved.";
                     CheckSaveOrUpdate();
                 }
 
 
                 // store the assembly record
-                elementSourceHandler.SaveBuildupRecord
+                elementSourceHandler.SaveAssemblyRecord
                     (
-                        newBuildupCode, 
-                        newBuildupName, 
-                        SelectedBuildupUnit.Value,
-                        SelectedBuildupGroup, 
-                        newBuildupDescription, 
-                        BuildupComponents.ToList() 
+                        newAssemblyCode, 
+                        newAssemblyName, 
+                        SelectedAssemblyUnit.Value,
+                        SelectedAssemblyGroup, 
+                        newAssemblyDescription, 
+                        AssemblyComponents.ToList() 
                     );
 
             }
@@ -608,23 +608,23 @@ namespace Calc.MVVM.ViewModels
         /// </summary>
         private async Task<string> SendElementsToSpeckle()
         {
-            var elementIds = BuildupComponents.SelectMany(c => c.ElementIds).ToList();
-            return await elementSender.SendToSpeckle(elementIds, NewBuildupCode, newBuildupName, NewBuildupDescription, DynamicProperties);
+            var elementIds = AssemblyComponents.SelectMany(c => c.ElementIds).ToList();
+            return await elementSender.SendToSpeckle(elementIds, NewAssemblyCode, newAssemblyName, NewAssemblyDescription, DynamicProperties);
         }
 
         private bool CheckCanSave()
         {
-            return !string.IsNullOrEmpty(NewBuildupCode) && !string.IsNullOrEmpty(NewBuildupName) && SelectedBuildupGroup != null && CurrentCalculationComponents.Count > 0 && IsNotSaving;
+            return !string.IsNullOrEmpty(NewAssemblyCode) && !string.IsNullOrEmpty(NewAssemblyName) && SelectedAssemblyGroup != null && CurrentCalculationComponents.Count > 0 && IsNotSaving;
         }
 
         private void CheckSaveOrUpdate()
         {
             var allAssemblies = store.AssembliesAll;
             // find the id with the same code
-            var existingBuildup = allAssemblies.Find(b => b.Code != null && b.Code == NewBuildupCode);
-            if(existingBuildup != null)
+            var existingAssembly = allAssemblies.Find(b => b.Code != null && b.Code == NewAssemblyCode);
+            if(existingAssembly != null)
             {
-                updateId = existingBuildup.Id;
+                updateId = existingAssembly.Id;
                 SaveOrUpdate = false;
             }
             else
@@ -633,10 +633,10 @@ namespace Calc.MVVM.ViewModels
                 SaveOrUpdate = true;
             }
         }
-        public void MoveBuildupComponent(int oldIndex, int newIndex)
+        public void MoveAssemblyComponent(int oldIndex, int newIndex)
         {
             if (oldIndex < 0 || newIndex < 0 || oldIndex == newIndex) return;
-            BuildupComponents.Move(oldIndex, newIndex);
+            AssemblyComponents.Move(oldIndex, newIndex);
             UpdateCalculationComponents();
         }
 

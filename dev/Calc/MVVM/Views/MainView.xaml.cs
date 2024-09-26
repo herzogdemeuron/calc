@@ -158,27 +158,27 @@ namespace Calc.MVVM.Views
             }
         }
 
-        private void SetBuildupClicked(object sender, RoutedEventArgs e)
+        private void SetAssemblyClicked(object sender, RoutedEventArgs e)
         {
             string tag = (sender as Button).Tag.ToString();
-            SetBuildupWithTag(tag);
+            SetAssemblyWithTag(tag);
         }
 
         // set the main or sub assembly calling the assembly selection view
         // decide which assembly to set based on the tag
-        private void SetBuildupWithTag(string tag)
+        private void SetAssemblyWithTag(string tag)
         {
             bool setMain = tag.Contains("Main");
-            var canSelect = MainVM.HandleSelectingBuildup(setMain);
+            var canSelect = MainVM.HandleSelectingAssembly(setMain);
 
             if (!canSelect) return;
 
-            var assemblySelectionView = new BuildupSelectionView(MainVM.BuildupSelectionVM);
+            var assemblySelectionView = new AssemblySelectionView(MainVM.AssemblySelectionVM);
             var result = assemblySelectionView.ShowDialog();
 
             if (result == true)
             {
-                MainVM.HandleBuildupSelected(setMain);
+                MainVM.HandleAssemblySelected(setMain);
             }
         }
 
@@ -214,7 +214,7 @@ namespace Calc.MVVM.Views
                     this.ColorByAssemblyButton.Uid = "pack://application:,,,/CalcMVVM;component/Resources/button_color.png";
                     this.ColorByGroupButton.Opacity = 0.4;
                     this.ColorByGroupButton.Uid = "";
-                    MainVM.HandleViewToggleToBuildup();
+                    MainVM.HandleViewToggleToAssembly();
                     break;
                 case "co2":
                     break;

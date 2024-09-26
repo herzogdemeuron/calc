@@ -12,7 +12,7 @@ namespace Calc.Core.Objects.Mappings
     public class MappingItem
     {
         [JsonProperty("assembly_ids")]
-        public List<int> BuildupIds { get; set; }
+        public List<int> AssemblyIds { get; set; }
         [JsonProperty("mapping_path")]
         public List<MappingPath> Path { get; set; }
 

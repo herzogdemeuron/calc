@@ -74,7 +74,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="{Binding BuildupCreationVM.MainWarning}"
+                <TextBlock Text="{Binding AssemblyCreationVM.MainWarning}"
                            d:Text="Choose a type and set one amount as normalizer 🡩  "
                            Grid.ColumnSpan="5"
                            Grid.Row="1"
@@ -99,10 +99,10 @@
                             BorderThickness="0" 
                             CornerRadius="4"
                             d:Background="LightGray"
-                            Background="{Binding BuildupCreationVM.CurrentColor, Converter={StaticResource ColorConverter}}"/>
+                            Background="{Binding AssemblyCreationVM.CurrentColor, Converter={StaticResource ColorConverter}}"/>
 
                 <Grid Grid.Column="1"
-                      DataContext="{Binding BuildupCreationVM.AmountsModel}">
+                      DataContext="{Binding AssemblyCreationVM.AmountsModel}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
@@ -150,7 +150,7 @@
                             MouseMove="TreeViewMouseMove"
                             DragOver="TreeViewDragOver"
                             Drop="TreeViewDrop"
-                            ItemsSource="{Binding BuildupCreationVM.BuildupComponents}"
+                            ItemsSource="{Binding AssemblyCreationVM.AssemblyComponents}"
                             TreeViewItem.Selected="TreeViewItemSelected"
                             ItemContainerStyle="{StaticResource TreeViewItemStyle}">
                         <TreeView.ItemTemplate>
@@ -175,7 +175,7 @@
                     FontSize="18"
                     Margin="10,10,0,10"/>
 
-            <Grid x:Name="BuildupInfoGrid"
+            <Grid x:Name="AssemblyInfoGrid"
                     Grid.Column="2" 
                     Grid.Row="1"
                     Margin="10,0,10,0">
@@ -192,36 +192,36 @@
 
 
 
-                <ComboBox   x:Name="BuildupGroupComboBox"
+                <ComboBox   x:Name="AssemblyGroupComboBox"
                             Text = "Assembly Group"
                             Grid.Row="0"
                             Grid.Column="2"
-                            ItemsSource="{Binding BuildupCreationVM.BuildupGroupsAll}"
-                            SelectedItem="{Binding BuildupCreationVM.SelectedBuildupGroup}"
+                            ItemsSource="{Binding AssemblyCreationVM.AssemblyGroupsAll}"
+                            SelectedItem="{Binding AssemblyCreationVM.SelectedAssemblyGroup}"
                             Style="{StaticResource RoundedComboBoxStyle}"
                             DisplayMemberPath="Name"/>
 
-                <TextBox x:Name="BuildupNameTextBox"
+                <TextBox x:Name="AssemblyNameTextBox"
                         Grid.Column="0"
                         Height="25"
                         Margin="0,0,5,0"
                         Tag="Assembly Name"
                         Style="{StaticResource TextBoxStyle}"
-                        Text="{Binding BuildupCreationVM.NewBuildupName}"
+                        Text="{Binding AssemblyCreationVM.NewAssemblyName}"
                         FontWeight="SemiBold"
-                        LostFocus="BuildupNameFocusLost"
-                        TextChanged="BuildupNameTextChanged"/>
+                        LostFocus="AssemblyNameFocusLost"
+                        TextChanged="AssemblyNameTextChanged"/>
 
-                <TextBox x:Name="BuildupCodeTextBox"
+                <TextBox x:Name="AssemblyCodeTextBox"
                         Grid.Column="1"
                         Height="25"
                         Margin="0,0,5,0"
                         Tag="Assembly Code"
                         Style="{StaticResource TextBoxStyle}"
-                        Text="{Binding BuildupCreationVM.NewBuildupCode}"
+                        Text="{Binding AssemblyCreationVM.NewAssemblyCode}"
                         FontWeight="SemiBold"
-                        LostFocus="BuildupCodeFocusLost"
-                        TextChanged="BuildupCodeTextChanged"/>
+                        LostFocus="AssemblyCodeFocusLost"
+                        TextChanged="AssemblyCodeTextChanged"/>
 
                 <TextBox x:Name="DescriptionTextBox"
                         Grid.Column="0"
@@ -234,7 +234,7 @@
                         VerticalAlignment="Top"
                         TextWrapping="Wrap"
                         Height="55"
-                        Text="{Binding BuildupCreationVM.NewBuildupDescription}"/>
+                        Text="{Binding AssemblyCreationVM.NewAssemblyDescription}"/>
                 
                 <Border  Grid.Column="2"
                          Grid.Row="1"
@@ -250,9 +250,9 @@
                          CornerRadius="4">
                     <Grid>
                         <Image x:Name="ImagePreview" 
-                                Source="{Binding BuildupCreationVM.CurrentImage}"/>
+                                Source="{Binding AssemblyCreationVM.CurrentImage}"/>
                         <TextBlock x:Name="CaptureTextBlock"
-                                   Text="{Binding BuildupCreationVM.CaptureText}"
+                                   Text="{Binding AssemblyCreationVM.CaptureText}"
                                    d:Text="↻"
                                    Foreground="Gray"
                                    FontSize="20"
@@ -263,7 +263,7 @@
 
                 <Popup x:Name="ImagePreviewPopup" AllowsTransparency="True">
                     <Border BorderThickness="0" Background="Transparent" CornerRadius="4">
-                        <Image Source="{Binding BuildupCreationVM.CurrentImage}" Width="500" Height="400"/>
+                        <Image Source="{Binding AssemblyCreationVM.CurrentImage}" Width="500" Height="400"/>
                     </Border>
                 </Popup>
 
@@ -283,11 +283,11 @@
                      Margin="10,0,10,0"
                      CornerRadius="4"
                      d:Background="LightGray"
-                     Background="{Binding BuildupCreationVM.CurrentColor, Converter={StaticResource ColorConverter}}">
+                     Background="{Binding AssemblyCreationVM.CurrentColor, Converter={StaticResource ColorConverter}}">
 
                 <Grid x:Name="MaterialGrid"
                       Margin="10"
-                      DataContext="{Binding BuildupCreationVM.CurrentLayerMaterialModel}"
+                      DataContext="{Binding AssemblyCreationVM.CurrentLayerMaterialModel}"
                       IsEnabled="{Binding IsEnabled}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -449,7 +449,7 @@
                    Margin="10,10,0,10"
                    FontSize="18"/>
 
-            <Grid x:Name="BuildupPreviewGrid"
+            <Grid x:Name="AssemblyPreviewGrid"
                      Margin="10,0,10,0"
                      Grid.Row="5" 
                      Grid.Column="2">
@@ -468,7 +468,7 @@
                     <ColumnDefinition Width="45"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock d:Text="This is a Buildup name, and it is really long so that it has to be wrapepd."
+                <TextBlock d:Text="This is a Assembly name, and it is really long so that it has to be wrapepd."
                            Grid.Column="0"
                            Grid.RowSpan="2"
                            FontSize="13"
@@ -477,20 +477,20 @@
                            LineHeight="17"
                            Margin="0,0,20,0"
                            LineStackingStrategy="BlockLineHeight" 
-                           Text="{Binding BuildupCreationVM.NewBuildupName}"/>
+                           Text="{Binding AssemblyCreationVM.NewAssemblyName}"/>
 
                 <TextBlock Grid.Column="1" Text="Unit: " FontWeight="SemiBold" VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="2" Text="{Binding BuildupCreationVM.SelectedBuildupUnit}" VerticalAlignment="Center" d:Text="m2"/>
+                <TextBlock Grid.Column="2" Text="{Binding AssemblyCreationVM.SelectedAssemblyUnit}" VerticalAlignment="Center" d:Text="m2"/>
 
                 <TextBlock Grid.Column="1" Grid.Row="1" Text="Source: " FontWeight="SemiBold" VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding BuildupCreationVM.StandardsString}" VerticalAlignment="Center" d:Text="KBOB"/>
+                <TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding AssemblyCreationVM.StandardsString}" VerticalAlignment="Center" d:Text="KBOB"/>
 
                 <TextBlock Grid.Column="4" Text="GWP: " FontWeight="SemiBold" VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="5" Text="{Binding BuildupCreationVM.BuildupGwp}" VerticalAlignment="Center" d:Text="98.902"/>
+                <TextBlock Grid.Column="5" Text="{Binding AssemblyCreationVM.AssemblyGwp}" VerticalAlignment="Center" d:Text="98.902"/>
                 <TextBlock Grid.Column="6" FontSize="9" Text="kgCO₂/yr" Margin="5,0,0,0" VerticalAlignment="Center"/>
 
                 <TextBlock Grid.Column="4" Grid.Row="1" Text="GE: " FontWeight="SemiBold" VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="5" Grid.Row="1" Text="{Binding BuildupCreationVM.BuildupGe}" VerticalAlignment="Center" d:Text="177.902"/>
+                <TextBlock Grid.Column="5" Grid.Row="1" Text="{Binding AssemblyCreationVM.AssemblyGe}" VerticalAlignment="Center" d:Text="177.902"/>
                 <TextBlock Grid.Column="6" FontSize="9" Grid.Row="1" Text="kWhOil/yr" Margin="5,0,0,0" VerticalAlignment="Center"/>
 
                 <Border x:Name="PreviewCalculation"
@@ -501,7 +501,7 @@
                         CornerRadius="4">
                     <DataGrid x:Name="Calculations"
                               Style="{StaticResource DataGridStyle}"
-                              ItemsSource="{Binding BuildupCreationVM.CurrentCalculationComponents}"
+                              ItemsSource="{Binding AssemblyCreationVM.CurrentCalculationComponents}"
                               AutoGenerateColumns="False">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="" Width="20">
@@ -542,15 +542,15 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="200" />
                 </Grid.ColumnDefinitions>
-                <Button Click="SaveBuildupClicked"
-                        IsEnabled="{Binding BuildupCreationVM.CanSave}"
+                <Button Click="SaveAssemblyClicked"
+                        IsEnabled="{Binding AssemblyCreationVM.CanSave}"
                         Grid.Column="1"
                         Margin="0,0,10,0">
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
                             <Setter Property="Content" Value="Create" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding BuildupCreationVM.SaveOrUpdate}" Value="False">
+                                <DataTrigger Binding="{Binding AssemblyCreationVM.SaveOrUpdate}" Value="False">
                                     <Setter Property="Content" Value="Code exists, Update" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -558,19 +558,19 @@
                     </Button.Style>
                 </Button>
                 <Image gif:ImageBehavior.AnimatedSource="/CalcMVVM;component/Resources/DT_logo.gif"
-                       Visibility="{Binding BuildupCreationVM.SavingVisibility}"
+                       Visibility="{Binding AssemblyCreationVM.SavingVisibility}"
                        HorizontalAlignment="Right"
                        Margin="0,0,10,0"
                        Width="30"
                        Height="30"/>
 
                 <Label x:Name="SaveMessageLabel"
-                       Content="{Binding BuildupCreationVM.SaveMessage}"
+                       Content="{Binding AssemblyCreationVM.SaveMessage}"
                        HorizontalAlignment="Right"
                        VerticalAlignment="Center"
                        d:Content="Saved"
                        FontWeight="SemiBold"
-                       Foreground="{Binding BuildupCreationVM.SaveMessageColor}"/>
+                       Foreground="{Binding AssemblyCreationVM.SaveMessageColor}"/>
 
             </Grid>
 

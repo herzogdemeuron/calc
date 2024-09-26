@@ -28,7 +28,7 @@ namespace Calc.Core.TestIntegration.Drivers
             {
                 tree.Plant(mockData.Elements);
                 //mockData.AssignAssemblies(tree);
-                tree.RemoveElementsByBuildupOverrides();
+                tree.RemoveElementsByAssemblyOverrides();
                 branches.AddRange(tree.Flatten());
             }
 

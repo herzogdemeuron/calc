@@ -7,7 +7,7 @@ namespace CalcBuilderTest.MockData
 {
     internal class MockAssemblyComponents
     {
-        public static List<AssemblyComponent> GetBuildupComponents()
+        public static List<AssemblyComponent> GetAssemblyComponents()
         {
             var result = new List<AssemblyComponent>()
             {

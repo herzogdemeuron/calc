@@ -15,24 +15,24 @@ namespace Calc.MVVM.ViewModels
         public ObservableCollection<NodeModel> BrokenNodeSource {  get; private set; }
 
         private string _assembly1;
-        public string Buildup1
+        public string Assembly1
         {
             get => _assembly1;
             set
             {
                 _assembly1 = value;
-                OnPropertyChanged(nameof(Buildup1));
+                OnPropertyChanged(nameof(Assembly1));
             }
         }
 
         private string _assembly2;
-        public string Buildup2
+        public string Assembly2
         {
             get => _assembly2;
             set
             {
                 _assembly2 = value;
-                OnPropertyChanged(nameof(Buildup2));
+                OnPropertyChanged(nameof(Assembly2));
             }
         }
 
@@ -105,20 +105,20 @@ namespace Calc.MVVM.ViewModels
             {
                 if(nodeItem.Host is Tree)
                 {
-                    Buildup1 = "-";
-                    Buildup2 = null;
+                    Assembly1 = "-";
+                    Assembly2 = null;
                 }
                 else
                 {
                     var branch = nodeItem.Host as Branch;
-                    Buildup1 = branch.Assemblies?.Count > 0 ? branch.Assemblies[0].ToString() : "-";
-                    Buildup2 = branch.Assemblies?.Count > 1 ? branch.Assemblies[1].ToString() : null;
+                    Assembly1 = branch.Assemblies?.Count > 0 ? branch.Assemblies[0].ToString() : "-";
+                    Assembly2 = branch.Assemblies?.Count > 1 ? branch.Assemblies[1].ToString() : null;
                 }
             }
             else
             {
-                Buildup1 = null;
-                Buildup2 = null;
+                Assembly1 = null;
+                Assembly2 = null;
             }
         }
 
@@ -171,8 +171,8 @@ namespace Calc.MVVM.ViewModels
 
         public void DeselectNodes()
         {
-            Buildup1 = null;
-            Buildup2 = null;
+            Assembly1 = null;
+            Assembly2 = null;
             MediatorToView.Broadcast("ViewDeselectBrokenNodesTreeView");
         }
 

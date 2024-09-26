@@ -228,27 +228,27 @@ public class MockData
         var assembly1 = new Assembly
         {
             Id = 901,
-            Name = "Buildup No.1",
-            BuildupUnit = Unit.m2
+            Name = "Assembly No.1",
+            AssemblyUnit = Unit.m2
         };
 
         var assembly2 = new Assembly
         {
             Id = 902,
-            Name = "Buildup No.2",
-            BuildupUnit = Unit.m3
+            Name = "Assembly No.2",
+            AssemblyUnit = Unit.m3
         };
 
 
         assembly1.Group = group1;
-        assembly1.BuildupComponents = new ObservableCollection<AssemblyComponent>
+        assembly1.AssemblyComponents = new ObservableCollection<AssemblyComponent>
         {
             component1,
             component2
         };
 
         assembly2.Group = group1;
-        assembly2.BuildupComponents = new ObservableCollection<AssemblyComponent>
+        assembly2.AssemblyComponents = new ObservableCollection<AssemblyComponent>
         {
             component3
         };
@@ -277,7 +277,7 @@ public class MockData
                 {
                     TreeName = "Roh_Wand",
                     Path = new List<MappingPath>(),
-                    BuildupIds = new List<int> { 902, 901 }
+                    AssemblyIds = new List<int> { 902, 901 }
                 },
                 new MappingItem
                 {
@@ -295,7 +295,7 @@ public class MockData
                             Value = "SubGroup2"
                         }
                     },
-                    BuildupIds = new List<int> { 902 }
+                    AssemblyIds = new List<int> { 902 }
                 },
                 new MappingItem
                 {
@@ -313,7 +313,7 @@ public class MockData
                             Value = "SubGroupA"
                         }
                     },
-                    BuildupIds = new List<int> { 902 }
+                    AssemblyIds = new List<int> { 902 }
                 },
                 new MappingItem
                 {
@@ -331,7 +331,7 @@ public class MockData
                             Value = "SubGroupB"
                         }
                     },
-                    BuildupIds = new List<int> { 901 }
+                    AssemblyIds = new List<int> { 901 }
                 }
             }
         };

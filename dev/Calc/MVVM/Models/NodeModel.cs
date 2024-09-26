@@ -25,7 +25,7 @@ namespace Calc.MVVM.Models
         public NodeTreeModel ParentTreeView { get; set; }
         public NodeModel ParentNodeItem { get; private set; }
         public ObservableCollection<NodeModel> SubNodeItems { get; }
-        public BuildupViewModel NodeBuildupItem { get; set; }
+        public AssemblyViewModel NodeAssemblyItem { get; set; }
 
         private IGraphNode host;
         public IGraphNode Host
@@ -49,7 +49,7 @@ namespace Calc.MVVM.Models
                 var calculation = new Dictionary<string, double>();
                 if (Host != null && Host is Branch branch)
                 {
-                    foreach (var bSnapshot in branch.BuildupSnapshots)
+                    foreach (var bSnapshot in branch.AssemblySnapshots)
                     {
                         if (calculation.ContainsKey(bSnapshot.GroupName))
                         {
@@ -94,7 +94,7 @@ namespace Calc.MVVM.Models
             Host = node;
             ParentTreeView = parentTreeView;
             SubNodeItems = new ObservableCollection<NodeModel>();
-            NodeBuildupItem = new BuildupViewModel(this);
+            NodeAssemblyItem = new AssemblyViewModel(this);
             ParentNodeItem = parentNodeItem;
 
             if(node == null) return;

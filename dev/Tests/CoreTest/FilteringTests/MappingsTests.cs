@@ -33,7 +33,7 @@ namespace Calc.Core.TestIntegration.Drivers
         public async Task ApplyMappingToTree_Default_TreeEqualsMockdata()
         {
             {
-                // WARINING: This test requires the Buildup Ids and Names in the mockdata to match some assemblies in the database.
+                // WARINING: This test requires the Assembly Ids and Names in the mockdata to match some assemblies in the database.
                 // Arrange
                 Assert.IsNotNull(this.trees);
                 Assert.IsNotNull(this.mockData);
@@ -65,10 +65,10 @@ namespace Calc.Core.TestIntegration.Drivers
                     tree.PrintTree();
                 }
 
-                /*// Check the equality of Buildup.Name for trees
+                /*// Check the equality of Assembly.Name for trees
                 Assert.IsTrue(trees.Select(t => t.Assemblies?.Name).SequenceEqual(treesCopy.Select(t => t.Assemblies?.Name)));
 
-                // Check the equality of Buildup.Name for sub-branches
+                // Check the equality of Assembly.Name for sub-branches
                 var subBranches = trees.SelectMany(t => t.SubBranches);
                 var subBranchesCopy = treesCopy.SelectMany(t => t.SubBranches);
                 Assert.IsTrue(subBranches.Select(sb => sb.Assemblies?.Name).SequenceEqual(subBranchesCopy.Select(sb => sb.Assemblies?.Name)));

@@ -22,7 +22,7 @@ namespace Calc.MVVM.Models
 
 
         /// <summary>
-        /// Each time the component selection, the Buildup Unit or the Material selection is changed, the BasicUnitModel needs to be updated.
+        /// Each time the component selection, the Assembly Unit or the Material selection is changed, the BasicUnitModel needs to be updated.
         /// </summary>
         public void UpdateAmounts(ICalcComponent host, Unit? assemblyUnit, Unit? materialUnit)
         {

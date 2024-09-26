@@ -31,15 +31,15 @@ namespace Calc.RevitConnector.Revit
         /// <summary>
         /// create a list of assembly components from a list of element ids
         /// </summary>
-        public List<AssemblyComponent> CreateBuildupComponents(List<ElementId> ids, List<RevitBasicParamConfig> bParamConfigs)
+        public List<AssemblyComponent> CreateAssemblyComponents(List<ElementId> ids, List<RevitBasicParamConfig> bParamConfigs)
         {
             basicParamConfigs = bParamConfigs;
             var result = new List<AssemblyComponent>();
             var elements = ids.Select(x => Doc.GetElement(x)).ToList();
             foreach (var element in elements)
             {
-                var component = CreateBuildupComponent(element);
-                MergeBuildupComponentToList(result, component);
+                var component = CreateAssemblyComponent(element);
+                MergeAssemblyComponentToList(result, component);
             }
             return result;
         }
@@ -47,7 +47,7 @@ namespace Calc.RevitConnector.Revit
         /// <summary>
         /// create an assembly component from one element
         /// </summary>
-        private AssemblyComponent CreateBuildupComponent(Element element)
+        private AssemblyComponent CreateAssemblyComponent(Element element)
         {
             var layersSet = CreateLayerComponents(element);
             var layers = layersSet.Item1;
@@ -68,7 +68,7 @@ namespace Calc.RevitConnector.Revit
         /// <summary>
         /// merge an assembly component to a list of assembly components if they have the same type
         /// </summary>
-        private void MergeBuildupComponentToList(List<AssemblyComponent> List, AssemblyComponent component)
+        private void MergeAssemblyComponentToList(List<AssemblyComponent> List, AssemblyComponent component)
         {
             var originComponent = List.FirstOrDefault(x => x.Equals(component));
             if (originComponent != null)

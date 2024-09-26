@@ -219,7 +219,7 @@
     </Style>
 
 
-    <Style x:Key="ListViewItemBuildupStyle" TargetType="ListViewItem">
+    <Style x:Key="ListViewItemAssemblyStyle" TargetType="ListViewItem">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListViewItem">
@@ -278,15 +278,15 @@
                                         <TextBlock Grid.Row="4"
                                                    Grid.Column="1"
                                                    FontSize="10"
-                                                   Text="{Binding BuildupUnit, StringFormat='Unit: {0}'}"/>
+                                                   Text="{Binding AssemblyUnit, StringFormat='Unit: {0}'}"/>
                                         <TextBlock Grid.Row="5"
                                                    Grid.Column="1"
                                                    FontSize="10"
-                                                   Text="{Binding BuildupGwp, StringFormat='Unit GWP: {0} kgCO₂/yr'}"/>
+                                                   Text="{Binding AssemblyGwp, StringFormat='Unit GWP: {0} kgCO₂/yr'}"/>
                                         <TextBlock Grid.Row="6"
                                                    Grid.Column="1"
                                                    FontSize="10"
-                                                   Text="{Binding BuildupGe, StringFormat='Unit GE: {0} kWhOil/yr'}"/>
+                                                   Text="{Binding AssemblyGe, StringFormat='Unit GE: {0} kWhOil/yr'}"/>
                                     </Grid>
                                 </DataTemplate>
                             </ContentPresenter.ContentTemplate>

@@ -72,7 +72,7 @@ namespace Calc.Core.Objects.Mappings
 
             foreach (var mappingItem in mappingItems)
             {
-                var assemblyIds = mappingItem.BuildupIds.Take(2).ToList();
+                var assemblyIds = mappingItem.AssemblyIds.Take(2).ToList();
                 var assemblies = allAssemblies.Where(b => assemblyIds.Contains(b.Id)).ToList();
                 var match = MapAssembliesToBranch(tree, assemblies, mappingItem.Path);
 
@@ -137,7 +137,7 @@ namespace Calc.Core.Objects.Mappings
                 {
                     mappingItems.Add(new MappingItem()
                     {
-                        BuildupIds = branch.Assemblies.Select(b => b.Id).ToList(),
+                        AssemblyIds = branch.Assemblies.Select(b => b.Id).ToList(),
                         Path = branch.Path,
                         TreeName = treeName
                     });

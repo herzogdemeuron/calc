@@ -99,10 +99,10 @@ namespace Calc.DirectusTest.StorageDriverTests
         }
 
         [TestMethod]
-        public async Task CreateSingleBuildup()
+        public async Task CreateSingleAssembly()
         {
             var storageManager = new DirectusManager<Assembly>(this.directus);
-            var assembly = MockBuildup();
+            var assembly = MockAssembly();
             var assemblyDriver = new AssemblyStorageDriver();
             assemblyDriver = await _graphqlRetry.ExecuteAsync(() =>
                     storageManager.GetMany<AssemblyStorageDriver>(assemblyDriver));
@@ -113,13 +113,13 @@ namespace Calc.DirectusTest.StorageDriverTests
             Assert.IsNotNull(response.CreatedItem);
         }
 
-        private static Assembly MockBuildup()
+        private static Assembly MockAssembly()
         {
             return new Assembly
             {
-               /* Name = "TestBuildup",
+               /* Name = "TestAssembly",
                 Standard = new LcaStandard { Id = 1 },
-                BuildupUnit = Core.Objects.Unit.m,
+                AssemblyUnit = Core.Objects.Unit.m,
                 Description = "TestDescription ccc",
                 CalculationComponents = new List<CalculationComponent>
                 {

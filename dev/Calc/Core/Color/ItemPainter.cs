@@ -27,7 +27,7 @@ namespace Calc.Core.Color
             }
         }
 
-        public static void ColorBranchesByBuildup(List<Branch> branches)
+        public static void ColorBranchesByAssembly(List<Branch> branches)
         {
             var allBranches = new List<IColorizable>();
             foreach (var branch in branches)

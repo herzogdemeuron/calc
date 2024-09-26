@@ -53,7 +53,7 @@ namespace Calc.MVVM.Services
                 LifeSpan = store.ProjectSelected.LifeSpan,
                 Stages = store.ProjectSelected.Stages,
                 ImpactCategories = store.ProjectSelected.ImpactCategories,
-                BuildupSnapshots = bSnapshot
+                AssemblySnapshots = bSnapshot
             };
             return snapshot;
         }

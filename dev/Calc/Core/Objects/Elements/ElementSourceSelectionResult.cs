@@ -5,13 +5,13 @@ namespace Calc.Core.Objects.Elements
 {
     public class ElementSourceSelectionResult
     {
-        public string BuildupCode { get; set; }
-        public string BuildupName { get; set; }
-        public Unit BuildupUnit { get; set; }
-        public AssemblyGroup BuildupGroup { get; set; }
+        public string AssemblyCode { get; set; }
+        public string AssemblyName { get; set; }
+        public Unit AssemblyUnit { get; set; }
+        public AssemblyGroup AssemblyGroup { get; set; }
         public string Description { get; set; }
         public Dictionary<string, string> Parameters { get; set; }
-        public List<AssemblyComponent> BuildupComponents { get; set; }
+        public List<AssemblyComponent> AssemblyComponents { get; set; }
 
         /// <summary>
         /// apply the assembly record to current result, so that the assembly components are mapped with the same materials
@@ -19,24 +19,24 @@ namespace Calc.Core.Objects.Elements
         /// apply the components from the record to the current component with the same name and same layers
         /// duplicate current component names would be ignored to avoid confusion
         /// </summary>
-        public void ApplyBuildupRecord(AssemblyRecord record, CalcStore store)
+        public void ApplyAssemblyRecord(AssemblyRecord record, CalcStore store)
         {
             if (record == null) return;
 
-            BuildupName = record.BuildupName;
+            AssemblyName = record.AssemblyName;
             Description = record.Description;
-            BuildupUnit = record.BuildupUnit;
-            BuildupGroup = store.BuildupGroupsAll.Find(g => g.Id == record.BuildupGroup.Id);
+            AssemblyUnit = record.AssemblyUnit;
+            AssemblyGroup = store.AssemblyGroupsAll.Find(g => g.Id == record.AssemblyGroup.Id);
 
-            if (BuildupComponents == null || BuildupComponents.Count == 0) return;
+            if (AssemblyComponents == null || AssemblyComponents.Count == 0) return;
 
             // link materials to the record components
             record.Components.ForEach(component => LinkMaterials(component, store));
 
-            foreach ( var currentComponent in BuildupComponents) 
+            foreach ( var currentComponent in AssemblyComponents) 
             {
                 var currentName = currentComponent.Name;
-                if (BuildupComponents.FindAll(c => c.Name == currentName).Count > 1) continue;
+                if (AssemblyComponents.FindAll(c => c.Name == currentName).Count > 1) continue;
 
                 var recordComponent = record.Components.Find(c => CheckComponentEquality(currentComponent, c));
                 if (recordComponent == null) continue;

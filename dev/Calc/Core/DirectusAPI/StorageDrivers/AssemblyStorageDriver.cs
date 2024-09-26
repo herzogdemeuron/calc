@@ -58,7 +58,7 @@ namespace Calc.Core.DirectusAPI.Drivers
 
         // this is a sample query, should be adjusted
         public string QueryCreateSingle { get; } = @"
-            mutation CreateBuildup($input: create_calc_assemblies_input!) {
+            mutation CreateAssembly($input: create_calc_assemblies_input!) {
               create_calc_assemblies_item(data: $input) {
                 id
               }
@@ -67,7 +67,7 @@ namespace Calc.Core.DirectusAPI.Drivers
 
         // this is a sample query, should be adjusted
         public string QueryUpdateSingle { get; } = @"
-            mutation UpdateBuildup($id: ID!, $input: update_calc_assemblies_input!) {
+            mutation UpdateAssembly($id: ID!, $input: update_calc_assemblies_input!) {
               update_calc_assemblies_item(id: $id, data: $input) {
                 id
               }
@@ -108,7 +108,7 @@ namespace Calc.Core.DirectusAPI.Drivers
             {
                 name = SendItem.Name,
                 code = SendItem.Code,
-                assembly_unit = SendItem.BuildupUnit,
+                assembly_unit = SendItem.AssemblyUnit,
                 group = new { id = SendItem.Group.Id },
                 description = SendItem.Description,
 
@@ -131,9 +131,9 @@ namespace Calc.Core.DirectusAPI.Drivers
                     }
                     ).ToArray(),
 
-                carbon_a1a3 = SendItem.BuildupGwp,
-                grey_energy_fabrication_total = SendItem.BuildupGe,
-                assembly_snapshot = JsonConvert.SerializeObject(SendItem.BuildupSnapshot),
+                carbon_a1a3 = SendItem.AssemblyGwp,
+                grey_energy_fabrication_total = SendItem.AssemblyGe,
+                assembly_snapshot = JsonConvert.SerializeObject(SendItem.AssemblySnapshot),
                 speckle_model_id = SendItem.SpeckleModelId,
                 speckle_project_id = SendItem.SpeckleProjectId
             };
@@ -142,11 +142,11 @@ namespace Calc.Core.DirectusAPI.Drivers
                         .GetProperties()
                         .ToDictionary(prop => prop.Name, prop => prop.GetValue(input, null));
 
-            if (SendItem.BuildupImage != null)
+            if (SendItem.AssemblyImage != null)
             {
                 inputDict.Add("image", new
                 {
-                    id = SendItem.BuildupImage.Id,
+                    id = SendItem.AssemblyImage.Id,
                     storage = "cloud",
                     filename_download = $"{SendItem.Name}.png"
                 });

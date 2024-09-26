@@ -43,12 +43,12 @@ namespace Calc.RevitConnector.Revit
             var basicParamConfigs = GetParamSettings(customParamSettings);
             var elementSelectionSet = SelectionHelper.SelectElements(uidoc);
             groupTypeId = elementSelectionSet.RevitGroupTypeId;
-            var components = ComponentCreator.CreateBuildupComponents(elementSelectionSet.ElementIds, basicParamConfigs);
+            var components = ComponentCreator.CreateAssemblyComponents(elementSelectionSet.ElementIds, basicParamConfigs);
             return new ElementSourceSelectionResult()
             {
-                BuildupCode = elementSelectionSet.RevitGroupName,
+                AssemblyCode = elementSelectionSet.RevitGroupName,
                 Parameters = elementSelectionSet.Parameters,
-                BuildupComponents = components
+                AssemblyComponents = components
             };
         }
 
@@ -56,21 +56,21 @@ namespace Calc.RevitConnector.Revit
         /// serialize the assembly record and store back to revit group type
         /// write record to group type parameter 'Type Comments' in a transaction
         /// </summary>
-        public void SaveBuildupRecord(string nCode, string newName, Unit newBuildupUnit,AssemblyGroup newBuildupGroup, string newDescription, List<AssemblyComponent> newComponents)
+        public void SaveAssemblyRecord(string nCode, string newName, Unit newAssemblyUnit,AssemblyGroup newAssemblyGroup, string newDescription, List<AssemblyComponent> newComponents)
         {
             newCode = nCode;
             assemblyRecord = new AssemblyRecord()
             {
-                BuildupName = newName,
-                BuildupGroup = newBuildupGroup,
-                BuildupUnit = newBuildupUnit,
+                AssemblyName = newName,
+                AssemblyGroup = newAssemblyGroup,
+                AssemblyUnit = newAssemblyUnit,
                 Description = newDescription,
                 Components = newComponents
             };
-            eventHandler.Raise(StoreBuildupRecord);
+            eventHandler.Raise(StoreAssemblyRecord);
         }
 
-        public void StoreBuildupRecord()
+        public void StoreAssemblyRecord()
         {
             var recordObject = assemblyRecord.SerializeRecord();
             var groupType = doc.GetElement(new ElementId(groupTypeId)) as GroupType;
@@ -92,7 +92,7 @@ namespace Calc.RevitConnector.Revit
         /// <summary>
         /// get the assembly record from the group type parameter 'Type Comments'
         /// </summary>
-        public AssemblyRecord GetBuildupRecord()
+        public AssemblyRecord GetAssemblyRecord()
         {
             var groupType = doc.GetElement(new ElementId(groupTypeId)) as GroupType;
             var recordString = groupType?.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_COMMENTS)?.AsString();

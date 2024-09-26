@@ -11,13 +11,13 @@ namespace Calc.Core.Snapshots
         [JsonProperty("element_group")]
         public string ElementGroup { get; set; } // tree
         [JsonProperty("assembly_name")]
-        public string BuildupName { get; set; }
+        public string AssemblyName { get; set; }
         [JsonProperty("assembly_code")]
-        public string BuildupCode { get; set; }
+        public string AssemblyCode { get; set; }
         [JsonProperty("assembly_group")]
-        public string BuildupGroup { get; set; }
+        public string AssemblyGroup { get; set; }
         [JsonProperty("assembly_unit")]
-        public Unit BuildupUnit { get; set; }
+        public Unit AssemblyUnit { get; set; }
         [JsonProperty("element_type_id")]
         public string ElementTypeId { get; set; }
         [JsonProperty("element_ids")]
@@ -36,7 +36,7 @@ namespace Calc.Core.Snapshots
         /// </summary>
         public void ClaimElement(CalcElement element, string elementGroup)
         {
-            ElementAmount = element.GetBasicUnitParameter(BuildupUnit).Amount??0;
+            ElementAmount = element.GetBasicUnitParameter(AssemblyUnit).Amount??0;
             ElementIds = new List<string> { element.Id };
             ElementGroup = elementGroup;
             foreach (var material in MaterialSnapshots)
@@ -55,10 +55,10 @@ namespace Calc.Core.Snapshots
             return new AssemblySnapshot
             {
                 ElementGroup = ElementGroup,
-                BuildupName = BuildupName,
-                BuildupCode = BuildupCode,
-                BuildupGroup = BuildupGroup,
-                BuildupUnit = BuildupUnit,
+                AssemblyName = AssemblyName,
+                AssemblyCode = AssemblyCode,
+                AssemblyGroup = AssemblyGroup,
+                AssemblyUnit = AssemblyUnit,
                 ElementTypeId = ElementTypeId,
                 ElementIds = ElementIds,
                 ElementAmount = ElementAmount,

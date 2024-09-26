@@ -141,23 +141,23 @@ namespace Calc.Core.Objects.GraphNodes
         }
 
         [JsonIgnore]
-        public bool HasCalculationResults => (BuildupSnapshots != null && BuildupSnapshots.Count > 0);
+        public bool HasCalculationResults => (AssemblySnapshots != null && AssemblySnapshots.Count > 0);
         private List<AssemblySnapshot> assemblySnapshots = new();
         [JsonIgnore]
-        public List<AssemblySnapshot> BuildupSnapshots
+        public List<AssemblySnapshot> AssemblySnapshots
         {
             get
             {
                 if (SubBranches.Count > 0)
                 {
-                    return SubBranches.SelectMany(sb => sb.BuildupSnapshots ?? new List<AssemblySnapshot>()).ToList();
+                    return SubBranches.SelectMany(sb => sb.AssemblySnapshots ?? new List<AssemblySnapshot>()).ToList();
                 }
                 return assemblySnapshots;
             }
             set
             {
                 assemblySnapshots = value;
-                OnPropertyChanged(nameof(BuildupSnapshots));
+                OnPropertyChanged(nameof(AssemblySnapshots));
             }
         }
 
@@ -190,7 +190,7 @@ namespace Calc.Core.Objects.GraphNodes
                     {
                         if (component == null) continue;
 
-                        BasicParameter param = element.GetBasicUnitParameter(assembly.BuildupUnit);
+                        BasicParameter param = element.GetBasicUnitParameter(assembly.AssemblyUnit);
 
                         if (param.ErrorType != null)
                         {
@@ -381,26 +381,26 @@ namespace Calc.Core.Objects.GraphNodes
         /// are also present in subbranches that have an assembly assigned.
         /// In the bigger picture, this allows to override assemblies further down the tree.
         /// </summary>
-        public void RemoveElementsByBuildupOverrides()
+        public void RemoveElementsByAssemblyOverrides()
         {
             if (Assemblies != null && SubBranches.Count > 0)
             {
                 // get all elements with assembly from subbranches
-                var subElementsWithBuildup = SubBranches
+                var subElementsWithAssembly = SubBranches
                     .Where(sb => sb.Assemblies != null)
                     .Where(sb => sb.Assemblies.Count > 0)
                     .SelectMany(sb => sb.Elements)
                     .ToList();
                 // remove subelements with assembly from elements of current branch
                 Elements = Elements
-                    .Where(e => !subElementsWithBuildup.Contains(e))
+                    .Where(e => !subElementsWithAssembly.Contains(e))
                     .ToList();
             }
             if (SubBranches.Count > 0)
             {
                 foreach (var subBranch in SubBranches)
                 {
-                    subBranch.RemoveElementsByBuildupOverrides();
+                    subBranch.RemoveElementsByAssemblyOverrides();
                 }
             }
         }
@@ -427,7 +427,7 @@ namespace Calc.Core.Objects.GraphNodes
         public void PrintTree(int indentLevel = 0)
         {
             string indentation = new(' ', indentLevel * 4);
-            Console.WriteLine($"{indentation}∟: Elements: {Elements.Count}, Param: {Parameter}, Value: {Value}, Method: {Method}, Color: {HslColor.H}, Buildup: {Assemblies}");
+            Console.WriteLine($"{indentation}∟: Elements: {Elements.Count}, Param: {Parameter}, Value: {Value}, Method: {Method}, Color: {HslColor.H}, Assembly: {Assemblies}");
 
             foreach (var subBranch in SubBranches)
             {

@@ -62,7 +62,7 @@ namespace Calc.Core.TestIntegration.ColorTests
 
             // Act
             List<Branch> branches = this.Trees.ConvertAll(tree => (Branch)tree);
-            BranchPainter.ColorBranchesByBuildup(branches);
+            BranchPainter.ColorBranchesByAssembly(branches);
 
             // Assert
             foreach (var tree in this.Trees)

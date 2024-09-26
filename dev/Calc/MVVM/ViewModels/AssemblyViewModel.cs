@@ -10,7 +10,7 @@ using Calc.MVVM.Models;
 namespace Calc.MVVM.ViewModels
 {
 
-    public class BuildupViewModel : INotifyPropertyChanged
+    public class AssemblyViewModel : INotifyPropertyChanged
     {
         private readonly NodeModel _node;
         private bool _inheritEnabled = false;
@@ -34,52 +34,52 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        private bool _canAddFirstBuildup = false;
-        public bool CanAddFirstBuildup
+        private bool _canAddFirstAssembly = false;
+        public bool CanAddFirstAssembly
         {
-            get => _canAddFirstBuildup;
+            get => _canAddFirstAssembly;
             set
             {
-                _canAddFirstBuildup = value;
-                OnPropertyChanged(nameof(CanAddFirstBuildup));
+                _canAddFirstAssembly = value;
+                OnPropertyChanged(nameof(CanAddFirstAssembly));
             }
         }
 
-        private bool _canAddSecondBuildup = false;
-        public bool CanAddSecondBuildup
+        private bool _canAddSecondAssembly = false;
+        public bool CanAddSecondAssembly
         {
-            get => _canAddSecondBuildup;
+            get => _canAddSecondAssembly;
             set
             {
-                _canAddSecondBuildup = value;
-                OnPropertyChanged(nameof(CanAddSecondBuildup));
+                _canAddSecondAssembly = value;
+                OnPropertyChanged(nameof(CanAddSecondAssembly));
             }
         }
 
 
        
 
-        public Assembly Buildup1
+        public Assembly Assembly1
         {
             get => CurrentAssemblies?.Count > 0 ? CurrentAssemblies[0] : null;
             set
             {
-                UpdateBuildup(0, value);
-                UpdateBuildupSection(false);
+                UpdateAssembly(0, value);
+                UpdateAssemblySection(false);
                 //the combobox selection change due to node item selection change does not
                 //belong to assembly selection change broadcast
-                MediatorFromVM.Broadcast("BuildupSelectionChanged");
+                MediatorFromVM.Broadcast("AssemblySelectionChanged");
             }
         }
 
-        public Assembly Buildup2
+        public Assembly Assembly2
         {
             get => CurrentAssemblies?.Count > 1 ? CurrentAssemblies[1] : null;
             set
             {
-                UpdateBuildup(1, value);
-                UpdateBuildupSection(false);
-                MediatorFromVM.Broadcast("BuildupSelectionChanged");
+                UpdateAssembly(1, value);
+                UpdateAssemblySection(false);
+                MediatorFromVM.Broadcast("AssemblySelectionChanged");
             }
         }
 
@@ -88,37 +88,37 @@ namespace Calc.MVVM.ViewModels
             get => _node?.Host is Branch branch ? branch.Assemblies : null;
         }
 
-        private Assembly _activeBuildup;
-        public Assembly ActiveBuildup
+        private Assembly _activeAssembly;
+        public Assembly ActiveAssembly
         {
-            get => _activeBuildup;
+            get => _activeAssembly;
             set
             {
-                if (_activeBuildup != value)
+                if (_activeAssembly != value)
                 {
-                    _activeBuildup = value;
-                    OnPropertyChanged(nameof(ActiveBuildup));
+                    _activeAssembly = value;
+                    OnPropertyChanged(nameof(ActiveAssembly));
                 }
             }
         }
 
 
-        public BuildupViewModel(NodeModel node)
+        public AssemblyViewModel(NodeModel node)
         {
-            MediatorFromVM.Register("NodeItemSelectionChanged", _ => UpdateBuildupSection()); // if not, the assembly section sometimes not update,(parent reduced to zero, children remain all enabled), how to solve?
-            MediatorFromVM.Register("MappingSelectionChanged", _ => UpdateBuildupSection());
+            MediatorFromVM.Register("NodeItemSelectionChanged", _ => UpdateAssemblySection()); // if not, the assembly section sometimes not update,(parent reduced to zero, children remain all enabled), how to solve?
+            MediatorFromVM.Register("MappingSelectionChanged", _ => UpdateAssemblySection());
             _node = node;
         }
 
-        public void SetBuildup(bool setMain, Assembly assembly)
+        public void SetAssembly(bool setMain, Assembly assembly)
         {
             if (setMain)
             {
-                Buildup1 = assembly;
+                Assembly1 = assembly;
             }
             else
             {
-                Buildup2 = assembly;
+                Assembly2 = assembly;
             }
         }
 
@@ -126,37 +126,37 @@ namespace Calc.MVVM.ViewModels
         /// Notify the ui change of the assembly properties and the buttons,
         /// broadcast the assembly change to other viewmodels
         /// </summary>
-        public void UpdateBuildupSection(bool setFirstBuildupActive = true)
+        public void UpdateAssemblySection(bool setFirstAssemblyActive = true)
         {
-            OnPropertyChanged(nameof(Buildup1));
-            OnPropertyChanged(nameof(Buildup2));
+            OnPropertyChanged(nameof(Assembly1));
+            OnPropertyChanged(nameof(Assembly2));
             OnPropertyChanged(nameof(CurrentAssemblies));
 
 
             CheckInheritEnabled();
             CheckRemoveEnabled();
-            CheckAddBuildup();
+            CheckAddAssembly();
 
-            OnPropertyChanged(nameof(CanAddFirstBuildup));
-            OnPropertyChanged(nameof(CanAddSecondBuildup));
+            OnPropertyChanged(nameof(CanAddFirstAssembly));
+            OnPropertyChanged(nameof(CanAddSecondAssembly));
             OnPropertyChanged(nameof(InheritEnabled));
             OnPropertyChanged(nameof(RemoveEnabled));
 
-            if (setFirstBuildupActive)
+            if (setFirstAssemblyActive)
             {
-                SetFirstBuildupToActive();
+                SetFirstAssemblyToActive();
             }
         }
 
-        public void SetFirstBuildupToActive()
+        public void SetFirstAssemblyToActive()
         {
             if (CurrentAssemblies?.Count > 0)
             {
-                ActiveBuildup = CurrentAssemblies[0];
+                ActiveAssembly = CurrentAssemblies[0];
             }
         }
 
-        private void UpdateBuildup(int index, Assembly assembly)
+        private void UpdateAssembly(int index, Assembly assembly)
         {
             if (_node == null || !(_node.Host is Branch) || _node.Host == null)
                 return;
@@ -174,33 +174,33 @@ namespace Calc.MVVM.ViewModels
             }
 
             branch.SetAssemblies(newAssemblies);
-            ActiveBuildup = assembly;
+            ActiveAssembly = assembly;
 
-            UpdateBuildupSection(false);
+            UpdateAssemblySection(false);
         }
 
-        public void CheckAddBuildup()
+        public void CheckAddAssembly()
         {
 
             if (_node.Host is Branch branch)
             {
-                CanAddFirstBuildup = true;
+                CanAddFirstAssembly = true;
 
                 var assemblies = branch.Assemblies;
                 if (assemblies != null && assemblies.Count > 0)
                 {
-                    CanAddSecondBuildup = true;
+                    CanAddSecondAssembly = true;
                 }
                 else
                 {
-                    CanAddSecondBuildup = false;
+                    CanAddSecondAssembly = false;
                 }
 
             }
             else
             {
-                CanAddFirstBuildup = false;
-                CanAddSecondBuildup = false;
+                CanAddFirstAssembly = false;
+                CanAddSecondAssembly = false;
             }
 
 
@@ -240,10 +240,10 @@ namespace Calc.MVVM.ViewModels
             newAssemblies.RemoveAt(newAssemblies.Count - 1);
             branch.SetAssemblies(newAssemblies);
             var assemblyCount = newAssemblies.Count;
-            ActiveBuildup = assemblyCount > 0 ? newAssemblies[assemblyCount - 1] : null;
+            ActiveAssembly = assemblyCount > 0 ? newAssemblies[assemblyCount - 1] : null;
 
-            MediatorFromVM.Broadcast("BuildupSelectionChanged");
-            UpdateBuildupSection();
+            MediatorFromVM.Broadcast("AssemblySelectionChanged");
+            UpdateAssemblySection();
         }
 
         public void HandleInherit()
@@ -254,8 +254,8 @@ namespace Calc.MVVM.ViewModels
             if (!(host is Branch branch))
                 return;
             branch.InheritMapping();
-            MediatorFromVM.Broadcast("BuildupSelectionChanged");
-            UpdateBuildupSection();
+            MediatorFromVM.Broadcast("AssemblySelectionChanged");
+            UpdateAssemblySection();
         }
 
         

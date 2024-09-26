@@ -171,15 +171,15 @@
                                     <TextBlock.ToolTip>
                                         <ToolTip>
                                             <StackPanel>
-                                                <TextBlock Text="{Binding MappingErrorVM.Buildup1}"/>
-                                                <TextBlock Text="{Binding MappingErrorVM.Buildup2}"/>
+                                                <TextBlock Text="{Binding MappingErrorVM.Assembly1}"/>
+                                                <TextBlock Text="{Binding MappingErrorVM.Assembly2}"/>
                                             </StackPanel>
                                         </ToolTip>
                                     </TextBlock.ToolTip>
                     <TextBlock.Inlines>
-                        <Run Text="{Binding MappingErrorVM.Buildup1, Mode=OneWay}"/>
+                        <Run Text="{Binding MappingErrorVM.Assembly1, Mode=OneWay}"/>
                         <LineBreak/>
-                        <Run Text="{Binding MappingErrorVM.Buildup2, Mode=OneWay}"/>
+                        <Run Text="{Binding MappingErrorVM.Assembly2, Mode=OneWay}"/>
                     </TextBlock.Inlines>
                 </TextBlock>
 
@@ -343,7 +343,7 @@
 
             </Grid>
 
-            <Grid x:Name="BuildupGrid"
+            <Grid x:Name="AssemblyGrid"
                   DockPanel.Dock="Bottom"
                   Grid.Column="2"
                   Grid.Row="3"
@@ -365,7 +365,7 @@
                        Padding="0"
                        FontSize="18"/>
 
-                <DockPanel x:Name="BuildupSelection"
+                <DockPanel x:Name="AssemblySelection"
                            Grid.Row="1"
                            Height="60">
                     
@@ -376,35 +376,35 @@
                         <Button Style="{StaticResource ButtonStyle}"
                                 ToolTip="Reset"
                                 Uid="pack://application:,,,/CalcMVVM;component/Resources/button_back.png"
-                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.InheritEnabled}"
+                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeAssemblyItem.InheritEnabled}"
                                 Click="InheritClicked"/>
 
                         <Button Style="{StaticResource ButtonStyle}"
                                 ToolTip="Remove"
                                 Uid="pack://application:,,,/CalcMVVM;component/Resources/button_delete.png"
                                 Margin="0,10,0,0"
-                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.RemoveEnabled}"
+                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeAssemblyItem.RemoveEnabled}"
                                 Click="RemoveClicked"/>
                         
                     </StackPanel>
                     <StackPanel DockPanel.Dock="Left">
                         
-                        <Button Content="{Binding  NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup1.Name}"
-                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CanAddFirstBuildup}"
+                        <Button Content="{Binding  NodeTreeVM.SelectedNodeItem.NodeAssemblyItem.Assembly1.Name}"
+                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeAssemblyItem.CanAddFirstAssembly}"
                                 d:Content=""
                                 Tag="Select First Assembly"
                                 HorizontalAlignment="Stretch"
                                 Style="{StaticResource ButtonStyle}"
-                                Click="SetBuildupClicked"/>
+                                Click="SetAssemblyClicked"/>
 
-                        <Button Content="{Binding  NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup2.Name}"
-                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CanAddSecondBuildup}"
+                        <Button Content="{Binding  NodeTreeVM.SelectedNodeItem.NodeAssemblyItem.Assembly2.Name}"
+                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeAssemblyItem.CanAddSecondAssembly}"
                                 d:Content=""
                                 Margin="0,10,0,0"
                                 Tag="Select Second Assembly"
                                 HorizontalAlignment="Stretch"
                                 Style="{StaticResource ButtonStyle}"
-                                Click="SetBuildupClicked"/>
+                                Click="SetAssemblyClicked"/>
 
                     </StackPanel>
                 </DockPanel>
@@ -416,11 +416,11 @@
                         BorderBrush="Silver"
                         BorderThickness="1,1,1,1"                        
                         CornerRadius="4"/>
-                    <TabControl x:Name="BuildupTabs"
+                    <TabControl x:Name="AssemblyTabs"
                             BorderThickness="0"
                             Background="Transparent"
-                            ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CurrentAssemblies}"
-                            SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.ActiveBuildup}"
+                            ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeAssemblyItem.CurrentAssemblies}"
+                            SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeAssemblyItem.ActiveAssembly}"
                             ItemContainerStyle="{StaticResource TabItemStyle}">
 
                         <TabControl.ContentTemplate>
@@ -437,7 +437,7 @@
                                         </Grid.ColumnDefinitions>
 
                                         <StackPanel Grid.Column="0">
-                                            <TextBlock Text="{Binding  BuildupUnit}"
+                                            <TextBlock Text="{Binding  AssemblyUnit}"
                                                        FontWeight="Bold"
                                                        FontStyle="Italic"                                  
                                                        HorizontalAlignment="Center"/>
@@ -448,7 +448,7 @@
                                         </StackPanel>
                                         
                                         <StackPanel Grid.Column="1">
-                                            <TextBlock Text="{Binding  BuildupGwp, StringFormat={}{0:F2}}"
+                                            <TextBlock Text="{Binding  AssemblyGwp, StringFormat={}{0:F2}}"
                                                        FontWeight="Bold"
                                                        FontStyle="Italic"                                  
                                                        HorizontalAlignment="Center"/>
@@ -459,7 +459,7 @@
                                         </StackPanel>
 
                                         <StackPanel Grid.Column="2">
-                                            <TextBlock Text="{Binding  BuildupGe, StringFormat={}{0:F2}}"
+                                            <TextBlock Text="{Binding  AssemblyGe, StringFormat={}{0:F2}}"
                                                         FontWeight="Bold"
                                                         FontStyle="Italic"                                  
                                                         HorizontalAlignment="Center"/>

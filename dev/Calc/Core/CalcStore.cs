@@ -25,8 +25,8 @@ namespace Calc.Core
         public List<Unit> UnitsAll { get; set; }
         public List<CalcProject> ProjectsAll { get { return ProjectDriver?.GotManyItems; } }
         public List<LcaStandard> StandardsAll { get { return StandardDriver?.GotManyItems; } }
-        public List<AssemblyGroup> BuildupGroupsAll { get { return BuildupGroupDriver?.GotManyItems; } }
-        public List<Assembly> AssembliesAll { get { return BuildupDriver?.GotManyItems; } }
+        public List<AssemblyGroup> AssemblyGroupsAll { get { return AssemblyGroupDriver?.GotManyItems; } }
+        public List<Assembly> AssembliesAll { get { return AssemblyDriver?.GotManyItems; } }
         public List<Mapping> MappingsAll { get { return MappingDriver?.GotManyItems; } }
         public List<CustomParamSetting> CustomParamSettingsAll { get { return CustomParamSettingDriver?.GotManyItems; } }
         public List<Material> MaterialsAll { get { return MaterialDriver?.GotManyItems; } }
@@ -76,8 +76,8 @@ namespace Calc.Core
         private StandardStorageDriver StandardDriver { get; set; }
         private MaterialStorageDriver MaterialDriver { get; set; }
         private MaterialFunctionStorageDriver MaterialFunctionStorageDriver { get; set; }
-        private AssemblyGroupStorageDriver BuildupGroupDriver { get; set; }
-        private AssemblyStorageDriver BuildupDriver { get; set; }
+        private AssemblyGroupStorageDriver AssemblyGroupDriver { get; set; }
+        private AssemblyStorageDriver AssemblyDriver { get; set; }
         private MappingStorageDriver MappingDriver { get; set; }
         private ForestStorageDriver ForestDriver { get; set; }
         private ProjectResultStorageDriver ResultDriver { get; set; }
@@ -98,8 +98,8 @@ namespace Calc.Core
             ProjectDriver = new ProjectStorageDriver();
             StandardDriver = new StandardStorageDriver();
             MaterialDriver = new MaterialStorageDriver();
-            BuildupDriver = new AssemblyStorageDriver();
-            BuildupGroupDriver = new AssemblyGroupStorageDriver();
+            AssemblyDriver = new AssemblyStorageDriver();
+            AssemblyGroupDriver = new AssemblyGroupStorageDriver();
             MappingDriver = new MappingStorageDriver();
             ForestDriver = new ForestStorageDriver();
             ResultDriver = new ProjectResultStorageDriver();
@@ -146,11 +146,11 @@ namespace Calc.Core
                 OnProgressChanged(50);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                BuildupGroupDriver = await DirectusDriver.GetMany<AssemblyGroupStorageDriver, AssemblyGroup>(BuildupGroupDriver);
+                AssemblyGroupDriver = await DirectusDriver.GetMany<AssemblyGroupStorageDriver, AssemblyGroup>(AssemblyGroupDriver);
                 OnProgressChanged(60);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                BuildupDriver = await DirectusDriver.GetMany<AssemblyStorageDriver, Assembly>(BuildupDriver);
+                AssemblyDriver = await DirectusDriver.GetMany<AssemblyStorageDriver, Assembly>(AssemblyDriver);
                 OnProgressChanged(70);
 
                 cancellationToken.ThrowIfCancellationRequested();
@@ -212,11 +212,11 @@ namespace Calc.Core
                 OnProgressChanged(50);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                BuildupGroupDriver = await DirectusDriver.GetMany<AssemblyGroupStorageDriver,AssemblyGroup>(BuildupGroupDriver);
+                AssemblyGroupDriver = await DirectusDriver.GetMany<AssemblyGroupStorageDriver,AssemblyGroup>(AssemblyGroupDriver);
                 OnProgressChanged(60);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                BuildupDriver = await DirectusDriver.GetMany<AssemblyStorageDriver,Assembly>(BuildupDriver);
+                AssemblyDriver = await DirectusDriver.GetMany<AssemblyStorageDriver,Assembly>(AssemblyDriver);
                 OnProgressChanged(80);
 
                 cancellationToken.ThrowIfCancellationRequested();
@@ -265,7 +265,7 @@ namespace Calc.Core
         /// </summary>
         private void LinkMaterials()
         {
-            BuildupDriver.LinkMaterials(MaterialDriver.GotManyItems);
+            AssemblyDriver.LinkMaterials(MaterialDriver.GotManyItems);
         }
 
 
@@ -374,19 +374,19 @@ namespace Calc.Core
             }
         }
 
-        public async Task SaveSingleBuildup(Assembly assembly)
+        public async Task SaveSingleAssembly(Assembly assembly)
         {
-            BuildupDriver.SendItem = assembly;
+            AssemblyDriver.SendItem = assembly;
 
             try
             {
-                await DirectusDriver.CreateSingle<AssemblyStorageDriver, Assembly>(BuildupDriver);
-                var id = BuildupDriver.CreatedItem?.Id;
+                await DirectusDriver.CreateSingle<AssemblyStorageDriver, Assembly>(AssemblyDriver);
+                var id = AssemblyDriver.CreatedItem?.Id;
                 // save the assembly back to assemblies all
                 if (id != null)
                 {
                     assembly.Id = id.Value;
-                    BuildupDriver.GotManyItems.Add(assembly);
+                    AssemblyDriver.GotManyItems.Add(assembly);
                 }
             }
             catch (Exception e)
@@ -398,22 +398,22 @@ namespace Calc.Core
         /// <summary>
         /// update an assembly with an existing id assigned
         /// </summary>
-        public async Task UpdateSingleBuildup(Assembly assembly)
+        public async Task UpdateSingleAssembly(Assembly assembly)
         {
-            BuildupDriver.SendItem = assembly;
+            AssemblyDriver.SendItem = assembly;
 
             try
             {
-                await DirectusDriver.UpdateSingle<AssemblyStorageDriver, Assembly>(BuildupDriver);
+                await DirectusDriver.UpdateSingle<AssemblyStorageDriver, Assembly>(AssemblyDriver);
                 // replace the assembly in assemblies all
-                var index = BuildupDriver.GotManyItems.FindIndex(b => b.Id == assembly.Id);
+                var index = AssemblyDriver.GotManyItems.FindIndex(b => b.Id == assembly.Id);
                 if (index != -1)
                 {
-                    BuildupDriver.GotManyItems[index] = assembly;
+                    AssemblyDriver.GotManyItems[index] = assembly;
                 }
                 else
                 {
-                    throw new Exception("Buildup not found, cannot update.");
+                    throw new Exception("Assembly not found, cannot update.");
                 }
             }
             catch (Exception e)

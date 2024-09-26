@@ -20,7 +20,7 @@ namespace Calc.Core.TestIntegration
                 mockData.Mapping.ApplyToTree(tree,mockData.Assemblies);
             }
             var trees = mockData.Forest.Trees;
-            Assert.IsNotNull(trees.SelectMany(t=>t.BuildupSnapshots));
+            Assert.IsNotNull(trees.SelectMany(t=>t.AssemblySnapshots));
         }
     }
 }

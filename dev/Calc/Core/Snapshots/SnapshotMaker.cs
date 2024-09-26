@@ -24,34 +24,34 @@ namespace Calc.Core.Snapshots
             
                 foreach (var assembly in branch.Assemblies)
                 {               
-                    var s = MakeBuildupSnapshot(assembly, element, branch.ParentTree.Name);
+                    var s = MakeAssemblySnapshot(assembly, element, branch.ParentTree.Name);
                     snapshots.AddRange(s);                    
                 }            
 
-            branch.BuildupSnapshots = MergeSnapshots(snapshots);
+            branch.AssemblySnapshots = MergeSnapshots(snapshots);
         }
 
 
         /// <summary>
         /// generate the snapshots for an assembly, 
-        /// the element type id should already be claimed in GetBuildupSnapshot
+        /// the element type id should already be claimed in GetAssemblySnapshot
         /// </summary>
         public static void Snap(Assembly assembly)
         {
-            var snapshots = MakeBuildupSnapshot(assembly);
-            assembly.BuildupSnapshot = MergeSnapshots(snapshots);
+            var snapshots = MakeAssemblySnapshot(assembly);
+            assembly.AssemblySnapshot = MergeSnapshots(snapshots);
         }
 
 
         /// <summary>
         /// make the snapshots for an assembly (of unit amount), (for a branch) claim the element to the snapshot
         /// </summary>
-        private static List<AssemblySnapshot> MakeBuildupSnapshot(Assembly assembly, CalcElement? element=null, string elementGroup=null)
+        private static List<AssemblySnapshot> MakeAssemblySnapshot(Assembly assembly, CalcElement? element=null, string elementGroup=null)
         {
             var snapshots = new List<AssemblySnapshot>();
             foreach (var component in assembly.CalculationComponents)
             {
-                var snapshot = GetBuildupSnapshot(component, assembly);
+                var snapshot = GetAssemblySnapshot(component, assembly);
                 if (element != null && elementGroup != null)
                 {
                     snapshot.ClaimElement(element.Value, elementGroup);
@@ -64,7 +64,7 @@ namespace Calc.Core.Snapshots
         /// <summary>
         /// get the assembly snapshot from a single calculation component in an assembly
         /// </summary>
-        private static AssemblySnapshot GetBuildupSnapshot(CalculationComponent caComponent, Assembly assembly)
+        private static AssemblySnapshot GetAssemblySnapshot(CalculationComponent caComponent, Assembly assembly)
         {
             var calculationComponents = assembly.CalculationComponents;
 
@@ -85,10 +85,10 @@ namespace Calc.Core.Snapshots
 
             var bSnapshot = new AssemblySnapshot
             {
-                BuildupName = assembly.Name,
-                BuildupCode = assembly.Code,
-                BuildupGroup = assembly.Group.Name,
-                BuildupUnit = assembly.BuildupUnit,
+                AssemblyName = assembly.Name,
+                AssemblyCode = assembly.Code,
+                AssemblyGroup = assembly.Group.Name,
+                AssemblyUnit = assembly.AssemblyUnit,
                 MaterialSnapshots = new List<MaterialSnapshot> { materialSnapshot }
             };
 
@@ -107,7 +107,7 @@ namespace Calc.Core.Snapshots
         /// </summary>
         public static List<AssemblySnapshot> MergeSnapshots(List<AssemblySnapshot> assemblySnapshots)
         {
-            var result = MergeBuildupSnapshots(assemblySnapshots);
+            var result = MergeAssemblySnapshots(assemblySnapshots);
             foreach (var snapshot in result)
             {
                 snapshot.MaterialSnapshots = MergeMaterialSnapshots(snapshot.MaterialSnapshots);
@@ -118,7 +118,7 @@ namespace Calc.Core.Snapshots
         /// <summary>
         /// merge assembly snapshots according to the same element_group && assembly_code && element_type_id
         /// </summary>
-        private static List<AssemblySnapshot> MergeBuildupSnapshots(List<AssemblySnapshot> assemblySnapshots)
+        private static List<AssemblySnapshot> MergeAssemblySnapshots(List<AssemblySnapshot> assemblySnapshots)
         {
             var result = new List<AssemblySnapshot>();
 
@@ -126,9 +126,9 @@ namespace Calc.Core.Snapshots
             {
                 var existingSnapshot = result.Find(s =>
                     s.ElementTypeId == bSnapshot.ElementTypeId &&
-                    s.BuildupCode == bSnapshot.BuildupCode &&
+                    s.AssemblyCode == bSnapshot.AssemblyCode &&
                     s.ElementGroup == bSnapshot.ElementGroup&&
-                    s.BuildupGroup == bSnapshot.BuildupGroup
+                    s.AssemblyGroup == bSnapshot.AssemblyGroup
                     );
 
                 if (existingSnapshot != null)

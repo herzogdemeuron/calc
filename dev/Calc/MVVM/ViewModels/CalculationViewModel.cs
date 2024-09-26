@@ -32,7 +32,7 @@ namespace Calc.MVVM.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        public List<AssemblySnapshot> BuildupSnapshots
+        public List<AssemblySnapshot> AssemblySnapshots
         {
             get
             {
@@ -41,11 +41,11 @@ namespace Calc.MVVM.ViewModels
                 var trees = forest.Trees;
                 if (trees == null || trees.Count() == 0)
                     return null;
-                return trees.SelectMany(t => t.BuildupSnapshots).ToList();
+                return trees.SelectMany(t => t.AssemblySnapshots).ToList();
             }
         }
 
-        public bool HasResults => (BuildupSnapshots != null && BuildupSnapshots.Count > 0);
+        public bool HasResults => (AssemblySnapshots != null && AssemblySnapshots.Count > 0);
 
         /// <summary>
         /// calculation for each element group
@@ -55,10 +55,10 @@ namespace Calc.MVVM.ViewModels
             get
             {
                 var calculation = new List<CategorizedResultModel>();
-                if (BuildupSnapshots == null)
+                if (AssemblySnapshots == null)
                     return null;
 
-                foreach (var snapshot in BuildupSnapshots)
+                foreach (var snapshot in AssemblySnapshots)
                 {
                     var cal = calculation.FirstOrDefault(c => c.Group == snapshot.ElementGroup);
                     if (cal == null)
@@ -150,7 +150,7 @@ namespace Calc.MVVM.ViewModels
         public CalculationViewModel(NodeTreeModel ntVM)
         {
             NodeTreeVM = ntVM;
-            MediatorFromVM.Register("BuildupSelectionChanged", _ => NotifyCalculationChanged());
+            MediatorFromVM.Register("AssemblySelectionChanged", _ => NotifyCalculationChanged());
             MediatorFromVM.Register("NodeItemSelectionChanged", _ => NotifyCalculationChanged());
             MediatorFromVM.Register("MappingSelectionChanged", _ => NotifyCalculationChanged());
         }

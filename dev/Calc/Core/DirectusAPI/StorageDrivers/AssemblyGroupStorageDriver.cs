@@ -12,7 +12,7 @@ namespace Calc.Core.DirectusAPI.Drivers
     public class AssemblyGroupStorageDriver : IDriverGetMany<AssemblyGroup>
     {
         public string QueryGetMany { get; } = @"
-            query GetBuildupGroups {
+            query GetAssemblyGroups {
                 calc_assembly_groups {
                     id
                     name
