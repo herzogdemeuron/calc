@@ -21,7 +21,7 @@ namespace Calc.Core.Snapshots
         public List<string> Stages { get; set; }
         [JsonProperty("impact_categories")]
         public List<string> ImpactCategories { get; set; }
-        [JsonProperty("buildups")]
-        public List<BuildupSnapshot> BuildupSnapshots { get; set; }
+        [JsonProperty("assemblies")]
+        public List<AssemblySnapshot> BuildupSnapshots { get; set; }
     }
 }

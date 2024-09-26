@@ -3,7 +3,7 @@ using Autodesk.Revit.UI;
 using Calc.Core.Interfaces;
 using Calc.Core.Objects;
 using Calc.Core.Objects.BasicParameters;
-using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.Elements;
 using Calc.RevitConnector.Config;
 using Calc.RevitConnector.Helpers;
@@ -15,13 +15,13 @@ using System.Windows.Documents;
 
 namespace Calc.RevitConnector.Revit
 {
-    public class BuildupComponentCreator 
+    public class AssemblyComponentCreator 
     {
         private readonly Document Doc;
         private readonly UIDocument Uidoc;
         private List<RevitBasicParamConfig> basicParamConfigs;
         private ElementSelectionSet ElementSelectionSet;
-        public BuildupComponentCreator(UIDocument uidoc)
+        public AssemblyComponentCreator(UIDocument uidoc)
         {
             Doc = uidoc.Document;
             Uidoc = uidoc;
@@ -29,12 +29,12 @@ namespace Calc.RevitConnector.Revit
 
 
         /// <summary>
-        /// create a list of buildup components from a list of element ids
+        /// create a list of assembly components from a list of element ids
         /// </summary>
-        public List<BuildupComponent> CreateBuildupComponents(List<ElementId> ids, List<RevitBasicParamConfig> bParamConfigs)
+        public List<AssemblyComponent> CreateBuildupComponents(List<ElementId> ids, List<RevitBasicParamConfig> bParamConfigs)
         {
             basicParamConfigs = bParamConfigs;
-            var result = new List<BuildupComponent>();
+            var result = new List<AssemblyComponent>();
             var elements = ids.Select(x => Doc.GetElement(x)).ToList();
             foreach (var element in elements)
             {
@@ -45,15 +45,15 @@ namespace Calc.RevitConnector.Revit
         }
 
         /// <summary>
-        /// create a buildup component from one element
+        /// create a assembly component from one element
         /// </summary>
-        private BuildupComponent CreateBuildupComponent(Element element)
+        private AssemblyComponent CreateBuildupComponent(Element element)
         {
             var layersSet = CreateLayerComponents(element);
             var layers = layersSet.Item1;
             var isCompound = layersSet.Item2;
             var thickness = GetTypeThickness(element, isCompound);
-            return new BuildupComponent
+            return new AssemblyComponent
             {
                 Thickness = thickness,
                 ElementIds = new List<int> { element.Id.IntegerValue },
@@ -61,14 +61,14 @@ namespace Calc.RevitConnector.Revit
                 Name = GetElementType(element)?.Name,
                 LayerComponents = layers,
                 IsCompoundElement = isCompound,
-                BasicParameterSet = GetTotalAmounts(element) //Total amount of the buildup component is not sumed up from the layers, but directly from the element
+                BasicParameterSet = GetTotalAmounts(element) //Total amount of the assembly component is not sumed up from the layers, but directly from the element
             };
         }
 
         /// <summary>
-        /// merge a buildup component to a list of buildup components if they have the same type
+        /// merge a assembly component to a list of assembly components if they have the same type
         /// </summary>
-        private void MergeBuildupComponentToList(List<BuildupComponent> List, BuildupComponent component)
+        private void MergeBuildupComponentToList(List<AssemblyComponent> List, AssemblyComponent component)
         {
             var originComponent = List.FirstOrDefault(x => x.Equals(component));
             if (originComponent != null)

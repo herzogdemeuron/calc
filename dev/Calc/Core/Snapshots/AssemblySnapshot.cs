@@ -6,24 +6,24 @@ using System.Linq;
 
 namespace Calc.Core.Snapshots
 {
-    public class BuildupSnapshot
+    public class AssemblySnapshot
     {
         [JsonProperty("element_group")]
         public string ElementGroup { get; set; } // tree
-        [JsonProperty("buildup_name")]
+        [JsonProperty("assembly_name")]
         public string BuildupName { get; set; }
-        [JsonProperty("buildup_code")]
+        [JsonProperty("assembly_code")]
         public string BuildupCode { get; set; }
-        [JsonProperty("buildup_group")]
+        [JsonProperty("assembly_group")]
         public string BuildupGroup { get; set; }
-        [JsonProperty("buildup_unit")]
+        [JsonProperty("assembly_unit")]
         public Unit BuildupUnit { get; set; }
         [JsonProperty("element_type_id")]
         public string ElementTypeId { get; set; }
         [JsonProperty("element_ids")]
         public List<string> ElementIds { get; set; } = new List<string>();
         [JsonProperty("element_amount")]
-        public double ElementAmount { get; set; } // uses the buildup unit
+        public double ElementAmount { get; set; } // uses the assembly unit
 
         [JsonProperty("materials")]
         public List<MaterialSnapshot> MaterialSnapshots { get; set; }
@@ -50,9 +50,9 @@ namespace Calc.Core.Snapshots
             ElementTypeId = elementTypeId;
         }
 
-        public BuildupSnapshot Copy()
+        public AssemblySnapshot Copy()
         {
-            return new BuildupSnapshot
+            return new AssemblySnapshot
             {
                 ElementGroup = ElementGroup,
                 BuildupName = BuildupName,

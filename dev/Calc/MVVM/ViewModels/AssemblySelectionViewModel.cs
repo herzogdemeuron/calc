@@ -1,5 +1,5 @@
 ﻿using Calc.Core;
-using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Assemblies;
 using Calc.MVVM.Helpers;
 using Calc.MVVM.Models;
 using System.Collections.Generic;
@@ -17,28 +17,28 @@ namespace Calc.MVVM.ViewModels
     {
 
         private readonly CalcStore calcStore;
-        public ICollectionView AllBuildupsView { get; }
+        public ICollectionView AllAssembliesView { get; }
         public List<StandardModel> AllStandards { get; }
-        public List<BuildupGroup> AllBuildupGroups { get; }
+        public List<AssemblyGroup> AllBuildupGroups { get; }
 
         private string currentSearchText;
-        private readonly BuildupGroup defaultGroup = new BuildupGroup() { Name = "All Groups", Id = 0 };
+        private readonly AssemblyGroup defaultGroup = new AssemblyGroup() { Name = "All Groups", Id = 0 };
 
-        private BuildupGroup selectedBuildupGroup;
-        public BuildupGroup SelectedBuildupGroup
+        private AssemblyGroup selectedBuildupGroup;
+        public AssemblyGroup SelectedBuildupGroup
         {
             get => selectedBuildupGroup;
             set
             {
                 if (value == selectedBuildupGroup) return;
                 selectedBuildupGroup = value;
-                FilterBuildupsWithType();
+                FilterAssembliesWithType();
                 OnPropertyChanged(nameof(SelectedBuildupGroup));
             }
         }
 
-        private Buildup selectedBuildup;
-        public Buildup SelectedBuildup
+        private Assembly selectedBuildup;
+        public Assembly SelectedBuildup
         {
             get => selectedBuildup;
             set
@@ -99,46 +99,46 @@ namespace Calc.MVVM.ViewModels
         }
 
         /// <summary>
-        /// Only show verified buildups
+        /// Only show verified assemblies
         /// </summary>
         public BuildupSelectionViewModel(CalcStore store)
         {
             calcStore = store;
-            AllBuildupsView = CollectionViewSource.GetDefaultView(store.BuildupsAll.Where(b => b.Verified).ToList());
+            AllAssembliesView = CollectionViewSource.GetDefaultView(store.AssembliesAll.Where(b => b.Verified).ToList());
             AllStandards = new List<StandardModel>(store.StandardsAll.Select(s => new StandardModel(s)));
-            AllBuildupGroups = new List<BuildupGroup>() { defaultGroup };
+            AllBuildupGroups = new List<AssemblyGroup>() { defaultGroup };
             AllBuildupGroups.AddRange(store.BuildupGroupsAll);
             SelectedBuildupGroup = defaultGroup;            
         }
 
-        public void PrepareBuildupSelection(Buildup buildup)
+        public void PrepareBuildupSelection(Assembly assembly)
         {
             CurrentImage = null;
             ImageText = "Image Preview";
 
             currentSearchText = "";
-            SelectedBuildup = buildup;
+            SelectedBuildup = assembly;
             SelectedBuildupGroup = defaultGroup;
-            FilterBuildupsWithType();
+            FilterAssembliesWithType();
         }
 
         public void HandleSourceCheckChanged()
         {
-            FilterBuildupsWithType();
+            FilterAssembliesWithType();
         }
 
-        private void FilterBuildupsWithType()
+        private void FilterAssembliesWithType()
         {
-            AllBuildupsView.Filter = (obj) =>
+            AllAssembliesView.Filter = (obj) =>
             {
-                var buildup = obj as Buildup;
+                var assembly = obj as Assembly;
                
                 // either name, material type or material type family contains the search text
-                var name = buildup.Name?.ToLower() ?? "";
-                var standards = buildup.StandardItems.Select(i => i.Standard.Name).ToList();
-                var code = buildup.Code?.ToLower() ?? "";
-                var description = buildup.Description?.ToLower() ?? "";
-                var groupEqual = SelectedBuildupGroup.Id == 0 || buildup.Group.Name == SelectedBuildupGroup.Name;
+                var name = assembly.Name?.ToLower() ?? "";
+                var standards = assembly.StandardItems.Select(i => i.Standard.Name).ToList();
+                var code = assembly.Code?.ToLower() ?? "";
+                var description = assembly.Description?.ToLower() ?? "";
+                var groupEqual = SelectedBuildupGroup.Id == 0 || assembly.Group.Name == SelectedBuildupGroup.Name;
 
                 if (!groupEqual) return false;
 
@@ -158,12 +158,12 @@ namespace Calc.MVVM.ViewModels
             };
         }
 
-        private async Task LoadBuildupImageAsync(Buildup buildup)
+        private async Task LoadBuildupImageAsync(Assembly assembly)
         {
-            if (buildup == null) return;
+            if (assembly == null) return;
 
             // try to load image if should
-            var imageItem = buildup.BuildupImage;
+            var imageItem = assembly.BuildupImage;
 
             if (imageItem != null && imageItem.Id != null && !imageItem.ImageLoaded)
             {
@@ -195,7 +195,7 @@ namespace Calc.MVVM.ViewModels
             var loadId = SelectedBuildup?.Id;
             await LoadBuildupImageAsync(SelectedBuildup);
 
-            // refresh the current image if the selected buildup has not changed
+            // refresh the current image if the selected assembly has not changed
             if (SelectedBuildup?.Id != loadId) return;
 
             var imageData = SelectedBuildup.BuildupImage?.ImageData;
@@ -214,7 +214,7 @@ namespace Calc.MVVM.ViewModels
         public void HandleSearchTextChanged(string currentText)
         {
             currentSearchText = currentText.ToLower();
-            FilterBuildupsWithType();
+            FilterAssembliesWithType();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

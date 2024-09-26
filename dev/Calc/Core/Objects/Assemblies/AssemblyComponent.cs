@@ -6,14 +6,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
-namespace Calc.Core.Objects.Buildups
+namespace Calc.Core.Objects.Assemblies
 
 {
     /// <summary>
     /// All instances of a revit/rhino type in the builder group.
     /// Includes all the layers and basic parameters.
     /// </summary>
-    public class BuildupComponent : INotifyPropertyChanged, ICalcComponent
+    public class AssemblyComponent : INotifyPropertyChanged, ICalcComponent
     {
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -71,7 +71,7 @@ namespace Calc.Core.Objects.Buildups
         public bool HasMaterial => LayerComponents.Any(l => l.HasMainMaterial);
 
         /// <summary>
-        /// serialize the buildup component with layers, whose main material is not null
+        /// serialize the assembly component with layers, whose main material is not null
         /// </summary>
         /// <returns></returns>
         public object SerializeRecord()
@@ -86,7 +86,7 @@ namespace Calc.Core.Objects.Buildups
             };
         }
 
-        public bool Equals(BuildupComponent component)
+        public bool Equals(AssemblyComponent component)
         {
             return TypeIdentifier == component.TypeIdentifier;
         }

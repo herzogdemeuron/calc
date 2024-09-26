@@ -48,7 +48,7 @@ namespace SpeckleSender
         /// sends the elements to a speckle project with the model name, return the branch id
         /// stream id hardcoded for now
         /// </summary>
-        public async Task<string> SendToSpeckle(List<int> elementIds, string modelCode, string buildupName, string description, Dictionary<string,string> dynamicProperties)
+        public async Task<string> SendToSpeckle(List<int> elementIds, string modelCode, string assemblyName, string description, Dictionary<string,string> dynamicProperties)
         {
             List<object> elementList = elementIds
                 .Select(id => doc.GetElement(new ElementId(id)))
@@ -59,7 +59,7 @@ namespace SpeckleSender
             var speckleBases = speckleConverter.ConvertToSpeckle(elementList);
             var commitObject = new Base();
             commitObject["assembly_code"] = modelCode;
-            commitObject["assembly_name"] = buildupName;
+            commitObject["assembly_name"] = assemblyName;
             commitObject["description"] = description;
             commitObject["@elements"] = speckleBases;
 

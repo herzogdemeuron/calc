@@ -55,10 +55,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MockData\MockBuildups.cs" />
-    <Compile Include="MockData\MockBuildupComponents.cs" />
+    <Compile Include="MockData\MockAssemblies.cs" />
+    <Compile Include="MockData\MockAssemblyComponents.cs" />
     <Compile Include="MockData\MockMaterials.cs" />
-    <Compile Include="BuildupTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

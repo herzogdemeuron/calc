@@ -1,7 +1,7 @@
 ﻿using Calc.Core.DirectusAPI;
 using Calc.Core.DirectusAPI.Drivers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Assemblies;
 using System.Threading.Tasks;
 using CCalc.DirectusTest.StorageDriverTests;
 using System.Collections.Generic;
@@ -70,27 +70,27 @@ namespace Calc.DirectusTest.StorageDriverTests
             Assert.IsInstanceOfType(response.GotManyItems, typeof(List<LcaStandard>));
             Assert.IsTrue(response.GotManyItems.Count > 0);
 
-            // serialize buildups to console using System.Text.Json, indent
-            var buildupsJson = System.Text.Json.JsonSerializer.Serialize(response, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
-            Console.WriteLine(buildupsJson);
+            // serialize assemblies to console using System.Text.Json, indent
+            var assembliesJson = System.Text.Json.JsonSerializer.Serialize(response, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+            Console.WriteLine(assembliesJson);
         }
 
         [TestMethod]
-        public async Task GetAllBuildups_Default_SpecifyLater()
+        public async Task GetAllAssemblies_Default_SpecifyLater()
         {
-            var storageManager = new DirectusManager<Buildup>(this.directus);
+            var storageManager = new DirectusManager<Assembly>(this.directus);
 
             // Act
-            var response = await storageManager.GetMany<BuildupStorageDriver>(new BuildupStorageDriver());
+            var response = await storageManager.GetMany<AssemblyStorageDriver>(new AssemblyStorageDriver());
 
             // Assert
             Assert.IsNotNull(response.GotManyItems);
-            Assert.IsInstanceOfType(response.GotManyItems, typeof(List<Buildup>));
+            Assert.IsInstanceOfType(response.GotManyItems, typeof(List<Assembly>));
             Assert.IsTrue(response.GotManyItems.Count > 0);
 
-            // serialize buildups to console using System.Text.Json, indent
-            var buildupsJson = System.Text.Json.JsonSerializer.Serialize(response, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
-            Console.WriteLine(buildupsJson);
+            // serialize assemblies to console using System.Text.Json, indent
+            var assembliesJson = System.Text.Json.JsonSerializer.Serialize(response, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+            Console.WriteLine(assembliesJson);
 
            /* var matstorageManager = new DirectusManager<Material>(this.directus);
             var matresponse = await matstorageManager.GetMany<MaterialStorageDriver>(new MaterialStorageDriver());
@@ -101,21 +101,21 @@ namespace Calc.DirectusTest.StorageDriverTests
         [TestMethod]
         public async Task CreateSingleBuildup()
         {
-            var storageManager = new DirectusManager<Buildup>(this.directus);
-            var buildup = MockBuildup();
-            var buildupDriver = new BuildupStorageDriver();
-            buildupDriver = await _graphqlRetry.ExecuteAsync(() =>
-                    storageManager.GetMany<BuildupStorageDriver>(buildupDriver));
+            var storageManager = new DirectusManager<Assembly>(this.directus);
+            var assembly = MockBuildup();
+            var assemblyDriver = new AssemblyStorageDriver();
+            assemblyDriver = await _graphqlRetry.ExecuteAsync(() =>
+                    storageManager.GetMany<AssemblyStorageDriver>(assemblyDriver));
 
-            buildupDriver.SendItem = buildup;
+            assemblyDriver.SendItem = assembly;
 
-            var response = await storageManager.CreateSingle<BuildupStorageDriver>(buildupDriver);
+            var response = await storageManager.CreateSingle<AssemblyStorageDriver>(assemblyDriver);
             Assert.IsNotNull(response.CreatedItem);
         }
 
-        private static Buildup MockBuildup()
+        private static Assembly MockBuildup()
         {
-            return new Buildup
+            return new Assembly
             {
                /* Name = "TestBuildup",
                 Standard = new LcaStandard { Id = 1 },

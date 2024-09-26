@@ -1,4 +1,4 @@
-﻿using Calc.Core.Objects.Buildups;
+﻿using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.Materials;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -6,13 +6,13 @@ using System.Linq;
 
 namespace Calc.Core.DirectusAPI.Drivers
 {
-    public class BuildupStorageDriver : IDriverGetMany<Buildup>, IDriverCreateSingle<Buildup>, IDriverUpdateSingle<Buildup>
+    public class AssemblyStorageDriver : IDriverGetMany<Assembly>, IDriverCreateSingle<Assembly>, IDriverUpdateSingle<Assembly>
     {
-        public Buildup SendItem { get; set; }
+        public Assembly SendItem { get; set; }
         public string QueryGetMany { get; } = @"
-            query GetBuildups {
+            query GetAssemblies {
 
-                calc_buildups {
+                calc_assemblies {
 
                     id
                     name
@@ -23,7 +23,7 @@ namespace Calc.Core.DirectusAPI.Drivers
                         name
                         }
                     }
-                    buildup_unit
+                    assembly_unit
                     group {
                         id
                         name
@@ -58,8 +58,8 @@ namespace Calc.Core.DirectusAPI.Drivers
 
         // this is a sample query, should be adjusted
         public string QueryCreateSingle { get; } = @"
-            mutation CreateBuildup($input: create_calc_buildups_input!) {
-              create_calc_buildups_item(data: $input) {
+            mutation CreateBuildup($input: create_calc_assemblies_input!) {
+              create_calc_assemblies_item(data: $input) {
                 id
               }
             }";
@@ -67,19 +67,19 @@ namespace Calc.Core.DirectusAPI.Drivers
 
         // this is a sample query, should be adjusted
         public string QueryUpdateSingle { get; } = @"
-            mutation UpdateBuildup($id: ID!, $input: update_calc_buildups_input!) {
-              update_calc_buildups_item(id: $id, data: $input) {
+            mutation UpdateBuildup($id: ID!, $input: update_calc_assemblies_input!) {
+              update_calc_assemblies_item(id: $id, data: $input) {
                 id
               }
             }";
 
 
-        [JsonProperty("calc_buildups")]
-        public List<Buildup> GotManyItems { get; set; }
-        [JsonProperty("create_calc_buildups_item")]
-        public Buildup CreatedItem { get; set; }
-        [JsonProperty("update_calc_buildups_item")]
-        public Buildup UpdatedItem { get; set; }
+        [JsonProperty("calc_assemblies")]
+        public List<Assembly> GotManyItems { get; set; }
+        [JsonProperty("create_calc_assemblies_item")]
+        public Assembly CreatedItem { get; set; }
+        [JsonProperty("update_calc_assemblies_item")]
+        public Assembly UpdatedItem { get; set; }
 
         /// <summary>
         /// assign materials from the store to the calculation components with their ids
@@ -88,9 +88,9 @@ namespace Calc.Core.DirectusAPI.Drivers
         /// <param name="materials"></param>
         public void LinkMaterials(List<Material> materials)
         {
-            foreach (var buildup in GotManyItems)
+            foreach (var assembly in GotManyItems)
             {
-                foreach (var calculationComponent in buildup.CalculationComponents)
+                foreach (var calculationComponent in assembly.CalculationComponents)
                 {
                     calculationComponent.LinkMaterial(materials);
                 }
@@ -108,7 +108,7 @@ namespace Calc.Core.DirectusAPI.Drivers
             {
                 name = SendItem.Name,
                 code = SendItem.Code,
-                buildup_unit = SendItem.BuildupUnit,
+                assembly_unit = SendItem.BuildupUnit,
                 group = new { id = SendItem.Group.Id },
                 description = SendItem.Description,
 
@@ -133,7 +133,7 @@ namespace Calc.Core.DirectusAPI.Drivers
 
                 carbon_a1a3 = SendItem.BuildupGwp,
                 grey_energy_fabrication_total = SendItem.BuildupGe,
-                buildup_snapshot = JsonConvert.SerializeObject(SendItem.BuildupSnapshot),
+                assembly_snapshot = JsonConvert.SerializeObject(SendItem.BuildupSnapshot),
                 speckle_model_id = SendItem.SpeckleModelId,
                 speckle_project_id = SendItem.SpeckleProjectId
             };

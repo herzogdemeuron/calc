@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using GraphQL;
 using Newtonsoft.Json;
-using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.Materials;
 using Calc.Core.Objects;
 

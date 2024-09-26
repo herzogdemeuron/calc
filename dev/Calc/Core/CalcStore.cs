@@ -1,7 +1,7 @@
 ﻿using Calc.Core.DirectusAPI;
 using Calc.Core.DirectusAPI.Drivers;
 using Calc.Core.Objects;
-using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.Elements;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Mappings;
@@ -25,8 +25,8 @@ namespace Calc.Core
         public List<Unit> UnitsAll { get; set; }
         public List<CalcProject> ProjectsAll { get { return ProjectDriver?.GotManyItems; } }
         public List<LcaStandard> StandardsAll { get { return StandardDriver?.GotManyItems; } }
-        public List<BuildupGroup> BuildupGroupsAll { get { return BuildupGroupDriver?.GotManyItems; } }
-        public List<Buildup> BuildupsAll { get { return BuildupDriver?.GotManyItems; } }
+        public List<AssemblyGroup> BuildupGroupsAll { get { return BuildupGroupDriver?.GotManyItems; } }
+        public List<Assembly> AssembliesAll { get { return BuildupDriver?.GotManyItems; } }
         public List<Mapping> MappingsAll { get { return MappingDriver?.GotManyItems; } }
         public List<CustomParamSetting> CustomParamSettingsAll { get { return CustomParamSettingDriver?.GotManyItems; } }
         public List<Material> MaterialsAll { get { return MaterialDriver?.GotManyItems; } }
@@ -76,8 +76,8 @@ namespace Calc.Core
         private StandardStorageDriver StandardDriver { get; set; }
         private MaterialStorageDriver MaterialDriver { get; set; }
         private MaterialFunctionStorageDriver MaterialFunctionStorageDriver { get; set; }
-        private BuildupGroupStorageDriver BuildupGroupDriver { get; set; }
-        private BuildupStorageDriver BuildupDriver { get; set; }
+        private AssemblyGroupStorageDriver BuildupGroupDriver { get; set; }
+        private AssemblyStorageDriver BuildupDriver { get; set; }
         private MappingStorageDriver MappingDriver { get; set; }
         private ForestStorageDriver ForestDriver { get; set; }
         private ProjectResultStorageDriver ResultDriver { get; set; }
@@ -98,8 +98,8 @@ namespace Calc.Core
             ProjectDriver = new ProjectStorageDriver();
             StandardDriver = new StandardStorageDriver();
             MaterialDriver = new MaterialStorageDriver();
-            BuildupDriver = new BuildupStorageDriver();
-            BuildupGroupDriver = new BuildupGroupStorageDriver();
+            BuildupDriver = new AssemblyStorageDriver();
+            BuildupGroupDriver = new AssemblyGroupStorageDriver();
             MappingDriver = new MappingStorageDriver();
             ForestDriver = new ForestStorageDriver();
             ResultDriver = new ProjectResultStorageDriver();
@@ -146,11 +146,11 @@ namespace Calc.Core
                 OnProgressChanged(50);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                BuildupGroupDriver = await DirectusDriver.GetMany<BuildupGroupStorageDriver, BuildupGroup>(BuildupGroupDriver);
+                BuildupGroupDriver = await DirectusDriver.GetMany<AssemblyGroupStorageDriver, AssemblyGroup>(BuildupGroupDriver);
                 OnProgressChanged(60);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                BuildupDriver = await DirectusDriver.GetMany<BuildupStorageDriver, Buildup>(BuildupDriver);
+                BuildupDriver = await DirectusDriver.GetMany<AssemblyStorageDriver, Assembly>(BuildupDriver);
                 OnProgressChanged(70);
 
                 cancellationToken.ThrowIfCancellationRequested();
@@ -212,11 +212,11 @@ namespace Calc.Core
                 OnProgressChanged(50);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                BuildupGroupDriver = await DirectusDriver.GetMany<BuildupGroupStorageDriver,BuildupGroup>(BuildupGroupDriver);
+                BuildupGroupDriver = await DirectusDriver.GetMany<AssemblyGroupStorageDriver,AssemblyGroup>(BuildupGroupDriver);
                 OnProgressChanged(60);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                BuildupDriver = await DirectusDriver.GetMany<BuildupStorageDriver,Buildup>(BuildupDriver);
+                BuildupDriver = await DirectusDriver.GetMany<AssemblyStorageDriver,Assembly>(BuildupDriver);
                 OnProgressChanged(80);
 
                 cancellationToken.ThrowIfCancellationRequested();
@@ -260,7 +260,7 @@ namespace Calc.Core
         }
 
         /// <summary>
-        /// the first query got materials, buildups and some other fields with id separately
+        /// the first query got materials, assemblies and some other fields with id separately
         /// link the fields with the right objects with id
         /// </summary>
         private void LinkMaterials()
@@ -374,19 +374,19 @@ namespace Calc.Core
             }
         }
 
-        public async Task SaveSingleBuildup(Buildup buildup)
+        public async Task SaveSingleBuildup(Assembly assembly)
         {
-            BuildupDriver.SendItem = buildup;
+            BuildupDriver.SendItem = assembly;
 
             try
             {
-                await DirectusDriver.CreateSingle<BuildupStorageDriver, Buildup>(BuildupDriver);
+                await DirectusDriver.CreateSingle<AssemblyStorageDriver, Assembly>(BuildupDriver);
                 var id = BuildupDriver.CreatedItem?.Id;
-                // save the buildup back to buildups all
+                // save the assembly back to assemblies all
                 if (id != null)
                 {
-                    buildup.Id = id.Value;
-                    BuildupDriver.GotManyItems.Add(buildup);
+                    assembly.Id = id.Value;
+                    BuildupDriver.GotManyItems.Add(assembly);
                 }
             }
             catch (Exception e)
@@ -396,20 +396,20 @@ namespace Calc.Core
         }
 
         /// <summary>
-        /// update a buildup with an existing id assigned
+        /// update a assembly with an existing id assigned
         /// </summary>
-        public async Task UpdateSingleBuildup(Buildup buildup)
+        public async Task UpdateSingleBuildup(Assembly assembly)
         {
-            BuildupDriver.SendItem = buildup;
+            BuildupDriver.SendItem = assembly;
 
             try
             {
-                await DirectusDriver.UpdateSingle<BuildupStorageDriver, Buildup>(BuildupDriver);
-                // replace the buildup in buildups all
-                var index = BuildupDriver.GotManyItems.FindIndex(b => b.Id == buildup.Id);
+                await DirectusDriver.UpdateSingle<AssemblyStorageDriver, Assembly>(BuildupDriver);
+                // replace the assembly in assemblies all
+                var index = BuildupDriver.GotManyItems.FindIndex(b => b.Id == assembly.Id);
                 if (index != -1)
                 {
-                    BuildupDriver.GotManyItems[index] = buildup;
+                    BuildupDriver.GotManyItems[index] = assembly;
                 }
                 else
                 {
@@ -455,7 +455,7 @@ namespace Calc.Core
                 return null;
             }
 
-            string folderId = FolderDriver.GetFolderId("calc_buildup_images");
+            string folderId = FolderDriver.GetFolderId("calc_assembly_images");
 
             return await Directus.UploadFileAsync("image", imagePath, folderId, newFileName);
         }

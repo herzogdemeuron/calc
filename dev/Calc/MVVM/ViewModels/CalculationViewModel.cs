@@ -32,7 +32,7 @@ namespace Calc.MVVM.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        public List<BuildupSnapshot> BuildupSnapshots
+        public List<AssemblySnapshot> BuildupSnapshots
         {
             get
             {

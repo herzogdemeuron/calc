@@ -114,16 +114,16 @@ namespace Calc.MVVM.ViewModels
         public bool HandleSelectingBuildup(bool setMain)
         {
             if (NodeTreeVM.SelectedNodeItem == null) return false;
-            var buildupItem = NodeTreeVM.SelectedNodeItem.NodeBuildupItem;
-            var buildup = setMain ? buildupItem.Buildup1 : buildupItem.Buildup2;
-            BuildupSelectionVM.PrepareBuildupSelection(buildup);
+            var assemblyItem = NodeTreeVM.SelectedNodeItem.NodeBuildupItem;
+            var assembly = setMain ? assemblyItem.Buildup1 : assemblyItem.Buildup2;
+            BuildupSelectionVM.PrepareBuildupSelection(assembly);
             return true;
         }
 
         public void HandleBuildupSelected(bool setMain)
         {
-            var buildup = BuildupSelectionVM.SelectedBuildup;
-            NodeTreeVM.SelectedNodeItem.NodeBuildupItem.SetBuildup(setMain,buildup);
+            var assembly = BuildupSelectionVM.SelectedBuildup;
+            NodeTreeVM.SelectedNodeItem.NodeBuildupItem.SetBuildup(setMain,assembly);
         }
 
         public void HandleSideClicked()

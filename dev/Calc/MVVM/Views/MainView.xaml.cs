@@ -164,8 +164,8 @@ namespace Calc.MVVM.Views
             SetBuildupWithTag(tag);
         }
 
-        // set the main or sub buildup calling the buildup selection view
-        // decide which buildup to set based on the tag
+        // set the main or sub assembly calling the assembly selection view
+        // decide which assembly to set based on the tag
         private void SetBuildupWithTag(string tag)
         {
             bool setMain = tag.Contains("Main");
@@ -173,8 +173,8 @@ namespace Calc.MVVM.Views
 
             if (!canSelect) return;
 
-            var buildupSelectionView = new BuildupSelectionView(MainVM.BuildupSelectionVM);
-            var result = buildupSelectionView.ShowDialog();
+            var assemblySelectionView = new BuildupSelectionView(MainVM.BuildupSelectionVM);
+            var result = assemblySelectionView.ShowDialog();
 
             if (result == true)
             {

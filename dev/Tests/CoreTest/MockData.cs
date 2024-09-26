@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Xml.Linq;
 using Calc.Core.Filtering;
 using Calc.Core.Objects;
-using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Mappings;
 using Calc.Core.Objects.Materials;

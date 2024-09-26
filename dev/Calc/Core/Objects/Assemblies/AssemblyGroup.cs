@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Calc.Core.Objects.Buildups
+namespace Calc.Core.Objects.Assemblies
 {
-    public class BuildupGroup
+    public class AssemblyGroup
     {
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -17,9 +17,9 @@ namespace Calc.Core.Objects.Buildups
 
         public override bool Equals(object obj)
         {
-            if (obj is BuildupGroup)
+            if (obj is AssemblyGroup)
             {
-                return (obj as BuildupGroup).Name == Name;
+                return (obj as AssemblyGroup).Name == Name;
             }
             return false;
         }

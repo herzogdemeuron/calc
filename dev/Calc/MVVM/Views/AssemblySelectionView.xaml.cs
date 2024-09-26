@@ -1,4 +1,4 @@
-﻿using Calc.Core.Objects.Buildups;
+﻿using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.Materials;
 using Calc.MVVM.Helpers;
 using Calc.MVVM.ViewModels;
@@ -16,9 +16,9 @@ namespace Calc.MVVM.Views
         private double originalLeft;
         private readonly BuildupSelectionViewModel BuildupSelectionVM;
 
-        public BuildupSelectionView(BuildupSelectionViewModel buildupSelectionVM)
+        public BuildupSelectionView(BuildupSelectionViewModel assemblySelectionVM)
         {
-            this.BuildupSelectionVM = buildupSelectionVM;
+            this.BuildupSelectionVM = assemblySelectionVM;
             this.DataContext = BuildupSelectionVM;
             InitializeComponent();
         }

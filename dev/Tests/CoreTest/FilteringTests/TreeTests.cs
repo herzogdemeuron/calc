@@ -28,7 +28,7 @@ public class TreeTests
                }
             }
 
-            //mockData.AssignBuildups(tree);
+            //mockData.AssignAssemblies(tree);
             Assert.IsNotNull(tree.SubBranches);
             tree.PrintTree();
         }

@@ -419,7 +419,7 @@
                     <TabControl x:Name="BuildupTabs"
                             BorderThickness="0"
                             Background="Transparent"
-                            ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CurrentBuildups}"
+                            ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CurrentAssemblies}"
                             SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.ActiveBuildup}"
                             ItemContainerStyle="{StaticResource TabItemStyle}">
 

@@ -1,4 +1,4 @@
-﻿using Calc.Core.Objects.Buildups;
+﻿using Calc.Core.Objects.Assemblies;
 using System.Collections.Generic;
 
 namespace Calc.Core.Objects.Elements
@@ -8,18 +8,18 @@ namespace Calc.Core.Objects.Elements
         public string BuildupCode { get; set; }
         public string BuildupName { get; set; }
         public Unit BuildupUnit { get; set; }
-        public BuildupGroup BuildupGroup { get; set; }
+        public AssemblyGroup BuildupGroup { get; set; }
         public string Description { get; set; }
         public Dictionary<string, string> Parameters { get; set; }
-        public List<BuildupComponent> BuildupComponents { get; set; }
+        public List<AssemblyComponent> BuildupComponents { get; set; }
 
         /// <summary>
-        /// apply the buildup record to current result, so that the buildup components are mapped with the same materials
-        /// buildup code, parameters and buildup components are alread at hand in the raw selection result
+        /// apply the assembly record to current result, so that the assembly components are mapped with the same materials
+        /// assembly code, parameters and assembly components are alread at hand in the raw selection result
         /// apply the components from the record to the current component with the same name and same layers
         /// duplicate current component names would be ignored to avoid confusion
         /// </summary>
-        public void ApplyBuildupRecord(BuildupRecord record, CalcStore store)
+        public void ApplyBuildupRecord(AssemblyRecord record, CalcStore store)
         {
             if (record == null) return;
 
@@ -48,7 +48,7 @@ namespace Calc.Core.Objects.Elements
         /// check if both components have the same name and the same layers
         /// the target material and thickness must be identical to be the same layer
         /// </summary>
-        private bool CheckComponentEquality(BuildupComponent currentComponent, BuildupComponent recordComponent)
+        private bool CheckComponentEquality(AssemblyComponent currentComponent, AssemblyComponent recordComponent)
         {
             if (currentComponent.Name != recordComponent.Name) return false;
             if (currentComponent.LayerComponents.Count != recordComponent.LayerComponents.Count) return false;
@@ -69,7 +69,7 @@ namespace Calc.Core.Objects.Elements
         /// by applying isnormalizer and the materials of layers
         /// layers must have the same target material
         /// </summary>
-        private void FollowComponent(BuildupComponent currentComponent, BuildupComponent recordComponent)
+        private void FollowComponent(AssemblyComponent currentComponent, AssemblyComponent recordComponent)
         {
             currentComponent.IsNormalizer = recordComponent.IsNormalizer;
             var recordLayers = recordComponent.LayerComponents;
@@ -93,10 +93,10 @@ namespace Calc.Core.Objects.Elements
             currentLayer.SubMaterialRatio = recordLayer.SubMaterialRatio;
         }
 
-        private void LinkMaterials(BuildupComponent buildupComponent, CalcStore store)
+        private void LinkMaterials(AssemblyComponent assemblyComponent, CalcStore store)
         {
-            if (buildupComponent.LayerComponents == null) return;
-            foreach (var layer in buildupComponent.LayerComponents)
+            if (assemblyComponent.LayerComponents == null) return;
+            foreach (var layer in assemblyComponent.LayerComponents)
             {
                 if(layer.Function != null)
                 {

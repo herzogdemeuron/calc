@@ -1,5 +1,5 @@
 ﻿using Calc.Core.Objects;
-using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.Materials;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ namespace Calc.MVVM.Models
 {
     public class LayerMaterialModel : INotifyPropertyChanged
     {
-        public event EventHandler MaterialPropertyChanged; // event to invoke ui change of the buildup creatiion vm
+        public event EventHandler MaterialPropertyChanged; // event to invoke ui change of the assembly creatiion vm
 
         private readonly LayerComponent layer;
         public string TargetMaterialName { get => layer.TargetMaterialName; }

@@ -1,17 +1,17 @@
 ﻿using Calc.Core.Objects;
 using Calc.Core.Objects.BasicParameters;
-using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Assemblies;
 using System.Collections.Generic;
 
 namespace CalcBuilderTest.MockData
 {
-    internal class MockBuildupComponents
+    internal class MockAssemblyComponents
     {
-        public static List<BuildupComponent> GetBuildupComponents()
+        public static List<AssemblyComponent> GetBuildupComponents()
         {
-            var result = new List<BuildupComponent>()
+            var result = new List<AssemblyComponent>()
             {
-                new BuildupComponent
+                new AssemblyComponent
             }
         }
 

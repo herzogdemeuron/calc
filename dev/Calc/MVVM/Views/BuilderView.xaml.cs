@@ -1,5 +1,5 @@
 ﻿using Calc.Core.Objects;
-using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Assemblies;
 using Calc.MVVM.Helpers.Mediators;
 using Calc.MVVM.ViewModels;
 using System;
@@ -199,11 +199,11 @@ namespace Calc.MVVM.Views
             {
                 Point currentPosition = e.GetPosition(TreeView);
                 if (e.LeftButton == MouseButtonState.Pressed &&
-                    (_draggedItem == null || _draggedItem is BuildupComponent) &&
+                    (_draggedItem == null || _draggedItem is AssemblyComponent) &&
                     (Math.Abs(currentPosition.X - _lastMouseDown.X) > 10.0 ||
                      Math.Abs(currentPosition.Y - _lastMouseDown.Y) > 10.0))
                 {
-                    var item = TreeView.SelectedItem as BuildupComponent;
+                    var item = TreeView.SelectedItem as AssemblyComponent;
                     if (item != null)
                     {
                         _draggedItem = item;
@@ -225,7 +225,7 @@ namespace Calc.MVVM.Views
 
         private void TreeViewDrop(object sender, DragEventArgs e)
         {
-            var droppedData = e.Data.GetData(typeof(BuildupComponent)) as BuildupComponent;
+            var droppedData = e.Data.GetData(typeof(AssemblyComponent)) as AssemblyComponent;
             if (droppedData == null) return;
 
             // Get the drop target
@@ -235,7 +235,7 @@ namespace Calc.MVVM.Views
             TreeViewItem targetTreeViewItem = FindAncestorOrSelf<TreeViewItem>(targetItem);
             if (targetTreeViewItem == null) return;
 
-            var targetData = targetTreeViewItem.DataContext as BuildupComponent;
+            var targetData = targetTreeViewItem.DataContext as AssemblyComponent;
             if (targetData == null || ReferenceEquals(droppedData, targetData)) return;
 
             // Find indices

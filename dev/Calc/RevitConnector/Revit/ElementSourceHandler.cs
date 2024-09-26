@@ -2,7 +2,7 @@
 using Autodesk.Revit.UI;
 using Calc.Core.Interfaces;
 using Calc.Core.Objects;
-using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.Elements;
 using Calc.RevitConnector.Config;
 using Calc.RevitConnector.Helpers;
@@ -12,8 +12,8 @@ using System.Collections.Generic;
 namespace Calc.RevitConnector.Revit
 {
     /// <summary>
-    /// get buildup components from revit elements,
-    /// get and store the buildup record
+    /// get assembly components from revit elements,
+    /// get and store the assembly record
     /// </summary>
     public class ElementSourceHandler : IElementSourceHandler
     {
@@ -22,15 +22,15 @@ namespace Calc.RevitConnector.Revit
         private readonly RevitExternalEventHandler eventHandler;
         private int groupTypeId;
         private string newCode;
-        private BuildupRecord buildupRecord;
-        public BuildupComponentCreator ComponentCreator { get; }
+        private AssemblyRecord assemblyRecord;
+        public AssemblyComponentCreator ComponentCreator { get; }
 
         public ElementSourceHandler(UIDocument udoc, RevitExternalEventHandler eHandler)
         {
             uidoc = udoc;
             doc = uidoc.Document;
             eventHandler = eHandler;
-            ComponentCreator = new BuildupComponentCreator(uidoc);
+            ComponentCreator = new AssemblyComponentCreator(uidoc);
         }
 
         /// <summary>
@@ -53,13 +53,13 @@ namespace Calc.RevitConnector.Revit
         }
 
         /// <summary>
-        /// serialize the buildup record and store back to revit group type
+        /// serialize the assembly record and store back to revit group type
         /// write record to group type parameter 'Type Comments' in a transaction
         /// </summary>
-        public void SaveBuildupRecord(string nCode, string newName, Unit newBuildupUnit,BuildupGroup newBuildupGroup, string newDescription, List<BuildupComponent> newComponents)
+        public void SaveBuildupRecord(string nCode, string newName, Unit newBuildupUnit,AssemblyGroup newBuildupGroup, string newDescription, List<AssemblyComponent> newComponents)
         {
             newCode = nCode;
-            buildupRecord = new BuildupRecord()
+            assemblyRecord = new AssemblyRecord()
             {
                 BuildupName = newName,
                 BuildupGroup = newBuildupGroup,
@@ -72,11 +72,11 @@ namespace Calc.RevitConnector.Revit
 
         public void StoreBuildupRecord()
         {
-            var recordObject = buildupRecord.SerializeRecord();
+            var recordObject = assemblyRecord.SerializeRecord();
             var groupType = doc.GetElement(new ElementId(groupTypeId)) as GroupType;
             try
             {
-                var transaction = new Transaction(doc, "Store buildup to group type: " + groupType.Name);
+                var transaction = new Transaction(doc, "Store assembly to group type: " + groupType.Name);
                 transaction.Start();
                 groupType.Name = newCode;
                 var jsonString = JsonConvert.SerializeObject(recordObject);
@@ -90,16 +90,16 @@ namespace Calc.RevitConnector.Revit
         }
 
         /// <summary>
-        /// get the buildup record from the group type parameter 'Type Comments'
+        /// get the assembly record from the group type parameter 'Type Comments'
         /// </summary>
-        public BuildupRecord GetBuildupRecord()
+        public AssemblyRecord GetBuildupRecord()
         {
             var groupType = doc.GetElement(new ElementId(groupTypeId)) as GroupType;
             var recordString = groupType?.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_COMMENTS)?.AsString();
             if (recordString == null) return null;
             try
             {
-                return JsonConvert.DeserializeObject<BuildupRecord>(recordString);
+                return JsonConvert.DeserializeObject<AssemblyRecord>(recordString);
             }
             catch(JsonSerializationException e)
             {

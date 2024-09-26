@@ -2,33 +2,33 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Calc.Core.Objects.Buildups
+namespace Calc.Core.Objects.Assemblies
 {
     /// <summary>
     /// record to serialize and save back to revit/rhino
     /// deserialize when got from a new selection
-    /// and restore the buildup in current app
+    /// and restore the assembly in current app
     /// </summary>
-    public class BuildupRecord
+    public class AssemblyRecord
     {
-        [JsonProperty("buildup_name")]
+        [JsonProperty("assembly_name")]
         public string BuildupName { get; set; }
-        [JsonProperty("buildup_group")]
-        public BuildupGroup BuildupGroup { get; set; }
-        [JsonProperty("buildup_unit")]
+        [JsonProperty("assembly_group")]
+        public AssemblyGroup BuildupGroup { get; set; }
+        [JsonProperty("assembly_unit")]
         public Unit BuildupUnit { get; set; }
         [JsonProperty("description")]
         public string Description { get; set; }
         [JsonProperty("components")]
-        public List<BuildupComponent> Components { get; set; }
+        public List<AssemblyComponent> Components { get; set; }
 
         public object SerializeRecord()
         {
             return new
             {
-                buildup_name = BuildupName,
-                buildup_group = BuildupGroup,
-                buildup_unit = BuildupUnit,
+                assembly_name = BuildupName,
+                assembly_group = BuildupGroup,
+                assembly_unit = BuildupUnit,
                 description = Description,
                 components = Components.Select(c => c.SerializeRecord()).ToList()
             };

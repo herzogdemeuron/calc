@@ -3,7 +3,7 @@ using Calc.Core.Calculation;
 using Calc.Core.Color;
 using Calc.Core.Interfaces;
 using Calc.Core.Objects;
-using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.Materials;
 using Calc.Core.Objects.Standards;
 using Calc.Core.Snapshots;
@@ -33,7 +33,7 @@ namespace Calc.MVVM.ViewModels
         public List<LcaStandard> StandardsAll { get => store.StandardsAll; }
         public List<Unit> BuildupUnitsAll { get => store.UnitsAll; }
         public List<MaterialFunction> MaterialFunctionsAll { get => store.MaterialFunctionsAll; }
-        public List<BuildupGroup> BuildupGroupsAll { get => store.BuildupGroupsAll; }
+        public List<AssemblyGroup> BuildupGroupsAll { get => store.BuildupGroupsAll; }
 
         public BasicAmountsModel AmountsModel { get; set; } = new BasicAmountsModel();
         public bool MaterialSelectionEnabled { get => SelectedComponent is LayerComponent; }
@@ -50,14 +50,14 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        private ObservableCollection<BuildupComponent> buildupComponents = new ObservableCollection<BuildupComponent>();
-        public ObservableCollection<BuildupComponent> BuildupComponents
+        private ObservableCollection<AssemblyComponent> assemblyComponents = new ObservableCollection<AssemblyComponent>();
+        public ObservableCollection<AssemblyComponent> BuildupComponents
         {
-            get => buildupComponents;
+            get => assemblyComponents;
             set
             {
-                if (buildupComponents == value) return;
-                buildupComponents = value;
+                if (assemblyComponents == value) return;
+                assemblyComponents = value;
                 OnPropertyChanged(nameof(BuildupComponents));
             }
         }
@@ -179,8 +179,8 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        private BuildupGroup selectedBuildupGroup;
-        public BuildupGroup SelectedBuildupGroup
+        private AssemblyGroup selectedBuildupGroup;
+        public AssemblyGroup SelectedBuildupGroup
         {
             get => selectedBuildupGroup;
             set
@@ -315,7 +315,7 @@ namespace Calc.MVVM.ViewModels
                 component.IsNormalizer = false;
                 component.HasParamError = false;
             }
-            if (SelectedComponent is BuildupComponent bc)
+            if (SelectedComponent is AssemblyComponent bc)
             {
                 bc.IsNormalizer = true;
             }
@@ -349,7 +349,7 @@ namespace Calc.MVVM.ViewModels
 
         private void UpdateBuildupComponentError()
         {
-            if (SelectedComponent is BuildupComponent bc)
+            if (SelectedComponent is AssemblyComponent bc)
             {
                 bc.UpdateParamError((Unit)SelectedBuildupUnit);
             }
@@ -365,8 +365,8 @@ namespace Calc.MVVM.ViewModels
         }
 
         /// <summary>
-        /// selecting elements from revit, get the buildup components 
-        /// and try to restore buildup record to both the buildup components and the current view model
+        /// selecting elements from revit, get the assembly components 
+        /// and try to restore assembly record to both the assembly components and the current view model
         /// </summary>
         public void HandleSelectingElements()
         {
@@ -377,7 +377,7 @@ namespace Calc.MVVM.ViewModels
                 var record = elementSourceHandler.GetBuildupRecord();
                 if (record != null) result.ApplyBuildupRecord(record, store);
 
-                BuildupComponents = new ObservableCollection<BuildupComponent>(result.BuildupComponents);
+                BuildupComponents = new ObservableCollection<AssemblyComponent>(result.BuildupComponents);
                 DynamicProperties = result.Parameters;
                 if (result.BuildupCode != null)  NewBuildupCode = result.BuildupCode;
                 if (result.BuildupName != null) NewBuildupName = result.BuildupName;
@@ -516,9 +516,9 @@ namespace Calc.MVVM.ViewModels
             return 0;
         }
 
-        private Buildup CreateBuildup(string imageUuid,string speckleProjectId, string speckleModelId)
+        private Assembly CreateBuildup(string imageUuid,string speckleProjectId, string speckleModelId)
         {
-            var buildup = new Buildup
+            var assembly = new Assembly
             {
                 Name = NewBuildupName,
                 Code = NewBuildupCode,
@@ -530,20 +530,20 @@ namespace Calc.MVVM.ViewModels
                 BuildupGwp = BuildupGwp,
                 BuildupGe = BuildupGe,
             };
-            SnapshotMaker.Snap(buildup);
+            SnapshotMaker.Snap(assembly);
 
             if (!string.IsNullOrEmpty(imageUuid))
             {
-                buildup.BuildupImage = new BuildupImage() { Id = imageUuid };
+                assembly.BuildupImage = new AssemblyImage() { Id = imageUuid };
             }
 
             if (!string.IsNullOrEmpty(speckleModelId) && !string.IsNullOrEmpty(speckleProjectId))
             {
-                buildup.SpeckleProjectId = speckleProjectId;
-                buildup.SpeckleModelId = speckleModelId;
+                assembly.SpeckleProjectId = speckleProjectId;
+                assembly.SpeckleModelId = speckleModelId;
             }
 
-            return buildup;
+            return assembly;
         }
 
         public async Task<bool> HandleSaveBuildup()
@@ -557,23 +557,23 @@ namespace Calc.MVVM.ViewModels
                 string imageUuid = await store.UploadImageAsync(currentImagePath, NewBuildupName); // todo: make this more robust
                 var speckleModelId = await SendElementsToSpeckle();
                 var speckleProjectId = store.Config.SpeckleBuilderProjectId;
-                var buildup = CreateBuildup(imageUuid, speckleProjectId, speckleModelId);
+                var assembly = CreateBuildup(imageUuid, speckleProjectId, speckleModelId);
 
                 if (updateId != null)
                 {
-                    buildup.Id = updateId.Value;
-                    await store.UpdateSingleBuildup(buildup);
+                    assembly.Id = updateId.Value;
+                    await store.UpdateSingleBuildup(assembly);
                     SaveMessage = "Assembly updated.";
                 }
                 else
                 {
-                    await store.SaveSingleBuildup(buildup);
+                    await store.SaveSingleBuildup(assembly);
                     SaveMessage = "New Assembly saved.";
                     CheckSaveOrUpdate();
                 }
 
 
-                // store the buildup record
+                // store the assembly record
                 elementSourceHandler.SaveBuildupRecord
                     (
                         newBuildupCode, 
@@ -619,9 +619,9 @@ namespace Calc.MVVM.ViewModels
 
         private void CheckSaveOrUpdate()
         {
-            var allBuildups = store.BuildupsAll;
+            var allAssemblies = store.AssembliesAll;
             // find the id with the same code
-            var existingBuildup = allBuildups.Find(b => b.Code != null && b.Code == NewBuildupCode);
+            var existingBuildup = allAssemblies.Find(b => b.Code != null && b.Code == NewBuildupCode);
             if(existingBuildup != null)
             {
                 updateId = existingBuildup.Id;

@@ -7,9 +7,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-namespace Calc.Core.Objects.Buildups
+namespace Calc.Core.Objects.Assemblies
 {
-    public class Buildup : INotifyPropertyChanged, ISearchable  // check: notify property needed?
+    public class Assembly : INotifyPropertyChanged, ISearchable  // check: notify property needed?
     {
 
         private int id;
@@ -42,17 +42,17 @@ namespace Calc.Core.Objects.Buildups
             set => SetProperty(ref name, value);
         }
 
-        private Unit buildupUnit;
-        [JsonProperty("buildup_unit")]
+        private Unit assemblyUnit;
+        [JsonProperty("assembly_unit")]
         public Unit BuildupUnit
         {
-            get => buildupUnit;
-            set => SetProperty(ref buildupUnit, value);
+            get => assemblyUnit;
+            set => SetProperty(ref assemblyUnit, value);
         }
 
-        private BuildupGroup group;
+        private AssemblyGroup group;
         [JsonProperty("group")]
-        public BuildupGroup Group
+        public AssemblyGroup Group
         {
             get => group;
             set => SetProperty(ref group, value);
@@ -72,14 +72,14 @@ namespace Calc.Core.Objects.Buildups
         public bool Verified { get; set; }
 
         [JsonProperty("image")]
-        public BuildupImage BuildupImage { get; set; }
+        public AssemblyImage BuildupImage { get; set; }
         [JsonProperty("speckle_project_id")]
         public string SpeckleProjectId { get; set; }
         [JsonProperty("speckle_model_id")]
         public string SpeckleModelId { get; set; }
 
         [JsonIgnore]
-        public List<BuildupSnapshot> BuildupSnapshot { get; set; }
+        public List<AssemblySnapshot> BuildupSnapshot { get; set; }
 
 
         private List<CalculationComponent> calculationComponents = new List<CalculationComponent>();
@@ -109,7 +109,7 @@ namespace Calc.Core.Objects.Buildups
 
         public override bool Equals(object obj)
         {
-            if (obj is Buildup other)
+            if (obj is Assembly other)
             {
                 return Id == other.Id;
             }

@@ -17,7 +17,7 @@ namespace Calc.Core.TestIntegration
             foreach (var tree in mockData.Forest.Trees)
             {
                 tree.Plant(mockData.Elements);
-                mockData.Mapping.ApplyToTree(tree,mockData.Buildups);
+                mockData.Mapping.ApplyToTree(tree,mockData.Assemblies);
             }
             var trees = mockData.Forest.Trees;
             Assert.IsNotNull(trees.SelectMany(t=>t.BuildupSnapshots));

@@ -25,7 +25,7 @@ namespace Calc.Core.TestIntegration.Drivers
             foreach (var tree in this.forest.Trees)
             {
                 tree.Plant(mockData.Elements);
-                //mockData.AssignBuildups(tree);
+                //mockData.AssignAssemblies(tree);
             }
         }
 

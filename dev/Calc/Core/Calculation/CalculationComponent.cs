@@ -1,5 +1,5 @@
 ﻿using Calc.Core.Color;
-using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.Materials;
 using Newtonsoft.Json;
 using System;
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace Calc.Core.Calculation
 {
     /// <summary>
-    /// The calculation of a material in the buildup, amount per buildup unit.
+    /// The calculation of a material in the assembly, amount per assembly unit.
     /// </summary>
     public class CalculationComponent
     {

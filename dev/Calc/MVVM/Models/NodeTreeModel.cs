@@ -2,7 +2,7 @@
 using Calc.MVVM.Helpers.Mediators;
 using Calc.MVVM.Services;
 using Calc.Core;
-using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Mappings;
 using System.Collections.Generic;
@@ -77,7 +77,7 @@ namespace Calc.MVVM.Models
         }
 
         /// <summary>
-        /// reset all node label colors property according to the current branch/buildup switch
+        /// reset all node label colors property according to the current branch/assembly switch
         /// report to the visualizer
         /// </summary>
         private void RecolorAllNodes(bool forceRecolorAll = false)
@@ -93,7 +93,7 @@ namespace Calc.MVVM.Models
             }
             else
             {
-                Store.ForestSelected.SetBranchColorsBy("buildups");
+                Store.ForestSelected.SetBranchColorsBy("assemblies");
                 visualizer.IsolateAndColorBottomBranchElements(SelectedNodeItem?.Host);
             }
 
@@ -143,7 +143,7 @@ namespace Calc.MVVM.Models
         public void ColorNodesToBuildup()
         {
             if (CurrentForestItem == null) return;
-            Store.ForestSelected.SetBranchColorsBy("buildups");
+            Store.ForestSelected.SetBranchColorsBy("assemblies");
             CurrentForestItem.NotifyNodePropertyChange();
             DeselectNodes();
         }

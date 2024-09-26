@@ -21,8 +21,8 @@ namespace Calc.MVVM.Helpers
             {
                 Tree tree = nodeItem.Host as Tree;
                 if (newMapping == null) continue;
-                var verifiedBuildups = store.BuildupsAll.Where(b => b.Verified).ToList();
-                var brokenTree = newMapping.ApplyToTree(tree, verifiedBuildups);
+                var verifiedAssemblies = store.AssembliesAll.Where(b => b.Verified).ToList();
+                var brokenTree = newMapping.ApplyToTree(tree, verifiedAssemblies);
                 if (brokenTree != null && brokenTree.SubBranches.Count > 0)
                 {
                     brokenForest.Trees.Add(brokenTree);

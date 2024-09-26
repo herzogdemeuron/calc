@@ -33,7 +33,7 @@ namespace Calc.Core.Snapshots
     
         /// <summary>
         /// when claiming the element, the element amount ratio means
-        /// how many times buildup unit does this element have,
+        /// how many times assembly unit does this element have,
         /// apply the ratio to the snapshot, calculated gwp and ge are multiplied
         /// </summary>
         public void ApplyAmountRatio(double amountRatio)

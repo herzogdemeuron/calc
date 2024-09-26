@@ -1,6 +1,6 @@
 ﻿using Calc.Core.Objects;
 using Calc.Core.Objects.BasicParameters;
-using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Assemblies;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,11 +17,11 @@ namespace Calc.MVVM.Models
     {
         private readonly Unit unit;
         private ICalcComponent host;
-        private Unit? buildupUnit;
+        private Unit? assemblyUnit;
         private Unit? materialUnit;
         private BasicParameterSet basicParameterSet { get => host?.BasicParameterSet; }
         private bool HasError { get => (basicParameterSet?.GetAmountParam(unit)?.HasError) ?? true; }
-        private bool IsHostNormalizable { get => host is BuildupComponent; }
+        private bool IsHostNormalizable { get => host is AssemblyComponent; }
         public string AmountString { get => GetAmountString(); } // show the sting of the basic amounts in UI 
         public bool IsNormalizable { get => CheckNormalizable(); }  // show if each amount can be set as a normalizer
         public bool IsNormalizer { get => CheckNormalizer(); } // show if an amount is set as a normalizer
@@ -35,10 +35,10 @@ namespace Calc.MVVM.Models
         /// <summary>
         /// Each time the component selection, the Buildup Unit or the Material selection is changed, the BasicUnitModel needs to be updated.
         /// </summary>
-        public void UpdateWithHost(ICalcComponent host, Unit? buildupUnit, Unit? materialUnit)
+        public void UpdateWithHost(ICalcComponent host, Unit? assemblyUnit, Unit? materialUnit)
         {
             this.host = host;
-            this.buildupUnit = buildupUnit;
+            this.assemblyUnit = assemblyUnit;
             this.materialUnit = materialUnit;
             NotifyUpdate();
         }
@@ -98,8 +98,8 @@ namespace Calc.MVVM.Models
         private bool CheckNormalizer()
         {
             if (!IsHostNormalizable) return false;
-            var bc = host as BuildupComponent;
-            return bc.IsNormalizer && this.buildupUnit == unit;
+            var bc = host as AssemblyComponent;
+            return bc.IsNormalizer && this.assemblyUnit == unit;
         }
 
         private bool CheckUsed()
@@ -107,7 +107,7 @@ namespace Calc.MVVM.Models
             switch (IsHostNormalizable)
             {
                 case true:
-                    return (host as BuildupComponent).IsNormalizer && this.buildupUnit == unit;
+                    return (host as AssemblyComponent).IsNormalizer && this.assemblyUnit == unit;
                 case false:
                     return this.materialUnit == unit;
                 default:

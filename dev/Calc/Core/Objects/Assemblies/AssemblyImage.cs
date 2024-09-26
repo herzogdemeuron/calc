@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
-namespace Calc.Core.Objects.Buildups
+namespace Calc.Core.Objects.Assemblies
 {
-    public class BuildupImage : INotifyPropertyChanged
+    public class AssemblyImage : INotifyPropertyChanged
     {
         [JsonProperty("id")]
         public string Id { get; set; }

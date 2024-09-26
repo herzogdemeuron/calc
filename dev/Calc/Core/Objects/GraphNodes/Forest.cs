@@ -59,7 +59,7 @@ namespace Calc.Core.Objects.GraphNodes
                 case "branches":
                     ItemPainter.ColorBranchesByBranch(branches);
                     break;
-                case "buildups":
+                case "assemblies":
                     ItemPainter.ColorBranchesByBuildup(branches);
                     break;
                 default:

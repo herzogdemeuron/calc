@@ -14,24 +14,24 @@ namespace Calc.MVVM.ViewModels
         private MappingViewModel mappingVM;
         public ObservableCollection<NodeModel> BrokenNodeSource {  get; private set; }
 
-        private string _buildup1;
+        private string _assembly1;
         public string Buildup1
         {
-            get => _buildup1;
+            get => _assembly1;
             set
             {
-                _buildup1 = value;
+                _assembly1 = value;
                 OnPropertyChanged(nameof(Buildup1));
             }
         }
 
-        private string _buildup2;
+        private string _assembly2;
         public string Buildup2
         {
-            get => _buildup2;
+            get => _assembly2;
             set
             {
-                _buildup2 = value;
+                _assembly2 = value;
                 OnPropertyChanged(nameof(Buildup2));
             }
         }
@@ -111,8 +111,8 @@ namespace Calc.MVVM.ViewModels
                 else
                 {
                     var branch = nodeItem.Host as Branch;
-                    Buildup1 = branch.Buildups?.Count > 0 ? branch.Buildups[0].ToString() : "-";
-                    Buildup2 = branch.Buildups?.Count > 1 ? branch.Buildups[1].ToString() : null;
+                    Buildup1 = branch.Assemblies?.Count > 0 ? branch.Assemblies[0].ToString() : "-";
+                    Buildup2 = branch.Assemblies?.Count > 1 ? branch.Assemblies[1].ToString() : null;
                 }
             }
             else

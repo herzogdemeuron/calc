@@ -13,16 +13,16 @@ namespace Calc.MVVM.Services
         /// <summary>
         /// save the snapshot, returns if saved and the error message
         /// </summary>
-        public static async Task<(bool?,string)> SaveProjectSnapshot(CalcStore store, List<BuildupSnapshot> buildupSnapshots, string newName)
+        public static async Task<(bool?,string)> SaveProjectSnapshot(CalcStore store, List<AssemblySnapshot> assemblySnapshots, string newName)
         {
-            if (buildupSnapshots == null) return (null, null);
-            if (buildupSnapshots.Count == 0) return (null, null);
+            if (assemblySnapshots == null) return (null, null);
+            if (assemblySnapshots.Count == 0) return (null, null);
             if (store == null) return (null, null);
 
-            var pSnapshot = MakeProjectSnapshot(store, buildupSnapshots);
+            var pSnapshot = MakeProjectSnapshot(store, assemblySnapshots);
             var jsonPath = CreateResultJsonFile(newName, pSnapshot);
             string ResultUuid = await store.UploadResultAsync(jsonPath, newName);
-            int count = buildupSnapshots.Count;
+            int count = assemblySnapshots.Count;
             var selectedProject = store.ProjectSelected;
             var projectName = selectedProject?.Name;
             var forestName = store.ForestSelected?.Name;
@@ -40,9 +40,9 @@ namespace Calc.MVVM.Services
             return await store.SaveProjectResult(pResult);
         }
 
-        private static ProjectSnapshot MakeProjectSnapshot(CalcStore store, List<BuildupSnapshot> buildupSnapshots)
+        private static ProjectSnapshot MakeProjectSnapshot(CalcStore store, List<AssemblySnapshot> assemblySnapshots)
         {
-            var bSnapshot = SnapshotMaker.MergeSnapshots(buildupSnapshots);
+            var bSnapshot = SnapshotMaker.MergeSnapshots(assemblySnapshots);
             var snapshot = new ProjectSnapshot()
             {
                 ProjectNumber = store.ProjectSelected.Number,

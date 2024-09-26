@@ -1,30 +1,30 @@
 ﻿using Calc.Core.Objects;
 using Calc.Core.Objects.BasicParameters;
-using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.Materials;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace CalcBuilderTest
 {
-    internal class MockBuildups
+    internal class MockAssemblies
     {
        
-        public static List<Buildup> GetBuildups()
+        public static List<Assembly> GetAssemblies()
         {
-            return new List<Buildup>
+            return new List<Assembly>
             {
-                new Buildup
+                new Assembly
                 {
                     Id = 1,
                     Name = "BuildupName1",
                     Standard = "Source1",
                     BuildupUnit = Unit.m2,
-                    Group = new BuildupGroup {Name = "BuildupGroup1" },
+                    Group = new AssemblyGroup {Name = "BuildupGroup1" },
                     Description = "This is Buildup1 Description.",
-                    BuildupComponents = new ObservableCollection<BuildupComponent>
+                    BuildupComponents = new ObservableCollection<AssemblyComponent>
                     {
-                        new BuildupComponent
+                        new AssemblyComponent
                         {
                             MaterialComponentSet = new MaterialComponentSet()
                             {
@@ -33,7 +33,7 @@ namespace CalcBuilderTest
                             LayerComponent = new LayerComponent("targetTypeName0", "targetMaterialName0")
 
                         },
-                          new BuildupComponent
+                          new AssemblyComponent
                         {
                                MaterialComponentSet = new MaterialComponentSet()
                             {
@@ -44,17 +44,17 @@ namespace CalcBuilderTest
                         }
                     }
                 },
-                new Buildup
+                new Assembly
                 {
                     Id = 2,
                     Name = "BuildupName2",
                     Standard = "Source1",
                     BuildupUnit = Unit.m2,
-                    Group = new BuildupGroup {Name = "BuildupGroup2" },
+                    Group = new AssemblyGroup {Name = "BuildupGroup2" },
                     Description = "This is Buildup2 Description.",
-                    BuildupComponents = new ObservableCollection<BuildupComponent>
+                    BuildupComponents = new ObservableCollection<AssemblyComponent>
                     {
-                        new BuildupComponent
+                        new AssemblyComponent
                         {
                              MaterialComponentSet = new MaterialComponentSet()
                              {

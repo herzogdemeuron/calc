@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Calc.Core.DirectusAPI;
+﻿using Calc.Core.DirectusAPI;
 using Calc.Core.DirectusAPI.Drivers;
-using Calc.Core.Objects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+using Calc.Core.Objects.Assemblies;
 
 namespace Calc.Core.TestIntegration.Drivers
 {
     [TestClass]
-    public class ProjectStorageDriverTests
+    public class AssemblyStorageDriverTests
     {
         private Directus? directus;
 
@@ -23,16 +17,16 @@ namespace Calc.Core.TestIntegration.Drivers
         }
 
         [TestMethod]
-        public async Task GetAllProjects_Default_SpecifyLater()
+        public async Task GetAllAssemblies_Default_SpecifyLater()
         {
-            var storageManager = new DirectusManager<CalcProject>(this.directus);
+            var storageManager = new DirectusManager<Assembly>(this.directus);
 
             // Act
-            var response = await storageManager.GetMany<ProjectStorageDriver>(new ProjectStorageDriver());
+            var response = await storageManager.GetMany<AssemblyStorageDriver>(new AssemblyStorageDriver());
 
             // Assert
             Assert.IsNotNull(response.GotManyItems);
-            Assert.IsInstanceOfType(response.GotManyItems, typeof(List<CalcProject>));
+            Assert.IsInstanceOfType(response.GotManyItems, typeof(List<Assembly>));
             Assert.IsTrue(response.GotManyItems.Count > 0);
 
             // serialize assemblies to console using System.Text.Json, indent
@@ -42,4 +36,3 @@ namespace Calc.Core.TestIntegration.Drivers
         }
     }
 }
-

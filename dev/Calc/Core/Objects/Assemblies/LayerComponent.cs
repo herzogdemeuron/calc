@@ -8,7 +8,7 @@ using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Materials;
 using Newtonsoft.Json;
 
-namespace Calc.Core.Objects.Buildups
+namespace Calc.Core.Objects.Assemblies
 {
     /// <summary>
     /// For calc builder.

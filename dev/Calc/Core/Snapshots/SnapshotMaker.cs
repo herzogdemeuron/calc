@@ -1,5 +1,5 @@
 ﻿using Calc.Core.Calculation;
-using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.Elements;
 using Calc.Core.Objects.GraphNodes;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 namespace Calc.Core.Snapshots
 {
     /// <summary>
-    /// make the flat snapshots for a branch (each element) or for a new buildup (each element type)
+    /// make the flat snapshots for a branch (each element) or for a new assembly (each element type)
     /// only merge the snapshots before sending to directus
     /// </summary>
     public class SnapshotMaker
@@ -19,12 +19,12 @@ namespace Calc.Core.Snapshots
         public static void Snap(Branch branch) //move this to branch?
         {
 
-            var snapshots = new List<BuildupSnapshot>();
+            var snapshots = new List<AssemblySnapshot>();
             foreach (var element in branch.Elements)
             
-                foreach (var buildup in branch.Buildups)
+                foreach (var assembly in branch.Assemblies)
                 {               
-                    var s = MakeBuildupSnapshot(buildup, element, branch.ParentTree.Name);
+                    var s = MakeBuildupSnapshot(assembly, element, branch.ParentTree.Name);
                     snapshots.AddRange(s);                    
                 }            
 
@@ -33,25 +33,25 @@ namespace Calc.Core.Snapshots
 
 
         /// <summary>
-        /// generate the snapshots for a buildup, 
+        /// generate the snapshots for a assembly, 
         /// the element type id should already be claimed in GetBuildupSnapshot
         /// </summary>
-        public static void Snap(Buildup buildup)
+        public static void Snap(Assembly assembly)
         {
-            var snapshots = MakeBuildupSnapshot(buildup);
-            buildup.BuildupSnapshot = MergeSnapshots(snapshots);
+            var snapshots = MakeBuildupSnapshot(assembly);
+            assembly.BuildupSnapshot = MergeSnapshots(snapshots);
         }
 
 
         /// <summary>
-        /// make the snapshots for a buildup (of unit amount), (for a branch) claim the element to the snapshot
+        /// make the snapshots for a assembly (of unit amount), (for a branch) claim the element to the snapshot
         /// </summary>
-        private static List<BuildupSnapshot> MakeBuildupSnapshot(Buildup buildup, CalcElement? element=null, string elementGroup=null)
+        private static List<AssemblySnapshot> MakeBuildupSnapshot(Assembly assembly, CalcElement? element=null, string elementGroup=null)
         {
-            var snapshots = new List<BuildupSnapshot>();
-            foreach (var component in buildup.CalculationComponents)
+            var snapshots = new List<AssemblySnapshot>();
+            foreach (var component in assembly.CalculationComponents)
             {
-                var snapshot = GetBuildupSnapshot(component, buildup);
+                var snapshot = GetBuildupSnapshot(component, assembly);
                 if (element != null && elementGroup != null)
                 {
                     snapshot.ClaimElement(element.Value, elementGroup);
@@ -62,11 +62,11 @@ namespace Calc.Core.Snapshots
         }
 
         /// <summary>
-        /// get the buildup snapshot from a single calculation component in a buildup
+        /// get the assembly snapshot from a single calculation component in a assembly
         /// </summary>
-        private static BuildupSnapshot GetBuildupSnapshot(CalculationComponent caComponent, Buildup buildup)
+        private static AssemblySnapshot GetBuildupSnapshot(CalculationComponent caComponent, Assembly assembly)
         {
-            var calculationComponents = buildup.CalculationComponents;
+            var calculationComponents = assembly.CalculationComponents;
 
             var material = caComponent.Material;
             var materialSnapshot = new MaterialSnapshot
@@ -83,12 +83,12 @@ namespace Calc.Core.Snapshots
                 CalculatedGe = caComponent.Ge
             };
 
-            var bSnapshot = new BuildupSnapshot
+            var bSnapshot = new AssemblySnapshot
             {
-                BuildupName = buildup.Name,
-                BuildupCode = buildup.Code,
-                BuildupGroup = buildup.Group.Name,
-                BuildupUnit = buildup.BuildupUnit,
+                BuildupName = assembly.Name,
+                BuildupCode = assembly.Code,
+                BuildupGroup = assembly.Group.Name,
+                BuildupUnit = assembly.BuildupUnit,
                 MaterialSnapshots = new List<MaterialSnapshot> { materialSnapshot }
             };
 
@@ -103,11 +103,11 @@ namespace Calc.Core.Snapshots
         }
 
         /// <summary>
-        /// merge the buildup snapshots and their material snapshots
+        /// merge the assembly snapshots and their material snapshots
         /// </summary>
-        public static List<BuildupSnapshot> MergeSnapshots(List<BuildupSnapshot> buildupSnapshots)
+        public static List<AssemblySnapshot> MergeSnapshots(List<AssemblySnapshot> assemblySnapshots)
         {
-            var result = MergeBuildupSnapshots(buildupSnapshots);
+            var result = MergeBuildupSnapshots(assemblySnapshots);
             foreach (var snapshot in result)
             {
                 snapshot.MaterialSnapshots = MergeMaterialSnapshots(snapshot.MaterialSnapshots);
@@ -116,13 +116,13 @@ namespace Calc.Core.Snapshots
         }
 
         /// <summary>
-        /// merge buildup snapshots according to the same element_group && buildup_code && element_type_id
+        /// merge assembly snapshots according to the same element_group && assembly_code && element_type_id
         /// </summary>
-        private static List<BuildupSnapshot> MergeBuildupSnapshots(List<BuildupSnapshot> buildupSnapshots)
+        private static List<AssemblySnapshot> MergeBuildupSnapshots(List<AssemblySnapshot> assemblySnapshots)
         {
-            var result = new List<BuildupSnapshot>();
+            var result = new List<AssemblySnapshot>();
 
-            foreach (var bSnapshot in buildupSnapshots)
+            foreach (var bSnapshot in assemblySnapshots)
             {
                 var existingSnapshot = result.Find(s =>
                     s.ElementTypeId == bSnapshot.ElementTypeId &&
@@ -174,9 +174,9 @@ namespace Calc.Core.Snapshots
         }
 
         /// <summary>
-        /// flatten the buildup snapshots to a list of merged material snapshots
+        /// flatten the assembly snapshots to a list of merged material snapshots
         /// </summary>
-        public static List<MaterialSnapshot> FlattenBuilupSnapshots(List<BuildupSnapshot> snapshots)
+        public static List<MaterialSnapshot> FlattenBuilupSnapshots(List<AssemblySnapshot> snapshots)
         {
             var result = new List<MaterialSnapshot>();
             foreach (var snapshot in snapshots)
