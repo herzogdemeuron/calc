@@ -10,7 +10,7 @@ namespace Calc.Core.Snapshots
     {
         [JsonProperty("element_group")]
         public string ElementGroup { get; set; } // tree
-        [JsonProperty("buidup_name")]
+        [JsonProperty("buildup_name")]
         public string BuildupName { get; set; }
         [JsonProperty("buildup_code")]
         public string BuildupCode { get; set; }
