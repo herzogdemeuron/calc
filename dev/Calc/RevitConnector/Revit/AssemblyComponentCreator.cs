@@ -45,7 +45,7 @@ namespace Calc.RevitConnector.Revit
         }
 
         /// <summary>
-        /// create a assembly component from one element
+        /// create an assembly component from one element
         /// </summary>
         private AssemblyComponent CreateBuildupComponent(Element element)
         {
@@ -66,7 +66,7 @@ namespace Calc.RevitConnector.Revit
         }
 
         /// <summary>
-        /// merge a assembly component to a list of assembly components if they have the same type
+        /// merge an assembly component to a list of assembly components if they have the same type
         /// </summary>
         private void MergeBuildupComponentToList(List<AssemblyComponent> List, AssemblyComponent component)
         {

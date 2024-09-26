@@ -378,7 +378,7 @@ namespace Calc.Core.Objects.GraphNodes
         /// The Intended use is right befor calculation.
         /// 
         /// This method removes elements from the current branch that
-        /// are also present in subbranches that have a assembly assigned.
+        /// are also present in subbranches that have an assembly assigned.
         /// In the bigger picture, this allows to override assemblies further down the tree.
         /// </summary>
         public void RemoveElementsByBuildupOverrides()

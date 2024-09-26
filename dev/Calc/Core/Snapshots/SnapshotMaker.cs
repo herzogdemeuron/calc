@@ -33,7 +33,7 @@ namespace Calc.Core.Snapshots
 
 
         /// <summary>
-        /// generate the snapshots for a assembly, 
+        /// generate the snapshots for an assembly, 
         /// the element type id should already be claimed in GetBuildupSnapshot
         /// </summary>
         public static void Snap(Assembly assembly)
@@ -44,7 +44,7 @@ namespace Calc.Core.Snapshots
 
 
         /// <summary>
-        /// make the snapshots for a assembly (of unit amount), (for a branch) claim the element to the snapshot
+        /// make the snapshots for an assembly (of unit amount), (for a branch) claim the element to the snapshot
         /// </summary>
         private static List<AssemblySnapshot> MakeBuildupSnapshot(Assembly assembly, CalcElement? element=null, string elementGroup=null)
         {
@@ -62,7 +62,7 @@ namespace Calc.Core.Snapshots
         }
 
         /// <summary>
-        /// get the assembly snapshot from a single calculation component in a assembly
+        /// get the assembly snapshot from a single calculation component in an assembly
         /// </summary>
         private static AssemblySnapshot GetBuildupSnapshot(CalculationComponent caComponent, Assembly assembly)
         {

@@ -396,7 +396,7 @@ namespace Calc.Core
         }
 
         /// <summary>
-        /// update a assembly with an existing id assigned
+        /// update an assembly with an existing id assigned
         /// </summary>
         public async Task UpdateSingleBuildup(Assembly assembly)
         {
