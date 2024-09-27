@@ -106,26 +106,27 @@ namespace Calc.MVVM.Views
             BuilderVM.HandleReduceMaterial();
         }
 
-        private void SetMaterialClicked(object sender, RoutedEventArgs e)
+        private void SetFirstMaterialClicked(object sender, RoutedEventArgs e)
         {
-            string tag = (sender as Button).Tag.ToString();
-            SetMaterialWithTag(tag);
+            SetMaterialWithTag(true);
+        }
+
+        private void SetSecondMaterialClicked(object sender, RoutedEventArgs e)
+        {
+            SetMaterialWithTag(false);
         }
 
         // set the main or sub material calling the material selection view
         // decide which material to set based on the tag
-        private void SetMaterialWithTag(string tag)
+        private void SetMaterialWithTag(bool setFirst)
         {
-            bool setMain = tag.Contains("First");
-
-            BuilderVM.HandleSelectingMaterial(setMain);
-
+            BuilderVM.HandleSelectingMaterial(setFirst);
             var materialSelectionView = new MaterialSelectionView(BuilderVM.MaterialSelectionVM);
 
             var result = materialSelectionView.ShowDialog();
             if (result == true)
             {
-                BuilderVM.HandleMaterialSelected(setMain);
+                BuilderVM.HandleMaterialSelected(setFirst);
             }
         }
 

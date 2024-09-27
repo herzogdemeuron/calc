@@ -1,6 +1,5 @@
 ﻿using Calc.Core;
 using Calc.Core.Interfaces;
-using Calc.Core.Objects;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Mappings;
 using Calc.MVVM.Helpers.Mediators;
@@ -42,7 +41,7 @@ namespace Calc.MVVM.ViewModels
 
         public void HandleWindowLoaded()
         {
-            NotifyStoreChange();
+            OnPropertyChanged(nameof(Store));
         }
 
         public void HandleWindowClosing()
@@ -52,6 +51,7 @@ namespace Calc.MVVM.ViewModels
 
         public async void HandleForestSelectionChanged(Forest forest)
         {
+            if (Store.ForestSelected == forest) return; 
             await ForestVM.HandleForestSelectionChanged(forest);
         }
 
@@ -68,7 +68,7 @@ namespace Calc.MVVM.ViewModels
         public async Task HandleNewMappingCreateAsync(Mapping selectedMapping, string newName)
         {
             await NewMappingVM.HandleNewMappingCreate(selectedMapping, newName);
-            NotifyStoreChange();
+            OnPropertyChanged(nameof(Store));
         }
 
         public void HandleMappingErrorClicked()
@@ -178,12 +178,6 @@ namespace Calc.MVVM.ViewModels
         {
             MediatorToView.Broadcast("HideMessageOverlay");
         }
-
-        public void NotifyStoreChange()
-        {
-            OnPropertyChanged(nameof(Store));
-        }
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)

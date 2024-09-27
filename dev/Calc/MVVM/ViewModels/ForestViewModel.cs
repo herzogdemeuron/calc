@@ -21,35 +21,34 @@ namespace Calc.MVVM.ViewModels
         }
         public async Task HandleForestSelectionChanged(Forest forest)
         {
-            if (forest != null)
+            if (forest == null) return;
+
+            try
             {
-                try
+                Mapping mapping;
+                if (store.ForestSelected == forest) //never happens
                 {
-                    Mapping mapping;
-                    if (store.ForestSelected == forest)
-                    {
-                        // if the same forest is selected, update the current forest presering the mapping
-                        Mapping currentMapping = new Mapping("CurrentMapping", store.ForestSelected);
-                        var darkForest = await ForestHelper.PlantTreesAsync(store.ForestSelected, elementCreator, store.CustomParamSettingsAll);
-                        store.DarkForestSelected = darkForest;
-                        mapping = currentMapping;
-                    }
-                    else
-                    {
-                        // otherwise create new forest and reset mapping
-                        store.ForestSelected = forest;
-                        var darkForest = await ForestHelper.PlantTreesAsync(forest, elementCreator, store.CustomParamSettingsAll);
-                        store.DarkForestSelected = darkForest;
-                        mapping = store.MappingSelected;
-                    }
-                    MediatorFromVM.Broadcast("ForestSelectionChanged", mapping);
+                    // if the same forest is selected, update the current forest presering the mapping
+                    Mapping currentMapping = new Mapping("CurrentMapping", store.ForestSelected);
+                    var darkForest = await ForestHelper.PlantTreesAsync(store.ForestSelected, elementCreator, store.CustomParamSettingsAll);
+                    store.DarkForestSelected = darkForest;
+                    mapping = currentMapping;
                 }
-                catch (System.Exception e)
+                else
                 {
-                    // show error message if something goes wrong
-                    MediatorToView.Broadcast("ShowMessageOverlay", new List<object> { null, e.Message });
-                    store.ForestSelected = null;
+                    // otherwise create new forest and reset mapping
+                    store.ForestSelected = forest;
+                    var darkForest = await ForestHelper.PlantTreesAsync(forest, elementCreator, store.CustomParamSettingsAll);
+                    store.DarkForestSelected = darkForest;
+                    mapping = store.MappingSelected;
                 }
+                MediatorFromVM.Broadcast("ForestSelectionChanged", mapping);
+            }
+            catch (System.Exception e)
+            {
+                // show error message if something goes wrong
+                MediatorToView.Broadcast("ShowMessageOverlay", new List<object> { null, e.Message });
+                store.ForestSelected = null;
             }
         }
 

@@ -327,7 +327,7 @@
                             Grid.Column="0"
                             Grid.Row="0"
                             Style="{StaticResource ButtonStyle}"
-                            Click="SetMaterialClicked"/>
+                            Click="SetFirstMaterialClicked"/>
                     
                     <Button Content="{Binding SubMaterial.Name}"
                             Tag="Select Second Material"
@@ -337,7 +337,7 @@
                             Grid.Row="1"
                             Style="{StaticResource ButtonStyle}"
                             IsEnabled="{Binding CanAddSecondMaterial}"
-                            Click="SetMaterialClicked"/>
+                            Click="SetSecondMaterialClicked"/>
 
                     <TextBlock Text="{Binding MaterialMatchInfo}"
                                d:Text="Material units don't match."

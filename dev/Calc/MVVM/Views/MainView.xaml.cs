@@ -1,5 +1,4 @@
-﻿using Calc.Core.Objects;
-using Calc.Core.Objects.GraphNodes;
+﻿using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Mappings;
 using Calc.MVVM.Helpers;
 using Calc.MVVM.Helpers.Mediators;
