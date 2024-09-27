@@ -395,7 +395,7 @@
                                 Tag="Select First Assembly"
                                 HorizontalAlignment="Stretch"
                                 Style="{StaticResource ButtonStyle}"
-                                Click="SetAssemblyClicked"/>
+                                Click="SetFirstAssemblyClicked"/>
 
                         <Button Content="{Binding  NodeTreeVM.SelectedNodeItem.NodeAssemblyItem.Assembly2.Name}"
                                 IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeAssemblyItem.CanAddSecondAssembly}"
@@ -404,7 +404,7 @@
                                 Tag="Select Second Assembly"
                                 HorizontalAlignment="Stretch"
                                 Style="{StaticResource ButtonStyle}"
-                                Click="SetAssemblyClicked"/>
+                                Click="SetSecondAssemblyClicked"/>
 
                     </StackPanel>
                 </DockPanel>

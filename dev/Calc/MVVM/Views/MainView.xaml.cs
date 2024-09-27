@@ -158,18 +158,20 @@ namespace Calc.MVVM.Views
             }
         }
 
-        private void SetAssemblyClicked(object sender, RoutedEventArgs e)
+        private void SetFirstAssemblyClicked(object sender, RoutedEventArgs e)
         {
-            string tag = (sender as Button).Tag.ToString();
-            SetAssemblyWithTag(tag);
+            SetAssemblyWithTag(true);
+        }
+
+        private void SetSecondAssemblyClicked(object sender, RoutedEventArgs e)
+        {
+            SetAssemblyWithTag(false);
         }
 
         // set the main or sub assembly calling the assembly selection view
-        // decide which assembly to set based on the tag
-        private void SetAssemblyWithTag(string tag)
+        private void SetAssemblyWithTag(bool setFirst)
         {
-            bool setMain = tag.Contains("Main");
-            var canSelect = MainVM.HandleSelectingAssembly(setMain);
+            var canSelect = MainVM.HandleSelectingAssembly(setFirst);
 
             if (!canSelect) return;
 
@@ -178,7 +180,7 @@ namespace Calc.MVVM.Views
 
             if (result == true)
             {
-                MainVM.HandleAssemblySelected(setMain);
+                MainVM.HandleAssemblySelected(setFirst);
             }
         }
 
