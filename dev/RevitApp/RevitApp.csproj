@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\SpeckleSender\SpeckleSender.csproj" />
+    <ProjectReference Include="..\SpeckleSender\SpeckleSender.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\MVVM\MVVM.csproj" />
     <ProjectReference Include="..\RevitConnector\RevitConnector.csproj" />

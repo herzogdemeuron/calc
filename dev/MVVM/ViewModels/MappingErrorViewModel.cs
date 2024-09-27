@@ -62,16 +62,15 @@ namespace Calc.MVVM.ViewModels
         {
             mappingVM = mappingViewModel;
             BrokenNodeSource = new ObservableCollection<NodeModel>();
-            MediatorFromVM.Register("BrokenForestChanged", forest => UpdateBrokenNodes((Forest)forest));
         }
 
-        private void UpdateBrokenNodes(Forest forest)
+        internal void UpdateBrokenNodes(Forest blackForest)
         {
-            if(forest.Trees?.Count > 0)
+            if(blackForest.Trees?.Count > 0)
             {
-                BrokenForest = forest;
+                BrokenForest = blackForest;
                 BrokenNodeSource.Clear();
-                foreach (var tree in forest.Trees)
+                foreach (var tree in blackForest.Trees)
                 {
                     BrokenNodeSource.Add(new NodeModel(tree));
                 }

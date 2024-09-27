@@ -43,7 +43,7 @@ namespace Calc.MVVM.ViewModels
             Store = calcStore;
             this.visualizer = visualizer;
             BranchesSwitch = false;
-            MediatorFromVM.Register("ForestSelectionChanged", mapping => UpdateNodeSource((Mapping)mapping));
+            //MediatorFromVM.Register("ForestSelectionChanged", mapping => UpdateNodeSource((Mapping)mapping));
             MediatorFromVM.Register("MappingSelectionChanged", mapping => RemapAllNodes((Mapping)mapping));
             MediatorFromVM.Register("AssemblySelectionChanged", _ => RecolorAllNodes());
 
@@ -57,20 +57,22 @@ namespace Calc.MVVM.ViewModels
         }
 
 
-        public void UpdateNodeSource(Mapping mapping)
+        public void UpdateNodeSource()
         {
             CurrentForestItem = new NodeModel(Store.ForestSelected, this);
             CurrentDarkForestItem = new NodeModel(Store.DarkForestSelected, this);
-            RemapAllNodes(mapping);
+            RemapAllNodes();
             OnPropertyChanged(nameof(NodeSource));
             RecolorAllNodes(true);
             DeselectNodes();
         }
-        public void RemapAllNodes(Mapping mapping)
+        public void RemapAllNodes()
         {
             if (CurrentForestItem == null) return;
-            var brokenForest = MappingHelper.ApplyMappingToForestItem(CurrentForestItem, Store, mapping);
-            MediatorFromVM.Broadcast("BrokenForestChanged", brokenForest);
+            if (Store.MappingSelected == null) return;
+
+            var brokenForest = MappingHelper.ApplyMappingToForestItem(CurrentForestItem, Store, Store.MappingSelected);
+            //MediatorFromVM.Broadcast("BrokenForestChanged", brokenForest);
             RecolorAllNodes();
         }
 

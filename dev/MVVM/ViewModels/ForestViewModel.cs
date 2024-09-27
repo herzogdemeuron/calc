@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace Calc.MVVM.ViewModels
 {
-    public class ForestViewModel : INotifyPropertyChanged
+    public class ForestViewModel
     {
         private readonly CalcStore store;
         private IElementCreator elementCreator;
@@ -22,27 +22,10 @@ namespace Calc.MVVM.ViewModels
         public async Task HandleForestSelectionChanged(Forest forest)
         {
             if (forest == null) return;
-
             try
             {
-                Mapping mapping;
-                if (store.ForestSelected == forest) //never happens
-                {
-                    // if the same forest is selected, update the current forest presering the mapping
-                    Mapping currentMapping = new Mapping("CurrentMapping", store.ForestSelected);
-                    var darkForest = await ForestHelper.PlantTreesAsync(store.ForestSelected, elementCreator, store.CustomParamSettingsAll);
-                    store.DarkForestSelected = darkForest;
-                    mapping = currentMapping;
-                }
-                else
-                {
-                    // otherwise create new forest and reset mapping
-                    store.ForestSelected = forest;
-                    var darkForest = await ForestHelper.PlantTreesAsync(forest, elementCreator, store.CustomParamSettingsAll);
-                    store.DarkForestSelected = darkForest;
-                    mapping = store.MappingSelected;
-                }
-                MediatorFromVM.Broadcast("ForestSelectionChanged", mapping);
+                store.ForestSelected = forest;
+                store.DarkForestSelected = await ForestHelper.PlantTreesAsync(forest, elementCreator, store.CustomParamSettingsAll);
             }
             catch (System.Exception e)
             {
@@ -52,12 +35,6 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }
 

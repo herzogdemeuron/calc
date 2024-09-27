@@ -2,6 +2,7 @@
 using Calc.Core.Interfaces;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Mappings;
+using Calc.MVVM.Helpers;
 using Calc.MVVM.Helpers.Mediators;
 using Calc.MVVM.Models;
 using System.ComponentModel;
@@ -21,6 +22,7 @@ namespace Calc.MVVM.ViewModels
         public VisibilityViewModel VisibilityVM { get; set; }
         public CalculationViewModel CalculationVM { get; set; }
         public AssemblySelectionViewModel AssemblySelectionVM { get; set; }
+
 
         public MainViewModel(CalcStore store, IElementCreator elementCreator, IVisualizer visualizer)
         {
@@ -51,8 +53,11 @@ namespace Calc.MVVM.ViewModels
 
         public async void HandleForestSelectionChanged(Forest forest)
         {
-            if (Store.ForestSelected == forest) return; 
+            if (Store.ForestSelected == forest || forest == null) return;
             await ForestVM.HandleForestSelectionChanged(forest);
+            NodeTreeVM.UpdateNodeSource();
+            MappingErrorVM.UpdateBrokenNodes(Store.DarkForestSelected);
+
         }
 
         public void HandleMappingSelectionChanged(Mapping mapping)
