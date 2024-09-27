@@ -15,7 +15,7 @@ namespace Calc.MVVM.ViewModels
         public ForestViewModel ForestVM { get; set; }
         public MappingViewModel MappingVM { get; set; }
         public MappingErrorViewModel MappingErrorVM { get; set; }
-        public NodeTreeModel NodeTreeVM { get; set; }
+        public NodeTreeViewModel NodeTreeVM { get; set; }
         public SavingViewModel SavingVM { get; set; }
         public NewMappingViewModel NewMappingVM { get; set; }
         public VisibilityViewModel VisibilityVM { get; set; }
@@ -30,7 +30,7 @@ namespace Calc.MVVM.ViewModels
             ForestVM = new ForestViewModel(store, elementCreator);
             MappingVM = new MappingViewModel(store);
             NewMappingVM = new NewMappingViewModel(store);
-            NodeTreeVM = new NodeTreeModel(store, visualizer);
+            NodeTreeVM = new NodeTreeViewModel(store, visualizer);
 
             MappingErrorVM = new MappingErrorViewModel(MappingVM);
             CalculationVM = new CalculationViewModel(NodeTreeVM);

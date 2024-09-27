@@ -1,20 +1,18 @@
-﻿using Calc.MVVM.Helpers;
-using Calc.MVVM.Helpers.Mediators;
-using Calc.MVVM.Services;
-using Calc.Core;
-using Calc.Core.Objects.Assemblies;
-using Calc.Core.Objects.GraphNodes;
+﻿using Calc.Core;
+using Calc.Core.Color;
+using Calc.Core.Interfaces;
 using Calc.Core.Objects.Mappings;
+using Calc.MVVM.Helpers;
+using Calc.MVVM.Helpers.Mediators;
+using Calc.MVVM.Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using Calc.Core.Interfaces;
 using System.Linq;
-using Calc.Core.Color;
 
-namespace Calc.MVVM.Models
+namespace Calc.MVVM.ViewModels
 {
-    public class NodeTreeModel : INotifyPropertyChanged
+    public class NodeTreeViewModel : INotifyPropertyChanged
     {
         public CalcStore Store;
         public bool BranchesSwitch { get; set; }
@@ -40,7 +38,7 @@ namespace Calc.MVVM.Models
         public ObservableCollection<NodeModel> NodeSource
         { get => new ObservableCollection<NodeModel> { CurrentForestItem, CurrentDarkForestItem }; }
 
-        public NodeTreeModel(CalcStore calcStore, IVisualizer visualizer)
+        public NodeTreeViewModel(CalcStore calcStore, IVisualizer visualizer)
         {
             Store = calcStore;
             this.visualizer = visualizer;
@@ -54,7 +52,7 @@ namespace Calc.MVVM.Models
 
             MediatorFromVM.Register("MainViewToggleToBranch", _ => BranchesSwitch = true);
             MediatorFromVM.Register("MainViewToggleToBranch", _ => ColorNodesToBranch());
-            //new ResultSender();
+
             //changing priority: Forest => Mapping => Assembly
         }
 

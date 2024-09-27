@@ -22,7 +22,7 @@ namespace Calc.MVVM.Models
         public bool? BranchParameterIsInstance { get => CheckIfParameterIsInstance(); }
         public bool IsBranch { get => CheckIfBranch(); } // is a branch but not a tree
         public bool IsBrokenNode => Host is Branch && (Host as Branch).ParentForest == null; // mark as broken if parent forest is null
-        public NodeTreeModel ParentTreeView { get; set; }
+        public NodeTreeViewModel ParentTreeView { get; set; }
         public NodeModel ParentNodeItem { get; private set; }
         public ObservableCollection<NodeModel> SubNodeItems { get; }
         public AssemblyViewModel NodeAssemblyItem { get; set; }
@@ -41,29 +41,6 @@ namespace Calc.MVVM.Models
                 }
             }
         }
-
-   /*     public Dictionary<string, double> CategorizedCalculation
-        {
-            get
-            {
-                var calculation = new Dictionary<string, double>();
-                if (Host != null && Host is Branch branch)
-                {
-                    foreach (var aSnapshot in branch.AssemblySnapshots)
-                    {
-                        if (calculation.ContainsKey(aSnapshot.GroupName))
-                        {
-                            calculation[aSnapshot.GroupName] += Math.Round(aSnapshot.Gwp, 3);
-                        }
-                        else
-                        {
-                            calculation.Add(aSnapshot.GroupName, Math.Round(aSnapshot.Gwp, 3));
-                        }
-                    }
-                }
-                return calculation;
-            }
-        }*/
 
         private bool _labelColorVisible;
         public bool LabelColorVisible
@@ -89,7 +66,7 @@ namespace Calc.MVVM.Models
         }
 
 
-        public NodeModel(IGraphNode node, NodeTreeModel parentTreeView = null, NodeModel parentNodeItem = null)
+        public NodeModel(IGraphNode node, NodeTreeViewModel parentTreeView = null, NodeModel parentNodeItem = null)
         {
             Host = node;
             ParentTreeView = parentTreeView;

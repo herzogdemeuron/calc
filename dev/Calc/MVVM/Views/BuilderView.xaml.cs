@@ -259,7 +259,7 @@ namespace Calc.MVVM.Views
             // if the double clicked item is a treeviewitem, call set main material
             else if (!treeViewItem.HasItems)
             {
-                SetMaterialWithTag("Main");
+                SetMaterialWithTag(true);
             }
         }
 

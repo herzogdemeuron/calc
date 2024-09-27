@@ -13,7 +13,7 @@ namespace Calc.MVVM.ViewModels
 {
     public class CalculationViewModel : INotifyPropertyChanged
     {
-        private readonly NodeTreeModel NodeTreeVM;
+        private readonly NodeTreeViewModel NodeTreeVM;
         public CalcStore Store => NodeTreeVM.Store;
         public NodeModel CurrentNodeItem => NodeTreeVM.SelectedNodeItem ?? NodeTreeVM.CurrentForestItem;
         private IGraphNode HostNode => CurrentNodeItem?.Host;
@@ -126,7 +126,7 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        public CalculationViewModel(NodeTreeModel ntVM)
+        public CalculationViewModel(NodeTreeViewModel ntVM)
         {
             NodeTreeVM = ntVM;
             MediatorFromVM.Register("AssemblySelectionChanged", _ => NotifyCalculationChanged());
