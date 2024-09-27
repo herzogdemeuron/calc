@@ -126,27 +126,6 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-
-        private bool IsFullyCalculated // deprecated
-        {
-            get
-            {
-                if (HostNode == null) return false;
-                if (HostNode is Branch branch)
-                {
-                    return branch.IsFullyCalculated;
-                }
-                else
-                {
-                    var forest = NodeTreeVM.CurrentForestItem.Host as Forest;
-                    var branches = forest.Trees;
-                    if (branches == null || branches.Count() == 0)
-                        return true;
-                    return branches.All(b => b.IsFullyCalculated);
-                }
-            }
-        }
-
         public CalculationViewModel(NodeTreeModel ntVM)
         {
             NodeTreeVM = ntVM;

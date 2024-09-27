@@ -38,14 +38,5 @@ namespace Calc.MVVM.Views
             bool c = await LoginVM.HandleOK();
             if (c) this.Close();
         }
-
-        private void LoginQuitClicked(object sender, RoutedEventArgs e) // deprecated
-        {
-            LoginVM.CancelLoad();
-            this.Close();
-        }
-
-
-
     }
 }

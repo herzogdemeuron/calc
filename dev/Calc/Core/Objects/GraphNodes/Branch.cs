@@ -370,31 +370,6 @@ namespace Calc.Core.Objects.GraphNodes
             return newBranch;
         }
 
-
-        public void RemoveElementsByAssemblyOverrides() // deprecated
-        {
-            if (Assemblies != null && SubBranches.Count > 0)
-            {
-                // get all elements with assembly from subbranches
-                var subElementsWithAssembly = SubBranches
-                    .Where(sb => sb.Assemblies != null)
-                    .Where(sb => sb.Assemblies.Count > 0)
-                    .SelectMany(sb => sb.Elements)
-                    .ToList();
-                // remove subelements with assembly from elements of current branch
-                Elements = Elements
-                    .Where(e => !subElementsWithAssembly.Contains(e))
-                    .ToList();
-            }
-            if (SubBranches.Count > 0)
-            {
-                foreach (var subBranch in SubBranches)
-                {
-                    subBranch.RemoveElementsByAssemblyOverrides();
-                }
-            }
-        }
-
         /// <summary>
         /// This method returns a flat list of all subbranches. The current branch is included.
         /// Preferrably use this method on the root branch instance aka tree.Trunk.
@@ -412,17 +387,6 @@ namespace Calc.Core.Objects.GraphNodes
                 }
             }
             return branches;
-        }
-
-        public void PrintTree(int indentLevel = 0)  // deprecated
-        {
-            string indentation = new(' ', indentLevel * 4);
-            Console.WriteLine($"{indentation}∟: Elements: {Elements.Count}, Param: {Parameter}, Value: {Value}, Method: {Method}, Color: {HslColor.H}, Assembly: {Assemblies}");
-
-            foreach (var subBranch in SubBranches)
-            {
-                subBranch.PrintTree(indentLevel + 1);
-            }
         }
 
         private Dictionary<object, List<CalcElement>> GroupByParameterValue(string parameter)
