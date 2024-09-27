@@ -1,16 +1,11 @@
-﻿using Calc.MVVM.Helpers.Mediators;
-using Calc.Core.Objects;
-using Calc.Core.Objects.Buildups;
-using Calc.Core.Objects.GraphNodes;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows.Data;
-using Calc.MVVM.Models;
-using Calc.Core;
+﻿using Calc.Core;
 using Calc.Core.Objects.Materials;
-using Calc.Core.Objects.Results;
 using Calc.MVVM.Helpers;
+using Calc.MVVM.Models;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows.Data;
 
 namespace Calc.MVVM.ViewModels
 {
@@ -19,6 +14,7 @@ namespace Calc.MVVM.ViewModels
     {
         private readonly List<Material> allMaterials;
         public ICollectionView AllMaterialsView { get; set; }
+        public List<StandardModel> AllStandards { get; set; }
         private List<FilterTagModel> materialTags;
         public ICollectionView MaterialTagsView
         {
@@ -85,10 +81,11 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        public MaterialSelectionViewModel(DirectusStore store)
+        public MaterialSelectionViewModel(CalcStore store)
         {
-            allMaterials = store.CurrentMaterials;
-            AllMaterialsView = CollectionViewSource.GetDefaultView(allMaterials);
+            AllMaterialsView = CollectionViewSource.GetDefaultView(store.MaterialsAll);
+            allMaterials = store.MaterialsAll;
+            AllStandards = new List<StandardModel>(store.StandardsAll.Select(s => new StandardModel(s)));
             InitTypeTags();
 
         }
@@ -106,12 +103,11 @@ namespace Calc.MVVM.ViewModels
             SelectedMaterialTag = null;
             SelectedProductTag = null;
             SelectedMaterial = material;
-            // if a material was already selected, find the corresponding tags
-            if (SelectedMaterial != null)
-            {
-                SelectedMaterialTag = materialTags.Find(t => t.TagName == SelectedMaterial.MaterialTypeFamily);
-                SelectedProductTag = productTags.Find(t => t.TagName == SelectedMaterial.ProductTypeFamily);
-            }
+        }
+
+        public void HandleSourceCheckChanged()
+        {
+            FilterMaterialsWithType();
         }
 
         private void InitTypeTags()
@@ -147,10 +143,16 @@ namespace Calc.MVVM.ViewModels
                 var material = obj as Material;
                 // either name, material type or material type family contains the search text
                 var name = material.Name?.ToLower() ?? "";
+                var standard = material.Standard.Name ?? "";
                 var mType = material.MaterialType?.ToLower() ?? "";
                 var mFamily = material.MaterialTypeFamily?.ToLower() ?? "";
                 var pType = material.ProductTypeFamily?.ToLower() ?? "";
                 var pFamily = material.ProductTypeFamily?.ToLower() ?? "";
+
+                if (!AllStandards.Where(s => s.IsSelected).Any(s => s.Name == standard))
+                {
+                    return false;
+                }
 
                 if (SelectedMaterialTag != null && (material.MaterialTypeFamily ??"?") != SelectedMaterialTag.TagName)
                 {

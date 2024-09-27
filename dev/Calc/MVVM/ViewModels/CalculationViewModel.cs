@@ -1,23 +1,24 @@
-﻿using Calc.MVVM.Helpers.Mediators;
-using Calc.Core;
+﻿using Calc.Core;
 using Calc.Core.Objects;
+using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.GraphNodes;
-using Calc.Core.Objects.Results;
-using System;
+using Calc.Core.Snapshots;
+using Calc.MVVM.Helpers.Mediators;
+using Calc.MVVM.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using Calc.MVVM.Models;
 
 namespace Calc.MVVM.ViewModels
 {
     public class CalculationViewModel : INotifyPropertyChanged
     {
         private readonly NodeTreeModel NodeTreeVM;
-        public DirectusStore Store => NodeTreeVM.Store;
+        public CalcStore Store => NodeTreeVM.Store;
         public NodeModel CurrentNodeItem => NodeTreeVM.SelectedNodeItem ?? NodeTreeVM.CurrentForestItem;
         private IGraphNode HostNode => CurrentNodeItem?.Host;
-        public string Name
+        public double? ProjectArea => Store.ProjectSelected.Area;
+        public string Name  // used anywhere?
         {
             get
             {
@@ -28,52 +29,67 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        public List<Result> Results
+        /// <summary>
+        /// 
+        /// </summary>
+        public List<AssemblySnapshot> AssemblySnapshots
         {
             get
             {
-                if (HostNode == null) return null;
-                if (HostNode is Branch branch)
-                {
-                    return branch.CalculationResults;
-                }
-                else
-                {
-                    var forest = NodeTreeVM.CurrentForestItem.Host as Forest;
-                    var branches = forest.Trees.SelectMany(tree => tree.Flatten());
-                    if (branches == null || branches.Count() == 0)
-                        return null;
-                    return branches.SelectMany(b => b.CalculationResults).ToList();
-                }
-
+                if (NodeTreeVM.CurrentForestItem?.Host == null) return null;
+                var forest = NodeTreeVM.CurrentForestItem.Host as Forest;
+                var trees = forest.Trees;
+                if (trees == null || trees.Count() == 0)
+                    return null;
+                return trees.SelectMany(t => t.AssemblySnapshots).ToList();
             }
         }
-        public bool HasResults => (Results != null && Results.Count > 0);
+
+        public bool HasResults => (AssemblySnapshots != null && AssemblySnapshots.Count > 0);
+
+        /// <summary>
+        /// calculation for each element group
+        /// </summary>
         public List<CategorizedResultModel> CategorizedResults
         {
             get
             {
                 var calculation = new List<CategorizedResultModel>();
-
-                if (HostNode == null || Results == null)
+                if (AssemblySnapshots == null)
                     return null;
 
-                foreach (var result in Results)
+                foreach (var snapshot in AssemblySnapshots)
                 {
-                    var existingResult = calculation.FirstOrDefault(c => c.GroupName == result.GroupName);
-                    if (existingResult != null)
+                    var cal = calculation.FirstOrDefault(c => c.Group == snapshot.ElementGroup);
+                    if (cal == null)
                     {
-                        existingResult.Gwp += Math.Round(result.Gwp, 3);
-                        existingResult.Ge += Math.Round(result.Ge, 3);
+                        calculation.Add(
+                            new CategorizedResultModel
+                            {
+                                Group = snapshot.ElementGroup,
+                                Gwp = snapshot.TotalGwp.Value,
+                                Ge = snapshot.TotalGe.Value
+                            });
                     }
                     else
                     {
-                        calculation.Add(new CategorizedResultModel
-                        {
-                            GroupName = result.GroupName,
-                            Gwp = Math.Round(result.Gwp, 0),
-                            Ge = Math.Round(result.Ge, 0)
-                        });
+                        cal.Gwp += snapshot.TotalGwp.Value;
+                        cal.Ge += snapshot.TotalGe.Value;
+                    }
+                }
+
+                // post process: divide all values by the project area if it is not zero
+                foreach (var cal in calculation)
+                {
+                    if (ProjectArea.HasValue && ProjectArea.Value != 0)
+                    {
+                        cal.Gwp /= ProjectArea.Value;
+                        cal.Ge /= ProjectArea.Value;
+                    }
+                    else
+                    {
+                        cal.Gwp = 0;
+                        cal.Ge = 0;
                     }
                 }
 
@@ -82,8 +98,13 @@ namespace Calc.MVVM.ViewModels
         }
 
         public bool HasErrors => (Errors != null && Errors.Count > 0);
-        public bool CanSaveResults => (HasResults && !HasErrors && IsFullyCalculated);
+        public bool CanSaveResults => (HasResults && !HasErrors);
+        public double ProjectGwp => CategorizedResults?.Sum(c => c.Gwp) ?? 0;
+        public double ProjectGe => CategorizedResults?.Sum(c => c.Ge) ?? 0;
 
+        /// <summary>
+        /// Show the errors for the current selection / forest
+        /// </summary>
         public List<ParameterError> Errors
         {
             get
@@ -105,30 +126,10 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        private bool IsFullyCalculated
-        {
-            get
-            {
-                if (HostNode == null) return false;
-                if (HostNode is Branch branch)
-                {
-                    return branch.IsFullyCalculated;
-                }
-                else
-                {
-                    var forest = NodeTreeVM.CurrentForestItem.Host as Forest;
-                    var branches = forest.Trees;
-                    if (branches == null || branches.Count() == 0)
-                        return true;
-                    return branches.All(b => b.IsFullyCalculated);
-                }
-            }
-        }
-
         public CalculationViewModel(NodeTreeModel ntVM)
         {
             NodeTreeVM = ntVM;
-            MediatorFromVM.Register("BuildupSelectionChanged", _ => NotifyCalculationChanged());
+            MediatorFromVM.Register("AssemblySelectionChanged", _ => NotifyCalculationChanged());
             MediatorFromVM.Register("NodeItemSelectionChanged", _ => NotifyCalculationChanged());
             MediatorFromVM.Register("MappingSelectionChanged", _ => NotifyCalculationChanged());
         }
@@ -142,6 +143,9 @@ namespace Calc.MVVM.ViewModels
             OnPropertyChanged(nameof(HasResults));
             OnPropertyChanged(nameof(HasErrors));
             OnPropertyChanged(nameof(CanSaveResults));
+            OnPropertyChanged(nameof(ProjectGwp));
+            OnPropertyChanged(nameof(ProjectGe));
+            OnPropertyChanged(nameof(ProjectArea));
         }
 
 

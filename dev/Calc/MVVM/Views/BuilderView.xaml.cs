@@ -1,9 +1,6 @@
 ﻿using Calc.Core.Objects;
-using Calc.Core.Objects.Buildups;
-using Calc.Core.Objects.Results;
-using Calc.MVVM.Helpers;
+using Calc.Core.Objects.Assemblies;
 using Calc.MVVM.Helpers.Mediators;
-using Calc.MVVM.Models;
 using Calc.MVVM.ViewModels;
 using System;
 using System.Windows;
@@ -64,16 +61,28 @@ namespace Calc.MVVM.Views
             BuilderVM.HandleWindowLoaded();
         }
 
-        private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            BuilderVM.HandleWindowClosing();
-        }
-
-        private void BuildupNameTextChanged(object sender, TextChangedEventArgs e)
+        private void AssemblyNameTextChanged(object sender, TextChangedEventArgs e)
         {
             var currentText = (sender as TextBox).Text;
-            BuilderVM.HandleBuildupNameChanged(currentText);
+            BuilderVM.HandleAssemblyNameChanged(currentText);
         }
+
+        private void AssemblyNameFocusLost(object sender, RoutedEventArgs e)
+        {
+            BuilderVM.HandleAssemblyNameSetFinished();
+        }
+
+        private void AssemblyCodeTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var currentText = (sender as TextBox).Text;
+            BuilderVM.HandleAssemblyCodeChanged(currentText);
+        }
+
+        private void AssemblyCodeFocusLost(object sender, RoutedEventArgs e)
+        {
+            BuilderVM.HandleAssemblyCodeSetFinished();
+        }
+
 
         private void AmountClicked(object sender, RoutedEventArgs e)
         {
@@ -107,7 +116,7 @@ namespace Calc.MVVM.Views
         // decide which material to set based on the tag
         private void SetMaterialWithTag(string tag)
         {
-            bool setMain = tag.Contains("Main");
+            bool setMain = tag.Contains("First");
 
             BuilderVM.HandleSelectingMaterial(setMain);
 
@@ -126,9 +135,9 @@ namespace Calc.MVVM.Views
             BuilderVM.HandleMessageClose();
         }
 
-        private async void SaveBuildupClicked(object sender, RoutedEventArgs e)
+        private async void SaveAssemblyClicked(object sender, RoutedEventArgs e)
         {
-            await BuilderVM.HandleSaveBuildup();
+            await BuilderVM.HandleSaveAssembly();
         }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -190,11 +199,11 @@ namespace Calc.MVVM.Views
             {
                 Point currentPosition = e.GetPosition(TreeView);
                 if (e.LeftButton == MouseButtonState.Pressed &&
-                    (_draggedItem == null || _draggedItem is BuildupComponent) &&
+                    (_draggedItem == null || _draggedItem is AssemblyComponent) &&
                     (Math.Abs(currentPosition.X - _lastMouseDown.X) > 10.0 ||
                      Math.Abs(currentPosition.Y - _lastMouseDown.Y) > 10.0))
                 {
-                    var item = TreeView.SelectedItem as BuildupComponent;
+                    var item = TreeView.SelectedItem as AssemblyComponent;
                     if (item != null)
                     {
                         _draggedItem = item;
@@ -216,7 +225,7 @@ namespace Calc.MVVM.Views
 
         private void TreeViewDrop(object sender, DragEventArgs e)
         {
-            var droppedData = e.Data.GetData(typeof(BuildupComponent)) as BuildupComponent;
+            var droppedData = e.Data.GetData(typeof(AssemblyComponent)) as AssemblyComponent;
             if (droppedData == null) return;
 
             // Get the drop target
@@ -226,14 +235,14 @@ namespace Calc.MVVM.Views
             TreeViewItem targetTreeViewItem = FindAncestorOrSelf<TreeViewItem>(targetItem);
             if (targetTreeViewItem == null) return;
 
-            var targetData = targetTreeViewItem.DataContext as BuildupComponent;
+            var targetData = targetTreeViewItem.DataContext as AssemblyComponent;
             if (targetData == null || ReferenceEquals(droppedData, targetData)) return;
 
             // Find indices
-            int oldIndex = BuilderVM.BuildupCreationVM.BuildupComponents.IndexOf(droppedData);
-            int newIndex = BuilderVM.BuildupCreationVM.BuildupComponents.IndexOf(targetData);
+            int oldIndex = BuilderVM.AssemblyCreationVM.AssemblyComponents.IndexOf(droppedData);
+            int newIndex = BuilderVM.AssemblyCreationVM.AssemblyComponents.IndexOf(targetData);
 
-            BuilderVM.BuildupCreationVM.MoveBuildupComponent(oldIndex, newIndex);
+            BuilderVM.AssemblyCreationVM.MoveAssemblyComponent(oldIndex, newIndex);
             _draggedItem = null;
         }
 

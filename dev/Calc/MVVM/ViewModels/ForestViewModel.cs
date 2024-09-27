@@ -12,11 +12,11 @@ namespace Calc.MVVM.ViewModels
 {
     public class ForestViewModel : INotifyPropertyChanged
     {
-        private readonly DirectusStore store;
+        private readonly CalcStore store;
         private IElementCreator elementCreator;
-        public ForestViewModel(DirectusStore directusStore, IElementCreator elementCreator)
+        public ForestViewModel(CalcStore calcStore, IElementCreator elementCreator)
         {
-            store = directusStore;
+            store = calcStore;
             this.elementCreator = elementCreator;
         }
         public async Task HandleForestSelectionChanged(Forest forest)
@@ -30,14 +30,16 @@ namespace Calc.MVVM.ViewModels
                     {
                         // if the same forest is selected, update the current forest presering the mapping
                         Mapping currentMapping = new Mapping("CurrentMapping", store.ForestSelected);
-                        await ForestHelper.PlantTreesAsync(store.ForestSelected, elementCreator, store.CustomParamSettingsAll);
+                        var darkForest = await ForestHelper.PlantTreesAsync(store.ForestSelected, elementCreator, store.CustomParamSettingsAll);
+                        store.DarkForestSelected = darkForest;
                         mapping = currentMapping;
                     }
                     else
                     {
                         // otherwise create new forest and reset mapping
                         store.ForestSelected = forest;
-                        await ForestHelper.PlantTreesAsync(forest, elementCreator, store.CustomParamSettingsAll);
+                        var darkForest = await ForestHelper.PlantTreesAsync(forest, elementCreator, store.CustomParamSettingsAll);
+                        store.DarkForestSelected = darkForest;
                         mapping = store.MappingSelected;
                     }
                     MediatorFromVM.Broadcast("ForestSelectionChanged", mapping);

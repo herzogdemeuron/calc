@@ -1,4 +1,4 @@
-﻿using Speckle.Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,12 +7,12 @@ namespace Calc.Core.Objects.Mappings
 {
 
     /// <summary>
-    /// stands for a set of buildups that are assigned to a branch via a path
+    /// stands for a set of assemblies that are assigned to a branch via a path
     /// </summary>
     public class MappingItem
     {
-        [JsonProperty("buildup_ids")]
-        public List<int> BuildupIds { get; set; }
+        [JsonProperty("assembly_ids")]
+        public List<int> AssemblyIds { get; set; }
         [JsonProperty("mapping_path")]
         public List<MappingPath> Path { get; set; }
 

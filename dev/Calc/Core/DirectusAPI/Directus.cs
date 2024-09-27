@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
+﻿using GraphQL;
 using GraphQL.Client.Http;
-using Calc.Core.GraphQL.Serializer;
-using System.Threading.Tasks;
-using Speckle.Newtonsoft.Json;
-using System.Text;
-using System.Diagnostics;
-using System.Net;
+using GraphQL.Client.Serializer.Newtonsoft;
+using Newtonsoft.Json;
+using Polly;
+using Polly.Retry;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Polly;
-using GraphQL;
-using Polly.Retry;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading.Tasks;
+
 
 namespace Calc.Core.DirectusAPI
 {
@@ -23,31 +23,29 @@ namespace Calc.Core.DirectusAPI
     /// </summary>
     public class Directus
     {
-        private string token ;
+        private string token;
         private string baseUrl;
-        private string refreshToken;
+        private string refresh_token;
 
         private string reEmail;
         private string rePassword;
         public bool Authenticated { get; private set; } = false;
-        private readonly HttpClient httpClient;
+        private HttpClient httpClient;
         private GraphQLHttpClient graphQlClient;
         private GraphQLHttpClient graphQlSysClient;
 
-        private AsyncRetryPolicy graphQlRetryPolicy = 
+        private readonly AsyncRetryPolicy graphQlRetryPolicy = 
             Policy.Handle<GraphQLHttpRequestException>()
                   .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
 
-        private AsyncRetryPolicy httpRetryPolicy =
+        private readonly AsyncRetryPolicy httpRetryPolicy =
             Policy.Handle<HttpRequestException>()
                   .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
 
 
         public Directus()
         {
-            httpClient = new HttpClient();
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12; // unless windows supports TLS 1.3, directus cloud enforces TLS 1.3
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         public async Task<HttpResponseMessage> RequestWithRetry(string url, Func<HttpContent> contentFactory, bool reAuth = true)
@@ -58,9 +56,8 @@ namespace Calc.Core.DirectusAPI
             // re-authenticate and retry the request if the response is "Unauthorized"
             if (response.StatusCode == HttpStatusCode.Unauthorized && reAuth)
             {
-                // waite for sevaral seconds before retrying
-                await Task.Delay(5000);
                 await RefreshAuthentication();
+                action = new Func<Task<HttpResponseMessage>>(() => httpClient.PostAsync(url, contentFactory()));
                 response = await httpRetryPolicy.ExecuteAsync(action);
             }
             return response;
@@ -82,13 +79,21 @@ namespace Calc.Core.DirectusAPI
 
         public async Task<GraphQLResponse<TDriver>> GraphQlQueryWithRetry<TDriver>(GraphQLRequest request)
         {
-            var response = await graphQlRetryPolicy.ExecuteAsync(async () => await graphQlClient.SendQueryAsync<TDriver>(request));
-            bool isUnauthorized = response.Errors != null && response.Errors.Any(e => e.Message.Contains("Unauthorized"));
-            if (isUnauthorized)
+            GraphQLResponse<TDriver> response = null;
+            try
             {
-                await RefreshAuthentication();
                 response = await graphQlRetryPolicy.ExecuteAsync(async () => await graphQlClient.SendQueryAsync<TDriver>(request));
             }
+            // catch unauthorized exception
+            catch (GraphQLHttpRequestException ex)
+            {
+                if (ex.Message.Contains("Unauthorized"))
+                {
+                    await RefreshAuthentication();
+                    response = await graphQlRetryPolicy.ExecuteAsync(async () => await graphQlClient.SendQueryAsync<TDriver>(request));
+                }
+            }
+
             if (response.Errors != null && response.Data == null)
             {
                 throw new Exception(JsonConvert.SerializeObject(response.Errors, Formatting.Indented));
@@ -100,12 +105,19 @@ namespace Calc.Core.DirectusAPI
 
         public async Task<GraphQLResponse<TDriver>> GraphQlMutationWithRetry<TDriver>(GraphQLRequest request)
         {
-            var response = await graphQlRetryPolicy.ExecuteAsync(async () => await graphQlClient.SendMutationAsync<TDriver>(request));
-            bool isUnauthorized = response.Errors != null && response.Errors.Any(e => e.Message.Contains("Unauthorized"));
-            if (isUnauthorized)
+            GraphQLResponse<TDriver> response = null;
+            try
             {
-                await RefreshAuthentication();
-                response = await graphQlRetryPolicy.ExecuteAsync(async () => await graphQlClient.SendQueryAsync<TDriver>(request));
+                response = await graphQlRetryPolicy.ExecuteAsync(async () => await graphQlClient.SendMutationAsync<TDriver>(request));
+            }
+            // catch unauthorized exception
+            catch (GraphQLHttpRequestException ex)
+            {
+                   if (ex.Message.Contains("Unauthorized"))
+                {
+                    await RefreshAuthentication();
+                    response = await graphQlRetryPolicy.ExecuteAsync(async () => await graphQlClient.SendMutationAsync<TDriver>(request));
+                }
             }
             if (response.Errors != null && response.Data == null)
             {
@@ -118,12 +130,19 @@ namespace Calc.Core.DirectusAPI
 
         public async Task<GraphQLResponse<TDriver>> GraphQlSysQueryWithRetry<TDriver>(GraphQLRequest request)
         {
-            var response = await graphQlRetryPolicy.ExecuteAsync(async () => await graphQlSysClient.SendQueryAsync<TDriver>(request));
-            bool isUnauthorized = response.Errors != null && response.Errors.Any(e => e.Message.Contains("Unauthorized"));
-            if (isUnauthorized)
+            GraphQLResponse<TDriver> response = null;
+            try
             {
-                await RefreshAuthentication();
-                response = await graphQlRetryPolicy.ExecuteAsync(async () => await graphQlClient.SendQueryAsync<TDriver>(request));
+                response = await graphQlRetryPolicy.ExecuteAsync(async () => await graphQlSysClient.SendQueryAsync<TDriver>(request));
+            }
+            // catch unauthorized exception
+            catch (GraphQLHttpRequestException ex)
+            {
+                if (ex.Message.Contains("Unauthorized"))
+                {
+                    await RefreshAuthentication();
+                    response = await graphQlRetryPolicy.ExecuteAsync(async () => await graphQlClient.SendQueryAsync<TDriver>(request));
+                }
             }
             if (response.Errors != null && response.Data == null)
             {
@@ -144,6 +163,9 @@ namespace Calc.Core.DirectusAPI
                 throw new ArgumentException("Invalid URL.");
             }
 
+            httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
             string requestBody = JsonConvert.SerializeObject(new{ email, password });
             var contentFactory = () => new StringContent(requestBody, Encoding.UTF8, "application/json");
             var response = await RequestWithRetry($"{url}/auth/login", contentFactory, false);
@@ -153,28 +175,26 @@ namespace Calc.Core.DirectusAPI
 
             baseUrl = url;
             token = data.Access_token;
-            refreshToken = data.Refresh_token;
+            refresh_token = data.Refresh_token;
             reEmail = email;
             rePassword = password;
             ConfigureGraphQlClients();
             Authenticated = true;
-
         }
 
         public async Task RefreshAuthentication()
         {
-            if (string.IsNullOrEmpty(refreshToken))
+            if (string.IsNullOrEmpty(refresh_token))
             {
                 throw new InvalidOperationException("Refresh token is missing.");
             }
 
-            string requestBody = JsonConvert.SerializeObject(new { refresh_token = refreshToken });
+            string requestBody = JsonConvert.SerializeObject(new {refresh_token });
             var contentFactory = () => new StringContent(requestBody, Encoding.UTF8, "application/json");
             var response = await RequestWithRetry($"{baseUrl}/auth/refresh", contentFactory, false);
             // if the refresh token is expired, re-authenticate
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                await Task.Delay(5000);
                 await Authenticate(baseUrl, reEmail, rePassword);
                 return;
             }
@@ -183,11 +203,10 @@ namespace Calc.Core.DirectusAPI
             LoginResponseData data = responseData["data"];
 
             token = data.Access_token;
-            refreshToken = data.Refresh_token;
+            refresh_token = data.Refresh_token;
             ConfigureGraphQlClients();
             Authenticated = true;
         }
-
 
         private void ConfigureGraphQlClients()
         {
@@ -208,19 +227,32 @@ namespace Calc.Core.DirectusAPI
                 );
         }
 
-        public async Task<string> UploadImageAsync(string imagePath, string folderId, string newFileName)
+        public async Task<string> UploadFileAsync(string fileType, string filePath, string folderId, string newFileName)
         {
-            if (!File.Exists(imagePath))
+            if (!File.Exists(filePath))
             {
-                throw new FileNotFoundException("Image file not found.", imagePath);
+                throw new FileNotFoundException("Image file not found.", filePath);
             }
 
             // Prepare the multipart/form-data request
             var content = new MultipartFormDataContent();
-            var imageContent = new StreamContent(File.OpenRead(imagePath));
-            imageContent.Headers.ContentType = new MediaTypeHeaderValue("image/png");
+            var fileContent = new StreamContent(File.OpenRead(filePath));
+
+            // Set content type based on the file type
+            switch (fileType.ToLower())
+            {
+                case "image":
+                    fileContent.Headers.ContentType = new MediaTypeHeaderValue("image/png");
+                    break;
+                case "json":
+                    fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    break;
+                default:
+                    throw new ArgumentException("Unsupported file type", nameof(fileType));
+            }
+
             // Specify the filename in the Content-Disposition header
-            imageContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+            fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
             {
                 Name = "\"file\"",
                 FileName = $"\"{newFileName}\""
@@ -230,13 +262,30 @@ namespace Calc.Core.DirectusAPI
             {
                 content.Add(new StringContent(folderId), "folder");
             }
-            content.Add(imageContent, "file", Path.GetFileName(imagePath));
+            content.Add(fileContent, "file", Path.GetFileName(filePath));
+
             var contentFactory = () => content;
             HttpResponseMessage response = await RequestWithRetry($"{baseUrl}/files", contentFactory);
             var responseContent = await ReadResponseContent(response);
             var uploadResponse = JsonConvert.DeserializeObject<DirectusFileUploadResponse>(responseContent);
             return uploadResponse?.Data?.Id; // Return the UUID of the uploaded image
         }
+
+        public async Task<byte[]> LoadImageByIdAsync(string imageId)
+        {
+            string imageUrl = $"{baseUrl}/assets/{imageId}";
+
+            try
+            {
+                byte[] imageData = await httpClient.GetByteArrayAsync(imageUrl);
+                return imageData;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
     }
 
     internal class LoginResponseData

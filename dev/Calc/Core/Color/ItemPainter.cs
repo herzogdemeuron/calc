@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Calc.Core.Objects;
-using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.GraphNodes;
 
 namespace Calc.Core.Color
@@ -27,7 +27,7 @@ namespace Calc.Core.Color
             }
         }
 
-        public static void ColorBranchesByBuildup(List<Branch> branches)
+        public static void ColorBranchesByAssembly(List<Branch> branches)
         {
             var allBranches = new List<IColorizable>();
             foreach (var branch in branches)
@@ -38,7 +38,7 @@ namespace Calc.Core.Color
             SetByIdentifier(allBranches);
         }
 
-        public static void ColorLayersByMaterial(ObservableCollection<BuildupComponent> bcompos)
+        public static void ColorLayersByMaterial(ObservableCollection<AssemblyComponent> bcompos)
         {
             var allLayers = new List<IColorizable>();
             foreach (var bcompo in bcompos)
@@ -58,10 +58,10 @@ namespace Calc.Core.Color
 
             foreach (var item in items)
             {
-                var buildupIndex = uniqueItems.IndexOf(item.ColorIdentifier);
-                if (buildupIndex >= 0)
+                var assemblyIndex = uniqueItems.IndexOf(item.ColorIdentifier);
+                if (assemblyIndex >= 0)
                 {
-                    item.HslColor = colorGradient.HslColors[buildupIndex];
+                    item.HslColor = colorGradient.HslColors[assemblyIndex];
                 }
                 else
                 {

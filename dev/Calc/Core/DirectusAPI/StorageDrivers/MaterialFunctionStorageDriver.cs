@@ -1,11 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using Calc.Core.Objects.Materials;
+using Newtonsoft.Json;
 using System.Collections.Generic;
-using GraphQL;
-using Speckle.Newtonsoft.Json;
-using Calc.Core.Objects.Buildups;
-using Calc.Core.Objects.Materials;
-using Calc.Core.Objects.Mappings;
-using System.Linq;
 
 namespace Calc.Core.DirectusAPI.Drivers
 {
@@ -16,6 +11,7 @@ namespace Calc.Core.DirectusAPI.Drivers
                 calc_material_functions {
                     id
                     name
+                    amortization
                 }
             }";
 

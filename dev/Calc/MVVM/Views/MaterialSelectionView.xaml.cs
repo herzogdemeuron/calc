@@ -1,6 +1,7 @@
 ﻿using Calc.Core.Objects.Materials;
 using Calc.MVVM.Helpers;
 using Calc.MVVM.ViewModels;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,6 +11,8 @@ namespace Calc.MVVM.Views
 {
     public partial class MaterialSelectionView : Window
     {
+        private double originalLeft; // used to store the original left position of the window, for window ajustment when expander is expanded or collapsed
+
         private readonly MaterialSelectionViewModel MaterialSelectionVM;
         public Material SelectedMaterial { get => MaterialSelectionVM.SelectedMaterial; }
 
@@ -80,7 +83,39 @@ namespace Calc.MVVM.Views
             e.Handled = true;
         }
 
-       
+        private void SourceCheckChanged(object sender, RoutedEventArgs e)
+        {
+            MaterialSelectionVM.HandleSourceCheckChanged();
+        }
 
+        private void WindowLocationChanged(object sender, RoutedEventArgs e)
+        {
+            originalLeft = this.Left;
+        }
+
+        private void WindowLocationChanged(object sender, EventArgs e)
+        {
+            originalLeft = this.Left;
+        }
+
+        private void Expander_Expanded(object sender, RoutedEventArgs e)
+        {
+            Expander expander = sender as Expander;
+            if (expander != null)
+            {
+                this.Width += 220;
+                this.Left = originalLeft; // Keep the left position fixed
+            }
+        }
+
+        private void Expander_Collapsed(object sender, RoutedEventArgs e)
+        {
+            Expander expander = sender as Expander;
+            if (expander != null)
+            {
+                this.Width -= 220;
+                this.Left = originalLeft; // Keep the left position fixed
+            }
+        }
     }
 }

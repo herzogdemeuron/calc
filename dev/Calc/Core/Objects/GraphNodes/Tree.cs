@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Collections.Generic;
 using Calc.Core.Filtering;
-using Speckle.Newtonsoft.Json;
+using Newtonsoft.Json;
 using Calc.Core.Objects.Mappings;
-using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.Elements;
 
 namespace Calc.Core.Objects.GraphNodes;
@@ -26,9 +26,8 @@ public class Tree : Branch, IGraphNode
     public List<CalcElement> Plant(List<CalcElement> searchElements)
     {
         Elements = new ElementFilter().FilterElements(searchElements, FilterConfig);
-
-        // clear subbranches
-        SubBranches = new List<Branch>();
+        SubBranches.Clear();
+        this.ParentTree = this;
 
         if (BranchConfig != null && BranchConfig.Count > 0)
         {
@@ -40,9 +39,9 @@ public class Tree : Branch, IGraphNode
     }
 
     /// <summary>
-    /// creates a new branch from the mappingitem and adds buildups to it
+    /// creates a new branch from the mappingitem and adds assemblies to it
     /// </summary>
-    public void AddBranchWithMappingItem(MappingItem mappingItem, List<Buildup> buildups)
+    public void AddBranchWithMappingItem(MappingItem mappingItem, List<Assembly> assemblies)
     {
         var paths = mappingItem.Path;
         Branch currentBranch = this;
@@ -50,10 +49,9 @@ public class Tree : Branch, IGraphNode
         {
             var parameter = path.Parameter;
             var value = path.Value;
-            currentBranch = currentBranch.AddBranch(parameter, value, buildups);
+            currentBranch = currentBranch.AddBranch(parameter, value, assemblies);
         }
     }
-
 
     public string Serialize()
     {

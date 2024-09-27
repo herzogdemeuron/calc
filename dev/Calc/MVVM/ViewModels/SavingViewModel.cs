@@ -1,19 +1,13 @@
 ﻿using Calc.MVVM.Helpers.Mediators;
-using Calc.MVVM.Models;
 using Calc.MVVM.Services;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace Calc.MVVM.ViewModels
 {
-
-    public class SavingViewModel : INotifyPropertyChanged
+    public class SavingViewModel
     {
-        private readonly NodeTreeModel nodetreeVM;
         private readonly CalculationViewModel calculationVM;
-        public double ElementCount { get; set; }
-
 
         public SavingViewModel(CalculationViewModel calVM)
         
@@ -23,7 +17,7 @@ namespace Calc.MVVM.ViewModels
 
         public void HandleSavingResults()
         {
-            int count = calculationVM.Results?.Count??0;
+            int count = calculationVM.AssemblySnapshots?.Count??0;
             string message;
             if (count>100)
             {
@@ -41,16 +35,19 @@ namespace Calc.MVVM.ViewModels
         {
             
             MediatorToView.Broadcast("ShowWaitingOverlay", "Saving results...");
-            ResultSender resultSender = new ResultSender();
-            bool? feedback =  await resultSender.SaveResults(calculationVM.Store,calculationVM.Results,newName);
+
+            var feedback =  await SnapshotSender.SaveProjectSnapshot(calculationVM.Store, calculationVM.AssemblySnapshots, newName);
+            bool? saved = feedback.Item1;
+            string error = feedback.Item2;
+
             MediatorToView.Broadcast("ShowMainView");
             MediatorToView.Broadcast
                 ("ShowMessageOverlay",
                 new List<object> 
-                    {   feedback,
-                        "No element is saved",
+                    {   saved,
+                        "No element saved",
                         "Saved results successfully.",
-                        "Error occured while saving." 
+                        error??"Error occured while saving." 
                     }
                  );
         }
@@ -60,19 +57,5 @@ namespace Calc.MVVM.ViewModels
             MediatorToView.Broadcast("ShowMainView");
         }
 
-        private NodeModel GetNodeToCalculate()
-        {
-            NodeModel CurrentForestItem = nodetreeVM.CurrentForestItem;
-            NodeModel SelectedNodeItem = nodetreeVM.SelectedNodeItem;
-            if (CurrentForestItem == null) return null;
-            NodeModel nodeToCalculate = SelectedNodeItem ?? CurrentForestItem;
-            return nodeToCalculate;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

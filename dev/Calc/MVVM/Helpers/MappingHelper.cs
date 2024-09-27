@@ -3,13 +3,15 @@ using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Mappings;
 using System.Collections.Generic;
 using Calc.MVVM.Models;
+using System.Linq;
 
 namespace Calc.MVVM.Helpers
 {
     public class MappingHelper
     {
-        public static Forest ApplyMappingToForestItem(NodeModel ForestItem,DirectusStore store, Mapping newMapping, int maxBuildups)
+        public static Forest ApplyMappingToForestItem(NodeModel ForestItem,CalcStore store, Mapping newMapping)
         {
+            // todo: add missing mappings from missing trees to the dark forest
             var brokenForest = new Forest()
             {
                 Name = ForestItem.Name,
@@ -19,7 +21,8 @@ namespace Calc.MVVM.Helpers
             {
                 Tree tree = nodeItem.Host as Tree;
                 if (newMapping == null) continue;
-                var brokenTree = newMapping.ApplyToTree(tree, store.BuildupsAll, maxBuildups);
+                var verifiedAssemblies = store.AssembliesAll.Where(b => b.Verified).ToList();
+                var brokenTree = newMapping.ApplyToTree(tree, verifiedAssemblies);
                 if (brokenTree != null && brokenTree.SubBranches.Count > 0)
                 {
                     brokenForest.Trees.Add(brokenTree);
@@ -28,7 +31,7 @@ namespace Calc.MVVM.Helpers
             return brokenForest;
         }
 
-        public static Mapping CopyCurrentMapping(DirectusStore store)
+        public static Mapping CopyCurrentMapping(CalcStore store)
         {
             return new Mapping("CurrentMapping", store.ForestSelected);
         }

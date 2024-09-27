@@ -1,10 +1,9 @@
 ﻿using Calc.Core.Objects;
-using Calc.Core.Calculations;
 using Calc.Core.DirectusAPI.Drivers;
 using Calc.Core.DirectusAPI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Calc.Core.Objects.GraphNodes;
-using Calc.Core.Objects.Results;
+using Calc.Core.Snapshots;
 
 namespace Calc.Core.TestIntegration.Drivers
 {
@@ -28,23 +27,23 @@ namespace Calc.Core.TestIntegration.Drivers
             foreach (var tree in mockData.Trees)
             {
                 tree.Plant(mockData.Elements);
-                //mockData.AssignBuildups(tree);
-                tree.RemoveElementsByBuildupOverrides();
+                //mockData.AssignAssemblies(tree);
+                tree.RemoveElementsByAssemblyOverrides();
                 branches.AddRange(tree.Flatten());
             }
 
-            var results = Calculator.Calculate(branches);
-            var snapshot = new Snapshot
+            var results = SnapshotMaker.Calculate(branches);
+            var snapshot = new ProjectResult
             { 
                 Results = results,
-                Project = new Project() { Id = 1 },
+                Project = new CalcProject() { Id = 1 },
                 Name = "Test"
             };
 
-            var storageManager = new DirectusManager<Snapshot>(this.directus);
+            var storageManager = new DirectusManager<ProjectResult>(this.directus);
 
             // Act
-            var response = await storageManager.CreateSingle<SnapshotStorageDriver>(new SnapshotStorageDriver() { SendItem = snapshot });
+            var response = await storageManager.CreateSingle<ProjectResultStorageDriver>(new ProjectResultStorageDriver() { SendItem = snapshot });
             Console.WriteLine(response.CreatedItem.Id);
 
             // Assert

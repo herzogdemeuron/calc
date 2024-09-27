@@ -21,11 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Polly" Version="7.2.4" />
-    <PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\..\SpeckleSender\SpeckleSender.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\MVVM\MVVM.csproj" />
     <ProjectReference Include="..\RevitConnector\RevitConnector.csproj" />
@@ -37,6 +33,7 @@
     <Reference Include="RevitAPI">
       <HintPath>..\..\..\..\..\Program Files\Autodesk\Revit 2023\RevitAPI.dll</HintPath>
       <Private>False</Private>
+      <EmbedInteropTypes></EmbedInteropTypes>
     </Reference>
     <Reference Include="RevitAPIUI">
       <HintPath>..\..\..\..\..\Program Files\Autodesk\Revit 2023\RevitAPIUI.dll</HintPath>

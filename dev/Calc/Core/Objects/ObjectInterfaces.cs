@@ -1,6 +1,6 @@
 ﻿using Calc.Core.Color;
-using Speckle.Newtonsoft.Json.Converters;
-using Speckle.Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +20,7 @@ namespace Calc.Core.Objects
 
     public interface IHasProject
     {
-        Project Project { get; set; }
+        CalcProject Project { get; set; }
     }
 
     public interface IShowName
@@ -54,7 +54,7 @@ namespace Calc.Core.Objects
     public interface  ICalcComponent
     {
         double? Thickness { get; }
-        string Title { get; }
+        string Name { get; }
         HslColor HslColor { get;}
         BasicParameterSet BasicParameterSet { get; set; }
         bool HasParamError { get; }

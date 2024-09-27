@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Speckle.Newtonsoft.Json;
+using Newtonsoft.Json;
 using GraphQL;
 using GraphQL.Client.Http;
 using Polly;
@@ -19,6 +19,23 @@ namespace Calc.Core.DirectusAPI.Drivers
         {
             var request = CreateRequest(storageDriver.QueryGetMany, storageDriver.GetVariables());
             var response = await DirectusInstance.GraphQlQueryWithRetry<TDriver>(request);
+            if (response.Errors != null)
+            {
+                throw new Exception($"Error: {response.Errors[0].Message}");
+            }
+            return response.Data;
+        }
+
+        public static async Task<TDriver> GetSingle<TDriver, T>(IDriverGetSingle<T> storageDriver) where TDriver : IDriverGetSingle<T>
+        {
+            var request = CreateRequest(storageDriver.QueryGetSingle, storageDriver.GetVariables());
+            var response = await DirectusInstance.GraphQlQueryWithRetry<TDriver>(request);
+            if (response.Errors != null)
+            {
+                throw new Exception($"Error: {response.Errors[0].Message}");
+            }
+            // Update the driver with the retrieved item
+            storageDriver.GotItem = response.Data.GotItem;
             return response.Data;
         }
 
@@ -26,6 +43,10 @@ namespace Calc.Core.DirectusAPI.Drivers
         {
             var request = CreateRequest(storageDriver.QueryGetManySystem, storageDriver.GetVariables());
             var response = await DirectusInstance.GraphQlSysQueryWithRetry<TDriver>(request);
+            if (response.Errors != null)
+            {
+                throw new Exception($"Error: {response.Errors[0].Message}");
+            }
             return response.Data;
         }
 
@@ -34,6 +55,10 @@ namespace Calc.Core.DirectusAPI.Drivers
             CheckDriverPropertyIsNotNull(storageDriver, "SendItem");
             var request = CreateRequest(storageDriver.QueryCreateSingle, storageDriver.GetVariables());
             var response = await DirectusInstance.GraphQlMutationWithRetry<TDriver>(request);
+            if (response.Errors != null)
+            {
+                throw new Exception($"Error: {response.Errors[0].Message}");
+            }
             // Update the driver with the created item
             storageDriver.CreatedItem = response.Data.CreatedItem;
             return response.Data;
@@ -44,6 +69,10 @@ namespace Calc.Core.DirectusAPI.Drivers
             CheckDriverPropertyIsNotNull(storageDriver, "SendItems");
             var request = CreateRequest(storageDriver.QueryCreateMany, storageDriver.GetVariables());
             var response = await DirectusInstance.GraphQlMutationWithRetry<TDriver>(request);
+            if (response.Errors != null)
+            {
+                throw new Exception($"Error: {response.Errors[0].Message}");
+            }
             return response.Data;
         }
 
@@ -52,6 +81,10 @@ namespace Calc.Core.DirectusAPI.Drivers
             CheckDriverPropertyIsNotNull(storageDriver, "SendItem");
             var request = CreateRequest(storageDriver.QueryUpdateSingle, storageDriver.GetVariables());
             var response = await DirectusInstance.GraphQlMutationWithRetry<TDriver>(request);
+            if (response.Errors != null)
+            {
+                throw new Exception($"Error: {response.Errors[0].Message}");
+            }
             return response.Data;
         }
 

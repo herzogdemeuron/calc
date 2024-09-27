@@ -1,11 +1,11 @@
-﻿using Calc.Core.Calculations;
-using Calc.Core.Color;
+﻿using Calc.Core.Color;
 using Calc.Core.Helpers;
-using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.BasicParameters;
+using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.Elements;
 using Calc.Core.Objects.Mappings;
-using Calc.Core.Objects.Results;
-using Speckle.Newtonsoft.Json;
+using Calc.Core.Snapshots;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -67,20 +67,21 @@ namespace Calc.Core.Objects.GraphNodes
         [JsonIgnore]
         public Forest ParentForest { get; set; }
         [JsonIgnore]
-        private ObservableCollection<Buildup> _buildups = new();
+        private ObservableCollection<Assembly> _assemblies = new();
         [JsonIgnore]
-        public ObservableCollection<Buildup> Buildups
+        public ObservableCollection<Assembly> Assemblies
         {
-            // set _buildups to empty list if null to avoid null reference exceptions
-            get => _buildups;
+            // set _assemblies to empty list if null to avoid null reference exceptions
+            get => _assemblies;
             private set
             {
-                _buildups = value;
-                if (SubBranches.Count == 0)
-                {
-                    Calculator.Calculate(this);
-                }
-                OnPropertyChanged(nameof(Buildups));
+                _assemblies = value;
+                OnPropertyChanged(nameof(Assemblies));
+
+                // only for dead end branches:
+                if (SubBranches.Count > 0) return;
+                CheckParameterErrors(); // check for errors when assemblies are set
+                SnapshotMaker.Snap(this); // update the assembly snapshots
             }
         }
         [JsonIgnore]
@@ -88,10 +89,10 @@ namespace Calc.Core.Objects.GraphNodes
         {
             get
             {
-                return GetColorIdentifier(Buildups.ToList());
+                return GetColorIdentifier(Assemblies.ToList());
             }
         }
-        private HslColor _hslColor;
+        private HslColor _hslColor = new(0, 0, 85);
         [JsonIgnore]
         public HslColor HslColor
         {
@@ -105,8 +106,9 @@ namespace Calc.Core.Objects.GraphNodes
 
         [JsonIgnore]
         public bool HasCalculationErrors => (ParameterErrors != null && ParameterErrors.Count > 0);
+
         [JsonIgnore]
-        public bool IsFullyCalculated
+        public bool IsFullyCalculated // deprecatd
         {
             get
             {
@@ -139,24 +141,23 @@ namespace Calc.Core.Objects.GraphNodes
         }
 
         [JsonIgnore]
-        public bool HasCalculationResults => (CalculationResults != null && CalculationResults.Count > 0);
-
-        private List<Result> _calculationResults = new();
+        public bool HasCalculationResults => (AssemblySnapshots != null && AssemblySnapshots.Count > 0);
+        private List<AssemblySnapshot> assemblySnapshots = new();
         [JsonIgnore]
-        public List<Result> CalculationResults
+        public List<AssemblySnapshot> AssemblySnapshots
         {
             get
             {
                 if (SubBranches.Count > 0)
                 {
-                    return SubBranches.SelectMany(sb => sb.CalculationResults ?? new List<Result>()).ToList();
+                    return SubBranches.SelectMany(sb => sb.AssemblySnapshots ?? new List<AssemblySnapshot>()).ToList();
                 }
-                return _calculationResults;
+                return assemblySnapshots;
             }
             set
             {
-                _calculationResults = value;
-                OnPropertyChanged(nameof(CalculationResults));
+                assemblySnapshots = value;
+                OnPropertyChanged(nameof(AssemblySnapshots));
             }
         }
 
@@ -166,12 +167,47 @@ namespace Calc.Core.Objects.GraphNodes
             Parameter = "No Parameter";
             Method = "No Method";
             Value = "No Value";
-            //HslColor = new HslColor(0, 0, 85);
+            HslColor = new HslColor(0, 0, 85); // default color
         }
 
         public Branch(List<CalcElement> elements) : this()
         {
             Elements = elements;
+        }
+
+        /// <summary>
+        /// check if parameters have error for the dead end branch
+        /// </summary>
+        public void CheckParameterErrors()
+        {
+            ParameterErrors = new();
+
+            foreach (var element in Elements)
+            {
+                foreach (var assembly in Assemblies)
+                {
+                    foreach (var component in assembly.CalculationComponents)
+                    {
+                        if (component == null) continue;
+
+                        BasicParameter param = element.GetBasicUnitParameter(assembly.AssemblyUnit);
+
+                        if (param.ErrorType != null)
+                        {
+                            ParameterErrorHelper.AddToErrorList
+                                (
+                                ParameterErrors,
+                                new ParameterError
+                                {
+                                    ParameterName = param.Name,
+                                    Unit = param.Unit,
+                                    ErrorType = param.ErrorType,
+                                    ElementIds = new() { element.Id }
+                                });
+                        }
+                    }
+                }
+            }
         }
 
 
@@ -195,8 +231,8 @@ namespace Calc.Core.Objects.GraphNodes
                     Method = methodName,
                     ParentBranch = this,
                     // set the parent tree and forest of the subbranch
-                    ParentForest = ParentForest,
-                    ParentTree = BranchLevel == 0 ? this as Tree : ParentTree,
+                    ParentForest = this.ParentForest,
+                    ParentTree = this.BranchLevel == 0 ? this as Tree : this.ParentTree,
                 };
                 SubBranches.Add(branch);
             }
@@ -216,39 +252,39 @@ namespace Calc.Core.Objects.GraphNodes
         }
 
         /// <summary>
-        /// set the buildup of the current branch. 
-        /// Also set the buildup of all subbranches to the same value if they have no buildup assigned yet or the buildup is the same.
-        /// calculate the branch with the new buildup if it is a dead end branch.
+        /// set the assembly of the current branch. 
+        /// Also set the assembly of all subbranches to the same value if they have no assembly assigned yet or the assembly is the same.
+        /// calculate the branch with the new assembly if it is a dead end branch.
         /// </summary>
-        public void SetBuildups(List<Buildup> buildups)
+        public void SetAssemblies(List<Assembly> assemblies)
         {
-            if (buildups == null) return;
-            var newIdentifier = GetColorIdentifier(buildups);
+            if (assemblies == null) return;
+            var newIdentifier = GetColorIdentifier(assemblies);
             var currentIdentifier = ColorIdentifier;
             if (currentIdentifier == newIdentifier) return;
 
-            Buildups = new(buildups);
+            Assemblies = new(assemblies);
 
-            OnPropertyChanged(nameof(Buildups));
+            OnPropertyChanged(nameof(Assemblies));
             foreach (var subBranch in SubBranches)
             {
-                if (subBranch.Buildups == null || subBranch.ColorIdentifier == currentIdentifier)
+                if (subBranch.Assemblies == null || subBranch.ColorIdentifier == currentIdentifier)
                 {
-                    subBranch.SetBuildups(buildups);
+                    subBranch.SetAssemblies(assemblies);
                 }
             }
         }
 
-        public void ResetBuildups()
+        public void ResetAssemblies()
         {
-            Buildups = new();
+            Assemblies = new();
             if (SubBranches.Count == 0)
             {
                 return;
             }
             foreach (var subBranch in SubBranches)
             {
-                subBranch.ResetBuildups();
+                subBranch.ResetAssemblies();
             }
         }
 
@@ -277,14 +313,14 @@ namespace Calc.Core.Objects.GraphNodes
             {
                 return;
             }
-            if (ParentBranch.Buildups != null)
+            if (ParentBranch.Assemblies != null)
             {
-                SetBuildups(ParentBranch.Buildups.ToList());
+                SetAssemblies(ParentBranch.Assemblies.ToList());
             }
         }
 
         /// <summary>
-        /// calculates the results for one branch (should be the end branch) with buildup assigned.
+        /// calculates the results for one branch (should be the end branch) with assembly assigned.
         /// </summary>
         public Branch Copy()
         {
@@ -294,7 +330,7 @@ namespace Calc.Core.Objects.GraphNodes
                 Method = Method,
                 Value = Value,
                 BranchLevel = BranchLevel,
-                Buildups = Buildups,
+                Assemblies = Assemblies,
                 HslColor = HslColor,
                 Elements = Elements,
                 ParentBranch = ParentBranch,
@@ -312,10 +348,7 @@ namespace Calc.Core.Objects.GraphNodes
         /// add a new branch to the current branch using the parameter and value.
         /// returns the new branch.
         /// </summary>
-        /// <param name="parameter"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public Branch AddBranch(string parameter, string value, List<Buildup> buildups)
+        public Branch AddBranch(string parameter, string value, List<Assembly> assemblies)
         {
             //check if branch already exists
             var existingBranch = SubBranches.FirstOrDefault(sb => sb.Parameter == parameter && sb.Value == value);
@@ -327,7 +360,7 @@ namespace Calc.Core.Objects.GraphNodes
             {
                 Parameter = parameter,
                 Value = value,
-                Buildups = new ObservableCollection<Buildup>(buildups),
+                Assemblies = new ObservableCollection<Assembly>(assemblies),
                 ParentBranch = this,
                 BranchLevel = this.BranchLevel + 1,
                 ParentTree = ParentTree,
@@ -335,38 +368,6 @@ namespace Calc.Core.Objects.GraphNodes
             };
             SubBranches.Add(newBranch);
             return newBranch;
-        }
-
-        /// <summary>
-        /// WARNING: DESTRUCTIVE METHOD - USE ONLY ON A COPY OF THE TREE
-        /// The Intended use is right befor calculation.
-        /// 
-        /// This method removes elements from the current branch that
-        /// are also present in subbranches that have a buildup assigned.
-        /// In the bigger picture, this allows to override buildups further down the tree.
-        /// </summary>
-        public void RemoveElementsByBuildupOverrides()
-        {
-            if (Buildups != null && SubBranches.Count > 0)
-            {
-                // get all elements with buildup from subbranches
-                var subElementsWithBuildup = SubBranches
-                    .Where(sb => sb.Buildups != null)
-                    .Where(sb => sb.Buildups.Count > 0)
-                    .SelectMany(sb => sb.Elements)
-                    .ToList();
-                // remove subelements with buildup from elements of current branch
-                Elements = Elements
-                    .Where(e => !subElementsWithBuildup.Contains(e))
-                    .ToList();
-            }
-            if (SubBranches.Count > 0)
-            {
-                foreach (var subBranch in SubBranches)
-                {
-                    subBranch.RemoveElementsByBuildupOverrides();
-                }
-            }
         }
 
         /// <summary>
@@ -386,17 +387,6 @@ namespace Calc.Core.Objects.GraphNodes
                 }
             }
             return branches;
-        }
-
-        public void PrintTree(int indentLevel = 0)
-        {
-            string indentation = new(' ', indentLevel * 4);
-            Console.WriteLine($"{indentation}∟: Elements: {Elements.Count}, Param: {Parameter}, Value: {Value}, Method: {Method}, Color: {HslColor.H}, Buildup: {Buildups}");
-
-            foreach (var subBranch in SubBranches)
-            {
-                subBranch.PrintTree(indentLevel + 1);
-            }
         }
 
         private Dictionary<object, List<CalcElement>> GroupByParameterValue(string parameter)
@@ -423,11 +413,11 @@ namespace Calc.Core.Objects.GraphNodes
             return groupedElements;
         }
 
-        private string GetColorIdentifier(List<Buildup> buildups)
+        private string GetColorIdentifier(List<Assembly> assemblies)
         {
-            if (buildups == null)
+            if (assemblies == null)
                 return null;
-            return string.Join(",", buildups.Select(b => b?.Id??'-').OrderBy(i => i));
+            return string.Join(",", assemblies.Select(b => b?.Id??'-').OrderBy(i => i));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

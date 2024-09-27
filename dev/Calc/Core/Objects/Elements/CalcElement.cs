@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
-using Speckle.Newtonsoft.Json;
+using Newtonsoft.Json;
 using Calc.Core.Color;
 using System;
-using Speckle.Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Converters;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Collections.ObjectModel;
 using Calc.Core.Objects.BasicParameters;
+using Calc.Core.Objects.GraphNodes;
 
 namespace Calc.Core.Objects.Elements
 {
@@ -14,12 +15,14 @@ namespace Calc.Core.Objects.Elements
     {
         public string Id;
         public string TypeName;
+        public string Category;
         public Dictionary<string, object> Fields;
         private Dictionary<Unit, BasicParameter> _quantities;
 
         public CalcElement
             (
                 string id,
+                string category,
                 string type,
                 Dictionary<string, object> fields,
                 BasicParameter lenParam,
@@ -28,6 +31,7 @@ namespace Calc.Core.Objects.Elements
              )
         {
             Id = id;
+            Category = category;
             TypeName = type;
             Fields = fields;
             _quantities

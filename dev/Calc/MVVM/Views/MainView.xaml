@@ -15,14 +15,13 @@
         WindowStartupLocation="CenterScreen"
 
         Icon="pack://application:,,,/CalcMVVM;component/Resources/icon_main_small.png"
-        Title="CALC"
+        Title="Calc Project"
         Topmost="True">
 
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="MainViewResources.xaml"/>
-                <ResourceDictionary Source="ToggleButtonResource.xaml"/>
                 <ResourceDictionary Source="ButtonResource.xaml"/>
                 <ResourceDictionary Source="ComboBoxResource.xaml"/>
                 <ResourceDictionary Source="ListViewResource.xaml"/>
@@ -39,16 +38,15 @@
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="0"/>
-                <RowDefinition Height="105"/>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="35"/>
-                <RowDefinition Height="15"/>
             </Grid.RowDefinitions>
 
             <Label Content="DT @ Herzog &amp; de Meuron"
-                Grid.Row="5"
+                Grid.Row="4"
                 FontSize="9"
                 Padding="0"
                 Margin="10,0,0,3"
@@ -60,18 +58,17 @@
                        Grid.Column="0"
                        Grid.Row="1">
 
-                <Label Content="Element Groups"
-                       FontSize="27"
-                       Margin="10"
-                       Padding="0"
-                       FontWeight="light"/>
+                <Label Content="Element Grouping"
+                       FontSize="18"
+                       Margin="10,0,0,10"
+                       Padding="0"/>
 
                 <ComboBox x:Name="ForestsComboBox"
-                          Text="Choose Element Group"
+                          Text="Select Element Grouping"
                           Style="{StaticResource RoundedComboBoxStyle}"
                           ItemsSource="{Binding Store.ForestProjectRelated}"
                           DisplayMemberPath="Name"
-                          Margin="10,10,10,10"
+                          Margin="10,0,10,10"
                           SelectionChanged="ForestSelectionChanged"
                           HorizontalAlignment="Stretch"/>
             </StackPanel>
@@ -79,35 +76,39 @@
             <StackPanel x:Name="MappingSection"
                         Grid.Column="2" 
                         Grid.Row="1">
-                <Label Content="Mapping Settings" 
-                        Margin="10"
-                       Padding="0"
-                        FontSize="27"
-                       FontWeight="Light"/>
+                <Label Content="Mapping Setting" 
+                       Margin="10,0,0,10"
+                        Padding="0"
+                        FontSize="18"/>
 
                 <DockPanel x:Name="MappingPanel"
-                       Margin="10,10,10,10"
+                       Margin="10,0,10,10"
                        HorizontalAlignment="Stretch"
                        LastChildFill="True">
-                    <Button Style="{StaticResource MappingErrorButtonStyle}"
+                    <Button Style="{StaticResource ButtonStyle}"
+                            Uid="pack://application:,,,/CalcMVVM;component/Resources/button_error.png"
+                            IsEnabled="{Binding MappingErrorVM.HasBrokenItems}"
                             Width="25"
                             Margin="10,0,0,0"
+                            ToolTip="Missing Mappings"
                             DockPanel.Dock="Right"
                             Click="MappingErrorClicked">
                     </Button>
                     <Button Style="{StaticResource ButtonStyle}"
-                        Content="New" 
-                        Width="70"
-                        Click="NewMappingClicked"
-                        DockPanel.Dock="Right"/>
+                            Uid="pack://application:,,,/CalcMVVM;component/Resources/button_add.png"                            
+                            Width="25"
+                            Click="NewMappingClicked"
+                            ToolTip="Create New"
+                            DockPanel.Dock="Right"/>
                     <Button Style="{StaticResource ButtonStyle}"
-                        Content="Update" 
-                        Width="70" 
+                        Uid="pack://application:,,,/CalcMVVM;component/Resources/button_save.png"
+                        Width="25"
                         Click="UpdateMappingClicked"
+                        ToolTip="Save Mapping"
                         Margin="10,0,10,0"
                         DockPanel.Dock="Right"/>
                     <ComboBox x:Name="MappingsComboBox"
-                              Text="Choose Mapping"
+                              Text="Select Mapping Setting"
                               Style="{StaticResource RoundedComboBoxStyle}"
                               ItemsSource="{Binding Store.MappingsProjectRelated}"
                               SelectedItem="{Binding Store.MappingSelected}"
@@ -120,52 +121,30 @@
             <Grid x:Name="BrokenNodesSection"
                     Grid.Column="2" 
                     Grid.Row="2"
-                    Margin="80,0,10,0"
+                    Margin="10,0,10,0"
                     Height="220"
                   Visibility="{Binding MappingErrorVM.BrokenSectionVisibility}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="80"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="45"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="25"/>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="35"/>
-                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="45"/>
                 </Grid.RowDefinitions>
 
-                <Border Style="{StaticResource MappingErrorBorderStyle}"
+                <Border BorderBrush="Crimson"
+                        BorderThickness="1"
+                        CornerRadius="4"
                         Grid.ColumnSpan="2" 
-                        Grid.RowSpan="4"/>
+                        Grid.RowSpan="3"/>
 
-                <Canvas Height="30" Width="0"
-                        HorizontalAlignment="Right"
-                        Grid.Column="1">
-                    <Path Style="{StaticResource MappingErrorPathStyle}">
-                        <Path.Data>
-                            <PathGeometry>
-                                <PathFigure StartPoint="-1,-14">
-                                    <BezierSegment Point1="-1,-14" Point2="5,-7" Point3="-1,0"/>
-                                </PathFigure>
-                            </PathGeometry>
-                        </Path.Data>
-                    </Path>
-                </Canvas>
-
-                <TextBlock Style="{StaticResource MappingErrorTextStyle}"
-                               Grid.Column="0"
-                               Grid.ColumnSpan="2"
-                               HorizontalAlignment="Left"
-                               VerticalAlignment="Center"
-                               FontSize="13"
-                               Margin="10,5,0,0"
-                               FontWeight="SemiBold"/>
                 <Border Grid.ColumnSpan="2"
-                        Grid.Row="1"
+                        Grid.Row="0"
                         Margin="10,10,10,0"
                         BorderBrush="Silver"
                         BorderThickness="1"
-                        CornerRadius="4">
+                        CornerRadius="2">
                     <TreeView x:Name="BrokenNodesTreeView"
                               Background="Transparent"
                               BorderThickness="0"
@@ -185,37 +164,35 @@
                         </TreeView.ItemTemplate>
                     </TreeView>
                 </Border>
-                <TextBlock Text="{Binding MappingErrorVM.Buildup1}"
-                           ToolTip="{Binding MappingErrorVM.Buildup1}"
-                            Grid.Column="2"
-                            Grid.Row="2"
-                            VerticalAlignment="Center"
-                            TextWrapping="WrapWithOverflow"
-                            Margin="20,0,10,0"/>
-                <TextBlock Text="{Binding MappingErrorVM.Buildup2}"
-                           ToolTip="{Binding MappingErrorVM.Buildup2}"
-                            Grid.Column="2"
-                            Grid.Row="3"
-                            VerticalAlignment="Center"
-                            Margin="20,0,10,10"/>
+                <TextBlock Grid.Row="1"
+                           VerticalAlignment="Center"
+                           TextWrapping="Wrap"
+                           Margin="10,0,0,0">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding MappingErrorVM.Assembly1}"/>
+                                                <TextBlock Text="{Binding MappingErrorVM.Assembly2}"/>
+                                            </StackPanel>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                    <TextBlock.Inlines>
+                        <Run Text="{Binding MappingErrorVM.Assembly1, Mode=OneWay}"/>
+                        <LineBreak/>
+                        <Run Text="{Binding MappingErrorVM.Assembly2, Mode=OneWay}"/>
+                    </TextBlock.Inlines>
+                </TextBlock>
 
                 <Button Style="{StaticResource ButtonStyle}"
-                        Content="Ignore"
-                        Grid.Row="2"
-                        Width="70"
-                        Margin="10,0,0,0"
+                        ToolTip="Ignore"
+                        Uid="pack://application:,,,/CalcMVVM;component/Resources/button_trash.png"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Width="25"
+                        Margin="10"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Left"
                         Click="HandleIgnoreSelectedBrokenNode"/>
-
-                <Button Style="{StaticResource ButtonStyle}"
-                        Content="Ignore All"
-                        Grid.Row="3"
-                        Width="70"
-                        Margin="10,0,0,10"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Left"
-                        Click="HandleIgnoreAllBrokenNodes"/>
 
 
             </Grid>
@@ -227,17 +204,14 @@
                   Grid.RowSpan="2"
                   Margin="10,0,10,10">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="10"/>
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="10"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="25"/>
                 </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Border Grid.Row="2"
+ 
+                <Border Grid.Row="0"
                         Grid.ColumnSpan="4"
                         BorderBrush="Silver"
                         BorderThickness="1"
@@ -262,140 +236,191 @@
                     </TreeView>
                 </Border>
 
-                <Border Grid.ColumnSpan="4" Grid.Row="0" CornerRadius="4" Background="LightGray">
-                    <Border BorderThickness="0" CornerRadius="4"
-                            Visibility="{Binding NodeTreeVM.SelectedNodeItem.UnderlineVisibility}"
-                           Background="{Binding NodeTreeVM.SelectedNodeItem.Host.HslColor, Converter={StaticResource ColorConverter}}"/>
+                <Border Grid.ColumnSpan="4" Grid.Row="2" CornerRadius="4" BorderBrush="Silver" BorderThickness="1">
+                   
                 </Border>
+                <Grid Grid.Row="2" Margin="0,5,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                
+                    <StackPanel 
+                                Grid.Column="0">
+                        <TextBlock Text="{Binding CalculationVM.CurrentNodeItem.Host.Elements.Count}"
+                                   d:Text="8799"
+                                   FontWeight="Bold"
+                                   FontStyle="Italic"                                  
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="Count"
+                                   FontStyle="Italic"
+                                   FontSize="10"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
 
-                <StackPanel Grid.Row="0"
-                            Grid.Column="0"
-                            Margin="0,5,0,0">
-                    <TextBlock Text="Count"
-                               FontWeight="SemiBold"
-                               HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding CalculationVM.CurrentNodeItem.Host.Elements.Count}"
-                               HorizontalAlignment="Center"/>
-                </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="{Binding CalculationVM.CurrentNodeItem.Host.TotalLength,StringFormat={}{0:F1} m}"
+                                   d:Text="1045.2 m"
+                                    FontWeight="Bold"
+                                   FontStyle="Italic"                                  
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="Length"
+                                   FontStyle="Italic"
+                                    FontSize="10"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
 
-                <StackPanel Grid.Row="0"
-                            Grid.Column="1"
-                            Margin="0,5,0,0">
-                    <TextBlock Text="Length"
-                               FontWeight="SemiBold"
-                               HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding CalculationVM.CurrentNodeItem.Host.TotalLength,
-                                StringFormat={}{0:F1} m}"
-                                HorizontalAlignment="Center"/>
-                </StackPanel>
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="{Binding CalculationVM.CurrentNodeItem.Host.TotalArea,StringFormat={}{0:F1} m²}"
+                                   d:Text="105.2 m²"
+                                   FontWeight="Bold"
+                                   FontStyle="Italic"                                   
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="Area"
+                                   FontStyle="Italic"
+                                   FontSize="10"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
 
-                <StackPanel Grid.Row="0"
-                            Grid.Column="2"
-                            Margin="0,5,0,0">
-                    <TextBlock Text="Area"
-                               FontWeight="SemiBold"
+                    <StackPanel Grid.Column="3">
+                        <TextBlock Text="{Binding CalculationVM.CurrentNodeItem.Host.TotalVolume,StringFormat={}{0:F1} m³}"
+                                   d:Text="415.9 m³"
+                                   FontWeight="Bold"
+                                   FontStyle="Italic"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="Volume"
+                               FontStyle="Italic"                               
+                               FontSize="10"
                                HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding CalculationVM.CurrentNodeItem.Host.TotalArea,
-                                        StringFormat={}{0:F1} m²}"
-                               HorizontalAlignment="Center"/>
-                </StackPanel>
+                    </StackPanel>
+                </Grid>
 
-                <StackPanel Grid.Row="0"
-                            Grid.Column="3"
-                            Margin="0,5,0,0">
-                    <TextBlock Text="Volume"
-                               FontWeight="SemiBold"
-                               HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding CalculationVM.CurrentNodeItem.Host.TotalVolume,
-                                              StringFormat={}{0:F1} m³}"
-                               HorizontalAlignment="Center"/>
-                </StackPanel>
+                <Button Style="{StaticResource ButtonStyle}"
+                    Uid="pack://application:,,,/CalcMVVM;component/Resources/button_reload.png"
+                    Content=" Update"
+                    Grid.Row="4"
+                    Width="65"
+                    Click="UpdateRevitClicked"
+                    VerticalAlignment="Bottom"
+                    HorizontalAlignment="Left"/>
 
+                <Grid Grid.Row="4" Width="225" HorizontalAlignment="Right">
+                    <Border CornerRadius="4" Background="Silver"/>
+                    <StackPanel x:Name="TogglePanel"                            
+                            Orientation="Horizontal"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Stretch">
+
+                        <Button x:Name="ColorByGroupButton"                                
+                                Content="Group"
+                                Tag="group"
+                                Width="65"
+                                Opacity="0.4"
+                                Click="ColorizeClicked"
+                                Style="{StaticResource ButtonStyle}"/>
+                        <Button x:Name="ColorByAssemblyButton"
+                                Content="Assemb." 
+                                Tag="assembly"
+                                Width="65" 
+                                Margin="15,0,15,0"
+                                Uid="pack://application:,,,/CalcMVVM;component/Resources/button_color.png"
+                                Click="ColorizeClicked"
+                                Style="{StaticResource ButtonStyle}"/>
+                        <Button x:Name="ColorByCO2Button"
+                                Content="CO²" 
+                                Tag="co2"
+                                Width="65"
+                                Opacity="0.4"
+                                Click="ColorizeClicked"
+                                Style="{StaticResource ButtonStyle}"/>
+
+                    </StackPanel>
+
+                </Grid>
 
 
             </Grid>
 
-            <Grid x:Name="BuildupGrid"
+            <Grid x:Name="AssemblyGrid"
                   DockPanel.Dock="Bottom"
                   Grid.Column="2"
                   Grid.Row="3"
                   Margin="10,10,10,10">
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="45"/>
-                    <RowDefinition Height="80"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
                     <RowDefinition Height="4*"/>
-                    <RowDefinition Height="55"/>
+                    <RowDefinition Height="auto"/>
                     <RowDefinition Height="2*"/>
+                    <RowDefinition Height="85"/>
                 </Grid.RowDefinitions>
 
-                <Label Content="Buildups"
+                <Label Content="Assemblies"
+                       VerticalAlignment="Center"
                        Grid.Row="0"
+                       Margin="0,10,0,10"
                        Padding="0"
-                       FontSize="27"
-                       FontWeight="Light"/>
+                       FontSize="18"/>
 
-                <DockPanel x:Name="BuildupSelection"
+                <DockPanel x:Name="AssemblySelection"
                            Grid.Row="1"
                            Height="60">
-                    <StackPanel DockPanel.Dock="Left"
-                                Width="70"
-                                Margin="0,0,10,0">
+                    
+                    <StackPanel DockPanel.Dock="Right"
+                                Width="25"
+                                Margin="10,0,0,0">
+
                         <Button Style="{StaticResource ButtonStyle}"
-                                Content="Follow"
-                                Width="70"
-                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.InheritEnabled}"
+                                ToolTip="Reset"
+                                Uid="pack://application:,,,/CalcMVVM;component/Resources/button_back.png"
+                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeAssemblyItem.InheritEnabled}"
                                 Click="InheritClicked"/>
 
                         <Button Style="{StaticResource ButtonStyle}"
-                                Content="Reduce"
-                                Width="70"
-                                Margin="0,5,0,0"
-                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.RemoveEnabled}"
+                                ToolTip="Remove"
+                                Uid="pack://application:,,,/CalcMVVM;component/Resources/button_delete.png"
+                                Margin="0,10,0,0"
+                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeAssemblyItem.RemoveEnabled}"
                                 Click="RemoveClicked"/>
+                        
                     </StackPanel>
                     <StackPanel DockPanel.Dock="Left">
-                        <views:SearchComboBox x:Uid="ShowTextNote"
-                                              Style="{StaticResource RoundedComboBoxStyle}"
-                                              ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.AllBuildupsView1}"
-                                              SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup1}"
-                                              DisplayMemberPath="Name"
-                                              IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CanAddFirstBuildup}"
-                                              HorizontalAlignment="Stretch"
-                                              VerticalAlignment="Top">
-                            <ComboBox.GroupStyle>
-                                <StaticResource ResourceKey="ComboBoxGroupStyle"/>
-                            </ComboBox.GroupStyle>
-                        </views:SearchComboBox>
+                        
+                        <Button Content="{Binding  NodeTreeVM.SelectedNodeItem.NodeAssemblyItem.Assembly1.Name}"
+                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeAssemblyItem.CanAddFirstAssembly}"
+                                d:Content=""
+                                Tag="Select First Assembly"
+                                HorizontalAlignment="Stretch"
+                                Style="{StaticResource ButtonStyle}"
+                                Click="SetFirstAssemblyClicked"/>
 
-                        <views:SearchComboBox x:Uid="ShowTextNote"
-                                              Style="{StaticResource RoundedComboBoxStyle}"
-                                              ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.AllBuildupsView2}"
-                                              SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.Buildup2}"
-                                              DisplayMemberPath="Name"
-                                              IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CanAddSecondBuildup}"
-                                              Margin="0,5,0,0"
-                                              HorizontalAlignment="Stretch"
-                                              VerticalAlignment="Top">
-                            <ComboBox.GroupStyle>
-                                <StaticResource ResourceKey="ComboBoxGroupStyle"/>
-                            </ComboBox.GroupStyle>
-                        </views:SearchComboBox>
+                        <Button Content="{Binding  NodeTreeVM.SelectedNodeItem.NodeAssemblyItem.Assembly2.Name}"
+                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.NodeAssemblyItem.CanAddSecondAssembly}"
+                                d:Content=""
+                                Margin="0,10,0,0"
+                                Tag="Select Second Assembly"
+                                HorizontalAlignment="Stretch"
+                                Style="{StaticResource ButtonStyle}"
+                                Click="SetSecondAssemblyClicked"/>
+
                     </StackPanel>
                 </DockPanel>
                 <Grid Grid.Row="2"
-                        Margin="0,0,0,10"
+                        Margin="0,10,0,10"
                         DockPanel.Dock="Top">
+                    
                     <Border Margin="0,21,0,0"
                         BorderBrush="Silver"
-                        BorderThickness="1,1,1,1"
-                        
+                        BorderThickness="1,1,1,1"                        
                         CornerRadius="4"/>
-                    <TabControl x:Name="BuildupTabs"
+                    <TabControl x:Name="AssemblyTabs"
                             BorderThickness="0"
                             Background="Transparent"
-                            ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.CurrentBuildups}"
-                            SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeBuildupItem.ActiveBuildup}"
+                            ItemsSource="{Binding NodeTreeVM.SelectedNodeItem.NodeAssemblyItem.CurrentAssemblies}"
+                            SelectedItem="{Binding NodeTreeVM.SelectedNodeItem.NodeAssemblyItem.ActiveAssembly}"
                             ItemContainerStyle="{StaticResource TabItemStyle}">
 
                         <TabControl.ContentTemplate>
@@ -403,51 +428,49 @@
                                 <DockPanel VerticalAlignment="Stretch">
 
                                     <Grid DockPanel.Dock="Bottom"
-                                      VerticalAlignment="Bottom"
-                                      Margin="10,0,0,10">
+                                          Width="350"
+                                          VerticalAlignment="Bottom">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="100"/>
                                             <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="100"/>
+                                            <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="15"/>
-                                            <RowDefinition Height="15"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
 
-                                        <TextBlock Grid.Row="0" Grid.Column="0"
-                                               FontWeight="SemiBold"
-                                               Text="Buildup Unit: "/>                                               
-                                        <TextBlock Grid.Row="0" Grid.Column="1"
-                                               Text="{Binding  BuildupUnit}"/>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="{Binding  AssemblyUnit}"
+                                                       FontWeight="Bold"
+                                                       FontStyle="Italic"                                  
+                                                       HorizontalAlignment="Center"/>
+                                            <TextBlock Text="Unit"
+                                                   FontStyle="Italic"
+                                                   FontSize="10"
+                                                   HorizontalAlignment="Center"/>   
+                                        </StackPanel>
+                                        
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="{Binding  AssemblyGwp, StringFormat={}{0:F2}}"
+                                                       FontWeight="Bold"
+                                                       FontStyle="Italic"                                  
+                                                       HorizontalAlignment="Center"/>
+                                            <TextBlock Text="GWP (kgCO²eg/yr)"
+                                                   FontStyle="Italic"
+                                                   FontSize="10"
+                                                   HorizontalAlignment="Center"/>
+                                        </StackPanel>
 
-                                        <TextBlock Grid.Row="1" Grid.Column="0" 
-                                               FontWeight="SemiBold"
-                                                   Text="Buildup Group: "/>
-                                        <TextBlock Grid.Row="1" Grid.Column="1" 
-                                               Text="{Binding Group.Name}"/>
-
-                                        <TextBlock Grid.Row="0" Grid.Column="2" 
-                                                FontWeight="SemiBold"
-                                                Text="Buildup GWP: "/>
-                                        <TextBlock Grid.Row="0"  Grid.Column="3"  
-                                                Text="{Binding  BuildupGwp, StringFormat={}{0:F2} kgCO2eq}"/>
-
-                                        <TextBlock Grid.Row="1" Grid.Column="2" 
-                                                 FontWeight="SemiBold"
-                                                 Text="Buildup GE: "/>
-                                        <TextBlock Grid.Row="1"  Grid.Column="3"  
-                                                Text="{Binding BuildupGe, StringFormat={}{0:F2} kWhOileq}"/>
-
-                                        <TextBlock Grid.Row="2"
-                                               FontWeight="SemiBold"
-                                               Text="Description: "/>
-                                        <TextBlock Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3"
-                                               Text="{Binding  Description}" TextWrapping="Wrap"/>
-                                                   
+                                        <StackPanel Grid.Column="2">
+                                            <TextBlock Text="{Binding  AssemblyGe, StringFormat={}{0:F2}}"
+                                                        FontWeight="Bold"
+                                                        FontStyle="Italic"                                  
+                                                        HorizontalAlignment="Center"/>
+                                            <TextBlock Text="GE (kWhoil/yr)"
+                                                        FontStyle="Italic"
+                                                        FontSize="10"
+                                                        HorizontalAlignment="Center"/>
+                                        </StackPanel>
                                     </Grid>
+                                    
+                                    
                                     <Separator DockPanel.Dock="Bottom"
                                            BorderBrush="LightGray"
                                            BorderThickness="1"
@@ -457,7 +480,8 @@
                                           ItemsSource="{Binding CalculationComponents}"
                                           DockPanel.Dock="Top">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" Width="3*"  IsReadOnly="True" />
+                                            <DataGridTextColumn Header="Function" Binding="{Binding Function.Name}" Width="*"  IsReadOnly="True" />
+                                            <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" Width="2*"  IsReadOnly="True" />
                                             <DataGridTextColumn Header="Amount" Width="*"  IsReadOnly="True">
                                                 <DataGridTextColumn.Binding>
                                                     <MultiBinding  StringFormat="{}{0:F3} {1}">
@@ -465,9 +489,7 @@
                                                         <Binding Path="Material.MaterialUnit"/>
                                                     </MultiBinding>
                                                 </DataGridTextColumn.Binding>
-                                            </DataGridTextColumn>
-                                            <DataGridTextColumn Header="GWP (kgCO2eq)" Binding="{Binding Gwp, StringFormat={}{0:F2}}" Width="*"  IsReadOnly="True" />
-                                            <DataGridTextColumn Header="GE (kWhOileq)" Binding="{Binding Ge, StringFormat={}{0:F2}}" Width="*"  IsReadOnly="True" />
+                                            </DataGridTextColumn>                                          
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </DockPanel>
@@ -477,106 +499,136 @@
                 </Grid>
 
 
-                <Label Content="Calculation Results"
+                <Label Content="Calculation"
+                       VerticalAlignment="Center"
+                       Margin="0,10,0,10"
                        Grid.Row="3"
                        Padding="0"
-                       FontSize="27"
-                       FontWeight="Light"/>
+                       FontSize="18"/>
 
                 <Border  x:Name="ResultSection"
                          Grid.Row="4" 
-                         CornerRadius="4" 
-                         Background="LightGray">
-                    <Grid>
-                    <Border x:Name="LabelColorBorder"
-                            Visibility="{Binding NodeTreeVM.SelectedNodeItem.UnderlineVisibility}"
-                            Background="{Binding NodeTreeVM.SelectedNodeItem.Host.HslColor, Converter={StaticResource ColorConverter}}"/>
+                         CornerRadius="4"
+                         BorderBrush="Silver"
+                         BorderThickness="1">
 
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="38"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
+                    <DockPanel LastChildFill="True">
 
-                            <TextBlock Grid.Row="0"
-                                   Text="{Binding CalculationVM.Name}"
-                                   Margin="10"
-                                   FontSize="14"/>
-
-                            <DataGrid x:Name="ResultGrid"
-                                      Grid.Row="1"
-                                      Style="{StaticResource ResultDataGridStyle}"
-                                      VerticalAlignment="Bottom"
-                                      Margin="10"
-                                      ItemsSource="{Binding CalculationVM.CategorizedResults}">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Buildup Group" Binding="{Binding GroupName}" Width="3*"  IsReadOnly="True" />
-                                    <DataGridTextColumn Header="GWP (kgCO2eq)" Binding="{Binding Gwp, StringFormat={}{0:F0}}" Width="1*"  IsReadOnly="True" />
-                                    <DataGridTextColumn Header="GE (kWhOileq)" Binding="{Binding Ge, StringFormat={}{0:F0}}" Width="1*"  IsReadOnly="True" />
-                                </DataGrid.Columns>
-                            </DataGrid>
-
-                            <DataGrid x:Name="ErrorGrid"
-                                    Grid.Row="1"
-                                    Style="{StaticResource ErrorDataGridStyle}"
-                                    VerticalAlignment="Bottom"
+                        <DataGrid x:Name="ResultGrid"
+                                    Style="{StaticResource ResultDataGridStyle}"
+                                    VerticalContentAlignment="Stretch"
                                     Margin="10"
-                                    ItemsSource="{Binding CalculationVM.Errors}">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Binding="{Binding ErrorMessage}" Width="1*" IsReadOnly="True">
-                                        <DataGridTextColumn.Header>
+                                    DockPanel.Dock="Top"
+                                    ItemsSource="{Binding CalculationVM.CategorizedResults}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Group" Binding="{Binding Group}" Width="3*"  IsReadOnly="True" />
+                                <DataGridTextColumn Header="GWP" Binding="{Binding Gwp, StringFormat={}{0:F1}}" Width="1*"  IsReadOnly="True" />
+                                <DataGridTextColumn Header="GE" Binding="{Binding Ge, StringFormat={}{0:F1}}" Width="1*"  IsReadOnly="True" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <DataGrid x:Name="ErrorGrid"
+                                Style="{StaticResource ErrorDataGridStyle}"
+                                Margin="10"
+                                DockPanel.Dock="Bottom"
+                                ItemsSource="{Binding CalculationVM.Errors}">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="Issues" Width="1*" IsReadOnly="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="💔" FontSize="10" Foreground="Crimson" VerticalAlignment="Center"/>
-                                                <TextBlock Text=" Issues" Foreground="Crimson" FontSize="13" />
+                                                <Image Source="pack://application:,,,/CalcMVVM;component/Resources/button_issue.png" 
+                                                        Width="12" Height="12" Margin="0,0,5,0"/>
+                                                <TextBlock Text="{Binding ErrorMessage}"
+                                                            FontSize="10" FontStyle="Italic" 
+                                                            VerticalAlignment="Center"/>
                                             </StackPanel>
-                                        </DataGridTextColumn.Header>
-                                    </DataGridTextColumn>
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </Grid>
-                    </Grid>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
 
                 </Border>
+                <Grid x:Name="SumSection"
+                      Margin="0,10,0,0"
+                      Grid.Row="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                <Border  Grid.ColumnSpan="3"
+                         Grid.RowSpan="2"
+                         CornerRadius="4"
+                         Background="#404040"/>
 
+                    <TextBlock Grid.Column="0"
+                           Text="{Binding CalculationVM.ProjectArea, StringFormat={}{0:F1}}"
+                           d:Text="182920"
+                           FontWeight="Bold"
+                           FontStyle="Italic"                          
+                           Foreground="White"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontSize="21"/>
+                    
+                    <TextBlock Grid.Column="0" Grid.Row="1"
+                               TextAlignment="Center" Foreground="White"
+                               FontStyle="Italic"  FontSize="10">
+                        <Run Text="Project Area"/> <LineBreak/> <Run Text="(m²)"/>
+                    </TextBlock>
+
+
+                    <TextBlock Grid.Column="1"
+                           Text="{Binding CalculationVM.ProjectGwp, StringFormat={}{0:F1}}"
+                           d:Text="127.8"
+                           FontWeight="Bold"
+                           FontStyle="Italic"
+                           Foreground="White"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontSize="21"/>
+
+                    <TextBlock Grid.Column="1" Grid.Row="1"
+                               TextAlignment="Center" Foreground="White"
+                               FontStyle="Italic"  FontSize="10">
+                        <Run Text="Global Warming Potential"/> <LineBreak/> <Run Text="(kgCO²eg/m²/yr)"/>
+                    </TextBlock>
+
+                    <TextBlock Grid.Column="2"
+                           Text="{Binding CalculationVM.ProjectGe, StringFormat={}{0:F1}}"
+                           d:Text="55.8"
+                           FontWeight="Bold"
+                           FontStyle="Italic"
+                           Foreground="White"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontSize="21"/>
+
+                    <TextBlock Grid.Column="2" Grid.Row="1"
+                               TextAlignment="Center" Foreground="White"
+                               FontStyle="Italic"  FontSize="10">
+                        <Run Text="Grey Energy"/> <LineBreak/> <Run Text="(kWhoil/m²/yr)"/>
+                    </TextBlock>
+                </Grid>
             </Grid>
-
-            <StackPanel x:Name="TogglePanel"
-                        Grid.Column="0"
-                        Grid.Row="4"
-                        Orientation="Horizontal"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Left"
-                        Margin="10,0,0,10">
-                <TextBlock Text="Default" FontSize="10" Margin="0,5,4,0"/>
-                <ToggleButton x:Name="ViewToggleButton"
-                                  Style="{StaticResource ToggleButtonStyle}" 
-                                  Checked="ViewToggleButtonChecked"
-                                  Unchecked="ViewToggleButtonUnchecked"/>
-                <TextBlock Text="By Buildup" FontSize="10" Margin="4,5,0,0"/>
-            </StackPanel>
+            
             <Button Style="{StaticResource ButtonStyle}"
-                    Grid.Column="0"
-                    Grid.Row="4"
-                    Content="Reload"
-                    Margin="0,0,10,10"
-                    Width="70"
-                    Click="UpdateRevitClicked"
-                    HorizontalAlignment="Right"
-                    />
-
-            <Grid  x:Name="SaveButtons"
                     Grid.Column="2"
-                    Grid.Row="4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Button Style="{StaticResource ButtonStyle}"
-                        Grid.Column="1"
-                        Content="Save Results"
-                        Click="SaveResultsClicked" Margin="5,0,10,10"
-                        IsEnabled="{Binding CalculationVM.CanSaveResults}"/>
-            </Grid>
+                    Grid.Row="4"
+                    Content="Save"
+                    Width="95"
+                    Margin="0,0,10,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Click="SaveResultsClicked"
+                    IsEnabled="{Binding CalculationVM.CanSaveResults}"/>
         </Grid>
 
         <Grid x:Name="NewMappingOverlay"
@@ -588,9 +640,8 @@
                 
                 <Label HorizontalAlignment="Center"
                        Content="New Mapping Name"
-                       FontSize="27"
-                       Margin="10"
-                       FontWeight="light"/>
+                       FontSize="18"
+                       Margin="10"/>
                 
                 <TextBox Margin="10"
                          x:Name="NewNameText"
@@ -602,9 +653,8 @@
 
                 <Label HorizontalAlignment="Center"
                        Content="Dupliacate From?"
-                       FontSize="27"
-                       Margin="10"
-                       FontWeight="light"/>
+                       FontSize="18"
+                       Margin="10"/>
 
                 <ListView x:Name="MappingListView"
                          HorizontalAlignment="Center"
@@ -678,9 +728,8 @@
             <StackPanel VerticalAlignment="Center">
                 <Label HorizontalAlignment="Center"
                        Content="New Snapshot Name"
-                       FontSize="27"
-                       Margin="10"
-                       FontWeight="light"/>
+                       FontSize="18"
+                       Margin="10"/>
                 <TextBox x:Name="NewResultNameTextBox"
                         HorizontalAlignment="Center"
                         Width="180"

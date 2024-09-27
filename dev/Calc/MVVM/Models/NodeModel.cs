@@ -1,5 +1,4 @@
-﻿using Calc.Core.Color;
-using Calc.Core.Objects;
+﻿using Calc.Core.Objects;
 using Calc.Core.Objects.GraphNodes;
 using Calc.MVVM.Helpers;
 using Calc.MVVM.ViewModels;
@@ -8,7 +7,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Media;
 
 namespace Calc.MVVM.Models
 {
@@ -18,6 +16,7 @@ namespace Calc.MVVM.Models
     }
     public class NodeModel : INotifyPropertyChanged
     {
+        public bool IsDark { get => GetIsDark(); }
         public string Name { get => GetNodeName(); }
         public string BranchParameterName { get => GetParameterName(); }
         public bool? BranchParameterIsInstance { get => CheckIfParameterIsInstance(); }
@@ -26,7 +25,7 @@ namespace Calc.MVVM.Models
         public NodeTreeModel ParentTreeView { get; set; }
         public NodeModel ParentNodeItem { get; private set; }
         public ObservableCollection<NodeModel> SubNodeItems { get; }
-        public BuildupViewModel NodeBuildupItem { get; set; }
+        public AssemblyViewModel NodeAssemblyItem { get; set; }
 
         private IGraphNode host;
         public IGraphNode Host
@@ -38,34 +37,33 @@ namespace Calc.MVVM.Models
                 {
                     host = value;
                     OnPropertyChanged(nameof(Host));
-                    OnPropertyChanged(nameof(CategorizedCalculation));
+                    //OnPropertyChanged(nameof(CategorizedCalculation));
                 }
             }
         }
 
-        public Dictionary<string, double> CategorizedCalculation
+   /*     public Dictionary<string, double> CategorizedCalculation
         {
             get
             {
                 var calculation = new Dictionary<string, double>();
                 if (Host != null && Host is Branch branch)
                 {
-                    var results = branch.CalculationResults;
-                    foreach (var result in results)
+                    foreach (var aSnapshot in branch.AssemblySnapshots)
                     {
-                        if (calculation.ContainsKey(result.GroupName))
+                        if (calculation.ContainsKey(aSnapshot.GroupName))
                         {
-                            calculation[result.GroupName] += Math.Round(result.Gwp, 3);
+                            calculation[aSnapshot.GroupName] += Math.Round(aSnapshot.Gwp, 3);
                         }
                         else
                         {
-                            calculation.Add(result.GroupName, Math.Round(result.Gwp, 3));
+                            calculation.Add(aSnapshot.GroupName, Math.Round(aSnapshot.Gwp, 3));
                         }
                     }
                 }
                 return calculation;
             }
-        }
+        }*/
 
         private bool _labelColorVisible;
         public bool LabelColorVisible
@@ -96,7 +94,7 @@ namespace Calc.MVVM.Models
             Host = node;
             ParentTreeView = parentTreeView;
             SubNodeItems = new ObservableCollection<NodeModel>();
-            NodeBuildupItem = new BuildupViewModel(this);
+            NodeAssemblyItem = new AssemblyViewModel(this);
             ParentNodeItem = parentNodeItem;
 
             if(node == null) return;
@@ -128,6 +126,14 @@ namespace Calc.MVVM.Models
             {
                 return null;
             }
+        }
+
+        public bool GetIsDark()
+        {
+            if (Host is Forest forest)
+                return forest.IsDark;
+            else
+                return ParentNodeItem.IsDark;
         }
 
         public string GetNodeName()
@@ -166,9 +172,8 @@ namespace Calc.MVVM.Models
         {
             OnPropertyChanged(nameof(UnderlineVisibility));
             OnPropertyChanged(nameof(LabelColorVisible));
-
             OnPropertyChanged(nameof(Host));
-            OnPropertyChanged(nameof(CategorizedCalculation));
+            //OnPropertyChanged(nameof(CategorizedCalculation));
 
             foreach (var subBranch in SubNodeItems)
             {

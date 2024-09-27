@@ -5,6 +5,7 @@ using Calc.MVVM.Helpers.Mediators;
 using Calc.MVVM.ViewModels;
 using Calc.MVVM.Views;
 using Calc.RevitConnector.Revit;
+using SpeckleSender;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -38,17 +39,19 @@ namespace Calc.RevitApp.Revit
 
                 if (!loginVM.FullyPrepared) return Result.Cancelled;
 
-                BuildupComponentCreator componentCreator = new BuildupComponentCreator(uidoc);
+                ElementSourceHandler elementSourceHandler = new ElementSourceHandler(uidoc, new RevitExternalEventHandler());
                 RevitImageCreator imageCreator = new RevitImageCreator(doc);
-
-                BuilderViewModel builderViewModel = new BuilderViewModel(loginVM.DirectusStore, componentCreator, imageCreator);
+                ElementSender elementSender = new ElementSender(doc, loginVM.CalcStore.Config);
+                BuilderViewModel builderViewModel = new BuilderViewModel(loginVM.CalcStore, elementSourceHandler, imageCreator, elementSender);
                 BuilderView builderView = new BuilderView(builderViewModel);
 
                 builderView.Show();
+
                 return Result.Succeeded;
             }
             catch (Exception ex)
             {
+                TaskDialog.Show("Error", ex.Message);
                 Logger.Log(ex.Message);
                 Debug.WriteLine(ex.Message);
                 return Result.Failed;

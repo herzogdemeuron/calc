@@ -8,20 +8,18 @@
         xmlns:views="clr-namespace:Calc.MVVM.Views"
         d:DataContext="{d:DesignInstance Type=local:BuilderViewModel}"
         Loaded="WindowLoaded"
-        Closing="WindowClosing"
         mc:Ignorable="d"
         Height="800" MinHeight="700"
         Width="900" MinWidth="800"
         WindowStartupLocation="CenterScreen"
         Icon="pack://application:,,,/CalcMVVM;component/Resources/icon_builder_small.png"
-        Title="CALC BUILDER"
+        Title="Calc Builder"
         Topmost="True">
 
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="MainViewResources.xaml"/>
-                <ResourceDictionary Source="ToggleButtonResource.xaml"/>
                 <ResourceDictionary Source="ButtonResource.xaml"/>
                 <ResourceDictionary Source="ComboBoxResource.xaml"/>
             </ResourceDictionary.MergedDictionaries>
@@ -37,13 +35,13 @@
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="70"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="85"/>
-                <RowDefinition Height="60"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="2*"/>
-                <RowDefinition Height="60"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="3*"/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="45"/>
             </Grid.RowDefinitions>
 
             <Label Content="DT @ Herzog &amp; de Meuron"
@@ -56,9 +54,9 @@
                 Foreground="Gray"/>
 
             <Label Content="Revit Elements"
-                    FontSize="27"
-                    Margin="5,15,0,0"
-                    FontWeight="light"/>
+                   FontSize="18"
+                   Padding="0"
+                   Margin="10,10,0,10"/>
 
             <Grid x:Name="TreeviewGrid"
                       Grid.Column="0"
@@ -76,8 +74,8 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="{Binding BuildupCreationVM.MainWarning}"
-                           d:Text="Choose a type and set one amount as normalizer."
+                <TextBlock Text="{Binding AssemblyCreationVM.MainWarning}"
+                           d:Text="Choose a type and set one amount as normalizer 🡩  "
                            Grid.ColumnSpan="5"
                            Grid.Row="1"
                            VerticalAlignment="Center"
@@ -86,7 +84,8 @@
                            FontWeight="SemiBold"
                            FontSize="10"/>
 
-                <Button Content="Select"
+                <Button Content=" Select"
+                        Uid="pack://application:,,,/CalcMVVM;component/Resources/button_cursor.png"
                             Style="{StaticResource ButtonStyle}"
                             Grid.Column="0"
                             Grid.Row="0"
@@ -100,10 +99,10 @@
                             BorderThickness="0" 
                             CornerRadius="4"
                             d:Background="LightGray"
-                            Background="{Binding BuildupCreationVM.CurrentColor, Converter={StaticResource ColorConverter}}"/>
+                            Background="{Binding AssemblyCreationVM.CurrentColor, Converter={StaticResource ColorConverter}}"/>
 
                 <Grid Grid.Column="1"
-                      DataContext="{Binding BuildupCreationVM.AmountsModel}">
+                      DataContext="{Binding AssemblyCreationVM.AmountsModel}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
@@ -151,7 +150,7 @@
                             MouseMove="TreeViewMouseMove"
                             DragOver="TreeViewDragOver"
                             Drop="TreeViewDrop"
-                            ItemsSource="{Binding BuildupCreationVM.BuildupComponents}"
+                            ItemsSource="{Binding AssemblyCreationVM.AssemblyComponents}"
                             TreeViewItem.Selected="TreeViewItemSelected"
                             ItemContainerStyle="{StaticResource TreeViewItemStyle}">
                         <TreeView.ItemTemplate>
@@ -169,14 +168,14 @@
 
 
 
-            <Label Content="Buildup Settings" 
-                Grid.Column="2"
-                Grid.Row="0"
-                FontSize="27"
-                Margin="5,15,0,0"
-                FontWeight="light"/>
+            <Label Content="Assembly Properties" 
+                    Grid.Column="2"
+                    Grid.Row="0"
+                    Padding="0"
+                    FontSize="18"
+                    Margin="10,10,0,10"/>
 
-            <Grid x:Name="BuildupInfoGrid"
+            <Grid x:Name="AssemblyInfoGrid"
                     Grid.Column="2" 
                     Grid.Row="1"
                     Margin="10,0,10,0">
@@ -187,66 +186,60 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="120"/>
                 </Grid.ColumnDefinitions>
 
-                <ComboBox   x:Name="StandardComboBox"
-                            IsEnabled="False"
-                            Text="Standard"
+
+
+                <ComboBox   x:Name="AssemblyGroupComboBox"
+                            Text = "Assembly Group"
                             Grid.Row="0"
-                            Grid.Column="0"
-                            ItemsSource="{Binding BuildupCreationVM.StandardsAll}"
-                            SelectedItem="{Binding BuildupCreationVM.SelectedStandard}"
+                            Grid.Column="2"
+                            ItemsSource="{Binding AssemblyCreationVM.AssemblyGroupsAll}"
+                            SelectedItem="{Binding AssemblyCreationVM.SelectedAssemblyGroup}"
                             Style="{StaticResource RoundedComboBoxStyle}"
                             DisplayMemberPath="Name"/>
 
-                <ComboBox   x:Name="BuildupGroupComboBox"
-                            Text = "Buildup Group"
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            ItemsSource="{Binding BuildupCreationVM.BuildupGroupsAll}"
-                            SelectedItem="{Binding BuildupCreationVM.SelectedBuildupGroup}"
-                            Style="{StaticResource RoundedComboBoxStyle}"
-                            DisplayMemberPath="Name"/>
-
-                <ComboBox   x:Name="BuildupUnitComboBox"
-                            Text="Buildup Unit"
-                            Grid.Row="2"
-                            Grid.Column="0"
-                            ItemsSource="{Binding BuildupCreationVM.BuildupUnitsAll}"
-                            SelectedItem="{Binding BuildupCreationVM.SelectedBuildupUnit}"
-                            Style="{StaticResource RoundedComboBoxStyle}"/>
-
-
-
-                <TextBox x:Name="BuildupNameTextBox"
-                        Grid.Column="1"
-                        Grid.ColumnSpan="2"
+                <TextBox x:Name="AssemblyNameTextBox"
+                        Grid.Column="0"
                         Height="25"
-                        Margin="5,0,0,0"
-                        Tag="Buildup Name"
+                        Margin="0,0,5,0"
+                        Tag="Assembly Name"
                         Style="{StaticResource TextBoxStyle}"
-                        FontWeight="SemiBold"                        
-                        TextChanged="BuildupNameTextChanged"/>
+                        Text="{Binding AssemblyCreationVM.NewAssemblyName}"
+                        FontWeight="SemiBold"
+                        LostFocus="AssemblyNameFocusLost"
+                        TextChanged="AssemblyNameTextChanged"/>
+
+                <TextBox x:Name="AssemblyCodeTextBox"
+                        Grid.Column="1"
+                        Height="25"
+                        Margin="0,0,5,0"
+                        Tag="Assembly Code"
+                        Style="{StaticResource TextBoxStyle}"
+                        Text="{Binding AssemblyCreationVM.NewAssemblyCode}"
+                        FontWeight="SemiBold"
+                        LostFocus="AssemblyCodeFocusLost"
+                        TextChanged="AssemblyCodeTextChanged"/>
 
                 <TextBox x:Name="DescriptionTextBox"
-                        Grid.Column="1"
+                        Grid.Column="0"
+                         Grid.ColumnSpan="2"
                         Grid.Row="1"
                         Grid.RowSpan="2"
-                        Margin="5,5,0,0"
-                        Tag="Buildup Description"
+                        Margin="0,5,5,0"
+                        Tag="Assembly Description"
                         Style="{StaticResource TextBoxStyle}"
                         VerticalAlignment="Top"
                         TextWrapping="Wrap"
                         Height="55"
-                        Text="{Binding BuildupCreationVM.NewBuildupDescription}"/>
+                        Text="{Binding AssemblyCreationVM.NewAssemblyDescription}"/>
                 
                 <Border  Grid.Column="2"
                          Grid.Row="1"
                          Grid.RowSpan="2"
-                         Height="55"
-                         Margin="5,5,0,0"
+                         Margin="0,5,0,0"
                          BorderBrush="Silver"
                          BorderThickness="1"
                          Background="WhiteSmoke"
@@ -257,9 +250,9 @@
                          CornerRadius="4">
                     <Grid>
                         <Image x:Name="ImagePreview" 
-                                Source="{Binding BuildupCreationVM.CurrentImage}"/>
+                                Source="{Binding AssemblyCreationVM.CurrentImage}"/>
                         <TextBlock x:Name="CaptureTextBlock"
-                                   Text="{Binding BuildupCreationVM.CaptureText}"
+                                   Text="{Binding AssemblyCreationVM.CaptureText}"
                                    d:Text="↻"
                                    Foreground="Gray"
                                    FontSize="20"
@@ -270,7 +263,7 @@
 
                 <Popup x:Name="ImagePreviewPopup" AllowsTransparency="True">
                     <Border BorderThickness="0" Background="Transparent" CornerRadius="4">
-                        <Image Source="{Binding BuildupCreationVM.CurrentImage}" Width="500" Height="400"/>
+                        <Image Source="{Binding AssemblyCreationVM.CurrentImage}" Width="500" Height="400"/>
                     </Border>
                 </Popup>
 
@@ -278,11 +271,11 @@
 
 
             <Label Content="Materials"
-                       Grid.Column="2"
-                       Grid.Row="2"
-                       Margin="5,5,0,0"
-                       FontSize="27"
-                       FontWeight="Light"/>
+                    Grid.Column="2"
+                    Grid.Row="2"
+                    Padding="0"
+                    Margin="10,10,0,10"
+                    FontSize="18"/>
 
             <Border  x:Name="MaterialSection"
                      Grid.Column="2"
@@ -290,16 +283,16 @@
                      Margin="10,0,10,0"
                      CornerRadius="4"
                      d:Background="LightGray"
-                     Background="{Binding BuildupCreationVM.CurrentColor, Converter={StaticResource ColorConverter}}">
+                     Background="{Binding AssemblyCreationVM.CurrentColor, Converter={StaticResource ColorConverter}}">
 
                 <Grid x:Name="MaterialGrid"
                       Margin="10"
-                      DataContext="{Binding BuildupCreationVM.CurrentLayerMaterialModel}"
+                      DataContext="{Binding AssemblyCreationVM.CurrentLayerMaterialModel}"
                       IsEnabled="{Binding IsEnabled}">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="4*"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="80"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="25"/>
@@ -308,20 +301,28 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <ComboBox   x:Name="MaterialFunctionComboBox"
-                            Text="Material Function"
-                            Grid.Column="1"
-                            Grid.Row="0"
-                            Grid.ColumnSpan="2"
-                            Margin="5,0,0,0"
-                            ItemsSource="{Binding MaterialFunctionsAll}"
-                            DisplayMemberPath="Name"
-                            SelectedItem="{Binding SelectedFunction}"
-                            Style="{StaticResource RoundedComboBoxStyle}"/>
+                    <ComboBox x:Name="MaterialFunctionComboBox"
+                              Text="Material Function"
+                              Grid.Column="1"
+                              Grid.Row="0"
+                              Grid.ColumnSpan="2"
+                              Margin="5,0,0,0"
+                              ItemsSource="{Binding MaterialFunctionsAll}"
+                              SelectedItem="{Binding SelectedFunction}"
+                              Style="{StaticResource RoundedComboBoxStyle}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+                                    <TextBlock Text="{Binding Amortization}" Foreground="Gray" FontSize="9" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                    </ComboBox>
 
                     <Button Content="{Binding MainMaterial.Name}"
                             d:Content=""
-                            Tag="Choose Main"
+                            Tag="Select First Material"
                             HorizontalAlignment="Stretch"
                             Grid.Column="0"
                             Grid.Row="0"
@@ -329,7 +330,7 @@
                             Click="SetMaterialClicked"/>
                     
                     <Button Content="{Binding SubMaterial.Name}"
-                            Tag="Choose Second"
+                            Tag="Select Second Material"
                             d:Content=""
                             HorizontalAlignment="Stretch"
                             Grid.Column="0"
@@ -348,7 +349,8 @@
                                FontWeight="SemiBold"
                                FontSize="10"/>
 
-                    <Button Content="Reduce"
+                    <Button Content=" Delete"
+                            Uid="pack://application:,,,/CalcMVVM;component/Resources/button_delete.png"
                             Grid.Column="2"
                             Grid.Row="1"
                             Margin="2.5,0,0,0"
@@ -360,6 +362,7 @@
                                  Grid.Row="1"
                                  Margin="5,0,2.5,0"
                                  Height="25"
+                                 Tag="Ratio"
                                  KeyDown="RatioTextBoxKeyDown"
                                  Text="{Binding SubMaterialRatio}"
                                  Style="{StaticResource TextBoxStyle}"/>
@@ -439,14 +442,14 @@
                 </Grid>
             </Border>
 
-            <Label Content="Buildup Preview"
+            <Label Content="Assembly Preview"
                    Grid.Row="4"
                    Grid.Column="2"
-                   Margin="5,5,0,0"
-                   FontSize="27"
-                   FontWeight="Light"/>
+                   Padding="0"
+                   Margin="10,10,0,10"
+                   FontSize="18"/>
 
-            <Grid x:Name="BuildupPreviewGrid"
+            <Grid x:Name="AssemblyPreviewGrid"
                      Margin="10,0,10,0"
                      Grid.Row="5" 
                      Grid.Column="2">
@@ -457,38 +460,48 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="65"/>
+                    <ColumnDefinition Width="45"/>
                     <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="35"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="45"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock d:Text="This is a Buildup name, and it is really long so that it has to be wrapepd."
+                <TextBlock d:Text="This is a Assembly name, and it is really long so that it has to be wrapepd."
+                           Grid.Column="0"
                            Grid.RowSpan="2"
-                           FontSize="15"
+                           FontSize="13"
                            TextWrapping="Wrap"
                            FontWeight="SemiBold"
                            LineHeight="17"
-                           Margin="0,0,10,0"
+                           Margin="0,0,20,0"
                            LineStackingStrategy="BlockLineHeight" 
-                           Text="{Binding BuildupCreationVM.NewBuildupName}"/>
+                           Text="{Binding AssemblyCreationVM.NewAssemblyName}"/>
 
-                <TextBlock Grid.Column="1" Text="Total GWP: " VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="2" Text="{Binding BuildupCreationVM.BuildupGwp}" FontWeight="SemiBold" VerticalAlignment="Center" d:Text="98.902"/>
-                <TextBlock Grid.Column="3" Text="{Binding BuildupCreationVM.SelectedBuildupUnit, StringFormat='kgCO₂eq/{0}'}" d:Text="kgCO₂eq/m2" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="1" Text="Unit: " FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="2" Text="{Binding AssemblyCreationVM.SelectedAssemblyUnit}" VerticalAlignment="Center" d:Text="m2"/>
 
-                <TextBlock Grid.Column="1" Grid.Row="1" Text="Total GE: " VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding BuildupCreationVM.BuildupGe}" FontWeight="SemiBold" VerticalAlignment="Center" d:Text="177.902"/>
-                <TextBlock Grid.Column="3" Grid.Row="1" Text="{Binding BuildupCreationVM.SelectedBuildupUnit, StringFormat='kWhOileq/{0}'}" d:Text="kWhOileq/m2" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="1" Grid.Row="1" Text="Source: " FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding AssemblyCreationVM.StandardsString}" VerticalAlignment="Center" d:Text="KBOB"/>
+
+                <TextBlock Grid.Column="4" Text="GWP: " FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="5" Text="{Binding AssemblyCreationVM.AssemblyGwp}" VerticalAlignment="Center" d:Text="98.902"/>
+                <TextBlock Grid.Column="6" FontSize="9" Text="kgCO₂/yr" Margin="5,0,0,0" VerticalAlignment="Center"/>
+
+                <TextBlock Grid.Column="4" Grid.Row="1" Text="GE: " FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="5" Grid.Row="1" Text="{Binding AssemblyCreationVM.AssemblyGe}" VerticalAlignment="Center" d:Text="177.902"/>
+                <TextBlock Grid.Column="6" FontSize="9" Grid.Row="1" Text="kWhOil/yr" Margin="5,0,0,0" VerticalAlignment="Center"/>
 
                 <Border x:Name="PreviewCalculation"
                         BorderBrush="Silver"
                         BorderThickness="1"
                         Grid.Row="2"
-                        Grid.ColumnSpan="4"
+                        Grid.ColumnSpan="7"
                         CornerRadius="4">
                     <DataGrid x:Name="Calculations"
                               Style="{StaticResource DataGridStyle}"
-                              ItemsSource="{Binding BuildupCreationVM.AllCalculationComponents}"
+                              ItemsSource="{Binding AssemblyCreationVM.CurrentCalculationComponents}"
                               AutoGenerateColumns="False">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="" Width="20">
@@ -529,35 +542,35 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="200" />
                 </Grid.ColumnDefinitions>
-                <Button Click="SaveBuildupClicked"
-                        IsEnabled="{Binding BuildupCreationVM.CanSave}"
+                <Button Click="SaveAssemblyClicked"
+                        IsEnabled="{Binding AssemblyCreationVM.CanSave}"
                         Grid.Column="1"
                         Margin="0,0,10,0">
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
                             <Setter Property="Content" Value="Create" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding BuildupCreationVM.SaveOrUpdate}" Value="False">
-                                    <Setter Property="Content" Value="Name exists, Update" />
+                                <DataTrigger Binding="{Binding AssemblyCreationVM.SaveOrUpdate}" Value="False">
+                                    <Setter Property="Content" Value="Code exists, Update" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </Button.Style>
                 </Button>
                 <Image gif:ImageBehavior.AnimatedSource="/CalcMVVM;component/Resources/DT_logo.gif"
-                       Visibility="{Binding BuildupCreationVM.SavingVisibility}"
+                       Visibility="{Binding AssemblyCreationVM.SavingVisibility}"
                        HorizontalAlignment="Right"
                        Margin="0,0,10,0"
                        Width="30"
                        Height="30"/>
 
                 <Label x:Name="SaveMessageLabel"
-                       Content="{Binding BuildupCreationVM.SaveMessage}"
+                       Content="{Binding AssemblyCreationVM.SaveMessage}"
                        HorizontalAlignment="Right"
                        VerticalAlignment="Center"
                        d:Content="Saved"
                        FontWeight="SemiBold"
-                       Foreground="{Binding BuildupCreationVM.SaveMessageColor}"/>
+                       Foreground="{Binding AssemblyCreationVM.SaveMessageColor}"/>
 
             </Grid>
 

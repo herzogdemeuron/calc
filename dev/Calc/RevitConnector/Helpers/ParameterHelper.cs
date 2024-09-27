@@ -2,7 +2,6 @@
 using Calc.Core.Objects;
 using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Elements;
-using Calc.Core.Objects.Results;
 using Calc.RevitConnector.Config;
 using System;
 using System.Collections.Generic;

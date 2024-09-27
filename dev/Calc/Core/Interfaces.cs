@@ -1,5 +1,5 @@
 ﻿using Calc.Core.Objects;
-using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.Elements;
 using System;
 using System.Collections.Generic;
@@ -14,14 +14,25 @@ namespace Calc.Core.Interfaces
         List<CalcElement> CreateCalcElements(List<CustomParamSetting> customParamSettings, List<string> parameterNameList);
     }
 
-    public interface IBuildupComponentCreator
+
+    public interface IElementSourceHandler
     {
-        public List<BuildupComponent> CreateBuildupComponentsFromSelection(List<CustomParamSetting> customParamSettings);
+        public ElementSourceSelectionResult SelectElements(List<CustomParamSetting> customParamSettings);
+        public void SaveAssemblyRecord(string assemblyCode, string assemblyName, Unit newAssemblyUnit, AssemblyGroup assemblyGroup, string description, List<AssemblyComponent> components);
+        public AssemblyRecord GetAssemblyRecord();
     }
 
     public interface IImageSnapshotCreator
     {
         public string CreateImageSnapshot(string baseName);
+    }
+
+    /// <summary>
+    /// send elements to speckle
+    /// </summary>
+    public interface IElementSender
+    {
+        public Task<string> SendToSpeckle(List<int> elementIds, string modelName, string assemblyName,string description, Dictionary<string,string> dynamicProperties);
     }
     
 

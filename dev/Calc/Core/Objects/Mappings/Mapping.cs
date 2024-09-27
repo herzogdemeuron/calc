@@ -1,12 +1,10 @@
-﻿using Calc.Core.Objects.Buildups;
+﻿using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.GraphNodes;
-using Speckle.Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Calc.Core.Objects.Mappings
 {
@@ -17,7 +15,7 @@ namespace Calc.Core.Objects.Mappings
         [JsonProperty("name")]
         public string Name { get; set; }
         [JsonProperty("project")]
-        public Project Project { get; set; }
+        public CalcProject Project { get; set; }
         [JsonProperty("updated")]
         public DateTime? Updated { get; set; }
         [JsonProperty("mappings")]
@@ -52,11 +50,11 @@ namespace Calc.Core.Objects.Mappings
         }
 
         /// <summary>
-        /// Assigns the buildups to the tree based on the mapping.
+        /// Assigns the assemblies to the tree based on the mapping.
         /// Automatically determines which mapping to use based on the tree name.
         /// Returns a broken tree if the mapping path is not found.
         /// </summary>
-        public Tree ApplyToTree(Tree tree, List<Buildup> allBuildups, int maxBuildups)
+        public Tree ApplyToTree(Tree tree, List<Assembly> allAssemblies)
         {
             var brokenTree = new Tree()
             {
@@ -64,7 +62,7 @@ namespace Calc.Core.Objects.Mappings
                 ParentTree = tree
             };
 
-            tree.ResetBuildups();
+            tree.ResetAssemblies();
             // find the mapping items that apply to this tree
             var mappingItems = MappingItems.Where(mappingItem => mappingItem.TreeName == tree.Name);
             if (!mappingItems.Any())
@@ -74,25 +72,25 @@ namespace Calc.Core.Objects.Mappings
 
             foreach (var mappingItem in mappingItems)
             {
-                var buildupIds = mappingItem.BuildupIds.Take(maxBuildups).ToList();
-                var buildups = allBuildups.Where(b => buildupIds.Contains(b.Id)).ToList();
-                var match = MapBuildupsToBranch(tree, buildups, mappingItem.Path);
+                var assemblyIds = mappingItem.AssemblyIds.Take(2).ToList();
+                var assemblies = allAssemblies.Where(b => assemblyIds.Contains(b.Id)).ToList();
+                var match = MapAssembliesToBranch(tree, assemblies, mappingItem.Path);
 
                 if (!match)
                 {
-                    brokenTree.AddBranchWithMappingItem(mappingItem, buildups);
+                    brokenTree.AddBranchWithMappingItem(mappingItem, assemblies);
                 }
             }
 
             return brokenTree.SubBranches.Count > 0 ? brokenTree : null;
         }
 
-        private bool MapBuildupsToBranch(Branch branch, List<Buildup> buildups, List<MappingPath> path)
+        private bool MapAssembliesToBranch(Branch branch, List<Assembly> assemblies, List<MappingPath> path)
         {
 
             if (branch.Path.SequenceEqual(path))
             {
-                branch.SetBuildups(buildups);
+                branch.SetAssemblies(assemblies);
                 return true;
             }
             else
@@ -103,7 +101,7 @@ namespace Calc.Core.Objects.Mappings
                 }
                 foreach (var subBranch in branch.SubBranches)
                 {
-                    bool subMatch = MapBuildupsToBranch(subBranch, buildups, path);
+                    bool subMatch = MapAssembliesToBranch(subBranch, assemblies, path);
                     if (subMatch)
                     {
                         return true;
@@ -135,11 +133,11 @@ namespace Calc.Core.Objects.Mappings
             var mappingItems = new List<MappingItem>();
             foreach (var branch in branches)
             {
-                if (branch.Buildups != null && branch.Buildups.Count > 0)
+                if (branch.Assemblies != null && branch.Assemblies.Count > 0)
                 {
                     mappingItems.Add(new MappingItem()
                     {
-                        BuildupIds = branch.Buildups.Select(b => b.Id).ToList(),
+                        AssemblyIds = branch.Assemblies.Select(b => b.Id).ToList(),
                         Path = branch.Path,
                         TreeName = treeName
                     });

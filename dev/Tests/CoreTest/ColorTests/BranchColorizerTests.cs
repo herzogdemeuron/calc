@@ -55,14 +55,14 @@ namespace Calc.Core.TestIntegration.ColorTests
             var mockData = new MockData();
             foreach (var tree in this.Trees)
             {
-                //mockData.AssignBuildups(tree);
+                //mockData.AssignAssemblies(tree);
             }
 
             //Console.WriteLine(JsonConvert.SerializeObject(this.Trees, Formatting.Indented));
 
             // Act
             List<Branch> branches = this.Trees.ConvertAll(tree => (Branch)tree);
-            BranchPainter.ColorBranchesByBuildup(branches);
+            BranchPainter.ColorBranchesByAssembly(branches);
 
             // Assert
             foreach (var tree in this.Trees)

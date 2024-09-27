@@ -1,4 +1,4 @@
-﻿using Speckle.Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +10,11 @@ namespace Calc.Core.Objects.GraphNodes
     public class Forest : IHasProject, IGraphNode
     {
         [JsonIgnore]
+        public bool IsDark { get; set; } = false; // if the forest is a dark forest ( for left over elements )
+        [JsonIgnore]
         public List<CalcElement> Elements { get => GetElements(); }
+        [JsonIgnore]
+        public double TotalLength { get => SubBranches.Sum(s => s.TotalLength); }
         [JsonIgnore]
         public double TotalArea { get => SubBranches.Sum(s => s.TotalArea); }
         [JsonIgnore]
@@ -44,7 +48,7 @@ namespace Calc.Core.Objects.GraphNodes
             }
         }
         [JsonProperty("project_id")]
-        public Project Project { get; set; }
+        public CalcProject Project { get; set; }
 
         public void SetBranchColorsBy(string method)
         {
@@ -55,8 +59,8 @@ namespace Calc.Core.Objects.GraphNodes
                 case "branches":
                     ItemPainter.ColorBranchesByBranch(branches);
                     break;
-                case "buildups":
-                    ItemPainter.ColorBranchesByBuildup(branches);
+                case "assemblies":
+                    ItemPainter.ColorBranchesByAssembly(branches);
                     break;
                 default:
                     break;

@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using System.Collections.Generic;
 using GraphQL;
-using Speckle.Newtonsoft.Json;
-using Calc.Core.Objects.Buildups;
+using Newtonsoft.Json;
+using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.Materials;
 using Calc.Core.Objects;
 

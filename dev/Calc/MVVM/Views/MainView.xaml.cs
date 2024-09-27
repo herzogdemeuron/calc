@@ -157,7 +157,33 @@ namespace Calc.MVVM.Views
                 e.Handled = true;
             }
         }
-        
+
+        private void SetFirstAssemblyClicked(object sender, RoutedEventArgs e)
+        {
+            SetAssemblyWithTag(true);
+        }
+
+        private void SetSecondAssemblyClicked(object sender, RoutedEventArgs e)
+        {
+            SetAssemblyWithTag(false);
+        }
+
+        // set the main or sub assembly calling the assembly selection view
+        private void SetAssemblyWithTag(bool setFirst)
+        {
+            var canSelect = MainVM.HandleSelectingAssembly(setFirst);
+
+            if (!canSelect) return;
+
+            var assemblySelectionView = new AssemblySelectionView(MainVM.AssemblySelectionVM);
+            var result = assemblySelectionView.ShowDialog();
+
+            if (result == true)
+            {
+                MainVM.HandleAssemblySelected(setFirst);
+            }
+        }
+
         private void SideClickDown(object sender, MouseButtonEventArgs e)
         {
             MainVM.HandleSideClicked();
@@ -173,14 +199,28 @@ namespace Calc.MVVM.Views
             MainVM.HandleRemove();
         }
 
-        private void ViewToggleButtonChecked(object sender, RoutedEventArgs e)
+        private void ColorizeClicked(object sender, RoutedEventArgs e)
         {
-            MainVM.HandleViewToggleToBuildup();
-        }
-
-        private void ViewToggleButtonUnchecked(object sender, RoutedEventArgs e)
-        {
-            MainVM.HandleViewToggleToBranch();            
+            string tag = (sender as Button).Tag.ToString();
+            switch (tag)
+            {
+                case "group":
+                    this.ColorByAssemblyButton.Opacity = 0.4;
+                    this.ColorByAssemblyButton.Uid = "";
+                    this.ColorByGroupButton.Opacity = 1.0;
+                    this.ColorByGroupButton.Uid = "pack://application:,,,/CalcMVVM;component/Resources/button_color.png";
+                    MainVM.HandleViewToggleToBranch();
+                    break;
+                case "assembly":
+                    this.ColorByAssemblyButton.Opacity = 1.0;
+                    this.ColorByAssemblyButton.Uid = "pack://application:,,,/CalcMVVM;component/Resources/button_color.png";
+                    this.ColorByGroupButton.Opacity = 0.4;
+                    this.ColorByGroupButton.Uid = "";
+                    MainVM.HandleViewToggleToAssembly();
+                    break;
+                case "co2":
+                    break;
+            }
         }
 
         private void UpdateRevitClicked(object sender, RoutedEventArgs e)

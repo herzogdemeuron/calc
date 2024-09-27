@@ -1,5 +1,5 @@
 ﻿using Calc.Core.Objects.GraphNodes;
-using Speckle.Newtonsoft.Json;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace Calc.Core.DirectusAPI.Drivers

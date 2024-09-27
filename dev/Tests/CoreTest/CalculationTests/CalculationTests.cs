@@ -1,5 +1,5 @@
 ﻿using Calc.Core.Objects;
-using Calc.Core.Calculations;
+using Calc.Core.Calculation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
@@ -17,10 +17,10 @@ namespace Calc.Core.TestIntegration
             foreach (var tree in mockData.Forest.Trees)
             {
                 tree.Plant(mockData.Elements);
-                mockData.Mapping.ApplyToTree(tree,mockData.Buildups);
+                mockData.Mapping.ApplyToTree(tree,mockData.Assemblies);
             }
             var trees = mockData.Forest.Trees;
-            Assert.IsNotNull(trees.SelectMany(t=>t.CalculationResults));
+            Assert.IsNotNull(trees.SelectMany(t=>t.AssemblySnapshots));
         }
     }
 }

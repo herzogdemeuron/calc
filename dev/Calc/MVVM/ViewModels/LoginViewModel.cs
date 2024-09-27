@@ -15,13 +15,13 @@ namespace Calc.MVVM.ViewModels
 
     public class LoginViewModel : INotifyPropertyChanged
     {
-        private readonly bool MainOrBuilder;
+        public bool MainOrBuilder { get; }
         public Directus DirectusInstance { get; set; }
-        public DirectusStore DirectusStore { get; set; }
+        public CalcStore CalcStore { get; set; }
         public string Title { get; set; }
         public string Password { get; set; }
         private readonly CancellationTokenSource cTokenSource = new CancellationTokenSource();
-        public bool FullyPrepared => DirectusInstance.Authenticated && DirectusStore.AllDataLoaded;
+        public bool FullyPrepared => DirectusInstance.Authenticated && CalcStore.AllDataLoaded;
         private bool authenticated = false;
 
         private bool canOK = true;
@@ -150,29 +150,34 @@ namespace Calc.MVVM.ViewModels
         {
             MainOrBuilder = mainOrBuilder;
             DirectusInstance = new Directus();
-            Url = Properties.Settings.Default.Config1;
-            Email = Properties.Settings.Default.Config2;
-            Password = Properties.Settings.Default.Config3;
+            Url = Properties.Settings.Default.Url;
+            Email = Properties.Settings.Default.Email;
+            Password = Properties.Settings.Default.Password;
             Title = title;
         }
 
-        private async Task<bool> Authenticate()
+        private async Task Authenticate()
         {
             await DirectusInstance.Authenticate(Url, Email, Password);
-            if (!DirectusInstance.Authenticated) return false;
+            if (!DirectusInstance.Authenticated)
+            {
+                throw new Exception("Authentication failed.");
+            }
 
-            Properties.Settings.Default.Config1 = Url;
-            Properties.Settings.Default.Config2 = Email;
-            Properties.Settings.Default.Config3 = Password;
+            DateTime timeNow = DateTime.Now;
+
+            Properties.Settings.Default.Url = Url;
+            Properties.Settings.Default.Email = Email;
+            Properties.Settings.Default.Password = Password;
+            Properties.Settings.Default.LastTime = timeNow;
             Properties.Settings.Default.Save();
-            return true;
         }
 
         private async Task LoadData()
         {
-            DirectusStore = new DirectusStore(DirectusInstance);
+            CalcStore = new CalcStore(DirectusInstance);
 
-            DirectusStore.ProgressChanged += (s, p) =>
+            CalcStore.ProgressChanged += (s, p) =>
             {
                 Dispatcher.CurrentDispatcher.Invoke(() =>
                 {
@@ -182,89 +187,91 @@ namespace Calc.MVVM.ViewModels
 
             if (MainOrBuilder)
             {
-                await DirectusStore.GetMainData(cTokenSource.Token);
+                await CalcStore.GetMainData(cTokenSource.Token);
             }
             else
             {
-                await DirectusStore.GetBuilderData(cTokenSource.Token);
+                await CalcStore.GetBuilderData(cTokenSource.Token);
             }
         }
 
-        private void PrepareSelection()
+        public async Task<bool> HandleAutoLogin()
         {
-            if(MainOrBuilder)
+            DateTime lastTime = Properties.Settings.Default.LastTime;
+            // if the current time is within 1 hour of the last time, auto login (only for the same session)
+            if (DateTime.Now.Subtract(lastTime).TotalHours < 1)
             {
-                SelectionList = DirectusStore.ProjectsAll.OfType<IShowName>().ToList();
-                SelectionText = "Select Project:";
+                return await HandleOK();
             }
+            
             else
             {
-                SelectionList = DirectusStore.StandardsAll.OfType<IShowName>().ToList();
-                SelectionText = "Select LCA Standard:";
+                return false;
             }
         }
 
+        /// <summary>
+        /// handles the ok button click in 2 stages: 1. auth and load data, 2. select project(for main login)
+        /// returns true if the login is successful
+        /// </summary>
+        /// <returns></returns>
         public async Task<bool> HandleOK()
         {
 
+            // auth firstly
             if (!authenticated)
             {
                 CanOK = false;
+
                 try
                 {
-                    authenticated = await Authenticate();
+                    await Authenticate();
+                    authenticated = true;
 
-                    if (authenticated)
-                    {
-                        LoginVisibility = Visibility.Collapsed;
-                        LoadVisibility = Visibility.Visible;
-
-                        await LoadData();
-
-                        LoadVisibility = Visibility.Collapsed;
-                        SelectionVisibility = Visibility.Visible;
-
-                        PrepareSelection();
-                    }
+                    LoadVisibility = Visibility.Visible;
+                    LoginVisibility = Visibility.Collapsed;
+                    await LoadData();
+                    LoadVisibility = Visibility.Collapsed;
                 }
                 catch (Exception ex)
                 {
                     Message = ex.Message;
+                    CanOK = true;
+                    LoginVisibility = Visibility.Visible;
+                    return false;
                 }
 
+                // for builder directly return true
+                if (!MainOrBuilder) return true;
+
+                // for main prepare for project selection
                 CanOK = true;
+                SelectionList = CalcStore.ProjectsAll.OfType<IShowName>().ToList();
+                SelectionText = "Select Project:";
+                SelectionVisibility = Visibility.Visible;
+                LoginVisibility = Visibility.Collapsed;
                 return false;
             }
 
-            if (selected != null)
-            {
-                SetSelection();
-                return true;
-            }
-            else
-            {
-                Message = "Please select an item.";
-                return false;
-            }
-
-        }
-
-        private void SetSelection()
-        {
+            // select project for main login
             if (MainOrBuilder)
             {
-                var project = (Project)Selected;
-                var standard = project.Standard;
-                DirectusStore.ProjectSelected = project;
-                DirectusStore.StandardSelected = standard;
+                if (Selected != null)
+                {
+                    var project = (CalcProject)Selected;
+                    CalcStore.ProjectSelected = project;
+                    return true;
+                }
+                else
+                {
+                    Message = "Please select an item.";
+                    return false;
+                }
             }
-            else
-            {
-                DirectusStore.StandardSelected = (LcaStandard)Selected;
-            }
+
+            return false;
+
         }
-
-
 
         public void CancelLoad()
         {

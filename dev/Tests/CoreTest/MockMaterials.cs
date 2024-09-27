@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Xml.Linq;
 using Calc.Core.Filtering;
 using Calc.Core.Objects;
-using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Mappings;
 using Calc.Core.Objects.Materials;
@@ -16,7 +16,7 @@ public class MockData
     public Forest Forest { get; set; } = new Forest() { Name = "Mock Forest" };
     public List<Tree> Trees { get; set; } = new List<Tree>();
     public List<CalcElement> Elements { get; set; } = new List<CalcElement>();
-    public List<Buildup> Buildups { get; set; } = new List<Buildup>();
+    public List<Assembly> Assemblies { get; set; } = new List<Assembly>();
     public Mapping Mapping { get; set; } = new Mapping();
 
 
@@ -24,7 +24,7 @@ public class MockData
     {
         MakeForest();
         MakeElements();
-        MakeBuildups();
+        MakeAssemblies();
         MakeMapping();
     }
     private void MakeForest()
@@ -175,9 +175,9 @@ public class MockData
         this.Elements.Add(element6);
     }
 
-    public void MakeBuildups()
+    public void MakeAssemblies()
     {
-        var group1 = new BuildupGroup
+        var group1 = new AssemblyGroup
         {
             Name = "MaterialGroup1"
         };
@@ -190,7 +190,7 @@ public class MockData
             Category = "Category1"
         };
 
-        var component1 = new BuildupComponent
+        var component1 = new AssemblyComponent
         {
             Amount = 0.5m,
             Material = material1
@@ -204,7 +204,7 @@ public class MockData
             Category = "Category2"
         };
 
-        var component2 = new BuildupComponent
+        var component2 = new AssemblyComponent
         {
             Amount = 0.7m,
             Material = material2
@@ -218,49 +218,49 @@ public class MockData
             Category = "Category1"
         };
 
-        var component3 = new BuildupComponent
+        var component3 = new AssemblyComponent
         {
             Amount = 0.8m,
             Material = material3
         };
 
 
-        var buildup1 = new Buildup
+        var assembly1 = new Assembly
         {
             Id = 901,
-            Name = "Buildup No.1",
-            BuildupUnit = Unit.m2
+            Name = "Assembly No.1",
+            AssemblyUnit = Unit.m2
         };
 
-        var buildup2 = new Buildup
+        var assembly2 = new Assembly
         {
             Id = 902,
-            Name = "Buildup No.2",
-            BuildupUnit = Unit.m3
+            Name = "Assembly No.2",
+            AssemblyUnit = Unit.m3
         };
 
 
-        buildup1.Group = group1;
-        buildup1.BuildupComponents = new ObservableCollection<BuildupComponent>
+        assembly1.Group = group1;
+        assembly1.AssemblyComponents = new ObservableCollection<AssemblyComponent>
         {
             component1,
             component2
         };
 
-        buildup2.Group = group1;
-        buildup2.BuildupComponents = new ObservableCollection<BuildupComponent>
+        assembly2.Group = group1;
+        assembly2.AssemblyComponents = new ObservableCollection<AssemblyComponent>
         {
             component3
         };
 
 
-        this.Buildups.Add(buildup1);
-        this.Buildups.Add(buildup2);
+        this.Assemblies.Add(assembly1);
+        this.Assemblies.Add(assembly2);
     }
 
     public void MakeMapping()
     {
-        var project = new Project
+        var project = new CalcProject
         {
             Id = 0,
             ProjectNumber = "123"
@@ -277,7 +277,7 @@ public class MockData
                 {
                     TreeName = "Roh_Wand",
                     Path = new List<MappingPath>(),
-                    BuildupIds = new List<int> { 902, 901 }
+                    AssemblyIds = new List<int> { 902, 901 }
                 },
                 new MappingItem
                 {
@@ -295,7 +295,7 @@ public class MockData
                             Value = "SubGroup2"
                         }
                     },
-                    BuildupIds = new List<int> { 902 }
+                    AssemblyIds = new List<int> { 902 }
                 },
                 new MappingItem
                 {
@@ -313,7 +313,7 @@ public class MockData
                             Value = "SubGroupA"
                         }
                     },
-                    BuildupIds = new List<int> { 902 }
+                    AssemblyIds = new List<int> { 902 }
                 },
                 new MappingItem
                 {
@@ -331,7 +331,7 @@ public class MockData
                             Value = "SubGroupB"
                         }
                     },
-                    BuildupIds = new List<int> { 901 }
+                    AssemblyIds = new List<int> { 901 }
                 }
             }
         };

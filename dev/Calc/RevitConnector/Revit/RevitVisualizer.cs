@@ -51,7 +51,6 @@ namespace Calc.RevitConnector.Revit
 
         public void IsolateAndColorSubbranchElements(IGraphNode node)
         {
-            if (node == null) return;
             colorBranchAction = ColorSubbranchElements;
             selectedNode = node;
             eventHandler.Raise(IsolateAndColor);
@@ -59,7 +58,6 @@ namespace Calc.RevitConnector.Revit
 
         public void IsolateAndColorBottomBranchElements(IGraphNode node)
         {
-            if (node == null) return;
             colorBranchAction = ColorBottomBranchElements;
             selectedNode = node;
             eventHandler.Raise(IsolateAndColor);
@@ -83,15 +81,20 @@ namespace Calc.RevitConnector.Revit
         private void IsolateElements(IGraphNode node, View view)
         {
             view.TemporaryViewModes.DeactivateMode(TemporaryViewMode.TemporaryHideIsolate);
-            List<string> elementIds = node.ElementIds;
-            if (elementIds.Count > 0)
+            List<string> elementIds = node?.ElementIds ?? new List<string>();
+            var sectionBoxId = GetSectionBoxId(view);
+            if (sectionBoxId != null)
             {
-                view.IsolateElementsTemporary(StringsToElementIds(node.ElementIds));
+                elementIds.Add(sectionBoxId);
             }
+            view.IsolateElementsTemporary(StringsToElementIds(elementIds));
+            
         }
 
         private void ColorSubbranchElements(IGraphNode node, View view, ElementId patternId)
         {
+            if (node == null) return;
+
             foreach (var subBranch in node.SubBranches)
             {
                 ColorBranchElements(subBranch, view, patternId);
@@ -100,6 +103,8 @@ namespace Calc.RevitConnector.Revit
 
         private void ColorBottomBranchElements(IGraphNode node, View view, ElementId patternId)
         {
+            if (node == null) return;
+
             ColorBranchElements(node, view, patternId);
 
             if (node.SubBranches.Count == 0)
@@ -138,6 +143,18 @@ namespace Calc.RevitConnector.Revit
             {
                 view.SetElementOverrides(elementId, overrideSettings);
             }
+        }
+
+        private string GetSectionBoxId(View view)
+        {
+            // the section box id is the view id - 1
+            // see: https://forums.autodesk.com/t5/revit-api-forum/get-section-box-of-3d-view/td-p/9795973
+            if (view is View3D view3D && view3D.IsSectionBoxActive)
+            {
+                var sid = view3D.Id.IntegerValue - 1;
+                return sid.ToString();
+            }
+            return null;
         }
 
         private ElementId GetPatternId()

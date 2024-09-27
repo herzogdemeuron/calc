@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Calc.Core.Objects.Mappings;
-using Speckle.Newtonsoft.Json;
+using Newtonsoft.Json;
 
 namespace Calc.Core.DirectusAPI.Drivers
 {

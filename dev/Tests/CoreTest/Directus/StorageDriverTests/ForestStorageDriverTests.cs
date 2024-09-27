@@ -33,7 +33,7 @@ namespace Calc.Core.TestIntegration.Drivers
             {
                 Name = "test forest",
                 Trees = trees,
-                Project = new Project { Id = 1 }
+                Project = new CalcProject { Id = 1 }
             };
             var storageManager = new DirectusManager<Forest>(this.directus);
 
@@ -59,7 +59,7 @@ namespace Calc.Core.TestIntegration.Drivers
             {
                 Name = "updated forest",
                 Trees = trees,
-                Project = new Project { Id = 1 },
+                Project = new CalcProject { Id = 1 },
                 Id = this.forestId
             };
             var storageManager = new DirectusManager<Forest>(this.directus);

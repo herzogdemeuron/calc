@@ -10,7 +10,6 @@ namespace Calc.RevitApp
     public class App : IExternalApplication
     {
         public static string RevitVersion { get; set; }
-
         public Result OnStartup(UIControlledApplication application)
         {
             AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;

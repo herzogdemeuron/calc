@@ -16,18 +16,25 @@
                             BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="4">
                         <Grid>
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Grid x:Name="ImageGrid" Width="15" Height="15">
+                                    <Image  x:Name="Image"
+                                            Source="{Binding Uid, RelativeSource={RelativeSource TemplatedParent}}"
+                                            Stretch="Uniform"/>
+                                    <Rectangle x:Name="ImageInvert" Fill="White" Opacity="0">
+                                        <Rectangle.OpacityMask>
+                                            <VisualBrush Visual="{Binding ElementName=Image}"/>
+                                        </Rectangle.OpacityMask>
+                                    </Rectangle>
+                                </Grid>
+                                <TextBlock x:Name="ContentText"
+                                            Text="{TemplateBinding Content}"
+                                            VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"/>
+                            </StackPanel>
                             <TextBlock x:Name="PlaceholderText" 
                                        Foreground="DimGray"
                                         Text="{TemplateBinding Tag}"
-                                        VerticalAlignment="Center"
-                                        HorizontalAlignment="Center"
-                                        FontWeight="Regular"
-                                        IsHitTestVisible="False"
-                                        Visibility="Collapsed"/>
-                            <TextBlock x:Name="DisabledText" 
-                                       Foreground="LightGray"
-                                        Text=" - "
                                         VerticalAlignment="Center"
                                         HorizontalAlignment="Center"
                                         FontWeight="Regular"
@@ -39,22 +46,33 @@
 
                         <Trigger Property="Content" Value="{x:Null}">
                             <Setter TargetName="PlaceholderText" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="ContentText" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+
+                        <Trigger Property="Uid" Value="">
+                            <Setter TargetName="ImageGrid" Property="Visibility" Value="Collapsed"/>
                         </Trigger>
 
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="PlaceholderText" Property="Visibility" Value="Collapsed"/>
-                            <Setter TargetName="DisabledText" Property="Visibility" Value="Visible"/>
                             <Setter TargetName="border" Property="Background" Value="white"/>
                             <Setter TargetName="border" Property="BorderBrush" Value="LightGray"/>
                             <Setter Property="Foreground" Value="LightGray"/>
+                            <Setter TargetName="Image" Property="Opacity" Value="0.2"/>
+                            <Setter TargetName="ImageInvert" Property="Opacity" Value="1"/>
                         </Trigger>
 
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="border" Property="Background" Value="LightGray"/>
+                            <Setter Property="Opacity" Value="1"/>
+                            
                         </Trigger>
                         
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="Silver"/>
+                            <Setter TargetName="border" Property="Background" Value="#404040"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter TargetName="Image" Property="Opacity" Value="1"/>
+                            <Setter TargetName="ImageInvert" Property="Opacity" Value="1"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -128,5 +146,71 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <ControlTemplate x:Key="ExpanderToggleButton" TargetType="ToggleButton">
+        <Border x:Name="border" 
+            Background="WhiteSmoke" 
+            BorderBrush="Silver" 
+            BorderThickness="1"
+            CornerRadius="4"
+            Width="25" Height="25">
+            <Grid>
+                <Image  x:Name="Image"
+                        Source="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}"
+                        Width="15" Height="15"/>
+               
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="border" Property="Background" Value="LightGray"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="border" Property="Background" Value="Silver"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+
+    <Style x:Key="ExpanderStyle" TargetType="Expander">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Expander">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <ToggleButton x:Name="ExpanderButton"
+                                  Grid.Column="0"
+                                  ClickMode="Press"
+                                  VerticalAlignment="Top"
+                                  Margin="-45,45,0,0"
+                                  Tag="{Binding Uid, RelativeSource={RelativeSource TemplatedParent}}"
+                                  IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                  OverridesDefaultStyle="True"
+                                  Template="{StaticResource ExpanderToggleButton}"/>
+                        <ContentPresenter x:Name="ExpanderContent"
+                                      Grid.Column="1"
+                                      Visibility="Collapsed"
+                                      Content="{TemplateBinding Content}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsExpanded" Value="True">
+                            <Setter TargetName="ExpanderContent" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="ExpandDirection" Value="Right">
+                            <Setter TargetName="ExpanderButton" Property="DockPanel.Dock" Value="Left"/>
+                            <Setter TargetName="ExpanderContent" Property="DockPanel.Dock" Value="Right"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
 
 </ResourceDictionary>

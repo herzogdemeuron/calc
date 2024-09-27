@@ -6,7 +6,7 @@ Use it for setting up a local Directus instance for testing.
 import requests
 import json
 
-baseUrl = 'http://localhost:8055' # change this to your Directus instance
+baseUrl = 'https://hdm-dt.directus.app' # change this to your Directus instance
 
 # Get access token
 urlAuth = baseUrl + '/auth/login'

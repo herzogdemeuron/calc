@@ -1,6 +1,6 @@
 ﻿using Calc.Core.Objects;
 using Calc.Core.Objects.BasicParameters;
-using Calc.Core.Objects.Buildups;
+using Calc.Core.Objects.Assemblies;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,14 +22,14 @@ namespace Calc.MVVM.Models
 
 
         /// <summary>
-        /// Each time the component selection, the Buildup Unit or the Material selection is changed, the BasicUnitModel needs to be updated.
+        /// Each time the component selection, the Assembly Unit or the Material selection is changed, the BasicUnitModel needs to be updated.
         /// </summary>
-        public void UpdateAmounts(ICalcComponent host, Unit? buildupUnit, Unit? materialUnit)
+        public void UpdateAmounts(ICalcComponent host, Unit? assemblyUnit, Unit? materialUnit)
         {
-            CountAmount.UpdateWithHost(host, buildupUnit, materialUnit);
-            LengthAmount.UpdateWithHost(host, buildupUnit, materialUnit);
-            AreaAmount.UpdateWithHost(host, buildupUnit, materialUnit);
-            VolumeAmount.UpdateWithHost(host, buildupUnit, materialUnit);
+            CountAmount.UpdateWithHost(host, assemblyUnit, materialUnit);
+            LengthAmount.UpdateWithHost(host, assemblyUnit, materialUnit);
+            AreaAmount.UpdateWithHost(host, assemblyUnit, materialUnit);
+            VolumeAmount.UpdateWithHost(host, assemblyUnit, materialUnit);
         }
 
     }

@@ -8,18 +8,19 @@
         xmlns:views="clr-namespace:Calc.MVVM.Views"
         d:DataContext="{d:DesignInstance Type=local:LoginViewModel}"
         mc:Ignorable="d"
-        Height="240"
-        Width="350"
+        Height="290"
+        Width="320"
         WindowStartupLocation="CenterScreen"
-        Icon="pack://application:,,,/CalcMVVM;component/Resources/icon_builder_small.png"
-        Title="CALC"
+        Icon="pack://application:,,,/CalcMVVM;component/Resources/icon_black_small.png"
+        Title="Calc Login"
+        Loaded="WindowLoaded"
+        Closing="WindowClosing"
         Topmost="True">
 
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="MainViewResources.xaml"/>
-                <ResourceDictionary Source="ToggleButtonResource.xaml"/>
                 <ResourceDictionary Source="ButtonResource.xaml"/>
                 <ResourceDictionary Source="ComboBoxResource.xaml"/>
             </ResourceDictionary.MergedDictionaries>
@@ -29,120 +30,124 @@
         <Grid x:Name="MainGrid">
             <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="270"/>
-                <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="210"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="110"/>
             <RowDefinition Height="90"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <Label Content="{Binding Title}"
-               d:Content="Calc Builder Login"
-               HorizontalAlignment="Center"
-               Grid.Column="1"
-               FontSize="27"
-               FontWeight="light"/>
+        <Image Grid.Column="1" Width="100" Height="100" HorizontalAlignment="Center">
+            <Image.Style>
+                <Style TargetType="Image">
+                    <Setter Property="Source" Value="pack://application:,,,/CalcMVVM;component/Resources/icon_builder.png"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding MainOrBuilder}" Value="True">
+                            <Setter Property="Source" Value="pack://application:,,,/CalcMVVM;component/Resources/icon_main.png"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Image.Style>
+        </Image>
 
-        <StackPanel Grid.ColumnSpan="5"
-                    Grid.Row="2"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center">
 
-            <Button Content="OK"
-                    Width="60"
-                    Margin="0,0,10,0"
-                    IsEnabled="{Binding CanOK}"
-                    Style="{StaticResource ButtonStyle}"
-                    IsDefault="True"
-                    Click="OkClicked"/>
 
-            <Button Content="Quit"
-                   Width="60"
-                   Style="{StaticResource ButtonStyle}"
-                   IsCancel="True"
-                   Click="LoginQuitClicked"/>
-        </StackPanel>
+        <Button Content="OK"
+                Width="70"
+                Grid.Column="1"
+                Grid.Row="2"
+                VerticalAlignment="Bottom"
+                IsEnabled="{Binding CanOK}"
+                Style="{StaticResource ButtonStyle}"
+                IsDefault="True"
+                Click="OkClicked"/>
 
-        <Label x:Name="MessageLabel"
-         Content="{Binding Message}"
-         Grid.Row="2"
+
+        <TextBlock x:Name="MessageLabel"
+         Text="{Binding Message}"
+         Grid.Row="3"
          Grid.ColumnSpan="3"
          Padding="0,10,0,0"
          HorizontalAlignment="Center"
          VerticalAlignment="Bottom"
          Foreground="Crimson"
-         d:Content="Error while login!"/>
+         Width="330"
+         TextWrapping="Wrap"
+         d:Text="Error while login! Error while login! Error while login! Error while login!"/>
 
         <Grid x:Name="LoginGrid"
               Grid.Row="1"
               Grid.Column="1"
               Visibility="{Binding LoginVisibility}"
-             d:Visibility="Collapsed">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="65"/>
-                <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="200"/>
-            </Grid.ColumnDefinitions>
+             d:Visibility="Visible">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
-            
-            <Label Content="Url:"
-               VerticalAlignment="Center"
-               Grid.Row="0"
-               Grid.Column="0"/>
-            
+
             <TextBox Text="{Binding Url}"
                  Style="{StaticResource TextBoxStyle}"
                  d:Text="www.google.com"
-                 Grid.Column="2"
+                 Grid.Column="1"
                  Grid.Row="0"
                  Height="25"
-                 HorizontalAlignment="Stretch"/>
-            
-            <Label Content="Email:"
-               Grid.Row="1"
-               Grid.Column="0"
-               VerticalAlignment="Center"
-               Margin="0"/>
+                 Tag="Url"
+                 HorizontalAlignment="Stretch"/>            
 
             <TextBox Text="{Binding Email}"
              Style="{StaticResource TextBoxStyle}"
              d:Text="keke@keke.com"
-             Grid.Column="2"
+             Tag="Email"
+             Grid.Column="1"
              Grid.Row="1"
              Height="25"
-             HorizontalAlignment="Stretch"/>
+             HorizontalAlignment="Stretch"/> 
 
-            <Label Content="Password:"
-               Grid.Row="2"
-               Grid.Column="0"
-               VerticalAlignment="Center"
-               Margin="0"/>
-
-            <Border Grid.Column="2"
+            <Border Grid.Column="1"
                     Grid.Row="2"
                     Height="25"
                     BorderBrush="Silver"
                     Background="WhiteSmoke"
                     BorderThickness="1"
                     CornerRadius="4">
-                <PasswordBox x:Name="PasswordBox"
-                         PasswordChar="〰"
-                         FontSize="15"
-                         d:Password="kjguielcisd"
-                         Height="25"
-                         PasswordChanged="PasswordChanged"
-                         Background="Transparent"
-                         BorderThickness="0"
-                         VerticalContentAlignment="Center"
-                         HorizontalAlignment="Stretch"/>
+                <Grid>
+                    <PasswordBox x:Name="PasswordBox"
+                             PasswordChar="〰"                         
+                             FontSize="15"
+                             d:Password="kjguielcisd"
+                             Height="25"
+                             PasswordChanged="PasswordChanged"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             VerticalContentAlignment="Center"
+                             HorizontalAlignment="Stretch"/>
+                    <TextBlock Text="password"
+                               Foreground="DimGray"
+                               VerticalAlignment="Center"
+                               Margin="2,0,0,0"
+                               FontWeight="Regular"
+                               IsHitTestVisible="False"
+                               Visibility="Collapsed">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding Password}" Value="{x:Null}"/>
+                                            <Condition Binding="{Binding ElementName=PasswordBox, Path=Password}" Value=""/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Grid>
             </Border>
         </Grid>
 
@@ -188,14 +193,8 @@
                      ItemsSource="{Binding SelectionList}"
                      SelectedItem="{Binding Selected}"
                      DisplayMemberPath="ShowName"
+                     Text="{Binding SelectionText}"
                      Style="{StaticResource RoundedComboBoxStyle}"/>
-
-            <TextBlock x:Name="SelectionText"
-                       Text="{Binding SelectionText}"
-                       Grid.Row="0"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center"            
-                       d:Text="Select Standard"/>   
 
         </Grid>
 
