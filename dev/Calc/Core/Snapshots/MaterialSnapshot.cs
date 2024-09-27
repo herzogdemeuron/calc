@@ -43,6 +43,27 @@ namespace Calc.Core.Snapshots
             if (MaterialGe.HasValue) CalculatedGe = MaterialGe * MaterialAmount;
         }
 
+        /// <summary>
+        /// merge a material snapshot to this, adding up the amount and kpis
+        /// the equality should be already checked
+        /// </summary>
+        public void Merge(MaterialSnapshot mSnapshot)
+        {
+            MaterialAmount += mSnapshot.MaterialAmount;
+            CalculatedGwp += mSnapshot.CalculatedGwp;
+            CalculatedGe += mSnapshot.CalculatedGe;
+        }
+
+        /// <summary>
+        /// compares if the two material snapshots are the same by material function, source uuid and source
+        /// </summary>
+        public bool Equals(MaterialSnapshot mSnapshot)
+        {
+            return MaterialSourceUuid == mSnapshot.MaterialSourceUuid &&
+                   MaterialSource == mSnapshot.MaterialSource &&
+                   MaterialFunction == mSnapshot.MaterialFunction;
+        }
+
         public MaterialSnapshot Copy()
             {
             return new MaterialSnapshot

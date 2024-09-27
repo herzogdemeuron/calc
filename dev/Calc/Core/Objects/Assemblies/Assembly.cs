@@ -79,7 +79,7 @@ namespace Calc.Core.Objects.Assemblies
         public string SpeckleModelId { get; set; }
 
         [JsonIgnore]
-        public List<AssemblySnapshot> AssemblySnapshot { get; set; }
+        public AssemblySnapshot AssemblySnapshot { get; set; }
 
 
         private List<CalculationComponent> calculationComponents = new List<CalculationComponent>();

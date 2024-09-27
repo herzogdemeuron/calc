@@ -22,48 +22,65 @@ namespace Calc.Core.Snapshots
         public List<ElementTypeSnapshot> ElementTypes { get; set; } = new List<ElementTypeSnapshot>();
         [JsonIgnore]
         public double? TotalGwp => ElementTypes.Sum(m => m.TotalGwp);
+        [JsonIgnore]
         public double? TotalGe => ElementTypes.Sum(m => m.TotalGe);
 
         /// <summary>
-        /// claim the snapshot for one element, manipulate the the element amount and the material snapshots
+        /// claim the snapshot for one element, modify the the element amount and the material snapshots
         /// element ids should be later merged
         /// </summary>
         public void ClaimElement(CalcElement element, string elementGroup)
         {
             ElementGroup = elementGroup;
-            var snapshot = FindElementTypeSnapshot();
-            snapshot.ElementAmount = element.GetBasicUnitParameter(AssemblyUnit).Amount??0;
+            var snapshot = ElementTypes.FirstOrDefault();
+            if (snapshot == null) return;
+
+            var eAmount = element.GetBasicUnitParameter(AssemblyUnit).Amount??0;
+            snapshot.ElementAmount = eAmount;
             snapshot.ElementIds = new List<string> { element.Id };
             foreach (var material in snapshot.MaterialSnapshots)
             {
-                material.ApplyAmountRatio(snapshot.ElementAmount); // the element amount ratio equals element amount
+                material.ApplyAmountRatio(eAmount); // the element amount ratio equals element amount
             }
         }
 
         /// <summary>
-        /// add a material snapshot to the corresponding element type snapshot
+        /// assign a material snapshot to a new element type snapshot
         /// </summary>
-        public void AddMaterialSnapshot(MaterialSnapshot mSnapshot, string elementTypeId)
+        public void AssignMaterialSnapshot(MaterialSnapshot mSnapshot, string elementTypeId)
         {
-            var snapshot = FindElementTypeSnapshot(elementTypeId);
-            snapshot.MaterialSnapshots.Add(mSnapshot);
+            var etSnapshot = new ElementTypeSnapshot(elementTypeId);
+            etSnapshot.AssignMaterialSnapshot(mSnapshot);
+            ElementTypes.Add(etSnapshot);
         }
 
+        public bool Equals(AssemblySnapshot other)
+        {
+            return ElementGroup == other.ElementGroup &&
+                   AssemblyCode == other.AssemblyCode &&
+                   AssemblyGroup == other.AssemblyGroup;
+        }
 
         /// <summary>
-        /// get the element type snapshot from the list, create a new one if not found
+        /// merge another assembly snapshot to this
+        /// the equality should be already ensured
         /// </summary>
-        private ElementTypeSnapshot FindElementTypeSnapshot(string elementTypeId=null)
+        public void Merge(AssemblySnapshot other)
         {
-            var snapshot = ElementTypes.FirstOrDefault(m => m.ElementTypeId == elementTypeId);
-            if (snapshot == null)
+            foreach (var etSnapshot in other.ElementTypes)
             {
-                snapshot = new ElementTypeSnapshot() { ElementTypeId = elementTypeId };
-                ElementTypes.Add(snapshot);
-            }
-            return snapshot;
-        }                
+                var existingSnapshot = ElementTypes.FirstOrDefault(et => et.Equals(etSnapshot));
 
+                if (existingSnapshot != null)
+                {
+                    existingSnapshot.Merge(etSnapshot);
+                }
+                else
+                {
+                    ElementTypes.Add(etSnapshot.Copy());
+                }
+            }
+        }
                 
         public AssemblySnapshot Copy()
         {
