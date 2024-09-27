@@ -49,15 +49,15 @@ namespace Calc.MVVM.Models
                 var calculation = new Dictionary<string, double>();
                 if (Host != null && Host is Branch branch)
                 {
-                    foreach (var bSnapshot in branch.AssemblySnapshots)
+                    foreach (var aSnapshot in branch.AssemblySnapshots)
                     {
-                        if (calculation.ContainsKey(bSnapshot.GroupName))
+                        if (calculation.ContainsKey(aSnapshot.GroupName))
                         {
-                            calculation[bSnapshot.GroupName] += Math.Round(bSnapshot.Gwp, 3);
+                            calculation[aSnapshot.GroupName] += Math.Round(aSnapshot.Gwp, 3);
                         }
                         else
                         {
-                            calculation.Add(bSnapshot.GroupName, Math.Round(bSnapshot.Gwp, 3));
+                            calculation.Add(aSnapshot.GroupName, Math.Round(aSnapshot.Gwp, 3));
                         }
                     }
                 }

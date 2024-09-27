@@ -42,7 +42,7 @@ namespace Calc.MVVM.Services
 
         private static ProjectSnapshot MakeProjectSnapshot(CalcStore store, List<AssemblySnapshot> assemblySnapshots)
         {
-            var bSnapshot = SnapshotMaker.MergeSnapshots(assemblySnapshots);
+            var aSnapshot = SnapshotMaker.MergeSnapshots(assemblySnapshots);
             var snapshot = new ProjectSnapshot()
             {
                 ProjectNumber = store.ProjectSelected.Number,
@@ -53,7 +53,7 @@ namespace Calc.MVVM.Services
                 LifeSpan = store.ProjectSelected.LifeSpan,
                 Stages = store.ProjectSelected.Stages,
                 ImpactCategories = store.ProjectSelected.ImpactCategories,
-                AssemblySnapshots = bSnapshot
+                AssemblySnapshots = aSnapshot
             };
             return snapshot;
         }

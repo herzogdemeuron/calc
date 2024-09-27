@@ -348,9 +348,6 @@ namespace Calc.Core.Objects.GraphNodes
         /// add a new branch to the current branch using the parameter and value.
         /// returns the new branch.
         /// </summary>
-        /// <param name="parameter"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
         public Branch AddBranch(string parameter, string value, List<Assembly> assemblies)
         {
             //check if branch already exists
@@ -373,15 +370,8 @@ namespace Calc.Core.Objects.GraphNodes
             return newBranch;
         }
 
-        /// <summary>
-        /// WARNING: DESTRUCTIVE METHOD - USE ONLY ON A COPY OF THE TREE
-        /// The Intended use is right befor calculation.
-        /// 
-        /// This method removes elements from the current branch that
-        /// are also present in subbranches that have an assembly assigned.
-        /// In the bigger picture, this allows to override assemblies further down the tree.
-        /// </summary>
-        public void RemoveElementsByAssemblyOverrides()
+
+        public void RemoveElementsByAssemblyOverrides() // deprecated
         {
             if (Assemblies != null && SubBranches.Count > 0)
             {
@@ -424,7 +414,7 @@ namespace Calc.Core.Objects.GraphNodes
             return branches;
         }
 
-        public void PrintTree(int indentLevel = 0)
+        public void PrintTree(int indentLevel = 0)  // deprecated
         {
             string indentation = new(' ', indentLevel * 4);
             Console.WriteLine($"{indentation}∟: Elements: {Elements.Count}, Param: {Parameter}, Value: {Value}, Method: {Method}, Color: {HslColor.H}, Assembly: {Assemblies}");
