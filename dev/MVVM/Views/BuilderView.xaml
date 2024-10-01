@@ -84,7 +84,7 @@
                            FontWeight="SemiBold"
                            FontSize="10"/>
 
-                <Button Content=" Select"
+                <Button Content="Select"
                         Uid="pack://application:,,,/CalcMVVM;component/Resources/button_cursor.png"
                             Style="{StaticResource ButtonStyle}"
                             Grid.Column="0"
