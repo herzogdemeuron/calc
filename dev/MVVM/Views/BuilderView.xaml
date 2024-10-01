@@ -70,7 +70,7 @@
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="65"/>
+                    <ColumnDefinition Width="60"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
@@ -89,7 +89,7 @@
                             Style="{StaticResource ButtonStyle}"
                             Grid.Column="0"
                             Grid.Row="0"
-                            Width="60"
+                            Width="55"
                             Height="40"
                             HorizontalAlignment="Left"
                             Click="SelectClicked"/>
@@ -521,15 +521,15 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock>
-                                            <Run Text="{Binding Amount, StringFormat={}{0:F3}}"/>
+                                            <Run Text="{Binding Amount, StringFormat={}{0:F1}}"/>
                                             <Run Text=" "/>
                                             <Run Text="{Binding Material.MaterialUnit}"/>
                                         </TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="GWP" Binding="{Binding Gwp}" Width="*" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="GE" Binding="{Binding Ge}" Width="*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="GWP" Binding="{Binding Gwp, StringFormat={}{0:F1}}" Width="*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="GE" Binding="{Binding Ge, StringFormat={}{0:F1}}" Width="*" IsReadOnly="True"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Border>

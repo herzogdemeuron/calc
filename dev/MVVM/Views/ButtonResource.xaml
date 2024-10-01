@@ -102,13 +102,15 @@
                                 <RowDefinition Height="15"/>
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0" 
+                                       Text="{Binding AmountString}"                                       
+                                       HorizontalAlignment="Center"
+                                       FontWeight="Bold"
+                                       FontStyle="Italic"/>
+                            <TextBlock Grid.Row="1" 
                                        Text="{TemplateBinding Tag}" 
-                                       FontWeight="SemiBold" 
+                                       FontStyle="Italic"
+                                       FontSize="10"
                                        TextAlignment="Center"/>
-                            <ContentPresenter Content="{Binding AmountString}"
-                                              Grid.Row="1" 
-                                              HorizontalAlignment="Center" 
-                                              VerticalAlignment="Center"/>
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
