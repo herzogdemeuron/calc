@@ -2,8 +2,9 @@
 using Calc.Core.Interfaces;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Mappings;
-using Calc.MVVM.Helpers.Mediators;
+using Calc.MVVM.Helpers;
 using Calc.MVVM.Models;
+using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
 
@@ -21,19 +22,21 @@ namespace Calc.MVVM.ViewModels
         public VisibilityViewModel VisibilityVM { get; set; }
         public CalculationViewModel CalculationVM { get; set; }
         public AssemblySelectionViewModel AssemblySelectionVM { get; set; }
+        public event EventHandler DeselectTreeView;
+        public event EventHandler DeselectBrokenTreeView;
 
         public MainViewModel(CalcStore store, IElementCreator elementCreator, IVisualizer visualizer)
         {
             Store = store;
             VisibilityVM = new VisibilityViewModel();
-            ForestVM = new ForestViewModel(store, elementCreator);
-            MappingVM = new MappingViewModel(store);
-            NewMappingVM = new NewMappingViewModel(store);
+            ForestVM = new ForestViewModel(store, elementCreator, VisibilityVM);
+            MappingVM = new MappingViewModel(store, VisibilityVM);
+            NewMappingVM = new NewMappingViewModel(store, VisibilityVM);
             AssemblySelectionVM = new AssemblySelectionViewModel(store);
             NodeTreeVM = new NodeTreeViewModel(store, visualizer);
             MappingErrorVM = new MappingErrorViewModel(MappingVM);
             CalculationVM = new CalculationViewModel(NodeTreeVM);
-            SavingVM = new SavingViewModel(CalculationVM);
+            SavingVM = new SavingViewModel(CalculationVM, VisibilityVM);
         }
 
         /// <summary>
@@ -68,9 +71,10 @@ namespace Calc.MVVM.ViewModels
             NodeTreeVM.UpdateNodeSource();
             MappingChangedActions();
             NodeTreeVM.DeselectNodes();
+            DeselectTreeView?.Invoke(this, EventArgs.Empty);
         }
 
-        public void HandleMappingSelectionChanged(Mapping mapping)
+        public void HandleMappingSelectionChanged()
         {            
             MappingChangedActions();
         }
@@ -108,7 +112,8 @@ namespace Calc.MVVM.ViewModels
 
         public void HandleErrorMappingSideClicked()
         {
-            MappingErrorVM.DeselectNodes();
+            //MappingErrorVM.ResetAssemblies();
+            DeselectBrokenTreeView?.Invoke(this, EventArgs.Empty);
         }
 
         public async Task HandleUpdateMapping()
@@ -148,6 +153,7 @@ namespace Calc.MVVM.ViewModels
         {
             NodeTreeVM.DeselectNodes();
             CalculationVM.RefreshCalculation();
+            DeselectTreeView?.Invoke(this, EventArgs.Empty);
         }
 
         public void HandleInherit()
@@ -192,7 +198,7 @@ namespace Calc.MVVM.ViewModels
         }
         public void HandleMessageClose()
         {
-            MediatorToView.Broadcast("HideMessageOverlay");
+            VisibilityVM.HideMessageOverlay();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

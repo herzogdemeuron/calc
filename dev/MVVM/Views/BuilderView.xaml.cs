@@ -1,6 +1,6 @@
 ﻿using Calc.Core.Objects;
 using Calc.Core.Objects.Assemblies;
-using Calc.MVVM.Helpers.Mediators;
+using Calc.MVVM.Helpers;
 using Calc.MVVM.ViewModels;
 using System;
 using System.Windows;
@@ -21,7 +21,8 @@ namespace Calc.MVVM.Views
             BuilderVM = bvm;
             this.DataContext = BuilderVM;
             InitializeComponent();
-            MediatorToView.Register("ViewDeselectTreeView", _=>DeselectTreeView());
+            //MediatorToView.Register("ViewDeselectTreeView", _=>DeselectTreeView());
+            bvm.DeselectTreeView += DeselectTreeView;
         }
 
         private void SelectClicked(object sender, RoutedEventArgs e)
@@ -45,7 +46,7 @@ namespace Calc.MVVM.Views
         }
 
 
-        private void DeselectTreeView()
+        private void DeselectTreeView(object sender, EventArgs e)
         {
             if (TreeView.SelectedItem != null)
             {
@@ -128,12 +129,6 @@ namespace Calc.MVVM.Views
             {
                 BuilderVM.HandleMaterialSelected(setFirst);
             }
-        }
-
-
-        private void MessageOKClicked(object sender, RoutedEventArgs e)
-        {
-            BuilderVM.HandleMessageClose();
         }
 
         private async void SaveAssemblyClicked(object sender, RoutedEventArgs e)

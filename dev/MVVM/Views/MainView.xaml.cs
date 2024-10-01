@@ -1,9 +1,9 @@
 ﻿using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Mappings;
 using Calc.MVVM.Helpers;
-using Calc.MVVM.Helpers.Mediators;
 using Calc.MVVM.Models;
 using Calc.MVVM.ViewModels;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -19,12 +19,14 @@ namespace Calc.MVVM.Views
             MainVM = mvm;
             this.DataContext = MainVM;
             InitializeComponent();
-            MediatorToView.Register("ViewDeselectTreeView", _=>DeselectTreeView());
-            MediatorToView.Register("ViewDeselectBrokenNodesTreeView", _ => DeselectBrokenNodesTreeView());
-            MediatorToView.Register("ViewSelectBrokenNodesTreeView", node => SelectNodeTreeView((NodeModel)node));
+            mvm.DeselectTreeView += DeselectTreeView;
+            mvm.DeselectBrokenTreeView += DeselectBrokenNodesTreeView;
+            //MediatorToView.Register("ViewDeselectTreeView", _=>DeselectTreeView());
+            //MediatorToView.Register("ViewDeselectBrokenNodesTreeView", _ => DeselectBrokenNodesTreeView());
+            //MediatorToView.Register("ViewSelectBrokenNodesTreeView", node => SelectNodeTreeView((NodeModel)node));
         }
 
-        private void DeselectTreeView()
+        private void DeselectTreeView(object sender, EventArgs e)
         {
             if (TreeView.SelectedItem != null)
             {
@@ -35,7 +37,7 @@ namespace Calc.MVVM.Views
             }
         }
 
-        private void DeselectBrokenNodesTreeView()
+        private void DeselectBrokenNodesTreeView(object sender, EventArgs e)
         {
             if (BrokenNodesTreeView.SelectedItem != null)
             {
@@ -46,7 +48,7 @@ namespace Calc.MVVM.Views
             }
         }
 
-        private void SelectNodeTreeView(NodeModel node)
+        private void SelectNodeTreeView(NodeModel node) // deprecated
         {
             if (node != null)
             {
@@ -59,7 +61,7 @@ namespace Calc.MVVM.Views
             }
             else
             {
-                DeselectBrokenNodesTreeView();
+                //DeselectBrokenNodesTreeView();
             }
         }
 
@@ -76,7 +78,7 @@ namespace Calc.MVVM.Views
 
         private void MappingSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            MainVM.HandleMappingSelectionChanged(MappingsComboBox.SelectedItem as Mapping);
+            MainVM.HandleMappingSelectionChanged();
         }
 
         private void MappingListViewSelected(object sender, MouseButtonEventArgs e)

@@ -1,4 +1,4 @@
-﻿using Calc.MVVM.Helpers.Mediators;
+﻿using Calc.MVVM.Helpers;
 using Calc.Core;
 using Calc.Core.Objects.GraphNodes;
 using System;
@@ -6,16 +6,19 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Calc.MVVM.ViewModels
 {
     public class MappingViewModel : INotifyPropertyChanged
     {
         private CalcStore store;
+        private readonly VisibilityViewModel visibilityVM;
         public Forest BrokenMappingForest { get; set; }
-        public MappingViewModel(CalcStore calcStore)
+        public MappingViewModel(CalcStore calcStore, VisibilityViewModel vvm)
         {
             store = calcStore;
+            visibilityVM = vvm;
         }
 
         public async Task HandleUpdateMapping()
@@ -24,7 +27,7 @@ namespace Calc.MVVM.ViewModels
             string error = "";
             try
             {
-                MediatorToView.Broadcast("ShowWaitingOverlay", "Updating mapping...");
+                visibilityVM.ShowWaitingOverlay("Updating mapping...");
                 feedback = await store.UpdateSelectedMapping(BrokenMappingForest);
             }
             catch (Exception ex)
@@ -33,16 +36,14 @@ namespace Calc.MVVM.ViewModels
                 feedback = null;
                 error = ex.Message;
             }
-            MediatorToView.Broadcast("ShowMainView");
-            MediatorToView.Broadcast
-               ("ShowMessageOverlay",
-               new List<object>
-                   {   feedback,
+            visibilityVM.HideAllOverlays();
+            visibilityVM.ShowMessageOverlay(
+                        feedback,
                         error,
                         "Updated mapping successfully.",
                         "Error occured while saving, please try again."
-                   }
-                );
+                        );
+
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

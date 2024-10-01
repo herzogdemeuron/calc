@@ -1,7 +1,8 @@
 ﻿using Calc.Core;
 using Calc.Core.Interfaces;
 using Calc.Core.Objects;
-using Calc.MVVM.Helpers.Mediators;
+using Calc.MVVM.Helpers;
+using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
 
@@ -9,15 +10,17 @@ namespace Calc.MVVM.ViewModels
 {
     public class BuilderViewModel: INotifyPropertyChanged
     {
+
         public CalcStore Store { get; set; }
         public AssemblyCreationViewModel AssemblyCreationVM { get; set; }
         public VisibilityViewModel VisibilityVM { get; set; }
         public MaterialSelectionViewModel MaterialSelectionVM { get; set; }
+        public event EventHandler DeselectTreeView;
 
         public BuilderViewModel(CalcStore store, IElementSourceHandler elementSourceHandler, IImageSnapshotCreator imageSnapshotCreator, IElementSender elementSender)
         {
             Store = store;
-            VisibilityVM = new VisibilityViewModel();
+            VisibilityVM = new VisibilityViewModel(); // is this used?
             MaterialSelectionVM = new MaterialSelectionViewModel(store);
             AssemblyCreationVM = new AssemblyCreationViewModel(Store, elementSourceHandler, imageSnapshotCreator, elementSender);
         }
@@ -64,6 +67,7 @@ namespace Calc.MVVM.ViewModels
         public void HandleSideClicked()
         {
             AssemblyCreationVM.HandleDeselect();
+            DeselectTreeView?.Invoke(this, EventArgs.Empty);
         }
 
         public void HandleSelectingMaterial(bool setMain)
@@ -119,11 +123,6 @@ namespace Calc.MVVM.ViewModels
         public void HandleAssemblyCodeSetFinished()
         {
             AssemblyCreationVM.NewAssemblyCode = AssemblyCreationVM.NewAssemblyCode?.Trim();
-        }
-
-        public void HandleMessageClose()
-        {
-            MediatorToView.Broadcast("HideMessageOverlay");
         }
 
         public void NotifyStoreChange()

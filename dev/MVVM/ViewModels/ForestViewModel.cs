@@ -1,5 +1,4 @@
 ﻿using Calc.MVVM.Helpers;
-using Calc.MVVM.Helpers.Mediators;
 using Calc.Core;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Interfaces;
@@ -12,10 +11,12 @@ namespace Calc.MVVM.ViewModels
     {
         private readonly CalcStore store;
         private IElementCreator elementCreator;
-        public ForestViewModel(CalcStore calcStore, IElementCreator elementCreator)
+        private readonly VisibilityViewModel visibilityVM;
+        public ForestViewModel(CalcStore calcStore, IElementCreator elementCreator, VisibilityViewModel vvm)
         {
             store = calcStore;
             this.elementCreator = elementCreator;
+            this.visibilityVM = vvm;
         }
 
         /// <summary>
@@ -31,8 +32,7 @@ namespace Calc.MVVM.ViewModels
             }
             catch (System.Exception e)
             {
-                // show error message if something goes wrong
-                MediatorToView.Broadcast("ShowMessageOverlay", new List<object> { null, e.Message });
+                visibilityVM.ShowMessageOverlay(null, e.Message);
                 store.ForestSelected = null;
             }
         }

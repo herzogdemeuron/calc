@@ -1,4 +1,4 @@
-﻿using Calc.MVVM.Helpers.Mediators;
+﻿using Calc.MVVM.Helpers;
 using Calc.Core;
 using Calc.Core.Objects.Mappings;
 using System;
@@ -13,7 +13,8 @@ namespace Calc.MVVM.ViewModels
 {
     public class NewMappingViewModel : INotifyPropertyChanged
     {
-        private CalcStore store;
+        private readonly CalcStore store;
+        private readonly VisibilityViewModel visibilityVM;
 
 
         private string newName;
@@ -37,14 +38,15 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(MappingsListView));
             }
         }
-        public NewMappingViewModel(CalcStore calcStore)
+        public NewMappingViewModel(CalcStore calcStore, VisibilityViewModel vvm)
         {
             store = calcStore;
+            visibilityVM = vvm;
         }
         public void HandleNewMappingClicked()
         {
             CreateMappingsList();
-            MediatorToView.Broadcast("ShowNewMappingOverlay");
+            visibilityVM.ShowNewMappingOverlay();
         }
         
         private void CreateMappingsList()
@@ -59,29 +61,23 @@ namespace Calc.MVVM.ViewModels
         {
             bool? feedback;
             string error = "";
-
-/*            if (selectedMapping == null) 
-            {
-                MediatorToView.Broadcast("ShowMessageOverlay", new List<object> { null, "Please choose a mapping to duplicate." });
-                return;
-            }*/
             
             if (string.IsNullOrEmpty(newName))
             {
-                MediatorToView.Broadcast("ShowMessageOverlay", new List<object> { null, "Please enter a new name." });
+                visibilityVM.ShowMessageOverlay(null, "Please enter a new name.");
                 return;
             }
 
             List<string> currentNames = store.MappingsProjectRelated.Select(m => m.Name).ToList();
             if (currentNames.Contains(newName))
             {
-                MediatorToView.Broadcast("ShowMessageOverlay", new List<object> { null, "Name already exists in current project." });
+                visibilityVM.ShowMessageOverlay(null, "Name already exists in current project.");
                 return;
             }
 
             try
             {
-                MediatorToView.Broadcast("ShowWaitingOverlay", "Creating new mapping...");
+                visibilityVM.ShowWaitingOverlay("Creating new mapping...");
                 // choose if save current mapping or duplicate from selected
                 Mapping newMapping;
                 // if no mapping selected, create new mapping from current forest
@@ -103,22 +99,18 @@ namespace Calc.MVVM.ViewModels
                 feedback = null;
                 error = ex.Message;
             }
-            MediatorToView.Broadcast("ShowMainView");
-            MediatorToView.Broadcast
-                ("ShowMessageOverlay",
-                new List<object>
-                    {  
+            visibilityVM.HideAllOverlays();
+            visibilityVM.ShowMessageOverlay(
                     feedback,
                     error,
                     "Created mapping successfully.",
                     "Error occured while creating."
-                    }
-                );
+                    );
         }
 
         public void HandleNewMappingCanceled()
         {
-            MediatorToView.Broadcast("ShowMainView");
+            visibilityVM.HideAllOverlays();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

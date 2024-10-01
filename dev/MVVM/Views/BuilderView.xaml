@@ -235,7 +235,7 @@
                         TextWrapping="Wrap"
                         Height="55"
                         Text="{Binding AssemblyCreationVM.NewAssemblyDescription}"/>
-                
+
                 <Border  Grid.Column="2"
                          Grid.Row="1"
                          Grid.RowSpan="2"
@@ -310,14 +310,14 @@
                               ItemsSource="{Binding MaterialFunctionsAll}"
                               SelectedItem="{Binding SelectedFunction}"
                               Style="{StaticResource RoundedComboBoxStyle}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
                                     <TextBlock Text="{Binding Amortization}" Foreground="Gray" FontSize="9" Margin="5,0,0,0" VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
                     </ComboBox>
 
                     <Button Content="{Binding MainMaterial.Name}"
@@ -328,7 +328,7 @@
                             Grid.Row="0"
                             Style="{StaticResource ButtonStyle}"
                             Click="SetFirstMaterialClicked"/>
-                    
+
                     <Button Content="{Binding SubMaterial.Name}"
                             Tag="Select Second Material"
                             d:Content=""
@@ -357,7 +357,7 @@
                            Style="{StaticResource ButtonStyle}"
                             Click="ReduceMaterialClicked"/>
 
-                        <TextBox x:Name="RatioTextBox"
+                    <TextBox x:Name="RatioTextBox"
                                  Grid.Column="1"
                                  Grid.Row="1"
                                  Margin="5,0,2.5,0"
@@ -366,7 +366,7 @@
                                  KeyDown="RatioTextBoxKeyDown"
                                  Text="{Binding SubMaterialRatio}"
                                  Style="{StaticResource TextBoxStyle}"/>
-                   
+
                     <Grid x:Name="MaterialTabsGrid"
                           Grid.ColumnSpan="3"
                           Grid.Row="4"
@@ -573,28 +573,6 @@
                        Foreground="{Binding AssemblyCreationVM.SaveMessageColor}"/>
 
             </Grid>
-
         </Grid>
-
-        <Grid x:Name="MessageOverlayGrid"
-             Background="Gainsboro"
-             Margin="5,5,5,5"
-             Visibility="{Binding VisibilityVM.MessageOverlayVisibility}"
-             
-              d:IsHidden="true">
-            <StackPanel VerticalAlignment="Center">
-                <TextBlock x:Name="MessageTextBlock"
-                            Text="{Binding VisibilityVM.MessageText}"
-                            HorizontalAlignment="Center"/>
-                <Button Style="{StaticResource ButtonStyle}"
-                        Content="OK" 
-                        HorizontalAlignment="Center"
-                        Width="90"
-                        Margin="10"
-                        Click="MessageOKClicked"/>
-            </StackPanel>
-        </Grid>
-        
-        
     </Grid>
 </Window>

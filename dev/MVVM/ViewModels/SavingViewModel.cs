@@ -1,4 +1,4 @@
-﻿using Calc.MVVM.Helpers.Mediators;
+﻿using Calc.MVVM.Helpers;
 using Calc.MVVM.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,11 +8,13 @@ namespace Calc.MVVM.ViewModels
     public class SavingViewModel
     {
         private readonly CalculationViewModel calculationVM;
+        private readonly VisibilityViewModel visibilityVM;
 
-        public SavingViewModel(CalculationViewModel calVM)
+        public SavingViewModel(CalculationViewModel calVM, VisibilityViewModel vvm)
         
         {
             calculationVM = calVM;
+            visibilityVM = vvm;
         }
 
         public void HandleSavingResults()
@@ -27,34 +29,31 @@ namespace Calc.MVVM.ViewModels
             {
                 message = $"{count} elements to save.";
             }
-            MediatorToView.Broadcast("ShowSavingOverlay", message);
+            visibilityVM.ShowSavingOverlay(message);
         }
 
 
         public async Task HandleSendingResults(string newName)
         {
-            
-            MediatorToView.Broadcast("ShowWaitingOverlay", "Saving results...");
+
+            visibilityVM.ShowWaitingOverlay("Saving results...");
 
             var feedback =  await SnapshotSender.SaveProjectSnapshot(calculationVM.Store, calculationVM.AssemblySnapshots, newName);
             bool? saved = feedback.Item1;
             string error = feedback.Item2;
 
-            MediatorToView.Broadcast("ShowMainView");
-            MediatorToView.Broadcast
-                ("ShowMessageOverlay",
-                new List<object> 
-                    {   saved,
+            visibilityVM.HideAllOverlays();
+            visibilityVM.ShowMessageOverlay(
+                        saved,
                         "No element saved",
                         "Saved results successfully.",
-                        error??"Error occured while saving." 
-                    }
-                 );
+                        error??"Error occured while saving."
+                        );
         }
 
         public void HandleSaveResultCanceled()
         {
-            MediatorToView.Broadcast("ShowMainView");
+            visibilityVM.HideAllOverlays();
         }
 
     }

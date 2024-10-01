@@ -3,7 +3,6 @@ using Calc.Core.Color;
 using Calc.Core.Interfaces;
 using Calc.Core.Objects.GraphNodes;
 using Calc.MVVM.Helpers;
-using Calc.MVVM.Helpers.Mediators;
 using Calc.MVVM.Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,13 +13,11 @@ namespace Calc.MVVM.ViewModels
 {
     public class NodeTreeViewModel : INotifyPropertyChanged
     {
+        private NodeModel selectedNodeItem;
+        private readonly IVisualizer visualizer;
         public CalcStore Store;
         public bool BranchesSwitch { get; set; }
-
-        private IVisualizer visualizer;
         public HslColor CurrentColor { get => SelectedNodeItem?.Host?.HslColor ?? ItemPainter.DefaultColor; }
-
-        private NodeModel selectedNodeItem;
         public NodeModel SelectedNodeItem
         {
             get => selectedNodeItem;
@@ -34,7 +31,7 @@ namespace Calc.MVVM.ViewModels
         public NodeModel CurrentForestItem { get; set; } = new NodeModel(null, null);
         public NodeModel CurrentDarkForestItem { get; set; } = new NodeModel(null, null);
 
-        private List<NodeModel> ForestSelectionRecord = new List<NodeModel>(); // record which forest were selected, then to reset the color, for performance
+        private List<NodeModel> ForestSelectionRecord = new List<NodeModel>(); // TO BE REVISED: record which forest were selected, then to reset the color, for performance
         public ObservableCollection<NodeModel> NodeSource
         { get => new ObservableCollection<NodeModel> { CurrentForestItem, CurrentDarkForestItem }; }
 
@@ -43,17 +40,6 @@ namespace Calc.MVVM.ViewModels
             Store = calcStore;
             this.visualizer = visualizer;
             BranchesSwitch = false;
-            //MediatorFromVM.Register("ForestSelectionChanged", mapping => UpdateNodeSource((Mapping)mapping));
-            //MediatorFromVM.Register("MappingSelectionChanged", mapping => ReMapAllNodes());
-            //MediatorFromVM.Register("AssemblySelectionChanged", _ => ReColorAllNodes());
-
-           //MediatorFromVM.Register("MainViewToggleToAssembly", _ => BranchesSwitch = false);
-            //MediatorFromVM.Register("MainViewToggleToAssembly", _ => ColorNodesToAssembly());
-
-            //MediatorFromVM.Register("MainViewToggleToBranch", _ => BranchesSwitch = true);
-            //MediatorFromVM.Register("MainViewToggleToBranch", _ => ColorNodesToBranch());
-
-            //changing priority: Forest => Mapping => Assembly
         }
 
         /// <summary>
@@ -63,7 +49,6 @@ namespace Calc.MVVM.ViewModels
         {
             CurrentForestItem = new NodeModel(Store.ForestSelected, this);
             CurrentDarkForestItem = new NodeModel(Store.DarkForestSelected, this);
-            //ReMapAllNodes();
             OnPropertyChanged(nameof(NodeSource));
             ReColorAllNodes(true);
             DeselectNodes();
@@ -170,16 +155,16 @@ namespace Calc.MVVM.ViewModels
             NodeHelper.HideAllLabelColor(CurrentForestItem);
             NodeHelper.HideAllLabelColor(CurrentDarkForestItem);
 
-            MediatorToView.Broadcast("ViewDeselectTreeView"); //send command to the view to deselect treeview
             SelectedNodeItem = null;
             CurrentForestItem.NotifyNodePropertyChange(); //better ways to do this?
             CurrentDarkForestItem.NotifyNodePropertyChange();
 
             // take the unique forest from the record
-            var forestItems = ForestSelectionRecord.Distinct().ToList();
-            var resetItems = forestItems.SelectMany(f => f.SubNodeItems).Select(n => n.Host).ToList();
+            //var forestItems = ForestSelectionRecord.Distinct().ToList();
+            //var resetItems = forestItems.SelectMany(f => f.SubNodeItems).Select(n => n.Host).ToList();
+            var resetItems = CurrentForestItem.SubNodeItems.Select(n => n.Host).ToList();
             visualizer.ResetView(resetItems);
-            ForestSelectionRecord.Clear();
+            //ForestSelectionRecord.Clear();
         }
 
 

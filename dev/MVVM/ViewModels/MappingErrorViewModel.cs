@@ -1,5 +1,5 @@
 ﻿using Calc.Core.Objects.GraphNodes;
-using Calc.MVVM.Helpers.Mediators;
+using Calc.MVVM.Helpers;
 using Calc.MVVM.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -123,7 +123,6 @@ namespace Calc.MVVM.ViewModels
             if(nodeItem == null)
                 return;
 
-            NodeModel nextNode = null;
 
             if(nodeItem.Host is Tree)
             {
@@ -132,18 +131,12 @@ namespace Calc.MVVM.ViewModels
             }
             else
             {
-                nextNode = nodeItem.RemoveFromParent();
+                nodeItem.RemoveFromParent();
             }
-            
-            if(nextNode != null)
-            {
-                SelectNode(nextNode);
-            }
-            else
-            {
-                DeselectNodes();
-            }
-            
+
+            Assembly1 = null;
+            Assembly2 = null;
+
             // remove empty trees
             foreach (var tree in BrokenNodeSource)
             {
@@ -165,22 +158,16 @@ namespace Calc.MVVM.ViewModels
             OnPropertyChanged(nameof(BrokenSectionVisibility));
         }
 
-        public void DeselectNodes()
+        public void ResetAssemblies()
         {
             Assembly1 = null;
             Assembly2 = null;
-            MediatorToView.Broadcast("ViewDeselectBrokenNodesTreeView");
-        }
-
-        private void SelectNode(NodeModel node)
-        {
-            MediatorToView.Broadcast("ViewSelectBrokenNodesTreeView", node);
         }
 
             public void RemoveAllBrokenNodes()
         {
             BrokenNodeSource.Clear();
-            DeselectNodes();
+            ResetAssemblies();
             OnPropertyChanged(nameof(BrokenNodeSource));
             OnPropertyChanged(nameof(HasBrokenItems));
         }

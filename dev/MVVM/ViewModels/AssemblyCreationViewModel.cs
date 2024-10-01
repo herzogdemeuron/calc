@@ -7,7 +7,7 @@ using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.Materials;
 using Calc.Core.Objects.Standards;
 using Calc.Core.Snapshots;
-using Calc.MVVM.Helpers.Mediators;
+using Calc.MVVM.Helpers;
 using Calc.MVVM.Models;
 using System;
 using System.Collections.Generic;
@@ -303,7 +303,7 @@ namespace Calc.MVVM.ViewModels
         public void HandleDeselect()
         {
             SelectedComponent = null;
-            MediatorToView.Broadcast("ViewDeselectTreeView");
+            
             OnPropertyChanged(nameof(CurrentColor));
         }
 

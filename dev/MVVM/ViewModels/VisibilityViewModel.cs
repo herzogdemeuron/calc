@@ -1,7 +1,4 @@
-﻿using Calc.MVVM.Helpers.Mediators;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Windows;
 
 namespace Calc.MVVM.ViewModels
@@ -111,18 +108,10 @@ namespace Calc.MVVM.ViewModels
         public VisibilityViewModel()
         {
             HideAllOverlays(false);
-            MediatorToView.Register("ShowMainView", _ => HideAllOverlays());
-            MediatorToView.Register("ShowWaitingOverlay", message => ShowWaitingOverlay((string)message));
-            MediatorToView.Register("ShowSavingOverlay", message => ShowSavingOverlay((string)message));
-            MediatorToView.Register("ShowMessageOverlay", args => ShowMessageOverlay((List<object>)args));
-            MediatorToView.Register("HideMessageOverlay", _ => HideMessageOverlay());
-
-            MediatorToView.Register("ShowNewMappingOverlay", _ => ShowNewMappingOverlay());
-            
         }
 
 
-        private void ShowSavingOverlay(string message)
+        internal void ShowSavingOverlay(string message)
         {
             HideAllOverlays();
             SavingMessage = message;
@@ -130,44 +119,43 @@ namespace Calc.MVVM.ViewModels
 
         }
 
-        private void ShowNewMappingOverlay()
+        internal void ShowNewMappingOverlay()
         {
             HideAllOverlays();
             NewMappingOverlayVisibility = Visibility.Visible;
         }
 
-        private void ShowWaitingOverlay(string text)
+        internal void ShowWaitingOverlay(string text)
         {
             HideAllOverlays();
             WaitingText = text;
             WaitingOverlayVisibility = Visibility.Visible;
         }
 
-        private void ShowMessageOverlay( List<object> args)
+        internal void ShowMessageOverlay(bool? route, params object[] args)
         {
             
             MessageOverlayVisibility = Visibility.Visible;
-            bool? result = args.FirstOrDefault() as bool?;
-            if (result == null)
+            switch (route)
             {
-                MessageText = args[1]?.ToString() ?? "-";
-            }
-            else if (result == true)
-            {
-                MessageText = args[2]?.ToString() ?? "-";
-            }
-            else
-            {
-                MessageText = args[3]?.ToString() ?? "-";
+                case null:
+                    MessageText = args[0]?.ToString() ?? "Unknown";
+                    break;
+                case true:
+                    MessageText = args[1]?.ToString() ?? "Unknown";
+                    break;
+                case false:
+                    MessageText = args[2]?.ToString() ?? "Unknown";
+                    break;
             }
         }
 
-        private void HideMessageOverlay() 
+        internal void HideMessageOverlay() 
         {
             MessageOverlayVisibility = Visibility.Collapsed;
         }
 
-        private void HideAllOverlays(bool? hideProjects = true)
+        internal void HideAllOverlays(bool? hideProjects = true)
         {
             WaitingOverlayVisibility = Visibility.Collapsed;
             MessageOverlayVisibility = Visibility.Collapsed;
@@ -178,8 +166,6 @@ namespace Calc.MVVM.ViewModels
                 ProjectOverlayVisibility = Visibility.Collapsed;
             }
         }
-        
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
