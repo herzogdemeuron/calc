@@ -69,7 +69,7 @@ namespace Calc.Core.Objects.GraphNodes
         [JsonIgnore]
         private ObservableCollection<Assembly> _assemblies = new();
         [JsonIgnore]
-        public ObservableCollection<Assembly> Assemblies
+        public ObservableCollection<Assembly> Assemblies  // change to main and sub assembly
         {
             // set _assemblies to empty list if null to avoid null reference exceptions
             get => _assemblies;

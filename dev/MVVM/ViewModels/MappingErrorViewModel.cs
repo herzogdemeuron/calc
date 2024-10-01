@@ -64,13 +64,13 @@ namespace Calc.MVVM.ViewModels
             BrokenNodeSource = new ObservableCollection<NodeModel>();
         }
 
-        internal void UpdateBrokenNodes(Forest blackForest)
+        internal void UpdateBrokenNodes(Forest forest)
         {
-            if(blackForest.Trees?.Count > 0)
+            if(forest.Trees?.Count > 0)
             {
-                BrokenForest = blackForest;
+                BrokenForest = forest;
                 BrokenNodeSource.Clear();
-                foreach (var tree in blackForest.Trees)
+                foreach (var tree in forest.Trees)
                 {
                     BrokenNodeSource.Add(new NodeModel(tree));
                 }

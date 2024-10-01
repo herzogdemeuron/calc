@@ -41,9 +41,36 @@ namespace Calc.MVVM.ViewModels
             AssemblySelectionVM = new AssemblySelectionViewModel(store);
         }
 
+
+
+        /// <summary>
+        /// actions be taken when the mapping setting or the node source is changed
+        /// </summary>
+        private void MappingChangedActions()
+        {
+            NodeTreeVM.ReMapAllNodes();
+            AssemblySelectionChangedActions(true);
+        }
+
+        private void AssemblySelectionChangedActions(bool all = false)
+        {
+            // refresh the assembly section ui
+            if (all)
+            {
+                NodeTreeVM.CurrentForestItem.RefreshAssemblySection();
+            }
+            else
+            {
+                NodeTreeVM.SelectedNodeItem.RefreshAssemblySection(); 
+            }
+            NodeTreeVM.ReColorAllNodes(true); // recolor all node labels
+            CalculationVM.RefreshCalculation(); // refresh the current calculation
+        }
+
+
         public void HandleWindowLoaded()
         {
-            OnPropertyChanged(nameof(Store));
+            //OnPropertyChanged(nameof(Store));
         }
 
         public void HandleWindowClosing()
@@ -56,13 +83,13 @@ namespace Calc.MVVM.ViewModels
             if (Store.ForestSelected == forest || forest == null) return;
             await ForestVM.HandleForestSelectionChanged(forest);
             NodeTreeVM.UpdateNodeSource();
-            MappingErrorVM.UpdateBrokenNodes(Store.DarkForestSelected);
-
+            MappingChangedActions();
+            //MappingErrorVM.UpdateBrokenNodes(forest);
         }
 
         public void HandleMappingSelectionChanged(Mapping mapping)
-        {
-            MappingVM.HandleMappingSelectionChanged(mapping);
+        {            
+            MappingChangedActions();
         }
 
         public void HandleNewMappingClicked()
@@ -119,7 +146,7 @@ namespace Calc.MVVM.ViewModels
         public bool HandleSelectingAssembly(bool setMain)
         {
             if (NodeTreeVM.SelectedNodeItem == null) return false;
-            var assemblyItem = NodeTreeVM.SelectedNodeItem.NodeAssemblyItem;
+            var assemblyItem = NodeTreeVM.SelectedNodeItem.AssemblyModel;
             var assembly = setMain ? assemblyItem.Assembly1 : assemblyItem.Assembly2;
             AssemblySelectionVM.PrepareAssemblySelection(assembly);
             return true;
@@ -128,7 +155,8 @@ namespace Calc.MVVM.ViewModels
         public void HandleAssemblySelected(bool setMain)
         {
             var assembly = AssemblySelectionVM.SelectedAssembly;
-            NodeTreeVM.SelectedNodeItem.NodeAssemblyItem.SetAssembly(setMain,assembly);
+            NodeTreeVM.SelectedNodeItem.SetAssembly(setMain,assembly);
+            AssemblySelectionChangedActions();
         }
 
         public void HandleSideClicked()
@@ -140,14 +168,14 @@ namespace Calc.MVVM.ViewModels
         {
             if (NodeTreeVM.SelectedNodeItem == null)
                 return;
-            NodeTreeVM.SelectedNodeItem.NodeAssemblyItem.HandleInherit();
+            NodeTreeVM.SelectedNodeItem.AssemblyModel.HandleInherit();
         }
 
         public void HandleRemove()
         {
             if (NodeTreeVM.SelectedNodeItem == null)
                 return;
-            NodeTreeVM.SelectedNodeItem.NodeAssemblyItem.HandleRemove();
+            NodeTreeVM.SelectedNodeItem.AssemblyModel.HandleRemove();
         }
 
         public void HandleViewToggleToAssembly()

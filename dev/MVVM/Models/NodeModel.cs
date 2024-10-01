@@ -1,19 +1,14 @@
 ﻿using Calc.Core.Objects;
+using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.GraphNodes;
 using Calc.MVVM.Helpers;
 using Calc.MVVM.ViewModels;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 
 namespace Calc.MVVM.Models
 {
-    public enum NodeError
-    {
-        DoorOrWindowWithoutArea
-    }
     public class NodeModel : INotifyPropertyChanged
     {
         public bool IsDark { get => GetIsDark(); }
@@ -25,7 +20,7 @@ namespace Calc.MVVM.Models
         public NodeTreeViewModel ParentTreeView { get; set; }
         public NodeModel ParentNodeItem { get; private set; }
         public ObservableCollection<NodeModel> SubNodeItems { get; }
-        public AssemblyViewModel NodeAssemblyItem { get; set; }
+        public AssemblyModel AssemblyModel { get; set; }
 
         private IGraphNode host;
         public IGraphNode Host
@@ -71,7 +66,7 @@ namespace Calc.MVVM.Models
             Host = node;
             ParentTreeView = parentTreeView;
             SubNodeItems = new ObservableCollection<NodeModel>();
-            NodeAssemblyItem = new AssemblyViewModel(this);
+            AssemblyModel = new AssemblyModel(this);
             ParentNodeItem = parentNodeItem;
 
             if(node == null) return;
@@ -79,6 +74,19 @@ namespace Calc.MVVM.Models
             {
                 SubNodeItems.Add(new NodeModel(subNode, parentTreeView, this));
             }
+        }
+
+        public void SetAssembly(bool setMain, Assembly assembly)
+        {
+            if (setMain)
+            {
+                AssemblyModel.Assembly1 = assembly;
+            }
+            else
+            {
+                AssemblyModel.Assembly2 = assembly;
+            }
+            //RefreshAssemblySection();
         }
 
         /// <summary>
@@ -102,6 +110,19 @@ namespace Calc.MVVM.Models
             else
             {
                 return null;
+            }
+        }
+
+
+        public void RefreshAssemblySection()
+        {
+            AssemblyModel.RefreshAssemblySection();
+            if (SubNodeItems.Count > 0)
+            {
+                foreach (var subNode in SubNodeItems)
+                {
+                    subNode.RefreshAssemblySection();
+                }
             }
         }
 

@@ -5,12 +5,11 @@ using Calc.Core.Objects.GraphNodes;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using Calc.MVVM.Models;
 
-namespace Calc.MVVM.ViewModels
+namespace Calc.MVVM.Models
 {
 
-    public class AssemblyViewModel : INotifyPropertyChanged
+    public class AssemblyModel : INotifyPropertyChanged
     {
         private readonly NodeModel _node;
         private bool _inheritEnabled = false;
@@ -57,7 +56,7 @@ namespace Calc.MVVM.ViewModels
         }
 
 
-       
+
 
         public Assembly Assembly1
         {
@@ -65,10 +64,10 @@ namespace Calc.MVVM.ViewModels
             set
             {
                 UpdateAssembly(0, value);
-                UpdateAssemblySection(false);
+                RefreshAssemblySection(false);
                 //the combobox selection change due to node item selection change does not
                 //belong to assembly selection change broadcast
-                MediatorFromVM.Broadcast("AssemblySelectionChanged");
+                //MediatorFromVM.Broadcast("AssemblySelectionChanged");
             }
         }
 
@@ -78,8 +77,8 @@ namespace Calc.MVVM.ViewModels
             set
             {
                 UpdateAssembly(1, value);
-                UpdateAssemblySection(false);
-                MediatorFromVM.Broadcast("AssemblySelectionChanged");
+                RefreshAssemblySection(false);
+                //MediatorFromVM.Broadcast("AssemblySelectionChanged");
             }
         }
 
@@ -103,10 +102,10 @@ namespace Calc.MVVM.ViewModels
         }
 
 
-        public AssemblyViewModel(NodeModel node)
+        public AssemblyModel(NodeModel node)
         {
-            MediatorFromVM.Register("NodeItemSelectionChanged", _ => UpdateAssemblySection()); // if not, the assembly section sometimes not update,(parent reduced to zero, children remain all enabled), how to solve?
-            MediatorFromVM.Register("MappingSelectionChanged", _ => UpdateAssemblySection());
+            MediatorFromVM.Register("NodeItemSelectionChanged", _ => RefreshAssemblySection()); // if not, the assembly section sometimes not update,(parent reduced to zero, children remain all enabled), how to solve?
+            //MediatorFromVM.Register("MappingSelectionChanged", _ => UpdateAssemblySection());
             _node = node;
         }
 
@@ -126,21 +125,20 @@ namespace Calc.MVVM.ViewModels
         /// Notify the ui change of the assembly properties and the buttons,
         /// broadcast the assembly change to other viewmodels
         /// </summary>
-        public void UpdateAssemblySection(bool setFirstAssemblyActive = true)
+        internal void RefreshAssemblySection(bool setFirstAssemblyActive = true)
         {
             OnPropertyChanged(nameof(Assembly1));
             OnPropertyChanged(nameof(Assembly2));
             OnPropertyChanged(nameof(CurrentAssemblies));
 
-
             CheckInheritEnabled();
             CheckRemoveEnabled();
             CheckAddAssembly();
 
-            OnPropertyChanged(nameof(CanAddFirstAssembly));
-            OnPropertyChanged(nameof(CanAddSecondAssembly));
-            OnPropertyChanged(nameof(InheritEnabled));
-            OnPropertyChanged(nameof(RemoveEnabled));
+            OnPropertyChanged(nameof(CanAddFirstAssembly)); // needed?
+            OnPropertyChanged(nameof(CanAddSecondAssembly)); // needed?
+            OnPropertyChanged(nameof(InheritEnabled)); // needed?
+            OnPropertyChanged(nameof(RemoveEnabled)); // needed?
 
             if (setFirstAssemblyActive)
             {
@@ -176,7 +174,7 @@ namespace Calc.MVVM.ViewModels
             branch.SetAssemblies(newAssemblies);
             ActiveAssembly = assembly;
 
-            UpdateAssemblySection(false);
+            RefreshAssemblySection(false);
         }
 
         public void CheckAddAssembly()
@@ -202,9 +200,6 @@ namespace Calc.MVVM.ViewModels
                 CanAddFirstAssembly = false;
                 CanAddSecondAssembly = false;
             }
-
-
-
         }
 
         public void CheckInheritEnabled()
@@ -216,7 +211,7 @@ namespace Calc.MVVM.ViewModels
             }
             var branch = _node.Host;
             // if branch is branch but not tree, then it can inherit
-            InheritEnabled = (branch is Branch) && !(branch is Tree);
+            InheritEnabled = branch is Branch && !(branch is Tree);
         }
 
         public void CheckRemoveEnabled()
@@ -233,7 +228,7 @@ namespace Calc.MVVM.ViewModels
 
         public void HandleRemove()
         {
-            if (_node == null || _node.Host ==null)
+            if (_node == null || _node.Host == null)
                 return;
             var branch = _node.Host as Branch;
             var newAssemblies = new List<Assembly>(branch.Assemblies);
@@ -243,7 +238,7 @@ namespace Calc.MVVM.ViewModels
             ActiveAssembly = assemblyCount > 0 ? newAssemblies[assemblyCount - 1] : null;
 
             MediatorFromVM.Broadcast("AssemblySelectionChanged");
-            UpdateAssemblySection();
+            RefreshAssemblySection();
         }
 
         public void HandleInherit()
@@ -255,10 +250,10 @@ namespace Calc.MVVM.ViewModels
                 return;
             branch.InheritMapping();
             MediatorFromVM.Broadcast("AssemblySelectionChanged");
-            UpdateAssemblySection();
+            RefreshAssemblySection();
         }
 
-        
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)

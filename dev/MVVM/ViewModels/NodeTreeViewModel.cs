@@ -44,8 +44,8 @@ namespace Calc.MVVM.ViewModels
             this.visualizer = visualizer;
             BranchesSwitch = false;
             //MediatorFromVM.Register("ForestSelectionChanged", mapping => UpdateNodeSource((Mapping)mapping));
-            MediatorFromVM.Register("MappingSelectionChanged", mapping => RemapAllNodes((Mapping)mapping));
-            MediatorFromVM.Register("AssemblySelectionChanged", _ => RecolorAllNodes());
+            //MediatorFromVM.Register("MappingSelectionChanged", mapping => ReMapAllNodes());
+            MediatorFromVM.Register("AssemblySelectionChanged", _ => ReColorAllNodes());
 
             MediatorFromVM.Register("MainViewToggleToAssembly", _ => BranchesSwitch = false);
             MediatorFromVM.Register("MainViewToggleToAssembly", _ => ColorNodesToAssembly());
@@ -56,31 +56,32 @@ namespace Calc.MVVM.ViewModels
             //changing priority: Forest => Mapping => Assembly
         }
 
-
+        /// <summary>
+        /// Update the source of forest node and dark forest node
+        /// </summary>
         public void UpdateNodeSource()
         {
             CurrentForestItem = new NodeModel(Store.ForestSelected, this);
             CurrentDarkForestItem = new NodeModel(Store.DarkForestSelected, this);
-            RemapAllNodes();
+            //ReMapAllNodes();
             OnPropertyChanged(nameof(NodeSource));
-            RecolorAllNodes(true);
+            ReColorAllNodes(true);
             DeselectNodes();
         }
-        public void RemapAllNodes()
+        public void ReMapAllNodes()
         {
             if (CurrentForestItem == null) return;
             if (Store.MappingSelected == null) return;
 
-            var brokenForest = MappingHelper.ApplyMappingToForestItem(CurrentForestItem, Store, Store.MappingSelected);
-            //MediatorFromVM.Broadcast("BrokenForestChanged", brokenForest);
-            RecolorAllNodes();
+            var brokenForest = MappingHelper.ApplyMappingToForestItem(CurrentForestItem, Store, Store.MappingSelected); // this should be passed to mapping error?
+            ReColorAllNodes();
         }
 
         /// <summary>
         /// reset all node label colors property according to the current branch/assembly switch
         /// report to the visualizer
         /// </summary>
-        private void RecolorAllNodes(bool forceRecolorAll = false)
+        public void ReColorAllNodes(bool forceRecolorAll = false)
         {
             if (CurrentForestItem == null) return;
             if (BranchesSwitch == true)

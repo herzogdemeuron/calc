@@ -19,6 +19,10 @@ namespace Calc.MVVM.ViewModels
             store = calcStore;
             this.elementCreator = elementCreator;
         }
+
+        /// <summary>
+        /// Set the new selected forest to store, plant trees and update the dark forest
+        /// </summary>
         public async Task HandleForestSelectionChanged(Forest forest)
         {
             if (forest == null) return;

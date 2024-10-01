@@ -129,12 +129,12 @@ namespace Calc.MVVM.ViewModels
         public CalculationViewModel(NodeTreeViewModel ntVM)
         {
             NodeTreeVM = ntVM;
-            MediatorFromVM.Register("AssemblySelectionChanged", _ => NotifyCalculationChanged());
-            MediatorFromVM.Register("NodeItemSelectionChanged", _ => NotifyCalculationChanged());
-            MediatorFromVM.Register("MappingSelectionChanged", _ => NotifyCalculationChanged());
+            //MediatorFromVM.Register("AssemblySelectionChanged", _ => NotifyCalculationChanged());
+            //MediatorFromVM.Register("NodeItemSelectionChanged", _ => NotifyCalculationChanged());
+            //MediatorFromVM.Register("MappingSelectionChanged", _ => NotifyCalculationChanged());
         }
 
-        private void NotifyCalculationChanged()
+        public void RefreshCalculation()
         {
             OnPropertyChanged(nameof(Name));
             OnPropertyChanged(nameof(CurrentNodeItem));
