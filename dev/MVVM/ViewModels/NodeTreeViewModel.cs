@@ -1,7 +1,7 @@
 ﻿using Calc.Core;
 using Calc.Core.Color;
 using Calc.Core.Interfaces;
-using Calc.Core.Objects.Mappings;
+using Calc.Core.Objects.GraphNodes;
 using Calc.MVVM.Helpers;
 using Calc.MVVM.Helpers.Mediators;
 using Calc.MVVM.Models;
@@ -45,13 +45,13 @@ namespace Calc.MVVM.ViewModels
             BranchesSwitch = false;
             //MediatorFromVM.Register("ForestSelectionChanged", mapping => UpdateNodeSource((Mapping)mapping));
             //MediatorFromVM.Register("MappingSelectionChanged", mapping => ReMapAllNodes());
-            MediatorFromVM.Register("AssemblySelectionChanged", _ => ReColorAllNodes());
+            //MediatorFromVM.Register("AssemblySelectionChanged", _ => ReColorAllNodes());
 
-            MediatorFromVM.Register("MainViewToggleToAssembly", _ => BranchesSwitch = false);
-            MediatorFromVM.Register("MainViewToggleToAssembly", _ => ColorNodesToAssembly());
+           //MediatorFromVM.Register("MainViewToggleToAssembly", _ => BranchesSwitch = false);
+            //MediatorFromVM.Register("MainViewToggleToAssembly", _ => ColorNodesToAssembly());
 
-            MediatorFromVM.Register("MainViewToggleToBranch", _ => BranchesSwitch = true);
-            MediatorFromVM.Register("MainViewToggleToBranch", _ => ColorNodesToBranch());
+            //MediatorFromVM.Register("MainViewToggleToBranch", _ => BranchesSwitch = true);
+            //MediatorFromVM.Register("MainViewToggleToBranch", _ => ColorNodesToBranch());
 
             //changing priority: Forest => Mapping => Assembly
         }
@@ -68,13 +68,21 @@ namespace Calc.MVVM.ViewModels
             ReColorAllNodes(true);
             DeselectNodes();
         }
-        public void ReMapAllNodes()
+
+        /// <summary>
+        /// re-map all nodes in the current forest
+        /// return the broken forest
+        /// </summary>
+        public Forest ReMapAllNodes()
         {
-            if (CurrentForestItem == null) return;
-            if (Store.MappingSelected == null) return;
+            if (Store.ForestSelected == null) return null;
+            if (Store.MappingSelected == null) return null;
 
             var brokenForest = MappingHelper.ApplyMappingToForestItem(CurrentForestItem, Store, Store.MappingSelected); // this should be passed to mapping error?
-            ReColorAllNodes();
+            //ReColorAllNodes();
+
+            return brokenForest;
+
         }
 
         /// <summary>
@@ -83,7 +91,7 @@ namespace Calc.MVVM.ViewModels
         /// </summary>
         public void ReColorAllNodes(bool forceRecolorAll = false)
         {
-            if (CurrentForestItem == null) return;
+            if (Store.ForestSelected == null) return;
             if (BranchesSwitch == true)
             {
                 if (forceRecolorAll)
@@ -114,7 +122,6 @@ namespace Calc.MVVM.ViewModels
 
             if (BranchesSwitch)
             {
-
                 NodeHelper.ShowSubLabelColor(nodeItem);
                 visualizer.IsolateAndColorSubbranchElements(SelectedNodeItem?.Host);
             }
@@ -126,8 +133,6 @@ namespace Calc.MVVM.ViewModels
 
             CurrentForestItem.NotifyNodePropertyChange();
             CurrentDarkForestItem.NotifyNodePropertyChange();
-
-            MediatorFromVM.Broadcast("NodeItemSelectionChanged");
 
             // add the forest to the record
             if (selectedNodeItem.IsDark)
@@ -143,6 +148,7 @@ namespace Calc.MVVM.ViewModels
 
         public void ColorNodesToAssembly()
         {
+            BranchesSwitch = false;
             if (CurrentForestItem == null) return;
             Store.ForestSelected.SetBranchColorsBy("assemblies");
             CurrentForestItem.NotifyNodePropertyChange();
@@ -151,6 +157,7 @@ namespace Calc.MVVM.ViewModels
 
         public void ColorNodesToBranch()
         {
+            BranchesSwitch = true;
             if (CurrentForestItem == null) return;
             Store.ForestSelected.SetBranchColorsBy("branches");
             CurrentForestItem.NotifyNodePropertyChange();
@@ -168,7 +175,6 @@ namespace Calc.MVVM.ViewModels
             CurrentForestItem.NotifyNodePropertyChange(); //better ways to do this?
             CurrentDarkForestItem.NotifyNodePropertyChange();
 
-            MediatorFromVM.Broadcast("NodeItemSelectionChanged");
             // take the unique forest from the record
             var forestItems = ForestSelectionRecord.Distinct().ToList();
             var resetItems = forestItems.SelectMany(f => f.SubNodeItems).Select(n => n.Host).ToList();

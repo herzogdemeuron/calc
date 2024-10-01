@@ -29,7 +29,6 @@ namespace Calc.RevitApp.Revit
         {
             try
             {
-                MediatorFromVM.Reset();
                 MediatorToView.Reset();
 
                 App.RevitVersion = commandData.Application.Application.VersionNumber;

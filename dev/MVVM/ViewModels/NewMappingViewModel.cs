@@ -94,7 +94,7 @@ namespace Calc.MVVM.ViewModels
                     newMapping = selectedMapping.Copy(newName);
                 }
                 feedback = await store.CreateMapping(newMapping);
-                MediatorFromVM.Broadcast("MappingSelectionChanged", store.MappingSelected);
+                //MediatorFromVM.Broadcast("MappingSelectionChanged", store.MappingSelected);
 
             }
             catch (Exception ex)

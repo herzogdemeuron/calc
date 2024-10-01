@@ -3,7 +3,6 @@ using Calc.Core.Objects;
 using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Snapshots;
-using Calc.MVVM.Helpers.Mediators;
 using Calc.MVVM.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -134,6 +133,9 @@ namespace Calc.MVVM.ViewModels
             //MediatorFromVM.Register("MappingSelectionChanged", _ => NotifyCalculationChanged());
         }
 
+        /// <summary>
+        /// refresh the current amounts and calculation
+        /// </summary>
         public void RefreshCalculation()
         {
             OnPropertyChanged(nameof(Name));

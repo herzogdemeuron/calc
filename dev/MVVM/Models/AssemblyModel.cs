@@ -1,5 +1,4 @@
-﻿using Calc.MVVM.Helpers.Mediators;
-using Calc.Core.Objects;
+﻿using Calc.Core.Objects;
 using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.GraphNodes;
 using System.Collections.Generic;
@@ -55,19 +54,12 @@ namespace Calc.MVVM.Models
             }
         }
 
-
-
-
         public Assembly Assembly1
         {
             get => CurrentAssemblies?.Count > 0 ? CurrentAssemblies[0] : null;
             set
             {
                 UpdateAssembly(0, value);
-                RefreshAssemblySection(false);
-                //the combobox selection change due to node item selection change does not
-                //belong to assembly selection change broadcast
-                //MediatorFromVM.Broadcast("AssemblySelectionChanged");
             }
         }
 
@@ -77,8 +69,6 @@ namespace Calc.MVVM.Models
             set
             {
                 UpdateAssembly(1, value);
-                RefreshAssemblySection(false);
-                //MediatorFromVM.Broadcast("AssemblySelectionChanged");
             }
         }
 
@@ -104,8 +94,6 @@ namespace Calc.MVVM.Models
 
         public AssemblyModel(NodeModel node)
         {
-            MediatorFromVM.Register("NodeItemSelectionChanged", _ => RefreshAssemblySection()); // if not, the assembly section sometimes not update,(parent reduced to zero, children remain all enabled), how to solve?
-            //MediatorFromVM.Register("MappingSelectionChanged", _ => UpdateAssemblySection());
             _node = node;
         }
 
@@ -125,7 +113,7 @@ namespace Calc.MVVM.Models
         /// Notify the ui change of the assembly properties and the buttons,
         /// broadcast the assembly change to other viewmodels
         /// </summary>
-        internal void RefreshAssemblySection(bool setFirstAssemblyActive = true)
+        internal void RefreshAssemblySection()
         {
             OnPropertyChanged(nameof(Assembly1));
             OnPropertyChanged(nameof(Assembly2));
@@ -135,15 +123,10 @@ namespace Calc.MVVM.Models
             CheckRemoveEnabled();
             CheckAddAssembly();
 
-            OnPropertyChanged(nameof(CanAddFirstAssembly)); // needed?
-            OnPropertyChanged(nameof(CanAddSecondAssembly)); // needed?
-            OnPropertyChanged(nameof(InheritEnabled)); // needed?
-            OnPropertyChanged(nameof(RemoveEnabled)); // needed?
-
-            if (setFirstAssemblyActive)
-            {
-                SetFirstAssemblyToActive();
-            }
+            //OnPropertyChanged(nameof(CanAddFirstAssembly)); // needed?
+            //OnPropertyChanged(nameof(CanAddSecondAssembly)); // needed?
+            //OnPropertyChanged(nameof(InheritEnabled)); // needed?
+            //OnPropertyChanged(nameof(RemoveEnabled)); // needed?
         }
 
         public void SetFirstAssemblyToActive()
@@ -174,7 +157,7 @@ namespace Calc.MVVM.Models
             branch.SetAssemblies(newAssemblies);
             ActiveAssembly = assembly;
 
-            RefreshAssemblySection(false);
+            //RefreshAssemblySection(false);
         }
 
         public void CheckAddAssembly()
@@ -236,9 +219,6 @@ namespace Calc.MVVM.Models
             branch.SetAssemblies(newAssemblies);
             var assemblyCount = newAssemblies.Count;
             ActiveAssembly = assemblyCount > 0 ? newAssemblies[assemblyCount - 1] : null;
-
-            MediatorFromVM.Broadcast("AssemblySelectionChanged");
-            RefreshAssemblySection();
         }
 
         public void HandleInherit()
@@ -249,8 +229,6 @@ namespace Calc.MVVM.Models
             if (!(host is Branch branch))
                 return;
             branch.InheritMapping();
-            MediatorFromVM.Broadcast("AssemblySelectionChanged");
-            RefreshAssemblySection();
         }
 
 

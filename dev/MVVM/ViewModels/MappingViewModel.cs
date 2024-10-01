@@ -1,7 +1,6 @@
 ﻿using Calc.MVVM.Helpers.Mediators;
 using Calc.Core;
 using Calc.Core.Objects.GraphNodes;
-using Calc.Core.Objects.Mappings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,14 +16,6 @@ namespace Calc.MVVM.ViewModels
         public MappingViewModel(CalcStore calcStore)
         {
             store = calcStore;
-        }
-
-        public void HandleMappingSelectionChanged(Mapping mapping)
-        {
-            if (store.ForestSelected != null)
-            {
-                MediatorFromVM.Broadcast("MappingSelectionChanged", mapping);
-            }
         }
 
         public async Task HandleUpdateMapping()

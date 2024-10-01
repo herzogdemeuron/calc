@@ -75,7 +75,7 @@ namespace Calc.MVVM.Models
                 SubNodeItems.Add(new NodeModel(subNode, parentTreeView, this));
             }
         }
-
+        
         public void SetAssembly(bool setMain, Assembly assembly)
         {
             if (setMain)
@@ -86,7 +86,6 @@ namespace Calc.MVVM.Models
             {
                 AssemblyModel.Assembly2 = assembly;
             }
-            //RefreshAssemblySection();
         }
 
         /// <summary>
@@ -113,7 +112,9 @@ namespace Calc.MVVM.Models
             }
         }
 
-
+        /// <summary>
+        /// refresh the assembly ui section of the node and all its subnodes
+        /// </summary>
         public void RefreshAssemblySection()
         {
             AssemblyModel.RefreshAssemblySection();

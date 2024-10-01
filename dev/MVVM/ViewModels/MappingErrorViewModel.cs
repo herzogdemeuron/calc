@@ -66,6 +66,8 @@ namespace Calc.MVVM.ViewModels
 
         internal void UpdateBrokenNodes(Forest forest)
         {
+            if (forest == null) return;
+
             if(forest.Trees?.Count > 0)
             {
                 BrokenForest = forest;
@@ -82,12 +84,7 @@ namespace Calc.MVVM.ViewModels
             }
 
             mappingVM.BrokenMappingForest = BrokenForest;
-            
-            if (BrokenNodeSource.Count > 0)
-            {
-                BrokenSectionVisibility = Visibility.Visible;
-            }
-
+            BrokenSectionVisibility = (BrokenNodeSource.Count > 0)? Visibility.Visible: Visibility.Collapsed;
             OnPropertyChanged(nameof(BrokenSectionVisibility));
             OnPropertyChanged(nameof(BrokenNodeSource));
             OnPropertyChanged(nameof(HasBrokenItems));

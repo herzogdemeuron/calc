@@ -2,8 +2,6 @@
 using Calc.MVVM.Helpers.Mediators;
 using Calc.Core;
 using Calc.Core.Objects.GraphNodes;
-using Calc.Core.Objects.Mappings;
-using System.ComponentModel;
 using Calc.Core.Interfaces;
 using System.Threading.Tasks;
 using System.Collections.Generic;

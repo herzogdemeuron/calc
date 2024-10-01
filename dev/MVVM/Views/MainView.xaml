@@ -8,7 +8,6 @@
         xmlns:views="clr-namespace:Calc.MVVM.Views"
         d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
         Closing="WindowClosing"
-        Loaded="MainWindowLoaded"
         mc:Ignorable="d"
         Height="900" MinHeight="700"
         Width="900" MinWidth="750"

@@ -24,11 +24,6 @@ namespace Calc.MVVM.Views
             MediatorToView.Register("ViewSelectBrokenNodesTreeView", node => SelectNodeTreeView((NodeModel)node));
         }
 
-        private void MainWindowLoaded(object sender, RoutedEventArgs e)
-        {
-            MainVM.HandleWindowLoaded();
-        }
-
         private void DeselectTreeView()
         {
             if (TreeView.SelectedItem != null)
@@ -72,7 +67,6 @@ namespace Calc.MVVM.Views
         {
             MainVM.HandleWindowClosing();
         }
-
 
         private void ForestSelectionChanged (object sender, SelectionChangedEventArgs e)
         {
@@ -119,7 +113,6 @@ namespace Calc.MVVM.Views
             MainVM.HandleMappingErrorClicked();
         }
 
-
         private void BrokenNodeSelected(object sender, RoutedEventArgs e)
         {
             if (BrokenNodesTreeView.SelectedItem is NodeModel selectedNode)
@@ -136,7 +129,6 @@ namespace Calc.MVVM.Views
                 MainVM.HandleIgnoreSelectedBrokenNode(selectedNode);
             }
         }
-
         private void HandleIgnoreAllBrokenNodes(object sender, RoutedEventArgs e)
         {
             MainVM.HandleIgnoreAllBrokenNodes();
@@ -225,7 +217,7 @@ namespace Calc.MVVM.Views
         private void UpdateRevitClicked(object sender, RoutedEventArgs e)
         {
             var forest = ForestsComboBox.SelectedItem;
-            MainVM.HandleUpdateRevitClicked(forest as Forest);
+            MainVM.HandleForestSelectionChanged(forest as Forest, true);
         }
 
         private void SaveResultsClicked(object sender, RoutedEventArgs e)
