@@ -540,7 +540,7 @@
                     Grid.Row="6">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="130" />
                 </Grid.ColumnDefinitions>
                 <Button Click="SaveAssemblyClicked"
                         IsEnabled="{Binding AssemblyCreationVM.CanSave}"
