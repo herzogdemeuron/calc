@@ -1,10 +1,11 @@
 ﻿using Autodesk.Revit.DB;
 using Calc.Core;
 using Calc.Core.Interfaces;
+using Calc.Core.Objects.Assemblies;
 using Speckle.Core.Api;
+using Speckle.Core.Api.GraphQL.Inputs;
 using Speckle.Core.Credentials;
 using Speckle.Core.Kits;
-using Speckle.Core.Models;
 using Speckle.Core.Transports;
 using System;
 using System.Collections.Generic;
@@ -43,83 +44,76 @@ namespace SpeckleSender
             builderProjectId = config.SpeckleBuilderProjectId;
         }
 
-
-        /// <summary>
-        /// sends the elements to a speckle project with the model name, return the branch id
-        /// stream id hardcoded for now
-        /// </summary>
-        public async Task<string> SendToSpeckle(List<int> elementIds, string modelCode, string assemblyName, string description, Dictionary<string,string> dynamicProperties)
+        private AssemblyBase CreateAssemblyBase(AssemblyData assemblyData)
         {
-            List<object> elementList = elementIds
+            List<object> elementList = assemblyData.ElementIds
                 .Select(id => doc.GetElement(new ElementId(id)))
                 .ToList()
                 .ConvertAll(e => e as Object);
-
             speckleConverter.SetContextDocument(new RevitDocumentAggregateCache(doc));
-            var speckleBases = speckleConverter.ConvertToSpeckle(elementList);
-            var commitObject = new Base();
-            commitObject["assembly_code"] = modelCode;
-            commitObject["assembly_name"] = assemblyName;
-            commitObject["description"] = description;
-            commitObject["@elements"] = speckleBases;
-
-            foreach (var prop in dynamicProperties)
+            var elementBases = speckleConverter.ConvertToSpeckle(elementList);
+            var assemblyBase = new AssemblyBase(assemblyData, elementBases);
+            foreach (var dProp in assemblyData.Properties)
             {
-                commitObject[prop.Key] = prop.Value;
+                assemblyBase[dProp.Key] = dProp.Value;
             }
 
+            return assemblyBase;
+        }
+
+
+        /// <summary>
+        /// send the elements to a speckle project with the model name, return the model id, which would be saved back to revit group
+        /// the group shared parameters are wrapped as dynamic properties
+        /// </summary>
+        public async Task<string> SendAssembly(AssemblyData assemblyData)
+        {
+           var assemblyBase = CreateAssemblyBase(assemblyData);
             var transport = new ServerTransport(account, builderProjectId);
-            var objectId = await Operations.Send(commitObject, transport, true);
+            var objectId = await Operations.Send(assemblyBase, transport, true);
+            // ensure model exists
+            // filter the models by model path (group + code) contains model code
+            var filter = new ProjectModelsFilter(null,null,null,null,assemblyData.Code,new List<string> { "Calc Builder","Calc Builder Revit2023"}.AsReadOnly());
+            var models = await client.Model.GetModels(builderProjectId, 10000, null, filter);
 
-            string branchId;
-            // ensure branch exists
-            var branch = await client.BranchGet(builderProjectId, modelCode);
-
-            if (branch == null)
+            // get the model with exactly the same code
+            // get the model code with splitting '/' and get the last item
+            var found = models.items.Where(m => m.name.Split('/').Last().ToLower() == assemblyData.Code.ToLower()).ToList();
+            if (found.Count > 1)
             {
-                // create a new branch with the model name
-                branchId = await client.BranchCreate(
-                    new BranchCreateInput
-                    {
-                        streamId = builderProjectId,
-                        name = modelCode,
-                        description = description
-                    });                
+                throw new Exception($"Multiple models with code '{assemblyData.Code}' found");
+            }
+            var model = found.FirstOrDefault();
+            if (model == null)
+            {
+                // create a new model
+                model = await client.Model.Create(
+                    new CreateModelInput(assemblyData.ModelPath, assemblyData.Description, builderProjectId)
+                    );
             }
             else
             {
-                if(branch.description != description )
+                // update the description if it doesn't match
+                if(model.description != assemblyData.Description || model.name != assemblyData.ModelPath)
                 {
-                    branch.description = description;
-                    await client.BranchUpdate( 
-                        new BranchUpdateInput 
-                        {
-                            streamId = builderProjectId,
-                            id = branch.id,
-                            name = modelCode,
-                            description = description 
-                        });
+                    model = await client.Model.Update(
+                        new UpdateModelInput(model.id, assemblyData.ModelPath, assemblyData.Description, builderProjectId)
+                        );
                 }
-                branchId = branch.id;
             }
 
             string revitFilePath = doc.PathName;
             string revitUserName = doc.Application.Username;
-            var commitId = await client.CommitCreate(
+            var commitId = await client.Version.Create(
                                   new CommitCreateInput
                                   {
                                       streamId = builderProjectId,
-                                      branchName = modelCode,
+                                      branchName = assemblyData.ModelPath,
                                       objectId = objectId,
                                       message = $"[{revitUserName}]{revitFilePath}",
-                                      sourceApplication = "Calc Builder " + revitAppName
+                                      sourceApplication = "Calc Builder"
                                   });
-
-            //var commitId = Helpers.Send(streamId, commitObject, "My commit message").Result;
-
-            return branchId;
-
-
+            return model.id;
         }
     }
 }

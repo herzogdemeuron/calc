@@ -609,7 +609,16 @@ namespace Calc.MVVM.ViewModels
         private async Task<string> SendElementsToSpeckle()
         {
             var elementIds = AssemblyComponents.SelectMany(c => c.ElementIds).ToList();
-            return await elementSender.SendToSpeckle(elementIds, NewAssemblyCode, newAssemblyName, NewAssemblyDescription, DynamicProperties);
+            var assemblyData = new AssemblyData()
+            {
+                Name = NewAssemblyName,
+                Code = NewAssemblyCode,
+                ElementIds = elementIds,
+                Description = NewAssemblyDescription,
+                Group = SelectedAssemblyGroup.Name,
+                Properties = DynamicProperties
+            };
+            return await elementSender.SendAssembly(assemblyData);
         }
 
         private bool CheckCanSave()
