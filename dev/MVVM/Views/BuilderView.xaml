@@ -399,8 +399,9 @@
                                         </Grid.RowDefinitions>
 
                                         <TextBlock Grid.Row="0" Grid.Column="0"
-                                               FontWeight="SemiBold"
-                                               Text="Material Type: "/>
+                                                   FontWeight="Bold"
+                                                   FontStyle="Italic"
+                                                   Text="Material Type: "/>
                                         <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3">
                                             <TextBlock.Text>
                                                 <MultiBinding StringFormat="{}{0} → {1}">
@@ -411,28 +412,35 @@
                                         </TextBlock>
 
                                         <TextBlock Grid.Row="1" Grid.Column="0"
-                                               FontWeight="SemiBold"
-                                               Text="Material Unit: "/>
+                                                   FontWeight="Bold"
+                                                   FontStyle="Italic"
+                                                   Text="Material Unit: "/>
                                         <TextBlock Grid.Row="1" Grid.Column="1" 
                                                Text="{Binding  MaterialUnit}"/>
 
                                         <TextBlock Grid.Row="2" Grid.Column="0"
-                                                   FontWeight="SemiBold"
+                                                   FontWeight="Bold"
+                                                   FontStyle="Italic"
                                                    Text="Thickness: "/>
-                                        <TextBlock Grid.Row="2" Grid.Column="1" 
+                                        <TextBlock Grid.Row="2" 
+                                                   Grid.Column="1" 
                                                    Text="{Binding Thickness, StringFormat='{}{0} mm', TargetNullValue='-'}"/>
 
                                         <TextBlock Grid.Row="1" Grid.Column="2"
-                                              FontWeight="SemiBold"
-                                              Text="Unit GWP: "/>
-                                        <TextBlock Grid.Row="1" Grid.Column="3"
-                                              Text="{Binding Gwp, StringFormat='{}{0} kgCO₂eq'}"/>
+                                                   FontWeight="Bold"
+                                                   FontStyle="Italic"
+                                                   Text="Unit GWP: "/>
+                                        <TextBlock Grid.Row="1" 
+                                                   Grid.Column="3"
+                                                   Text="{Binding Gwp, StringFormat='{}{0} kgCO₂eq'}"/>
 
                                         <TextBlock Grid.Row="2" Grid.Column="2"
-                                              FontWeight="SemiBold"
-                                              Text="Unit GE: "/>
-                                        <TextBlock Grid.Row="2" Grid.Column="3"
-                                              Text="{Binding Ge, StringFormat='{}{0} kWhOileq'}"/>
+                                                   FontWeight="Bold"
+                                                   FontStyle="Italic"
+                                                   Text="Unit GE: "/>
+                                        <TextBlock Grid.Row="2" 
+                                                   Grid.Column="3"
+                                                   Text="{Binding Ge, StringFormat='{}{0} kWhOileq'}"/>
                                     </Grid>
 
                                 </DataTemplate>
