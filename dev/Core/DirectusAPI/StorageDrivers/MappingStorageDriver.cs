@@ -67,7 +67,6 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
             };
 
             var variables = new Dictionary<string, object>();
-
             // if id is set, we are updating an existing item
             if (SendItem.Id > 0)
             {

@@ -3,14 +3,15 @@ using Newtonsoft.Json;
 
 namespace Calc.Core.Filtering
 {
+    /// <summary>
+    /// Represents a simple condition that can be evaluated against a CalcElement.
+    /// </summary>
     public class SimpleCondition
     {
         [JsonProperty("parameter")]
         public string Parameter { get; set; }
-
         [JsonProperty("method")]
         public string Method { get; set; }
-
         [JsonProperty("value")]
         public object Value { get; set; }
 
@@ -20,7 +21,6 @@ namespace Calc.Core.Filtering
             {
                 return false;
             }
-
             switch (Method.ToLowerInvariant())
             {
                 case "equals":

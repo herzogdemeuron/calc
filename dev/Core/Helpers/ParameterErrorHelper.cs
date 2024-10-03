@@ -1,17 +1,15 @@
-﻿using Calc.Core.Objects;
-using Calc.Core.Objects.BasicParameters;
-using Calc.Core.Objects.Assemblies;
-using System;
+﻿using Calc.Core.Objects.BasicParameters;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 
 namespace Calc.Core.Helpers
 {
-    public static class ParameterErrorHelper
+    internal static class ParameterErrorHelper
     {
-        public static List<ParameterError> MergeParameterErrors(List<List<ParameterError>> errorLists)
+        /// <summary>
+        /// Merges parameter errors, appending element ids
+        /// </summary>
+        internal static List<ParameterError> MergeParameterErrors(List<List<ParameterError>> errorLists)
         {
             List<ParameterError> result = new();
             foreach (var errorList in errorLists)
@@ -28,7 +26,7 @@ namespace Calc.Core.Helpers
         /// <summary>
         /// Add a new parameter error to the error list
         /// </summary>
-        public static void AddToErrorList(List<ParameterError> errorList, ParameterError newError)
+        internal static void AddToErrorList(List<ParameterError> errorList, ParameterError newError)
         {
             var existingError = errorList.FirstOrDefault(x => x.ParameterName == newError.ParameterName && x.ErrorType == newError.ErrorType);
             if (existingError == null)

@@ -11,12 +11,15 @@ namespace Calc.Core.Objects.GraphNodes;
 
 public class Tree : Branch, IGraphNode
 {
+    [JsonProperty("name")]
     public string Name { get; set; }
+    [JsonProperty("filter_config")]
     public GroupCondition FilterConfig { get; set; }
-    private List<string> _branchConfig;
+    private List<string> _branchConfig;  // needed?
+    [JsonProperty("branch_config")]
     public List<string> BranchConfig // List of parameters to group by
     {
-        get { return _branchConfig; }
+        get => _branchConfig;
         set { _branchConfig = value.ToList(); }
     }
 
@@ -65,6 +68,35 @@ public class Tree : Branch, IGraphNode
             }
         }
         return filteredElements;
+    }
+
+    /// <summary>
+    /// Makes a tree for a category.
+    /// </summary>
+    public static Tree MakeCategoryTree(string categoryName)
+    {
+        Tree tree = new Tree();
+        tree.Name = categoryName;
+
+        SimpleCondition condition = new SimpleCondition()
+        {
+            Method = "equals",
+            Parameter = "Category",
+            Value = categoryName
+        };
+        ConditionContainer conditionContainer = new ConditionContainer()
+        {
+            Type = "simple_condition",
+            Condition = condition
+        };
+        tree.FilterConfig = new GroupCondition()
+        {
+            Conditions = new List<ConditionContainer>() { conditionContainer },
+            Operator = "and"
+        };
+        tree.BranchConfig = new List<string>() { "type:Type Name" };
+
+        return tree;
     }
 
     public string Serialize()

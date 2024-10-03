@@ -178,7 +178,7 @@ namespace Calc.Core.Objects.GraphNodes
         /// <summary>
         /// check if parameters have error for the dead end branch
         /// </summary>
-        public void CheckParameterErrors()
+        private void CheckParameterErrors()
         {
             ParameterErrors = new();
 

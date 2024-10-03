@@ -5,6 +5,9 @@ using Calc.Core.Objects.Elements;
 
 namespace Calc.Core.Filtering
 {
+    /// <summary>
+    /// Represents a group of conditions that can be evaluated together using logical operators.
+    /// </summary>
     public class GroupCondition
     {
         [JsonProperty("operator")]
@@ -19,7 +22,7 @@ namespace Calc.Core.Filtering
             {
                 foreach (var conditionContainer in Conditions)
                 {
-                    if (conditionContainer.Type.Equals("GroupCondition", StringComparison.OrdinalIgnoreCase))
+                    if (conditionContainer.Type.Equals("group_condition", StringComparison.OrdinalIgnoreCase))
                     {
                         GroupCondition groupCondition = new GroupCondition
                         {
@@ -31,7 +34,7 @@ namespace Calc.Core.Filtering
                             return false;
                         }
                     }
-                    else if (conditionContainer.Type.Equals("SimpleCondition", StringComparison.OrdinalIgnoreCase))
+                    else if (conditionContainer.Type.Equals("simple_condition", StringComparison.OrdinalIgnoreCase))
                     {
                         SimpleCondition simpleCondition = conditionContainer.Condition;
                         if (!simpleCondition.Evaluate(element))
@@ -46,7 +49,7 @@ namespace Calc.Core.Filtering
             {
                 foreach (var conditionContainer in Conditions)
                 {
-                    if (conditionContainer.Type.Equals("GroupCondition", StringComparison.OrdinalIgnoreCase))
+                    if (conditionContainer.Type.Equals("group_condition", StringComparison.OrdinalIgnoreCase))
                     {
                         GroupCondition groupCondition = new GroupCondition
                         {
@@ -58,7 +61,7 @@ namespace Calc.Core.Filtering
                             return true;
                         }
                     }
-                    else if (conditionContainer.Type.Equals("SimpleCondition", StringComparison.OrdinalIgnoreCase))
+                    else if (conditionContainer.Type.Equals("simple_condition", StringComparison.OrdinalIgnoreCase))
                     {
                         SimpleCondition simpleCondition = conditionContainer.Condition;
                         if (simpleCondition.Evaluate(element))
@@ -79,7 +82,7 @@ namespace Calc.Core.Filtering
 
             foreach (var conditionContainer in Conditions)
             {
-                if (conditionContainer.Type.Equals("GroupCondition", StringComparison.OrdinalIgnoreCase))
+                if (conditionContainer.Type.Equals("group_condition", StringComparison.OrdinalIgnoreCase))
                 {
                     GroupCondition groupCondition = new GroupCondition
                     {
@@ -88,7 +91,7 @@ namespace Calc.Core.Filtering
                     };
                     parameters.UnionWith(groupCondition.GetAllParameters());
                 }
-                else if (conditionContainer.Type.Equals("SimpleCondition", StringComparison.OrdinalIgnoreCase))
+                else if (conditionContainer.Type.Equals("simple_condition", StringComparison.OrdinalIgnoreCase))
                 {
                     SimpleCondition simpleCondition = conditionContainer.Condition;
                     {
