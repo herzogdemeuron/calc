@@ -1,10 +1,7 @@
 ﻿using Calc.Core.Objects;
 using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.Elements;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Calc.Core.Interfaces

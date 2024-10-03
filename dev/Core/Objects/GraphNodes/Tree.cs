@@ -25,7 +25,7 @@ public class Tree : Branch, IGraphNode
     /// </summary>
     public List<CalcElement> Plant(List<CalcElement> searchElements)
     {
-        Elements = new ElementFilter().FilterElements(searchElements, FilterConfig);
+        Elements = FilterElements(searchElements, FilterConfig);
         SubBranches.Clear();
         this.ParentTree = this;
 
@@ -51,6 +51,20 @@ public class Tree : Branch, IGraphNode
             var value = path.Value;
             currentBranch = currentBranch.AddBranch(parameter, value, assemblies);
         }
+    }
+
+    private List<CalcElement> FilterElements(List<CalcElement> elements, GroupCondition filter)
+    {
+        List<CalcElement> filteredElements = new List<CalcElement>();
+
+        foreach (CalcElement element in elements)
+        {
+            if (filter.Evaluate(element))
+            {
+                filteredElements.Add(element);
+            }
+        }
+        return filteredElements;
     }
 
     public string Serialize()
