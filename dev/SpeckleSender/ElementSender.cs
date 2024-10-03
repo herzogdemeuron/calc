@@ -35,8 +35,6 @@ namespace SpeckleSender
 
             speckleConverter = speckleKit.LoadConverter(revitAppName);
             speckleConverter.SetContextDocument(doc);
-
-            // make client
             account = new Account();
             account.token = config.SpeckleToken;
             account.serverInfo = new Speckle.Core.Api.GraphQL.Models.ServerInfo { url = config.SpeckleServerUrl };
@@ -44,6 +42,11 @@ namespace SpeckleSender
             builderProjectId = config.SpeckleBuilderProjectId;
         }
 
+        /// <summary>
+        /// uses the assembly data to create an speckle base, adding all dynamic properties
+        /// </summary>
+        /// <param name="assemblyData"></param>
+        /// <returns></returns>
         private AssemblyBase CreateAssemblyBase(AssemblyData assemblyData)
         {
             List<object> elementList = assemblyData.ElementIds
@@ -75,9 +78,8 @@ namespace SpeckleSender
             // filter the models by model path (group + code) contains model code
             var filter = new ProjectModelsFilter(null,null,null,null,assemblyData.Code,new List<string> { "Calc Builder","Calc Builder Revit2023"}.AsReadOnly());
             var models = await client.Model.GetModels(builderProjectId, 10000, null, filter);
-
             // get the model with exactly the same code
-            // get the model code with splitting '/' and get the last item
+            // get the model code by splitting '/' and get the last item
             var found = models.items.Where(m => m.name.Split('/').Last().ToLower() == assemblyData.Code.ToLower()).ToList();
             if (found.Count > 1)
             {
@@ -93,7 +95,7 @@ namespace SpeckleSender
             }
             else
             {
-                // update the description if it doesn't match
+                // update the description and name(path) if they don't match
                 if(model.description != assemblyData.Description || model.name != assemblyData.ModelPath)
                 {
                     model = await client.Model.Update(

@@ -20,19 +20,19 @@ namespace Calc.Core.DirectusAPI
     /// <summary>
     /// The core class for interacting with Directus API with retry policies.
     /// Both HttpClient (auth and image) and GraphQLHttpClient are used for making requests to Directus API.
+    /// Currently calc only supports TLS 1.2. Note that the directus cloud forces TLS 1.3.
     /// </summary>
     public class Directus
     {
         private string token;
         private string baseUrl;
         private string refresh_token;
-
         private string reEmail;
         private string rePassword;
-        public bool Authenticated { get; private set; } = false;
         private HttpClient httpClient;
         private GraphQLHttpClient graphQlClient;
         private GraphQLHttpClient graphQlSysClient;
+        public bool Authenticated { get; private set; } = false;
 
         private readonly AsyncRetryPolicy graphQlRetryPolicy = 
             Policy.Handle<GraphQLHttpRequestException>()
@@ -45,14 +45,14 @@ namespace Calc.Core.DirectusAPI
 
         public Directus()
         {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12; // unless windows supports TLS 1.3, directus cloud enforces TLS 1.3
+            // change this to switch between TLS 1.2 and 1.3
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12; 
         }
 
-        public async Task<HttpResponseMessage> RequestWithRetry(string url, Func<HttpContent> contentFactory, bool reAuth = true)
+        private async Task<HttpResponseMessage> RequestWithRetry(string url, Func<HttpContent> contentFactory, bool reAuth = true)
         {
             var action = new Func<Task<HttpResponseMessage>>(() => httpClient.PostAsync(url, contentFactory()));
             var response = await httpRetryPolicy.ExecuteAsync(action);
-
             // re-authenticate and retry the request if the response is "Unauthorized"
             if (response.StatusCode == HttpStatusCode.Unauthorized && reAuth)
             {
@@ -63,47 +63,42 @@ namespace Calc.Core.DirectusAPI
             return response;
         }
 
-        public async Task<string> ReadResponseContent(HttpResponseMessage response)
+        private async Task<string> ReadResponseContent(HttpResponseMessage response)
         {
             var responseContent = await response.Content.ReadAsStringAsync();
-
             if (!response.IsSuccessStatusCode)
             {
                 var errorResponse = JsonConvert.DeserializeObject<Dictionary<string, List<LoginErrorResponse>>>(responseContent);
                 string message = errorResponse.Values.FirstOrDefault()?.FirstOrDefault()?.Message ?? "Requesting to Directus failed";
                 throw new ApplicationException(message);
             }
-
             return responseContent;
         }
 
-        public async Task<GraphQLResponse<TDriver>> GraphQlQueryWithRetry<TDriver>(GraphQLRequest request)
+        internal async Task<GraphQLResponse<TDriver>> GraphQlQueryWithRetry<TDriver>(GraphQLRequest request)
         {
             GraphQLResponse<TDriver> response = null;
             try
             {
                 response = await graphQlRetryPolicy.ExecuteAsync(async () => await graphQlClient.SendQueryAsync<TDriver>(request));
             }
-            // catch unauthorized exception
+            // catch unauthorized exception and retry
             catch (GraphQLHttpRequestException ex)
             {
-                if (ex.Message.Contains("Unauthorized"))
+                if (ex.Message.ToLower().Contains("unauthorized"))
                 {
                     await RefreshAuthentication();
                     response = await graphQlRetryPolicy.ExecuteAsync(async () => await graphQlClient.SendQueryAsync<TDriver>(request));
                 }
             }
-
             if (response.Errors != null && response.Data == null)
             {
                 throw new Exception(JsonConvert.SerializeObject(response.Errors, Formatting.Indented));
             }
-
             return response;
-
         }
 
-        public async Task<GraphQLResponse<TDriver>> GraphQlMutationWithRetry<TDriver>(GraphQLRequest request)
+        internal async Task<GraphQLResponse<TDriver>> GraphQlMutationWithRetry<TDriver>(GraphQLRequest request)
         {
             GraphQLResponse<TDriver> response = null;
             try
@@ -126,9 +121,8 @@ namespace Calc.Core.DirectusAPI
 
             return response;
         }
-        
 
-        public async Task<GraphQLResponse<TDriver>> GraphQlSysQueryWithRetry<TDriver>(GraphQLRequest request)
+        internal async Task<GraphQLResponse<TDriver>> GraphQlSysQueryWithRetry<TDriver>(GraphQLRequest request)
         {
             GraphQLResponse<TDriver> response = null;
             try
@@ -182,7 +176,7 @@ namespace Calc.Core.DirectusAPI
             Authenticated = true;
         }
 
-        public async Task RefreshAuthentication()
+        private async Task RefreshAuthentication()
         {
             if (string.IsNullOrEmpty(refresh_token))
             {
@@ -227,7 +221,7 @@ namespace Calc.Core.DirectusAPI
                 );
         }
 
-        public async Task<string> UploadFileAsync(string fileType, string filePath, string folderId, string newFileName)
+        internal async Task<string> UploadFileAsync(string fileType, string filePath, string folderId, string newFileName)
         {
             if (!File.Exists(filePath))
             {
@@ -271,7 +265,7 @@ namespace Calc.Core.DirectusAPI
             return uploadResponse?.Data?.Id; // Return the UUID of the uploaded image
         }
 
-        public async Task<byte[]> LoadImageByIdAsync(string imageId)
+        internal async Task<byte[]> LoadImageByIdAsync(string imageId)
         {
             string imageUrl = $"{baseUrl}/assets/{imageId}";
 

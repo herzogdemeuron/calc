@@ -1,5 +1,5 @@
 ﻿using Calc.Core.DirectusAPI;
-using Calc.Core.DirectusAPI.Drivers;
+using Calc.Core.DirectusAPI.StorageDrivers;
 using Calc.Core.Objects;
 using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.Elements;
@@ -314,45 +314,6 @@ namespace Calc.Core
             catch (Exception e)
             {
                 return false;
-                throw e;
-            }
-        }
-
-        public async Task UpdateSelectedForest()
-        {
-            if (ForestSelected == null)
-            {
-                throw new Exception("No forest selected");
-            }
-
-            ForestDriver.SendItem = ForestSelected;
-
-            try
-            {
-                await DirectusDriver.UpdateSingle<ForestStorageDriver, Forest>(ForestDriver);
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
-
-        public async Task<int?> SaveSelectedForest()
-        {
-            if (ForestSelected == null)
-            {
-                throw new Exception("No forest selected");
-            }
-
-            ForestDriver.SendItem = ForestSelected;
-
-            try
-            {
-                await DirectusDriver.CreateSingle<ForestStorageDriver, Forest>(ForestDriver);
-                return ForestDriver.CreatedItem?.Id;
-            }
-            catch (Exception e)
-            {
                 throw e;
             }
         }

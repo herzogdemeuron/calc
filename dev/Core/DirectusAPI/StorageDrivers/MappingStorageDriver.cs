@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using Calc.Core.Objects.Mappings;
 using Newtonsoft.Json;
 
-namespace Calc.Core.DirectusAPI.Drivers
+namespace Calc.Core.DirectusAPI.StorageDrivers
 {
+    /// <summary>
+    /// Provides query patterns for the DirectusDriver, to get / create mappings from directus.
+    /// </summary>
     public class MappingStorageDriver : IDriverCreateSingle<Mapping>, IDriverGetMany<Mapping>, IDriverUpdateSingle<Mapping>
     {
         public Mapping SendItem { get; set; }
-
         public string QueryGetMany { get; } = @"
                     query GetAllMappings {
                         calc_mappings {
@@ -46,6 +48,9 @@ namespace Calc.Core.DirectusAPI.Drivers
         [JsonProperty("update_calc_mappings_item")]
         public Mapping UpdatedItem { get; set; }
 
+        /// <summary>
+        /// Provides creation variables.
+        /// </summary>
         public Dictionary<string, object> GetVariables()
         {
             if (this.SendItem == null)

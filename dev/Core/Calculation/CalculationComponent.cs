@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace Calc.Core.Calculation
 {
     /// <summary>
-    /// The calculation of a material in the assembly, amount per assembly unit.
+    /// The calculation of a material layer in the assembly, amount per assembly unit.
     /// </summary>
     public class CalculationComponent
     {
@@ -24,7 +24,6 @@ namespace Calc.Core.Calculation
         public double? Ge { get; set; } // calculated ge
         [JsonProperty("cost")]
         public double? Cost { get; set; }
-
         [JsonProperty("calc_materials_id")]
         public Material Material { get; set; }
         [JsonIgnore]
@@ -33,7 +32,10 @@ namespace Calc.Core.Calculation
         public bool HasError { get; set; }
         public bool IsComplete { get => CheckComplete(); }
 
-        public void LinkMaterial(List<Material> materials)
+        /// <summary>
+        /// Find and replace the material from the list with the same id
+        /// </summary>
+        internal void LinkMaterial(List<Material> materials)
         {
             if (Material != null)
             {
@@ -41,10 +43,13 @@ namespace Calc.Core.Calculation
             }
         }
 
-        public static List<CalculationComponent> FromLayer(LayerComponent layer, double normalizeRatio)
+        /// <summary>
+        /// Creates the calculation component from a layer component
+        /// </summary>
+        internal static List<CalculationComponent> FromLayer(LayerComponent layer, double normalizeRatio)
         {
             var result = new List<CalculationComponent>();
-   
+
             if (!layer.HasMainMaterial) return result;
             var mainCalculationComponent = FromLayerMaterial(layer, normalizeRatio, true);
             result.Add(mainCalculationComponent);
@@ -56,18 +61,20 @@ namespace Calc.Core.Calculation
             return result;
         }
 
-       private static CalculationComponent FromLayerMaterial(LayerComponent layer, double normalizeRatio, bool getMain = true)
+        /// <summary>
+        /// Creates a calculation component from the layer material.
+        /// </summary>
+        private static CalculationComponent FromLayerMaterial(LayerComponent layer, double normalizeRatio, bool isMain = true)
         {
             var layerAmountParam = layer.GetAmountParam();
-            var layerAmount = layer.GetLayerAmount(normalizeRatio, getMain);
-
+            var layerAmount = layer.GetLayerAmount(normalizeRatio, isMain);
             var amortizationFactor = layer.GetAmortizationFactor();
-            var calculatedGwp = layer.GetMaterialGwp(getMain) * layerAmount * amortizationFactor;
-            var calculatedGe = layer.GetMaterialGe(getMain) * layerAmount * amortizationFactor;
+            var calculatedGwp = layer.GetMaterialGwp(isMain) * layerAmount * amortizationFactor;
+            var calculatedGe = layer.GetMaterialGe(isMain) * layerAmount * amortizationFactor;
 
             return new CalculationComponent
             {
-                Material = getMain ? layer.MainMaterial : layer.SubMaterial,
+                Material = isMain ? layer.MainMaterial : layer.SubMaterial,
                 Function = layer.Function,
                 Amount = Math.Round(layerAmount.Value, 5),
                 HasError = layerAmountParam.HasError,
@@ -78,15 +85,17 @@ namespace Calc.Core.Calculation
             };
         }
 
-        public bool CheckComplete()
+        /// <summary>
+        /// Checks if the calculation can be completed, function and amount must be valid.
+        /// </summary>
+        private bool CheckComplete()
         {
             return Function != null && Amount > 0;
         }
 
         /// <summary>
-        /// update the position number of the components
+        /// Update the position number of the components.
         /// </summary>
-        /// <param name="components"></param>
         public static void UpdatePosition(List<CalculationComponent> components)
         {
             if (components == null) return;

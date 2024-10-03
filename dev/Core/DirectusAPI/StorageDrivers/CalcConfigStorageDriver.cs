@@ -1,10 +1,12 @@
-﻿using Calc.Core.DirectusAPI.Drivers;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Calc.Core
+namespace Calc.Core.DirectusAPI.StorageDrivers
 {
-    public class CalcConfigStorageDriver : IDriverGetSingle<CalcConfig>
+    /// <summary>
+    /// Provides query patterns for the DirectusDriver, to get calc config from directus.
+    /// </summary>
+    internal class CalcConfigStorageDriver : IDriverGetSingle<CalcConfig>
     {
         public string QueryGetSingle { get; } = @"
             query GetCalcConfig {
@@ -17,10 +19,5 @@ namespace Calc.Core
 
         [JsonProperty("calc_config")]
         public CalcConfig GotItem { get; set; }
-
-        public Dictionary<string, object> GetVariables()
-        {
-            return new Dictionary<string, object>();
-        }
     }
 }

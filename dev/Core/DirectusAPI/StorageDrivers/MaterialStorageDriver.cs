@@ -1,13 +1,12 @@
-﻿using System.Threading.Tasks;
-using System.Collections.Generic;
-using GraphQL;
+﻿using Calc.Core.Objects.Materials;
 using Newtonsoft.Json;
-using Calc.Core.Objects.Assemblies;
-using Calc.Core.Objects.Materials;
-using Calc.Core.Objects;
+using System.Collections.Generic;
 
-namespace Calc.Core.DirectusAPI.Drivers
+namespace Calc.Core.DirectusAPI.StorageDrivers
 {
+    /// <summary>
+    /// Provides query patterns for the DirectusDriver, to get materials from directus.
+    /// </summary>
     public class MaterialStorageDriver : IDriverGetMany<Material>
     {
         public string QueryGetMany { get; } = @"
@@ -36,10 +35,5 @@ namespace Calc.Core.DirectusAPI.Drivers
 
         [JsonProperty("calc_materials")]
         public List<Material> GotManyItems { get; set; }
-
-        public Dictionary<string, object> GetVariables()
-        {
-            return new Dictionary<string, object>();
-        }
     }
 }

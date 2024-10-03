@@ -4,8 +4,11 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Calc.Core.Snapshots;
 
-namespace Calc.Core.DirectusAPI.Drivers
+namespace Calc.Core.DirectusAPI.StorageDrivers
 {
+    /// <summary>
+    /// Provides query patterns for the DirectusDriver, to create project result from directus.
+    /// </summary>
     public class ProjectResultStorageDriver : IDriverCreateSingle<ProjectResult>
     {
         public ProjectResult SendItem { get; set; }
@@ -21,6 +24,9 @@ namespace Calc.Core.DirectusAPI.Drivers
         [JsonProperty("create_calc_snapshots_item")]
         public ProjectResult CreatedItem { get; set; }
 
+        /// <summary>
+        /// Provides creation variables.
+        /// </summary>
         public Dictionary<string, object> GetVariables()
         {
             if (this.SendItem == null)

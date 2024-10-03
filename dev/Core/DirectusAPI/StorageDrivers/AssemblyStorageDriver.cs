@@ -4,9 +4,12 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Calc.Core.DirectusAPI.Drivers
+namespace Calc.Core.DirectusAPI.StorageDrivers
 {
-    public class AssemblyStorageDriver : IDriverGetMany<Assembly>, IDriverCreateSingle<Assembly>, IDriverUpdateSingle<Assembly>
+    /// <summary>
+    /// Provides query patterns for the DirectusDriver, to get and create assemblies from directus.
+    /// </summary>
+    internal class AssemblyStorageDriver : IDriverGetMany<Assembly>, IDriverCreateSingle<Assembly>, IDriverUpdateSingle<Assembly>
     {
         public Assembly SendItem { get; set; }
         public string QueryGetMany { get; } = @"
@@ -56,7 +59,6 @@ namespace Calc.Core.DirectusAPI.Drivers
 
             }";
 
-        // this is a sample query, should be adjusted
         public string QueryCreateSingle { get; } = @"
             mutation CreateAssembly($input: create_calc_assemblies_input!) {
               create_calc_assemblies_item(data: $input) {
@@ -64,15 +66,12 @@ namespace Calc.Core.DirectusAPI.Drivers
               }
             }";
 
-
-        // this is a sample query, should be adjusted
         public string QueryUpdateSingle { get; } = @"
             mutation UpdateAssembly($id: ID!, $input: update_calc_assemblies_input!) {
               update_calc_assemblies_item(id: $id, data: $input) {
                 id
               }
             }";
-
 
         [JsonProperty("calc_assemblies")]
         public List<Assembly> GotManyItems { get; set; }
@@ -82,10 +81,9 @@ namespace Calc.Core.DirectusAPI.Drivers
         public Assembly UpdatedItem { get; set; }
 
         /// <summary>
-        /// assign materials from the store to the calculation components with their ids
-        /// to simplify the query structure
+        /// Assigns materials from the store to the calculation components with their ids,
+        /// to simplify the query structure.
         /// </summary>
-        /// <param name="materials"></param>
         public void LinkMaterials(List<Material> materials)
         {
             foreach (var assembly in GotManyItems)
@@ -97,7 +95,9 @@ namespace Calc.Core.DirectusAPI.Drivers
             }
         }
 
-
+        /// <summary>
+        /// Provides creation variables.
+        /// </summary>
         public Dictionary<string, object> GetVariables()
         {
             if (this.SendItem == null)
@@ -137,11 +137,9 @@ namespace Calc.Core.DirectusAPI.Drivers
                 speckle_model_id = SendItem.SpeckleModelId,
                 speckle_project_id = SendItem.SpeckleProjectId
             };
-
             var inputDict = input.GetType()
                         .GetProperties()
                         .ToDictionary(prop => prop.Name, prop => prop.GetValue(input, null));
-
             if (SendItem.AssemblyImage != null)
             {
                 inputDict.Add("image", new
@@ -151,9 +149,7 @@ namespace Calc.Core.DirectusAPI.Drivers
                     filename_download = $"{SendItem.Name}.png"
                 });
             }
-
             var variables = new Dictionary<string, object>();
-
             if (SendItem.Id > 0)
             {
                 variables.Add("id", SendItem.Id);

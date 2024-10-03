@@ -2,8 +2,11 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Calc.Core.DirectusAPI.Drivers
+namespace Calc.Core.DirectusAPI.StorageDrivers
 {
+    /// <summary>
+    /// Provides query patterns for the DirectusDriver, to get material functions from directus.
+    /// </summary>
     public class MaterialFunctionStorageDriver : IDriverGetMany<MaterialFunction>
     {
         public string QueryGetMany { get; } = @"
@@ -15,13 +18,7 @@ namespace Calc.Core.DirectusAPI.Drivers
                 }
             }";
 
-
         [JsonProperty("calc_material_functions")]
         public List<MaterialFunction> GotManyItems { get; set; }
-
-        public Dictionary<string, object> GetVariables()
-        {
-            return new Dictionary<string, object>();
-        }
     }
 }

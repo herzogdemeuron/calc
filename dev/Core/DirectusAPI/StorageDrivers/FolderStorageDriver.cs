@@ -1,13 +1,12 @@
-﻿using Calc.Core.DirectusAPI.Drivers;
-using Calc.Core.Objects;
-using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
 
-namespace Calc.Core.DirectusAPI.Drivers
+namespace Calc.Core.DirectusAPI.StorageDrivers
 {
-    public class FolderStorageDriver : IDriverGetManySystem<DirectusFolder>
+    /// <summary>
+    /// Provides query patterns for the DirectusDriver, to get calc folders from directus.
+    /// </summary>
+    internal class FolderStorageDriver : IDriverGetManySystem<DirectusFolder>
     {
         public string QueryGetManySystem { get; } = @"
                 query { 
@@ -19,6 +18,10 @@ namespace Calc.Core.DirectusAPI.Drivers
 
         [JsonProperty("folders")]
         public List<DirectusFolder> GotManyItems { get; set; }
+
+        /// <summary>
+        /// Provides creation variables.
+        /// </summary>
         public string GetFolderId(string folderName)
         {
             if (GotManyItems == null) return null;
@@ -31,10 +34,6 @@ namespace Calc.Core.DirectusAPI.Drivers
                 }
             }
             return null;
-        }
-        public Dictionary<string, object> GetVariables()
-        {
-            return new Dictionary<string, object>();
         }
     }
 }

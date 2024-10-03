@@ -2,6 +2,9 @@
 
 namespace Calc.Core.Color
 {
+    /// <summary>
+    /// Handles color conversions.
+    /// </summary>
     public class CalcColorConverter
     {
         public static RgbColor HslToRgb(HslColor hsl)

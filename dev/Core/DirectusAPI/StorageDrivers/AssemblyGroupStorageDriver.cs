@@ -1,15 +1,13 @@
-﻿using System.Threading.Tasks;
-using System.Collections.Generic;
-using GraphQL;
+﻿using Calc.Core.Objects.Assemblies;
 using Newtonsoft.Json;
-using Calc.Core.Objects.Assemblies;
-using Calc.Core.Objects.Materials;
-using Calc.Core.Objects.Mappings;
-using System.Linq;
+using System.Collections.Generic;
 
-namespace Calc.Core.DirectusAPI.Drivers
+namespace Calc.Core.DirectusAPI.StorageDrivers
 {
-    public class AssemblyGroupStorageDriver : IDriverGetMany<AssemblyGroup>
+    /// <summary>
+    /// Provides query patterns for the DirectusDriver, to get assembly groups from directus.
+    /// </summary>
+    internal class AssemblyGroupStorageDriver : IDriverGetMany<AssemblyGroup>
     {
         public string QueryGetMany { get; } = @"
             query GetAssemblyGroups {
@@ -19,13 +17,7 @@ namespace Calc.Core.DirectusAPI.Drivers
                 }
             }";
 
-
         [JsonProperty("calc_assembly_groups")]
         public List<AssemblyGroup> GotManyItems { get; set; }
-
-        public Dictionary<string, object> GetVariables()
-        {
-            return new Dictionary<string, object>();
-        }
     }
 }

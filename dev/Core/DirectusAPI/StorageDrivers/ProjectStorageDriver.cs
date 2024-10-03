@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Calc.Core.DirectusAPI.Drivers
+namespace Calc.Core.DirectusAPI.StorageDrivers
 {
+    /// <summary>
+    /// Provides query patterns for the DirectusDriver, to get projects from directus.
+    /// </summary>
     public class ProjectStorageDriver : IDriverGetMany<CalcProject>
     {
         public string QueryGetMany { get; } = @"
@@ -23,10 +26,5 @@ namespace Calc.Core.DirectusAPI.Drivers
 
         [JsonProperty("calc_architecture_projects")]
         public List<CalcProject> GotManyItems { get; set; }
-
-        public Dictionary<string, object> GetVariables()
-        {
-            return new Dictionary<string, object>();
-        }
     }
 }

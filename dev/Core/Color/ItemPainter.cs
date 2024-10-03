@@ -8,17 +8,15 @@ using Calc.Core.Objects.GraphNodes;
 
 namespace Calc.Core.Color
 {
+    /// <summary>
+    /// Colorizes IColorizable items by their identifiers / graph relations.
+    /// </summary>
     public class ItemPainter
     {
         public static HslColor DefaultColor = new HslColor(0, 0, 83);
         public static void ColorBranchesByBranch(List<Branch> branches)
         {
-            if (branches.Count == 0)
-            {
-                Console.WriteLine("No branches to color.");
-                return;
-            }
-
+            if (branches.Count == 0) { return;}
             var colorGradient = new ColorGradient(branches.Count);
             for (int index = 0; index < branches.Count; index++)
             {
