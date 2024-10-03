@@ -1,16 +1,12 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
-using Calc.Core.Color;
+﻿using Calc.Core.Objects.BasicParameters;
 using System;
-using Newtonsoft.Json.Converters;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Collections.ObjectModel;
-using Calc.Core.Objects.BasicParameters;
-using Calc.Core.Objects.GraphNodes;
+using System.Collections.Generic;
 
 namespace Calc.Core.Objects.Elements
 {
+    /// <summary>
+    /// A building element in calc.
+    /// </summary>
     public struct CalcElement
     {
         public string Id;
@@ -44,7 +40,7 @@ namespace Calc.Core.Objects.Elements
                     };
         }
 
-        public readonly BasicParameter GetBasicUnitParameter(Unit unit)
+        internal readonly BasicParameter GetBasicUnitParameter(Unit unit)
         {
             if (!_quantities.ContainsKey(unit))
             {

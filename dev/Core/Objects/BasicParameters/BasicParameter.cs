@@ -1,7 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace Calc.Core.Objects.BasicParameters
 {
@@ -12,6 +9,10 @@ namespace Calc.Core.Objects.BasicParameters
         Multiply,
         Divide
     }
+
+    /// <summary>
+    /// A basic quantity parameter of a unit.
+    /// </summary>
     public class BasicParameter
     {
         public string Name { get; set; }
@@ -43,9 +44,11 @@ namespace Calc.Core.Objects.BasicParameters
 
         public bool HasError => ErrorType != null;
         public bool CanOperate => !HasError || ErrorType == ParameterErrorType.ZeroValue; // zero value allows operations
-
         public bool HasValue => Amount != null && Amount >= 0;
 
+        /// <summary>
+        /// Performs an operation on two basic parameters, takes care when error types are involved.
+        /// </summary>
         public BasicParameter PerformOperation(Operation operation, BasicParameter otherParam)
         {
             var resultParam = new BasicParameter()
@@ -99,6 +102,9 @@ namespace Calc.Core.Objects.BasicParameters
             return resultParam;
         }
 
+        /// <summary>
+        /// Performs an operation on a basic parameter and a double, takes care when error types are involved.
+        /// </summary>
         public BasicParameter PerformOperation(Operation operation, double value)
         {
             var resultParam = new BasicParameter()
@@ -157,6 +163,9 @@ namespace Calc.Core.Objects.BasicParameters
             return null;
         }
 
+        /// <summary>
+        /// Gets an error parameter of a given unit.
+        /// </summary>
         public static BasicParameter ErrorParam(Unit Unit)
         {
             return new BasicParameter()

@@ -3,8 +3,8 @@
 namespace Calc.Core.Objects.Elements
 {
     /// <summary>
-    /// This is the parameter setting used for calc element creation
-    /// defines which custom parameter names are used from the native elements
+    /// This is the parameter setting used for calc element creation,
+    /// defines which custom parameter names are used in replacement of the basic unit parameter of a category.
     /// </summary>
     public class CustomParamSetting
     {
@@ -19,7 +19,4 @@ namespace Calc.Core.Objects.Elements
         [JsonProperty("volume_custom_param_name")]
         public string VolumeCustomParamName { get; set; }
     }
-
-
-
 }

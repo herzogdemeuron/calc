@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Calc.Core.Objects.Assemblies
 {
     /// <summary>
-    /// wraps the assembly data fo the element sender
+    /// Wraps the assembly data, used by the element sender.
     /// </summary>
     public class AssemblyData
     {

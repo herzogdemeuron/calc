@@ -5,9 +5,9 @@ using System.Linq;
 namespace Calc.Core.Objects.Assemblies
 {
     /// <summary>
-    /// record to serialize and save back to revit/rhino
-    /// deserialize when got from a new selection
-    /// and restore the assembly in current app
+    /// Record of an assembly, to serialize and save back to revit/rhino,
+    /// could be deserialized when read from a new selection (revit group),
+    /// and restore the assembly in current app.
     /// </summary>
     public class AssemblyRecord
     {
@@ -22,6 +22,9 @@ namespace Calc.Core.Objects.Assemblies
         [JsonProperty("components")]
         public List<AssemblyComponent> Components { get; set; }
 
+        /// <summary>
+        /// Serializes the current assembly record, as well all assembly components.
+        /// </summary>
         public object SerializeRecord()
         {
             return new

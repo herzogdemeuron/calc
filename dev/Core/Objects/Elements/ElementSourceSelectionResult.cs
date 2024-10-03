@@ -3,6 +3,11 @@ using System.Collections.Generic;
 
 namespace Calc.Core.Objects.Elements
 {
+    /// <summary>
+    /// Used by the calc builder,
+    /// holds the result of the element source selection,
+    /// including the metadata and the transformed assembly components.
+    /// </summary>
     public class ElementSourceSelectionResult
     {
         public string AssemblyCode { get; set; }
@@ -14,10 +19,10 @@ namespace Calc.Core.Objects.Elements
         public List<AssemblyComponent> AssemblyComponents { get; set; }
 
         /// <summary>
-        /// apply the assembly record to current result, so that the assembly components are mapped with the same materials
-        /// assembly code, parameters and assembly components are alread at hand in the raw selection result
-        /// apply the components from the record to the current component with the same name and same layers
-        /// duplicate current component names would be ignored to avoid confusion
+        /// Apply the assembly record to current assembly components, so that they are mapped with the same materials.
+        /// Assembly code, parameters and assembly components are alread at hand in the raw selection result,
+        /// matches the recorded components to the current components with the same name and same layers.
+        /// duplicate component names would be ignored to avoid misunderstanding.
         /// </summary>
         public void ApplyAssemblyRecord(AssemblyRecord record, CalcStore store)
         {
@@ -45,8 +50,8 @@ namespace Calc.Core.Objects.Elements
         }
 
         /// <summary>
-        /// check if both components have the same name and the same layers
-        /// the target material and thickness must be identical to be the same layer
+        /// Checks if two assembly components have the same name and the same layers,
+        /// the target material and thickness must be identical to be the same layer.
         /// </summary>
         private bool CheckComponentEquality(AssemblyComponent currentComponent, AssemblyComponent recordComponent)
         {
@@ -60,14 +65,12 @@ namespace Calc.Core.Objects.Elements
                 if (currentLayer.TargetMaterialName != recordLayer.TargetMaterialName) return false;
                 if (currentLayer.Thickness != recordLayer.Thickness) return false;
             }
-            return true;
-            
+            return true;            
         }
 
         /// <summary>
-        /// apply one component from the record to the current component
-        /// by applying isnormalizer and the materials of layers
-        /// layers must have the same target material
+        /// Applies one assembly component from the record to the current component,
+        /// applying isnormalizer and the materials of layers.
         /// </summary>
         private void FollowComponent(AssemblyComponent currentComponent, AssemblyComponent recordComponent)
         {
@@ -85,6 +88,9 @@ namespace Calc.Core.Objects.Elements
             }
         }
         
+        /// <summary>
+        /// Copies data from the record layer to the current layer.
+        /// </summary>
         private void FollowLayer(LayerComponent currentLayer, LayerComponent recordLayer)
         {
             currentLayer.Function = recordLayer.Function;
@@ -93,6 +99,9 @@ namespace Calc.Core.Objects.Elements
             currentLayer.SubMaterialRatio = recordLayer.SubMaterialRatio;
         }
 
+        /// <summary>
+        /// Links the material data from the calc store to the assembly component using material id.
+        /// </summary>
         private void LinkMaterials(AssemblyComponent assemblyComponent, CalcStore store)
         {
             if (assemblyComponent.LayerComponents == null) return;

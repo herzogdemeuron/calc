@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Calc.Core.Objects.BasicParameters
 {
@@ -11,6 +9,7 @@ namespace Calc.Core.Objects.BasicParameters
         ZeroValue,
         CalculationError
     }
+
     public class ParameterError
     {
         public string ParameterName { get; set; }

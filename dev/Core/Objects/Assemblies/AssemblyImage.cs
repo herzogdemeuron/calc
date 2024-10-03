@@ -1,23 +1,19 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 
 namespace Calc.Core.Objects.Assemblies
 {
+    /// <summary>
+    /// Assembly images created by calc builder.
+    /// </summary>
     public class AssemblyImage : INotifyPropertyChanged
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
-
-        // default has image is true, when load failed, set to false
+        public string Id { get; set; }        
         [JsonIgnore]
         public bool ImageLoaded { get; set; } = false;
-
         [JsonIgnore]
         public byte[] ImageData { get; set; }
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)

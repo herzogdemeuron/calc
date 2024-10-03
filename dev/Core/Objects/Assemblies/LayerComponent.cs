@@ -11,9 +11,9 @@ using Newtonsoft.Json;
 namespace Calc.Core.Objects.Assemblies
 {
     /// <summary>
-    /// For calc builder.
+    /// Used by calc builder.
     /// A layer or component of an element type in revit/rhino.
-    /// A LayerComponent must have mapped infos，could have Ids to be targeted.
+    /// A LayerComponent must be associated with a set of materials.
     /// </summary>
     public class LayerComponent : ICalcComponent, IColorizable, INotifyPropertyChanged
     {
@@ -99,7 +99,7 @@ namespace Calc.Core.Objects.Assemblies
         }
 
         /// <summary>
-        /// get the amount parameter of this layer using the unit from the main material
+        /// Gets the amount parameter of this layer, using the unit of the main material.
         /// </summary>
         public BasicParameter GetAmountParam()
         {
@@ -110,9 +110,9 @@ namespace Calc.Core.Objects.Assemblies
         }
 
         /// <summary>
-        /// get the real amount of the main/sub material in the layer, normalized
+        /// Gets the normalized amount of the main/sub material in the layer.
         /// </summary>
-        public double? GetLayerAmount(double normalizeRatio, bool getMain)
+        internal double? GetLayerAmount(double normalizeRatio, bool getMain)
         {
             var ratio = getMain ? MainMaterialRatio : SubMaterialRatio;
             var layerAmountParam = GetAmountParam();
@@ -120,7 +120,10 @@ namespace Calc.Core.Objects.Assemblies
             return layerAmount;
         }
 
-        public double GetAmortizationFactor()
+        /// <summary>
+        /// Gets the amortization factor of the layer from the material function assigned.
+        /// </summary>
+        internal double GetAmortizationFactor()
         {
             var result = Function?.Amortization ?? 0;
             if (result == 0) return 0;
@@ -128,7 +131,11 @@ namespace Calc.Core.Objects.Assemblies
             return factor;
         }
 
-        private string GetColorIdentifier()
+        /// <summary>
+        /// The color identifier, combined with the main and sub material id.
+        /// </summary>
+        /// <returns></returns>
+        internal string GetColorIdentifier()
         {
             var result = "";
             if (!HasMainMaterial) return result;
@@ -138,9 +145,9 @@ namespace Calc.Core.Objects.Assemblies
         }
 
         /// <summary>
-        /// get the unit gwp of the main/sub material
+        /// Get the unit GWP of the main/sub material.
         /// </summary>
-        public double GetMaterialGwp(bool getMain = true)
+        internal double GetMaterialGwp(bool getMain = true)
         {
             var hasMaterial = getMain ? HasMainMaterial : HasSubMaterial;
             if (hasMaterial)
@@ -153,9 +160,9 @@ namespace Calc.Core.Objects.Assemblies
         }
 
         /// <summary>
-        /// get the unit ge of the main/sub material
+        /// Gets the unit GE of the main/sub material
         /// </summary>
-        public double GetMaterialGe(bool getMain = true)
+        internal double GetMaterialGe(bool getMain = true)
         {
             var hasMaterial = getMain ? HasMainMaterial : HasSubMaterial;
             if (hasMaterial)
@@ -167,6 +174,9 @@ namespace Calc.Core.Objects.Assemblies
             return 0;
         }
 
+        /// <summary>
+        /// Checks if the main and sub material units match
+        /// </summary>
         public bool CheckUnitsMatch()
         {
             if (HasMainMaterial && HasSubMaterial && MainMaterial.MaterialUnit != SubMaterial.MaterialUnit)
@@ -176,16 +186,22 @@ namespace Calc.Core.Objects.Assemblies
             return true;
         }
 
-        public void UpdateCalculation(double normalizeRatio)
+        /// <summary>
+        /// Re-generates the calculation components.
+        /// </summary>
+        internal void UpdateCalculation(double normalizeRatio)
         {
             CalculationComponents.Clear();
             CalculationComponents = CalculationComponent.FromLayer(this, normalizeRatio);
             OnPropertyChanged(nameof(HasParamError));
             OnPropertyChanged(nameof(CalculationCompleted));
-
         }
 
-        public object SerializeRecord()
+        /// <summary>
+        /// Serializes the layer with material mapping.
+        /// </summary>
+        /// <returns></returns>
+        internal object SerializeRecord()
         {
             // no material assigned
             if (MainMaterial == null)
@@ -219,7 +235,6 @@ namespace Calc.Core.Objects.Assemblies
                 sub_material = new { id = SubMaterial?.Id },
                 sub_material_ratio = SubMaterialRatio,
             };
-
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Calc.Core.Objects.BasicParameters
 {
+    /// <summary>
+    /// Basic parameter set of all basic quantity units.
+    /// </summary>
     public class BasicParameterSet
     {
         private BasicParameter pieceParam;
@@ -19,6 +22,9 @@ namespace Calc.Core.Objects.BasicParameters
             this.volParam = volParam;
         }
 
+        /// <summary>
+        /// Given a unit, gets the corresponding basic parameter.
+        /// </summary>
         public BasicParameter GetAmountParam(Unit unit)
         {
             switch (unit)
@@ -37,7 +43,7 @@ namespace Calc.Core.Objects.BasicParameters
         }
 
         /// <summary>
-        /// add a given basic parameter set to this one
+        /// Adds a given basic parameter set to this one.
         /// </summary>
         public void Add(BasicParameterSet other)
         {
@@ -48,7 +54,7 @@ namespace Calc.Core.Objects.BasicParameters
         }
 
         /// <summary>
-        /// force set a basic parameter with a given one
+        /// Forces set a basic parameter with a given one.
         /// </summary>
         public void Set(BasicParameter param)
         {
@@ -72,6 +78,9 @@ namespace Calc.Core.Objects.BasicParameters
             }
         }
 
+        /// <summary>
+        /// Creates an error parameter set with all units set to error.
+        /// </summary>
         public static BasicParameterSet ErrorParamSet()
         {
             return new BasicParameterSet

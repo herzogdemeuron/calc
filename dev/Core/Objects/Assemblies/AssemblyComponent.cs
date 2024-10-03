@@ -7,11 +7,11 @@ using System.ComponentModel;
 using System.Linq;
 
 namespace Calc.Core.Objects.Assemblies
-
 {
     /// <summary>
-    /// All instances of a revit/rhino type in the builder group.
-    /// Includes all the layers and basic parameters.
+    /// Used in the calc builder, representing one selected type from revit.
+    /// Includes all instances of a revit/rhino type in the builder group,
+    /// as well as all the layers (LayerComponent) and basic parameters of each type.
     /// </summary>
     public class AssemblyComponent : INotifyPropertyChanged, ICalcComponent
     {
@@ -50,6 +50,9 @@ namespace Calc.Core.Objects.Assemblies
         public HslColor HslColor { get => ItemPainter.DefaultColor; }
         public bool HasLayers => LayerComponents.Count > 0;
 
+        /// <summary>
+        /// Update the calculation components of all layer components.
+        /// </summary>
         public void UpdateCalculationComponents(double normalizeRatio)
         {
             foreach (var layer in LayerComponents)
@@ -58,23 +61,27 @@ namespace Calc.Core.Objects.Assemblies
             }
         }
 
+        /// <summary>
+        /// Collect the calculation components from all layer components.
+        /// </summary>
         public List<CalculationComponent> GetCalculationComponents()
         {
             return LayerComponents.Where(l => l.CalculationCompleted).SelectMany(l => l.CalculationComponents).ToList();
         }
 
+        /// <summary>
+        /// Check if there are errors in the basic parameters
+        /// </summary>
         public void UpdateParamError(Unit unit)
         {
             HasParamError = BasicParameterSet?.GetAmountParam(unit)?.HasError ?? true;
         }
 
-        public bool HasMaterial => LayerComponents.Any(l => l.HasMainMaterial);
 
         /// <summary>
-        /// serialize the assembly component with layers, whose main material is not null
+        /// Serializes the assembly component with layers.
         /// </summary>
-        /// <returns></returns>
-        public object SerializeRecord()
+        internal object SerializeRecord()
         {
             return new
             {
@@ -85,7 +92,6 @@ namespace Calc.Core.Objects.Assemblies
                 .ToList()
             };
         }
-
         public bool Equals(AssemblyComponent component)
         {
             return TypeIdentifier == component.TypeIdentifier;
