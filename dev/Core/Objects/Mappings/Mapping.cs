@@ -26,19 +26,19 @@ namespace Calc.Core.Objects.Mappings
             // empty constructor for deserialization
         }
 
-        public Mapping(string mappingName, params Forest[] forests)
+        public Mapping(string mappingName, params QueryTemplate[] queryTemplates) // simplify to taking one template
         {
             MappingItems = new List<MappingItem>();
-            foreach (var forest in forests)
+            foreach (var qt in queryTemplates)
             {
-                if(forest == null)
+                if(qt == null)
                 {
                     continue;
                 }
 
-                foreach (var tree in forest.Trees)
+                foreach (var query in qt.Queries)
                 {
-                    MappingItems.AddRange(ExtractMappingItems(tree.Flatten(), tree.Name));
+                    MappingItems.AddRange(ExtractMappingItems(query.Flatten(), query.Name));
                 }
             }
             Name = mappingName;
@@ -50,21 +50,21 @@ namespace Calc.Core.Objects.Mappings
         }
 
         /// <summary>
-        /// Assigns the assemblies to the tree based on the mapping.
-        /// Automatically determines which mapping to use based on the tree name.
-        /// Returns a broken tree if the mapping path is not found.
+        /// Assigns the assemblies to the query based on the mapping.
+        /// Automatically determines which mapping to use based on the query name.
+        /// Returns a broken query if the mapping path is not found.
         /// </summary>
-        public Tree ApplyToTree(Tree tree, List<Assembly> allAssemblies)
+        public Query ApplyToQuery(Query query, List<Assembly> allAssemblies)
         {
-            var brokenTree = new Tree()
+            var brokenQuery = new Query()
             {
-                Name = tree.Name,
-                ParentTree = tree
+                Name = query.Name,
+                ParentQuery = query
             };
 
-            tree.ResetAssemblies();
-            // find the mapping items that apply to this tree
-            var mappingItems = MappingItems.Where(mappingItem => mappingItem.TreeName == tree.Name);
+            query.ResetAssemblies();
+            // find the mapping items that apply to this query
+            var mappingItems = MappingItems.Where(mappingItem => mappingItem.QueryName == query.Name);
             if (!mappingItems.Any())
             {
                 return null;
@@ -74,15 +74,15 @@ namespace Calc.Core.Objects.Mappings
             {
                 var assemblyIds = mappingItem.AssemblyIds.Take(2).ToList();
                 var assemblies = allAssemblies.Where(b => assemblyIds.Contains(b.Id)).ToList();
-                var match = MapAssembliesToBranch(tree, assemblies, mappingItem.Path);
+                var match = MapAssembliesToBranch(query, assemblies, mappingItem.Path);
 
                 if (!match)
                 {
-                    brokenTree.AddBranchWithMappingItem(mappingItem, assemblies);
+                    brokenQuery.AddBranchWithMappingItem(mappingItem, assemblies);
                 }
             }
 
-            return brokenTree.SubBranches.Count > 0 ? brokenTree : null;
+            return brokenQuery.SubBranches.Count > 0 ? brokenQuery : null;
         }
 
         private bool MapAssembliesToBranch(Branch branch, List<Assembly> assemblies, List<MappingPath> path)
@@ -128,7 +128,7 @@ namespace Calc.Core.Objects.Mappings
             };
         }
 
-        private static List<MappingItem> ExtractMappingItems(List<Branch> branches, string treeName)
+        private static List<MappingItem> ExtractMappingItems(List<Branch> branches, string queryName)
         {
             var mappingItems = new List<MappingItem>();
             foreach (var branch in branches)
@@ -139,7 +139,7 @@ namespace Calc.Core.Objects.Mappings
                     {
                         AssemblyIds = branch.Assemblies.Select(b => b.Id).ToList(),
                         Path = branch.Path,
-                        TreeName = treeName
+                        QueryName = queryName
                     });
                 }
             }

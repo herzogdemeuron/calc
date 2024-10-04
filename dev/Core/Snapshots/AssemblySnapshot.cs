@@ -9,7 +9,7 @@ namespace Calc.Core.Snapshots
     public class AssemblySnapshot
     {
         [JsonProperty("element_group")]
-        public string ElementGroup { get; set; } // tree
+        public string ElementGroup { get; set; } // query
         [JsonProperty("assembly_name")]
         public string AssemblyName { get; set; }
         [JsonProperty("assembly_code")]

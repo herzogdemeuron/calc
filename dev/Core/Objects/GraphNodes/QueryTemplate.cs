@@ -7,10 +7,10 @@ using Calc.Core.Objects.Elements;
 
 namespace Calc.Core.Objects.GraphNodes
 {
-    public class Forest : IHasProject, IGraphNode
+    public class QueryTemplate : IHasProject, IGraphNode
     {
         [JsonIgnore]
-        public bool IsDark { get; set; } = false; // if the forest is a dark forest ( for left over elements )
+        public bool IsBlack { get; set; } = false; // if the query template is black ( for left over elements )
         [JsonIgnore]
         public List<CalcElement> Elements { get => GetElements(); }
         [JsonIgnore]
@@ -22,27 +22,27 @@ namespace Calc.Core.Objects.GraphNodes
         [JsonIgnore]
         public List<string> ElementIds => Elements.Select(e => e.Id).ToList();
         [JsonIgnore]
-        public List<Branch> SubBranches => Trees.ConvertAll(tree => (Branch)tree);
+        public List<Branch> SubBranches => Queries.ConvertAll(query => (Branch)query);
         [JsonIgnore]
         public HslColor HslColor { get; set; } = ItemPainter.DefaultColor;
         [JsonProperty("id")]
         public int Id { get; set; } = -1;
-        [JsonProperty("forest_name")]
+        [JsonProperty("name")]
         public string Name { get; set; }
         [JsonIgnore]
-        private List<Tree> _trees;
-        [JsonProperty("trees")] // for receiving the tree JSON from the API
-        public List<Tree> Trees
+        private List<Query> _queries;
+        [JsonProperty("queries")] // for receiving the query JSON from the API
+        public List<Query> Queries
         {
-            get => _trees;
+            get => _queries;
             set
             {
-                _trees = value;
-                if (_trees != null)
+                _queries = value;
+                if (_queries != null)
                 {
-                    foreach (var tree in _trees)
+                    foreach (var query in _queries)
                     {
-                        tree.ParentForest = this;
+                        query.QueryTemplate = this;
                     }
                 }
             }
@@ -52,7 +52,7 @@ namespace Calc.Core.Objects.GraphNodes
 
         public void SetBranchColorsBy(string method)
         {
-            List<Branch> branches = Trees.ConvertAll(tree => (Branch)tree);
+            List<Branch> branches = Queries.ConvertAll(query => (Branch)query);
 
             switch (method)
             {
@@ -70,40 +70,40 @@ namespace Calc.Core.Objects.GraphNodes
         public HashSet<string> GetAllParameters()
         {
             var parameters = new HashSet<string>();
-            foreach (Tree tree in Trees)
+            foreach (Query query in Queries)
             {
-                parameters.UnionWith(tree.FilterConfig.GetAllParameters());
-                parameters.UnionWith(tree.BranchConfig);
+                parameters.UnionWith(query.FilterConfig.GetAllParameters());
+                parameters.UnionWith(query.BranchConfig);
             }
             return parameters;
         }
 
         /// <summary>
-        /// Plants all trees in the forest and returns the remaining elements
+        /// Plants all queries in the query template and returns the remaining elements
         /// </summary>
-        public List<CalcElement> PlantTrees(List<CalcElement> searchElements)
+        public List<CalcElement> PlantQueries(List<CalcElement> searchElements)
         {
-            foreach (Tree tree in Trees)
+            foreach (Query query in Queries)
             {
-                searchElements = tree.Plant(searchElements);
+                searchElements = query.Plant(searchElements);
             }
             return searchElements;
         }
 
-        public string SerializeTrees()
+        public string SerializeQueries()
         {
-            var treesJson = new StringBuilder();
-            treesJson.Append($"[{string.Join(",", Trees.Select(t => t.Serialize()))}]");
-            return treesJson.ToString();
+            var queriesJson = new StringBuilder();
+            queriesJson.Append($"[{string.Join(",", Queries.Select(t => t.Serialize()))}]");
+            return queriesJson.ToString();
         }
 
         private List<CalcElement> GetElements()
         {
             List<CalcElement> elements = new();
 
-            foreach (Tree tree in Trees)
+            foreach (Query query in Queries)
             {
-                elements.AddRange(tree.Elements);
+                elements.AddRange(query.Elements);
             }
 
             return elements;

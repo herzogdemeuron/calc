@@ -23,7 +23,7 @@ namespace Calc.Core.Snapshots
             
                 foreach (var assembly in branch.Assemblies)
                 {               
-                    var s = CreateAssemblySnapshots(assembly, element, branch.ParentTree.Name);
+                    var s = CreateAssemblySnapshots(assembly, element, branch.ParentQuery.Name);
                     rawSnapshots.AddRange(s);                    
                 }            
 

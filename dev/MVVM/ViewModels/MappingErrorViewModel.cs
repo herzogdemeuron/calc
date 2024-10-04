@@ -36,14 +36,14 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        private Forest _brokenForest;
-        public Forest BrokenForest
+        private QueryTemplate _brokenQuerySet;
+        public QueryTemplate BrokenQuerySet
         {
-            get => _brokenForest;
+            get => _brokenQuerySet;
             set
             {
-                _brokenForest = value;
-                OnPropertyChanged(nameof(BrokenForest));
+                _brokenQuerySet = value;
+                OnPropertyChanged(nameof(BrokenQuerySet));
             }
         }
 
@@ -64,26 +64,26 @@ namespace Calc.MVVM.ViewModels
             BrokenNodeSource = new ObservableCollection<NodeModel>();
         }
 
-        internal void UpdateBrokenNodes(Forest forest)
+        internal void UpdateBrokenNodes(QueryTemplate qryTemplate)
         {
-            if (forest == null) return;
+            if (qryTemplate == null) return;
 
-            if(forest.Trees?.Count > 0)
+            if(qryTemplate.Queries?.Count > 0)
             {
-                BrokenForest = forest;
+                BrokenQuerySet = qryTemplate;
                 BrokenNodeSource.Clear();
-                foreach (var tree in forest.Trees)
+                foreach (var query in qryTemplate.Queries)
                 {
-                    BrokenNodeSource.Add(new NodeModel(tree));
+                    BrokenNodeSource.Add(new NodeModel(query));
                 }
             }
             else
             {
-                BrokenForest = null;
+                BrokenQuerySet = null;
                 BrokenNodeSource.Clear();
             }
 
-            mappingVM.BrokenMappingForest = BrokenForest;
+            mappingVM.BrokenQuerySet = BrokenQuerySet;
             BrokenSectionVisibility = (BrokenNodeSource.Count > 0)? Visibility.Visible: Visibility.Collapsed;
             OnPropertyChanged(nameof(BrokenSectionVisibility));
             OnPropertyChanged(nameof(BrokenNodeSource));
@@ -99,7 +99,7 @@ namespace Calc.MVVM.ViewModels
         {
             if (nodeItem != null && nodeItem.Host!= null)
             {
-                if(nodeItem.Host is Tree)
+                if(nodeItem.Host is Query)
                 {
                     Assembly1 = "-";
                     Assembly2 = null;
@@ -124,10 +124,10 @@ namespace Calc.MVVM.ViewModels
                 return;
 
 
-            if(nodeItem.Host is Tree)
+            if(nodeItem.Host is Query)
             {
                 BrokenNodeSource.Remove(nodeItem);
-                BrokenForest.Trees.Remove(nodeItem.Host as Tree);
+                BrokenQuerySet.Queries.Remove(nodeItem.Host as Query);
             }
             else
             {
@@ -137,13 +137,13 @@ namespace Calc.MVVM.ViewModels
             Assembly1 = null;
             Assembly2 = null;
 
-            // remove empty trees
-            foreach (var tree in BrokenNodeSource)
+            // remove empty queries
+            foreach (var query in BrokenNodeSource)
             {
-                if (tree.SubNodeItems?.Count == 0)
+                if (query.SubNodeItems?.Count == 0)
                 {
-                    BrokenNodeSource.Remove(tree);
-                    BrokenForest.Trees.Remove(tree.Host as Tree);
+                    BrokenNodeSource.Remove(query);
+                    BrokenQuerySet.Queries.Remove(query.Host as Query);
                     break;
                 }
             }

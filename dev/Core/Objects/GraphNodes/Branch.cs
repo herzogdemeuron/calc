@@ -15,7 +15,7 @@ namespace Calc.Core.Objects.GraphNodes
 {
     /// <summary>
     /// Used by calc project.
-    /// Represents a branch in the tree view.
+    /// Represents a branch in the query view.
     /// </summary>
     public class Branch : IGraphNode, INotifyPropertyChanged, IColorizable
     {
@@ -52,8 +52,8 @@ namespace Calc.Core.Objects.GraphNodes
         public int BranchLevel = 0;
         public List<Branch> SubBranches { get; set; } = new();
         public Branch ParentBranch;
-        public Tree ParentTree { get; set; }
-        public Forest ParentForest { get; set; }
+        public Query ParentQuery { get; set; }
+        public QueryTemplate QueryTemplate { get; set; }
         private ObservableCollection<Assembly> _assemblies = new();
         public ObservableCollection<Assembly> Assemblies  // change to main and sub assembly
         {
@@ -210,9 +210,9 @@ namespace Calc.Core.Objects.GraphNodes
                     Value = group.Key.ToString(),
                     Method = methodName,
                     ParentBranch = this,
-                    // set the parent tree and forest of the subbranch
-                    ParentForest = this.ParentForest,
-                    ParentTree = this.BranchLevel == 0 ? this as Tree : this.ParentTree,
+                    // set the parent query and query template of the subbranch
+                    QueryTemplate = this.QueryTemplate,
+                    ParentQuery = this.BranchLevel == 0 ? this as Query : this.ParentQuery,
                 };
                 SubBranches.Add(branch);
             }
@@ -314,8 +314,8 @@ namespace Calc.Core.Objects.GraphNodes
                 HslColor = HslColor,
                 Elements = Elements,
                 ParentBranch = ParentBranch,
-                ParentTree = ParentTree,
-                ParentForest = ParentForest
+                ParentQuery = ParentQuery,
+                QueryTemplate = QueryTemplate
             };
             if (SubBranches != null)
             {
@@ -343,8 +343,8 @@ namespace Calc.Core.Objects.GraphNodes
                 Assemblies = new ObservableCollection<Assembly>(assemblies),
                 ParentBranch = this,
                 BranchLevel = this.BranchLevel + 1,
-                ParentTree = ParentTree,
-                ParentForest = ParentForest
+                ParentQuery = ParentQuery,
+                QueryTemplate = QueryTemplate
             };
             SubBranches.Add(newBranch);
             return newBranch;
@@ -352,9 +352,9 @@ namespace Calc.Core.Objects.GraphNodes
 
         /// <summary>
         /// This method returns a flat list of all subbranches. The current branch is included.
-        /// Preferrably use this method on the root branch instance aka tree.Trunk.
+        /// Preferrably use this method on the root branch instance aka query.Trunk.
         /// The output is useful when you want to iterate over all branches
-        /// but don't care about the tree structure anymore.
+        /// but don't care about the query structure anymore.
         /// </summary>
         public List<Branch> Flatten()
         {

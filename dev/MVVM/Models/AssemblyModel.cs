@@ -187,19 +187,19 @@ namespace Calc.MVVM.Models
 
         public void CheckInheritEnabled()
         {
-            if (_node == null || _node.Host is Tree)
+            if (_node == null || _node.Host is Query)
             {
                 InheritEnabled = false;
                 return;
             }
             var branch = _node.Host;
-            // if branch is branch but not tree, then it can inherit
-            InheritEnabled = branch is Branch && !(branch is Tree);
+            // if branch is branch but not query, then it can inherit
+            InheritEnabled = branch is Branch && !(branch is Query);
         }
 
         public void CheckRemoveEnabled()
         {
-            if (_node == null || _node.Host is Forest)
+            if (_node == null || _node.Host is QueryTemplate)
             {
                 RemoveEnabled = false;
                 return;

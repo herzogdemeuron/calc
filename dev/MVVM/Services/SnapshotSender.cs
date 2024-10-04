@@ -25,9 +25,9 @@ namespace Calc.MVVM.Services
             int count = assemblySnapshots.Count;
             var selectedProject = store.ProjectSelected;
             var projectName = selectedProject?.Name;
-            var forestName = store.ForestSelected?.Name;
+            var qryTemplateName = store.QueryTemplateSelected?.Name;
             var mappingName = store.MappingSelected?.Name;
-            var description = $"Project: {projectName}\nForest: {forestName}\nMapping: {mappingName}\nLayer count: {count}";
+            var description = $"Project: {projectName}\nQuery Template: {qryTemplateName}\nMapping: {mappingName}\nLayer count: {count}";
 
             var pResult = new ProjectResult()
             {
@@ -47,7 +47,7 @@ namespace Calc.MVVM.Services
             {
                 ProjectNumber = store.ProjectSelected.Number,
                 ProjectName = store.ProjectSelected.Name,
-                ClassificationSystem = store.ForestSelected.Name,
+                QueryTemplate = store.QueryTemplateSelected.Name,
                 Location = store.ProjectSelected.Location,
                 LcaMethod = store.ProjectSelected.LcaMethod,
                 LifeSpan = store.ProjectSelected.LifeSpan,

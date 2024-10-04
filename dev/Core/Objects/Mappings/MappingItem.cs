@@ -16,8 +16,8 @@ namespace Calc.Core.Objects.Mappings
         [JsonProperty("mapping_path")]
         public List<MappingPath> Path { get; set; }
 
-        [JsonProperty("tree_name")]
-        public string TreeName { get; set; }
+        [JsonProperty("query_name")]
+        public string QueryName { get; set; }
 
         public string Serialize()
         {

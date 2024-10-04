@@ -20,7 +20,7 @@ namespace Calc.MVVM.Views
             this.DataContext = MainVM;
             InitializeComponent();
             mvm.DeselectTreeView += DeselectTreeView;
-            mvm.DeselectBrokenTreeView += DeselectBrokenNodesTreeView;
+            mvm.DeselectBrokenQueryView += DeselectBrokenNodesTreeView;
         }
 
         private void DeselectTreeView(object sender, EventArgs e)
@@ -67,10 +67,10 @@ namespace Calc.MVVM.Views
             MainVM.HandleWindowClosing();
         }
 
-        private void ForestSelectionChanged (object sender, SelectionChangedEventArgs e)
+        private void QueryTemplateSelectionChanged (object sender, SelectionChangedEventArgs e)
         {
-            var forest = ForestsComboBox.SelectedItem;
-            MainVM.HandleForestSelectionChanged(forest as Forest);
+            var qryTemplate = QueryTemplatesComboBox.SelectedItem;
+            MainVM.HandleQueryTemplateSelectionChanged(qryTemplate as QueryTemplate);
         }
 
         private void MappingSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -216,8 +216,8 @@ namespace Calc.MVVM.Views
 
         private void UpdateRevitClicked(object sender, RoutedEventArgs e)
         {
-            var forest = ForestsComboBox.SelectedItem;
-            MainVM.HandleForestSelectionChanged(forest as Forest, true);
+            var qryTemplate = QueryTemplatesComboBox.SelectedItem;
+            MainVM.HandleQueryTemplateSelectionChanged(qryTemplate as QueryTemplate, true);
         }
 
         private void SaveResultsClicked(object sender, RoutedEventArgs e)

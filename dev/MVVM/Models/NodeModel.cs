@@ -11,12 +11,12 @@ namespace Calc.MVVM.Models
 {
     public class NodeModel : INotifyPropertyChanged
     {
-        public bool IsDark { get => GetIsDark(); }
+        public bool IsBlack { get => CheckBlack(); }
         public string Name { get => GetNodeName(); }
         public string BranchParameterName { get => GetParameterName(); }
         public bool? BranchParameterIsInstance { get => CheckIfParameterIsInstance(); }
-        public bool IsBranch { get => CheckIfBranch(); } // is a branch but not a tree
-        public bool IsBrokenNode => Host is Branch && (Host as Branch).ParentForest == null; // mark as broken if parent forest is null
+        public bool IsBranch { get => CheckIfBranch(); } // is a branch but not a query
+        public bool IsBrokenNode => Host is Branch && (Host as Branch).QueryTemplate == null; // mark as broken if parent query template is null
         public NodeTreeViewModel ParentTreeView { get; set; }
         public NodeModel ParentNodeItem { get; private set; }
         public ObservableCollection<NodeModel> SubNodeItems { get; }
@@ -127,22 +127,22 @@ namespace Calc.MVVM.Models
             }
         }
 
-        public bool GetIsDark()
+        public bool CheckBlack()
         {
-            if (Host is Forest forest)
-                return forest.IsDark;
+            if (Host is QueryTemplate qryTemplate)
+                return qryTemplate.IsBlack;
             else
-                return ParentNodeItem.IsDark;
+                return ParentNodeItem.IsBlack;
         }
 
         public string GetNodeName()
         {
-            if (Host is Tree tree)
-                return tree.Name;
+            if (Host is Query query)
+                return query.Name;
             else if (Host is Branch branch)
                 return branch.Value;
-            else if (Host is Forest forest)
-                return forest.Name;
+            else if (Host is QueryTemplate qryTemplate)
+                return qryTemplate.Name;
             else
                 return "Please select an element group";
         }
@@ -165,7 +165,7 @@ namespace Calc.MVVM.Models
 
         public bool CheckIfBranch()
         {
-            return Host is Branch && !(Host is Tree);
+            return Host is Branch && !(Host is Query);
         }
         public void NotifyNodePropertyChange()
         {

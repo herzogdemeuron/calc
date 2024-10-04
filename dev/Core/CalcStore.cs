@@ -44,32 +44,12 @@ namespace Calc.Core
                 _mappingSelected.Project = ProjectSelected; // needed?
             }
             }
-        public List<Mapping> MappingsProjectRelated
-        {
-            get => GetProjectRelated(MappingDriver);
-            set => MappingDriver.GotManyItems = value;
-        }
-        public List<Mapping> MappingsProjectUnrelated
-        {
-              get => GetProjectUnrelated(MappingDriver);
-            set => MappingDriver.GotManyItems = value;
-        }
+        public List<Mapping> MappingsProjectRelated { get => GetProjectRelated(MappingDriver); }
 
-        public List<Forest> Forests { get { return ForestDriver.GotManyItems; } }
-        public Forest ForestSelected { get; set; }
-        public Forest DarkForestSelected { get; set; }
-        public List<Forest> ForestProjectRelated
-        {
-            get => GetProjectRelated(ForestDriver);
-            set => ForestDriver.GotManyItems = value;
-        }
-        public List<Forest> ForestProjectUnrelated
-        {
-            get => GetProjectUnrelated(ForestDriver);
-            set => ForestDriver.GotManyItems = value;
-        }
-
-
+        public List<QueryTemplate> QueryTemplates { get { return QueryTemplateDriver.GotManyItems; } }
+        public QueryTemplate QueryTemplateSelected { get; set; }
+        public QueryTemplate BlackQuerySet { get; set; }
+        public List<QueryTemplate> RelatedQueryTemplate { get => GetProjectRelated(QueryTemplateDriver); }
         private Directus Directus { get; set; }
         private CalcConfigStorageDriver CalcConfigDriver { get; set; }
         private ProjectStorageDriver ProjectDriver { get; set; }
@@ -79,7 +59,7 @@ namespace Calc.Core
         private AssemblyGroupStorageDriver AssemblyGroupDriver { get; set; }
         private AssemblyStorageDriver AssemblyDriver { get; set; }
         private MappingStorageDriver MappingDriver { get; set; }
-        private ForestStorageDriver ForestDriver { get; set; }
+        private QueryTemplateStorageDriver QueryTemplateDriver { get; set; }
         private ProjectResultStorageDriver ResultDriver { get; set; }
         private FolderStorageDriver FolderDriver { get; set; }
         private CustomParamSettingStorageDriver CustomParamSettingDriver { get; set; }
@@ -91,7 +71,7 @@ namespace Calc.Core
                 throw new Exception("CalcStore: Directus not authenticated");
             }
 
-            DirectusDriver.DirectusInstance = directus;
+            DirectusManager.DirectusInstance = directus;
             Directus = directus;
 
             CalcConfigDriver = new CalcConfigStorageDriver();
@@ -101,7 +81,7 @@ namespace Calc.Core
             AssemblyDriver = new AssemblyStorageDriver();
             AssemblyGroupDriver = new AssemblyGroupStorageDriver();
             MappingDriver = new MappingStorageDriver();
-            ForestDriver = new ForestStorageDriver();
+            QueryTemplateDriver = new QueryTemplateStorageDriver();
             ResultDriver = new ProjectResultStorageDriver();
             FolderDriver = new FolderStorageDriver();
             CustomParamSettingDriver = new CustomParamSettingStorageDriver();
@@ -118,7 +98,7 @@ namespace Calc.Core
             try
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                var configsDriver = await DirectusDriver.GetSingle<CalcConfigStorageDriver, CalcConfig>(CalcConfigDriver);
+                var configsDriver = await DirectusManager.GetSingle<CalcConfigStorageDriver, CalcConfig>(CalcConfigDriver);
                 Config = configsDriver.GotItem;
                 if (Config == null)
                 {
@@ -126,43 +106,43 @@ namespace Calc.Core
                 }
 
                 cancellationToken.ThrowIfCancellationRequested();
-                ProjectDriver = await DirectusDriver.GetMany<ProjectStorageDriver, CalcProject>(ProjectDriver);
+                ProjectDriver = await DirectusManager.GetMany<ProjectStorageDriver, CalcProject>(ProjectDriver);
                 OnProgressChanged(5);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                StandardDriver = await DirectusDriver.GetMany<StandardStorageDriver, LcaStandard>(StandardDriver);
+                StandardDriver = await DirectusManager.GetMany<StandardStorageDriver, LcaStandard>(StandardDriver);
                 OnProgressChanged(10);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                CustomParamSettingDriver = await DirectusDriver.GetMany<CustomParamSettingStorageDriver, CustomParamSetting>(CustomParamSettingDriver);
+                CustomParamSettingDriver = await DirectusManager.GetMany<CustomParamSettingStorageDriver, CustomParamSetting>(CustomParamSettingDriver);
                 OnProgressChanged(20);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                MaterialFunctionStorageDriver = await DirectusDriver.GetMany<MaterialFunctionStorageDriver, MaterialFunction>(MaterialFunctionStorageDriver);
+                MaterialFunctionStorageDriver = await DirectusManager.GetMany<MaterialFunctionStorageDriver, MaterialFunction>(MaterialFunctionStorageDriver);
                 OnProgressChanged(30);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                MaterialDriver = await DirectusDriver.GetMany<MaterialStorageDriver, Material>(MaterialDriver);
+                MaterialDriver = await DirectusManager.GetMany<MaterialStorageDriver, Material>(MaterialDriver);
                 OnProgressChanged(50);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                AssemblyGroupDriver = await DirectusDriver.GetMany<AssemblyGroupStorageDriver, AssemblyGroup>(AssemblyGroupDriver);
+                AssemblyGroupDriver = await DirectusManager.GetMany<AssemblyGroupStorageDriver, AssemblyGroup>(AssemblyGroupDriver);
                 OnProgressChanged(60);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                AssemblyDriver = await DirectusDriver.GetMany<AssemblyStorageDriver, Assembly>(AssemblyDriver);
+                AssemblyDriver = await DirectusManager.GetMany<AssemblyStorageDriver, Assembly>(AssemblyDriver);
                 OnProgressChanged(70);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                MappingDriver = await DirectusDriver.GetMany<MappingStorageDriver, Mapping>(MappingDriver);
+                MappingDriver = await DirectusManager.GetMany<MappingStorageDriver, Mapping>(MappingDriver);
                 OnProgressChanged(80);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                ForestDriver = await DirectusDriver.GetMany<ForestStorageDriver, Forest>(ForestDriver);
+                QueryTemplateDriver = await DirectusManager.GetMany<QueryTemplateStorageDriver, QueryTemplate>(QueryTemplateDriver);
                 OnProgressChanged(90);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                FolderDriver = await DirectusDriver.GetManySystem<FolderStorageDriver, DirectusFolder>(FolderDriver);
+                FolderDriver = await DirectusManager.GetManySystem<FolderStorageDriver, DirectusFolder>(FolderDriver);
                 OnProgressChanged(99);
 
                 LinkMaterials();
@@ -188,7 +168,7 @@ namespace Calc.Core
             try
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                var configsDriver = await DirectusDriver.GetSingle<CalcConfigStorageDriver, CalcConfig>(CalcConfigDriver);
+                var configsDriver = await DirectusManager.GetSingle<CalcConfigStorageDriver, CalcConfig>(CalcConfigDriver);
                 Config = configsDriver.GotItem;
                 if (Config == null)
                 {
@@ -196,31 +176,31 @@ namespace Calc.Core
                 }
 
                 cancellationToken.ThrowIfCancellationRequested();
-                StandardDriver = await DirectusDriver.GetMany<StandardStorageDriver,LcaStandard>(StandardDriver);
+                StandardDriver = await DirectusManager.GetMany<StandardStorageDriver,LcaStandard>(StandardDriver);
                 OnProgressChanged(10);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                CustomParamSettingDriver = await DirectusDriver.GetMany<CustomParamSettingStorageDriver,CustomParamSetting>(CustomParamSettingDriver);
+                CustomParamSettingDriver = await DirectusManager.GetMany<CustomParamSettingStorageDriver,CustomParamSetting>(CustomParamSettingDriver);
                 OnProgressChanged(20);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                MaterialFunctionStorageDriver = await DirectusDriver.GetMany<MaterialFunctionStorageDriver, MaterialFunction>(MaterialFunctionStorageDriver);
+                MaterialFunctionStorageDriver = await DirectusManager.GetMany<MaterialFunctionStorageDriver, MaterialFunction>(MaterialFunctionStorageDriver);
                 OnProgressChanged(30);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                MaterialDriver = await DirectusDriver.GetMany<MaterialStorageDriver,Material>(MaterialDriver);
+                MaterialDriver = await DirectusManager.GetMany<MaterialStorageDriver,Material>(MaterialDriver);
                 OnProgressChanged(50);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                AssemblyGroupDriver = await DirectusDriver.GetMany<AssemblyGroupStorageDriver,AssemblyGroup>(AssemblyGroupDriver);
+                AssemblyGroupDriver = await DirectusManager.GetMany<AssemblyGroupStorageDriver,AssemblyGroup>(AssemblyGroupDriver);
                 OnProgressChanged(60);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                AssemblyDriver = await DirectusDriver.GetMany<AssemblyStorageDriver,Assembly>(AssemblyDriver);
+                AssemblyDriver = await DirectusManager.GetMany<AssemblyStorageDriver,Assembly>(AssemblyDriver);
                 OnProgressChanged(80);
 
                 cancellationToken.ThrowIfCancellationRequested();
-                FolderDriver = await DirectusDriver.GetManySystem<FolderStorageDriver,DirectusFolder>(FolderDriver);
+                FolderDriver = await DirectusManager.GetManySystem<FolderStorageDriver,DirectusFolder>(FolderDriver);
                 OnProgressChanged(99);
 
                 cancellationToken.ThrowIfCancellationRequested();
@@ -270,15 +250,15 @@ namespace Calc.Core
 
 
 
-        public async Task<bool> UpdateSelectedMapping(Forest additionalForest = null)
+        public async Task<bool> UpdateSelectedMapping(QueryTemplate additional = null)
         {             
             if (MappingSelected == null)
             {
                 throw new Exception("Please firstly create a new mapping.");
             }
 
-            // refresh the mapping with the selected forest
-            var sendMapping = new Mapping(MappingSelected.Name, ForestSelected, additionalForest)
+            // refresh the mapping with the selected query template
+            var sendMapping = new Mapping(MappingSelected.Name, QueryTemplateSelected, additional)
             {
                 Project = ProjectSelected,
                 Id = MappingSelected.Id,
@@ -288,7 +268,7 @@ namespace Calc.Core
 
             try
             {
-                await DirectusDriver.UpdateSingle<MappingStorageDriver, Mapping>(MappingDriver);
+                await DirectusManager.UpdateSingle<MappingStorageDriver, Mapping>(MappingDriver);
                 MappingSelected.MappingItems = sendMapping.MappingItems;
                 return true;
             }
@@ -305,7 +285,7 @@ namespace Calc.Core
             MappingDriver.SendItem = newMapping;
             try
             {
-                var mappingDriver = await DirectusDriver.CreateSingle<MappingStorageDriver, Mapping>(MappingDriver);
+                var mappingDriver = await DirectusManager.CreateSingle<MappingStorageDriver, Mapping>(MappingDriver);
                 newMapping.Id = mappingDriver.CreatedItem.Id; // todo: check if is working?
                 MappingDriver.GotManyItems.Add(newMapping);
                 MappingSelected = newMapping;
@@ -325,7 +305,7 @@ namespace Calc.Core
 
             try
             {
-                await DirectusDriver.CreateSingle<ProjectResultStorageDriver, ProjectResult>(ResultDriver);
+                await DirectusManager.CreateSingle<ProjectResultStorageDriver, ProjectResult>(ResultDriver);
                 return (true, null);
 
             }
@@ -341,7 +321,7 @@ namespace Calc.Core
 
             try
             {
-                await DirectusDriver.CreateSingle<AssemblyStorageDriver, Assembly>(AssemblyDriver);
+                await DirectusManager.CreateSingle<AssemblyStorageDriver, Assembly>(AssemblyDriver);
                 var id = AssemblyDriver.CreatedItem?.Id;
                 // save the assembly back to assemblies all
                 if (id != null)
@@ -365,7 +345,7 @@ namespace Calc.Core
 
             try
             {
-                await DirectusDriver.UpdateSingle<AssemblyStorageDriver, Assembly>(AssemblyDriver);
+                await DirectusManager.UpdateSingle<AssemblyStorageDriver, Assembly>(AssemblyDriver);
                 // replace the assembly in assemblies all
                 var index = AssemblyDriver.GotManyItems.FindIndex(b => b.Id == assembly.Id);
                 if (index != -1)
@@ -391,16 +371,6 @@ namespace Calc.Core
             }
 
             return driver.GotManyItems.FindAll(m => m.Project?.Id == ProjectSelected.Id);
-        }
-
-        private List<T> GetProjectUnrelated<T>(IDriverGetMany<T> driver) where T : IHasProject
-        {
-            if (ProjectSelected == null)
-            {
-                throw new Exception("No project selected");
-            }
-
-            return driver.GotManyItems.FindAll(m => m.Project?.Id != ProjectSelected.Id);
         }
 
 

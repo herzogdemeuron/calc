@@ -28,12 +28,10 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        public NodeModel CurrentForestItem { get; set; } = new NodeModel(null, null);
-        public NodeModel CurrentDarkForestItem { get; set; } = new NodeModel(null, null);
-
-        private List<NodeModel> ForestSelectionRecord = new List<NodeModel>(); // TO BE REVISED: record which forest were selected, then to reset the color, for performance
+        public NodeModel CurrentQueryTemplateItem { get; set; } = new NodeModel(null, null);
+        public NodeModel CurrentBlackQuerySetItem { get; set; } = new NodeModel(null, null);
         public ObservableCollection<NodeModel> NodeSource
-        { get => new ObservableCollection<NodeModel> { CurrentForestItem, CurrentDarkForestItem }; }
+        { get => new ObservableCollection<NodeModel> { CurrentQueryTemplateItem, CurrentBlackQuerySetItem }; }
 
         public NodeTreeViewModel(CalcStore calcStore, IVisualizer visualizer)
         {
@@ -43,30 +41,30 @@ namespace Calc.MVVM.ViewModels
         }
 
         /// <summary>
-        /// Update the source of forest node and dark forest node
+        /// Update the source of query template node and black query set node
         /// </summary>
         public void UpdateNodeSource()
         {
-            CurrentForestItem = new NodeModel(Store.ForestSelected, this);
-            CurrentDarkForestItem = new NodeModel(Store.DarkForestSelected, this);
+            CurrentQueryTemplateItem = new NodeModel(Store.QueryTemplateSelected, this);
+            CurrentBlackQuerySetItem = new NodeModel(Store.BlackQuerySet, this);
             OnPropertyChanged(nameof(NodeSource));
             ReColorAllNodes(true);
             DeselectNodes();
         }
 
         /// <summary>
-        /// re-map all nodes in the current forest
-        /// return the broken forest
+        /// re-map all nodes in the current query template
+        /// return the broken query set
         /// </summary>
-        public Forest ReMapAllNodes()
+        public QueryTemplate ReMapAllNodes()
         {
-            if (Store.ForestSelected == null) return null;
+            if (Store.QueryTemplateSelected == null) return null;
             if (Store.MappingSelected == null) return null;
 
-            var brokenForest = MappingHelper.ApplyMappingToForestItem(CurrentForestItem, Store, Store.MappingSelected); // this should be passed to mapping error?
+            var brokenQrySet = MappingHelper.ApplyMapping(CurrentQueryTemplateItem, Store, Store.MappingSelected); // this should be passed to mapping error?
             //ReColorAllNodes();
 
-            return brokenForest;
+            return brokenQrySet;
 
         }
 
@@ -76,23 +74,23 @@ namespace Calc.MVVM.ViewModels
         /// </summary>
         public void ReColorAllNodes(bool forceRecolorAll = false)
         {
-            if (Store.ForestSelected == null) return;
+            if (Store.QueryTemplateSelected == null) return;
             if (BranchesSwitch == true)
             {
                 if (forceRecolorAll)
                 {
-                    Store.ForestSelected.SetBranchColorsBy("branches");
+                    Store.QueryTemplateSelected.SetBranchColorsBy("branches");
                     visualizer.IsolateAndColorSubbranchElements(SelectedNodeItem?.Host);
                 }
             }
             else
             {
-                Store.ForestSelected.SetBranchColorsBy("assemblies");
+                Store.QueryTemplateSelected.SetBranchColorsBy("assemblies");
                 visualizer.IsolateAndColorBottomBranchElements(SelectedNodeItem?.Host);
             }
 
-            CurrentForestItem.NotifyNodePropertyChange();
-            CurrentDarkForestItem.NotifyNodePropertyChange();
+            CurrentQueryTemplateItem.NotifyNodePropertyChange();
+            CurrentBlackQuerySetItem.NotifyNodePropertyChange();
 
         }
 
@@ -100,10 +98,10 @@ namespace Calc.MVVM.ViewModels
         {
             if (nodeItem == null) return;
             if (nodeItem.Host == null) return;
-            if (CurrentForestItem == null) return;
+            if (CurrentQueryTemplateItem == null) return;
             SelectedNodeItem = nodeItem;
-            NodeHelper.HideAllLabelColor(CurrentForestItem);
-            NodeHelper.HideAllLabelColor(CurrentDarkForestItem);
+            NodeHelper.HideAllLabelColor(CurrentQueryTemplateItem);
+            NodeHelper.HideAllLabelColor(CurrentBlackQuerySetItem);
 
             if (BranchesSwitch)
             {
@@ -116,55 +114,41 @@ namespace Calc.MVVM.ViewModels
                 visualizer.IsolateAndColorBottomBranchElements(SelectedNodeItem?.Host);
             }
 
-            CurrentForestItem.NotifyNodePropertyChange();
-            CurrentDarkForestItem.NotifyNodePropertyChange();
-
-            // add the forest to the record
-            if (selectedNodeItem.IsDark)
-            {
-                ForestSelectionRecord.Add(CurrentDarkForestItem);
-            }
-            else
-            {
-                ForestSelectionRecord.Add(CurrentForestItem);
-            }
-
+            CurrentQueryTemplateItem.NotifyNodePropertyChange();
+            CurrentBlackQuerySetItem.NotifyNodePropertyChange();
         }
 
         public void ColorNodesToAssembly()
         {
             BranchesSwitch = false;
-            if (CurrentForestItem == null) return;
-            Store.ForestSelected.SetBranchColorsBy("assemblies");
-            CurrentForestItem.NotifyNodePropertyChange();
+            if (CurrentQueryTemplateItem == null) return;
+            Store.QueryTemplateSelected.SetBranchColorsBy("assemblies");
+            CurrentQueryTemplateItem.NotifyNodePropertyChange();
             DeselectNodes();
         }
 
         public void ColorNodesToBranch()
         {
             BranchesSwitch = true;
-            if (CurrentForestItem == null) return;
-            Store.ForestSelected.SetBranchColorsBy("branches");
-            CurrentForestItem.NotifyNodePropertyChange();
+            if (CurrentQueryTemplateItem == null) return;
+            Store.QueryTemplateSelected.SetBranchColorsBy("branches");
+            CurrentQueryTemplateItem.NotifyNodePropertyChange();
             DeselectNodes();
         }
 
         public void DeselectNodes()
         {
-            if (CurrentForestItem == null) return;
-            NodeHelper.HideAllLabelColor(CurrentForestItem);
-            NodeHelper.HideAllLabelColor(CurrentDarkForestItem);
+            if (CurrentQueryTemplateItem == null) return;
+            NodeHelper.HideAllLabelColor(CurrentQueryTemplateItem);
+            NodeHelper.HideAllLabelColor(CurrentBlackQuerySetItem);
 
             SelectedNodeItem = null;
-            CurrentForestItem.NotifyNodePropertyChange(); //better ways to do this?
-            CurrentDarkForestItem.NotifyNodePropertyChange();
+            CurrentQueryTemplateItem.NotifyNodePropertyChange(); //better ways to do this?
+            CurrentBlackQuerySetItem.NotifyNodePropertyChange();
 
-            // take the unique forest from the record
-            //var forestItems = ForestSelectionRecord.Distinct().ToList();
-            //var resetItems = forestItems.SelectMany(f => f.SubNodeItems).Select(n => n.Host).ToList();
-            var resetItems = CurrentForestItem.SubNodeItems.Select(n => n.Host).ToList();
+            var resetItems = CurrentQueryTemplateItem.SubNodeItems.Select(n => n.Host).ToList();
             visualizer.ResetView(resetItems);
-            //ForestSelectionRecord.Clear();
+
         }
 
 

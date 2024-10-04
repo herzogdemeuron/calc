@@ -9,31 +9,30 @@ namespace Calc.MVVM.Helpers
 {
     public class MappingHelper
     {
-        public static Forest ApplyMappingToForestItem(NodeModel ForestItem,CalcStore store, Mapping newMapping)
+        public static QueryTemplate ApplyMapping(NodeModel queryTemplateItem,CalcStore store, Mapping newMapping)
         {
-            // todo: add missing mappings from missing trees to the dark forest
-            var brokenForest = new Forest()
+            var brokenQueries = new QueryTemplate()
             {
-                Name = ForestItem.Name,
-                Trees = new List<Tree>()
+                Name = queryTemplateItem.Name,
+                Queries = new List<Query>()
             };
-            foreach (NodeModel nodeItem in ForestItem.SubNodeItems)
+            foreach (NodeModel nodeItem in queryTemplateItem.SubNodeItems)
             {
-                Tree tree = nodeItem.Host as Tree;
+                Query query = nodeItem.Host as Query;
                 if (newMapping == null) continue;
                 var verifiedAssemblies = store.AssembliesAll.Where(b => b.Verified).ToList();
-                var brokenTree = newMapping.ApplyToTree(tree, verifiedAssemblies);
-                if (brokenTree != null && brokenTree.SubBranches.Count > 0)
+                var brokenQuery = newMapping.ApplyToQuery(query, verifiedAssemblies);
+                if (brokenQuery != null && brokenQuery.SubBranches.Count > 0)
                 {
-                    brokenForest.Trees.Add(brokenTree);
+                    brokenQueries.Queries.Add(brokenQuery);
                 }
             };
-            return brokenForest;
+            return brokenQueries;
         }
 
         public static Mapping CopyCurrentMapping(CalcStore store)
         {
-            return new Mapping("CurrentMapping", store.ForestSelected);
+            return new Mapping("CurrentMapping", store.QueryTemplateSelected);
         }
 
     }

@@ -9,8 +9,8 @@ namespace Calc.Core.Snapshots
         public string ProjectNumber { get; set; }
         [JsonProperty("project_name")]
         public string ProjectName { get; set; }
-        [JsonProperty("classification_system")]
-        public string ClassificationSystem { get; set; } // forest name
+        [JsonProperty("query_template")]
+        public string QueryTemplate { get; set; }
         [JsonProperty("location")]
         public string? Location { get; set; }
         [JsonProperty("lca_method")]

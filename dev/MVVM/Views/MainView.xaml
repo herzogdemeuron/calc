@@ -53,7 +53,7 @@
                 HorizontalAlignment="Left"
                 Foreground="Gray"/>
 
-            <StackPanel x:Name="ForestPanel"
+            <StackPanel x:Name="QueriesPanel"
                        Grid.Column="0"
                        Grid.Row="1">
 
@@ -62,13 +62,13 @@
                        Margin="10,0,0,10"
                        Padding="0"/>
 
-                <ComboBox x:Name="ForestsComboBox"
+                <ComboBox x:Name="QueryTemplatesComboBox"
                           Text="Select Element Grouping"
                           Style="{StaticResource RoundedComboBoxStyle}"
-                          ItemsSource="{Binding Store.ForestProjectRelated}"
+                          ItemsSource="{Binding Store.RelatedQueryTemplate}"
                           DisplayMemberPath="Name"
                           Margin="10,0,10,10"
-                          SelectionChanged="ForestSelectionChanged"
+                          SelectionChanged="QueryTemplateSelectionChanged"
                           HorizontalAlignment="Stretch"/>
             </StackPanel>
 

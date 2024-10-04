@@ -14,15 +14,15 @@ namespace Calc.MVVM.ViewModels
     {
         private readonly NodeTreeViewModel NodeTreeVM;
         public CalcStore Store => NodeTreeVM.Store;
-        public NodeModel CurrentNodeItem => NodeTreeVM.SelectedNodeItem ?? NodeTreeVM.CurrentForestItem;
+        public NodeModel CurrentNodeItem => NodeTreeVM.SelectedNodeItem ?? NodeTreeVM.CurrentQueryTemplateItem;
         private IGraphNode HostNode => CurrentNodeItem?.Host;
         public double? ProjectArea => Store.ProjectSelected.Area;
         public string Name  // used anywhere?
         {
             get
             {
-                if (HostNode is Forest forest)
-                    return forest.Name;
+                if (HostNode is QueryTemplate qryTemplate)
+                    return qryTemplate.Name;
                 else
                     return NodeTreeVM.SelectedNodeItem?.Name;
             }
@@ -35,12 +35,12 @@ namespace Calc.MVVM.ViewModels
         {
             get
             {
-                if (NodeTreeVM.CurrentForestItem?.Host == null) return null;
-                var forest = NodeTreeVM.CurrentForestItem.Host as Forest;
-                var trees = forest.Trees;
-                if (trees == null || trees.Count() == 0)
+                if (NodeTreeVM.CurrentQueryTemplateItem?.Host == null) return null;
+                var qryTemplate = NodeTreeVM.CurrentQueryTemplateItem.Host as QueryTemplate;
+                var queries = qryTemplate.Queries;
+                if (queries == null || queries.Count() == 0)
                     return null;
-                return trees.SelectMany(t => t.AssemblySnapshots).ToList();
+                return queries.SelectMany(t => t.AssemblySnapshots).ToList();
             }
         }
 
@@ -102,7 +102,7 @@ namespace Calc.MVVM.ViewModels
         public double ProjectGe => CategorizedResults?.Sum(c => c.Ge) ?? 0;
 
         /// <summary>
-        /// Show the errors for the current selection / forest
+        /// Show the errors for the current selection / whole query template
         /// </summary>
         public List<ParameterError> Errors
         {
@@ -115,8 +115,8 @@ namespace Calc.MVVM.ViewModels
                 }
                 else
                 {
-                    var forest = NodeTreeVM.CurrentForestItem.Host as Forest;
-                    var branches = forest.Trees;
+                    var qryTemplate = NodeTreeVM.CurrentQueryTemplateItem.Host as QueryTemplate;
+                    var branches = qryTemplate.Queries;
                     if (branches == null || branches.Count() == 0)
                         return null;
                     return branches.SelectMany(b => b.ParameterErrors).ToList();

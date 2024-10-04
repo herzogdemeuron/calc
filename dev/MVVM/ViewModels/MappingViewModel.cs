@@ -14,7 +14,7 @@ namespace Calc.MVVM.ViewModels
     {
         private CalcStore store;
         private readonly VisibilityViewModel visibilityVM;
-        public Forest BrokenMappingForest { get; set; }
+        public QueryTemplate BrokenQuerySet { get; set; }
         public MappingViewModel(CalcStore calcStore, VisibilityViewModel vvm)
         {
             store = calcStore;
@@ -28,7 +28,7 @@ namespace Calc.MVVM.ViewModels
             try
             {
                 visibilityVM.ShowWaitingOverlay("Updating mapping...");
-                feedback = await store.UpdateSelectedMapping(BrokenMappingForest);
+                feedback = await store.UpdateSelectedMapping(BrokenQuerySet);
             }
             catch (Exception ex)
             {

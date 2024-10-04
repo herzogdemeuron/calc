@@ -80,10 +80,10 @@ namespace Calc.MVVM.ViewModels
                 visibilityVM.ShowWaitingOverlay("Creating new mapping...");
                 // choose if save current mapping or duplicate from selected
                 Mapping newMapping;
-                // if no mapping selected, create new mapping from current forest
+                // if no mapping selected, create new mapping from current query template
                 if (selectedMapping == null)
                 {
-                    newMapping = new Mapping(newName, store.ForestSelected);
+                    newMapping = new Mapping(newName, store.QueryTemplateSelected);
                 }
                 else
                 {

@@ -8,7 +8,7 @@ namespace Calc.Core.DirectusAPI
     /// <summary>
     /// A static class that provides interfaces to interact with the Directus.
     /// </summary>
-    internal static class DirectusDriver
+    internal static class DirectusManager
     {
         internal static Directus DirectusInstance { get; set; }
 

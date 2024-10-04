@@ -4,25 +4,16 @@ namespace Calc.MVVM.Helpers
 {
     public class NodeHelper
     {
-        public static void HideAllLabelColor(NodeModel forestItem)
-        {    
-            forestItem.LabelColorVisible = false;
-
-            foreach (NodeModel nodeItem in forestItem.SubNodeItems)
-            {
-                HideNodeLabelColor(nodeItem);
-            }
-        }
-
-        private static void HideNodeLabelColor(NodeModel nodeItem)
+        internal static void HideAllLabelColor(NodeModel nodeItem)
         {
             nodeItem.LabelColorVisible = false;
 
             foreach (NodeModel subNodeItem in nodeItem.SubNodeItems)
             {
-                HideNodeLabelColor(subNodeItem);
+                HideAllLabelColor(subNodeItem);
             }
         }
+
         public static void ShowSubLabelColor(NodeModel nodeItem)
         {
             foreach (NodeModel subNodeItem in nodeItem.SubNodeItems)

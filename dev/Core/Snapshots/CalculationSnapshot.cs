@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 namespace Calc.Core.Snapshots
 {
-    public class CalculationSnapshot
+    public class CalculationSnapshot //deprecated?
     {
         [JsonProperty("project_number")]
         public string ProjectNumber { get; set; }
         [JsonProperty("project_name")]
         public string ProjectName { get; set; }
         [JsonProperty("classification_system")]
-        public string ClassificationSystem { get; set; } // forest
+        public string ClassificationSystem { get; set; }
         [JsonProperty("location")]
         public string Location { get; set; }
         [JsonProperty("lca_method")]

@@ -9,7 +9,7 @@ using Calc.Core.Objects.Elements;
 
 namespace Calc.Core.Objects.GraphNodes;
 
-public class Tree : Branch, IGraphNode
+public class Query : Branch, IGraphNode
 {
     [JsonProperty("name")]
     public string Name { get; set; }
@@ -24,13 +24,13 @@ public class Tree : Branch, IGraphNode
     }
 
     /// <summary>
-    /// Creates a tree from a list of elements and a list of parameters to group by
+    /// Creates a query from a list of elements and a list of parameters to group by
     /// </summary>
-    public List<CalcElement> Plant(List<CalcElement> searchElements)
+    public List<CalcElement> Plant(List<CalcElement> searchElements) // rename plant?
     {
         Elements = FilterElements(searchElements, FilterConfig);
         SubBranches.Clear();
-        this.ParentTree = this;
+        this.ParentQuery = this;
 
         if (BranchConfig != null && BranchConfig.Count > 0)
         {
@@ -71,12 +71,12 @@ public class Tree : Branch, IGraphNode
     }
 
     /// <summary>
-    /// Makes a tree for a category.
+    /// Makes a query for a category.
     /// </summary>
-    public static Tree MakeCategoryTree(string categoryName)
+    public static Query MakeCategoryQuery(string categoryName)
     {
-        Tree tree = new Tree();
-        tree.Name = categoryName;
+        Query query = new Query();
+        query.Name = categoryName;
 
         SimpleCondition condition = new SimpleCondition()
         {
@@ -89,14 +89,14 @@ public class Tree : Branch, IGraphNode
             Type = "simple_condition",
             Condition = condition
         };
-        tree.FilterConfig = new GroupCondition()
+        query.FilterConfig = new GroupCondition()
         {
             Conditions = new List<ConditionContainer>() { conditionContainer },
             Operator = "and"
         };
-        tree.BranchConfig = new List<string>() { "type:Type Name" };
+        query.BranchConfig = new List<string>() { "type:Type Name" };
 
-        return tree;
+        return query;
     }
 
     public string Serialize()

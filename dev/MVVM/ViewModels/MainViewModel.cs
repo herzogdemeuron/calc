@@ -2,7 +2,6 @@
 using Calc.Core.Interfaces;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Mappings;
-using Calc.MVVM.Helpers;
 using Calc.MVVM.Models;
 using System;
 using System.ComponentModel;
@@ -13,7 +12,7 @@ namespace Calc.MVVM.ViewModels
     public class MainViewModel: INotifyPropertyChanged
     {
         public CalcStore Store { get; set; }
-        public ForestViewModel ForestVM { get; set; }
+        public QueryTemplateViewModel QueryTemplateVM { get; set; }
         public MappingViewModel MappingVM { get; set; }
         public MappingErrorViewModel MappingErrorVM { get; set; }
         public NodeTreeViewModel NodeTreeVM { get; set; }
@@ -23,13 +22,13 @@ namespace Calc.MVVM.ViewModels
         public CalculationViewModel CalculationVM { get; set; }
         public AssemblySelectionViewModel AssemblySelectionVM { get; set; }
         public event EventHandler DeselectTreeView;
-        public event EventHandler DeselectBrokenTreeView;
+        public event EventHandler DeselectBrokenQueryView;
 
         public MainViewModel(CalcStore store, IElementCreator elementCreator, IVisualizer visualizer)
         {
             Store = store;
             VisibilityVM = new VisibilityViewModel();
-            ForestVM = new ForestViewModel(store, elementCreator, VisibilityVM);
+            QueryTemplateVM = new QueryTemplateViewModel(store, elementCreator, VisibilityVM);
             MappingVM = new MappingViewModel(store, VisibilityVM);
             NewMappingVM = new NewMappingViewModel(store, VisibilityVM);
             AssemblySelectionVM = new AssemblySelectionViewModel(store);
@@ -44,15 +43,15 @@ namespace Calc.MVVM.ViewModels
         /// </summary>
         private void MappingChangedActions()
         {
-            var brokenForest = NodeTreeVM.ReMapAllNodes();
-            MappingErrorVM.UpdateBrokenNodes(brokenForest);
+            var brokenQuerySet = NodeTreeVM.ReMapAllNodes();
+            MappingErrorVM.UpdateBrokenNodes(brokenQuerySet);
             AssemblySelectionChangedActions(true);
         }
 
         private void AssemblySelectionChangedActions(bool all = false)
         {
             // refresh the assembly section ui
-            var node = all ? NodeTreeVM.CurrentForestItem : NodeTreeVM.SelectedNodeItem;
+            var node = all ? NodeTreeVM.CurrentQueryTemplateItem : NodeTreeVM.SelectedNodeItem;
             node.RefreshAssemblySection();
             NodeTreeVM.ReColorAllNodes(true);
             CalculationVM.RefreshCalculation();
@@ -63,11 +62,11 @@ namespace Calc.MVVM.ViewModels
             NodeTreeVM.DeselectNodes();
         }
 
-        public async void HandleForestSelectionChanged(Forest forest, bool forceUpdate = false)
+        public async void HandleQueryTemplateSelectionChanged(QueryTemplate qryTemplate, bool forceUpdate = false)
         {
-            if (forest == null) return;
-            if(forest == Store.ForestSelected && !forceUpdate) return;
-            await ForestVM.HandleForestSelectionChanged(forest);
+            if (qryTemplate == null) return;
+            if(qryTemplate == Store.QueryTemplateSelected && !forceUpdate) return;
+            await QueryTemplateVM.HandleQueryTemplateSelectionChanged(qryTemplate);
             NodeTreeVM.UpdateNodeSource();
             MappingChangedActions();
             NodeTreeVM.DeselectNodes();
@@ -113,7 +112,7 @@ namespace Calc.MVVM.ViewModels
         public void HandleErrorMappingSideClicked()
         {
             //MappingErrorVM.ResetAssemblies();
-            DeselectBrokenTreeView?.Invoke(this, EventArgs.Empty);
+            DeselectBrokenQueryView?.Invoke(this, EventArgs.Empty);
         }
 
         public async Task HandleUpdateMapping()
