@@ -7,7 +7,7 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
     /// <summary>
     /// Provides query patterns for the DirectusDriver, to get param settings from directus.
     /// </summary>
-    public class CustomParamSettingStorageDriver : IDriverGetMany<CustomParamSetting>
+    public class CustomParamSettingDriver : IDriverGetMany<CustomParamSetting>
     {
         public string QueryGetMany { get; } = @"
             query GetParamSettings {

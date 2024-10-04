@@ -7,7 +7,7 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
     /// <summary>
     /// Provides query patterns for the DirectusDriver, to get materials from directus.
     /// </summary>
-    public class MaterialStorageDriver : IDriverGetMany<Material>
+    public class MaterialDriver : IDriverGetMany<Material>
     {
         public string QueryGetMany { get; } = @"
             query GetMaterials {

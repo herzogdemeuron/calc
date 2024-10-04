@@ -8,7 +8,7 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
     /// <summary>
     /// Provides query patterns for the DirectusDriver, to get / create mappings from directus.
     /// </summary>
-    public class MappingStorageDriver : IDriverCreateSingle<Mapping>, IDriverGetMany<Mapping>, IDriverUpdateSingle<Mapping>
+    public class MappingDriver : IDriverCreateSingle<Mapping>, IDriverGetMany<Mapping>, IDriverUpdateSingle<Mapping>
     {
         public Mapping SendItem { get; set; }
         public string QueryGetMany { get; } = @"

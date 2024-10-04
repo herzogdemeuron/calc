@@ -7,7 +7,7 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
     /// <summary>
     /// Provides query patterns for the DirectusDriver, to get standards from directus.
     /// </summary>
-    public class StandardStorageDriver : IDriverGetMany<LcaStandard>
+    public class StandardDriver : IDriverGetMany<LcaStandard>
     {
         public string QueryGetMany { get; } = @"
             query GetStandards {

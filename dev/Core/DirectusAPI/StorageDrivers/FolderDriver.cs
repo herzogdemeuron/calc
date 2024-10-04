@@ -6,7 +6,7 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
     /// <summary>
     /// Provides query patterns for the DirectusDriver, to get calc folders from directus.
     /// </summary>
-    internal class FolderStorageDriver : IDriverGetManySystem<DirectusFolder>
+    internal class FolderDriver : IDriverGetManySystem<DirectusFolder>
     {
         public string QueryGetManySystem { get; } = @"
                 query { 

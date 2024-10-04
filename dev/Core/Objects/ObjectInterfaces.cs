@@ -15,7 +15,7 @@ namespace Calc.Core.Objects
     }
 
     /// <summary>
-    /// Implement this to get project related mappings and query templates from directus.
+    /// Implement this to get project related mappings and query templates from calc store.
     /// </summary>
     public interface IHasProject
     {

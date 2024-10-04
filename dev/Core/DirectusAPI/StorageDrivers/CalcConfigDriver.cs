@@ -5,7 +5,7 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
     /// <summary>
     /// Provides query patterns for the DirectusDriver, to get calc config from directus.
     /// </summary>
-    internal class CalcConfigStorageDriver : IDriverGetSingle<CalcConfig>
+    internal class CalcConfigDriver : IDriverGetSingle<CalcConfig>
     {
         public string QueryGetSingle => @"
             query GetCalcConfig {

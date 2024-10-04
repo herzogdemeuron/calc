@@ -9,7 +9,7 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
     /// <summary>
     /// Provides query patterns for the DirectusDriver, to get and create assemblies from directus.
     /// </summary>
-    internal class AssemblyStorageDriver : IDriverGetMany<Assembly>, IDriverCreateSingle<Assembly>, IDriverUpdateSingle<Assembly>
+    internal class AssemblyDriver : IDriverGetMany<Assembly>, IDriverCreateSingle<Assembly>, IDriverUpdateSingle<Assembly>
     {
         public Assembly SendItem { get; set; }
         public string QueryGetMany { get; } = @"

@@ -68,7 +68,7 @@ namespace Calc.MVVM.ViewModels
                 return;
             }
 
-            List<string> currentNames = store.MappingsProjectRelated.Select(m => m.Name).ToList();
+            List<string> currentNames = store.RelatedMappings.Select(m => m.Name).ToList();
             if (currentNames.Contains(newName))
             {
                 visibilityVM.ShowMessageOverlay(null, "Name already exists in current project.");

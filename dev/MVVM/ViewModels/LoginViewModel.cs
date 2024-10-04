@@ -187,11 +187,11 @@ namespace Calc.MVVM.ViewModels
 
             if (MainOrBuilder)
             {
-                await CalcStore.GetMainData(cTokenSource.Token);
+                await CalcStore.LoadCalcProjectData(cTokenSource.Token);
             }
             else
             {
-                await CalcStore.GetBuilderData(cTokenSource.Token);
+                await CalcStore.LoadCalcBuilderData(cTokenSource.Token);
             }
         }
 

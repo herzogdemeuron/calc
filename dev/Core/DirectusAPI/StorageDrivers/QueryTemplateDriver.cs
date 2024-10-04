@@ -7,7 +7,7 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
     /// <summary>
     /// Provides query patterns for the DirectusDriver, to get query templates from directus.
     /// </summary>
-    public class QueryTemplateStorageDriver : IDriverGetMany<QueryTemplate>
+    public class QueryTemplateDriver : IDriverGetMany<QueryTemplate>
     {
         public QueryTemplate SendItem { get; set; }
 

@@ -9,7 +9,7 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
     /// <summary>
     /// Provides query patterns for the DirectusDriver, to create project result from directus.
     /// </summary>
-    public class ProjectResultStorageDriver : IDriverCreateSingle<ProjectResult>
+    public class ProjectResultDriver : IDriverCreateSingle<ProjectResult>
     {
         public ProjectResult SendItem { get; set; }
 

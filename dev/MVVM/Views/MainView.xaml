@@ -109,7 +109,7 @@
                     <ComboBox x:Name="MappingsComboBox"
                               Text="Select Mapping Setting"
                               Style="{StaticResource RoundedComboBoxStyle}"
-                              ItemsSource="{Binding Store.MappingsProjectRelated}"
+                              ItemsSource="{Binding Store.RelatedMappings}"
                               SelectedItem="{Binding Store.MappingSelected}"
                               DisplayMemberPath="Name"
                               DockPanel.Dock="Left"
