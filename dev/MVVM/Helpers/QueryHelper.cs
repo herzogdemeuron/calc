@@ -1,5 +1,5 @@
 ﻿using Calc.Core.Filtering;
-using Calc.Core.Interfaces;
+using Calc.Core;
 using Calc.Core.Objects.Elements;
 using Calc.Core.Objects.GraphNodes;
 using System.Collections.Generic;
@@ -14,15 +14,15 @@ namespace Calc.MVVM.Helpers
     {
         /// <summary>
         /// creates calc elements from revit elements and sort them into queries
-        /// return the black query set (planted with left over elements)
+        /// return the black query set (performed with left over elements)
         /// </summary>
-        public static async Task<QueryTemplate> PlantQueriesAsync(QueryTemplate qryTemplate, IElementCreator elementCreator, List<CustomParamSetting> customParamSettings)
+        public static async Task<QueryTemplate> PerformQueriesAsync(QueryTemplate qryTemplate, IElementCreator elementCreator, List<CustomParamSetting> customParamSettings)
         {
             List<string> parameters = GetParameterList(qryTemplate);
 
             List<CalcElement> calcElements = await Task.Run(() => elementCreator.CreateCalcElements(customParamSettings, parameters));
 
-            var leftElements = qryTemplate.PlantQueries(calcElements);
+            var leftElements = qryTemplate.PerformQueries(calcElements);
             var blackQuerySet = CreateBlackQuerySet("Unassigned", leftElements);
 
             return blackQuerySet;
@@ -40,17 +40,17 @@ namespace Calc.MVVM.Helpers
             //create queries for each category
             foreach (var category in calcElements.Select(e => e.Category).Distinct())
             {
-                Query query = Query.MakeCategoryQuery(category);
+                Query query = Query.CreateCategoryQuery(category);
                 blackQuerySet.Queries.Add(query);
             }
-            blackQuerySet.PlantQueries(calcElements);
+            blackQuerySet.PerformQueries(calcElements);
             return blackQuerySet;
         }
 
         private static List<string> GetParameterList(QueryTemplate qryTemplate)
         {
             //get the root parameters from each query
-            List<string>  parameters = qryTemplate.GetAllParameters().ToList();
+            List<string>  parameters = qryTemplate.GetAllParameters();
             List<string> validatedParameters = ParameterHelper.ValidateParameterNames(parameters);
             // TODO: should show the illegal parameters
             Debug.WriteLine("Illegal parameter count: " + (parameters.Count - validatedParameters.Count));

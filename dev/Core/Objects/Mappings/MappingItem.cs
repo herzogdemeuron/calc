@@ -7,7 +7,7 @@ namespace Calc.Core.Objects.Mappings
 {
 
     /// <summary>
-    /// stands for a set of assemblies that are assigned to a branch via a path
+    /// Stands for a set of assemblies that are assigned to a branch via a path
     /// </summary>
     public class MappingItem
     {
@@ -15,7 +15,6 @@ namespace Calc.Core.Objects.Mappings
         public List<int> AssemblyIds { get; set; }
         [JsonProperty("mapping_path")]
         public List<MappingPath> Path { get; set; }
-
         [JsonProperty("query_name")]
         public string QueryName { get; set; }
 

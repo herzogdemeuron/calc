@@ -7,10 +7,16 @@ using Calc.Core.Objects.Elements;
 
 namespace Calc.Core.Objects.GraphNodes
 {
+    /// <summary>
+    /// Used by calc project.
+    /// It is both a set of queries and the result of the queries.
+    /// It is also used to summarize the black queries (for elements that are not fallen into any query results)
+    /// and the broken query set (for broken mappings that never exists agin in the current query result structure).
+    /// </summary>
     public class QueryTemplate : IHasProject, IGraphNode
     {
         [JsonIgnore]
-        public bool IsBlack { get; set; } = false; // if the query template is black ( for left over elements )
+        public bool IsBlack { get; set; } = false;
         [JsonIgnore]
         public List<CalcElement> Elements { get => GetElements(); }
         [JsonIgnore]
@@ -31,7 +37,7 @@ namespace Calc.Core.Objects.GraphNodes
         public string Name { get; set; }
         [JsonIgnore]
         private List<Query> _queries;
-        [JsonProperty("queries")] // for receiving the query JSON from the API
+        [JsonProperty("queries")]
         public List<Query> Queries
         {
             get => _queries;
@@ -50,6 +56,10 @@ namespace Calc.Core.Objects.GraphNodes
         [JsonProperty("project_id")]
         public CalcProject Project { get; set; }
 
+        /// <summary>
+        /// Sets the colors of the branches based on the coloring method (branches, assemblies).
+        /// </summary>
+        /// <param name="method"></param>
         public void SetBranchColorsBy(string method)
         {
             List<Branch> branches = Queries.ConvertAll(query => (Branch)query);
@@ -67,7 +77,11 @@ namespace Calc.Core.Objects.GraphNodes
             }
         }
 
-        public HashSet<string> GetAllParameters()
+        /// <summary>
+        /// Gets all parameters that are going to be used in the query template,
+        /// this is used to simplify the element creation, only getting the nescessary parameters.
+        /// </summary>
+        public List<string> GetAllParameters()
         {
             var parameters = new HashSet<string>();
             foreach (Query query in Queries)
@@ -75,26 +89,19 @@ namespace Calc.Core.Objects.GraphNodes
                 parameters.UnionWith(query.FilterConfig.GetAllParameters());
                 parameters.UnionWith(query.BranchConfig);
             }
-            return parameters;
+            return parameters.ToList();
         }
 
         /// <summary>
-        /// Plants all queries in the query template and returns the remaining elements
+        /// Performs all queries in the query template and returns the remaining elements
         /// </summary>
-        public List<CalcElement> PlantQueries(List<CalcElement> searchElements)
+        public List<CalcElement> PerformQueries(List<CalcElement> searchElements)
         {
             foreach (Query query in Queries)
             {
-                searchElements = query.Plant(searchElements);
+                searchElements = query.Perform(searchElements);
             }
             return searchElements;
-        }
-
-        public string SerializeQueries()
-        {
-            var queriesJson = new StringBuilder();
-            queriesJson.Append($"[{string.Join(",", Queries.Select(t => t.Serialize()))}]");
-            return queriesJson.ToString();
         }
 
         private List<CalcElement> GetElements()

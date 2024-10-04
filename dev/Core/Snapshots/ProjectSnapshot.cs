@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Calc.Core.Snapshots
 {
+    /// <summary>
+    /// Should be serialized and saved to directus as json file.
+    /// </summary>
     public class ProjectSnapshot
     {
         [JsonProperty("project_number")]

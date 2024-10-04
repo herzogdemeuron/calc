@@ -1,5 +1,5 @@
 ﻿using Calc.Core;
-using Calc.Core.Interfaces;
+using Calc.Core;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Mappings;
 using Calc.MVVM.Models;

@@ -1,13 +1,11 @@
 ﻿using Calc.Core;
 using Calc.Core.Calculation;
 using Calc.Core.Color;
-using Calc.Core.Interfaces;
 using Calc.Core.Objects;
 using Calc.Core.Objects.Assemblies;
 using Calc.Core.Objects.Materials;
 using Calc.Core.Objects.Standards;
 using Calc.Core.Snapshots;
-using Calc.MVVM.Helpers;
 using Calc.MVVM.Models;
 using System;
 using System.Collections.Generic;

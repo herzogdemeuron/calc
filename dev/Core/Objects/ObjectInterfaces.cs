@@ -1,14 +1,10 @@
 ﻿using Calc.Core.Color;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Elements;
+using Calc.Core.Objects.GraphNodes;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System.Collections.Generic;
 
 namespace Calc.Core.Objects
 {
@@ -18,6 +14,9 @@ namespace Calc.Core.Objects
         piece, m, m2, m3
     }
 
+    /// <summary>
+    /// Implement this to get project related mappings and query templates from directus.
+    /// </summary>
     public interface IHasProject
     {
         CalcProject Project { get; set; }
@@ -37,7 +36,7 @@ namespace Calc.Core.Objects
     }
 
     /// <summary>
-    /// can be searched with group name and name
+    /// Can be searched with group name and name.
     /// </summary>
     public interface ISearchable
     {

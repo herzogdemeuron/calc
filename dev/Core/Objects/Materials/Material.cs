@@ -1,6 +1,5 @@
 ﻿using Calc.Core.Objects.Standards;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace Calc.Core.Objects.Materials
 {
@@ -26,34 +25,15 @@ namespace Calc.Core.Objects.Materials
         public string SourceUuid { get; set; }
         [JsonProperty("thickness")]
         public double? Thickness { get; set; }
-
         [JsonProperty("material_unit")]
         public Unit MaterialUnit { get; set; }
         [JsonProperty("updated")]
         public string Updated { get; set; }
         [JsonProperty("carbon_a1a3")]
         public double? Gwp { get; set; }
-
         [JsonProperty("grey_energy_fabrication_total")]
         public double? Ge { get; set; }
-
-        [JsonProperty("cost")]
-        public double? Cost { get; set; }
-
-        public string GroupName => MaterialType;
-
-        public void LinkStandard(List<LcaStandard> standards)
-        {
-            if (Standard != null)
-            {
-                Standard = standards.Find(s => s.Id == Standard.Id);
-            }
-        }
-
-        public override string ToString()
-        {
-            return $"Material Id: {Id}, Material Name: {Name}, Material Type: {MaterialType}";
-        }
+        public string GroupName => MaterialType; // for searching
     }
 
 }

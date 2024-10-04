@@ -10,7 +10,7 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
 
     internal interface IDriverGetSingle<T>
     {
-        public string QueryGetSingle { get; }
+        string QueryGetSingle { get; }
         public T GotItem { get; set; }
     }
 

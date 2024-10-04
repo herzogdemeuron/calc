@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Calc.Core.Objects.Mappings
 {
+    /// <summary>
+    /// A pair of parameter and value, one step of localization in a mapping item.
+    /// </summary>
     public class MappingPath
     {
         [JsonProperty("parameter")]

@@ -1,6 +1,5 @@
 ﻿using Autodesk.Revit.DB;
 using Calc.Core;
-using Calc.Core.Interfaces;
 using Calc.Core.Objects.Assemblies;
 using Speckle.Core.Api;
 using Speckle.Core.Api.GraphQL.Inputs;

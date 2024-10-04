@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Autodesk.Revit.UI;
-using Calc.Core.Interfaces;
+using Calc.Core;
 using System.Windows.Media.Imaging;
 
 namespace Calc.RevitConnector.Revit

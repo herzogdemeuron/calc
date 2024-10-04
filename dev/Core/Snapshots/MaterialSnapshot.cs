@@ -1,11 +1,10 @@
 ﻿using Calc.Core.Objects;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace Calc.Core.Snapshots
 {
     /// <summary>
-    /// material snapshots should be grouped and merged by material function, source uuid and the source
+    /// Snapshot for a material layer, which material properties and the calculated results.
     /// </summary>
     public class MaterialSnapshot
     {
@@ -32,22 +31,22 @@ namespace Calc.Core.Snapshots
 
     
         /// <summary>
-        /// when claiming the element, the element amount ratio means
+        /// When claiming the element, the element amount ratio means
         /// how many times assembly unit does this element have,
-        /// apply the ratio to the snapshot, calculated gwp and ge are multiplied
+        /// apply the ratio to the snapshot, calculated gwp and ge are multiplied.
         /// </summary>
-        public void ApplyAmountRatio(double amountRatio)
+        internal void ApplyAmountRatio(double amountRatio)
         {
             MaterialAmount = MaterialAmount * amountRatio;
-            if (MaterialGwp.HasValue) CalculatedGwp = MaterialGwp * MaterialAmount; // this should equal CalculatedGwp * amountRatio
+            if (MaterialGwp.HasValue) CalculatedGwp = MaterialGwp * MaterialAmount;
             if (MaterialGe.HasValue) CalculatedGe = MaterialGe * MaterialAmount;
         }
 
         /// <summary>
-        /// merge a material snapshot to this, adding up the amount and kpis
-        /// the equality should be already checked
+        /// Merges a material snapshot to this, adding up the amount and kpis.
+        /// The equality should be already checked.
         /// </summary>
-        public void Merge(MaterialSnapshot mSnapshot)
+        internal void Merge(MaterialSnapshot mSnapshot)
         {
             MaterialAmount += mSnapshot.MaterialAmount;
             CalculatedGwp += mSnapshot.CalculatedGwp;
@@ -55,16 +54,17 @@ namespace Calc.Core.Snapshots
         }
 
         /// <summary>
-        /// compares if the two material snapshots are the same by material function, source uuid and source
+        /// Compares if the two material snapshots should be equally categorized
+        /// with material function, source uuid and source.
         /// </summary>
-        public bool Equals(MaterialSnapshot mSnapshot)
+        internal bool Equals(MaterialSnapshot mSnapshot)
         {
             return MaterialSourceUuid == mSnapshot.MaterialSourceUuid &&
                    MaterialSource == mSnapshot.MaterialSource &&
                    MaterialFunction == mSnapshot.MaterialFunction;
         }
 
-        public MaterialSnapshot Copy()
+        internal MaterialSnapshot Copy()
             {
             return new MaterialSnapshot
             {

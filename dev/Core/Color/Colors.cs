@@ -7,7 +7,9 @@ namespace Calc.Core.Color
         public readonly int H = hue;
         public readonly int S = saturation;
         public readonly int L = lightness;
+        public static readonly HslColor Default = new HslColor(0, 0, 85);
     }
+
     public readonly struct RgbColor(byte red, byte green, byte blue)
     {
         public readonly byte R = red;

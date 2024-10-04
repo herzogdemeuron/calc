@@ -59,13 +59,13 @@ namespace Calc.MVVM.ViewModels
 
                 foreach (var snapshot in AssemblySnapshots)
                 {
-                    var cal = calculation.FirstOrDefault(c => c.Group == snapshot.ElementGroup);
+                    var cal = calculation.FirstOrDefault(c => c.Group == snapshot.QueryName);
                     if (cal == null)
                     {
                         calculation.Add(
                             new CategorizedResultModel
                             {
-                                Group = snapshot.ElementGroup,
+                                Group = snapshot.QueryName,
                                 Gwp = snapshot.TotalGwp.Value,
                                 Ge = snapshot.TotalGe.Value
                             });

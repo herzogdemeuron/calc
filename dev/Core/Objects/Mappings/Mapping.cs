@@ -8,6 +8,9 @@ using System.Text;
 
 namespace Calc.Core.Objects.Mappings
 {
+    /// <summary>
+    /// Stands for a set of assemblies that are assigned to a branch of a query via a path.
+    /// </summary>
     public class Mapping : IHasProject
     {
         [JsonProperty("id")]
@@ -26,7 +29,11 @@ namespace Calc.Core.Objects.Mappings
             // empty constructor for deserialization
         }
 
-        public Mapping(string mappingName, params QueryTemplate[] queryTemplates) // simplify to taking one template
+        /// <summary>
+        /// Constructor for extracting a mapping from the current performed query template.
+        /// Add broken query sets also to the mapping as well, if they are not ignored.
+        /// </summary>
+        public Mapping(string mappingName, params QueryTemplate[] queryTemplates)
         {
             MappingItems = new List<MappingItem>();
             foreach (var qt in queryTemplates)
@@ -44,11 +51,6 @@ namespace Calc.Core.Objects.Mappings
             Name = mappingName;
         }
 
-        public void AddMappingItems(List<MappingItem> mappingItems)
-        {
-            MappingItems.AddRange(mappingItems);
-        }
-
         /// <summary>
         /// Assigns the assemblies to the query based on the mapping.
         /// Automatically determines which mapping to use based on the query name.
@@ -59,11 +61,10 @@ namespace Calc.Core.Objects.Mappings
             var brokenQuery = new Query()
             {
                 Name = query.Name,
-                ParentQuery = query
+                Query = query
             };
 
             query.ResetAssemblies();
-            // find the mapping items that apply to this query
             var mappingItems = MappingItems.Where(mappingItem => mappingItem.QueryName == query.Name);
             if (!mappingItems.Any())
             {
@@ -81,13 +82,14 @@ namespace Calc.Core.Objects.Mappings
                     brokenQuery.AddBranchWithMappingItem(mappingItem, assemblies);
                 }
             }
-
             return brokenQuery.SubBranches.Count > 0 ? brokenQuery : null;
         }
 
+        /// <summary>
+        /// Assigns the assemblies to the branch based on the path.
+        /// </summary>
         private bool MapAssembliesToBranch(Branch branch, List<Assembly> assemblies, List<MappingPath> path)
         {
-
             if (branch.Path.SequenceEqual(path))
             {
                 branch.SetAssemblies(assemblies);

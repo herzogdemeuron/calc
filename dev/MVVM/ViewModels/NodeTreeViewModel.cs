@@ -1,6 +1,6 @@
 ﻿using Calc.Core;
 using Calc.Core.Color;
-using Calc.Core.Interfaces;
+using Calc.Core;
 using Calc.Core.Objects.GraphNodes;
 using Calc.MVVM.Helpers;
 using Calc.MVVM.Models;

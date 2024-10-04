@@ -5,7 +5,8 @@ using System.Linq;
 namespace Calc.Core.Snapshots
 {
     /// <summary>
-    /// one element type with each meta data and the material layers
+    /// The snapshot for one element type with each meta data and the material layers.
+    /// Refer to calc schema.
     /// </summary>
     public class ElementTypeSnapshot
     {
@@ -14,7 +15,7 @@ namespace Calc.Core.Snapshots
         [JsonProperty("element_ids")]
         public List<string> ElementIds { get; set; }
         [JsonProperty("element_amount")]
-        public double? ElementAmount { get; set; } // uses the assembly unit
+        public double? ElementAmount { get; set; } // in the assembly unit
         [JsonProperty("materials")]
         public List<MaterialSnapshot> MaterialSnapshots { get; set; } = new List<MaterialSnapshot>();
         [JsonIgnore]
@@ -27,21 +28,27 @@ namespace Calc.Core.Snapshots
             ElementTypeId = elementTypeId;            
         }
 
-        public void AssignMaterialSnapshot(MaterialSnapshot mSnapshot)
+        /// <summary>
+        /// Initializes the material snapshots with an item.
+        /// </summary>
+        internal void AssignMaterialSnapshot(MaterialSnapshot mSnapshot)
         {
             MaterialSnapshots = [mSnapshot];
         }
 
-        public bool Equals(ElementTypeSnapshot other)
+        /// <summary>
+        /// If two element type snapshots should be equally categirized.
+        /// </summary>
+        internal bool Equals(ElementTypeSnapshot other)
         {
             return ElementTypeId == other.ElementTypeId;
         }
 
         /// <summary>
-        /// merge another element type snapshot to this
-        /// the equality should be already ensured
+        /// Merges another element type snapshot to this,
+        /// the equality should be already ensured.
         /// </summary>
-        public void Merge(ElementTypeSnapshot other)
+        internal void Merge(ElementTypeSnapshot other)
         {
             if (other.ElementIds != null)
             {
@@ -68,7 +75,7 @@ namespace Calc.Core.Snapshots
             }
         }
 
-        public ElementTypeSnapshot Copy()
+        internal ElementTypeSnapshot Copy()
         {
             return new ElementTypeSnapshot(ElementTypeId)
             {

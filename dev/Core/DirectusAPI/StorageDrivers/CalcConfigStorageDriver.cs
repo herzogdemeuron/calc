@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace Calc.Core.DirectusAPI.StorageDrivers
 {
@@ -8,7 +7,7 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
     /// </summary>
     internal class CalcConfigStorageDriver : IDriverGetSingle<CalcConfig>
     {
-        public string QueryGetSingle { get; } = @"
+        public string QueryGetSingle => @"
             query GetCalcConfig {
                 calc_config {
                     speckle_server_url

@@ -1,7 +1,7 @@
 ﻿using Calc.MVVM.Helpers;
 using Calc.Core;
 using Calc.Core.Objects.GraphNodes;
-using Calc.Core.Interfaces;
+using Calc.Core;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
@@ -20,7 +20,7 @@ namespace Calc.MVVM.ViewModels
         }
 
         /// <summary>
-        /// Set the new selected query template to store, plant queries and update the black query set
+        /// Set the new selected query template to store, perform queries and update the black query set
         /// </summary>
         public async Task HandleQueryTemplateSelectionChanged(QueryTemplate qryTemplate)
         {
@@ -28,7 +28,7 @@ namespace Calc.MVVM.ViewModels
             try
             {
                 store.QueryTemplateSelected = qryTemplate;
-                store.BlackQuerySet = await QueryHelper.PlantQueriesAsync(qryTemplate, elementCreator, store.CustomParamSettingsAll);
+                store.BlackQuerySet = await QueryHelper.PerformQueriesAsync(qryTemplate, elementCreator, store.CustomParamSettingsAll);
             }
             catch (System.Exception e)
             {
@@ -39,5 +39,3 @@ namespace Calc.MVVM.ViewModels
 
     }
 }
-
-

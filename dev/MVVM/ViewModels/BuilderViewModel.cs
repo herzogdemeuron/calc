@@ -1,5 +1,5 @@
 ﻿using Calc.Core;
-using Calc.Core.Interfaces;
+using Calc.Core;
 using Calc.Core.Objects;
 using Calc.MVVM.Helpers;
 using System;

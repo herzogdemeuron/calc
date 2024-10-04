@@ -6,10 +6,14 @@ using System.Linq;
 
 namespace Calc.Core.Snapshots
 {
+    /// <summary>
+    /// The snapshot for an assembly, serialized to directus.
+    /// Refer to calc schema.
+    /// </summary>
     public class AssemblySnapshot
     {
-        [JsonProperty("element_group")]
-        public string ElementGroup { get; set; } // query
+        [JsonProperty("query_name")]
+        public string QueryName { get; set; }
         [JsonProperty("assembly_name")]
         public string AssemblyName { get; set; }
         [JsonProperty("assembly_code")]
@@ -26,12 +30,12 @@ namespace Calc.Core.Snapshots
         public double? TotalGe => ElementTypes.Sum(m => m.TotalGe);
 
         /// <summary>
-        /// claim the snapshot for one element, modify the the element amount and the material snapshots
-        /// element ids should be later merged
+        /// Claims the snapshot for one element, modifies the the element amount and the material snapshots.
+        /// Element ids should be later merged.
         /// </summary>
-        public void ClaimElement(CalcElement element, string elementGroup)
+        internal void ClaimElement(CalcElement element, string elementGroup)
         {
-            ElementGroup = elementGroup;
+            QueryName = elementGroup;
             var snapshot = ElementTypes.FirstOrDefault();
             if (snapshot == null) return;
 
@@ -40,32 +44,36 @@ namespace Calc.Core.Snapshots
             snapshot.ElementIds = new List<string> { element.Id };
             foreach (var material in snapshot.MaterialSnapshots)
             {
-                material.ApplyAmountRatio(eAmount); // the element amount ratio equals element amount
+                // the element amount ratio equals element amount
+                material.ApplyAmountRatio(eAmount); 
             }
         }
 
         /// <summary>
-        /// assign a material snapshot to a new element type snapshot
+        /// Assigns a material snapshot to a new element type snapshot
         /// </summary>
-        public void AssignMaterialSnapshot(MaterialSnapshot mSnapshot, string elementTypeId)
+        internal void AssignMaterialSnapshot(MaterialSnapshot mSnapshot, string elementTypeId)
         {
             var etSnapshot = new ElementTypeSnapshot(elementTypeId);
             etSnapshot.AssignMaterialSnapshot(mSnapshot);
             ElementTypes.Add(etSnapshot);
         }
 
-        public bool Equals(AssemblySnapshot other)
+        /// <summary>
+        /// If two assembly snapshots should be equally categirized.
+        /// </summary>
+        internal bool Equals(AssemblySnapshot other)
         {
-            return ElementGroup == other.ElementGroup &&
+            return QueryName == other.QueryName &&
                    AssemblyCode == other.AssemblyCode &&
                    AssemblyGroup == other.AssemblyGroup;
         }
 
         /// <summary>
-        /// merge another assembly snapshot to this
-        /// the equality should be already ensured
+        /// Merges another assembly snapshot to this,
+        /// the equality should be already ensured.
         /// </summary>
-        public void Merge(AssemblySnapshot other)
+        internal void Merge(AssemblySnapshot other)
         {
             foreach (var etSnapshot in other.ElementTypes)
             {
@@ -82,11 +90,11 @@ namespace Calc.Core.Snapshots
             }
         }
                 
-        public AssemblySnapshot Copy()
+        internal AssemblySnapshot Copy()
         {
             return new AssemblySnapshot
             {
-                ElementGroup = ElementGroup,
+                QueryName = QueryName,
                 AssemblyName = AssemblyName,
                 AssemblyCode = AssemblyCode,
                 AssemblyGroup = AssemblyGroup,

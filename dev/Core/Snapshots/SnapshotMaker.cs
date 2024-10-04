@@ -8,22 +8,22 @@ using System.Linq;
 namespace Calc.Core.Snapshots
 {
     /// <summary>
-    /// make the flat snapshots for a branch (each element id, with element amount) or for a new assembly (each element type id)
+    /// Makes the flat snapshots for a branch (each element id, with element amount) or for a new assembly (each element type id)
     /// only merge the snapshots before sending to directus
     /// </summary>
     public class SnapshotMaker
     {
         /// <summary>
-        /// generate the snapshots for a **dead end** branch
+        /// Generates the snapshots for a **dead end** branch
         /// </summary>
-        public static void Snap(Branch branch) //move this to branch?
+        public static void Snap(Branch branch) // todo: move this to branch?
         {
             var rawSnapshots = new List<AssemblySnapshot>();
             foreach (var element in branch.Elements)
             
                 foreach (var assembly in branch.Assemblies)
                 {               
-                    var s = CreateAssemblySnapshots(assembly, element, branch.ParentQuery.Name);
+                    var s = CreateAssemblySnapshots(assembly, element, branch.Query.Name);
                     rawSnapshots.AddRange(s);                    
                 }            
 
@@ -31,18 +31,18 @@ namespace Calc.Core.Snapshots
         }
 
         /// <summary>
-        /// generate the snapshots for an assembly, 
-        /// the element type id should already be claimed in GetAssemblySnapshot
+        /// Generates the snapshots for an assembly, 
+        /// the element type id should already be claimed in GetAssemblySnapshot.
         /// </summary>
-        public static void Snap(Assembly assembly) //move this to assembly?
+        public static void Snap(Assembly assembly) // todo: move this to assembly?
         {
             var rawSnapshots = CreateAssemblySnapshots(assembly);
             assembly.AssemblySnapshot = MergeAssemblySnapshots(rawSnapshots).FirstOrDefault();
         }
 
         /// <summary>
-        /// make the raw snapshots (raw means to be merged) for one assembly (of unit amount),
-        /// for a branch, also claim the element and element group to the snapshot
+        /// Make the raw snapshots (raw means to be merged) for one assembly (of unit amount),
+        /// for a branch, also claim the element and element group to the snapshot.
         /// </summary>
         private static List<AssemblySnapshot> CreateAssemblySnapshots(Assembly assembly, CalcElement? element=null, string elementGroup=null)
         {
@@ -62,7 +62,9 @@ namespace Calc.Core.Snapshots
         }
 
         /// <summary>
-        /// create an assembly snapshot from a single calculation component (represents one material layer) in an assembly
+        /// Creates an assembly snapshot from a single calculation component (represents one material layer) in an assembly.
+        /// In calc builder, the element type id exists in the calculation component,
+        /// in calc project, assembly are generated from storage driver on the fly, thus element type id should be null.
         /// </summary>
         private static AssemblySnapshot CreateAssemblySnapshot(CalculationComponent caComponent, Assembly assembly)
         {
@@ -88,15 +90,12 @@ namespace Calc.Core.Snapshots
                 AssemblyGroup = assembly.Group.Name,
                 AssemblyUnit = assembly.AssemblyUnit,
             };
-            // in calc builder, the element type id exists in the calculation component
-            // in calc project, assembly generated from storage driver, element type id should be null
-            aSnapshot.AssignMaterialSnapshot(materialSnapshot, caComponent.ElementTypeId);        
-
+            aSnapshot.AssignMaterialSnapshot(materialSnapshot, caComponent.ElementTypeId);
             return aSnapshot;
         }
 
         /// <summary>
-        /// create a merged list of snapshots from the raw  list
+        /// Creates a merged list of snapshots from the raw list.
         /// </summary>
         public static List<AssemblySnapshot> MergeAssemblySnapshots(List<AssemblySnapshot> assemblySnapshots)
         {

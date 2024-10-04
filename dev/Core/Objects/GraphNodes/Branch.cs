@@ -15,7 +15,8 @@ namespace Calc.Core.Objects.GraphNodes
 {
     /// <summary>
     /// Used by calc project.
-    /// Represents a branch in the query view.
+    /// Represents a branch in the query result.
+    /// The Query and QueryTemplate are deverived from the branch.
     /// </summary>
     public class Branch : IGraphNode, INotifyPropertyChanged, IColorizable
     {
@@ -49,13 +50,13 @@ namespace Calc.Core.Objects.GraphNodes
         public string Value { get; set; }
         public List<MappingPath> Path { get => GeneratePath(); }
         public string Method { get; set; }
-        public int BranchLevel = 0;
+        private int BranchLevel = 0;
         public List<Branch> SubBranches { get; set; } = new();
         public Branch ParentBranch;
-        public Query ParentQuery { get; set; }
+        public Query Query { get; set; }
         public QueryTemplate QueryTemplate { get; set; }
         private ObservableCollection<Assembly> _assemblies = new();
-        public ObservableCollection<Assembly> Assemblies  // change to main and sub assembly
+        public ObservableCollection<Assembly> Assemblies  // todo: change to main and sub assembly
         {
             // set _assemblies to empty list if null to avoid null reference exceptions
             get => _assemblies;
@@ -90,18 +91,7 @@ namespace Calc.Core.Objects.GraphNodes
             }
         }
 
-        public bool HasCalculationErrors => (ParameterErrors != null && ParameterErrors.Count > 0);
-        public bool IsFullyCalculated // deprecatd
-        {
-            get
-            {
-                if (SubBranches.Count > 0)
-                {
-                    return SubBranches.All(sb => sb.IsFullyCalculated);
-                }
-                return HasCalculationResults || ElementIds.Count == 0;
-            }
-        }
+        public bool HasCalculationErrors => (ParameterErrors != null && ParameterErrors.Count > 0); // used in xaml
 
         private List<ParameterError> _parameterErrors = new();
         public List<ParameterError> ParameterErrors
@@ -121,8 +111,6 @@ namespace Calc.Core.Objects.GraphNodes
                 OnPropertyChanged(nameof(ParameterErrors));
             }
         }
-
-        public bool HasCalculationResults => (AssemblySnapshots != null && AssemblySnapshots.Count > 0);
         private List<AssemblySnapshot> assemblySnapshots = new();
         public List<AssemblySnapshot> AssemblySnapshots
         {
@@ -141,13 +129,12 @@ namespace Calc.Core.Objects.GraphNodes
             }
         }
 
-
         public Branch()
         {
             Parameter = "No Parameter";
             Method = "No Method";
             Value = "No Value";
-            HslColor = new HslColor(0, 0, 85); // default color
+            HslColor = HslColor.Default;
         }
 
         public Branch(List<CalcElement> elements) : this()
@@ -190,18 +177,15 @@ namespace Calc.Core.Objects.GraphNodes
             }
         }
 
-
-        public void CreateBranches(List<string> branchConfig)
+        /// <summary>
+        /// Creates all subbranches from the branch config
+        /// </summary>
+        internal void CreateBranches(List<string> branchConfig)
         {
-            if (branchConfig.Count <= BranchLevel)
-            {
-                return;
-            }
-
+            if (branchConfig.Count <= BranchLevel) return;
             var currentParameter = branchConfig[BranchLevel];
             var groupedElements = GroupByParameterValue(currentParameter);
             var methodName = nameof(GroupByParameterValue);
-
             foreach (KeyValuePair<object, List<CalcElement>> group in groupedElements)
             {
                 var branch = new Branch(group.Value)
@@ -212,17 +196,11 @@ namespace Calc.Core.Objects.GraphNodes
                     ParentBranch = this,
                     // set the parent query and query template of the subbranch
                     QueryTemplate = this.QueryTemplate,
-                    ParentQuery = this.BranchLevel == 0 ? this as Query : this.ParentQuery,
+                    Query = this.BranchLevel == 0 ? this as Query : this.Query,
                 };
                 SubBranches.Add(branch);
             }
-
-            if (SubBranches.Count == 0)
-            {
-                return;
-            }
-
-
+            if (SubBranches.Count == 0) return;
             for (int index = 0; index < SubBranches.Count; index++)
             {
                 var subBranch = SubBranches[index];
@@ -232,9 +210,9 @@ namespace Calc.Core.Objects.GraphNodes
         }
 
         /// <summary>
-        /// set the assembly of the current branch. 
-        /// Also set the assembly of all subbranches to the same value if they have no assembly assigned yet or the assembly is the same.
-        /// calculate the branch with the new assembly if it is a dead end branch.
+        /// Sets the assembly of the current branch. 
+        /// Also sets the assembly of all subbranches to the same value if they have no assembly assigned yet or the assembly is the same.
+        /// If it is a dead end branch, calculate the branch with the new assembly.
         /// </summary>
         public void SetAssemblies(List<Assembly> assemblies)
         {
@@ -242,7 +220,6 @@ namespace Calc.Core.Objects.GraphNodes
             var newIdentifier = GetColorIdentifier(assemblies);
             var currentIdentifier = ColorIdentifier;
             if (currentIdentifier == newIdentifier) return;
-
             Assemblies = new(assemblies);
 
             OnPropertyChanged(nameof(Assemblies));
@@ -255,7 +232,7 @@ namespace Calc.Core.Objects.GraphNodes
             }
         }
 
-        public void ResetAssemblies()
+        internal void ResetAssemblies()
         {
             Assemblies = new();
             if (SubBranches.Count == 0)
@@ -271,7 +248,6 @@ namespace Calc.Core.Objects.GraphNodes
         private List<MappingPath> GeneratePath()
         {
             var path = new List<MappingPath>();
-
             Branch currentBranch = this;
             while (currentBranch.BranchLevel > 0)
             {
@@ -283,7 +259,6 @@ namespace Calc.Core.Objects.GraphNodes
 
                 currentBranch = currentBranch.ParentBranch;
             }
-
             return path;
         }
 
@@ -300,35 +275,10 @@ namespace Calc.Core.Objects.GraphNodes
         }
 
         /// <summary>
-        /// calculates the results for one branch (should be the end branch) with assembly assigned.
+        /// Adds a new branch to the current branch using the parameter and value.
         /// </summary>
-        public Branch Copy()
-        {
-            var branch = new Branch
-            {
-                Parameter = Parameter,
-                Method = Method,
-                Value = Value,
-                BranchLevel = BranchLevel,
-                Assemblies = Assemblies,
-                HslColor = HslColor,
-                Elements = Elements,
-                ParentBranch = ParentBranch,
-                ParentQuery = ParentQuery,
-                QueryTemplate = QueryTemplate
-            };
-            if (SubBranches != null)
-            {
-                branch.SubBranches = SubBranches.Select(sb => sb.Copy()).ToList();
-            }
-            return branch;
-        }
-
-        /// <summary>
-        /// add a new branch to the current branch using the parameter and value.
-        /// returns the new branch.
-        /// </summary>
-        public Branch AddBranch(string parameter, string value, List<Assembly> assemblies)
+        /// <returns>The new branch</returns>
+        internal Branch AddBranch(string parameter, string value, List<Assembly> assemblies)
         {
             //check if branch already exists
             var existingBranch = SubBranches.FirstOrDefault(sb => sb.Parameter == parameter && sb.Value == value);
@@ -343,7 +293,7 @@ namespace Calc.Core.Objects.GraphNodes
                 Assemblies = new ObservableCollection<Assembly>(assemblies),
                 ParentBranch = this,
                 BranchLevel = this.BranchLevel + 1,
-                ParentQuery = ParentQuery,
+                Query = Query,
                 QueryTemplate = QueryTemplate
             };
             SubBranches.Add(newBranch);
@@ -352,11 +302,8 @@ namespace Calc.Core.Objects.GraphNodes
 
         /// <summary>
         /// This method returns a flat list of all subbranches. The current branch is included.
-        /// Preferrably use this method on the root branch instance aka query.Trunk.
-        /// The output is useful when you want to iterate over all branches
-        /// but don't care about the query structure anymore.
         /// </summary>
-        public List<Branch> Flatten()
+        internal List<Branch> Flatten()
         {
             var branches = new List<Branch> { this };
             if (SubBranches.Count > 0)
@@ -369,11 +316,13 @@ namespace Calc.Core.Objects.GraphNodes
             return branches;
         }
 
+        /// <summary>
+        /// Groups calc elements with parameter values they have.
+        /// </summary>
         private Dictionary<object, List<CalcElement>> GroupByParameterValue(string parameter)
         {
             var groupedElements = new Dictionary<object, List<CalcElement>>();
             var nullKey = new object(); // Sentinel value for null
-
             foreach (var element in Elements)
             {
                 if (element.Fields.TryGetValue(parameter, out object value))
@@ -393,6 +342,9 @@ namespace Calc.Core.Objects.GraphNodes
             return groupedElements;
         }
 
+        /// <summary>
+        /// The color identifier for current assembly combination.
+        /// </summary>
         private string GetColorIdentifier(List<Assembly> assemblies)
         {
             if (assemblies == null)
