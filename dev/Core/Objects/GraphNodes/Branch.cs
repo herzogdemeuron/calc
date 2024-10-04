@@ -1,11 +1,10 @@
 ﻿using Calc.Core.Color;
 using Calc.Core.Helpers;
-using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Assemblies;
+using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Elements;
 using Calc.Core.Objects.Mappings;
 using Calc.Core.Snapshots;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,11 +13,13 @@ using System.Linq;
 
 namespace Calc.Core.Objects.GraphNodes
 {
+    /// <summary>
+    /// Used by calc project.
+    /// Represents a branch in the tree view.
+    /// </summary>
     public class Branch : IGraphNode, INotifyPropertyChanged, IColorizable
     {
-        [JsonIgnore]
         public List<CalcElement> Elements { get; set; } = new();
-        [JsonIgnore]
         public double TotalLength
         {
             get => Math.Round(
@@ -27,7 +28,6 @@ namespace Calc.Core.Objects.GraphNodes
                     ),
                 3); 
         }
-        [JsonIgnore]
         public double TotalArea 
         { 
             get => Math.Round(
@@ -36,7 +36,6 @@ namespace Calc.Core.Objects.GraphNodes
                     ),
                 3); 
         }
-        [JsonIgnore]
         public double TotalVolume 
         { 
             get => Math.Round(
@@ -45,30 +44,17 @@ namespace Calc.Core.Objects.GraphNodes
                     ),
                 3); 
         }
-
-        [JsonIgnore]
         public List<string> ElementIds => Elements.Select(e => e.Id).ToList();
-        [JsonIgnore]
         public string Parameter { get; set; }
-        [JsonIgnore]
         public string Value { get; set; }
-        [JsonIgnore]
         public List<MappingPath> Path { get => GeneratePath(); }
-        [JsonIgnore]
         public string Method { get; set; }
-        [JsonIgnore]
         public int BranchLevel = 0;
-        [JsonIgnore]
         public List<Branch> SubBranches { get; set; } = new();
-        [JsonIgnore]
         public Branch ParentBranch;
-        [JsonIgnore]
         public Tree ParentTree { get; set; }
-        [JsonIgnore]
         public Forest ParentForest { get; set; }
-        [JsonIgnore]
         private ObservableCollection<Assembly> _assemblies = new();
-        [JsonIgnore]
         public ObservableCollection<Assembly> Assemblies  // change to main and sub assembly
         {
             // set _assemblies to empty list if null to avoid null reference exceptions
@@ -84,7 +70,7 @@ namespace Calc.Core.Objects.GraphNodes
                 SnapshotMaker.Snap(this); // update the assembly snapshots
             }
         }
-        [JsonIgnore]
+
         public string ColorIdentifier
         {
             get
@@ -92,8 +78,8 @@ namespace Calc.Core.Objects.GraphNodes
                 return GetColorIdentifier(Assemblies.ToList());
             }
         }
+
         private HslColor _hslColor = new(0, 0, 85);
-        [JsonIgnore]
         public HslColor HslColor
         {
             get { return _hslColor; }
@@ -104,10 +90,7 @@ namespace Calc.Core.Objects.GraphNodes
             }
         }
 
-        [JsonIgnore]
         public bool HasCalculationErrors => (ParameterErrors != null && ParameterErrors.Count > 0);
-
-        [JsonIgnore]
         public bool IsFullyCalculated // deprecatd
         {
             get
@@ -121,7 +104,6 @@ namespace Calc.Core.Objects.GraphNodes
         }
 
         private List<ParameterError> _parameterErrors = new();
-        [JsonIgnore]
         public List<ParameterError> ParameterErrors
         {
             get
@@ -140,10 +122,8 @@ namespace Calc.Core.Objects.GraphNodes
             }
         }
 
-        [JsonIgnore]
         public bool HasCalculationResults => (AssemblySnapshots != null && AssemblySnapshots.Count > 0);
         private List<AssemblySnapshot> assemblySnapshots = new();
-        [JsonIgnore]
         public List<AssemblySnapshot> AssemblySnapshots
         {
             get

@@ -21,9 +21,6 @@ namespace Calc.MVVM.Views
             InitializeComponent();
             mvm.DeselectTreeView += DeselectTreeView;
             mvm.DeselectBrokenTreeView += DeselectBrokenNodesTreeView;
-            //MediatorToView.Register("ViewDeselectTreeView", _=>DeselectTreeView());
-            //MediatorToView.Register("ViewDeselectBrokenNodesTreeView", _ => DeselectBrokenNodesTreeView());
-            //MediatorToView.Register("ViewSelectBrokenNodesTreeView", node => SelectNodeTreeView((NodeModel)node));
         }
 
         private void DeselectTreeView(object sender, EventArgs e)
@@ -214,6 +211,7 @@ namespace Calc.MVVM.Views
                 case "co2":
                     break;
             }
+            // DeselectBrokenNodesTreeView(sender, e);
         }
 
         private void UpdateRevitClicked(object sender, RoutedEventArgs e)
