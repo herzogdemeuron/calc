@@ -57,7 +57,7 @@
                        Grid.Column="0"
                        Grid.Row="1">
 
-                <Label Content="Element Grouping"
+                <Label Content="Query Results"
                        FontSize="18"
                        Margin="10,0,0,10"
                        Padding="0"/>
