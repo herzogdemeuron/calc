@@ -12,7 +12,9 @@ using System.Windows.Threading;
 
 namespace Calc.MVVM.ViewModels
 {
-
+    /// <summary>
+    /// Handles login logic.
+    /// </summary>
     public class LoginViewModel : INotifyPropertyChanged
     {
         public bool MainOrBuilder { get; }
@@ -23,7 +25,6 @@ namespace Calc.MVVM.ViewModels
         private readonly CancellationTokenSource cTokenSource = new CancellationTokenSource();
         public bool FullyPrepared => DirectusInstance.Authenticated && CalcStore.AllDataLoaded;
         private bool authenticated = false;
-
         private bool canOK = true;
         public bool CanOK
         {
@@ -34,7 +35,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(CanOK));
             }
         }
-
         private Visibility loginVisibility = Visibility.Visible;
         public Visibility LoginVisibility
         {
@@ -45,7 +45,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(LoginVisibility));
             }
         }
-
         private Visibility loadVisibility = Visibility.Collapsed;
         public Visibility LoadVisibility
         {
@@ -56,7 +55,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(LoadVisibility));
             }
         }
-
         private Visibility selectionVisibility = Visibility.Collapsed;
         public Visibility SelectionVisibility
         {
@@ -67,7 +65,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(SelectionVisibility));
             }
         }
-
         private string message;
         public string Message
         {
@@ -78,7 +75,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(Message));
             }
         }
-
         private string url;
         public string Url
         {
@@ -89,7 +85,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(Url));
             }
         }
-
         private string email;
         public string Email
         {
@@ -100,7 +95,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(Email));
             }
         }
-
         private int progressValue;
         public int ProgressValue
         {
@@ -111,7 +105,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(ProgressValue));
             }
         }
-
         private List<IShowName> selectionList;
         public List<IShowName> SelectionList
         {
@@ -122,7 +115,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(SelectionList));
             }
         }
-
         private IShowName selected;
         public IShowName Selected
         {
@@ -133,7 +125,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(Selected));
             }
         }
-
         private string selectionText;
         public string SelectionText
         {
@@ -144,7 +135,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(SelectionText));
             }
         }
-
 
         public LoginViewModel(bool mainOrBuilder, string title)
         {
@@ -163,9 +153,7 @@ namespace Calc.MVVM.ViewModels
             {
                 throw new Exception("Authentication failed.");
             }
-
             DateTime timeNow = DateTime.Now;
-
             Properties.Settings.Default.Url = Url;
             Properties.Settings.Default.Email = Email;
             Properties.Settings.Default.Password = Password;
@@ -176,7 +164,6 @@ namespace Calc.MVVM.ViewModels
         private async Task LoadData()
         {
             CalcStore = new CalcStore(DirectusInstance);
-
             CalcStore.ProgressChanged += (s, p) =>
             {
                 Dispatcher.CurrentDispatcher.Invoke(() =>
@@ -184,7 +171,6 @@ namespace Calc.MVVM.ViewModels
                     ProgressValue = p;
                 });
             };
-
             if (MainOrBuilder)
             {
                 await CalcStore.LoadCalcProjectData(cTokenSource.Token);
@@ -195,15 +181,16 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        public async Task<bool> HandleAutoLogin()
+        /// <summary>
+        /// If the current time is within 1 hour of the last time, auto login (only for the same session).
+        /// </summary>
+        internal async Task<bool> HandleAutoLogin()
         {
             DateTime lastTime = Properties.Settings.Default.LastTime;
-            // if the current time is within 1 hour of the last time, auto login (only for the same session)
             if (DateTime.Now.Subtract(lastTime).TotalHours < 1)
             {
                 return await HandleOK();
-            }
-            
+            }            
             else
             {
                 return false;
@@ -211,23 +198,19 @@ namespace Calc.MVVM.ViewModels
         }
 
         /// <summary>
-        /// handles the ok button click in 2 stages: 1. auth and load data, 2. select project(for main login)
-        /// returns true if the login is successful
+        /// Handles the ok button click in 2 stages: 1. auth and load data, 2. select project(for main login)
         /// </summary>
-        /// <returns></returns>
-        public async Task<bool> HandleOK()
+        /// <returns>True if the login is successful.</returns>
+        internal async Task<bool> HandleOK()
         {
-
             // auth firstly
             if (!authenticated)
             {
                 CanOK = false;
-
                 try
                 {
                     await Authenticate();
                     authenticated = true;
-
                     LoadVisibility = Visibility.Visible;
                     LoginVisibility = Visibility.Collapsed;
                     await LoadData();
@@ -240,10 +223,8 @@ namespace Calc.MVVM.ViewModels
                     LoginVisibility = Visibility.Visible;
                     return false;
                 }
-
                 // for builder directly return true
                 if (!MainOrBuilder) return true;
-
                 // for main prepare for project selection
                 CanOK = true;
                 SelectionList = CalcStore.ProjectsAll.OfType<IShowName>().ToList();
@@ -252,7 +233,6 @@ namespace Calc.MVVM.ViewModels
                 LoginVisibility = Visibility.Collapsed;
                 return false;
             }
-
             // select project for main login
             if (MainOrBuilder)
             {
@@ -268,12 +248,10 @@ namespace Calc.MVVM.ViewModels
                     return false;
                 }
             }
-
             return false;
-
         }
 
-        public void CancelLoad()
+        internal void CancelLoad()
         {
             cTokenSource.Cancel();
         }

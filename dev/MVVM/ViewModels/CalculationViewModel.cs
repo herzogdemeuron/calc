@@ -10,6 +10,10 @@ using System.Linq;
 
 namespace Calc.MVVM.ViewModels
 {
+    /// <summary>
+    /// Used by the calc project.
+    /// Stores Assembly Snapshots, and provides preview of the calculation.
+    /// </summary>
     internal class CalculationViewModel : INotifyPropertyChanged
     {
         private readonly NodeTreeViewModel NodeTreeVM;
@@ -28,9 +32,6 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public List<AssemblySnapshot> AssemblySnapshots
         {
             get
@@ -47,16 +48,15 @@ namespace Calc.MVVM.ViewModels
         public bool HasResults => (AssemblySnapshots != null && AssemblySnapshots.Count > 0);
 
         /// <summary>
-        /// calculation for each element group
+        /// Calculation preview on ui.
         /// </summary>
         public List<CategorizedResultModel> CategorizedResults
         {
             get
             {
+                // sum up all results
                 var calculation = new List<CategorizedResultModel>();
-                if (AssemblySnapshots == null)
-                    return null;
-
+                if (AssemblySnapshots == null) return null;
                 foreach (var snapshot in AssemblySnapshots)
                 {
                     var cal = calculation.FirstOrDefault(c => c.Group == snapshot.QueryName);
@@ -76,8 +76,7 @@ namespace Calc.MVVM.ViewModels
                         cal.Ge += snapshot.TotalGe.Value;
                     }
                 }
-
-                // post process: divide all values by the project area if it is not zero
+                // divide all values by the project area if it is not zero
                 foreach (var cal in calculation)
                 {
                     if (ProjectArea.HasValue && ProjectArea.Value != 0)
@@ -91,11 +90,9 @@ namespace Calc.MVVM.ViewModels
                         cal.Ge = 0;
                     }
                 }
-
                 return calculation;
             }
         }
-
         public bool HasErrors => (Errors != null && Errors.Count > 0);
         public bool CanSaveResults => (HasResults && !HasErrors);
         public double ProjectGwp => CategorizedResults?.Sum(c => c.Gwp) ?? 0;
@@ -121,7 +118,6 @@ namespace Calc.MVVM.ViewModels
                         return null;
                     return branches.SelectMany(b => b.ParameterErrors).ToList();
                 }
-
             }
         }
 
@@ -131,7 +127,7 @@ namespace Calc.MVVM.ViewModels
         }
 
         /// <summary>
-        /// refresh the current amounts and calculation
+        /// Refreshes the current calculation and errors.
         /// </summary>
         public void RefreshCalculation()
         {
@@ -146,7 +142,6 @@ namespace Calc.MVVM.ViewModels
             OnPropertyChanged(nameof(ProjectGe));
             OnPropertyChanged(nameof(ProjectArea));
         }
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)

@@ -1,5 +1,5 @@
-﻿using Calc.MVVM.Helpers;
-using Calc.Core;
+﻿using Calc.Core;
+using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Mappings;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace Calc.MVVM.ViewModels
     {
         private readonly CalcStore store;
         private readonly VisibilityViewModel visibilityVM;
-
+        public QueryTemplate BrokenQuerySet { get; set; }
 
         private string newName;
         public string NewName
@@ -43,6 +43,32 @@ namespace Calc.MVVM.ViewModels
             store = calcStore;
             visibilityVM = vvm;
         }
+
+        public async Task HandleUpdateMapping()
+        {
+            bool? feedback;
+            string error = "";
+            try
+            {
+                visibilityVM.ShowWaitingOverlay("Updating mapping...");
+                feedback = await store.UpdateSelectedMapping(BrokenQuerySet);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                feedback = null;
+                error = ex.Message;
+            }
+            visibilityVM.HideAllOverlays();
+            visibilityVM.ShowMessageOverlay(
+                        feedback,
+                        error,
+                        "Updated mapping successfully.",
+                        "Error occured while saving, please try again."
+                        );
+
+        }
+
         public void HandleNewMappingClicked()
         {
             CreateMappingsList();

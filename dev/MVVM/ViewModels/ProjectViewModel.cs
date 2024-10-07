@@ -1,5 +1,4 @@
 ﻿using Calc.Core;
-using Calc.Core;
 using Calc.Core.Objects.GraphNodes;
 using Calc.Core.Objects.Mappings;
 using Calc.MVVM.Models;
@@ -9,22 +8,25 @@ using System.Threading.Tasks;
 
 namespace Calc.MVVM.ViewModels
 {
-    public class MainViewModel: INotifyPropertyChanged
+    /// <summary>
+    /// The main view model for calc project.
+    /// </summary>
+    public class ProjectViewModel: INotifyPropertyChanged
     {
         public CalcStore Store { get; set; }
         public QueryTemplateViewModel QueryTemplateVM { get; set; }
         public MappingViewModel MappingVM { get; set; }
         public MappingErrorViewModel MappingErrorVM { get; set; }
-        public NodeTreeViewModel NodeTreeVM { get; set; }
+        internal NodeTreeViewModel NodeTreeVM { get; set; }
         public SavingViewModel SavingVM { get; set; }
         public NewMappingViewModel NewMappingVM { get; set; }
         public VisibilityViewModel VisibilityVM { get; set; }
-        public CalculationViewModel CalculationVM { get; set; }
-        public AssemblySelectionViewModel AssemblySelectionVM { get; set; }
+        internal CalculationViewModel CalculationVM { get; set; }
+        internal AssemblySelectionViewModel AssemblySelectionVM { get; set; }
         public event EventHandler DeselectTreeView;
         public event EventHandler DeselectBrokenQueryView;
 
-        public MainViewModel(CalcStore store, IElementCreator elementCreator, IVisualizer visualizer)
+        public ProjectViewModel(CalcStore store, IElementCreator elementCreator, IVisualizer visualizer)
         {
             Store = store;
             VisibilityVM = new VisibilityViewModel();
@@ -39,7 +41,7 @@ namespace Calc.MVVM.ViewModels
         }
 
         /// <summary>
-        /// actions be taken when the mapping setting or the node source is changed
+        /// Actions be taken when the mapping setting or the node source is changed.
         /// </summary>
         private void MappingChangedActions()
         {
@@ -48,6 +50,9 @@ namespace Calc.MVVM.ViewModels
             AssemblySelectionChangedActions(true);
         }
 
+        /// <summary>
+        /// Actions be taken when the assembly selection is changed.
+        /// </summary>
         private void AssemblySelectionChangedActions(bool all = false)
         {
             // refresh the assembly section ui
@@ -57,12 +62,12 @@ namespace Calc.MVVM.ViewModels
             CalculationVM.RefreshCalculation();
         }
 
-        public void HandleWindowClosing()
+        internal void HandleWindowClosing()
         {
             NodeTreeVM.DeselectNodes();
         }
 
-        public async void HandleQueryTemplateSelectionChanged(QueryTemplate qryTemplate, bool forceUpdate = false)
+        internal async void HandleQueryTemplateSelectionChanged(QueryTemplate qryTemplate, bool forceUpdate = false)
         {
             if (qryTemplate == null) return;
             if(qryTemplate == Store.QueryTemplateSelected && !forceUpdate) return;
@@ -94,28 +99,27 @@ namespace Calc.MVVM.ViewModels
             MappingErrorVM.HandleMappingErrorClicked();
         }
 
-        public void HandleBrokenNodeSelectionChanged(NodeModel selectedNode)
+        internal void HandleBrokenNodeSelectionChanged(NodeModel selectedNode)
         {
             MappingErrorVM.HandleBrokenNodeSelectionChanged(selectedNode);
         }
 
-        public void HandleIgnoreSelectedBrokenNode(NodeModel selectedNode)
+        internal void HandleIgnoreSelectedBrokenNode(NodeModel selectedNode)
         {
             MappingErrorVM.RemoveBrokenNode(selectedNode);
         }
 
-        public void HandleIgnoreAllBrokenNodes()
+        internal void HandleIgnoreAllBrokenNodes()
         {
             MappingErrorVM.RemoveAllBrokenNodes();
         }
 
-        public void HandleErrorMappingSideClicked()
+        internal void HandleErrorMappingSideClicked()
         {
-            //MappingErrorVM.ResetAssemblies();
             DeselectBrokenQueryView?.Invoke(this, EventArgs.Empty);
         }
 
-        public async Task HandleUpdateMapping()
+        internal async Task HandleUpdateMapping()
         {
             await MappingVM.HandleUpdateMapping();
         }
@@ -125,14 +129,14 @@ namespace Calc.MVVM.ViewModels
             NewMappingVM.HandleNewMappingCanceled();
         }
 
-        public void HandleNodeItemSelectionChanged(NodeModel selectedNode)
+        internal void HandleNodeItemSelectionChanged(NodeModel selectedNode)
         {
             NodeTreeVM.HandleNodeItemSelectionChanged(selectedNode);
             selectedNode.AssemblyModel.SetFirstAssemblyToActive();
             CalculationVM.RefreshCalculation();
         }
 
-        public bool HandleSelectingAssembly(bool setMain)
+        internal bool HandleSelectingAssembly(bool setMain)
         {
             if (NodeTreeVM.SelectedNodeItem == null) return false;
             var assemblyItem = NodeTreeVM.SelectedNodeItem.AssemblyModel;
@@ -141,21 +145,21 @@ namespace Calc.MVVM.ViewModels
             return true;
         }
 
-        public void HandleAssemblySelected(bool setMain)
+        internal void HandleAssemblySelected(bool setMain)
         {
             var assembly = AssemblySelectionVM.SelectedAssembly;
             NodeTreeVM.SelectedNodeItem.SetAssembly(setMain,assembly);
             AssemblySelectionChangedActions();
         }
 
-        public void HandleSideClicked()
+        internal void HandleSideClicked()
         {
             NodeTreeVM.DeselectNodes();
             CalculationVM.RefreshCalculation();
             DeselectTreeView?.Invoke(this, EventArgs.Empty);
         }
 
-        public void HandleInherit()
+        internal void HandleInherit()
         {
             if (NodeTreeVM.SelectedNodeItem == null)
                 return;
@@ -163,7 +167,7 @@ namespace Calc.MVVM.ViewModels
             AssemblySelectionChangedActions();
         }
 
-        public void HandleRemove()
+        internal void HandleRemove()
         {
             if (NodeTreeVM.SelectedNodeItem == null)
                 return;
@@ -171,31 +175,31 @@ namespace Calc.MVVM.ViewModels
             AssemblySelectionChangedActions();
         }
 
-        public void HandleViewToggleToAssembly()
+        internal void HandleViewToggleToAssembly()
         {
             NodeTreeVM.ColorNodesToAssembly();
         }
 
-        public void HandleViewToggleToBranch()
+        internal void HandleViewToggleToBranch()
         {
             NodeTreeVM.ColorNodesToBranch();
         }
 
-        public void HandleSavingResults()
+        internal void HandleSavingResults()
         {
             SavingVM.HandleSavingResults();
         }
 
-        public async Task HandleSendingResults(string newName)
+        internal async Task HandleSendingResults(string newName)
         {
             await SavingVM.HandleSendingResults(newName);
         }
 
-        public void HandleCancelSavingResults()
+        internal void HandleCancelSavingResults()
         {
             SavingVM.HandleSaveResultCanceled();
         }
-        public void HandleMessageClose()
+        internal void HandleMessageClose()
         {
             VisibilityVM.HideMessageOverlay();
         }

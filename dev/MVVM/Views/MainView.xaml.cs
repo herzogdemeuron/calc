@@ -12,9 +12,9 @@ namespace Calc.MVVM.Views
 {
     public partial class MainView : Window
     {
-        private readonly MainViewModel MainVM;
+        private readonly ProjectViewModel MainVM;
 
-        public MainView(MainViewModel mvm)
+        public MainView(ProjectViewModel mvm)
         {
             MainVM = mvm;
             this.DataContext = MainVM;

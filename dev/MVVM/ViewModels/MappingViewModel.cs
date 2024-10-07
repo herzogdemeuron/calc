@@ -1,18 +1,15 @@
-﻿using Calc.MVVM.Helpers;
-using Calc.Core;
+﻿using Calc.Core;
 using Calc.Core.Objects.GraphNodes;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace Calc.MVVM.ViewModels
 {
-    public class MappingViewModel : INotifyPropertyChanged
+    internal class MappingViewModel : INotifyPropertyChanged
     {
-        private CalcStore store;
+        private readonly CalcStore store;
         private readonly VisibilityViewModel visibilityVM;
         public QueryTemplate BrokenQuerySet { get; set; }
         public MappingViewModel(CalcStore calcStore, VisibilityViewModel vvm)

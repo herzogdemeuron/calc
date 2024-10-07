@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Calc.MVVM.ViewModels"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:views="clr-namespace:Calc.MVVM.Views"
-        d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
+        d:DataContext="{d:DesignInstance Type=local:ProjectViewModel}"
         Closing="WindowClosing"
         mc:Ignorable="d"
         Height="900" MinHeight="700"
