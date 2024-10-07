@@ -15,11 +15,10 @@ namespace Calc.MVVM.ViewModels
     {
         public CalcStore Store { get; set; }
         public QueryTemplateViewModel QueryTemplateVM { get; set; }
-        public MappingViewModel MappingVM { get; set; }
-        public MappingErrorViewModel MappingErrorVM { get; set; }
+        internal MappingViewModel MappingVM { get; set; }
+        internal MappingErrorViewModel MappingErrorVM { get; set; }
         internal NodeTreeViewModel NodeTreeVM { get; set; }
         public SavingViewModel SavingVM { get; set; }
-        public NewMappingViewModel NewMappingVM { get; set; }
         public VisibilityViewModel VisibilityVM { get; set; }
         internal CalculationViewModel CalculationVM { get; set; }
         internal AssemblySelectionViewModel AssemblySelectionVM { get; set; }
@@ -32,7 +31,6 @@ namespace Calc.MVVM.ViewModels
             VisibilityVM = new VisibilityViewModel();
             QueryTemplateVM = new QueryTemplateViewModel(store, elementCreator, VisibilityVM);
             MappingVM = new MappingViewModel(store, VisibilityVM);
-            NewMappingVM = new NewMappingViewModel(store, VisibilityVM);
             AssemblySelectionVM = new AssemblySelectionViewModel(store);
             NodeTreeVM = new NodeTreeViewModel(store, visualizer);
             MappingErrorVM = new MappingErrorViewModel(MappingVM);
@@ -85,12 +83,12 @@ namespace Calc.MVVM.ViewModels
 
         public void HandleNewMappingClicked()
         {
-            NewMappingVM.HandleNewMappingClicked();
+            MappingVM.HandleNewMappingClicked();
         }
 
         public async Task HandleNewMappingCreateAsync(Mapping selectedMapping, string newName)
         {
-            await NewMappingVM.HandleNewMappingCreate(selectedMapping, newName);
+            await MappingVM.HandleNewMappingCreate(selectedMapping, newName);
             OnPropertyChanged(nameof(Store));
         }
 
@@ -126,7 +124,7 @@ namespace Calc.MVVM.ViewModels
 
         public void HandleNewMappingCanceled()
         {
-            NewMappingVM.HandleNewMappingCanceled();
+            MappingVM.HandleNewMappingCanceled();
         }
 
         internal void HandleNodeItemSelectionChanged(NodeModel selectedNode)

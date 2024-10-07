@@ -9,6 +9,9 @@ using System.Linq;
 
 namespace Calc.MVVM.ViewModels
 {
+    /// <summary>
+    /// For the queries tree view in calc project.
+    /// </summary>
     internal class NodeTreeViewModel : INotifyPropertyChanged
     {
         private NodeModel selectedNodeItem;
@@ -25,7 +28,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(SelectedNodeItem));
             }
         }
-
         public NodeModel CurrentQueryTemplateItem { get; set; } = new NodeModel(null, null);
         public NodeModel CurrentLeftoverQuerySetItem { get; set; } = new NodeModel(null, null);
         public ObservableCollection<NodeModel> NodeSource
@@ -39,9 +41,9 @@ namespace Calc.MVVM.ViewModels
         }
 
         /// <summary>
-        /// Update the source of query template node and leftover query set node
+        /// Updates the source of query template node and leftover query set node.
         /// </summary>
-        public void UpdateNodeSource()
+        internal void UpdateNodeSource()
         {
             CurrentQueryTemplateItem = new NodeModel(Store.QueryTemplateSelected, this);
             CurrentLeftoverQuerySetItem = new NodeModel(Store.LeftoverQuerySet, this);
@@ -51,10 +53,10 @@ namespace Calc.MVVM.ViewModels
         }
 
         /// <summary>
-        /// re-map all nodes in the current query template
-        /// return the broken query set
+        /// Re-maps all nodes in the current query template.
         /// </summary>
-        public QueryTemplate ReMapAllNodes()
+        /// <returns>The broken query set</returns>
+        internal QueryTemplate ReMapAllNodes()
         {
             if (Store.QueryTemplateSelected == null) return null;
             if (Store.MappingSelected == null) return null;
@@ -67,10 +69,10 @@ namespace Calc.MVVM.ViewModels
         }
 
         /// <summary>
-        /// reset all node label colors property according to the current branch/assembly switch
-        /// report to the visualizer
+        /// Resets all node label colors property according to the current branch/assembly switch,
+        /// feedbacks to the visualizer.
         /// </summary>
-        public void ReColorAllNodes(bool forceRecolorAll = false)
+        internal void ReColorAllNodes(bool forceRecolorAll = false)
         {
             if (Store.QueryTemplateSelected == null) return;
             if (BranchesSwitch == true)
@@ -86,21 +88,22 @@ namespace Calc.MVVM.ViewModels
                 Store.QueryTemplateSelected.SetBranchColorsBy("assemblies");
                 visualizer.IsolateAndColorBottomBranchElements(SelectedNodeItem?.Host);
             }
-
             CurrentQueryTemplateItem.NotifyNodePropertyChange();
-            CurrentLeftoverQuerySetItem.NotifyNodePropertyChange();
-
+            CurrentLeftoverQuerySetItem.NotifyNodePropertyChange(); // todo: check if this is needed
         }
 
-        public void HandleNodeItemSelectionChanged(NodeModel nodeItem)
+        /// <summary>
+        /// Resets the lable colors with the selected node,
+        /// feedbacks to the visualizer.
+        /// </summary>
+        internal void HandleNodeItemSelectionChanged(NodeModel nodeItem)
         {
             if (nodeItem == null) return;
             if (nodeItem.Host == null) return;
             if (CurrentQueryTemplateItem == null) return;
             SelectedNodeItem = nodeItem;
             NodeHelper.HideAllLabelColor(CurrentQueryTemplateItem);
-            NodeHelper.HideAllLabelColor(CurrentLeftoverQuerySetItem);
-
+            NodeHelper.HideAllLabelColor(CurrentLeftoverQuerySetItem); // todo: check if this is needed
             if (BranchesSwitch)
             {
                 NodeHelper.ShowSubLabelColor(nodeItem);
@@ -111,12 +114,11 @@ namespace Calc.MVVM.ViewModels
                 NodeHelper.ShowAllSubLabelColor(nodeItem);
                 visualizer.IsolateAndColorBottomBranchElements(SelectedNodeItem?.Host);
             }
-
             CurrentQueryTemplateItem.NotifyNodePropertyChange();
-            CurrentLeftoverQuerySetItem.NotifyNodePropertyChange();
+            CurrentLeftoverQuerySetItem.NotifyNodePropertyChange(); // todo: check if this is needed
         }
 
-        public void ColorNodesToAssembly()
+        internal void ColorNodesToAssembly()
         {
             BranchesSwitch = false;
             if (CurrentQueryTemplateItem == null) return;
@@ -125,7 +127,7 @@ namespace Calc.MVVM.ViewModels
             DeselectNodes();
         }
 
-        public void ColorNodesToBranch()
+        internal void ColorNodesToBranch()
         {
             BranchesSwitch = true;
             if (CurrentQueryTemplateItem == null) return;
@@ -134,21 +136,17 @@ namespace Calc.MVVM.ViewModels
             DeselectNodes();
         }
 
-        public void DeselectNodes()
+        internal void DeselectNodes()
         {
             if (CurrentQueryTemplateItem == null) return;
             NodeHelper.HideAllLabelColor(CurrentQueryTemplateItem);
-            NodeHelper.HideAllLabelColor(CurrentLeftoverQuerySetItem);
-
+            NodeHelper.HideAllLabelColor(CurrentLeftoverQuerySetItem); // todo: check if this is needed
             SelectedNodeItem = null;
             CurrentQueryTemplateItem.NotifyNodePropertyChange(); //better ways to do this?
-            CurrentLeftoverQuerySetItem.NotifyNodePropertyChange();
-
+            CurrentLeftoverQuerySetItem.NotifyNodePropertyChange(); // todo: check if this is needed
             var resetItems = CurrentQueryTemplateItem.SubNodeItems.Select(n => n.Host).ToList();
             visualizer.ResetView(resetItems);
-
         }
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
