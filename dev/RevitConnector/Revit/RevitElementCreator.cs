@@ -116,7 +116,7 @@ namespace Calc.RevitConnector.Revit
                 parameterDictionary[parameterName] = result.Item2;
             }
             var category = elem.Category.Name;
-            parameterDictionary["Category"] = category; // add category to the dictionary, for black query set grouping
+            parameterDictionary["Category"] = category; // add category to the dictionary, for leftover query set grouping
 
             var typeName = elem.LookupParameter("Family and Type")?.AsValueString() ?? doc.GetElement(elem.GetTypeId()).Name;
             var lenParam = ParameterHelper.CreateBasicUnitParameter(elem, lenName, Unit.m);

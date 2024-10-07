@@ -2,7 +2,7 @@
 
 namespace Calc.MVVM.Helpers
 {
-    public class NodeHelper
+    internal class NodeHelper
     {
         internal static void HideAllLabelColor(NodeModel nodeItem)
         {
@@ -14,7 +14,7 @@ namespace Calc.MVVM.Helpers
             }
         }
 
-        public static void ShowSubLabelColor(NodeModel nodeItem)
+        internal static void ShowSubLabelColor(NodeModel nodeItem)
         {
             foreach (NodeModel subNodeItem in nodeItem.SubNodeItems)
             {
@@ -22,7 +22,7 @@ namespace Calc.MVVM.Helpers
             }
         }
 
-        public static void ShowAllSubLabelColor(NodeModel nodeItem)
+        internal static void ShowAllSubLabelColor(NodeModel nodeItem)
         {
             nodeItem.LabelColorVisible = true;
             foreach (NodeModel subNodeItem in nodeItem.SubNodeItems)

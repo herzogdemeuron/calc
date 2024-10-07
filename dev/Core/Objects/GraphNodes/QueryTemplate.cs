@@ -10,13 +10,13 @@ namespace Calc.Core.Objects.GraphNodes
     /// <summary>
     /// Used by calc project.
     /// It is both a set of queries and the result of the queries.
-    /// It is also used to summarize the black queries (for elements that are not fallen into any query results)
+    /// It is also used to summarize the leftover queries (for elements that are not fallen into any query results)
     /// and the broken query set (for broken mappings that never exists agin in the current query result structure).
     /// </summary>
     public class QueryTemplate : IHasProject, IGraphNode
     {
         [JsonIgnore]
-        public bool IsBlack { get; set; } = false;
+        public bool IsLeftover { get; set; } = false;
         [JsonIgnore]
         public List<CalcElement> Elements { get => GetElements(); }
         [JsonIgnore]

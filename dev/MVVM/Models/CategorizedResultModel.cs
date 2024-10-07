@@ -1,6 +1,6 @@
 ﻿namespace Calc.MVVM.Models
 {
-    public class CategorizedResultModel
+    internal class CategorizedResultModel
     {
         public string Group { get; set; }
         public double Gwp { get; set; }

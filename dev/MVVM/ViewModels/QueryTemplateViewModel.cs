@@ -20,7 +20,7 @@ namespace Calc.MVVM.ViewModels
         }
 
         /// <summary>
-        /// Set the new selected query template to store, perform queries and update the black query set
+        /// Set the new selected query template to store, perform queries and update the leftover query set
         /// </summary>
         public async Task HandleQueryTemplateSelectionChanged(QueryTemplate qryTemplate)
         {
@@ -28,7 +28,7 @@ namespace Calc.MVVM.ViewModels
             try
             {
                 store.QueryTemplateSelected = qryTemplate;
-                store.BlackQuerySet = await QueryHelper.PerformQueriesAsync(qryTemplate, elementCreator, store.CustomParamSettingsAll);
+                store.LeftoverQuerySet = await QueryHelper.PerformQueriesAsync(qryTemplate, elementCreator, store.CustomParamSettingsAll);
             }
             catch (System.Exception e)
             {

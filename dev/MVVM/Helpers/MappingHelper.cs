@@ -7,9 +7,14 @@ using System.Linq;
 
 namespace Calc.MVVM.Helpers
 {
-    public class MappingHelper
+    internal class MappingHelper
     {
-        public static QueryTemplate ApplyMapping(NodeModel queryTemplateItem,CalcStore store, Mapping newMapping)
+        /// <summary>
+        /// Applies a mapping to a query template.
+        /// An unverified assembly will be marked to broken.
+        /// </summary>
+        /// <returns>The broken queries with missing mappings.</returns>
+        internal static QueryTemplate ApplyMapping(NodeModel queryTemplateItem,CalcStore store, Mapping newMapping)
         {
             var brokenQueries = new QueryTemplate()
             {
@@ -29,11 +34,5 @@ namespace Calc.MVVM.Helpers
             };
             return brokenQueries;
         }
-
-        public static Mapping CopyCurrentMapping(CalcStore store)
-        {
-            return new Mapping("CurrentMapping", store.QueryTemplateSelected);
-        }
-
     }
 }

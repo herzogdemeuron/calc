@@ -9,18 +9,14 @@ using System.Windows.Media.Imaging;
 
 namespace Calc.MVVM.Helpers
 {
-    public static class ImageHelper
+    internal static class ImageHelper
     {
-        private static readonly BitmapImage noImage = new BitmapImage(new Uri("pack://application:,,,/CalcMVVM;component/Resources/no_image.png"));
-
-
-        public static BitmapImage ByteArrayToBitmap(byte[] imageData)
+        internal static BitmapImage ByteArrayToBitmap(byte[] imageData)
         {
             if (imageData == null || imageData.Length == 0)
             {
                 return null;
             }
-
             using (var ms = new MemoryStream(imageData))
             {
                 BitmapImage bitmapImage = new BitmapImage();
@@ -31,11 +27,6 @@ namespace Calc.MVVM.Helpers
                 bitmapImage.Freeze();
                 return bitmapImage;
             }
-        }
-
-        public static BitmapImage GetNoImage()
-        {
-            return noImage;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Calc.MVVM.Models
 {
     public class NodeModel : INotifyPropertyChanged
     {
-        public bool IsBlack { get => CheckBlack(); }
+        public bool IsLeftover { get => CheckLeftover(); }
         public string Name { get => GetNodeName(); }
         public string BranchParameterName { get => GetParameterName(); }
         public bool? BranchParameterIsInstance { get => CheckIfParameterIsInstance(); }
@@ -127,12 +127,12 @@ namespace Calc.MVVM.Models
             }
         }
 
-        public bool CheckBlack()
+        public bool CheckLeftover()
         {
             if (Host is QueryTemplate qryTemplate)
-                return qryTemplate.IsBlack;
+                return qryTemplate.IsLeftover;
             else
-                return ParentNodeItem.IsBlack;
+                return ParentNodeItem.IsLeftover;
         }
 
         public string GetNodeName()

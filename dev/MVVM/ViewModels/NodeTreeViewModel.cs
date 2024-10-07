@@ -29,9 +29,9 @@ namespace Calc.MVVM.ViewModels
         }
 
         public NodeModel CurrentQueryTemplateItem { get; set; } = new NodeModel(null, null);
-        public NodeModel CurrentBlackQuerySetItem { get; set; } = new NodeModel(null, null);
+        public NodeModel CurrentLeftoverQuerySetItem { get; set; } = new NodeModel(null, null);
         public ObservableCollection<NodeModel> NodeSource
-        { get => new ObservableCollection<NodeModel> { CurrentQueryTemplateItem, CurrentBlackQuerySetItem }; }
+        { get => new ObservableCollection<NodeModel> { CurrentQueryTemplateItem, CurrentLeftoverQuerySetItem }; }
 
         public NodeTreeViewModel(CalcStore calcStore, IVisualizer visualizer)
         {
@@ -41,12 +41,12 @@ namespace Calc.MVVM.ViewModels
         }
 
         /// <summary>
-        /// Update the source of query template node and black query set node
+        /// Update the source of query template node and leftover query set node
         /// </summary>
         public void UpdateNodeSource()
         {
             CurrentQueryTemplateItem = new NodeModel(Store.QueryTemplateSelected, this);
-            CurrentBlackQuerySetItem = new NodeModel(Store.BlackQuerySet, this);
+            CurrentLeftoverQuerySetItem = new NodeModel(Store.LeftoverQuerySet, this);
             OnPropertyChanged(nameof(NodeSource));
             ReColorAllNodes(true);
             DeselectNodes();
@@ -90,7 +90,7 @@ namespace Calc.MVVM.ViewModels
             }
 
             CurrentQueryTemplateItem.NotifyNodePropertyChange();
-            CurrentBlackQuerySetItem.NotifyNodePropertyChange();
+            CurrentLeftoverQuerySetItem.NotifyNodePropertyChange();
 
         }
 
@@ -101,7 +101,7 @@ namespace Calc.MVVM.ViewModels
             if (CurrentQueryTemplateItem == null) return;
             SelectedNodeItem = nodeItem;
             NodeHelper.HideAllLabelColor(CurrentQueryTemplateItem);
-            NodeHelper.HideAllLabelColor(CurrentBlackQuerySetItem);
+            NodeHelper.HideAllLabelColor(CurrentLeftoverQuerySetItem);
 
             if (BranchesSwitch)
             {
@@ -115,7 +115,7 @@ namespace Calc.MVVM.ViewModels
             }
 
             CurrentQueryTemplateItem.NotifyNodePropertyChange();
-            CurrentBlackQuerySetItem.NotifyNodePropertyChange();
+            CurrentLeftoverQuerySetItem.NotifyNodePropertyChange();
         }
 
         public void ColorNodesToAssembly()
@@ -140,11 +140,11 @@ namespace Calc.MVVM.ViewModels
         {
             if (CurrentQueryTemplateItem == null) return;
             NodeHelper.HideAllLabelColor(CurrentQueryTemplateItem);
-            NodeHelper.HideAllLabelColor(CurrentBlackQuerySetItem);
+            NodeHelper.HideAllLabelColor(CurrentLeftoverQuerySetItem);
 
             SelectedNodeItem = null;
             CurrentQueryTemplateItem.NotifyNodePropertyChange(); //better ways to do this?
-            CurrentBlackQuerySetItem.NotifyNodePropertyChange();
+            CurrentLeftoverQuerySetItem.NotifyNodePropertyChange();
 
             var resetItems = CurrentQueryTemplateItem.SubNodeItems.Select(n => n.Host).ToList();
             visualizer.ResetView(resetItems);

@@ -7,8 +7,11 @@ using System.ComponentModel;
 
 namespace Calc.MVVM.Models
 {
-
-    public class AssemblyModel : INotifyPropertyChanged
+    /// <summary>
+    /// Used in calc project.
+    /// The assembly section of a node model.
+    /// </summary>
+    internal class AssemblyModel : INotifyPropertyChanged
     {
         private readonly NodeModel _node;
         private bool _inheritEnabled = false;
@@ -31,7 +34,6 @@ namespace Calc.MVVM.Models
                 OnPropertyChanged(nameof(RemoveEnabled));
             }
         }
-
         private bool _canAddFirstAssembly = false;
         public bool CanAddFirstAssembly
         {
@@ -42,7 +44,6 @@ namespace Calc.MVVM.Models
                 OnPropertyChanged(nameof(CanAddFirstAssembly));
             }
         }
-
         private bool _canAddSecondAssembly = false;
         public bool CanAddSecondAssembly
         {
@@ -53,7 +54,6 @@ namespace Calc.MVVM.Models
                 OnPropertyChanged(nameof(CanAddSecondAssembly));
             }
         }
-
         public Assembly Assembly1
         {
             get => CurrentAssemblies?.Count > 0 ? CurrentAssemblies[0] : null;
@@ -62,7 +62,6 @@ namespace Calc.MVVM.Models
                 UpdateAssembly(0, value);
             }
         }
-
         public Assembly Assembly2
         {
             get => CurrentAssemblies?.Count > 1 ? CurrentAssemblies[1] : null;
@@ -71,12 +70,10 @@ namespace Calc.MVVM.Models
                 UpdateAssembly(1, value);
             }
         }
-
         public ObservableCollection<Assembly> CurrentAssemblies
         {
             get => _node?.Host is Branch branch ? branch.Assemblies : null;
         }
-
         private Assembly _activeAssembly;
         public Assembly ActiveAssembly
         {
@@ -91,45 +88,28 @@ namespace Calc.MVVM.Models
             }
         }
 
-
         public AssemblyModel(NodeModel node)
         {
             _node = node;
         }
 
-        public void SetAssembly(bool setMain, Assembly assembly)
-        {
-            if (setMain)
-            {
-                Assembly1 = assembly;
-            }
-            else
-            {
-                Assembly2 = assembly;
-            }
-        }
-
         /// <summary>
-        /// Notify the ui change of the assembly properties and the buttons,
-        /// broadcast the assembly change to other viewmodels
+        /// Notifies the ui change of the assembly properties and the buttons.
         /// </summary>
         internal void RefreshAssemblySection()
         {
             OnPropertyChanged(nameof(Assembly1));
             OnPropertyChanged(nameof(Assembly2));
             OnPropertyChanged(nameof(CurrentAssemblies));
-
             CheckInheritEnabled();
             CheckRemoveEnabled();
             CheckAddAssembly();
-
-            //OnPropertyChanged(nameof(CanAddFirstAssembly)); // needed?
-            //OnPropertyChanged(nameof(CanAddSecondAssembly)); // needed?
-            //OnPropertyChanged(nameof(InheritEnabled)); // needed?
-            //OnPropertyChanged(nameof(RemoveEnabled)); // needed?
         }
 
-        public void SetFirstAssemblyToActive()
+        /// <summary>
+        /// Sets the first assembly as the active assembly.
+        /// </summary>
+        internal void SetFirstAssemblyToActive()
         {
             if (CurrentAssemblies?.Count > 0)
             {
@@ -137,14 +117,16 @@ namespace Calc.MVVM.Models
             }
         }
 
-        private void UpdateAssembly(int index, Assembly assembly)
+        /// <summary>
+        /// Updates the assembly at the specified index,
+        /// both in the curremt model and in the branch.
+        /// </summary>
+        private void UpdateAssembly(int index, Assembly assembly) // todo: simplify to two items instead of a list of assemblies
         {
             if (_node == null || !(_node.Host is Branch) || _node.Host == null)
                 return;
             var branch = _node.Host as Branch;
-
             var newAssemblies = new List<Assembly>(branch.Assemblies);
-
             if (index >= newAssemblies.Count)
             {
                 newAssemblies.Add(assembly);
@@ -153,20 +135,18 @@ namespace Calc.MVVM.Models
             {
                 newAssemblies[index] = assembly;
             }
-
             branch.SetAssemblies(newAssemblies);
             ActiveAssembly = assembly;
-
-            //RefreshAssemblySection(false);
         }
 
-        public void CheckAddAssembly()
+        /// <summary>
+        /// Checks and update if the first and second assembly can be added.
+        /// </summary>
+        private void CheckAddAssembly()
         {
-
             if (_node.Host is Branch branch)
             {
                 CanAddFirstAssembly = true;
-
                 var assemblies = branch.Assemblies;
                 if (assemblies != null && assemblies.Count > 0)
                 {
@@ -176,7 +156,6 @@ namespace Calc.MVVM.Models
                 {
                     CanAddSecondAssembly = false;
                 }
-
             }
             else
             {
@@ -185,7 +164,10 @@ namespace Calc.MVVM.Models
             }
         }
 
-        public void CheckInheritEnabled()
+        /// <summary>
+        /// Checks and update InheritEnabled.
+        /// </summary>
+        private void CheckInheritEnabled()
         {
             if (_node == null || _node.Host is Query)
             {
@@ -197,7 +179,10 @@ namespace Calc.MVVM.Models
             InheritEnabled = branch is Branch && !(branch is Query);
         }
 
-        public void CheckRemoveEnabled()
+        /// <summary>
+        /// Checks and update RemoveEnabled.
+        /// </summary>
+        private void CheckRemoveEnabled()
         {
             if (_node == null || _node.Host is QueryTemplate)
             {
@@ -205,11 +190,13 @@ namespace Calc.MVVM.Models
                 return;
             }
             var branch = _node.Host as Branch;
-
             RemoveEnabled = branch?.Assemblies?.Count > 0;
         }
 
-        public void HandleRemove()
+        /// <summary>
+        /// Removes one assembly.
+        /// </summary>
+        internal void HandleRemove()
         {
             if (_node == null || _node.Host == null)
                 return;
@@ -221,17 +208,17 @@ namespace Calc.MVVM.Models
             ActiveAssembly = assemblyCount > 0 ? newAssemblies[assemblyCount - 1] : null;
         }
 
-        public void HandleInherit()
+        /// <summary>
+        /// Resets the assembly mapping as the parent.
+        /// </summary>
+        internal void HandleInherit()
         {
             if (_node == null || _node.Host == null)
                 return;
             IGraphNode host = _node.Host;
-            if (!(host is Branch branch))
-                return;
+            if (!(host is Branch branch)) return;
             branch.InheritMapping();
         }
-
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)

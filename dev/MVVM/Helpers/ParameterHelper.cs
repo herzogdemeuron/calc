@@ -3,16 +3,17 @@ using System.Collections.Generic;
 
 namespace Calc.MVVM.Helpers
 {
-    public class ParameterHelper
+    internal class ParameterHelper
     {
-     
-        public static Tuple<bool, string> GetParameterInfo(string parameterName)
+        /// <summary>
+        /// Checks if the parameter names from query template are legal,
+        /// In the query template:
+        /// type paramter name: "type: parameterName",
+        /// instance parameter name: "inst: parameterName".
+        /// </summary>
+        /// <returns>true/false for instance/type parameter, and the parameter name string. If illegal, return null string.</returns>
+        internal static Tuple<bool, string> GetParameterInfo(string parameterName)
         {
-            // type paramter name: "type: parameterName"
-            // instance parameter name: "inst: parameterName"
-            // check if the parameter name is legal
-            // if yes, return true for instance false for type parameter, and the parameter name
-            // if no, return null
             if (parameterName.StartsWith("type:"))
             {
                 return Tuple.Create(false, parameterName.Substring(5).Trim());
@@ -26,7 +27,12 @@ namespace Calc.MVVM.Helpers
                 return Tuple.Create(false, (string)null);
             }
         }
-        public static List<string> ValidateParameterNames(List<string> parameterNames)
+
+        /// <summary>
+        /// Validate and filter the parameter names.
+        /// </summary>
+        /// <returns>The valid parameter names.</returns>
+        internal static List<string> ValidateParameterNames(List<string> parameterNames)
         {
             // check if the parameter names are legal
             // if yes, return the parameter names

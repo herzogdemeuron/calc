@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Calc.MVVM.Models
 {
-    public class FilterTagModel: INotifyPropertyChanged
+    /// <summary>
+    /// Used by the calc builder.
+    /// A filter tag for material selection.
+    /// </summary>
+    internal class FilterTagModel: INotifyPropertyChanged
     {
         public string TagName { get; set; }
         private bool isSelected = false;
@@ -20,9 +21,7 @@ namespace Calc.MVVM.Models
                 OnPropertyChanged(nameof(IsSelected));
             }
         }
-
         public bool HasCount => DynamicCount != "0";
-
         private string dynamicCount;
         public string DynamicCount
         {
@@ -34,7 +33,6 @@ namespace Calc.MVVM.Models
                 OnPropertyChanged(nameof(HasCount));
             }
         }
-
         private Dictionary<FilterTagModel,int> relationCount = new Dictionary<FilterTagModel, int>();
 
         public FilterTagModel(string name)
@@ -42,7 +40,7 @@ namespace Calc.MVVM.Models
             TagName = name;
         }
 
-        public void AddRelationCount(FilterTagModel tagModel)
+        internal void AddRelationCount(FilterTagModel tagModel)
         {
             if (relationCount.ContainsKey(tagModel))
             {
@@ -55,9 +53,9 @@ namespace Calc.MVVM.Models
         }
 
         /// <summary>
-        /// show the count of the tagmodel in the dynamic count
+        /// Shows the count of the tagmodel in the dynamic count.
         /// </summary>
-        public void UpdateDynamicCount(FilterTagModel tagModel)
+        internal void UpdateDynamicCount(FilterTagModel tagModel)
         {
 
             if(tagModel == null)
@@ -74,11 +72,10 @@ namespace Calc.MVVM.Models
             }
         }
 
-        public void CleanDynamicCount()
+        internal void CleanDynamicCount()
         {
             DynamicCount = "";
         }
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)

@@ -1,5 +1,4 @@
-﻿using Calc.Core.Filtering;
-using Calc.Core;
+﻿using Calc.Core;
 using Calc.Core.Objects.Elements;
 using Calc.Core.Objects.GraphNodes;
 using System.Collections.Generic;
@@ -9,23 +8,22 @@ using System.Threading.Tasks;
 
 namespace Calc.MVVM.Helpers
 {
-
-    public class QueryHelper
+    internal class QueryHelper
     {
         /// <summary>
-        /// creates calc elements from revit elements and sort them into queries
-        /// return the black query set (performed with left over elements)
+        /// Creates calc elements from revit elements and sort them into queries.
         /// </summary>
-        public static async Task<QueryTemplate> PerformQueriesAsync(QueryTemplate qryTemplate, IElementCreator elementCreator, List<CustomParamSetting> customParamSettings)
+        /// <returns>The leftover query set (performed with left over elements)</returns>
+        internal static async Task<QueryTemplate> PerformQueriesAsync(QueryTemplate qryTemplate, IElementCreator elementCreator, List<CustomParamSetting> customParamSettings)
         {
             List<string> parameters = GetParameterList(qryTemplate);
 
             List<CalcElement> calcElements = await Task.Run(() => elementCreator.CreateCalcElements(customParamSettings, parameters));
 
             var leftElements = qryTemplate.PerformQueries(calcElements);
-            var blackQuerySet = CreateBlackQuerySet("Unassigned", leftElements);
+            var leftoverQuerySet = CreateLeftoverQuerySet("Unassigned", leftElements);
 
-            return blackQuerySet;
+            return leftoverQuerySet;
         }
 
         /// <summary>
@@ -34,17 +32,17 @@ namespace Calc.MVVM.Helpers
         /// branches are split by the type names
         /// make new query set and new queries for each category
         /// </summary>
-        private static QueryTemplate CreateBlackQuerySet(string name, List<CalcElement> calcElements)
+        private static QueryTemplate CreateLeftoverQuerySet(string name, List<CalcElement> calcElements)
         {
-            QueryTemplate blackQuerySet = new QueryTemplate() { Name = name, IsBlack = true, Queries = new List<Query>() };
+            QueryTemplate leftoverQuerySet = new QueryTemplate() { Name = name, IsLeftover = true, Queries = new List<Query>() };
             //create queries for each category
             foreach (var category in calcElements.Select(e => e.Category).Distinct())
             {
                 Query query = Query.CreateCategoryQuery(category);
-                blackQuerySet.Queries.Add(query);
+                leftoverQuerySet.Queries.Add(query);
             }
-            blackQuerySet.PerformQueries(calcElements);
-            return blackQuerySet;
+            leftoverQuerySet.PerformQueries(calcElements);
+            return leftoverQuerySet;
         }
 
         private static List<string> GetParameterList(QueryTemplate qryTemplate)

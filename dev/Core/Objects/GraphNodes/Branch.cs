@@ -262,6 +262,9 @@ namespace Calc.Core.Objects.GraphNodes
             return path;
         }
 
+        /// <summary>
+        /// Uses the assemblies mapping of the parent branch.
+        /// </summary>
         public void InheritMapping()
         {
             if (ParentBranch == null)

@@ -1,19 +1,14 @@
 ﻿using Calc.Core.Objects;
-using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Assemblies;
-using System;
-using System.Collections.Generic;
+using Calc.Core.Objects.BasicParameters;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Calc.MVVM.Models
 {
     /// <summary>
-    /// showing the basic amounts of a ICalcComponent
+    /// Shows one basic unit amount of an ICalcComponent.
     /// </summary>
-    public class AmountModel : INotifyPropertyChanged
+    internal class AmountModel : INotifyPropertyChanged
     {
         private readonly Unit unit;
         private ICalcComponent host;
@@ -22,10 +17,10 @@ namespace Calc.MVVM.Models
         private BasicParameterSet basicParameterSet { get => host?.BasicParameterSet; }
         private bool HasError { get => (basicParameterSet?.GetAmountParam(unit)?.HasError) ?? true; }
         private bool IsHostNormalizable { get => host is AssemblyComponent; }
-        public string AmountString { get => GetAmountString(); } // show the sting of the basic amounts in UI 
-        public bool IsNormalizable { get => CheckNormalizable(); }  // show if each amount can be set as a normalizer
-        public bool IsNormalizer { get => CheckNormalizer(); } // show if an amount is set as a normalizer
-        public bool IsUsed { get => CheckUsed(); }  // show if an amount is used for normalization or for material calculation
+        public string AmountString { get => GetAmountString(); }
+        public bool IsNormalizable { get => CheckNormalizable(); }
+        public bool IsNormalizer { get => CheckNormalizer(); }
+        public bool IsUsed { get => CheckUsed(); }
         public bool WarningActive { get => IsUsed && HasError; }
         public AmountModel(Unit unit)
         {
@@ -33,9 +28,10 @@ namespace Calc.MVVM.Models
         }
 
         /// <summary>
-        /// Each time the component selection, the Assembly Unit or the Material selection is changed, the BasicUnitModel needs to be updated.
+        /// Each time during component selection, the Assembly Unit or the Material selection is changed,
+        /// the AmountModel needs to be updated.
         /// </summary>
-        public void UpdateWithHost(ICalcComponent host, Unit? assemblyUnit, Unit? materialUnit)
+        internal void UpdateWithHost(ICalcComponent host, Unit? assemblyUnit, Unit? materialUnit)
         {
             this.host = host;
             this.assemblyUnit = assemblyUnit;
@@ -43,6 +39,9 @@ namespace Calc.MVVM.Models
             NotifyUpdate();
         }
 
+        /// <summary>
+        /// The sting of the basic amounts in UI 
+        /// </summary>
         private string GetAmountString()
         {
             if (basicParameterSet == null) return "-";
@@ -83,9 +82,11 @@ namespace Calc.MVVM.Models
                 default:
                 return "?";
             }
-
         }
 
+        /// <summary>
+        /// If each amount can be set as a normalizer.
+        /// </summary>
         private bool CheckNormalizable()
         {
             if (!IsHostNormalizable) return false;
@@ -95,13 +96,19 @@ namespace Calc.MVVM.Models
             return amountParam.Amount > 0;
         }
 
+        /// <summary>
+        /// If an amount is set as a normalizer.
+        /// </summary>
         private bool CheckNormalizer()
         {
             if (!IsHostNormalizable) return false;
-            var bc = host as AssemblyComponent;
-            return bc.IsNormalizer && this.assemblyUnit == unit;
+            var ac = host as AssemblyComponent;
+            return ac.IsNormalizer && this.assemblyUnit == unit;
         }
 
+        /// <summary>
+        /// Shows if an amount is used for normalization or for material calculation.
+        /// </summary>
         private bool CheckUsed()
         {
             switch (IsHostNormalizable)
@@ -114,6 +121,10 @@ namespace Calc.MVVM.Models
                     return false;
             }
         }
+
+        /// <summary>
+        /// Notify all the properties changed.
+        /// </summary>
         private void NotifyUpdate()
         {
             OnPropertyChanged(nameof(AmountString));

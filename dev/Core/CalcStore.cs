@@ -39,7 +39,7 @@ namespace Calc.Core
         public List<Mapping> RelatedMappings { get => GetProjectRelated(MappingDriver); }
         public List<QueryTemplate> QueryTemplates { get { return QueryTemplateDriver.GotManyItems; } }
         public QueryTemplate QueryTemplateSelected { get; set; }
-        public QueryTemplate BlackQuerySet { get; set; }
+        public QueryTemplate LeftoverQuerySet { get; set; }
         public List<QueryTemplate> RelatedQueryTemplate { get => GetProjectRelated(QueryTemplateDriver); }
 
         private Directus Directus { get; set; }

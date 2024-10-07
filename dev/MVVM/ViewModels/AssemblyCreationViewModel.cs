@@ -354,7 +354,7 @@ namespace Calc.MVVM.ViewModels
         }
 
         /// <summary>
-        /// updates the basic unit amounts of the current selection
+        /// Updates the basic unit amounts of the current selection.
         /// </summary>
         private void UpdateAmounts()
         {

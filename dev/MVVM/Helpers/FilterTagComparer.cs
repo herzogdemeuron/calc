@@ -3,7 +3,10 @@ using System.Collections;
 
 namespace Calc.MVVM.Helpers
 {
-    public class FilterTagComparer : IComparer
+    /// <summary>
+    /// Custom comparer for filter tag.
+    /// </summary>
+    internal class FilterTagComparer : IComparer
     {
         public int Compare(object x, object y)
         {

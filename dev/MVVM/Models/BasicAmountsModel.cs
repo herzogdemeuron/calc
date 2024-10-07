@@ -1,30 +1,21 @@
 ﻿using Calc.Core.Objects;
-using Calc.Core.Objects.BasicParameters;
-using Calc.Core.Objects.Assemblies;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Calc.MVVM.Models
 {
     /// <summary>
-    /// showing the basic amounts of a ICalcComponent
+    /// Includes all basic unit amount models.
     /// </summary>
-    public class BasicAmountsModel
+    internal class BasicAmountsModel
     {
         public AmountModel CountAmount { get; } = new AmountModel(Unit.piece);
         public AmountModel LengthAmount { get; } = new AmountModel(Unit.m);
         public AmountModel AreaAmount { get; } = new AmountModel(Unit.m2);
         public AmountModel VolumeAmount { get; } = new AmountModel(Unit.m3);
 
-
         /// <summary>
-        /// Each time the component selection, the Assembly Unit or the Material selection is changed, the BasicUnitModel needs to be updated.
+        /// Updates the basic amounts with the new host ICalcComponent and the used units.
         /// </summary>
-        public void UpdateAmounts(ICalcComponent host, Unit? assemblyUnit, Unit? materialUnit)
+        internal void UpdateAmounts(ICalcComponent host, Unit? assemblyUnit, Unit? materialUnit)
         {
             CountAmount.UpdateWithHost(host, assemblyUnit, materialUnit);
             LengthAmount.UpdateWithHost(host, assemblyUnit, materialUnit);

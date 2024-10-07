@@ -5,9 +5,9 @@ using System.Windows.Media;
 
 namespace Calc.MVVM.Helpers
 {
-    public static class ViewHelper
+    internal static class ViewHelper
     {
-        public static TreeViewItem FindTreeViewItem(ItemsControl itemsControl, NodeModel node)
+        internal static TreeViewItem FindTreeViewItem(ItemsControl itemsControl, NodeModel node)
         {
             if (itemsControl != null && node != null)
             {
@@ -33,7 +33,7 @@ namespace Calc.MVVM.Helpers
             return null;
         }
 
-        public static T FindVisualChild<T>(DependencyObject obj) where T : DependencyObject
+        internal static T FindVisualChild<T>(DependencyObject obj) where T : DependencyObject
         {
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
             {
