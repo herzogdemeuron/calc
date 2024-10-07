@@ -84,11 +84,24 @@ namespace Calc.MVVM.Views
             BuilderVM.HandleAssemblyCodeSetFinished();
         }
 
-
-        private void AmountClicked(object sender, RoutedEventArgs e)
+        private void CountAmountClicked(object sender, RoutedEventArgs e)
         {
-            string tag = (sender as Button).Tag.ToString();
-            BuilderVM.HandleAmountClicked(tag);
+            BuilderVM.HandleAmountClicked(Unit.piece);
+        }
+
+        private void LengthAmountClicked(object sender, RoutedEventArgs e)
+        {
+            BuilderVM.HandleAmountClicked(Unit.m);
+        }
+
+        private void AreaAmountClicked(object sender, RoutedEventArgs e)
+        {
+            BuilderVM.HandleAmountClicked(Unit.m2);
+        }
+
+        private void VolumeAmountClicked(object sender, RoutedEventArgs e)
+        {
+            BuilderVM.HandleAmountClicked(Unit.m3);
         }
 
         private void RatioTextBoxKeyDown(object sender, KeyEventArgs e)

@@ -1,133 +1,107 @@
 ﻿using Calc.Core;
-using Calc.Core;
 using Calc.Core.Objects;
-using Calc.MVVM.Helpers;
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace Calc.MVVM.ViewModels
 {
-    public class BuilderViewModel: INotifyPropertyChanged
+    /// <summary>
+    /// The main view model for calc builder.
+    /// </summary>
+    internal class BuilderViewModel: INotifyPropertyChanged
     {
-
         public CalcStore Store { get; set; }
         public AssemblyCreationViewModel AssemblyCreationVM { get; set; }
-        public VisibilityViewModel VisibilityVM { get; set; }
         public MaterialSelectionViewModel MaterialSelectionVM { get; set; }
         public event EventHandler DeselectTreeView;
 
         public BuilderViewModel(CalcStore store, IElementSourceHandler elementSourceHandler, IImageSnapshotCreator imageSnapshotCreator, IElementSender elementSender)
         {
             Store = store;
-            VisibilityVM = new VisibilityViewModel(); // is this used?
             MaterialSelectionVM = new MaterialSelectionViewModel(store);
             AssemblyCreationVM = new AssemblyCreationViewModel(Store, elementSourceHandler, imageSnapshotCreator, elementSender);
         }
 
-        public void HandleWindowLoaded()
+        internal void HandleWindowLoaded()
         {
             AssemblyCreationVM.HandleLoaded();
         }
 
-        public async Task HandleSaveAssembly()
+        internal async Task HandleSaveAssembly()
         {
             await AssemblyCreationVM.HandleSaveAssembly();
         }
 
-        public void HandleAmountClicked(string unit)
+        internal void HandleAmountClicked(Unit unit)
         {
-            Unit? newAssemblyUnit;
-            switch (unit)
-            {
-                case "Count":
-                    newAssemblyUnit = Unit.piece;
-                    break;
-                case "Length":
-                    newAssemblyUnit = Unit.m;
-                    break;
-                case "Area":
-                    newAssemblyUnit = Unit.m2;
-                    break;
-                case "Volume":
-                    newAssemblyUnit = Unit.m3;
-                    break;
-                default:
-                    return;
-            }
-
-            AssemblyCreationVM.HandleAmountClicked(newAssemblyUnit);
+            AssemblyCreationVM.HandleAmountClicked(unit);
         }
 
-        public void HandleComponentSelectionChanged(ICalcComponent selectedCompo)
+        internal void HandleComponentSelectionChanged(ICalcComponent selectedCompo)
         {
             AssemblyCreationVM.HandleComponentSelectionChanged(selectedCompo);
         }
 
-        public void HandleSideClicked()
+        internal void HandleSideClicked()
         {
             AssemblyCreationVM.HandleDeselect();
             DeselectTreeView?.Invoke(this, EventArgs.Empty);
         }
 
-        public void HandleSelectingMaterial(bool setMain)
+        internal void HandleSelectingMaterial(bool setMain)
         {
             var currentLayer = AssemblyCreationVM.CurrentLayerMaterialModel;
             var material = setMain? currentLayer.MainMaterial : currentLayer.SubMaterial;
             MaterialSelectionVM.PrepareMaterialSelection(material);
         }
 
-        public void HandleMaterialSelected(bool setMain)
+        internal void HandleMaterialSelected(bool setMain)
         {
             var material = MaterialSelectionVM.SelectedMaterial;
             AssemblyCreationVM.HandleSetMaterial(setMain, material);
             MaterialSelectionVM.Reset();
         }
 
-        public void HandleReduceMaterial()
+        internal void HandleReduceMaterial()
         {
             AssemblyCreationVM.HandleReduceMaterial();
         }
 
-        public void HandleSelect()
+        internal void HandleSelect()
         {
             if (AssemblyCreationVM == null) return;
             AssemblyCreationVM.HandleSelectingElements();
         }
 
-        public void HandleCaptureClicked()
+        internal void HandleCaptureClicked()
         {
             AssemblyCreationVM.HandleCaptureClicked();
         }
 
-        public void HandleCaptureMouseOver(bool isEnter)
+        internal void HandleCaptureMouseOver(bool isEnter)
         {
             AssemblyCreationVM.HandleCaptureMouseOver(isEnter);
         }
 
-        public void HandleAssemblyNameChanged(string text)
+        internal void HandleAssemblyNameChanged(string text)
         {
             AssemblyCreationVM.NewAssemblyName = text;
         }
 
-        public void HandleAssemblyNameSetFinished()
+        internal void HandleAssemblyNameSetFinished()
         {
             AssemblyCreationVM.NewAssemblyName = AssemblyCreationVM.NewAssemblyName?.Trim();            
         }
 
-        public void HandleAssemblyCodeChanged(string text)
+        internal void HandleAssemblyCodeChanged(string text)
         {
             AssemblyCreationVM.NewAssemblyCode = text;
         }
 
-        public void HandleAssemblyCodeSetFinished()
+        internal void HandleAssemblyCodeSetFinished()
         {
             AssemblyCreationVM.NewAssemblyCode = AssemblyCreationVM.NewAssemblyCode?.Trim();
-        }
-
-        public void NotifyStoreChange()
-        {
-            OnPropertyChanged(nameof(Store));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -110,28 +110,24 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button Tag="Count"
-                            DataContext="{Binding CountAmount}"
+                    <Button DataContext="{Binding CountAmount}"
                             Grid.Column="0"
-                            Click="AmountClicked"
+                            Click="CountAmountClicked"
                             Style="{StaticResource UnitButtonStyle}"/>
 
-                    <Button Tag="Length"
-                            DataContext="{Binding LengthAmount}"
+                    <Button DataContext="{Binding LengthAmount}"
                             Grid.Column="1"
-                            Click="AmountClicked"
+                            Click="LengthAmountClicked"
                             Style="{StaticResource UnitButtonStyle}"/>
 
-                    <Button Tag="Area"
-                            DataContext="{Binding AreaAmount}"
+                    <Button DataContext="{Binding AreaAmount}"
                             Grid.Column="2"
-                            Click="AmountClicked"
+                            Click="AreaAmountClicked"
                             Style="{StaticResource UnitButtonStyle}"/>
 
-                    <Button Tag="Volume"
-                            DataContext="{Binding VolumeAmount}"
+                    <Button DataContext="{Binding VolumeAmount}"
                             Grid.Column="3"
-                            Click="AmountClicked"
+                            Click="VolumeAmountClicked"
                             Style="{StaticResource UnitButtonStyle}"/>
                 </Grid>
 

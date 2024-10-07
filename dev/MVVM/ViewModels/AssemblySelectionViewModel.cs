@@ -12,19 +12,20 @@ using System.Windows.Media.Imaging;
 
 namespace Calc.MVVM.ViewModels
 {
-
-    public class AssemblySelectionViewModel : INotifyPropertyChanged
+    /// <summary>
+    /// Used by the calc builder.
+    /// Logic for the assembly selection dialog.
+    /// Only verified assemblies are shown.
+    /// </summary>
+    internal class AssemblySelectionViewModel : INotifyPropertyChanged
     {
-
         private readonly CalcStore calcStore;
+        private string currentSearchText;
+        private readonly AssemblyGroup defaultGroup = new AssemblyGroup() { Name = "All Groups", Id = 0 };
+        private AssemblyGroup selectedAssemblyGroup;
         public ICollectionView AllAssembliesView { get; }
         public List<StandardModel> AllStandards { get; }
         public List<AssemblyGroup> AllAssemblyGroups { get; }
-
-        private string currentSearchText;
-        private readonly AssemblyGroup defaultGroup = new AssemblyGroup() { Name = "All Groups", Id = 0 };
-
-        private AssemblyGroup selectedAssemblyGroup;
         public AssemblyGroup SelectedAssemblyGroup
         {
             get => selectedAssemblyGroup;
@@ -32,11 +33,10 @@ namespace Calc.MVVM.ViewModels
             {
                 if (value == selectedAssemblyGroup) return;
                 selectedAssemblyGroup = value;
-                FilterAssembliesWithType();
+                FilterAssemblies();
                 OnPropertyChanged(nameof(SelectedAssemblyGroup));
             }
         }
-
         private Assembly selectedAssembly;
         public Assembly SelectedAssembly
         {
@@ -49,7 +49,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(SelectedAssembly));
             }
         }
-
         private bool canOk;
         public bool CanOk
         {
@@ -61,7 +60,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(CanOk));
             }
         }
-
         private BitmapImage currentImage;
         public BitmapImage CurrentImage
         {
@@ -73,7 +71,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(CurrentImage));
             }
         }
-
         private Visibility loadingVisibility = Visibility.Collapsed;
         public Visibility LoadingVisibility
         {
@@ -85,7 +82,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(LoadingVisibility));
             }
         }
-
         private string imageText;
         public string ImageText
         {
@@ -98,9 +94,6 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        /// <summary>
-        /// Only show verified assemblies
-        /// </summary>
         public AssemblySelectionViewModel(CalcStore store)
         {
             calcStore = store;
@@ -111,46 +104,46 @@ namespace Calc.MVVM.ViewModels
             SelectedAssemblyGroup = defaultGroup;            
         }
 
-        public void PrepareAssemblySelection(Assembly assembly)
+        /// <summary>
+        /// Initializes the assembly selection.
+        /// </summary>
+        internal void PrepareAssemblySelection(Assembly assembly)
         {
             CurrentImage = null;
             ImageText = "Image Preview";
-
             currentSearchText = "";
             SelectedAssembly = assembly;
             SelectedAssemblyGroup = defaultGroup;
-            FilterAssembliesWithType();
+            FilterAssemblies();
         }
 
-        public void HandleSourceCheckChanged()
+        internal void HandleSourceCheckChanged()
         {
-            FilterAssembliesWithType();
+            FilterAssemblies();
         }
 
-        private void FilterAssembliesWithType()
+        /// <summary>
+        /// Updates the AllAssembliesView.
+        /// </summary>
+        private void FilterAssemblies()
         {
             AllAssembliesView.Filter = (obj) =>
             {
-                var assembly = obj as Assembly;
-               
+                var assembly = obj as Assembly;               
                 // either name, material type or material type family contains the search text
                 var name = assembly.Name?.ToLower() ?? "";
                 var standards = assembly.StandardItems.Select(i => i.Standard.Name).ToList();
                 var code = assembly.Code?.ToLower() ?? "";
                 var description = assembly.Description?.ToLower() ?? "";
                 var groupEqual = SelectedAssemblyGroup.Id == 0 || assembly.Group.Name == SelectedAssemblyGroup.Name;
-
                 if (!groupEqual) return false;
-
                 if (!AllStandards.Where(s => !s.IsSelected).All(s => !standards.Contains(s.Name)))
                 {
                     return false;
                 }
-
                 if (!string.IsNullOrEmpty(currentSearchText)
                     && !name.Contains(currentSearchText)
                     && !code.Contains(currentSearchText))
-
                 {
                     return false;
                 }
@@ -158,13 +151,14 @@ namespace Calc.MVVM.ViewModels
             };
         }
 
+        /// <summary>
+        /// Loads the image of the selected assembly from directus.
+        /// </summary>
         private async Task LoadAssemblyImageAsync(Assembly assembly)
         {
             if (assembly == null) return;
-
             // try to load image if should
             var imageItem = assembly.AssemblyImage;
-
             if (imageItem != null && imageItem.Id != null && !imageItem.ImageLoaded)
             {
                 var data = await calcStore.LoadImageAsync(imageItem.Id);
@@ -173,12 +167,14 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        public async Task HandleBuilupSelectionChangedAsync()
+        /// <summary>
+        /// Handles the image when assembly selection changeed.
+        /// </summary>
+        /// <returns></returns>
+        internal async Task HandleAssemblySelectionChangedAsync()
         {
-
             CurrentImage = null;
             ImageText = "";
-
             if (SelectedAssembly == null)
             {
                 LoadingVisibility = Visibility.Collapsed;
@@ -190,14 +186,10 @@ namespace Calc.MVVM.ViewModels
                 LoadingVisibility = Visibility.Visible;
                 ImageText = "";
             }
-
-
             var loadId = SelectedAssembly?.Id;
             await LoadAssemblyImageAsync(SelectedAssembly);
-
             // refresh the current image if the selected assembly has not changed
             if (SelectedAssembly?.Id != loadId) return;
-
             var imageData = SelectedAssembly.AssemblyImage?.ImageData;
             if (imageData != null)
             {
@@ -210,11 +202,10 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-
-        public void HandleSearchTextChanged(string currentText)
+        internal void HandleSearchTextChanged(string currentText)
         {
             currentSearchText = currentText.ToLower();
-            FilterAssembliesWithType();
+            FilterAssemblies();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -101,7 +101,7 @@ namespace Calc.MVVM.Views
 
         private async void AssemblySelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            await AssemblySelectionVM.HandleBuilupSelectionChangedAsync();
+            await AssemblySelectionVM.HandleAssemblySelectionChangedAsync();
         }
 
         private void Expander_Expanded(object sender, RoutedEventArgs e)

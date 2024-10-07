@@ -10,14 +10,14 @@ using System.Linq;
 
 namespace Calc.MVVM.ViewModels
 {
-    public class CalculationViewModel : INotifyPropertyChanged
+    internal class CalculationViewModel : INotifyPropertyChanged
     {
         private readonly NodeTreeViewModel NodeTreeVM;
         public CalcStore Store => NodeTreeVM.Store;
         public NodeModel CurrentNodeItem => NodeTreeVM.SelectedNodeItem ?? NodeTreeVM.CurrentQueryTemplateItem;
         private IGraphNode HostNode => CurrentNodeItem?.Host;
         public double? ProjectArea => Store.ProjectSelected.Area;
-        public string Name  // used anywhere?
+        public string Name  // todo: check if needed
         {
             get
             {
@@ -128,9 +128,6 @@ namespace Calc.MVVM.ViewModels
         public CalculationViewModel(NodeTreeViewModel ntVM)
         {
             NodeTreeVM = ntVM;
-            //MediatorFromVM.Register("AssemblySelectionChanged", _ => NotifyCalculationChanged());
-            //MediatorFromVM.Register("NodeItemSelectionChanged", _ => NotifyCalculationChanged());
-            //MediatorFromVM.Register("MappingSelectionChanged", _ => NotifyCalculationChanged());
         }
 
         /// <summary>

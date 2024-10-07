@@ -314,6 +314,10 @@ namespace Calc.MVVM.ViewModels
             CurrentImage = new BitmapImage(new Uri(currentImagePath));
         }
 
+        /// <summary>
+        /// Sets the capture text, for mouse enter and leave area.
+        /// </summary>
+        /// <param name="isEnter"></param>
         internal void HandleCaptureMouseOver(bool isEnter)
         {
             if(CurrentImage == null) return;
