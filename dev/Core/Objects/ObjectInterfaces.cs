@@ -50,6 +50,9 @@ namespace Calc.Core.Objects
         HslColor HslColor { get; set; }
     }
 
+    /// <summary>
+    /// Could be an assembly component or a layer component.
+    /// </summary>
     public interface  ICalcComponent
     {
         double? Thickness { get; }

@@ -9,7 +9,10 @@ using System.Windows;
 
 namespace Calc.MVVM.Models
 {
-    public class NodeModel : INotifyPropertyChanged
+    /// <summary>
+    /// Wraps an IGraphNode.
+    /// </summary>
+    internal class NodeModel : INotifyPropertyChanged
     {
         public bool IsLeftover { get => CheckLeftover(); }
         public string Name { get => GetNodeName(); }
@@ -21,7 +24,6 @@ namespace Calc.MVVM.Models
         public NodeModel ParentNodeItem { get; private set; }
         public ObservableCollection<NodeModel> SubNodeItems { get; }
         public AssemblyModel AssemblyModel { get; set; }
-
         private IGraphNode host;
         public IGraphNode Host
         {
@@ -32,11 +34,9 @@ namespace Calc.MVVM.Models
                 {
                     host = value;
                     OnPropertyChanged(nameof(Host));
-                    //OnPropertyChanged(nameof(CategorizedCalculation));
                 }
             }
         }
-
         private bool _labelColorVisible;
         public bool LabelColorVisible
         {
@@ -50,8 +50,6 @@ namespace Calc.MVVM.Models
                 }
             }
         }
-
-
         public Visibility UnderlineVisibility
         {
             get
@@ -60,7 +58,6 @@ namespace Calc.MVVM.Models
             }
         }
 
-
         public NodeModel(IGraphNode node, NodeTreeViewModel parentTreeView = null, NodeModel parentNodeItem = null)
         {
             Host = node;
@@ -68,7 +65,6 @@ namespace Calc.MVVM.Models
             SubNodeItems = new ObservableCollection<NodeModel>();
             AssemblyModel = new AssemblyModel(this);
             ParentNodeItem = parentNodeItem;
-
             if(node == null) return;
             foreach (var subNode in node.SubBranches)
             {
@@ -76,7 +72,7 @@ namespace Calc.MVVM.Models
             }
         }
         
-        public void SetAssembly(bool setMain, Assembly assembly)
+        internal void SetAssembly(bool setMain, Assembly assembly)
         {
             if (setMain)
             {
@@ -89,19 +85,16 @@ namespace Calc.MVVM.Models
         }
 
         /// <summary>
-        /// remove the branch node from its parent node,
-        /// returns the next node to select.
+        /// Removes the branch node from its parent node.
         /// </summary>
-        public NodeModel RemoveFromParent()
+        /// <returns>The next node to select.</returns>
+        internal NodeModel RemoveFromParent()
         {
             if (ParentNodeItem == null || IsBranch == false)
                 return null;
-
             var index = ParentNodeItem.SubNodeItems.IndexOf(this);
-
             ParentNodeItem.SubNodeItems.RemoveAt(index);
             ParentNodeItem.Host.SubBranches.RemoveAt(index);
-
             if (index < ParentNodeItem.SubNodeItems.Count)
             {
                 return ParentNodeItem.SubNodeItems[index];
@@ -113,9 +106,9 @@ namespace Calc.MVVM.Models
         }
 
         /// <summary>
-        /// refresh the assembly ui section of the node and all its subnodes
+        /// Refreshes the assembly ui section of the node and all its subnodes
         /// </summary>
-        public void RefreshAssemblySection()
+        internal void RefreshAssemblySection()
         {
             AssemblyModel.RefreshAssemblySection();
             if (SubNodeItems.Count > 0)
@@ -127,7 +120,7 @@ namespace Calc.MVVM.Models
             }
         }
 
-        public bool CheckLeftover()
+        private bool CheckLeftover()
         {
             if (Host is QueryTemplate qryTemplate)
                 return qryTemplate.IsLeftover;
@@ -135,7 +128,7 @@ namespace Calc.MVVM.Models
                 return ParentNodeItem.IsLeftover;
         }
 
-        public string GetNodeName()
+        private string GetNodeName()
         {
             if (Host is Query query)
                 return query.Name;
@@ -144,10 +137,10 @@ namespace Calc.MVVM.Models
             else if (Host is QueryTemplate qryTemplate)
                 return qryTemplate.Name;
             else
-                return "Please select an element group";
+                return "Please select a query template";
         }
 
-        public string GetParameterName()
+        private string GetParameterName()
         {
             if (Host is Branch branch)
                 return ParameterHelper.GetParameterInfo(branch.Parameter).Item2;
@@ -155,7 +148,10 @@ namespace Calc.MVVM.Models
                 return null;
         }
 
-        public bool? CheckIfParameterIsInstance()
+        /// <summary>
+        /// Checks if the parameter is an instance parameter.
+        /// </summary>
+        private bool? CheckIfParameterIsInstance()
         {
             if (Host is Branch branch)
                 return ParameterHelper.GetParameterInfo(branch.Parameter).Item1;
@@ -163,17 +159,23 @@ namespace Calc.MVVM.Models
                 return null;
         }
 
-        public bool CheckIfBranch()
+        /// <summary>
+        /// Checks if the node is a branch but not a query.
+        /// </summary>
+        /// <returns></returns>
+        private bool CheckIfBranch()
         {
             return Host is Branch && !(Host is Query);
         }
-        public void NotifyNodePropertyChange()
+
+        /// <summary>
+        /// Notify all the properties changed of the node and all its subnodes.
+        /// </summary>
+        internal void NotifyNodePropertyChange()
         {
             OnPropertyChanged(nameof(UnderlineVisibility));
             OnPropertyChanged(nameof(LabelColorVisible));
             OnPropertyChanged(nameof(Host));
-            //OnPropertyChanged(nameof(CategorizedCalculation));
-
             foreach (var subBranch in SubNodeItems)
             {
                 subBranch.NotifyNodePropertyChange();

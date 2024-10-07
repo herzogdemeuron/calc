@@ -1,17 +1,15 @@
 ﻿using Calc.Core;
 using Calc.Core.Color;
-using Calc.Core;
 using Calc.Core.Objects.GraphNodes;
 using Calc.MVVM.Helpers;
 using Calc.MVVM.Models;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 
 namespace Calc.MVVM.ViewModels
 {
-    public class NodeTreeViewModel : INotifyPropertyChanged
+    internal class NodeTreeViewModel : INotifyPropertyChanged
     {
         private NodeModel selectedNodeItem;
         private readonly IVisualizer visualizer;

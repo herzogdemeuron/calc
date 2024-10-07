@@ -6,14 +6,18 @@ using System.ComponentModel;
 
 namespace Calc.MVVM.Models
 {
-    public class LayerMaterialModel : INotifyPropertyChanged
+    /// <summary>
+    /// Used in calc builder.
+    /// Each layer component has a layer material model, which defines the material settings for the layer
+    /// </summary>
+    internal class LayerMaterialModel : INotifyPropertyChanged
     {
-        public event EventHandler MaterialPropertyChanged; // event to invoke ui change of the assembly creatiion vm
         private readonly LayerComponent layer;
+        public event EventHandler MaterialPropertyChanged; // event to invoke ui change of the assembly creatiion vm
         public string TargetMaterialName { get => layer.TargetMaterialName; }
         public List<MaterialFunction> MaterialFunctionsAll { get; }
         public bool IsEnabled { get => layer.IsValid; } // for ui to disable selection controls
-        public string MaterialMatchInfo { get => GetMaterialMatchText(); } // warning message for material unit match bewteen main and sub material
+        public string MaterialMatchInfo { get => GetMaterialMatchText(); }
         public List<Material> CurrentMaterials
         {
             get
@@ -24,7 +28,6 @@ namespace Calc.MVVM.Models
                 return materials;
             }
         }
-
         public MaterialFunction SelectedFunction
         {
             get => layer.Function;
@@ -35,7 +38,6 @@ namespace Calc.MVVM.Models
                 NotifyPropertiesChange();
             }
         }
-
         public Material MainMaterial
         {
             get => layer.MainMaterial;
@@ -48,7 +50,6 @@ namespace Calc.MVVM.Models
                 NotifyPropertiesChange();
             }
         }
-
         public Material SubMaterial
         {
             get => layer.SubMaterial;
@@ -60,7 +61,6 @@ namespace Calc.MVVM.Models
                 NotifyPropertiesChange();
             }
         }
-
         public double SubMaterialRatio
         {
             get => layer.SubMaterialRatio;
@@ -71,7 +71,6 @@ namespace Calc.MVVM.Models
                 NotifyPropertiesChange();
             }
         }
-
         public bool CanAddSecondMaterial
         {
             get
@@ -83,9 +82,8 @@ namespace Calc.MVVM.Models
                 return false;
             }
         }
-
         private Material activeMaterial;
-        public Material ActiveMaterial // for the tab to show the current material
+        public Material ActiveMaterial // to be shown on the tab
         {
             get => activeMaterial;
             set
@@ -106,8 +104,12 @@ namespace Calc.MVVM.Models
             layer = new LayerComponent() { IsValid = false };
         }
 
-        // if property changed due to material learning, the event should not be triggered to prevent deadlock
-        public void NotifyPropertiesChange(bool sendEvent = true)
+        /// <summary>
+        /// Notify all the properties changed.
+        /// sendEvent: if property changed from 'material learning', 
+        /// the MaterialPropertyChanged event should not be invoked to prevent deadlock.
+        /// </summary>
+        internal void NotifyPropertiesChange(bool sendEvent = true)
         {
             OnPropertyChanged(nameof(CanAddSecondMaterial));
             OnPropertyChanged(nameof(CurrentMaterials));
@@ -118,12 +120,15 @@ namespace Calc.MVVM.Models
             }
         }
 
-        public void ResetActiveMaterial() // not implemented yet
+        internal void ResetActiveMaterial()
         {
             if(layer.HasMainMaterial) ActiveMaterial = MainMaterial;
         }
 
-        public void RemoveMaterial()
+        /// <summary>
+        /// Remove one material, sub or main.
+        /// </summary>
+        internal void RemoveMaterial()
         {
             if(layer.HasSubMaterial)
             {
@@ -140,7 +145,6 @@ namespace Calc.MVVM.Models
             }
         }
 
-
         private string GetMaterialMatchText()
         {
             if (!layer.CheckUnitsMatch())
@@ -151,9 +155,10 @@ namespace Calc.MVVM.Models
         }
 
         /// <summary>
-        /// check if the target material is the same, and they are not the identical object
+        /// Checks if two LayerMaterialModels have the same target material.
+        /// Compared with material names.
         /// </summary>
-        public bool CheckIdenticalTargetMaterial(LayerMaterialModel otherModel)
+        internal bool CheckIdenticalTargetMaterial(LayerMaterialModel otherModel)
         {
             if (otherModel == null) return false;
             if (this == otherModel) return false;
@@ -162,26 +167,19 @@ namespace Calc.MVVM.Models
         }
 
         /// <summary>
-        /// copy material setting from another model
-        /// without triggering the event
+        /// Copies material settings from another model,
+        /// including main material, sub material and sub material ratio.
         /// </summary>
-        public void LearnMaterialSetting(LayerMaterialModel otherModel)
+        internal void LearnMaterialSetting(LayerMaterialModel otherModel)
         {
-            //this.layer.Function = otherModel.SelectedFunction;
-            //OnPropertyChanged(nameof(SelectedFunction));
-
             this.layer.SetMainMaterial(otherModel.MainMaterial);
             OnPropertyChanged(nameof(MainMaterial));
-
             this.layer.SetSubMaterial(otherModel.SubMaterial);
             OnPropertyChanged(nameof(SubMaterial));
-
             this.layer.SetSubMaterialRatio(otherModel.SubMaterialRatio);
-            OnPropertyChanged(nameof(SubMaterialRatio));
-            // prevent deadlock
-            NotifyPropertiesChange(false);
+            OnPropertyChanged(nameof(SubMaterialRatio));            
+            NotifyPropertiesChange(false); // prevent deadlock
         }
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)

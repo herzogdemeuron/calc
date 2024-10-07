@@ -14,7 +14,6 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace Calc.Core.DirectusAPI
 {
     /// <summary>
@@ -268,7 +267,6 @@ namespace Calc.Core.DirectusAPI
         internal async Task<byte[]> LoadImageByIdAsync(string imageId)
         {
             string imageUrl = $"{baseUrl}/assets/{imageId}";
-
             try
             {
                 byte[] imageData = await httpClient.GetByteArrayAsync(imageUrl);
@@ -279,7 +277,6 @@ namespace Calc.Core.DirectusAPI
                 return null;
             }
         }
-
     }
 
     internal class LoginResponseData

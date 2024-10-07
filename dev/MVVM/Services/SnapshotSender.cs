@@ -8,10 +8,13 @@ using System.Threading.Tasks;
 
 namespace Calc.MVVM.Services
 {
+    /// <summary>
+    /// Saves the project snapshot.
+    /// </summary>
     public class SnapshotSender
     {
         /// <summary>
-        /// save the snapshot, returns if saved and the error message
+        /// Saves the project snapshot, returns if saved and the error message.
         /// </summary>
         public static async Task<(bool?,string)> SaveProjectSnapshot(CalcStore store, List<AssemblySnapshot> assemblySnapshots, string newName)
         {
@@ -65,7 +68,7 @@ namespace Calc.MVVM.Services
             return path;
         }
 
-        public static string CreateResultJsonFile(string baseName,ProjectSnapshot snapshot)
+        private static string CreateResultJsonFile(string baseName,ProjectSnapshot snapshot)
         {
             string filePath = GetFilePath(baseName);
             var json = JsonConvert.SerializeObject(snapshot, Formatting.Indented);

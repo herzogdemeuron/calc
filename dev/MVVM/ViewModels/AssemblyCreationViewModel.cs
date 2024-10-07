@@ -19,20 +19,21 @@ using System.Windows.Media.Imaging;
 
 namespace Calc.MVVM.ViewModels
 {
-
-    public class AssemblyCreationViewModel : INotifyPropertyChanged
+    /// <summary>
+    /// Used by the calc builder.
+    /// The major VM handling the assembly creation logic.
+    /// </summary>
+    internal class AssemblyCreationViewModel : INotifyPropertyChanged
     {
         private readonly CalcStore store;
         private readonly IElementSourceHandler elementSourceHandler;
         private readonly IImageSnapshotCreator imageSnapshotCreator;
         private readonly IElementSender elementSender;
-
         private Dictionary<string, string> DynamicProperties = new Dictionary<string, string>();
         public List<LcaStandard> StandardsAll { get => store.StandardsAll; }
         public List<Unit> AssemblyUnitsAll { get => store.UnitsAll; }
         public List<MaterialFunction> MaterialFunctionsAll { get => store.MaterialFunctionsAll; }
         public List<AssemblyGroup> AssemblyGroupsAll { get => store.AssemblyGroupsAll; }
-
         public BasicAmountsModel AmountsModel { get; set; } = new BasicAmountsModel();
         public bool MaterialSelectionEnabled { get => SelectedComponent is LayerComponent; }
         public HslColor CurrentColor { get => SelectedComponent?.HslColor?? ItemPainter.DefaultColor; }
@@ -47,7 +48,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(MainWarning));
             }
         }
-
         private ObservableCollection<AssemblyComponent> assemblyComponents = new ObservableCollection<AssemblyComponent>();
         public ObservableCollection<AssemblyComponent> AssemblyComponents
         {
@@ -59,7 +59,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(AssemblyComponents));
             }
         }
-
         public List<CalculationComponent> CurrentCalculationComponents
         {
             get
@@ -73,10 +72,6 @@ namespace Calc.MVVM.ViewModels
                 return calcs;
             }
         }
-
-        /// <summary>
-        /// Each layer component has a layer material model, which defines the material settings for the layer
-        /// </summary>
         private Dictionary<LayerComponent,  LayerMaterialModel> layerMaterialModels = new Dictionary<LayerComponent, LayerMaterialModel>();
         private LayerMaterialModel InvalidLayerMaterialModel { get => new LayerMaterialModel(); }
         public LayerMaterialModel CurrentLayerMaterialModel
@@ -91,7 +86,6 @@ namespace Calc.MVVM.ViewModels
                 return InvalidLayerMaterialModel;
             }
         }
-
         private string newAssemblyName;
         public string NewAssemblyName
         {
@@ -105,7 +99,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(CanSave));
             }
         }
-
         private string newAssemblyCode;
         public string NewAssemblyCode
         {
@@ -119,7 +112,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(CanSave));
             }
         }
-
         private string newAssemblyDescription;
         public string NewAssemblyDescription
         {
@@ -131,7 +123,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(NewAssemblyDescription));
             }
         }
-
         private ICalcComponent selectedComponent;
         public ICalcComponent SelectedComponent
         {
@@ -145,23 +136,20 @@ namespace Calc.MVVM.ViewModels
                 UpdateAmounts();
             }
         }
-
         /// <summary>
-        /// the set of standard from the materials in the AllCalculationComponents
+        /// A set of standards from the materials in the CurrentCalculationComponents
         /// </summary>
-        public List<LcaStandard> Standards
+        private List<LcaStandard> Standards
         {
             get => CurrentCalculationComponents?
                 .Where(c => c.Material != null)
                 .Select(c => c.Material.Standard)
                 .Distinct().ToList();
         }
-
         public string StandardsString
         {
             get => Standards == null ? "" : string.Join(", ", Standards.Select(s => s.Name));
         }
-
         private Unit? selectedAssemblyUnit;
         public Unit? SelectedAssemblyUnit // todo: put this to record
         {
@@ -176,7 +164,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(MainWarning));
             }
         }
-
         private AssemblyGroup selectedAssemblyGroup;
         public AssemblyGroup SelectedAssemblyGroup
         {
@@ -189,7 +176,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(CanSave));
             }
         }
-
         private string currentImagePath;
         private BitmapImage currentImage; 
         public BitmapImage CurrentImage
@@ -202,7 +188,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(CurrentImage));
             }
         }
-
         private string captureText = "📷";
         public string CaptureText
         {
@@ -214,7 +199,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(CaptureText));
             }
         }
-
         private string saveMessage;
         public string SaveMessage
         {
@@ -226,7 +210,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(SaveMessage));
             }
         }
-
         private SolidColorBrush saveMessageColor;
         public SolidColorBrush SaveMessageColor
         {
@@ -238,9 +221,7 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(SaveMessageColor));
             }
         }
-
         public bool CanSave { get => CheckCanSave(); }
-
         private bool isNotSaving = true;
         public bool IsNotSaving
         {
@@ -253,7 +234,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(CanSave));
             }
         }
-
         private int? updateId;
         private bool saveOrUpdate = true;
         public bool SaveOrUpdate
@@ -266,7 +246,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(SaveOrUpdate));
             }
         }
-
         private Visibility savingVisibility = Visibility.Collapsed;
         public Visibility SavingVisibility
         {
@@ -278,10 +257,8 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(SavingVisibility));
             }
         }
-
         public double? AssemblyGwp { get => CurrentCalculationComponents?.Sum(c => c.Gwp); }
         public double? AssemblyGe { get => CurrentCalculationComponents?.Sum(c => c.Ge); }
-
 
         public AssemblyCreationViewModel(CalcStore store, IElementSourceHandler elemSrcHandler, IImageSnapshotCreator imgCreator, IElementSender elemSender)
         {
@@ -291,21 +268,30 @@ namespace Calc.MVVM.ViewModels
             elementSender = elemSender;
         }
 
-        public void HandleLoaded()
+        /// <summary>
+        /// Initialize the some properties.
+        /// </summary>
+        internal void HandleLoaded()
         {
             OnPropertyChanged(nameof(AssemblyUnitsAll));
             OnPropertyChanged(nameof(AssemblyGroupsAll));
             UpadteMainWarning();
         }
 
-        public void HandleDeselect()
+        /// <summary>
+        /// Clears selected component.
+        /// </summary>
+        internal void HandleDeselect()
         {
-            SelectedComponent = null;
-            
+            SelectedComponent = null;            
             OnPropertyChanged(nameof(CurrentColor));
         }
 
-        public void HandleAmountClicked(Unit? newAssemblyUnit)
+        /// <summary>
+        /// Sets Normalizer and unit.
+        /// </summary>
+        /// <param name="newAssemblyUnit"></param>
+        internal void HandleAmountClicked(Unit? newAssemblyUnit)
         {
             if(newAssemblyUnit == null) return;
             foreach (var component in AssemblyComponents)
@@ -321,14 +307,14 @@ namespace Calc.MVVM.ViewModels
             UpadteMainWarning();
         }
 
-        public void HandleCaptureClicked()
+        internal void HandleCaptureClicked()
         {
             string filename = NewAssemblyName ?? "CalcAssembly";
             currentImagePath = imageSnapshotCreator.CreateImageSnapshot(filename);
             CurrentImage = new BitmapImage(new Uri(currentImagePath));
         }
 
-        public void HandleCaptureMouseOver(bool isEnter)
+        internal void HandleCaptureMouseOver(bool isEnter)
         {
             if(CurrentImage == null) return;
             CaptureText = isEnter ? "↻" : "";
@@ -363,10 +349,10 @@ namespace Calc.MVVM.ViewModels
         }
 
         /// <summary>
-        /// selecting elements from revit, get the assembly components 
-        /// and try to restore assembly record to both the assembly components and the current view model
+        /// Selects elements from revit, gets the assembly components,
+        /// restores assembly record to both the assembly components and the current view model.
         /// </summary>
-        public void HandleSelectingElements()
+        internal void HandleSelectingElements()
         {
             try
             {
@@ -399,11 +385,11 @@ namespace Calc.MVVM.ViewModels
 
         }
 
-
         /// <summary>
-        /// component selection from treeview changed
+        /// Sets the selcted component.
+        /// Called while component selection of treeview changed.
         /// </summary>
-        public void HandleComponentSelectionChanged(ICalcComponent selectedCompo)
+        internal void HandleComponentSelectionChanged(ICalcComponent selectedCompo)
         {
             SelectedComponent = selectedCompo;
             // set the main material tab to active
@@ -411,7 +397,10 @@ namespace Calc.MVVM.ViewModels
             OnPropertyChanged(nameof(CurrentColor));
         }
 
-        public void HandleSetMaterial(bool setMain, Material material)
+        /// <summary>
+        /// Sets the material to the layer material model.
+        /// </summary>
+        internal void HandleSetMaterial(bool setMain, Material material)
         {
             if (setMain)
             {
@@ -425,13 +414,17 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
-        public void HandleReduceMaterial()
+        /// <summary>
+        /// Removes one material from the layer material model.
+        /// </summary>
+        internal void HandleReduceMaterial()
         {
             CurrentLayerMaterialModel.RemoveMaterial();
         }
 
         /// <summary>
-        /// reload all layer material models, when the standard changes or selected revit elements changed
+        /// Reloads all layer material models.
+        /// Called when the standard changes or selected revit elements changed.
         /// </summary>
         private void UpdateLayerMaterialModels()
         {
@@ -449,7 +442,9 @@ namespace Calc.MVVM.ViewModels
             CurrentLayerMaterialModel.NotifyPropertiesChange();
         }
 
-        // the properties change from layer material models should invoke this function to update ui
+        /// <summary>
+        /// The properties change from layer material models should invoke this function to update ui.
+        /// </summary>
         private void HandleMaterialChanged(object sender, EventArgs e)
         {
             if (sender is LayerMaterialModel changedModel)
@@ -462,7 +457,7 @@ namespace Calc.MVVM.ViewModels
         }
 
         /// <summary>
-        /// set the same material setting to models with the same target material
+        /// Sets the same material setting to models, according to the same target material.
         /// </summary>
         private void UpdateMaterialModelSettings(LayerMaterialModel changedModel)
         {
@@ -481,10 +476,9 @@ namespace Calc.MVVM.ViewModels
             OnPropertyChanged(nameof(CurrentColor));
         }
 
-        public void UpdateCalculationComponents()
+        internal void UpdateCalculationComponents()
         {
             var normalizeRatio = GetNormalizeRatio();
-
             foreach (var component in AssemblyComponents)
             {
                 component.UpdateCalculationComponents(normalizeRatio);
@@ -497,9 +491,8 @@ namespace Calc.MVVM.ViewModels
             SaveMessage = "";
         }
 
-
         /// <summary>
-        /// get the normalize ratio from the normalizer
+        /// Gets the normalize ratio from the normalizer.
         /// </summary>
         private double GetNormalizeRatio()
         {
@@ -514,6 +507,10 @@ namespace Calc.MVVM.ViewModels
             return 0;
         }
 
+        /// <summary>
+        /// Creates the assembly class before saving.
+        /// Taking the image snapshot and the speckle properties.
+        /// </summary>
         private Assembly CreateAssembly(string imageUuid,string speckleProjectId, string speckleModelId)
         {
             var assembly = new Assembly
@@ -529,34 +526,35 @@ namespace Calc.MVVM.ViewModels
                 AssemblyGe = AssemblyGe,
             };
             SnapshotMaker.Snap(assembly);
-
             if (!string.IsNullOrEmpty(imageUuid))
             {
                 assembly.AssemblyImage = new AssemblyImage() { Id = imageUuid };
             }
-
             if (!string.IsNullOrEmpty(speckleModelId) && !string.IsNullOrEmpty(speckleProjectId))
             {
                 assembly.SpeckleProjectId = speckleProjectId;
                 assembly.SpeckleModelId = speckleModelId;
             }
-
             return assembly;
         }
-
-        public async Task<bool> HandleSaveAssembly()
+        
+        /// <summary>
+        /// Uploads the image snapshot and speckle model, 
+        /// creates the assembly and saves it.
+        /// Lastly takes care of the assembly record.
+        /// </summary>
+        /// <returns></returns>
+        internal async Task<bool> HandleSaveAssembly()
         {
             IsNotSaving = false;
             SavingVisibility = Visibility.Visible;
             SaveMessage = "";
-
             try
             {
                 string imageUuid = await store.UploadImageAsync(currentImagePath, NewAssemblyName); // todo: make this more robust
                 var speckleModelId = await SendElementsToSpeckle();
                 var speckleProjectId = store.Config.SpeckleBuilderProjectId;
                 var assembly = CreateAssembly(imageUuid, speckleProjectId, speckleModelId);
-
                 if (updateId != null)
                 {
                     assembly.Id = updateId.Value;
@@ -569,8 +567,6 @@ namespace Calc.MVVM.ViewModels
                     SaveMessage = "New Assembly saved.";
                     CheckSaveOrUpdate();
                 }
-
-
                 // store the assembly record
                 elementSourceHandler.SaveAssemblyRecord
                     (
@@ -581,7 +577,6 @@ namespace Calc.MVVM.ViewModels
                         newAssemblyDescription, 
                         AssemblyComponents.ToList() 
                     );
-
             }
             catch (Exception ex)
             {
@@ -591,18 +586,14 @@ namespace Calc.MVVM.ViewModels
                 IsNotSaving = true;
                 return false;
             }
-
             SaveMessageColor = Brushes.ForestGreen;
             SavingVisibility = Visibility.Collapsed;
             IsNotSaving = true;
-
-
             return true;
-
         }
 
         /// <summary>
-        /// send elements to speckle, get the branch id 
+        /// Sends elements to speckle, gets the model id.
         /// </summary>
         private async Task<string> SendElementsToSpeckle()
         {
@@ -640,13 +631,12 @@ namespace Calc.MVVM.ViewModels
                 SaveOrUpdate = true;
             }
         }
-        public void MoveAssemblyComponent(int oldIndex, int newIndex)
+        internal void MoveAssemblyComponent(int oldIndex, int newIndex)
         {
             if (oldIndex < 0 || newIndex < 0 || oldIndex == newIndex) return;
             AssemblyComponents.Move(oldIndex, newIndex);
             UpdateCalculationComponents();
         }
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)

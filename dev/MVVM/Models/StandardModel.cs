@@ -1,14 +1,12 @@
 ﻿using Calc.Core.Objects.Standards;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Calc.MVVM.Models
 {
-    public class StandardModel : INotifyPropertyChanged
+    /// <summary>
+    /// The standard source of a material.
+    /// </summary>
+    internal class StandardModel : INotifyPropertyChanged
     {
         public string Name { get; set; }
         private bool isSelected = true;
