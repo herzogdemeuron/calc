@@ -6,6 +6,7 @@ using Calc.MVVM.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 
 namespace Calc.MVVM.ViewModels
 {
@@ -28,6 +29,26 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(SelectedNodeItem));
             }
         }
+        private Visibility treeViewVisibility;
+        public Visibility TreeViewVisibility
+        {
+            get => treeViewVisibility;
+            set
+            {
+                treeViewVisibility = value;
+                OnPropertyChanged(nameof(TreeViewVisibility));
+            }
+        }
+        private Visibility emptyNoteVisibility;
+        public Visibility EmptyNoteVisibility
+        {
+            get => emptyNoteVisibility;
+            set
+            {
+                emptyNoteVisibility = value;
+                OnPropertyChanged(nameof(EmptyNoteVisibility));
+            }
+        }
         public NodeModel CurrentQueryTemplateItem { get; set; } = new NodeModel(null, null);
         public NodeModel CurrentLeftoverQuerySetItem { get; set; } = new NodeModel(null, null);
         public ObservableCollection<NodeModel> NodeSource
@@ -38,6 +59,8 @@ namespace Calc.MVVM.ViewModels
             Store = calcStore;
             this.visualizer = visualizer;
             BranchesSwitch = false;
+            TreeViewVisibility = Visibility.Collapsed;
+            EmptyNoteVisibility = Visibility.Visible;
         }
 
         /// <summary>
@@ -47,6 +70,8 @@ namespace Calc.MVVM.ViewModels
         {
             CurrentQueryTemplateItem = new NodeModel(Store.QueryTemplateSelected, this);
             CurrentLeftoverQuerySetItem = new NodeModel(Store.LeftoverQuerySet, this);
+            TreeViewVisibility = Visibility.Visible;
+            EmptyNoteVisibility = Visibility.Collapsed;
             OnPropertyChanged(nameof(NodeSource));
             ReColorAllNodes(true);
             DeselectNodes();

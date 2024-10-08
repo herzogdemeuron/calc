@@ -110,22 +110,26 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button DataContext="{Binding CountAmount}"
+                    <Button Tag="Count"
+                            DataContext="{Binding CountAmount}"
                             Grid.Column="0"
                             Click="CountAmountClicked"
                             Style="{StaticResource UnitButtonStyle}"/>
 
-                    <Button DataContext="{Binding LengthAmount}"
+                    <Button Tag="Length"
+                            DataContext="{Binding LengthAmount}"
                             Grid.Column="1"
                             Click="LengthAmountClicked"
                             Style="{StaticResource UnitButtonStyle}"/>
 
-                    <Button DataContext="{Binding AreaAmount}"
+                    <Button Tag="Area"
+                            DataContext="{Binding AreaAmount}"
                             Grid.Column="2"
                             Click="AreaAmountClicked"
                             Style="{StaticResource UnitButtonStyle}"/>
 
-                    <Button DataContext="{Binding VolumeAmount}"
+                    <Button Tag="Volume"
+                            DataContext="{Binding VolumeAmount}"
                             Grid.Column="3"
                             Click="VolumeAmountClicked"
                             Style="{StaticResource UnitButtonStyle}"/>
@@ -490,11 +494,11 @@
                 <TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding AssemblyCreationVM.StandardsString}" VerticalAlignment="Center" d:Text="KBOB"/>
 
                 <TextBlock Grid.Column="4" Text="GWP: " FontWeight="SemiBold" VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="5" Text="{Binding AssemblyCreationVM.AssemblyGwp}" VerticalAlignment="Center" d:Text="98.902"/>
+                <TextBlock Grid.Column="5" Text="{Binding AssemblyCreationVM.AssemblyGwp, StringFormat={}{0:F3}}" VerticalAlignment="Center" d:Text="98.902"/>
                 <TextBlock Grid.Column="6" FontSize="9" Text="kgCO₂/yr" Margin="5,0,0,0" VerticalAlignment="Center"/>
 
                 <TextBlock Grid.Column="4" Grid.Row="1" Text="GE: " FontWeight="SemiBold" VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="5" Grid.Row="1" Text="{Binding AssemblyCreationVM.AssemblyGe}" VerticalAlignment="Center" d:Text="177.902"/>
+                <TextBlock Grid.Column="5" Grid.Row="1" Text="{Binding AssemblyCreationVM.AssemblyGe, StringFormat={}{0:F3}}" VerticalAlignment="Center" d:Text="177.902"/>
                 <TextBlock Grid.Column="6" FontSize="9" Grid.Row="1" Text="kWhOil/yr" Margin="5,0,0,0" VerticalAlignment="Center"/>
 
                 <Border x:Name="PreviewCalculation"
@@ -525,15 +529,15 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock>
-                                            <Run Text="{Binding Amount, StringFormat={}{0:F1}}"/>
+                                            <Run Text="{Binding Amount, StringFormat={}{0:F3}}"/>
                                             <Run Text=" "/>
                                             <Run Text="{Binding Material.MaterialUnit}"/>
                                         </TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="GWP" Binding="{Binding Gwp, StringFormat={}{0:F1}}" Width="*" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="GE" Binding="{Binding Ge, StringFormat={}{0:F1}}" Width="*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="GWP" Binding="{Binding Gwp, StringFormat={}{0:F3}}" Width="*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="GE" Binding="{Binding Ge, StringFormat={}{0:F3}}" Width="*" IsReadOnly="True"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Border>
