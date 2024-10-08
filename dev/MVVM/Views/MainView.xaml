@@ -209,11 +209,7 @@
                     <RowDefinition Height="10"/>
                     <RowDefinition Height="25"/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="- Select Query Template -"
-                           Visibility="{Binding NodeTreeVM.EmptyNoteVisibility}"
-                           Foreground="Gray"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"/>
+
                 <Border Grid.Row="0"
                         Grid.ColumnSpan="4"
                         BorderBrush="Silver"
@@ -240,6 +236,10 @@
                         </TreeView.ItemTemplate>
                     </TreeView>
                 </Border>
+                <TextBlock Text="{Binding NodeTreeVM.EmptyQueryResultText}"
+                           Foreground="Gray"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
 
                 <Border Grid.ColumnSpan="4" Grid.Row="2" CornerRadius="4" BorderBrush="Silver" BorderThickness="1">
                    
@@ -499,6 +499,10 @@
                             </DataTemplate>
                         </TabControl.ContentTemplate>
                     </TabControl>
+                    <TextBlock Text="{Binding NodeTreeVM.EmptyAssemblyText}"
+                           Foreground="Gray"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
                 </Grid>
 
 
@@ -555,6 +559,11 @@
                                     </DataGridTemplateColumn>
                                 </DataGrid.Columns>
                             </DataGrid>
+                        <TextBlock Text="{Binding CalculationVM.EmptyCalculationText}"
+                                   Grid.RowSpan="2"
+                                   Foreground="Gray"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
                     </Grid>
                 </Border>
                 

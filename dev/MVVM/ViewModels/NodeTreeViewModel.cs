@@ -39,14 +39,24 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(TreeViewVisibility));
             }
         }
-        private Visibility emptyNoteVisibility;
-        public Visibility EmptyNoteVisibility
+        private string emptyQueryResultText = "- select a query template -";
+        public string EmptyQueryResultText
         {
-            get => emptyNoteVisibility;
+            get => emptyQueryResultText;
             set
             {
-                emptyNoteVisibility = value;
-                OnPropertyChanged(nameof(EmptyNoteVisibility));
+                emptyQueryResultText = value;
+                OnPropertyChanged(nameof(EmptyQueryResultText));
+            }
+        }
+        private string emptyAssemblyText = "- no assembly assigned -";
+        public string EmptyAssemblyText
+        {
+            get => emptyAssemblyText;
+            set
+            {
+                emptyAssemblyText = value;
+                OnPropertyChanged(nameof(EmptyAssemblyText));
             }
         }
         public NodeModel CurrentQueryTemplateItem { get; set; } = new NodeModel(null, null);
@@ -60,7 +70,6 @@ namespace Calc.MVVM.ViewModels
             this.visualizer = visualizer;
             BranchesSwitch = false;
             TreeViewVisibility = Visibility.Collapsed;
-            EmptyNoteVisibility = Visibility.Visible;
         }
 
         /// <summary>
@@ -71,7 +80,7 @@ namespace Calc.MVVM.ViewModels
             CurrentQueryTemplateItem = new NodeModel(Store.QueryTemplateSelected, this);
             CurrentLeftoverQuerySetItem = new NodeModel(Store.LeftoverQuerySet, this);
             TreeViewVisibility = Visibility.Visible;
-            EmptyNoteVisibility = Visibility.Collapsed;
+            EmptyQueryResultText = string.Empty;
             OnPropertyChanged(nameof(NodeSource));
             ReColorAllNodes(true);
             DeselectNodes();
@@ -85,12 +94,8 @@ namespace Calc.MVVM.ViewModels
         {
             if (Store.QueryTemplateSelected == null) return null;
             if (Store.MappingSelected == null) return null;
-
             var brokenQrySet = MappingHelper.ApplyMapping(CurrentQueryTemplateItem, Store, Store.MappingSelected); // this should be passed to mapping error?
-            //ReColorAllNodes();
-
             return brokenQrySet;
-
         }
 
         /// <summary>
@@ -141,6 +146,14 @@ namespace Calc.MVVM.ViewModels
             }
             CurrentQueryTemplateItem.NotifyNodePropertyChange();
             CurrentLeftoverQuerySetItem.NotifyNodePropertyChange(); // todo: check if this is needed
+            if(selectedNodeItem.AssemblyModel.CurrentAssemblies.Count > 0)
+            {
+                EmptyAssemblyText = string.Empty;
+            }
+            else
+            {
+                EmptyAssemblyText = "- no assembly assigned -";
+            }
         }
 
         /// <summary>
@@ -181,6 +194,7 @@ namespace Calc.MVVM.ViewModels
             CurrentLeftoverQuerySetItem.NotifyNodePropertyChange(); // todo: check if this is needed
             var resetItems = CurrentQueryTemplateItem.SubNodeItems.Select(n => n.Host).ToList();
             visualizer.ResetView(resetItems);
+            EmptyAssemblyText = "- select a query result -";
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

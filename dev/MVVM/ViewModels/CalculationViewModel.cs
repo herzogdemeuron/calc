@@ -32,6 +32,19 @@ namespace Calc.MVVM.ViewModels
             }
         }
 
+        public string EmptyCalculationText
+        {
+            get
+            {
+                if (HasResults || HasErrors)
+                {
+                    return string.Empty;
+                }
+                return "- no assembly assigned -";
+
+            }
+        }
+
         public List<AssemblySnapshot> AssemblySnapshots
         {
             get
@@ -141,6 +154,7 @@ namespace Calc.MVVM.ViewModels
             OnPropertyChanged(nameof(ProjectGwp));
             OnPropertyChanged(nameof(ProjectGe));
             OnPropertyChanged(nameof(ProjectArea));
+            OnPropertyChanged(nameof(EmptyCalculationText));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
