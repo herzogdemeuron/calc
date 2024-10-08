@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.DB;
 using RevitSharedResources.Interfaces;
+using System;
+using System.Collections.Generic;
 
 namespace SpeckleSender
 {

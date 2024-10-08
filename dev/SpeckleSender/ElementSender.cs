@@ -22,16 +22,16 @@ namespace SpeckleSender
         private readonly string builderProjectId;
         private readonly Document doc;
 
+        /// <summary>
+        /// Should be using the revit converter from nuget Speckle.Objects.Converter.Revit2023,
+        /// or from the installed speckle app kit.
+        /// see: https://speckle.community/t/how-to-run-revit-to-speckle-conversions-in-c/1548/6
+        /// </summary>
         public ElementSender(Document doc, CalcConfig config)
         {
             this.doc = doc;
             revitAppName = HostApplications.Revit.GetVersion(HostAppVersion.v2023);
             var speckleKit = KitManager.GetDefaultKit();
-
-            // this should be loading the revit converter from nuget Speckle.Objects.Converter.Revit2023 (priotized?)
-            // or from the installed speckle app kit.
-            // see: https://speckle.community/t/how-to-run-revit-to-speckle-conversions-in-c/1548/6
-
             speckleConverter = speckleKit.LoadConverter(revitAppName);
             speckleConverter.SetContextDocument(doc);
             account = new Account();
@@ -42,10 +42,8 @@ namespace SpeckleSender
         }
 
         /// <summary>
-        /// uses the assembly data to create an speckle base, adding all dynamic properties
+        /// Uses the assembly data to create an speckle base, adding all dynamic properties.
         /// </summary>
-        /// <param name="assemblyData"></param>
-        /// <returns></returns>
         private AssemblyBase CreateAssemblyBase(AssemblyData assemblyData)
         {
             List<object> elementList = assemblyData.ElementIds
@@ -59,14 +57,13 @@ namespace SpeckleSender
             {
                 assemblyBase[dProp.Key] = dProp.Value;
             }
-
             return assemblyBase;
         }
 
 
         /// <summary>
-        /// send the elements to a speckle project with the model name, return the model id, which would be saved back to revit group
-        /// the group shared parameters are wrapped as dynamic properties
+        /// Sends the elements to a speckle project with the model name, return the model id, which would be saved back to revit group.
+        /// All shared parameters of the group are wrapped as dynamic properties.
         /// </summary>
         public async Task<string> SendAssembly(AssemblyData assemblyData)
         {
@@ -102,7 +99,6 @@ namespace SpeckleSender
                         );
                 }
             }
-
             string revitFilePath = doc.PathName;
             string revitUserName = doc.Application.Username;
             var commitId = await client.Version.Create(

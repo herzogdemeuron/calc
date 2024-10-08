@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace SpeckleSender
 {
+    /// <summary>
+    /// The speckle base for an assembly.
+    /// </summary>
     internal class AssemblyBase : Base
     {
         public string assembly_code { get; set; }
