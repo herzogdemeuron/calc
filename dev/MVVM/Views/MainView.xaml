@@ -648,7 +648,7 @@
                          Width="180"
                          HorizontalAlignment="Center"
                          Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding NewMappingVM.NewName}"/>
+                         Text="{Binding MappingVM.NewName}"/>
 
                 <Label HorizontalAlignment="Center"
                        Content="Dupliacate From?"
@@ -664,7 +664,7 @@
                          PreviewMouseLeftButtonDown="MappingListViewSelected"
                          Style="{StaticResource ListViewStyle}" 
                          ItemContainerStyle="{StaticResource ListViewItemMappingStyle}"
-                         ItemsSource="{Binding NewMappingVM.MappingsListView}">
+                         ItemsSource="{Binding MappingVM.MappingsListView}">
                     <ListView.GroupStyle>
                         <GroupStyle>
                             <GroupStyle.HeaderTemplate>
