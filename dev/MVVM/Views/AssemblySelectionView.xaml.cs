@@ -1,13 +1,9 @@
-﻿using Calc.Core.Objects.Assemblies;
-using Calc.Core.Objects.Materials;
-using Calc.MVVM.Helpers;
+﻿using Calc.MVVM.Helpers;
 using Calc.MVVM.ViewModels;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Threading;
 
 namespace Calc.MVVM.Views
 {
@@ -16,7 +12,7 @@ namespace Calc.MVVM.Views
         private double originalLeft;
         private readonly AssemblySelectionViewModel AssemblySelectionVM;
 
-        public AssemblySelectionView(AssemblySelectionViewModel assemblySelectionVM)
+        internal AssemblySelectionView(AssemblySelectionViewModel assemblySelectionVM)
         {
             this.AssemblySelectionVM = assemblySelectionVM;
             this.DataContext = AssemblySelectionVM;
@@ -110,7 +106,7 @@ namespace Calc.MVVM.Views
             if (expander != null)
             {
                 this.Width += 670; // border width + margin
-                this.Left = originalLeft; // Keep the left position fixed
+                this.Left = originalLeft; // Keeps the left position fixed
             }
         }
 
@@ -120,7 +116,7 @@ namespace Calc.MVVM.Views
             if (expander != null)
             {
                 this.Width -= 670;
-                this.Left = originalLeft; // Keep the left position fixed
+                this.Left = originalLeft; // Keeps the left position fixed
             }
         }
 

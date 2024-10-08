@@ -1,16 +1,14 @@
-﻿using Calc.MVVM.Helpers;
-using Calc.Core;
+﻿using Calc.Core;
 using Calc.Core.Objects.GraphNodes;
-using Calc.Core;
+using Calc.MVVM.Helpers;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace Calc.MVVM.ViewModels
 {
-    public class QueryTemplateViewModel
+    internal class QueryTemplateViewModel
     {
         private readonly CalcStore store;
-        private IElementCreator elementCreator;
+        private readonly IElementCreator elementCreator;
         private readonly VisibilityViewModel visibilityVM;
         public QueryTemplateViewModel(CalcStore calcStore, IElementCreator elementCreator, VisibilityViewModel vvm)
         {
@@ -20,9 +18,9 @@ namespace Calc.MVVM.ViewModels
         }
 
         /// <summary>
-        /// Set the new selected query template to store, perform queries and update the leftover query set
+        /// Sets the new selected query template to store, perform queries and update the leftover query set
         /// </summary>
-        public async Task HandleQueryTemplateSelectionChanged(QueryTemplate qryTemplate)
+        internal async Task HandleQueryTemplateSelectionChanged(QueryTemplate qryTemplate)
         {
             if (qryTemplate == null) return;
             try

@@ -23,6 +23,9 @@ namespace Calc.MVVM.Views
             mvm.DeselectBrokenQueryView += DeselectBrokenNodesTreeView;
         }
 
+        /// <summary>
+        /// Deselects the selected treeview item in the Tag property.
+        /// </summary>
         private void DeselectTreeView(object sender, EventArgs e)
         {
             if (TreeView.SelectedItem != null)
@@ -34,6 +37,9 @@ namespace Calc.MVVM.Views
             }
         }
 
+        /// <summary>
+        /// Deselects the selected treeview item in the Tag property.
+        /// </summary>
         private void DeselectBrokenNodesTreeView(object sender, EventArgs e)
         {
             if (BrokenNodesTreeView.SelectedItem != null)
@@ -42,23 +48,6 @@ namespace Calc.MVVM.Views
                 {
                     selectedTreeViewItem.IsSelected = false;
                 }
-            }
-        }
-
-        private void SelectNodeTreeView(NodeModel node) // deprecated
-        {
-            if (node != null)
-            {
-                //find treeviewitem by node
-                var treeViewItem = ViewHelper.FindTreeViewItem(BrokenNodesTreeView, node);
-                if (treeViewItem != null)
-                {
-                    treeViewItem.IsSelected = true;
-                }
-            }
-            else
-            {
-                //DeselectBrokenNodesTreeView();
             }
         }
 
@@ -112,12 +101,16 @@ namespace Calc.MVVM.Views
             MainVM.HandleMappingErrorClicked();
         }
 
+        /// <summary>
+        /// Stores the selected treeview item in the Tag property,
+        /// in order to be able to deselect it.
+        /// </summary>
         private void BrokenNodeSelected(object sender, RoutedEventArgs e)
         {
             if (BrokenNodesTreeView.SelectedItem is NodeModel selectedNode)
             {
                 MainVM.HandleBrokenNodeSelectionChanged(selectedNode);
-                BrokenNodesTreeView.Tag = e.OriginalSource; // save selected treeviewitem for deselecting
+                BrokenNodesTreeView.Tag = e.OriginalSource;
                 e.Handled = true;
             }
         }
@@ -138,12 +131,16 @@ namespace Calc.MVVM.Views
             MainVM.HandleErrorMappingSideClicked();
         }
 
+        /// <summary>
+        /// Stores the selected treeview item in the Tag property,
+        /// in order to be able to deselect it.
+        /// </summary>
         private void TreeViewItemSelected(object sender, RoutedEventArgs e)
         {
             if (TreeView.SelectedItem is NodeModel selectedNode)
             {
                 MainVM.HandleNodeItemSelectionChanged(selectedNode);
-                TreeView.Tag = e.OriginalSource; // save selected treeviewitem for deselecting
+                TreeView.Tag = e.OriginalSource;
                 e.Handled = true;
             }
         }
@@ -158,16 +155,17 @@ namespace Calc.MVVM.Views
             SetAssemblyWithTag(false);
         }
 
-        // set the main or sub assembly calling the assembly selection view
+        /// <summary>
+        /// Calls the assembly selection view.
+        /// Sets the main or sub assembly with argument setFirst.
+        /// </summary>
         private void SetAssemblyWithTag(bool setFirst)
         {
             var canSelect = MainVM.HandleSelectingAssembly(setFirst);
 
             if (!canSelect) return;
-
             var assemblySelectionView = new AssemblySelectionView(MainVM.AssemblySelectionVM);
             var result = assemblySelectionView.ShowDialog();
-
             if (result == true)
             {
                 MainVM.HandleAssemblySelected(setFirst);
@@ -189,21 +187,25 @@ namespace Calc.MVVM.Views
             MainVM.HandleRemove();
         }
 
+        /// <summary>
+        /// Sets the apprearance of the colorize buttons when clicked.
+        /// </summary>
         private void ColorizeClicked(object sender, RoutedEventArgs e)
         {
             string tag = (sender as Button).Tag.ToString();
+            string image = "pack://application:,,,/CalcMVVM;component/Resources/button_color.png";
             switch (tag)
             {
                 case "group":
                     this.ColorByAssemblyButton.Opacity = 0.4;
                     this.ColorByAssemblyButton.Uid = "";
                     this.ColorByGroupButton.Opacity = 1.0;
-                    this.ColorByGroupButton.Uid = "pack://application:,,,/CalcMVVM;component/Resources/button_color.png";
+                    this.ColorByGroupButton.Uid = image;
                     MainVM.HandleViewToggleToBranch();
                     break;
                 case "assembly":
                     this.ColorByAssemblyButton.Opacity = 1.0;
-                    this.ColorByAssemblyButton.Uid = "pack://application:,,,/CalcMVVM;component/Resources/button_color.png";
+                    this.ColorByAssemblyButton.Uid = image;
                     this.ColorByGroupButton.Opacity = 0.4;
                     this.ColorByGroupButton.Uid = "";
                     MainVM.HandleViewToggleToAssembly();
@@ -211,7 +213,6 @@ namespace Calc.MVVM.Views
                 case "co2":
                     break;
             }
-            // DeselectBrokenNodesTreeView(sender, e);
         }
 
         private void UpdateRevitClicked(object sender, RoutedEventArgs e)
@@ -251,7 +252,6 @@ namespace Calc.MVVM.Views
             base.OnMouseLeftButtonDown(e);
             this.DragMove();
         }
-
         private void OnCloseClicked(object sender, RoutedEventArgs e)
         {
             this.Close();

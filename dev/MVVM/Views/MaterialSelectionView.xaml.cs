@@ -5,18 +5,20 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace Calc.MVVM.Views
 {
     public partial class MaterialSelectionView : Window
     {
-        private double originalLeft; // used to store the original left position of the window, for window ajustment when expander is expanded or collapsed
-
+        /// <summary>
+        /// Used to store the original left position of the window, 
+        /// for window ajustment when expander is expanded or collapsed.
+        /// </summary>
+        private double originalLeft;
         private readonly MaterialSelectionViewModel MaterialSelectionVM;
-        public Material SelectedMaterial { get => MaterialSelectionVM.SelectedMaterial; }
+        //public Material SelectedMaterial { get => MaterialSelectionVM.SelectedMaterial; } // todo: remove
 
-        public MaterialSelectionView(MaterialSelectionViewModel materialSelectionVM)
+        internal MaterialSelectionView(MaterialSelectionViewModel materialSelectionVM)
         {
             this.MaterialSelectionVM = materialSelectionVM;
             this.DataContext = MaterialSelectionVM;
@@ -66,7 +68,7 @@ namespace Calc.MVVM.Views
         }
 
         /// <summary>
-        /// Enables scrolling item by item in the list view
+        /// Enables scrolling item by item in the list view.
         /// </summary>
         private void ListViewPreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
@@ -104,7 +106,7 @@ namespace Calc.MVVM.Views
             if (expander != null)
             {
                 this.Width += 220;
-                this.Left = originalLeft; // Keep the left position fixed
+                this.Left = originalLeft; // Keeps the left position fixed
             }
         }
 
@@ -114,7 +116,7 @@ namespace Calc.MVVM.Views
             if (expander != null)
             {
                 this.Width -= 220;
-                this.Left = originalLeft; // Keep the left position fixed
+                this.Left = originalLeft; // Keeps the left position fixed
             }
         }
     }

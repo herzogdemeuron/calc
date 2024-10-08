@@ -3,10 +3,12 @@ using System.Windows;
 
 namespace Calc.MVVM.ViewModels
 {
-    public class VisibilityViewModel : INotifyPropertyChanged
+    /// <summary>
+    /// Used in the calc project.
+    /// Manages the visibility of all overlays.
+    /// </summary>
+    internal class VisibilityViewModel : INotifyPropertyChanged
     {
-
-
         private string messageText;
         public string MessageText
         {
@@ -17,7 +19,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(MessageText));
             }
         }
-
         private string waitingText;
         public string WaitingText
         {
@@ -28,7 +29,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(WaitingText));
             }
         }
-
         private string savingmessage;
         public string SavingMessage
         {
@@ -39,17 +39,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(SavingMessage));
             }
         }
-        private Visibility projectOverlayVisibility = Visibility.Visible;
-        public Visibility ProjectOverlayVisibility
-        {
-            get { return projectOverlayVisibility; }
-            set
-            {
-                projectOverlayVisibility = value;
-                OnPropertyChanged(nameof(ProjectOverlayVisibility));
-            }
-        } 
-
         private Visibility waitingOverlayVisibility;
         public Visibility WaitingOverlayVisibility
         {
@@ -60,7 +49,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(WaitingOverlayVisibility));
             }
         }
-
         private Visibility messageOverlayVisibility;
         public Visibility MessageOverlayVisibility
         {
@@ -71,7 +59,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(MessageOverlayVisibility));
             }
         }
-
         private Visibility savingOverlayVisibility;
         public Visibility SavingOverlayVisibility
         {
@@ -82,7 +69,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(SavingOverlayVisibility));
             }
         }
-
         private Visibility newMappingOverlayVisibility;
         public Visibility NewMappingOverlayVisibility
         {
@@ -93,7 +79,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(NewMappingOverlayVisibility));
             }
         }
-
         private Visibility loginOverlayVisibility;
         public Visibility LoginOverlayVisibility
         {
@@ -107,16 +92,14 @@ namespace Calc.MVVM.ViewModels
 
         public VisibilityViewModel()
         {
-            HideAllOverlays(false);
+            HideAllOverlays();
         }
-
 
         internal void ShowSavingOverlay(string message)
         {
             HideAllOverlays();
             SavingMessage = message;
             SavingOverlayVisibility = Visibility.Visible;
-
         }
 
         internal void ShowNewMappingOverlay()
@@ -132,9 +115,12 @@ namespace Calc.MVVM.ViewModels
             WaitingOverlayVisibility = Visibility.Visible;
         }
 
+        /// <summary>
+        /// Shows a message overlay, shows text depending on the route:
+        /// null -> args[0], true -> args[1], false -> args[2]
+        /// </summary>
         internal void ShowMessageOverlay(bool? route, params object[] args)
-        {
-            
+        {            
             MessageOverlayVisibility = Visibility.Visible;
             switch (route)
             {
@@ -155,16 +141,12 @@ namespace Calc.MVVM.ViewModels
             MessageOverlayVisibility = Visibility.Collapsed;
         }
 
-        internal void HideAllOverlays(bool? hideProjects = true)
+        internal void HideAllOverlays()
         {
             WaitingOverlayVisibility = Visibility.Collapsed;
             MessageOverlayVisibility = Visibility.Collapsed;
             SavingOverlayVisibility = Visibility.Collapsed;
             NewMappingOverlayVisibility= Visibility.Collapsed;
-            if (hideProjects == true)
-            {
-                ProjectOverlayVisibility = Visibility.Collapsed;
-            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

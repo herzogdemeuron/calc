@@ -1,6 +1,5 @@
 ﻿using Calc.Core.Objects;
 using Calc.Core.Objects.Assemblies;
-using Calc.MVVM.Helpers;
 using Calc.MVVM.ViewModels;
 using System;
 using System.Windows;
@@ -21,20 +20,24 @@ namespace Calc.MVVM.Views
             BuilderVM = bvm;
             this.DataContext = BuilderVM;
             InitializeComponent();
-            //MediatorToView.Register("ViewDeselectTreeView", _=>DeselectTreeView());
             bvm.DeselectTreeView += DeselectTreeView;
         }
 
+        /// <summary>
+        /// If there are less than 5 items in the treeview, expand all after selection.
+        /// </summary>
         private void SelectClicked(object sender, RoutedEventArgs e)
         {
-            // hide the window when selecting elelemts
             this.Hide();
             BuilderVM.HandleSelect();
-            // show the window again
             this.Show();
-            // if there are less than 5 items in the treeview, expand all
             if (TreeView.Items?.Count < 5) ExpandAll(this.TreeView, true);
         }
+
+        /// <summary>
+        /// Stores the selected treeview item in the Tag property,
+        /// in order to be able to deselect it.
+        /// </summary>
         private void TreeViewItemSelected(object sender, RoutedEventArgs e)
         {
             if (TreeView.SelectedItem is ICalcComponent selectedCompo)
@@ -45,7 +48,9 @@ namespace Calc.MVVM.Views
             }
         }
 
-
+        /// <summary>
+        /// Deselects the selected treeview item in the Tag property.
+        /// </summary>
         private void DeselectTreeView(object sender, EventArgs e)
         {
             if (TreeView.SelectedItem != null)
@@ -104,6 +109,9 @@ namespace Calc.MVVM.Views
             BuilderVM.HandleAmountClicked(Unit.m3);
         }
 
+        /// <summary>
+        /// Handles the enter keydown event for the ratio textbox.
+        /// </summary>
         private void RatioTextBoxKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -122,17 +130,19 @@ namespace Calc.MVVM.Views
 
         private void SetFirstMaterialClicked(object sender, RoutedEventArgs e)
         {
-            SetMaterialWithTag(true);
+            SetMaterial(true);
         }
 
         private void SetSecondMaterialClicked(object sender, RoutedEventArgs e)
         {
-            SetMaterialWithTag(false);
+            SetMaterial(false);
         }
 
-        // set the main or sub material calling the material selection view
-        // decide which material to set based on the tag
-        private void SetMaterialWithTag(bool setFirst)
+        /// <summary>
+        /// Calls the material selection view.
+        /// Sets the main or sub material with argument setFirst.
+        /// </summary>
+        private void SetMaterial(bool setFirst)
         {
             BuilderVM.HandleSelectingMaterial(setFirst);
             var materialSelectionView = new MaterialSelectionView(BuilderVM.MaterialSelectionVM);
@@ -149,6 +159,9 @@ namespace Calc.MVVM.Views
             await BuilderVM.HandleSaveAssembly();
         }
 
+        /// <summary>
+        /// Drags the window.
+        /// </summary>
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
@@ -188,10 +201,12 @@ namespace Calc.MVVM.Views
             ImagePreviewPopup.IsOpen = false;
         }
 
+        /// <summary>
+        /// Previews image snapshot at the mouse position.
+        /// </summary>
         private void CaptureMouseMove(object sender, MouseEventArgs e)
         {
             if (!ImagePreviewPopup.IsOpen) return;
-
             ImagePreviewPopup.Placement = System.Windows.Controls.Primitives.PlacementMode.Relative;
             ImagePreviewPopup.HorizontalOffset = e.GetPosition(this).X;
             ImagePreviewPopup.VerticalOffset = e.GetPosition(this).Y;
@@ -202,6 +217,10 @@ namespace Calc.MVVM.Views
             _lastMouseDown = e.GetPosition(TreeView);
             BuilderVM.HandleSideClicked();
         }
+
+        /// <summary>
+        /// Rearranges assembly component in the treeview by drag and drop.
+        /// </summary>
         private void TreeViewMouseMove(object sender, MouseEventArgs e)
         {
             try
@@ -226,12 +245,18 @@ namespace Calc.MVVM.Views
             }
         }
 
+        /// <summary>
+        /// Rearranges assembly component in the treeview by drag and drop.
+        /// </summary>
         private void TreeViewDragOver(object sender, DragEventArgs e)
         {
             e.Effects = DragDropEffects.Move;
             e.Handled = true;
         }
 
+        /// <summary>
+        /// Rearranges assembly component in the treeview by drag and drop.
+        /// </summary>
         private void TreeViewDrop(object sender, DragEventArgs e)
         {
             var droppedData = e.Data.GetData(typeof(AssemblyComponent)) as AssemblyComponent;
@@ -255,22 +280,27 @@ namespace Calc.MVVM.Views
             _draggedItem = null;
         }
 
+        /// <summary>
+        /// If the double clicked item is a treeviewitem, call set main material;
+        /// if the double clicked item is not a treeviewitem, expand/collapse all
+        /// </summary>
         private void TreeViewDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var treeViewItem = FindAncestorOrSelf<TreeViewItem>(e.OriginalSource as DependencyObject);
-            // if the double clicked item is not a treeviewitem, expand/collapse all
             if (treeViewItem == null)
             {
                 bool shouldExpand = ShouldExpandItems(TreeView);
                 ExpandAll(TreeView, shouldExpand);
             }
-            // if the double clicked item is a treeviewitem, call set main material
             else if (!treeViewItem.HasItems)
             {
-                SetMaterialWithTag(true);
+                SetMaterial(true);
             }
         }
 
+        /// <summary>
+        /// Fetches if the items are expanded.
+        /// </summary>
         private bool ShouldExpandItems(ItemsControl itemsControl)
         {
             foreach (var item in itemsControl.Items)
@@ -287,14 +317,15 @@ namespace Calc.MVVM.Views
             return true;
         }
 
-        // Expand/Collapse all items in the treeview
+        /// <summary>
+        /// Expands/Collapses all items in the treeview.
+        /// </summary>
         private void ExpandAll(ItemsControl items, bool expand)
         {
             foreach (object obj in items.Items)
             {
                 ItemsControl childControl = items.ItemContainerGenerator.ContainerFromItem(obj) as ItemsControl;
-                if (childControl != null)  ExpandAll(childControl, expand);
-                
+                if (childControl != null)  ExpandAll(childControl, expand);                
                 TreeViewItem item = childControl as TreeViewItem;
                 if (item != null) item.IsExpanded = expand;
             }

@@ -1,11 +1,12 @@
-﻿using Calc.MVVM.Helpers;
-using Calc.MVVM.Services;
-using System.Collections.Generic;
+﻿using Calc.MVVM.Services;
 using System.Threading.Tasks;
 
 namespace Calc.MVVM.ViewModels
 {
-    public class SavingViewModel
+    /// <summary>
+    /// VM for the saving dialog.
+    /// </summary>
+    internal class SavingViewModel
     {
         private readonly CalculationViewModel calculationVM;
         private readonly VisibilityViewModel visibilityVM;
@@ -17,7 +18,10 @@ namespace Calc.MVVM.ViewModels
             visibilityVM = vvm;
         }
 
-        public void HandleSavingResults()
+        /// <summary>
+        /// The saving confirmation.
+        /// </summary>
+        internal void HandleSavingResults()
         {
             int count = calculationVM.AssemblySnapshots?.Count??0;
             string message;
@@ -32,16 +36,15 @@ namespace Calc.MVVM.ViewModels
             visibilityVM.ShowSavingOverlay(message);
         }
 
-
-        public async Task HandleSendingResults(string newName)
+        /// <summary>
+        /// The saving and save result message.
+        /// </summary>
+        internal async Task HandleSendingResults(string newName)
         {
-
             visibilityVM.ShowWaitingOverlay("Saving results...");
-
             var feedback =  await SnapshotSender.SaveProjectSnapshot(calculationVM.Store, calculationVM.AssemblySnapshots, newName);
             bool? saved = feedback.Item1;
             string error = feedback.Item2;
-
             visibilityVM.HideAllOverlays();
             visibilityVM.ShowMessageOverlay(
                         saved,
@@ -51,7 +54,7 @@ namespace Calc.MVVM.ViewModels
                         );
         }
 
-        public void HandleSaveResultCanceled()
+        internal void HandleSaveResultCanceled()
         {
             visibilityVM.HideAllOverlays();
         }

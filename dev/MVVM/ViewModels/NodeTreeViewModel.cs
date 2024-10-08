@@ -93,7 +93,7 @@ namespace Calc.MVVM.ViewModels
         }
 
         /// <summary>
-        /// Resets the lable colors with the selected node,
+        /// Controls lable color visibility with the selected node,
         /// feedbacks to the visualizer.
         /// </summary>
         internal void HandleNodeItemSelectionChanged(NodeModel nodeItem)
@@ -118,6 +118,9 @@ namespace Calc.MVVM.ViewModels
             CurrentLeftoverQuerySetItem.NotifyNodePropertyChange(); // todo: check if this is needed
         }
 
+        /// <summary>
+        /// Resets all node (branch) colors by assembly assignment.
+        /// </summary>
         internal void ColorNodesToAssembly()
         {
             BranchesSwitch = false;
@@ -127,6 +130,9 @@ namespace Calc.MVVM.ViewModels
             DeselectNodes();
         }
 
+        /// <summary>
+        /// Resets all node (branch) colors by branching.
+        /// </summary>
         internal void ColorNodesToBranch()
         {
             BranchesSwitch = true;
@@ -136,6 +142,10 @@ namespace Calc.MVVM.ViewModels
             DeselectNodes();
         }
 
+        /// <summary>
+        /// Hide all label colors,
+        /// feedbacks to the visualizer.
+        /// </summary>
         internal void DeselectNodes()
         {
             if (CurrentQueryTemplateItem == null) return;
