@@ -14,7 +14,7 @@ namespace Calc.MVVM.ViewModels
     /// Used by the calc project.
     /// Stores Assembly Snapshots, and provides preview of the calculation.
     /// </summary>
-    internal class CalculationViewModel : INotifyPropertyChanged
+    public class CalculationViewModel : INotifyPropertyChanged
     {
         private readonly NodeTreeViewModel NodeTreeVM;
         public CalcStore Store => NodeTreeVM.Store;

@@ -12,7 +12,7 @@ namespace Calc.MVVM.ViewModels
     /// <summary>
     /// For the queries tree view in calc project.
     /// </summary>
-    internal class NodeTreeViewModel : INotifyPropertyChanged
+    public class NodeTreeViewModel : INotifyPropertyChanged
     {
         private NodeModel selectedNodeItem;
         private readonly IVisualizer visualizer;

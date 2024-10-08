@@ -11,7 +11,7 @@ namespace Calc.MVVM.Models
     /// Used in calc project.
     /// The assembly section of a node model.
     /// </summary>
-    internal class AssemblyModel : INotifyPropertyChanged
+    public class AssemblyModel : INotifyPropertyChanged
     {
         private readonly NodeModel _node;
         private bool _inheritEnabled = false;

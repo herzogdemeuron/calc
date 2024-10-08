@@ -1,11 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:hprs="clr-namespace:Calc.MVVM.Helpers">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="ButtonResource.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
-
+    <hprs:HslToColorConverter x:Key="ColorConverter"/>
 
     <Style x:Key="TreeViewItemStyle" TargetType="TreeViewItem">
         <Style.Resources>

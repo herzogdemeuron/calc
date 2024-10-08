@@ -10,7 +10,7 @@ namespace Calc.MVVM.Models
     /// Used in calc builder.
     /// Each layer component has a layer material model, which defines the material settings for the layer
     /// </summary>
-    internal class LayerMaterialModel : INotifyPropertyChanged
+    public class LayerMaterialModel : INotifyPropertyChanged
     {
         private readonly LayerComponent layer;
         public event EventHandler MaterialPropertyChanged; // event to invoke ui change of the assembly creatiion vm

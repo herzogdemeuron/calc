@@ -9,7 +9,7 @@ namespace Calc.MVVM.ViewModels
     /// <summary>
     /// Takes care of broken mappings in calc project.
     /// </summary>
-    internal class MappingErrorViewModel : INotifyPropertyChanged
+    public class MappingErrorViewModel : INotifyPropertyChanged
     {
         private readonly MappingViewModel mappingVM;
         public bool HasBrokenItems => BrokenNodeSource.Count > 0;

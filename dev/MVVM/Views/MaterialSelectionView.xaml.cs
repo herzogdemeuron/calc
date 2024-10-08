@@ -1,5 +1,4 @@
-﻿using Calc.Core.Objects.Materials;
-using Calc.MVVM.Helpers;
+﻿using Calc.MVVM.Helpers;
 using Calc.MVVM.ViewModels;
 using System;
 using System.Windows;

@@ -14,7 +14,7 @@ namespace Calc.MVVM.ViewModels
     /// <summary>
     /// Handles updating and creating new mappings.
     /// </summary>
-    internal class MappingViewModel : INotifyPropertyChanged
+    public class MappingViewModel : INotifyPropertyChanged
     {
         private readonly CalcStore store;
         private readonly VisibilityViewModel visibilityVM;

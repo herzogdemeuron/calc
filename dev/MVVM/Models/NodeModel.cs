@@ -12,7 +12,7 @@ namespace Calc.MVVM.Models
     /// <summary>
     /// Wraps an IGraphNode.
     /// </summary>
-    internal class NodeModel : INotifyPropertyChanged
+    public class NodeModel : INotifyPropertyChanged
     {
         public bool IsLeftover { get => CheckLeftover(); }
         public string Name { get => GetNodeName(); }

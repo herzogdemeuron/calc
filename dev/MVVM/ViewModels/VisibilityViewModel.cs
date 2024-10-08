@@ -7,7 +7,7 @@ namespace Calc.MVVM.ViewModels
     /// Used in the calc project.
     /// Manages the visibility of all overlays.
     /// </summary>
-    internal class VisibilityViewModel : INotifyPropertyChanged
+    public class VisibilityViewModel : INotifyPropertyChanged
     {
         private string messageText;
         public string MessageText
@@ -77,16 +77,6 @@ namespace Calc.MVVM.ViewModels
             {
                 newMappingOverlayVisibility = value;
                 OnPropertyChanged(nameof(NewMappingOverlayVisibility));
-            }
-        }
-        private Visibility loginOverlayVisibility;
-        public Visibility LoginOverlayVisibility
-        {
-            get { return loginOverlayVisibility; }
-            set
-            {
-                loginOverlayVisibility = value;
-                OnPropertyChanged(nameof(LoginOverlayVisibility));
             }
         }
 

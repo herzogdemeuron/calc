@@ -23,7 +23,7 @@ namespace Calc.MVVM.ViewModels
     /// Used by the calc builder.
     /// The major VM handling the assembly creation logic.
     /// </summary>
-    internal class AssemblyCreationViewModel : INotifyPropertyChanged
+    public class AssemblyCreationViewModel : INotifyPropertyChanged
     {
         private readonly CalcStore store;
         private readonly IElementSourceHandler elementSourceHandler;

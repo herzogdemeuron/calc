@@ -6,7 +6,7 @@ namespace Calc.MVVM.ViewModels
     /// <summary>
     /// VM for the saving dialog.
     /// </summary>
-    internal class SavingViewModel
+    public class SavingViewModel
     {
         private readonly CalculationViewModel calculationVM;
         private readonly VisibilityViewModel visibilityVM;

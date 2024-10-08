@@ -5,7 +5,7 @@ namespace Calc.MVVM.Models
     /// <summary>
     /// Includes all basic unit amount models.
     /// </summary>
-    internal class BasicAmountsModel
+    public class BasicAmountsModel
     {
         public AmountModel CountAmount { get; } = new AmountModel(Unit.piece);
         public AmountModel LengthAmount { get; } = new AmountModel(Unit.m);

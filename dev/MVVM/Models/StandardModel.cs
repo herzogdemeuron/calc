@@ -6,7 +6,7 @@ namespace Calc.MVVM.Models
     /// <summary>
     /// The standard source of a material.
     /// </summary>
-    internal class StandardModel : INotifyPropertyChanged
+    public class StandardModel : INotifyPropertyChanged
     {
         public string Name { get; set; }
         private bool isSelected = true;

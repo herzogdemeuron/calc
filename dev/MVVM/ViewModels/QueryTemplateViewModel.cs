@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Calc.MVVM.ViewModels
 {
-    internal class QueryTemplateViewModel
+    public class QueryTemplateViewModel
     {
         private readonly CalcStore store;
         private readonly IElementCreator elementCreator;

@@ -8,7 +8,7 @@ namespace Calc.MVVM.Models
     /// Used by the calc builder.
     /// A filter tag for material selection.
     /// </summary>
-    internal class FilterTagModel: INotifyPropertyChanged
+    public class FilterTagModel: INotifyPropertyChanged
     {
         public string TagName { get; set; }
         private bool isSelected = false;

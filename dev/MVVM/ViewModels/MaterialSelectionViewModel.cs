@@ -10,7 +10,7 @@ using System.Windows.Data;
 namespace Calc.MVVM.ViewModels
 {
 
-    internal class MaterialSelectionViewModel : INotifyPropertyChanged
+    public class MaterialSelectionViewModel : INotifyPropertyChanged
     {
         private readonly List<Material> allMaterials;
         public ICollectionView AllMaterialsView { get; set; }

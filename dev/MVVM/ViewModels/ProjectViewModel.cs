@@ -13,15 +13,15 @@ namespace Calc.MVVM.ViewModels
     /// </summary>
     public class ProjectViewModel: INotifyPropertyChanged
     {
-        internal CalcStore Store { get; set; }
-        internal QueryTemplateViewModel QueryTemplateVM { get; set; }
-        internal MappingViewModel MappingVM { get; set; }
-        internal MappingErrorViewModel MappingErrorVM { get; set; }
-        internal NodeTreeViewModel NodeTreeVM { get; set; }
-        internal SavingViewModel SavingVM { get; set; }
-        internal VisibilityViewModel VisibilityVM { get; set; }
-        internal CalculationViewModel CalculationVM { get; set; }
-        internal AssemblySelectionViewModel AssemblySelectionVM { get; set; }
+        public CalcStore Store { get; set; }
+        public QueryTemplateViewModel QueryTemplateVM { get; set; }
+        public MappingViewModel MappingVM { get; set; }
+        public MappingErrorViewModel MappingErrorVM { get; set; }
+        public NodeTreeViewModel NodeTreeVM { get; set; }
+        public SavingViewModel SavingVM { get; set; }
+        public VisibilityViewModel VisibilityVM { get; set; }
+        public CalculationViewModel CalculationVM { get; set; }
+        public AssemblySelectionViewModel AssemblySelectionVM { get; set; }
         public event EventHandler DeselectTreeView;
         public event EventHandler DeselectBrokenQueryView;
 

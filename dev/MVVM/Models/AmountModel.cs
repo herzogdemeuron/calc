@@ -8,7 +8,7 @@ namespace Calc.MVVM.Models
     /// <summary>
     /// Shows one basic unit amount of an ICalcComponent.
     /// </summary>
-    internal class AmountModel : INotifyPropertyChanged
+    public class AmountModel : INotifyPropertyChanged
     {
         private readonly Unit unit;
         private ICalcComponent host;

@@ -765,7 +765,7 @@
              Background="Gainsboro"
              Margin="5"
              Visibility="{Binding VisibilityVM.MessageOverlayVisibility}"             
-              d:IsHidden="True">
+             d:IsHidden="True">
             <StackPanel VerticalAlignment="Center">
                 <TextBlock x:Name="MessageTextBlock"
                             Text="{Binding VisibilityVM.MessageText}"

@@ -12,8 +12,8 @@ namespace Calc.MVVM.ViewModels
     public class BuilderViewModel: INotifyPropertyChanged
     {
         public CalcStore Store { get; set; }
-        internal AssemblyCreationViewModel AssemblyCreationVM { get; set; }
-        internal MaterialSelectionViewModel MaterialSelectionVM { get; set; }
+        public AssemblyCreationViewModel AssemblyCreationVM { get; set; }
+        public MaterialSelectionViewModel MaterialSelectionVM { get; set; }
         public event EventHandler DeselectTreeView;
 
         public BuilderViewModel(CalcStore store, IElementSourceHandler elementSourceHandler, IImageSnapshotCreator imageSnapshotCreator, IElementSender elementSender)

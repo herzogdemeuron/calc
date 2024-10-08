@@ -17,7 +17,7 @@ namespace Calc.MVVM.ViewModels
     /// Logic for the assembly selection dialog.
     /// Only verified assemblies are shown.
     /// </summary>
-    internal class AssemblySelectionViewModel : INotifyPropertyChanged
+    public class AssemblySelectionViewModel : INotifyPropertyChanged
     {
         private readonly CalcStore calcStore;
         private string currentSearchText;
