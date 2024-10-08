@@ -4,15 +4,13 @@ using Calc.RevitConnector.Revit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Calc.RevitConnector.Helpers
 {
     /// <summary>
-    /// prompts user to select elements in revit with some specific catetgories using ISelectionFilter
+    /// Prompts user to select elements in revit with some specific catetgories using ISelectionFilter.
     /// </summary>
-    public static class SelectionHelper
+    internal static class SelectionHelper
     {
         public static ElementSelectionSet SelectElements(UIDocument uidoc)
         {
@@ -33,15 +31,14 @@ namespace Calc.RevitConnector.Helpers
         }
 
         /// <summary>
-        /// filter elements, get the element selection set
-        /// the elements are elements inside the groups and the outsiders
-        /// if there is only one group selected, extract the parameters from it, store it into the element selection set
+        /// Filters elements, gets the element selection set.
+        /// The selected elements could be both inside and outside of a group.
+        /// If there is only one group selected, extract the parameters from it, store it into the element selection set.
         /// </summary>
         private static ElementSelectionSet GetElementSelectionSet(List<Reference> references, UIDocument uidoc)
         {
             var selectionSet = new ElementSelectionSet();
             var selectedGroups = new List<Element>();
-
             // collect outsiders and groups
             foreach (var reference in references)
             {

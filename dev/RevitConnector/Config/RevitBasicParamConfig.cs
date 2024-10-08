@@ -3,7 +3,7 @@
 namespace Calc.RevitConnector.Config
 {
     /// <summary>
-    /// defines the basic parameter names (len, area and vol) for multiple categories that are used for calc element creation
+    /// Defines the basic parameter names (len, area and vol) for multiple categories that are used for calc element creation
     /// </summary>
     public class RevitBasicParamConfig
     {

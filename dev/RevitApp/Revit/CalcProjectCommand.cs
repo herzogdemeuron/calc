@@ -45,7 +45,6 @@ namespace Calc.RevitApp.Revit
             }
             catch (Exception ex)
             {
-                Logger.Log(ex.Message);
                 Debug.WriteLine(ex.Message);
                 return Result.Failed;
             }

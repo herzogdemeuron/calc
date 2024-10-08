@@ -48,7 +48,6 @@ namespace Calc.RevitApp.Revit
             catch (Exception ex)
             {
                 TaskDialog.Show("Error", ex.Message);
-                Logger.Log(ex.Message);
                 Debug.WriteLine(ex.Message);
                 return Result.Failed;
             }

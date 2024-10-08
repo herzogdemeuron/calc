@@ -4,17 +4,18 @@ using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Elements;
 using Calc.RevitConnector.Config;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Calc.RevitConnector.Helpers
 {
-    public class ParameterHelper
+    internal class ParameterHelper
     {
-        public static Tuple<bool, object> CheckAndGet(Element element, string parameterName)
+        /// <summary>
+        /// Gets parameter value from element, if not exist, return false.
+        /// </summary>
+        /// <returns>bool: if parameter exists, object: parameter value</returns>
+        internal static Tuple<bool, object> CheckAndGet(Element element, string parameterName)
         {
-            // bool: if parameter exists
-            // object: parameter value
             var parameter = GetParameter(element, parameterName);
             if (parameter == null)
             {
@@ -29,27 +30,27 @@ namespace Calc.RevitConnector.Helpers
 
         }
 
+        /// <summary>
+        /// Gets revit parameter from element with the given name.
+        /// </summary>
         private static Parameter GetParameter(Element element, string parameterName)
         {
             Tuple<bool, string> result  = GetParameterInfo(parameterName);
             bool isInstance = result.Item1;
-            string name = result.Item2;
-            
-            if (name == null)
-            {
-                return null;
-            }
-
+            string name = result.Item2;            
+            if (name == null) return null;
             return isInstance ? element.LookupParameter(name) : LookupTypeParameter(element, name);
         }
 
-        public static Tuple<bool, string> GetParameterInfo(string parameterName)
+        /// <summary>
+        /// Checks if the parameter name is legal,
+        /// type paramter name with prefix "type:"
+        /// instance parameter name with prefix "inst:"
+        /// </summary>
+        /// <returns> if legal, returns true for instance false for type parameter, and the parameter name as string.
+        /// if illegal, return null</returns>
+        internal static Tuple<bool, string> GetParameterInfo(string parameterName)
         {
-            // type paramter name: "type: parameterName"
-            // instance parameter name: "inst: parameterName"
-            // check if the parameter name is legal
-            // if yes, return true for instance false for type parameter, and the parameter name
-            // if no, return null
             if (parameterName.StartsWith("type:"))
             {
                 return Tuple.Create(false, parameterName.Substring(5).Trim());
@@ -64,6 +65,9 @@ namespace Calc.RevitConnector.Helpers
             }
         }
 
+        /// <summary>
+        /// Gets the type parameter of an element with the given name.
+        /// </summary>
         private static Parameter LookupTypeParameter(Element element, string parameterName)
         {
             ElementId id = element.GetTypeId();
@@ -72,10 +76,13 @@ namespace Calc.RevitConnector.Helpers
             return param;
         }
 
-        public static double ToMetricValue(Parameter parameter)
+        /// <summary>
+        /// Converts parameter value to metric if the GetDataType is length, area or volume.
+        /// </summary>
+        private static double ToMetricValue(Parameter parameter)
         {
             double value = parameter.AsDouble();
-            // convert parameter value to metric if the GetDataType is length, area or volume
+            // 
             ForgeTypeId typeId = parameter.Definition.GetDataType();
 
             if (typeId == SpecTypeId.Length)
@@ -94,7 +101,10 @@ namespace Calc.RevitConnector.Helpers
             return Math.Round(value, 5);            
         }
 
-        public static double ToMetricValue(double value, Unit unit)
+        /// <summary>
+        /// Converts value from revit units to metric
+        /// </summary>
+        internal static double ToMetricValue(double value, Unit unit)
         {
             switch (unit)
             {
@@ -110,10 +120,10 @@ namespace Calc.RevitConnector.Helpers
         }
 
         /// <summary>
-        /// get the basic unit parameter of an element
-        /// create a basic unit parameter with error type if the parameter is missing or redundant
+        /// Gets the basic unit parameter of an element,
+        /// creates a basic unit parameter with error type if the parameter is missing or redundant.
         /// </summary>
-        public static BasicParameter CreateBasicUnitParameter(Element elem, string parameterName, Unit unit)
+        internal static BasicParameter CreateBasicUnitParameter(Element elem, string parameterName, Unit unit)
         {
             if (unit == Unit.piece)
             {
@@ -124,11 +134,9 @@ namespace Calc.RevitConnector.Helpers
                     Unit = unit
                 };
             }
-
             var parameters = elem.GetParameters(parameterName);
             // get parameters with unique ids
             parameters = parameters.GroupBy(p => p.Id.IntegerValue).Select(g => g.First()).ToList();
-
             if (parameters.Count == 0)
             {
                 return new BasicParameter()
@@ -147,9 +155,7 @@ namespace Calc.RevitConnector.Helpers
                     Unit = unit
                 };
             }
-
             var value = ParameterHelper.ToMetricValue(parameters.First());
-
             if (value == 0)
             {
                 return new BasicParameter()
@@ -172,9 +178,9 @@ namespace Calc.RevitConnector.Helpers
         }
 
         /// <summary>
-        /// getthe material amount parameter of an element, either area or volume
+        /// Gets the material amount parameter of an element, either area or volume.
         /// </summary>
-        public static BasicParameter CreateMaterialAmountParameter(Element elem, ElementId materialId, Unit unit)
+        internal static BasicParameter CreateMaterialAmountParameter(Element elem, ElementId materialId, Unit unit)
         {
             double amount;
             switch (unit)
@@ -211,10 +217,10 @@ namespace Calc.RevitConnector.Helpers
         }
 
         /// <summary>
-        /// get the revit basic param config from the calc core custom param settings
-        /// return null if the category is invalid
+        /// Gets the revit basic param config from the calc core custom param settings,
+        /// returns null if the category is invalid.
         /// </summary>
-        public static RevitBasicParamConfig ParseFromParamSetting(CustomParamSetting paramSetting)
+        internal static RevitBasicParamConfig ParseFromParamSetting(CustomParamSetting paramSetting)
         {
             BuiltInCategory category;
             try
@@ -228,7 +234,6 @@ namespace Calc.RevitConnector.Helpers
             var lengthName = paramSetting.LengthCustomParamName;
             var areaName = paramSetting.AreaCustomParamName;
             var volumeName = paramSetting.VolumeCustomParamName;
-
             return new RevitBasicParamConfig(category, lengthName, areaName, volumeName);
         }
     }
