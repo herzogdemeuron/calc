@@ -5,7 +5,7 @@ using System.Security.Policy;
 namespace Calc.RevitConnector.Revit
 {
     /// <summary>
-    /// the selected result from revit, including the element ids and the paramaters of the group
+    /// The selection result from revit, including the element ids and the paramaters of the group.
     /// </summary>
     public class ElementSelectionSet
     {

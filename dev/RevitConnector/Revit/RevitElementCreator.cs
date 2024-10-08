@@ -11,31 +11,27 @@ using System.Linq;
 namespace Calc.RevitConnector.Revit
 {
     public class RevitElementCreator : IElementCreator
-
-    {
-        /// <summary>
-        /// Create a list of calc elements from the current document
-        /// it only takes the relevant parameters from the parameter name list to speed up the process
-        /// </summary>
-        
+    {        
         private readonly Document doc;
         
         public RevitElementCreator(Document doc)
         {
             this.doc = doc;
         }
+
+        /// <summary>
+        /// Creates a list of calc element from the current document,
+        /// it only takes the relevant parameters from the parameter name list to speed up the process.
+        /// </summary>
         public List<CalcElement> CreateCalcElements(List<CustomParamSetting> customParamSettings,List<string> parameterNameList)
-        {
- 
+        { 
             var paramConfigs = new List<RevitBasicParamConfig>();
             foreach (CustomParamSetting paramSetting in customParamSettings)
             {
                 var setting = ParameterHelper.ParseFromParamSetting(paramSetting);
                 if (setting != null) paramConfigs.Add(setting);
             }
-
             List<CalcElement> result = new List<CalcElement>();
-
             var opt = new Options();
             var elementDepot = new FilteredElementCollector(doc)
                   .WhereElementIsNotElementType()
@@ -47,21 +43,17 @@ namespace Calc.RevitConnector.Revit
                   x.GetTypeId() != null &&
                   x.GetTypeId() != ElementId.InvalidElementId &&
                   x.get_Geometry(opt) != null).ToList();
-
             foreach (RevitBasicParamConfig paramConfig in paramConfigs)
             {
-
                 result.AddRange
                     (
                         CalcElementsFromParamConfig(elementDepot, parameterNameList, paramConfig)
                     );
             }
-
             result.AddRange
                 (
                     CalcElementsFromParamConfig(elementDepot, parameterNameList, new RevitBasicParamConfig())
                 );
-
             return result;
         }
 
@@ -73,31 +65,25 @@ namespace Calc.RevitConnector.Revit
             )
         {
             var result = new List<CalcElement>();
-
             var builtinCategory = paramConfig.category;
             var lengthName = paramConfig.LengthName;
             var areaName = paramConfig.AreaName;
             var volumeName = paramConfig.VolumeName;
-
-            //takes the whole list if the category is invalid, otherwise filter the list by category
+            // if the category is invalid, takes the whole list, otherwise filter the list by category
             var filteredElements = (int)builtinCategory == -1 ?
                 elementList :
                 elementList.Where(x => x.Category.Id.IntegerValue == (int)builtinCategory);
-
             result = filteredElements.Select
                 (
                 x => CreateCalcElement(x, parameterNameList, lengthName, areaName, volumeName)
                 ).ToList();
-
             // remove the result elements from the elementList
             elementList.RemoveAll(x => x.Category.Id.IntegerValue == (int)builtinCategory);
             return result;
         }
 
-       
-
         /// <summary>
-        /// create a calc element using the element and the parameter name list
+        /// Creates a calc element using the element and the parameter name list,
         /// add as many parameters from the list as possible
         /// </summary>
         private CalcElement CreateCalcElement(
@@ -117,13 +103,10 @@ namespace Calc.RevitConnector.Revit
             }
             var category = elem.Category.Name;
             parameterDictionary["Category"] = category; // add category to the dictionary, for leftover query set grouping
-
             var typeName = elem.LookupParameter("Family and Type")?.AsValueString() ?? doc.GetElement(elem.GetTypeId()).Name;
             var lenParam = ParameterHelper.CreateBasicUnitParameter(elem, lenName, Unit.m);
             var areaParam = ParameterHelper.CreateBasicUnitParameter(elem, areaName, Unit.m2);
             var volParam = ParameterHelper.CreateBasicUnitParameter(elem, volName, Unit.m3);
-
-
             return new CalcElement
                 (
                 elem.Id.ToString(),
@@ -135,6 +118,5 @@ namespace Calc.RevitConnector.Revit
                 volParam
                 );
         }
-
     }
 }

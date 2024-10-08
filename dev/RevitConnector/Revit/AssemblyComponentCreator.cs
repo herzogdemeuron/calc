@@ -1,16 +1,13 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using Calc.Core;
 using Calc.Core.Objects;
-using Calc.Core.Objects.BasicParameters;
 using Calc.Core.Objects.Assemblies;
-using Calc.Core.Objects.Elements;
+using Calc.Core.Objects.BasicParameters;
 using Calc.RevitConnector.Config;
 using Calc.RevitConnector.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using System.Windows.Documents;
 
 namespace Calc.RevitConnector.Revit
@@ -18,18 +15,14 @@ namespace Calc.RevitConnector.Revit
     public class AssemblyComponentCreator 
     {
         private readonly Document Doc;
-        private readonly UIDocument Uidoc;
         private List<RevitBasicParamConfig> basicParamConfigs;
-        private ElementSelectionSet ElementSelectionSet;
         public AssemblyComponentCreator(UIDocument uidoc)
         {
             Doc = uidoc.Document;
-            Uidoc = uidoc;
         }
 
-
         /// <summary>
-        /// create a list of assembly components from a list of element ids
+        /// Creates a list of assembly components from a list of element ids.
         /// </summary>
         public List<AssemblyComponent> CreateAssemblyComponents(List<ElementId> ids, List<RevitBasicParamConfig> bParamConfigs)
         {
@@ -45,7 +38,7 @@ namespace Calc.RevitConnector.Revit
         }
 
         /// <summary>
-        /// create an assembly component from one element
+        /// Creates an assembly component from one element.
         /// </summary>
         private AssemblyComponent CreateAssemblyComponent(Element element)
         {
@@ -66,7 +59,7 @@ namespace Calc.RevitConnector.Revit
         }
 
         /// <summary>
-        /// merge an assembly component to a list of assembly components if they have the same type
+        /// Merges an assembly component to a list of assembly components if they have the same type.
         /// </summary>
         private void MergeAssemblyComponentToList(List<AssemblyComponent> List, AssemblyComponent component)
         {
@@ -85,7 +78,7 @@ namespace Calc.RevitConnector.Revit
         }
 
         /// <summary>
-        /// merge a layer component to a list of layer components with the same material
+        /// Merges a layer component to a list of layer components with the same material.
         /// </summary>
         private void MergeLayerComponentWithMaterial(List<LayerComponent> List, LayerComponent component)
         {
@@ -101,12 +94,12 @@ namespace Calc.RevitConnector.Revit
         }
 
         /// <summary>
-        /// for compound elements:
+        /// For compound elements:
         /// layers are defined by the compound structure layers in type property,
-        /// merge two layer component lists if they are from the same compound structure type
-        /// for non compond elements:
+        /// merge two layer component lists if they are from the same compound structure type.
+        /// For non compond elements:
         /// layers are defined by different materials,
-        /// merge two layer component lists of layer components if they have the same material
+        /// merge two layer component lists of layer components if they have the same material.
         /// </summary>
         private void MergeLayerComponents(List<LayerComponent> list1, List<LayerComponent> list2, bool isCompound)
         {
@@ -128,12 +121,12 @@ namespace Calc.RevitConnector.Revit
         }
 
         /// <summary>
-        /// create a list of layer components from an element.
+        /// Creates a list of layer components from an element.
         /// Firstly get the amounts for each material despite of the compound structure (materialAmounts),
         /// if there is a compound structure, re-order the material amount with the compund layers by the compound material thicknesses 
         /// and calculate the proportion of area and volume of the same material.
-        /// also returns if the element is a compound structure.
         /// </summary>
+        /// <returns>bool: if the element is a compound structure.</returns>
         private (List<LayerComponent>,bool) CreateLayerComponents(Element elem)
         {
             bool isCompound = false;
@@ -186,10 +179,11 @@ namespace Calc.RevitConnector.Revit
             }
             return (result, isCompound);
         }
+
         /// <summary>
-        /// get the material amounts of an element separated by different materials 
+        /// Gets the material amounts of an element separated by different materials,
         /// by getting the material area and volume of the element.
-        /// this step takes the area and volume of the material from revit, the area could be sometimes not accurate.
+        /// This step takes the area and volume of the material from revit, the area could be sometimes inaccurate.
         /// for compund elements and panels, the area is correct, in other cases, the area could be the whole area of the element.
         /// </summary>
         private List<(Material, BasicParameterSet)> GetMaterialAmounts(Element elem, bool isCompund)
@@ -197,33 +191,26 @@ namespace Calc.RevitConnector.Revit
             var result = new List<(Material, BasicParameterSet)>();
             var totalAmountParamSet = GetTotalAmounts(elem);
             var materialIds = elem.GetMaterialIds(false);
-
             var countParamTotal = totalAmountParamSet.GetAmountParam(Unit.piece);
             var lengthParamTotal = totalAmountParamSet.GetAmountParam(Unit.m);
             var areaParamTotal = totalAmountParamSet.GetAmountParam(Unit.m2);
             var volumeParamTotal = totalAmountParamSet.GetAmountParam(Unit.m3);
-
-
             // firstly calculate valid material amounts
             foreach (var materialId in materialIds)
             {
                 var material = Doc.GetElement(materialId) as Material;
                 if (material == null) continue;
-
                 var areaParam = ParameterHelper.CreateMaterialAmountParameter(elem, materialId, Unit.m2);
                 var volumeParam = ParameterHelper.CreateMaterialAmountParameter(elem, materialId, Unit.m3);
                 var materialAmount = new BasicParameterSet(countParamTotal, lengthParamTotal, areaParam, volumeParam);
-
                 result.Add((material, materialAmount));
             }
-
             // calculate the no material amounts by subtracting the material amounts from the total amounts
             foreach (var materialAmount in result.Select(x => x.Item2))
             {
                 var volumeParam = materialAmount.GetAmountParam(Unit.m3);
                 volumeParamTotal = volumeParamTotal.PerformOperation(Operation.Subtract, volumeParam);
             }
-
             // show no material if volume has value
             // the no material amounts are all missing params, they shall not be used for calculation
             if (!volumeParamTotal.HasError && volumeParamTotal.Amount > 0)
@@ -232,7 +219,6 @@ namespace Calc.RevitConnector.Revit
             }
             // the material area values are correct if it is a compound structure
             if(isCompund) return result;
-
             // otherwise, if there is only one material, take the element area as the material area
             // if more than one material, make the area param as error
             if ( (result.Count == 1) && (result[0].Item1 != null))
@@ -244,27 +230,24 @@ namespace Calc.RevitConnector.Revit
                 var areaParam = BasicParameter.ErrorParam(Unit.m2);
                 result.ForEach(x => x.Item2.Set(areaParam));
             }
-
             return result;
         }
 
         /// <summary>
-        /// get the total amounts of an element, including count, length, area and volume using the basic parameter config.
+        /// Gets the total amounts of an element, including count, length, area and volume using the basic parameter config.
         /// </summary>
         private BasicParameterSet GetTotalAmounts(Element elem)
         {
             var paramConfig = GetParamConfig(elem);
-
             var lengthParam = ParameterHelper.CreateBasicUnitParameter(elem, paramConfig.LengthName, Unit.m);
             var areaParam = ParameterHelper.CreateBasicUnitParameter(elem, paramConfig.AreaName, Unit.m2);
             var volumeParam = ParameterHelper.CreateBasicUnitParameter(elem, paramConfig.VolumeName, Unit.m3);
             var countParam = ParameterHelper.CreateBasicUnitParameter(elem, paramConfig.CountName, Unit.piece);
-
             return new BasicParameterSet(countParam, lengthParam, areaParam, volumeParam);
         }
 
         /// <summary>
-        /// get the parameter config for the category of the element
+        /// Gets the parameter config for the category of the element.
         /// </summary>
         private RevitBasicParamConfig GetParamConfig(Element elem)
         {
@@ -279,9 +262,9 @@ namespace Calc.RevitConnector.Revit
         }
 
         /// <summary>
-        /// get the compound material thicknesses (mm) of the element with the right order,
-        /// returning the material, its thickness and the proportion of area and volume of the same material
+        /// Gets the compound material thicknesses (mm) of the element with the right order.
         /// </summary>
+        /// <returns>The material, its thickness and the proportion of area and volume of the same material</returns>
         private List<(Material,double,double,double)> GetCompoundMaterialThicknesses(Element elem, int round=3)
         {
             var type = GetElementType(elem);
@@ -292,7 +275,6 @@ namespace Calc.RevitConnector.Revit
             {
                 var compoundStructure = hostObjAttributes.GetCompoundStructure();
                 if (compoundStructure == null) return null;
-
                 var layers = compoundStructure.GetLayers();
                 foreach (var layer in layers)
                 {
@@ -314,9 +296,9 @@ namespace Calc.RevitConnector.Revit
         }
 
         /// <summary>
-        /// get the proportion of the area and volume of the same material
-        /// for area, devided by same material layer count if the material is valid, otherwise devided by 1
-        /// for volume, devided by the thickness of the same material
+        /// Gets the proportion of the area and volume of the same material.
+        /// For area, devided by same material layer count if the material is valid, otherwise devided by 1.
+        /// For volume, devided by the thickness of the same material.
         /// </summary>
         private (double,double) GetMaterialRatio(List<(Material, double)> materials, (Material, double) singleMaterial)
         {
@@ -336,7 +318,7 @@ namespace Calc.RevitConnector.Revit
         }
 
         /// <summary>
-        /// get the thickness of the element type in mm
+        /// Gets the thickness of the element type in mm.
         /// </summary>
         private double? GetTypeThickness(Element elem, bool isCompound)
         {
@@ -344,13 +326,10 @@ namespace Calc.RevitConnector.Revit
             {
                 var type = GetElementType(elem);
                 if (type == null) return null;
-
                 var thickness = type is FloorType || type is RoofType || type is CeilingType ?
                     type.LookupParameter("Default Thickness")?.AsDouble() ?? 0 :
-                    type.LookupParameter("Width")?.AsDouble() ?? 0;
-                
+                    type.LookupParameter("Width")?.AsDouble() ?? 0;                
                 if (thickness == 0) return null;
-
                 return ParameterHelper.ToMetricValue(thickness, Unit.m) * 1000; // convert to mm
             }
             return null;
@@ -360,7 +339,6 @@ namespace Calc.RevitConnector.Revit
         {
             ElementId typeId = elem.GetTypeId();
             return typeId == ElementId.InvalidElementId ? null: Doc.GetElement(typeId);
-
         }
     }
 }

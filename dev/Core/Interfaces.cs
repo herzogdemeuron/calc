@@ -47,8 +47,8 @@ namespace Calc.Core
     public interface IVisualizer
     {
         void ResetView(List<IGraphNode> nodes);
-        void IsolateAndColorBottomBranchElements(IGraphNode node);
-        void IsolateAndColorSubbranchElements(IGraphNode node);
+        void IsolateAndColorizeBottomBranchElements(IGraphNode node);
+        void IsolateAndColorizeSubbranchElements(IGraphNode node);
         
     }
 }

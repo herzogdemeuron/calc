@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace Calc.RevitConnector.Revit
 {
+    /// <summary>
+    /// The selection filter, excluding WallKind.Curtain.
+    /// </summary>
     public class CustomSelectionFilter : Autodesk.Revit.UI.Selection.ISelectionFilter
     {
         private List<Type> allowedTypes = new List<Type>()

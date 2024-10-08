@@ -1,24 +1,21 @@
 ﻿using Autodesk.Revit.DB;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using Autodesk.Revit.UI;
 using Calc.Core;
-using System.Windows.Media.Imaging;
+using System;
+using System.IO;
 
 namespace Calc.RevitConnector.Revit
 {
     public class RevitImageCreator : IImageSnapshotCreator
     {
-        private Document doc;
+        private readonly Document doc;
         public RevitImageCreator(Document doc)
         {
             this.doc = doc;
         }
 
+        /// <summary>
+        /// Creates the temporary file path.
+        /// </summary>
         private string GetFilePath(string baseName)
         {
             string path = Path.Combine(Path.GetTempPath(), baseName + ".png");
@@ -36,14 +33,15 @@ namespace Calc.RevitConnector.Revit
                     counter++;
                 }
             }
-
             return path;
         }
 
+        /// <summary>
+        /// Creates the image snapshot to a temporary file path.
+        /// </summary>
         public string CreateImageSnapshot(string baseName)
         {
             string imagePath = GetFilePath(baseName);
-
             ImageExportOptions options = new ImageExportOptions()
             {
                 FilePath = imagePath,
@@ -54,7 +52,6 @@ namespace Calc.RevitConnector.Revit
                 ShadowViewsFileType = ImageFileType.PNG,
                 ExportRange = ExportRange.CurrentView,
             };
-
             try
             {
                 doc.ExportImage(options);

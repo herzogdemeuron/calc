@@ -80,13 +80,13 @@ namespace Calc.MVVM.ViewModels
                 if (forceRecolorAll)
                 {
                     Store.QueryTemplateSelected.SetBranchColorsBy("branches");
-                    visualizer.IsolateAndColorSubbranchElements(SelectedNodeItem?.Host);
+                    visualizer.IsolateAndColorizeSubbranchElements(SelectedNodeItem?.Host);
                 }
             }
             else
             {
                 Store.QueryTemplateSelected.SetBranchColorsBy("assemblies");
-                visualizer.IsolateAndColorBottomBranchElements(SelectedNodeItem?.Host);
+                visualizer.IsolateAndColorizeBottomBranchElements(SelectedNodeItem?.Host);
             }
             CurrentQueryTemplateItem.NotifyNodePropertyChange();
             CurrentLeftoverQuerySetItem.NotifyNodePropertyChange(); // todo: check if this is needed
@@ -107,12 +107,12 @@ namespace Calc.MVVM.ViewModels
             if (BranchesSwitch)
             {
                 NodeHelper.ShowSubLabelColor(nodeItem);
-                visualizer.IsolateAndColorSubbranchElements(SelectedNodeItem?.Host);
+                visualizer.IsolateAndColorizeSubbranchElements(SelectedNodeItem?.Host);
             }
             else
             {
                 NodeHelper.ShowAllSubLabelColor(nodeItem);
-                visualizer.IsolateAndColorBottomBranchElements(SelectedNodeItem?.Host);
+                visualizer.IsolateAndColorizeBottomBranchElements(SelectedNodeItem?.Host);
             }
             CurrentQueryTemplateItem.NotifyNodePropertyChange();
             CurrentLeftoverQuerySetItem.NotifyNodePropertyChange(); // todo: check if this is needed

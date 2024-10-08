@@ -27,6 +27,7 @@ namespace Calc.RevitConnector.Revit
                 Debug.WriteLine(ex);
             }
         }
+
         public void Raise(Action actionToExecute)
         {
             ActionToExecute = actionToExecute;

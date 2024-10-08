@@ -12,12 +12,12 @@ using System.Collections.Generic;
 namespace Calc.RevitConnector.Revit
 {
     /// <summary>
-    /// get assembly components from revit elements,
-    /// get and store the assembly record
+    /// Gets assembly components from revit elements.
+    /// Gets and stores the assembly record.
     /// </summary>
     public class ElementSourceHandler : IElementSourceHandler
     {
-        private UIDocument uidoc;
+        private readonly UIDocument uidoc;
         private readonly Document doc;
         private readonly RevitExternalEventHandler eventHandler;
         private int groupTypeId;
@@ -34,10 +34,8 @@ namespace Calc.RevitConnector.Revit
         }
 
         /// <summary>
-        /// select elements in revit, get the raw selection result
+        /// Selects elements in revit, creates the raw selection result.
         /// </summary>
-        /// <param name="customParamSettings"></param>
-        /// <returns></returns>
         public ElementSourceSelectionResult SelectElements(List<CustomParamSetting> customParamSettings)
         {
             var basicParamConfigs = GetParamSettings(customParamSettings);
@@ -53,8 +51,8 @@ namespace Calc.RevitConnector.Revit
         }
 
         /// <summary>
-        /// serialize the assembly record and store back to revit group type
-        /// write record to group type parameter 'Type Comments' in a transaction
+        /// Serializes the assembly record and store back to revit group type.
+        /// Writes record to group type parameter 'Type Comments' in a transaction.
         /// </summary>
         public void SaveAssemblyRecord(string nCode, string newName, Unit newAssemblyUnit,AssemblyGroup newAssemblyGroup, string newDescription, List<AssemblyComponent> newComponents)
         {
@@ -70,7 +68,7 @@ namespace Calc.RevitConnector.Revit
             eventHandler.Raise(StoreAssemblyRecord);
         }
 
-        public void StoreAssemblyRecord()
+        private void StoreAssemblyRecord()
         {
             var recordObject = assemblyRecord.SerializeRecord();
             var groupType = doc.GetElement(new ElementId(groupTypeId)) as GroupType;
@@ -90,7 +88,7 @@ namespace Calc.RevitConnector.Revit
         }
 
         /// <summary>
-        /// get the assembly record from the group type parameter 'Type Comments'
+        /// Gets the assembly record from the group type parameter 'Type Comments'.
         /// </summary>
         public AssemblyRecord GetAssemblyRecord()
         {

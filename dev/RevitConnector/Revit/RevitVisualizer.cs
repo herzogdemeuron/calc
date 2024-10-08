@@ -14,7 +14,7 @@ namespace Calc.RevitConnector.Revit
     {
         private readonly RevitExternalEventHandler eventHandler;
         private readonly Document doc;
-        private Action<IGraphNode, View, ElementId> colorBranchAction;
+        private Action<IGraphNode, View, ElementId> colorizeBranchAction;
         private List<IGraphNode> currentNodes = new List<IGraphNode>();
         private IGraphNode selectedNode;
 
@@ -24,6 +24,9 @@ namespace Calc.RevitConnector.Revit
             this.doc = doc;
         }
 
+        /// <summary>
+        /// Resets graphic overrides on the elements of the nodes.
+        /// </summary>
         public void ResetView(List<IGraphNode> nodes)
         {
             currentNodes = nodes;
@@ -49,21 +52,21 @@ namespace Calc.RevitConnector.Revit
             }
         }
 
-        public void IsolateAndColorSubbranchElements(IGraphNode node)
+        public void IsolateAndColorizeSubbranchElements(IGraphNode node)
         {
-            colorBranchAction = ColorSubbranchElements;
+            colorizeBranchAction = ColorizeSubbranchElements;
             selectedNode = node;
-            eventHandler.Raise(IsolateAndColor);
+            eventHandler.Raise(IsolateAndColorize);
         }
 
-        public void IsolateAndColorBottomBranchElements(IGraphNode node)
+        public void IsolateAndColorizeBottomBranchElements(IGraphNode node)
         {
-            colorBranchAction = ColorBottomBranchElements;
+            colorizeBranchAction = ColorizeBottomBranchElements;
             selectedNode = node;
-            eventHandler.Raise(IsolateAndColor);
+            eventHandler.Raise(IsolateAndColorize);
         }
 
-        public void IsolateAndColor()
+        public void IsolateAndColorize()
         {
             if (selectedNode == null) return;
 
@@ -73,7 +76,7 @@ namespace Calc.RevitConnector.Revit
                 t.Start();
                 View currentView = doc.ActiveView;
                 IsolateElements(selectedNode, currentView);
-                colorBranchAction(selectedNode, currentView, patternId);
+                colorizeBranchAction(selectedNode, currentView, patternId);
                 t.Commit();
             }
         }
@@ -88,44 +91,39 @@ namespace Calc.RevitConnector.Revit
                 elementIds.Add(sectionBoxId);
             }
             view.IsolateElementsTemporary(StringsToElementIds(elementIds));
-            
         }
 
-        private void ColorSubbranchElements(IGraphNode node, View view, ElementId patternId)
+        private void ColorizeSubbranchElements(IGraphNode node, View view, ElementId patternId)
         {
             if (node == null) return;
-
             foreach (var subBranch in node.SubBranches)
             {
-                ColorBranchElements(subBranch, view, patternId);
+                ColorizeBranchElements(subBranch, view, patternId);
             }
         }
 
-        private void ColorBottomBranchElements(IGraphNode node, View view, ElementId patternId)
+        private void ColorizeBottomBranchElements(IGraphNode node, View view, ElementId patternId)
         {
             if (node == null) return;
-
-            ColorBranchElements(node, view, patternId);
-
+            ColorizeBranchElements(node, view, patternId);
             if (node.SubBranches.Count == 0)
             {
-                ColorBranchElements(node, view, patternId);
+                ColorizeBranchElements(node, view, patternId);
             }
-
             foreach (var subBranch in node.SubBranches)
             {
                 if (subBranch.SubBranches.Count == 0)
                 {
-                    ColorBranchElements(subBranch, view, patternId);
+                    ColorizeBranchElements(subBranch, view, patternId);
                 }
                 else
                 {
-                    ColorBottomBranchElements(subBranch, view, patternId);
+                    ColorizeBottomBranchElements(subBranch, view, patternId);
                 }
             }
         }
 
-        private void ColorBranchElements(IGraphNode node, View view, ElementId patternId)
+        private void ColorizeBranchElements(IGraphNode node, View view, ElementId patternId)
         {
             HslColor hslColor = node.HslColor;
             HslColor hslColorDarker = new HslColor(hslColor.H, hslColor.S, (int)(hslColor.L * 0.6));
@@ -145,10 +143,12 @@ namespace Calc.RevitConnector.Revit
             }
         }
 
+        /// <summary>
+        /// The section box id is the view with id '-1'
+        /// see: https://forums.autodesk.com/t5/revit-api-forum/get-section-box-of-3d-view/td-p/9795973
+        /// </summary>
         private string GetSectionBoxId(View view)
         {
-            // the section box id is the view id - 1
-            // see: https://forums.autodesk.com/t5/revit-api-forum/get-section-box-of-3d-view/td-p/9795973
             if (view is View3D view3D && view3D.IsSectionBoxActive)
             {
                 var sid = view3D.Id.IntegerValue - 1;
@@ -163,6 +163,7 @@ namespace Calc.RevitConnector.Revit
             ICollection<Element> patterns = collector.OfClass(typeof(FillPatternElement)).ToElements();
             return patterns.FirstOrDefault().Id;
         }
+
         private List<ElementId> StringsToElementIds(List<string> elememtIdStrings)
         {
             List<ElementId> elementIds = new List<ElementId>();
