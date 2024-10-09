@@ -49,16 +49,6 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(EmptyQueryResultText));
             }
         }
-        private string emptyAssemblyText = "- no assembly assigned -";
-        public string EmptyAssemblyText
-        {
-            get => emptyAssemblyText;
-            set
-            {
-                emptyAssemblyText = value;
-                OnPropertyChanged(nameof(EmptyAssemblyText));
-            }
-        }
         public NodeModel CurrentQueryTemplateItem { get; set; } = new NodeModel(null, null);
         public NodeModel CurrentLeftoverQuerySetItem { get; set; } = new NodeModel(null, null);
         public ObservableCollection<NodeModel> NodeSource
@@ -146,14 +136,6 @@ namespace Calc.MVVM.ViewModels
             }
             CurrentQueryTemplateItem.NotifyNodePropertyChange();
             CurrentLeftoverQuerySetItem.NotifyNodePropertyChange(); // todo: check if this is needed
-            if(selectedNodeItem.AssemblyModel.CurrentAssemblies.Count > 0)
-            {
-                EmptyAssemblyText = string.Empty;
-            }
-            else
-            {
-                EmptyAssemblyText = "- no assembly assigned -";
-            }
         }
 
         /// <summary>
@@ -194,7 +176,6 @@ namespace Calc.MVVM.ViewModels
             CurrentLeftoverQuerySetItem.NotifyNodePropertyChange(); // todo: check if this is needed
             var resetItems = CurrentQueryTemplateItem.SubNodeItems.Select(n => n.Host).ToList();
             visualizer.ResetView(resetItems);
-            EmptyAssemblyText = "- select a query result -";
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

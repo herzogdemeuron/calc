@@ -63,7 +63,7 @@
                        Padding="0"/>
 
                 <ComboBox x:Name="QueryTemplatesComboBox"
-                          Text="Select Element Grouping"
+                          Text="Select Query Template"
                           Style="{StaticResource RoundedComboBoxStyle}"
                           ItemsSource="{Binding Store.RelatedQueryTemplate}"
                           DisplayMemberPath="Name"
@@ -379,21 +379,21 @@
                         <Button Style="{StaticResource ButtonStyle}"
                                 ToolTip="Reset"
                                 Uid="pack://application:,,,/CalcMVVM;component/Resources/button_back.png"
-                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.AssemblyModel.InheritEnabled}"
+                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.AssemblyModel.InheritEnabled, FallbackValue=False}"
                                 Click="InheritClicked"/>
 
                         <Button Style="{StaticResource ButtonStyle}"
                                 ToolTip="Remove"
                                 Uid="pack://application:,,,/CalcMVVM;component/Resources/button_delete.png"
                                 Margin="0,10,0,0"
-                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.AssemblyModel.RemoveEnabled}"
+                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.AssemblyModel.RemoveEnabled, FallbackValue=False}"
                                 Click="RemoveClicked"/>
                         
                     </StackPanel>
                     <StackPanel DockPanel.Dock="Left">
                         
                         <Button Content="{Binding  NodeTreeVM.SelectedNodeItem.AssemblyModel.Assembly1.Name}"
-                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.AssemblyModel.CanAddFirstAssembly}"
+                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.AssemblyModel.CanAddFirstAssembly, FallbackValue=False}"
                                 d:Content=""
                                 Tag="Select First Assembly"
                                 HorizontalAlignment="Stretch"
@@ -401,7 +401,7 @@
                                 Click="SetFirstAssemblyClicked"/>
 
                         <Button Content="{Binding  NodeTreeVM.SelectedNodeItem.AssemblyModel.Assembly2.Name}"
-                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.AssemblyModel.CanAddSecondAssembly}"
+                                IsEnabled="{Binding NodeTreeVM.SelectedNodeItem.AssemblyModel.CanAddSecondAssembly, FallbackValue=False}"
                                 d:Content=""
                                 Margin="0,10,0,0"
                                 Tag="Select Second Assembly"
@@ -499,7 +499,7 @@
                             </DataTemplate>
                         </TabControl.ContentTemplate>
                     </TabControl>
-                    <TextBlock Text="{Binding NodeTreeVM.EmptyAssemblyText}"
+                    <TextBlock Text="{Binding NodeTreeVM.SelectedNodeItem.AssemblyModel.EmptyAssemblyText, FallbackValue='- select a query result -'}"
                            Foreground="Gray"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"/>

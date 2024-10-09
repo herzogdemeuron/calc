@@ -84,8 +84,14 @@ namespace Calc.MVVM.Models
                 {
                     _activeAssembly = value;
                     OnPropertyChanged(nameof(ActiveAssembly));
+                    OnPropertyChanged(nameof(EmptyAssemblyText));
                 }
             }
+        }
+
+        public string EmptyAssemblyText
+        {
+            get => ActiveAssembly == null ? "- no active assembly -" : string.Empty;
         }
 
         public AssemblyModel(NodeModel node)
