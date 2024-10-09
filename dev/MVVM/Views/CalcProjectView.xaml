@@ -344,8 +344,8 @@
 
                         <Button x:Name="ColorByGroupButton"                                
                                 Content="Group"
-                                Foreground="Gray"
                                 Tag="group"
+                                Opacity="0.3"
                                 Width="65"
                                 Click="ColorizeClicked"
                                 Style="{StaticResource ButtonStyle}"/>
@@ -359,7 +359,7 @@
                                 Style="{StaticResource ButtonStyle}"/>
                         <Button x:Name="ColorByCO2Button"
                                 Content="CO²"
-                                Foreground="Gray"
+                                Opacity="0.3"
                                 Tag="co2"
                                 Width="65"
                                 Click="ColorizeClicked"

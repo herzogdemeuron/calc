@@ -200,16 +200,16 @@ namespace Calc.MVVM.Views
             switch (tag)
             {
                 case "group":
-                    this.ColorByAssemblyButton.Foreground = new SolidColorBrush(Colors.Gray);
+                    this.ColorByAssemblyButton.Opacity = 0.3;
                     this.ColorByAssemblyButton.Uid = "";
-                    this.ColorByGroupButton.Foreground = new SolidColorBrush(Colors.Black);
+                    this.ColorByGroupButton.Opacity = 1;
                     this.ColorByGroupButton.Uid = image;
                     ProjectVM.HandleViewToggleToBranch();
                     break;
                 case "assembly":
-                    this.ColorByAssemblyButton.Foreground = new SolidColorBrush(Colors.Black);
+                    this.ColorByAssemblyButton.Opacity = 1;
                     this.ColorByAssemblyButton.Uid = image;
-                    this.ColorByGroupButton.Foreground = new SolidColorBrush(Colors.Gray);
+                    this.ColorByGroupButton.Opacity = 0.3;
                     this.ColorByGroupButton.Uid = "";
                     ProjectVM.HandleViewToggleToAssembly();
                     break;
