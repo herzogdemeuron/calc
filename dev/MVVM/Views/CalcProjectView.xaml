@@ -52,7 +52,7 @@
                 <Image Source="pack://application:,,,/CalcMVVM;component/Resources/dt_logo_small.png" 
                         Width="15" 
                         Height="15"
-                        Opacity="0.8"
+                        Opacity="0.7"
                         Margin="0,-1,0,0"/>
                 <TextBlock FontSize="9"
                            ToolTip="Visit our github page.">

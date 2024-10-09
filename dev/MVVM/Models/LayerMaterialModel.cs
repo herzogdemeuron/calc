@@ -92,6 +92,10 @@ namespace Calc.MVVM.Models
                 OnPropertyChanged(nameof(ActiveMaterial));
             }
         }
+        public string EmptyMaterialText
+        {
+            get => ActiveMaterial == null ? "- no active material -" : string.Empty;
+        }
 
         public LayerMaterialModel(LayerComponent layercompo, List<Material> allMaterials, List<MaterialFunction> materialFunctionsAll)
         {
@@ -114,6 +118,7 @@ namespace Calc.MVVM.Models
             OnPropertyChanged(nameof(CanAddSecondMaterial));
             OnPropertyChanged(nameof(CurrentMaterials));
             OnPropertyChanged(nameof(MaterialMatchInfo));
+            OnPropertyChanged(nameof(EmptyMaterialText));
             if (sendEvent)
             {
                 MaterialPropertyChanged?.Invoke(this, EventArgs.Empty);

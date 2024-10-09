@@ -175,6 +175,13 @@
                         </TreeView.ItemTemplate>
                     </TreeView>
                 </Border>
+
+                <TextBlock Text="{Binding AssemblyCreationVM.EmptySelectionText}"
+                           Grid.Row="2"
+                           Grid.ColumnSpan="5"
+                           Foreground="Gray"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
             </Grid>
 
 
@@ -457,6 +464,11 @@
                                 </DataTemplate>
                             </TabControl.ContentTemplate>
                         </TabControl>
+                        <TextBlock Text="{Binding EmptyMaterialText}"
+                                   Margin="0,20,0,0"
+                                     Foreground="Gray"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"/>
                     </Grid>
                 </Grid>
             </Border>
@@ -552,6 +564,12 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </Border>
+                <TextBlock Text="{Binding AssemblyCreationVM.EmptyCalculationText}"
+                           Grid.Row="2"
+                           Grid.ColumnSpan="7"
+                           Foreground="Gray"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
             </Grid>
 
             <Grid  x:Name="SaveButtonGrid"

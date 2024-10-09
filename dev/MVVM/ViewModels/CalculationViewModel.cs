@@ -31,7 +31,6 @@ namespace Calc.MVVM.ViewModels
                     return NodeTreeVM.SelectedNodeItem?.Name;
             }
         }
-
         public string EmptyCalculationText
         {
             get

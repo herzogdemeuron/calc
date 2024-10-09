@@ -63,6 +63,7 @@ namespace Calc.MVVM.ViewModels
         {
             get
             {
+                if (AssemblyComponents.Count == 0) return null;
                 var calcs = new List<CalculationComponent>();
                 foreach (var component in AssemblyComponents)
                 {
@@ -259,6 +260,28 @@ namespace Calc.MVVM.ViewModels
         }
         public double? AssemblyGwp { get => CurrentCalculationComponents?.Sum(c => c.Gwp); }
         public double? AssemblyGe { get => CurrentCalculationComponents?.Sum(c => c.Ge); }
+        private string emptySelectionText = "- select elements to start -";
+        public string EmptySelectionText
+        {
+            get => emptySelectionText;
+            set
+            {
+                emptySelectionText = value;
+                OnPropertyChanged(nameof(EmptySelectionText));
+            }
+        }
+        public string EmptyCalculationText
+        {
+            get
+            {
+                if (CurrentCalculationComponents?.Count > 0)
+                {
+                    return string.Empty;
+                }
+                return "- no valid calculation -";
+
+            }
+        }
 
         public AssemblyCreationViewModel(CalcStore store, IElementSourceHandler elemSrcHandler, IImageSnapshotCreator imgCreator, IElementSender elemSender)
         {
@@ -335,6 +358,16 @@ namespace Calc.MVVM.ViewModels
             MainWarning = hasNormalizer ? "" : "Choose a type 🡫 and set one unit as normalizer 🡩 ";
         }
 
+        private void UpadteEmptyText()
+        {
+            if (AssemblyComponents.Count == 0)
+            {
+                EmptySelectionText = "- select elements to start -";
+                return;
+            }
+            EmptySelectionText = string.Empty;
+        }
+
         private void UpdateAssemblyComponentError()
         {
             if (SelectedComponent is AssemblyComponent bc)
@@ -377,6 +410,7 @@ namespace Calc.MVVM.ViewModels
                 UpdateLayerColors();
                 UpdateCalculationComponents();
                 UpadteMainWarning();
+                UpadteEmptyText();
 
                 CurrentImage = null;
                 CaptureText = "📷";
@@ -492,6 +526,7 @@ namespace Calc.MVVM.ViewModels
             OnPropertyChanged(nameof(AssemblyGwp));
             OnPropertyChanged(nameof(AssemblyGe));
             OnPropertyChanged(nameof(CanSave));
+            OnPropertyChanged(nameof(EmptyCalculationText));
             SaveMessage = "";
         }
 
