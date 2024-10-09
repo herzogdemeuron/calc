@@ -39,7 +39,7 @@ namespace Calc.RevitApp.Revit
                 RevitImageCreator imageCreator = new RevitImageCreator(doc);
                 ElementSender elementSender = new ElementSender(doc, loginVM.CalcStore.Config);
                 BuilderViewModel builderViewModel = new BuilderViewModel(loginVM.CalcStore, elementSourceHandler, imageCreator, elementSender);
-                BuilderView builderView = new BuilderView(builderViewModel);
+                CalcBuilderView builderView = new CalcBuilderView(builderViewModel);
 
                 builderView.Show();
 

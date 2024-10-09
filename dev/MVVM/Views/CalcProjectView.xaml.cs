@@ -10,17 +10,17 @@ using System.Windows.Input;
 
 namespace Calc.MVVM.Views
 {
-    public partial class MainView : Window
+    public partial class CalcProjectView : Window
     {
-        private readonly ProjectViewModel MainVM;
+        private readonly ProjectViewModel ProjectVM;
 
-        public MainView(ProjectViewModel mvm)
+        public CalcProjectView(ProjectViewModel pvm)
         {
-            MainVM = mvm;
-            this.DataContext = MainVM;
+            ProjectVM = pvm;
+            this.DataContext = ProjectVM;
             InitializeComponent();
-            mvm.DeselectTreeView += DeselectTreeView;
-            mvm.DeselectBrokenQueryView += DeselectBrokenNodesTreeView;
+            pvm.DeselectTreeView += DeselectTreeView;
+            pvm.DeselectBrokenQueryView += DeselectBrokenNodesTreeView;
         }
 
         /// <summary>
@@ -53,18 +53,18 @@ namespace Calc.MVVM.Views
 
         private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            MainVM.HandleWindowClosing();
+            ProjectVM.HandleWindowClosing();
         }
 
         private void QueryTemplateSelectionChanged (object sender, SelectionChangedEventArgs e)
         {
             var qryTemplate = QueryTemplatesComboBox.SelectedItem;
-            MainVM.HandleQueryTemplateSelectionChanged(qryTemplate as QueryTemplate);
+            ProjectVM.HandleQueryTemplateSelectionChanged(qryTemplate as QueryTemplate);
         }
 
         private void MappingSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            MainVM.HandleMappingSelectionChanged();
+            ProjectVM.HandleMappingSelectionChanged();
         }
 
         private void MappingListViewSelected(object sender, MouseButtonEventArgs e)
@@ -79,26 +79,26 @@ namespace Calc.MVVM.Views
 
         private void NewMappingClicked(object sender, RoutedEventArgs e)
         {
-            MainVM.HandleNewMappingClicked();
+            ProjectVM.HandleNewMappingClicked();
         }
 
         private async void NewMappingConfirmed(object sender, RoutedEventArgs e)
         {
             string newName = this.NewNameText.Text.Trim();
             Mapping selectedMapping = this.MappingListView.SelectedItem as Mapping;
-            await MainVM.HandleNewMappingCreateAsync(selectedMapping, newName);
+            await ProjectVM.HandleNewMappingCreateAsync(selectedMapping, newName);
         }
 
         private void NewMappingCanceld(object sender, RoutedEventArgs e)
         {
             this.NewNameText.Text = "";
             MappingListView.SelectedItem = null;
-            MainVM.HandleNewMappingCanceled();
+            ProjectVM.HandleNewMappingCanceled();
         }
 
         private void MappingErrorClicked(object sender, RoutedEventArgs e)
         {
-            MainVM.HandleMappingErrorClicked();
+            ProjectVM.HandleMappingErrorClicked();
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace Calc.MVVM.Views
         {
             if (BrokenNodesTreeView.SelectedItem is NodeModel selectedNode)
             {
-                MainVM.HandleBrokenNodeSelectionChanged(selectedNode);
+                ProjectVM.HandleBrokenNodeSelectionChanged(selectedNode);
                 BrokenNodesTreeView.Tag = e.OriginalSource;
                 e.Handled = true;
             }
@@ -118,17 +118,17 @@ namespace Calc.MVVM.Views
         {
             if (BrokenNodesTreeView.SelectedItem is NodeModel selectedNode)
             {
-                MainVM.HandleIgnoreSelectedBrokenNode(selectedNode);
+                ProjectVM.HandleIgnoreSelectedBrokenNode(selectedNode);
             }
         }
         private void HandleIgnoreAllBrokenNodes(object sender, RoutedEventArgs e)
         {
-            MainVM.HandleIgnoreAllBrokenNodes();
+            ProjectVM.HandleIgnoreAllBrokenNodes();
         }
 
         private void ErrorMappingSideClickDown(object sender, MouseButtonEventArgs e)
         {
-            MainVM.HandleErrorMappingSideClicked();
+            ProjectVM.HandleErrorMappingSideClicked();
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace Calc.MVVM.Views
         {
             if (TreeView.SelectedItem is NodeModel selectedNode)
             {
-                MainVM.HandleNodeItemSelectionChanged(selectedNode);
+                ProjectVM.HandleNodeItemSelectionChanged(selectedNode);
                 TreeView.Tag = e.OriginalSource;
                 e.Handled = true;
             }
@@ -161,30 +161,30 @@ namespace Calc.MVVM.Views
         /// </summary>
         private void SetAssemblyWithTag(bool setFirst)
         {
-            var canSelect = MainVM.HandleSelectingAssembly(setFirst);
+            var canSelect = ProjectVM.HandleSelectingAssembly(setFirst);
 
             if (!canSelect) return;
-            var assemblySelectionView = new AssemblySelectionView(MainVM.AssemblySelectionVM);
+            var assemblySelectionView = new AssemblySelectionView(ProjectVM.AssemblySelectionVM);
             var result = assemblySelectionView.ShowDialog();
             if (result == true)
             {
-                MainVM.HandleAssemblySelected(setFirst);
+                ProjectVM.HandleAssemblySelected(setFirst);
             }
         }
 
         private void SideClickDown(object sender, MouseButtonEventArgs e)
         {
-            MainVM.HandleSideClicked();
+            ProjectVM.HandleSideClicked();
         }
 
         private void InheritClicked(object sender, RoutedEventArgs e)
         {
-            MainVM.HandleInherit();
+            ProjectVM.HandleInherit();
         }
 
         private void RemoveClicked(object sender, RoutedEventArgs e)
         {
-            MainVM.HandleRemove();
+            ProjectVM.HandleRemove();
         }
 
         /// <summary>
@@ -201,14 +201,14 @@ namespace Calc.MVVM.Views
                     this.ColorByAssemblyButton.Uid = "";
                     this.ColorByGroupButton.Opacity = 1.0;
                     this.ColorByGroupButton.Uid = image;
-                    MainVM.HandleViewToggleToBranch();
+                    ProjectVM.HandleViewToggleToBranch();
                     break;
                 case "assembly":
                     this.ColorByAssemblyButton.Opacity = 1.0;
                     this.ColorByAssemblyButton.Uid = image;
                     this.ColorByGroupButton.Opacity = 0.4;
                     this.ColorByGroupButton.Uid = "";
-                    MainVM.HandleViewToggleToAssembly();
+                    ProjectVM.HandleViewToggleToAssembly();
                     break;
                 case "co2":
                     break;
@@ -218,33 +218,33 @@ namespace Calc.MVVM.Views
         private void UpdateRevitClicked(object sender, RoutedEventArgs e)
         {
             var qryTemplate = QueryTemplatesComboBox.SelectedItem;
-            MainVM.HandleQueryTemplateSelectionChanged(qryTemplate as QueryTemplate, true);
+            ProjectVM.HandleQueryTemplateSelectionChanged(qryTemplate as QueryTemplate, true);
         }
 
         private void SaveResultsClicked(object sender, RoutedEventArgs e)
         {
             NewResultNameTextBox.Text = "";
-            MainVM.SavingVM.HandleSavingResults();
+            ProjectVM.SavingVM.HandleSavingResults();
         }
 
         private async void SaveResultOKClicked( object sender, RoutedEventArgs e)
         {
-            await MainVM.HandleSendingResults(NewResultNameTextBox.Text);            
+            await ProjectVM.HandleSendingResults(NewResultNameTextBox.Text);            
         }
 
         private void SaveResultCancelClicked (object sender, RoutedEventArgs e)
         {
-            MainVM.HandleCancelSavingResults();
+            ProjectVM.HandleCancelSavingResults();
         }
 
         private void MessageOKClicked(object sender, RoutedEventArgs e)
         {
-            MainVM.HandleMessageClose();
+            ProjectVM.HandleMessageClose();
         }
 
         private async void UpdateMappingClicked(object sender, RoutedEventArgs e)
         {
-            await MainVM.HandleUpdateMapping();            
+            await ProjectVM.HandleUpdateMapping();            
         }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)

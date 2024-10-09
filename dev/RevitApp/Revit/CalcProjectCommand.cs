@@ -38,9 +38,9 @@ namespace Calc.RevitApp.Revit
                 RevitElementCreator elementCreator = new RevitElementCreator(doc);
                 RevitVisualizer visualizer = new RevitVisualizer( doc, new RevitExternalEventHandler());
                 ProjectViewModel projectViewModel = new ProjectViewModel(loginVM.CalcStore, elementCreator, visualizer);
-                MainView mainView = new MainView(projectViewModel);
+                CalcProjectView projectView = new CalcProjectView(projectViewModel);
 
-                mainView.Show();
+                projectView.Show();
                 return Result.Succeeded;
             }
             catch (Exception ex)

@@ -9,13 +9,13 @@ using System.Windows.Media;
 
 namespace Calc.MVVM.Views
 {
-    public partial class BuilderView : Window
+    public partial class CalcBuilderView : Window
     {
         private readonly BuilderViewModel BuilderVM;
         private Point _lastMouseDown;
         private object _draggedItem;
 
-        public BuilderView(BuilderViewModel bvm)
+        public CalcBuilderView(BuilderViewModel bvm)
         {
             BuilderVM = bvm;
             this.DataContext = BuilderVM;

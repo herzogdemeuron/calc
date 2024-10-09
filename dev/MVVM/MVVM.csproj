@@ -30,10 +30,10 @@
     <None Remove="ToggleButtonTemplate.xaml" />
     <None Remove="Views\AssemblySelectionView.xaml" />
     <None Remove="Views\ButtonResource.xaml" />
+    <None Remove="Views\CalcProjectView.xaml" />
     <None Remove="Views\ComboBoxResource.xaml" />
     <None Remove="Views\ListViewResource.xaml" />
     <None Remove="Views\LoginView.xaml" />
-    <None Remove="Views\MainView.xaml" />
     <None Remove="Views\MainViewResources.xaml" />
     <None Remove="Views\MaterialSelectionView.xaml" />
   </ItemGroup>
@@ -62,11 +62,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\BuilderView.xaml">
+    <Page Include="Views\CalcBuilderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainView.xaml">
+    <Page Include="Views\CalcProjectView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
