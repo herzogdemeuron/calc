@@ -1,11 +1,14 @@
 ﻿using Newtonsoft.Json;
 
-namespace Calc.MVVM.Models
+namespace Calc.Core.Snapshots
 {
-    public class CategorizedResultModel // deprecated
+    /// <summary>
+    /// The calculation snapshot of a query.
+    /// </summary>
+    public class QuerySnapshot
     {
         [JsonProperty("query")]
-        public string Group { get; set; }
+        public string QueryName { get; set; }
         [JsonProperty("gwp")]
         public double Gwp { get; set; }
         [JsonProperty("ge")]

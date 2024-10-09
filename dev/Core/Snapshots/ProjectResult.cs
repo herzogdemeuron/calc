@@ -16,6 +16,8 @@ namespace Calc.Core.Snapshots
         public CalcProject Project { get; set; }
         [JsonProperty("description")]
         public string Description { get; set; }
+        [JsonProperty("snapshot_summary")]
+        public SnapshotSummary SnapshotSummary { get; set; }
         [JsonProperty("snapshot_file")]
         public string JsonUuid { get; set; }
     }

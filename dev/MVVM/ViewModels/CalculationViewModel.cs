@@ -43,7 +43,6 @@ namespace Calc.MVVM.ViewModels
 
             }
         }
-
         public List<AssemblySnapshot> AssemblySnapshots
         {
             get
@@ -56,28 +55,27 @@ namespace Calc.MVVM.ViewModels
                 return queries.SelectMany(t => t.AssemblySnapshots).ToList();
             }
         }
-
         public bool HasResults => (AssemblySnapshots != null && AssemblySnapshots.Count > 0);
 
         /// <summary>
-        /// Calculation preview on ui.
+        /// Calculation preview on ui, all query snapshots.
         /// </summary>
-        public List<CategorizedResultModel> CategorizedResults
+        public List<QuerySnapshot> QuerySnapshots
         {
             get
             {
                 // sum up all results
-                var calculation = new List<CategorizedResultModel>();
+                var qrySnp = new List<QuerySnapshot>();
                 if (AssemblySnapshots == null) return null;
                 foreach (var snapshot in AssemblySnapshots)
                 {
-                    var cal = calculation.FirstOrDefault(c => c.Group == snapshot.QueryName);
+                    var cal = qrySnp.FirstOrDefault(c => c.QueryName == snapshot.QueryName);
                     if (cal == null)
                     {
-                        calculation.Add(
-                            new CategorizedResultModel
+                        qrySnp.Add(
+                            new QuerySnapshot
                             {
-                                Group = snapshot.QueryName,
+                                QueryName = snapshot.QueryName,
                                 Gwp = snapshot.TotalGwp.Value,
                                 Ge = snapshot.TotalGe.Value
                             });
@@ -89,7 +87,7 @@ namespace Calc.MVVM.ViewModels
                     }
                 }
                 // divide all values by the project area if it is not zero
-                foreach (var cal in calculation)
+                foreach (var cal in qrySnp)
                 {
                     if (ProjectArea.HasValue && ProjectArea.Value != 0)
                     {
@@ -102,13 +100,13 @@ namespace Calc.MVVM.ViewModels
                         cal.Ge = 0;
                     }
                 }
-                return calculation;
+                return qrySnp;
             }
         }
         public bool HasErrors => (Errors != null && Errors.Count > 0);
         public bool CanSaveResults => (HasResults && !HasErrors);
-        public double ProjectGwp => CategorizedResults?.Sum(c => c.Gwp) ?? 0;
-        public double ProjectGe => CategorizedResults?.Sum(c => c.Ge) ?? 0;
+        public double ProjectGwp => QuerySnapshots?.Sum(c => c.Gwp) ?? 0;
+        public double ProjectGe => QuerySnapshots?.Sum(c => c.Ge) ?? 0;
 
         /// <summary>
         /// Show the errors for the current selection / whole query template
@@ -145,7 +143,7 @@ namespace Calc.MVVM.ViewModels
         {
             OnPropertyChanged(nameof(Name));
             OnPropertyChanged(nameof(CurrentNodeItem));
-            OnPropertyChanged(nameof(CategorizedResults));
+            OnPropertyChanged(nameof(QuerySnapshots));
             OnPropertyChanged(nameof(Errors));
             OnPropertyChanged(nameof(HasResults));
             OnPropertyChanged(nameof(HasErrors));

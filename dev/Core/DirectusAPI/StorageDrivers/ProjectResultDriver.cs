@@ -45,7 +45,8 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
                     filename_download = $"{SendItem.Name}.json",
                     description = SendItem.Description
                 },
-                description = SendItem.Description
+                description = SendItem.Description,
+                snapshot_summary = JsonConvert.SerializeObject(SendItem.SnapshotSummary)
             };
 
             var variables = new Dictionary<string, object>

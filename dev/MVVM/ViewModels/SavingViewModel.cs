@@ -42,7 +42,7 @@ namespace Calc.MVVM.ViewModels
         internal async Task HandleSendingResults(string newName)
         {
             visibilityVM.ShowWaitingOverlay("Saving results...");
-            var feedback =  await SnapshotSender.SaveProjectSnapshot(calculationVM.Store, calculationVM.AssemblySnapshots, newName);
+            var feedback =  await SnapshotSender.SaveProjectSnapshot(newName, calculationVM);
             bool? saved = feedback.Item1;
             string error = feedback.Item2;
             visibilityVM.HideAllOverlays();

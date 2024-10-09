@@ -1,5 +1,6 @@
 ﻿using Calc.Core;
 using Calc.Core.Snapshots;
+using Calc.MVVM.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -16,8 +17,10 @@ namespace Calc.MVVM.Services
         /// <summary>
         /// Saves the project snapshot, returns if saved and the error message.
         /// </summary>
-        public static async Task<(bool?,string)> SaveProjectSnapshot(CalcStore store, List<AssemblySnapshot> assemblySnapshots, string newName)
+        public static async Task<(bool?,string)> SaveProjectSnapshot(string newName, CalculationViewModel calVM)
         {
+            var store = calVM.Store;
+            var assemblySnapshots = calVM.AssemblySnapshots;
             if (assemblySnapshots == null) return (null, null);
             if (assemblySnapshots.Count == 0) return (null, null);
             if (store == null) return (null, null);
@@ -37,9 +40,14 @@ namespace Calc.MVVM.Services
                 Name = newName,
                 JsonUuid = ResultUuid,
                 Project = store.ProjectSelected,
-                Description = description
+                Description = description,
+                SnapshotSummary = new SnapshotSummary()
+                {
+                    TotalGwp = calVM.ProjectGwp,
+                    TotalGe = calVM.ProjectGe,
+                    QuerySnapshots = calVM.QuerySnapshots
+                }
             };
-
             return await store.SaveProjectResult(pResult);
         }
 

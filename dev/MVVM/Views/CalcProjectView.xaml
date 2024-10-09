@@ -553,9 +553,9 @@
                                   Grid.Row="0"
                                   VerticalScrollBarVisibility="Auto"
                                   Style="{StaticResource ResultDataGridStyle}" 
-                                  ItemsSource="{Binding CalculationVM.CategorizedResults}">
+                                  ItemsSource="{Binding CalculationVM.QuerySnapshots}">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Query" Binding="{Binding Group}" Width="3*" IsReadOnly="True" />
+                                <DataGridTextColumn Header="Query" Binding="{Binding QueryName}" Width="3*" IsReadOnly="True" />
                                     <DataGridTextColumn Header="GWP" Binding="{Binding Gwp, StringFormat={}{0:F1}}" Width="1*" IsReadOnly="True" />
                                     <DataGridTextColumn Header="GE" Binding="{Binding Ge, StringFormat={}{0:F1}}" Width="1*" IsReadOnly="True" />
                                 </DataGrid.Columns>
