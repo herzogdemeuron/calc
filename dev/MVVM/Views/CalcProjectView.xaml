@@ -44,14 +44,25 @@
                 <RowDefinition Height="35"/>
             </Grid.RowDefinitions>
 
-            <Label Content="DT @ Herzog &amp; de Meuron"
-                Grid.Row="4"
-                FontSize="9"
-                Padding="0"
-                Margin="10,0,0,3"
-                VerticalAlignment="Bottom"
-                HorizontalAlignment="Left"
-                Foreground="Gray"/>
+            <StackPanel Grid.Row="4"
+                        Margin="10,0,0,10"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Left"> 
+                <Image Source="pack://application:,,,/CalcMVVM;component/Resources/dt_logo_small.png" 
+                        Width="15" 
+                        Height="15"
+                        Opacity="0.8"
+                        Margin="0,-1,0,0"/>
+                <TextBlock FontSize="9"
+                           ToolTip="Visit our github page.">
+                    <Hyperlink NavigateUri="https://github.com/herzogdemeuron/calc"
+                               RequestNavigate="OpenHyperLink"
+                               Foreground="#404040">
+                        Design Technologies
+                    </Hyperlink>
+                </TextBlock>
+            </StackPanel>
 
             <StackPanel x:Name="QueriesPanel"
                        Grid.Column="0"
@@ -132,7 +143,7 @@
                     <RowDefinition Height="45"/>
                 </Grid.RowDefinitions>
 
-                <Border BorderBrush="Crimson"
+                <Border BorderBrush="IndianRed"
                         BorderThickness="1"
                         CornerRadius="4"
                         Grid.ColumnSpan="2" 
@@ -310,7 +321,22 @@
                     HorizontalAlignment="Left"/>
 
                 <Grid Grid.Row="4" Width="225" HorizontalAlignment="Right">
-                    <Border CornerRadius="4" Background="Silver"/>
+                    <Border CornerRadius="4"
+                            Background="WhiteSmoke">
+                        <Border.Clip>
+                            <RectangleGeometry Rect="0,0,225,25" RadiusX="3" RadiusY="3"/>
+                        </Border.Clip>
+                        <Border BorderBrush="LightGray"
+                                CornerRadius="4"
+                                BorderThickness="1">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="5"
+                                          ShadowDepth="0"
+                                          Opacity="0.5"/>
+                            </Border.Effect>
+                        </Border>
+                    </Border>
+
                     <StackPanel x:Name="TogglePanel"                            
                             Orientation="Horizontal"
                             VerticalAlignment="Bottom"
@@ -318,24 +344,24 @@
 
                         <Button x:Name="ColorByGroupButton"                                
                                 Content="Group"
+                                Foreground="Gray"
                                 Tag="group"
                                 Width="65"
-                                Opacity="0.4"
                                 Click="ColorizeClicked"
                                 Style="{StaticResource ButtonStyle}"/>
                         <Button x:Name="ColorByAssemblyButton"
                                 Content="Assemb." 
                                 Tag="assembly"
-                                Width="65" 
+                                Width="65"
                                 Margin="15,0,15,0"
                                 Uid="pack://application:,,,/CalcMVVM;component/Resources/button_color.png"
                                 Click="ColorizeClicked"
                                 Style="{StaticResource ButtonStyle}"/>
                         <Button x:Name="ColorByCO2Button"
-                                Content="CO²" 
+                                Content="CO²"
+                                Foreground="Gray"
                                 Tag="co2"
                                 Width="65"
-                                Opacity="0.4"
                                 Click="ColorizeClicked"
                                 Style="{StaticResource ButtonStyle}"/>
 

@@ -22,6 +22,7 @@
     <None Remove="Resources\button_save.png" />
     <None Remove="Resources\button_trash.png" />
     <None Remove="Resources\DT_logo.gif" />
+    <None Remove="Resources\dt_logo_small.png" />
     <None Remove="Resources\icon_black_small.png" />
     <None Remove="Resources\icon_builder.png" />
     <None Remove="Resources\icon_builder_small.png" />
@@ -101,7 +102,10 @@
     <Resource Include="Resources\button_reload.png" />
     <Resource Include="Resources\button_save.png" />
     <Resource Include="Resources\button_trash.png" />
-    <Resource Include="Resources\DT_logo.gif" />
+    <Resource Include="Resources\DT_logo.gif">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\dt_logo_small.png" />
     <Resource Include="Resources\icon_black_small.png" />
     <Resource Include="Resources\icon_builder.png" />
     <Resource Include="Resources\icon_builder_small.png" />

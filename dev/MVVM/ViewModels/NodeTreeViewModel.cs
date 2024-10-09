@@ -144,7 +144,7 @@ namespace Calc.MVVM.ViewModels
         internal void ColorNodesToAssembly()
         {
             BranchesSwitch = false;
-            if (CurrentQueryTemplateItem == null) return;
+            if (CurrentQueryTemplateItem?.Host == null) return;
             Store.QueryTemplateSelected.SetBranchColorsBy("assemblies");
             CurrentQueryTemplateItem.NotifyNodePropertyChange();
             DeselectNodes();
@@ -156,7 +156,7 @@ namespace Calc.MVVM.ViewModels
         internal void ColorNodesToBranch()
         {
             BranchesSwitch = true;
-            if (CurrentQueryTemplateItem == null) return;
+            if (CurrentQueryTemplateItem?.Host == null) return;
             Store.QueryTemplateSelected.SetBranchColorsBy("branches");
             CurrentQueryTemplateItem.NotifyNodePropertyChange();
             DeselectNodes();

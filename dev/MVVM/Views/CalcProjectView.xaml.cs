@@ -4,9 +4,12 @@ using Calc.MVVM.Helpers;
 using Calc.MVVM.Models;
 using Calc.MVVM.ViewModels;
 using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Navigation;
 
 namespace Calc.MVVM.Views
 {
@@ -197,16 +200,16 @@ namespace Calc.MVVM.Views
             switch (tag)
             {
                 case "group":
-                    this.ColorByAssemblyButton.Opacity = 0.4;
+                    this.ColorByAssemblyButton.Foreground = new SolidColorBrush(Colors.Gray);
                     this.ColorByAssemblyButton.Uid = "";
-                    this.ColorByGroupButton.Opacity = 1.0;
+                    this.ColorByGroupButton.Foreground = new SolidColorBrush(Colors.Black);
                     this.ColorByGroupButton.Uid = image;
                     ProjectVM.HandleViewToggleToBranch();
                     break;
                 case "assembly":
-                    this.ColorByAssemblyButton.Opacity = 1.0;
+                    this.ColorByAssemblyButton.Foreground = new SolidColorBrush(Colors.Black);
                     this.ColorByAssemblyButton.Uid = image;
-                    this.ColorByGroupButton.Opacity = 0.4;
+                    this.ColorByGroupButton.Foreground = new SolidColorBrush(Colors.Gray);
                     this.ColorByGroupButton.Uid = "";
                     ProjectVM.HandleViewToggleToAssembly();
                     break;
@@ -252,6 +255,13 @@ namespace Calc.MVVM.Views
             base.OnMouseLeftButtonDown(e);
             this.DragMove();
         }
+
+        private void OpenHyperLink(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true });
+            e.Handled = true;
+        }
+
         private void OnCloseClicked(object sender, RoutedEventArgs e)
         {
             this.Close();

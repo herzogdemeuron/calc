@@ -2,10 +2,12 @@
 using Calc.Core.Objects.Assemblies;
 using Calc.MVVM.ViewModels;
 using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Navigation;
 
 namespace Calc.MVVM.Views
 {
@@ -329,6 +331,12 @@ namespace Calc.MVVM.Views
                 TreeViewItem item = childControl as TreeViewItem;
                 if (item != null) item.IsExpanded = expand;
             }
+        }
+
+        private void OpenHyperLink(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true });
+            e.Handled = true;
         }
 
         private static T FindAncestorOrSelf<T>(DependencyObject obj) where T : DependencyObject

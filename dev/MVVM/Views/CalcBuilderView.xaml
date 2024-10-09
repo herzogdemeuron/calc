@@ -44,14 +44,25 @@
                 <RowDefinition Height="45"/>
             </Grid.RowDefinitions>
 
-            <Label Content="DT @ Herzog &amp; de Meuron"
-                Grid.Row="6"
-                FontSize="9"
-                Padding="0"
-                Margin="10,0,0,10"
-                VerticalAlignment="Bottom"
-                HorizontalAlignment="Left"
-                Foreground="Gray"/>
+            <StackPanel Grid.Row="6"
+                        Margin="10,0,0,10"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Left">
+                <Image Source="pack://application:,,,/CalcMVVM;component/Resources/dt_logo_small.png" 
+                        Width="15" 
+                        Height="15"
+                        Opacity="0.8"
+                        Margin="0,-1,0,0"/>
+                <TextBlock FontSize="9"
+                           ToolTip="Visit our github page.">
+                    <Hyperlink NavigateUri="https://github.com/herzogdemeuron/calc"
+                               RequestNavigate="OpenHyperLink"
+                               Foreground="#404040">
+                        Design Technologies
+                    </Hyperlink>
+                </TextBlock>
+            </StackPanel>
 
             <Label Content="Revit Elements"
                    FontSize="18"
