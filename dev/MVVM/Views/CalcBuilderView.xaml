@@ -1,0 +1,615 @@
+﻿<Window x:Class="Calc.MVVM.Views.CalcBuilderView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Calc.MVVM.ViewModels"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
+        xmlns:views="clr-namespace:Calc.MVVM.Views"
+        d:DataContext="{d:DesignInstance Type=local:BuilderViewModel}"
+        Loaded="WindowLoaded"
+        mc:Ignorable="d"
+        Height="800" MinHeight="700"
+        Width="900" MinWidth="800"
+        WindowStartupLocation="CenterScreen"
+        Icon="pack://application:,,,/CalcMVVM;component/Resources/icon_builder_small.png"
+        Title="Calc Builder"
+        Topmost="True">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="MainViewResources.xaml"/>
+                <ResourceDictionary Source="ButtonResource.xaml"/>
+                <ResourceDictionary Source="ComboBoxResource.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid x:Name="MainGrid">
+
+        <Grid x:Name="BuilderGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="85"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="45"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="6"
+                        Margin="10,0,0,10"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Left">
+                <Image Source="pack://application:,,,/CalcMVVM;component/Resources/dt_logo_small.png" 
+                        Width="15" 
+                        Height="15"
+                        Opacity="0.8"
+                        Margin="0,-1,0,0"/>
+                <TextBlock FontSize="9"
+                           ToolTip="Visit our github page.">
+                    <Hyperlink NavigateUri="https://github.com/herzogdemeuron/calc"
+                               RequestNavigate="OpenHyperLink"
+                               Foreground="#404040">
+                        Design Technologies
+                    </Hyperlink>
+                </TextBlock>
+            </StackPanel>
+
+            <Label Content="Revit Elements"
+                   FontSize="18"
+                   Padding="0"
+                   Margin="10,10,0,10"/>
+
+            <Grid x:Name="TreeviewGrid"
+                      Grid.Column="0"
+                      Grid.Row="1"
+                      Grid.RowSpan="5"
+                      Margin="10,0,10,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="{Binding AssemblyCreationVM.MainWarning}"
+                           d:Text="Choose a type and set one amount as normalizer 🡩  "
+                           Grid.ColumnSpan="5"
+                           Grid.Row="1"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Right"
+                           Foreground="Crimson"
+                           FontWeight="SemiBold"
+                           FontSize="10"/>
+
+                <Button Content="Select"
+                        Uid="pack://application:,,,/CalcMVVM;component/Resources/button_cursor.png"
+                            Style="{StaticResource ButtonStyle}"
+                            Grid.Column="0"
+                            Grid.Row="0"
+                            Width="55"
+                            Height="40"
+                            HorizontalAlignment="Left"
+                            Click="SelectClicked"/>
+
+
+                <Border Grid.ColumnSpan="4" Grid.Column="1" Grid.Row="0"
+                            BorderThickness="0" 
+                            CornerRadius="4"
+                            d:Background="LightGray"
+                            Background="{Binding AssemblyCreationVM.CurrentColor, Converter={StaticResource ColorConverter}}"/>
+
+                <Grid Grid.Column="1"
+                      DataContext="{Binding AssemblyCreationVM.AmountsModel}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Tag="Count"
+                            DataContext="{Binding CountAmount}"
+                            Grid.Column="0"
+                            Click="CountAmountClicked"
+                            Style="{StaticResource UnitButtonStyle}"/>
+
+                    <Button Tag="Length"
+                            DataContext="{Binding LengthAmount}"
+                            Grid.Column="1"
+                            Click="LengthAmountClicked"
+                            Style="{StaticResource UnitButtonStyle}"/>
+
+                    <Button Tag="Area"
+                            DataContext="{Binding AreaAmount}"
+                            Grid.Column="2"
+                            Click="AreaAmountClicked"
+                            Style="{StaticResource UnitButtonStyle}"/>
+
+                    <Button Tag="Volume"
+                            DataContext="{Binding VolumeAmount}"
+                            Grid.Column="3"
+                            Click="VolumeAmountClicked"
+                            Style="{StaticResource UnitButtonStyle}"/>
+                </Grid>
+
+                <Border x:Name="TreeViewBorder"
+                            Grid.Row="2"
+                            Grid.ColumnSpan="5"
+                            BorderBrush="Silver"
+                            BorderThickness="1"
+                            CornerRadius="4">
+                    <TreeView x:Name="TreeView"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            AllowDrop="True"
+                            MouseLeftButtonDown="SideClickDown"
+                            MouseDoubleClick="TreeViewDoubleClick"
+                            MouseMove="TreeViewMouseMove"
+                            DragOver="TreeViewDragOver"
+                            Drop="TreeViewDrop"
+                            ItemsSource="{Binding AssemblyCreationVM.AssemblyComponents}"
+                            TreeViewItem.Selected="TreeViewItemSelected"
+                            ItemContainerStyle="{StaticResource TreeViewItemStyle}">
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding LayerComponents}">
+                                <ContentControl Content="{Binding}" ContentTemplate="{StaticResource LayerItemTemplate}">
+                                    <ContentControl.ToolTip>
+                                        <TextBlock Text="{Binding Title}"/>
+                                    </ContentControl.ToolTip>
+                                </ContentControl>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </Border>
+
+                <TextBlock Text="{Binding AssemblyCreationVM.EmptySelectionText}"
+                           Grid.Row="2"
+                           Grid.ColumnSpan="5"
+                           Foreground="Gray"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+            </Grid>
+
+
+
+            <Label Content="Assembly Properties" 
+                    Grid.Column="2"
+                    Grid.Row="0"
+                    Padding="0"
+                    FontSize="18"
+                    Margin="10,10,0,10"/>
+
+            <Grid x:Name="AssemblyInfoGrid"
+                    Grid.Column="2" 
+                    Grid.Row="1"
+                    Margin="10,0,10,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="25"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="120"/>
+                </Grid.ColumnDefinitions>
+
+
+
+                <ComboBox   x:Name="AssemblyGroupComboBox"
+                            Text = "Assembly Group"
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            ItemsSource="{Binding AssemblyCreationVM.AssemblyGroupsAll}"
+                            SelectedItem="{Binding AssemblyCreationVM.SelectedAssemblyGroup}"
+                            Style="{StaticResource RoundedComboBoxStyle}"
+                            DisplayMemberPath="Name"/>
+
+                <TextBox x:Name="AssemblyNameTextBox"
+                        Grid.Column="0"
+                        Height="25"
+                        Margin="0,0,5,0"
+                        Tag="Assembly Name"
+                        Style="{StaticResource TextBoxStyle}"
+                        Text="{Binding AssemblyCreationVM.NewAssemblyName}"
+                        FontWeight="SemiBold"
+                        LostFocus="AssemblyNameFocusLost"
+                        TextChanged="AssemblyNameTextChanged"/>
+
+                <TextBox x:Name="AssemblyCodeTextBox"
+                        Grid.Column="1"
+                        Height="25"
+                        Margin="0,0,5,0"
+                        Tag="Assembly Code"
+                        Style="{StaticResource TextBoxStyle}"
+                        Text="{Binding AssemblyCreationVM.NewAssemblyCode}"
+                        FontWeight="SemiBold"
+                        LostFocus="AssemblyCodeFocusLost"
+                        TextChanged="AssemblyCodeTextChanged"/>
+
+                <TextBox x:Name="DescriptionTextBox"
+                        Grid.Column="0"
+                         Grid.ColumnSpan="2"
+                        Grid.Row="1"
+                        Grid.RowSpan="2"
+                        Margin="0,5,5,0"
+                        Tag="Assembly Description"
+                        Style="{StaticResource TextBoxStyle}"
+                        VerticalAlignment="Top"
+                        TextWrapping="Wrap"
+                        Height="55"
+                        Text="{Binding AssemblyCreationVM.NewAssemblyDescription}"/>
+
+                <Border  Grid.Column="2"
+                         Grid.Row="1"
+                         Grid.RowSpan="2"
+                         Margin="0,5,0,0"
+                         BorderBrush="Silver"
+                         BorderThickness="1"
+                         Background="WhiteSmoke"
+                         MouseLeftButtonDown="OnCaputureClicked"
+                         MouseEnter="CaptureMouseEnter"
+                         MouseLeave="CaptureMouseLeave"
+                         MouseMove="CaptureMouseMove"
+                         CornerRadius="4">
+                    <Grid>
+                        <Image x:Name="ImagePreview" 
+                                Source="{Binding AssemblyCreationVM.CurrentImage}"/>
+                        <TextBlock x:Name="CaptureTextBlock"
+                                   Text="{Binding AssemblyCreationVM.CaptureText}"
+                                   d:Text="↻"
+                                   Foreground="Gray"
+                                   FontSize="20"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Grid>
+                </Border>
+
+                <Popup x:Name="ImagePreviewPopup" AllowsTransparency="True">
+                    <Border BorderThickness="0" Background="Transparent" CornerRadius="4">
+                        <Image Source="{Binding AssemblyCreationVM.CurrentImage}" Width="500" Height="400"/>
+                    </Border>
+                </Popup>
+
+            </Grid>
+
+
+            <Label Content="Materials"
+                    Grid.Column="2"
+                    Grid.Row="2"
+                    Padding="0"
+                    Margin="10,10,0,10"
+                    FontSize="18"/>
+
+            <Border  x:Name="MaterialSection"
+                     Grid.Column="2"
+                     Grid.Row="3"
+                     Margin="10,0,10,0"
+                     CornerRadius="4"
+                     d:Background="LightGray"
+                     Background="{Binding AssemblyCreationVM.CurrentColor, Converter={StaticResource ColorConverter}}">
+
+                <Grid x:Name="MaterialGrid"
+                      Margin="10"
+                      DataContext="{Binding AssemblyCreationVM.CurrentLayerMaterialModel}"
+                      IsEnabled="{Binding IsEnabled}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="80"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="15"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <ComboBox x:Name="MaterialFunctionComboBox"
+                              Text="Material Function"
+                              Grid.Column="1"
+                              Grid.Row="0"
+                              Grid.ColumnSpan="2"
+                              Margin="5,0,0,0"
+                              ItemsSource="{Binding MaterialFunctionsAll}"
+                              SelectedItem="{Binding SelectedFunction}"
+                              Style="{StaticResource RoundedComboBoxStyle}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+                                    <TextBlock Text="{Binding Amortization}" Foreground="Gray" FontSize="9" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <Button Content="{Binding MainMaterial.Name}"
+                            d:Content=""
+                            Tag="Select First Material"
+                            HorizontalAlignment="Stretch"
+                            Grid.Column="0"
+                            Grid.Row="0"
+                            Style="{StaticResource ButtonStyle}"
+                            Click="SetFirstMaterialClicked"/>
+
+                    <Button Content="{Binding SubMaterial.Name}"
+                            Tag="Select Second Material"
+                            d:Content=""
+                            HorizontalAlignment="Stretch"
+                            Grid.Column="0"
+                            Grid.Row="1"
+                            Style="{StaticResource ButtonStyle}"
+                            IsEnabled="{Binding CanAddSecondMaterial}"
+                            Click="SetSecondMaterialClicked"/>
+
+                    <TextBlock Text="{Binding MaterialMatchInfo}"
+                               d:Text="Material units don't match."
+                               HorizontalAlignment="Left"
+                               Grid.Column="0"
+                               Grid.Row="2"
+                               Margin="5,0,0,0"
+                               Foreground="Crimson"
+                               FontWeight="SemiBold"
+                               FontSize="10"/>
+
+                    <Button Content=" Delete"
+                            Uid="pack://application:,,,/CalcMVVM;component/Resources/button_delete.png"
+                            Grid.Column="2"
+                            Grid.Row="1"
+                            Margin="2.5,0,0,0"
+                           Style="{StaticResource ButtonStyle}"
+                            Click="ReduceMaterialClicked"/>
+
+                    <TextBox x:Name="RatioTextBox"
+                                 Grid.Column="1"
+                                 Grid.Row="1"
+                                 Margin="5,0,2.5,0"
+                                 Height="25"
+                                 Tag="Ratio"
+                                 KeyDown="RatioTextBoxKeyDown"
+                                 Text="{Binding SubMaterialRatio}"
+                                 Style="{StaticResource TextBoxStyle}"/>
+
+                    <Grid x:Name="MaterialTabsGrid"
+                          Grid.ColumnSpan="3"
+                          Grid.Row="4"
+                          DockPanel.Dock="Top">
+                        <Border Margin="0,21,0,0"
+                                BorderBrush="Silver"
+                                Background="White"
+                                BorderThickness="1,1,1,1"
+                                CornerRadius="4"/>
+                        <TabControl x:Name="MaterialTabs"
+                            BorderThickness="0"
+                            Background="Transparent"
+                            ItemsSource="{Binding CurrentMaterials}"
+                            SelectedItem="{Binding ActiveMaterial}"
+                            ItemContainerStyle="{StaticResource TabItemStyle}">
+                            <TabControl.ContentTemplate>
+                                <DataTemplate>
+
+                                    <Grid Margin="10,0,10,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="100"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="100"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="20"/>
+                                            <RowDefinition Height="20"/>
+                                            <RowDefinition Height="20"/>
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock Grid.Row="0" Grid.Column="0"
+                                                   FontWeight="Bold"
+                                                   FontStyle="Italic"
+                                                   Text="Material Type: "/>
+                                        <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} → {1}">
+                                                    <Binding Path="MaterialTypeFamily"/>
+                                                    <Binding Path="MaterialType"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+
+                                        <TextBlock Grid.Row="1" Grid.Column="0"
+                                                   FontWeight="Bold"
+                                                   FontStyle="Italic"
+                                                   Text="Material Unit: "/>
+                                        <TextBlock Grid.Row="1" Grid.Column="1" 
+                                               Text="{Binding  MaterialUnit}"/>
+
+                                        <TextBlock Grid.Row="2" Grid.Column="0"
+                                                   FontWeight="Bold"
+                                                   FontStyle="Italic"
+                                                   Text="Thickness: "/>
+                                        <TextBlock Grid.Row="2" 
+                                                   Grid.Column="1" 
+                                                   Text="{Binding Thickness, StringFormat='{}{0} mm', TargetNullValue='-'}"/>
+
+                                        <TextBlock Grid.Row="1" Grid.Column="2"
+                                                   FontWeight="Bold"
+                                                   FontStyle="Italic"
+                                                   Text="Unit GWP: "/>
+                                        <TextBlock Grid.Row="1" 
+                                                   Grid.Column="3"
+                                                   Text="{Binding Gwp, StringFormat='{}{0} kgCO₂eq'}"/>
+
+                                        <TextBlock Grid.Row="2" Grid.Column="2"
+                                                   FontWeight="Bold"
+                                                   FontStyle="Italic"
+                                                   Text="Unit GE: "/>
+                                        <TextBlock Grid.Row="2" 
+                                                   Grid.Column="3"
+                                                   Text="{Binding Ge, StringFormat='{}{0} kWhOileq'}"/>
+                                    </Grid>
+
+                                </DataTemplate>
+                            </TabControl.ContentTemplate>
+                        </TabControl>
+                        <TextBlock Text="{Binding EmptyMaterialText}"
+                                   Margin="0,20,0,0"
+                                     Foreground="Gray"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"/>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Label Content="Assembly Preview"
+                   Grid.Row="4"
+                   Grid.Column="2"
+                   Padding="0"
+                   Margin="10,10,0,10"
+                   FontSize="18"/>
+
+            <Grid x:Name="AssemblyPreviewGrid"
+                     Margin="10,0,10,0"
+                     Grid.Row="5" 
+                     Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="45"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="35"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="45"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock d:Text="This is a Assembly name, and it is really long so that it has to be wrapepd."
+                           Grid.Column="0"
+                           Grid.RowSpan="2"
+                           FontSize="13"
+                           TextWrapping="Wrap"
+                           FontWeight="SemiBold"
+                           LineHeight="17"
+                           Margin="0,0,20,0"
+                           LineStackingStrategy="BlockLineHeight" 
+                           Text="{Binding AssemblyCreationVM.NewAssemblyName}"/>
+
+                <TextBlock Grid.Column="1" Text="Unit: " FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="2" Text="{Binding AssemblyCreationVM.SelectedAssemblyUnit}" VerticalAlignment="Center" d:Text="m2"/>
+
+                <TextBlock Grid.Column="1" Grid.Row="1" Text="Source: " FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding AssemblyCreationVM.StandardsString}" VerticalAlignment="Center" d:Text="KBOB"/>
+
+                <TextBlock Grid.Column="4" Text="GWP: " FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="5" Text="{Binding AssemblyCreationVM.AssemblyGwp, StringFormat={}{0:F3}}" VerticalAlignment="Center" d:Text="98.902"/>
+                <TextBlock Grid.Column="6" FontSize="9" Text="kgCO₂/yr" Margin="5,0,0,0" VerticalAlignment="Center"/>
+
+                <TextBlock Grid.Column="4" Grid.Row="1" Text="GE: " FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="5" Grid.Row="1" Text="{Binding AssemblyCreationVM.AssemblyGe, StringFormat={}{0:F3}}" VerticalAlignment="Center" d:Text="177.902"/>
+                <TextBlock Grid.Column="6" FontSize="9" Grid.Row="1" Text="kWhOil/yr" Margin="5,0,0,0" VerticalAlignment="Center"/>
+
+                <Border x:Name="PreviewCalculation"
+                        BorderBrush="Silver"
+                        BorderThickness="1"
+                        Grid.Row="2"
+                        Grid.ColumnSpan="7"
+                        CornerRadius="4">
+                    <DataGrid x:Name="Calculations"
+                              Style="{StaticResource DataGridStyle}"
+                              ItemsSource="{Binding AssemblyCreationVM.CurrentCalculationComponents}"
+                              AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="" Width="20">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="■" FontSize="16" Padding="0,-2,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <TextBlock.Foreground>
+                                                <Binding Path="HslColor" Converter="{StaticResource ColorConverter}"/>
+                                            </TextBlock.Foreground>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Material" Binding="{Binding Material.Name}" Width="3*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Function" Binding="{Binding Function.Name}" Width="*" IsReadOnly="True"/>
+                            <DataGridTemplateColumn Header="Amount" Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <Run Text="{Binding Amount, StringFormat={}{0:F3}}"/>
+                                            <Run Text=" "/>
+                                            <Run Text="{Binding Material.MaterialUnit}"/>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="GWP" Binding="{Binding Gwp, StringFormat={}{0:F3}}" Width="*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="GE" Binding="{Binding Ge, StringFormat={}{0:F3}}" Width="*" IsReadOnly="True"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
+                <TextBlock Text="{Binding AssemblyCreationVM.EmptyCalculationText}"
+                           Grid.Row="2"
+                           Grid.ColumnSpan="7"
+                           Foreground="Gray"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+            </Grid>
+
+            <Grid  x:Name="SaveButtonGrid"
+                   Grid.ColumnSpan="5"
+                    Grid.Row="6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="130" />
+                </Grid.ColumnDefinitions>
+                <Button Click="SaveAssemblyClicked"
+                        IsEnabled="{Binding AssemblyCreationVM.CanSave}"
+                        Grid.Column="1"
+                        Margin="0,0,10,0">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+                            <Setter Property="Content" Value="Create" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding AssemblyCreationVM.SaveOrUpdate}" Value="False">
+                                    <Setter Property="Content" Value="Code exists, Update" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Image gif:ImageBehavior.AnimatedSource="/CalcMVVM;component/Resources/DT_logo.gif"
+                       Visibility="{Binding AssemblyCreationVM.SavingVisibility}"
+                       HorizontalAlignment="Right"
+                       Margin="0,0,10,0"
+                       Width="30"
+                       Height="30"/>
+
+                <Label x:Name="SaveMessageLabel"
+                       Content="{Binding AssemblyCreationVM.SaveMessage}"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
+                       d:Content="Saved"
+                       FontWeight="SemiBold"
+                       Foreground="{Binding AssemblyCreationVM.SaveMessageColor}"/>
+
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
