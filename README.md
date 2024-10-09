@@ -3,7 +3,7 @@
 <div align="center">
        <picture>
         <source media="(prefers-color-scheme: dark)" srcset="https://github.com/herzogdemeuron/calc/blob/master/images/icon_calc_light.png?raw=true" width="200" height="200">
-        <img alt="Revit Hack Logo" src="https://github.com/herzogdemeuron/calc/blob/master/images/icon_calc_dark.png?raw=true" width="200" height="200">
+        <img alt="calc logo" src="https://github.com/herzogdemeuron/calc/blob/master/images/icon_calc_dark.png?raw=true" width="200" height="200">
       </picture>
 </div>
 
