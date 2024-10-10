@@ -1,13 +1,10 @@
-<div align="center">
-   <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="./images/icon_calc_light.png" width="200" height="200">
-      <img alt="calc logo" src="./images/icon_calc_dark.png" width="200" height="200">
-   </picture>
-</div>
+<img align="left" src="./images/icon_calc_dark.png" width="110" height="110">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./images/icon_calc_light.png" width="50" height="50">
+</picture>
 
 ### Calc helps architects quickly estimate the environmental impact of their early designs. This repository contains the core in-house developed applications that support this workflow.
-
----
+<br clear="left">
 
 ## How it works
 1. (Directus) Create the material library and query templates.
