@@ -1,13 +1,25 @@
-<img align="left" src="./images/icon_calc_dark.png" width="110" height="110">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./images/icon_calc_light.png" width="50" height="50">
-</picture>
-
-### Calc helps architects quickly estimate the environmental impact of their early designs. This repository contains the core in-house developed applications that support this workflow.
+<div align="left">
+   <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="./images/icon_calc_light.png" width="180" height="180">
+      <img alt="calc logo" src="./images/icon_calc_dark.png" width="150" height="150">
+   </picture>
+</div>
 <br clear="left">
 
+**Calc helps architects quickly estimate the environmental impact of their early designs.**
+
+**This repository contains the core in-house developed applications that support this workflow.**
+
+## Key Features
+1. Intuitive role-based data management powered by Directus UI.
+2. Customize assemblies using material data and detailed Revit model groups.
+3. Efficient Revit project model breakdown using query templates.
+4. Seamless assembly assignment to model query results.
+5. Real-time visualization in Revit for model branching and assembly assignment validation.
+6. Automated calculations uploaded to Directus via Calc schema.
+
 ## How it works
-1. (Directus) Create the material library and query templates.
+1. Setup the material library and query templates in Directus.
 2. (Calc Builder) Design assemblies in a Revit container file.
 3. (Calc Project) Assign assemblies to project query result, save calculation snapshots.
 
