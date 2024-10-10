@@ -7,15 +7,14 @@
 
 ### Calc helps architects quickly estimate the environmental impact of their early designs. This repository contains the core in-house developed applications that support this workflow.
 
+---
 
-![extended](./images/overview.png)
+## How it works
+1. (Directus) Create the material library and query templates.
+2. (Calc Builder) Design assemblies in a Revit container file.
+3. (Calc Project) Assign assemblies to project query result, save calculation snapshots.
 
-
-## Workflow
-### 1. (Directus) Create the material library and query templates.
-### 2. (Calc Builder) Design assemblies.
-### 3. (Calc Project) Assign assemblies and save calculation snapshots.
-
+![overview](./images/overview.png)
 
 
 
