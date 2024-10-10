@@ -1,9 +1,14 @@
-<img align="center" src="./images/icon_calc_dark.png" width="150" height="150">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./images/icon_calc_light.png" width="110" height="110">
-</picture>
+<div align="left">
+   <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="./images/icon_calc_light.png" width="180" height="180">
+      <img alt="calc logo" src="./images/icon_calc_dark.png" width="150" height="150">
+   </picture>
+</div>
+<br clear="left">
 
-**Calc helps architects quickly estimate the environmental impact of their early designs. This repository contains the core in-house developed applications that support this workflow.**
+**Calc helps architects quickly estimate the environmental impact of their early designs.**
+
+**This repository contains the core in-house developed applications that support this workflow.**
 
 ## Key Features
 1. Intuitive role-based data management powered by Directus UI.
