@@ -26,26 +26,33 @@ namespace Calc.Core.Objects.Elements
         /// </summary>
         public void ApplyAssemblyRecord(AssemblyRecord record, CalcStore store)
         {
-            if (record == null) return;
-
-            AssemblyName = record.AssemblyName;
-            Description = record.Description;
-            AssemblyUnit = record.AssemblyUnit;
-            AssemblyGroup = store.AssemblyGroupsAll.Find(g => g.Id == record.AssemblyGroup.Id);
-
-            if (AssemblyComponents == null || AssemblyComponents.Count == 0) return;
-
-            // link materials to the record components
-            record.Components.ForEach(component => LinkMaterials(component, store));
-
-            foreach ( var currentComponent in AssemblyComponents) 
+            try
             {
-                var currentName = currentComponent.Name;
-                if (AssemblyComponents.FindAll(c => c.Name == currentName).Count > 1) continue;
+                if (record == null) return;
 
-                var recordComponent = record.Components.Find(c => CheckComponentEquality(currentComponent, c));
-                if (recordComponent == null) continue;
-                FollowComponent(currentComponent, recordComponent);
+                AssemblyName = record.AssemblyName;
+                Description = record.Description;
+                AssemblyUnit = record.AssemblyUnit;
+                AssemblyGroup = store.AssemblyGroupsAll.Find(g => g.Id == record.AssemblyGroup.Id);
+
+                if (AssemblyComponents == null || AssemblyComponents.Count == 0) return;
+
+                // link materials to the record components
+                record.Components.ForEach(component => LinkMaterials(component, store));
+
+                foreach ( var currentComponent in AssemblyComponents) 
+                {
+                    var currentName = currentComponent.Name;
+                    if (AssemblyComponents.FindAll(c => c.Name == currentName).Count > 1) continue;
+
+                    var recordComponent = record.Components.Find(c => CheckComponentEquality(currentComponent, c));
+                    if (recordComponent == null) continue;
+                    FollowComponent(currentComponent, recordComponent);
+                }
+            }
+            catch (System.Exception)
+            {
+                throw new System.Exception($"Failed to read the group type comments.");
             }
         }
 

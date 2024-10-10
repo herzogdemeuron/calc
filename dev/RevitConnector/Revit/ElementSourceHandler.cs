@@ -68,6 +68,9 @@ namespace Calc.RevitConnector.Revit
             eventHandler.Raise(StoreAssemblyRecord);
         }
 
+        /// <summary>
+        /// Write back the record to the type comments of the group in a transaction.
+        /// </summary>
         private void StoreAssemblyRecord()
         {
             var recordObject = assemblyRecord.SerializeRecord();
@@ -95,14 +98,16 @@ namespace Calc.RevitConnector.Revit
             var groupType = doc.GetElement(new ElementId(groupTypeId)) as GroupType;
             var recordString = groupType?.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_COMMENTS)?.AsString();
             if (recordString == null) return null;
+            AssemblyRecord result = null;
             try
             {
-                return JsonConvert.DeserializeObject<AssemblyRecord>(recordString);
+                result = JsonConvert.DeserializeObject<AssemblyRecord>(recordString);
             }
-            catch(JsonSerializationException e)
+            catch (System.Exception e)
             {
-                return null;
+                // do nothing
             }
+            return result ?? throw new System.Exception("I don't understand the 'Type Comments' of this group.");
         }
 
         private List<RevitBasicParamConfig> GetParamSettings(List<CustomParamSetting> customParamSettings)
