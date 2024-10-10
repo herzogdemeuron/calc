@@ -90,6 +90,7 @@ namespace Calc.MVVM.Models
             {
                 activeMaterial = value;
                 OnPropertyChanged(nameof(ActiveMaterial));
+                OnPropertyChanged(nameof(EmptyMaterialText));
             }
         }
         public string EmptyMaterialText
@@ -118,7 +119,7 @@ namespace Calc.MVVM.Models
             OnPropertyChanged(nameof(CanAddSecondMaterial));
             OnPropertyChanged(nameof(CurrentMaterials));
             OnPropertyChanged(nameof(MaterialMatchInfo));
-            OnPropertyChanged(nameof(EmptyMaterialText));
+            //OnPropertyChanged(nameof(EmptyMaterialText));
             if (sendEvent)
             {
                 MaterialPropertyChanged?.Invoke(this, EventArgs.Empty);

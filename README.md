@@ -13,25 +13,9 @@
 
 ![overview](./images/overview.png)
 
+![calc builder demo](./images/demo_calc_builder.gif)
 
-
-
-## Spotlight
-
-### Model Filtering
-Create custom filtering logic to group elements by any condition:
-
-![extended](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdWNqNjg0emRteDF5b295cWN5N2R3OHo1b2Q0amd2eDMwcTZqMjdvbSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/dJSosAypkBde68E5dU/giphy.gif)
-
-### Buildup Mapping
-Select mappings from your data source and apply them to the filter groups:
-
-![extended](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdjQyandnZGp6NjBkc29zNXN0bm10ZWQ5Y2xkbDR0aW5vdzlhczFsZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/z3RlZWk94Ndatat3kg/giphy.gif)
-
-### CalcLive
-See your result in realtime:
-
-![extended](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHNienZqNmg4eWRkaWtzNDN5YXpmbGJvdDViYTYwNTcyb2xxOWViYSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/JcUDbUK7lsAYjl3Pky/giphy.gif)
+![calc project demo](./images/demo_calc_project.gif)
 
 ## Capabilities
 
