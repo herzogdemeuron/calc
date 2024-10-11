@@ -30,18 +30,22 @@ This repository houses the core applications we've developed in-house to facilit
 
 👚 Automated calculations uploaded to Directus using Calc schema
 
-## How it works
-1. Configure material library and query templates in Directus
+## Workflow Steps
+
+### 1. Configure Data in Directus
+Set up material library and query templates in the Directus database.
 
 <img src="./images/database.png" width="1100"/>
 <br><br>
 
-2. Use **Calc Builder** to design assemblies
+### 2. Design Assemblies with Calc Builder
+Use **Calc Builder** to create and manage custom assemblies.
 
 <img src="./images/demo_calc_builder.gif" width="1100" />
 <br><br>
 
-3. Use **Calc Project** to assign assemblies to project query results and save calculation snapshots
+### 3. Apply and Calculate with Calc Project
+Use **Calc Project** to assign assemblies to project elements and generate calculation snapshots.
 
 <img src="./images/demo_calc_project.gif" width="1100"/>
 <br><br>
@@ -55,10 +59,11 @@ The Calc Schema is designed to capture calculation results as snapshots, facilit
 
 ### Assembly Snapshot
 
-The Assembly Snapshot represents individual calculation results:
+Represents calculation results for a single predefined assembly:
+
 ```json
 { 
-	"query_name":null, # used for project
+	"query_name":null, # Project-specific
 	"assembly_code":"DECK_SYST_STBE_DE11.001",
 	"assembly_group":"reasonable group",		
 	"assembly_name":"pretty assembly",
@@ -67,8 +72,8 @@ The Assembly Snapshot represents individual calculation results:
 		[
 			{
 				"element_type_id":"789",
-				"element_ids":null, # used for project
-				"element_amount":null, # used for project
+				"element_ids":null, # Project-specific
+				"element_amount":null, # Project-specific
 				"materials":
 					[
 						{
@@ -119,7 +124,7 @@ The Project Snapshot bundles multiple Assembly Snapshots with metadata:
 			"element_types":
 				[
 					{
-						"element_type_id":null, # used for assembly
+						"element_type_id":null,
 						"element_ids":[1,2,3],
 						"element_amount": 13.566,
 						"materials":
