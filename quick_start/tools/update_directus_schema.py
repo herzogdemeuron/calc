@@ -40,7 +40,7 @@ existingSchema = response.json()["data"]
 # Get schema diff
 urlSchemaDiff = baseUrl + '/schema/diff'
 
-with open('./quick_start/directus/directus-schema.json', 'r') as f:
+with open('./quick_start/calc_directus_schema.json', 'r') as f:
     calcSchema = json.load(f)
 
 if not calcSchema:

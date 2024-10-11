@@ -6,13 +6,13 @@ Use it for setting up a local Directus instance for testing.
 import requests
 import json
 
-baseUrl = 'https://hdm-dt.directus.app' # change this to your Directus instance
+baseUrl = 'http://127.0.0.1:8055' # change this to your Directus instance
 
 # Get access token
 urlAuth = baseUrl + '/auth/login'
 authBody = {
-    "email": "test@test.com", 
-    "password": "12345"
+    "email": "admin@example.com", 
+    "password": "d1r3ctu5"
 }  
 
 headers = {
@@ -31,7 +31,7 @@ headers["Authorization"] = 'Bearer {}'.format(access_token)
 response = requests.get(urlSchema, headers=headers)
 print(response.status_code)
 
-with open('calc_directus_schema.json', 'w') as outfile: 
+with open('./quick_start/calc_directus_schema.json', 'w') as outfile: 
     json.dump(response.json()["data"], outfile, indent=4)
 
 
