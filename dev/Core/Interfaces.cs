@@ -38,6 +38,7 @@ namespace Calc.Core
     /// </summary>
     public interface IElementSender
     {
+        public bool IsValid { get; }
         public Task<string> SendAssembly(AssemblyData assemblyData);
     }    
 

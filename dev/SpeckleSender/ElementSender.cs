@@ -15,6 +15,7 @@ namespace SpeckleSender
 {
     public class ElementSender : IElementSender
     {
+        public bool IsValid { get; }
         private readonly ISpeckleConverter speckleConverter;
         private readonly string revitAppName;
         private readonly Client client;
@@ -29,6 +30,11 @@ namespace SpeckleSender
         /// </summary>
         public ElementSender(Document doc, CalcConfig config)
         {
+            if (!config.IsValid())
+            {
+                IsValid = false;
+                return;
+            }
             this.doc = doc;
             revitAppName = HostApplications.Revit.GetVersion(HostAppVersion.v2023);
             var speckleKit = KitManager.GetDefaultKit();
@@ -67,6 +73,7 @@ namespace SpeckleSender
         /// </summary>
         public async Task<string> SendAssembly(AssemblyData assemblyData)
         {
+            if (!IsValid) return null;
            var assemblyBase = CreateAssemblyBase(assemblyData);
             var transport = new ServerTransport(account, builderProjectId);
             var objectId = await Operations.Send(assemblyBase, transport, true);

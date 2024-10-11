@@ -10,10 +10,10 @@ baseUrl = 'https://hdm-dt.directus.app' # change this to your Directus instance
 
 # Get access token
 urlAuth = baseUrl + '/auth/login'
-authBody =  {
-    "email": "admin@example.com", 
-    "password": "d1r3ctu5"
-    } # change this to your Directus credentials
+authBody = {
+    "email": "test@test.com", 
+    "password": "12345"
+}  
 
 headers = {
     "Content-Type":"application/json",
@@ -31,7 +31,7 @@ headers["Authorization"] = 'Bearer {}'.format(access_token)
 response = requests.get(urlSchema, headers=headers)
 print(response.status_code)
 
-with open('directus-schema.json', 'w') as outfile: 
-    json.dump(response.json()["data"], outfile)
+with open('calc_directus_schema.json', 'w') as outfile: 
+    json.dump(response.json()["data"], outfile, indent=4)
 
 
