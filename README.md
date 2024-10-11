@@ -1,4 +1,4 @@
-<div align="left">
+<div align="center">
    <picture>
       <source media="(prefers-color-scheme: dark)" srcset="./images/icon_calc_light.png" width="180" height="180">
       <img alt="calc logo" src="./images/icon_calc_dark.png" width="150" height="150">
