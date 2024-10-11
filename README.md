@@ -63,7 +63,7 @@ Represents calculation results for a single predefined assembly:
 
 ```json
 { 
-	"query_name":null, # Project-specific
+	"query_name":null, 
 	"assembly_code":"DECK_SYST_STBE_DE11.001",
 	"assembly_group":"reasonable group",		
 	"assembly_name":"pretty assembly",
@@ -72,21 +72,21 @@ Represents calculation results for a single predefined assembly:
 		[
 			{
 				"element_type_id":"789",
-				"element_ids":null, # Project-specific
-				"element_amount":null, # Project-specific
+				"element_ids":null,
+				"element_amount":null,
 				"materials":
 					[
 						{
-							"material_function": "Basement Retaining Walls",
-							"material_source_uuid": "06.003",
-							"material_source": "KBOB (2023) - German",
-							"material_name":"cool material",
-							"material_unit":"m3",
-							"material_amount":0.5,
-					    "material_carbon_a1a3": 6044.5,
-					    "material_grey_energy_fabrication_total": 26611.5,
-					    "calculated_carbon_a1a3": 524.8,
-					    "calculated_grey_energy_fabrication_total": 2310.48
+                     "material_function": "Basement Retaining Walls",
+                     "material_source_uuid": "06.003",
+                     "material_source": "KBOB (2023) - German",
+                     "material_name":"cool material",
+                     "material_unit":"m3",
+                     "material_amount":0.5,
+                     "material_carbon_a1a3": 6044.5,
+                     "material_grey_energy_fabrication_total": 26611.5,
+                     "calculated_carbon_a1a3": 524.8,
+                     "calculated_grey_energy_fabrication_total": 2310.48
 				    }
 				  ]
 			}
@@ -97,6 +97,7 @@ Represents calculation results for a single predefined assembly:
    - Assemblies are grouped together when they have identical values for all three fields: `query_name`, `assembly_code`, and `assembly_group`.
    - Within each assembly group, element types are further grouped by `element_type_id`.
    - Materials within each element type are grouped when they have matching values for all three fields: `material_function`, `material_source_uuid`, and `material_source`.
+   - The null value fields are project-specific.
 
 ### Project Snapshot
 
@@ -136,10 +137,10 @@ The Project Snapshot bundles multiple Assembly Snapshots with metadata:
 									"material_name":"cool material",
 									"material_unit":"m3",
 									"material_amount":0.5,
-							    "material_carbon_a1a3": 6044.5,
-							    "material_grey_energy_fabrication_total": 26611.5,
-							    "calculated_carbon_a1a3": 524.8,
-							    "calculated_grey_energy_fabrication_total": 2310.48
+                           "material_carbon_a1a3": 6044.5,
+                           "material_grey_energy_fabrication_total": 26611.5,
+                           "calculated_carbon_a1a3": 524.8,
+                           "calculated_grey_energy_fabrication_total": 2310.48
 						    }
 					    ]
 					}
