@@ -31,14 +31,14 @@ This repository houses the core applications we've developed in-house to facilit
 👚 Automated calculations uploaded to Directus using Calc schema
 
 ## How it works
-1. Configure material library and query templates in Directus
-![overview](./images/database.png)
+### 1. Configure material library and query templates in Directus
+<img src="./images/database.png" width="800"/>
 
-2. Use **Calc Builder** to design assemblies
-![calc builder demo](./images/demo_calc_builder.gif)
+### 2. Use **Calc Builder** to design assemblies
+<img src="./images/demo_calc_builder.gif" width="800"/>
 
-3. Use **Calc Project** to assign assemblies to project query results and save calculation snapshots
-![calc project demo](./images/demo_calc_project.gif)
+### 3. Use **Calc Project** to assign assemblies to project query results and save calculation snapshots
+<img src="./images/demo_calc_project.gif" width="800"/>
 
 
 
