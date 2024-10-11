@@ -36,21 +36,19 @@ This repository houses the core applications we've developed in-house to facilit
 Set up material library and query templates in the Directus database.
 
 <img src="./images/database.png" width="1100"/>
-<br><br>
 
 ### 2. Design Assemblies with Calc Builder
 Use **Calc Builder** to create and manage custom assemblies.
 
 <img src="./images/demo_calc_builder.gif" width="1100" />
-<br><br>
 
 ### 3. Apply and Calculate with Calc Project
 Use **Calc Project** to assign assemblies to project elements and generate calculation snapshots.
 
 <img src="./images/demo_calc_project.gif" width="1100"/>
-<br><br>
 
 ## Get Started
+
 👉 [Quick Start Guide](./quick_start)
 
 ## Calc Schema
