@@ -1,4 +1,4 @@
-# Quick Start
+# Calc Quick Start
 
 **This guide helps you quickly set up Calc with a local Directus instance. If you're using a self-hosted or cloud-based Directus, ensure it has the [Calc Directus Schema](./quick_start/calc_directus_schema.json) integrated. Calc requires this schema to function properly.**
 
@@ -10,7 +10,7 @@
 ## Step 2: Set Up Directus with Docker
 
 1. Ensure Docker is installed on your machine. If not, [download and install Docker](https://docs.docker.com/get-started/get-docker/).
-2. Navigate to the **directus** folder in File Explorer.
+2. Navigate to the **quick_start/directus** folder in File Explorer.
 3. Type `cmd` in the address bar and press Enter to open a command prompt.
 4. Run the command `docker compose up`.
 5. Wait for the message "**Server started at http://0.0.0.0:8055**" to appear.
