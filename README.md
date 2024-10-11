@@ -24,7 +24,7 @@ This repository houses the core applications we've developed in-house to facilit
 
 🧱 Efficient Revit project breakdown via query templates
 
-🥅 Seamless assembly-to-model query result assignment
+🥅 Seamless assembly-to-model assignment
 
 🤩 Real-time Revit visualization for model branching and assembly validation
 
