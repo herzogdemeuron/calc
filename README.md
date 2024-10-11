@@ -34,15 +34,15 @@ This repository houses the core applications we've developed in-house to facilit
 1. Configure material library and query templates in Directus
 
 <img src="./images/database.png" width="1100"/>
-<br><br><br><br>
+<br><br>
 
 2. Use **Calc Builder** to design assemblies
 
 <img src="./images/demo_calc_builder.gif" width="1100" />
-<br><br><br><br>
+<br><br>
 
 3. Use **Calc Project** to assign assemblies to project query results and save calculation snapshots
 
 <img src="./images/demo_calc_project.gif" width="1100"/>
-<br><br><br><br>
+<br><br>
 
