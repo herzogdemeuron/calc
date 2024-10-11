@@ -91,11 +91,6 @@ Represents calculation results for a single predefined assembly:
         ]
 }
 ```
-**Notice:**
-   - Assemblies are grouped together when they have identical values for all three fields: `query_name`, `assembly_code`, and `assembly_group`.
-   - Within each assembly group, element types are further grouped by `element_type_id`.
-   - Materials within each element type are grouped when they have matching values for all three fields: `material_function`, `material_source_uuid`, and `material_source`.
-   - The null value fields are project-specific.
 
 ### Project Snapshot
 
@@ -147,4 +142,8 @@ The Project Snapshot bundles multiple Assembly Snapshots with metadata:
         ]
 }
 ```
+### Notice:
+- Assemblies are grouped together when they have identical values for all three fields: `query_name`, `assembly_code`, and `assembly_group`.
+- Within each assembly group, element types are further grouped by `element_type_id`.
+- Materials within each element type are grouped when they have matching values for all three fields: `material_function`, `material_source_uuid`, and `material_source`.
 
