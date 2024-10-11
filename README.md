@@ -58,7 +58,7 @@ The Calc Schema is designed to capture calculation results as snapshots, facilit
 The Assembly Snapshot represents individual calculation results:
 ```json
 { 
-	"query_name":null,
+	"query_name":null, # used for project
 	"assembly_code":"DECK_SYST_STBE_DE11.001",
 	"assembly_group":"reasonable group",		
 	"assembly_name":"pretty assembly",
@@ -67,8 +67,8 @@ The Assembly Snapshot represents individual calculation results:
 		[
 			{
 				"element_type_id":"789",
-				"element_ids":null,
-				"element_amount":null,
+				"element_ids":null, # used for project
+				"element_amount":null, # used for project
 				"materials":
 					[
 						{
@@ -88,6 +88,10 @@ The Assembly Snapshot represents individual calculation results:
 		]
 }
 ```
+**Notice:**
+   - Assemblies are grouped together when they have identical values for all three fields: `query_name`, `assembly_code`, and `assembly_group`.
+   - Within each assembly group, element types are further grouped by `element_type_id`.
+   - Materials within each element type are grouped when they have matching values for all three fields: `material_function`, `material_source_uuid`, and `material_source`.
 
 ### Project Snapshot
 
@@ -115,7 +119,7 @@ The Project Snapshot bundles multiple Assembly Snapshots with metadata:
 			"element_types":
 				[
 					{
-						"element_type_id":null,
+						"element_type_id":null, # used for assembly
 						"element_ids":[1,2,3],
 						"element_amount": 13.566,
 						"materials":
