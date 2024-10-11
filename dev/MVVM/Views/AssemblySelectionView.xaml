@@ -12,7 +12,7 @@
         MinHeight="500"
         MinWidth="450"
         WindowStartupLocation="CenterScreen"
-        Icon="pack://application:,,,/CalcMVVM;component/Resources/icon_main_small.png"
+        Icon="pack://application:,,,/CalcMVVM;component/Resources/icon_project_small.png"
         Title="Assembly Selection"
         Topmost="True"
         LocationChanged="WindowLocationChanged"

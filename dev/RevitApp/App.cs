@@ -1,5 +1,4 @@
-﻿using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
+﻿using Autodesk.Revit.UI;
 using Calc.RevitApp.Revit;
 using System;
 using System.IO;
@@ -14,7 +13,7 @@ namespace Calc.RevitApp
         {
             AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;
 
-            RibbonMaker.Create(application, "HdM", "ANALYSIS");
+            RibbonMaker.Create(application, "CALC");
             return Result.Succeeded;
         }
 

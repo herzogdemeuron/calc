@@ -47,7 +47,7 @@
                     <Setter Property="Source" Value="pack://application:,,,/CalcMVVM;component/Resources/icon_builder.png"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding MainOrBuilder}" Value="True">
-                            <Setter Property="Source" Value="pack://application:,,,/CalcMVVM;component/Resources/icon_main.png"/>
+                            <Setter Property="Source" Value="pack://application:,,,/CalcMVVM;component/Resources/icon_project.png"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

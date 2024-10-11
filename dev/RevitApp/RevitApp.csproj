@@ -16,7 +16,8 @@
 </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\icon-01.png" />
+    <None Remove="Resources\tab_calc_builder_icon.png" />
+    <None Remove="Resources\tab_calc_project_icon.png" />
     <None Remove="ToggleButtonTemplate.xaml" />
   </ItemGroup>
 
@@ -44,6 +45,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\tab_calc_builder_icon.png" />
+    <Resource Include="Resources\tab_calc_project_icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
@@ -56,10 +62,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Resources\" />
   </ItemGroup>
 
 <PropertyGroup>

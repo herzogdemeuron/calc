@@ -9,37 +9,34 @@ namespace Calc.RevitApp.Revit
 {
     public class RibbonMaker
     {
-        public static void Create(UIControlledApplication uiCtrlApp, string tabName, string panelName)
+        public static void Create(UIControlledApplication uiCtrlApp, string panelName)
         {
-            CreateTab(uiCtrlApp, tabName);
-            RibbonPanel panel = CreatePanel(uiCtrlApp, tabName, panelName);
+            RibbonPanel panel = uiCtrlApp.CreateRibbonPanel(panelName);
+
+            CreateButton(
+                panel, 
+                "CalcBuilderButton", 
+                "Calc Builder", 
+                "Calc.RevitApp.Revit.CalcBuilderCommand", 
+                new Uri("pack://application:,,,/CalcRevitApp;component/Resources/tab_calc_builder_icon.png", UriKind.Absolute));
+
+            CreateButton(
+                panel,
+                "CalcProjectButton",
+                "Calc Project",
+                "Calc.RevitApp.Revit.CalcProjectCommand",
+                new Uri("pack://application:,,,/CalcRevitApp;component/Resources/tab_calc_project_icon.png", UriKind.Absolute));
+        }
+
+        private static void CreateButton(RibbonPanel panel, string buttonName, string buttonText, string commandName, Uri iconUri)
+        {
             PushButtonData buttonData = new PushButtonData(
-                "CalcButton",
-                "Calc",
+                buttonName,
+                buttonText,                
                 Assembly.GetExecutingAssembly().Location,
-               "Calc.ConnectorRevit.Revit.StartCommand");
+                commandName);
             PushButton button = panel.AddItem(buttonData) as PushButton;
-            Uri uriImage = new Uri("pack://application:,,,/MVVM;component/Resources/icon_main_small.png", UriKind.Absolute);
-
-            button.LargeImage = new BitmapImage(uriImage);
-        }
-
-
-        private static void CreateTab(UIControlledApplication uiCtrlApp, string tabName)
-        {
-            try
-            {
-                uiCtrlApp.CreateRibbonTab(tabName);
-            }
-            catch (Autodesk.Revit.Exceptions.ArgumentException)
-            {
-                // Tab already exists
-            }
-        }
-
-        private static RibbonPanel CreatePanel(UIControlledApplication uiCtrlApp, string tabName, string panelName)
-        {
-            return uiCtrlApp.GetRibbonPanels(tabName).Where(x => x.Name == panelName)?.FirstOrDefault() ?? uiCtrlApp.CreateRibbonPanel(tabName, panelName);
+            button.LargeImage = new BitmapImage(iconUri);
         }
     }
 }

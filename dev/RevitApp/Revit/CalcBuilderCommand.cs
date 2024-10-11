@@ -68,7 +68,6 @@ namespace Calc.RevitApp.Revit
             if (File.Exists(assemblyPath))
             {
                 return Assembly.LoadFrom(assemblyPath);
-
             }
             else
             {

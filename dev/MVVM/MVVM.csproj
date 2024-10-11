@@ -26,8 +26,8 @@
     <None Remove="Resources\icon_black_small.png" />
     <None Remove="Resources\icon_builder.png" />
     <None Remove="Resources\icon_builder_small.png" />
-    <None Remove="Resources\icon_main.png" />
-    <None Remove="Resources\icon_main_small.png" />
+    <None Remove="Resources\icon_project.png" />
+    <None Remove="Resources\icon_project_small.png" />
     <None Remove="ToggleButtonTemplate.xaml" />
     <None Remove="Views\AssemblySelectionView.xaml" />
     <None Remove="Views\ButtonResource.xaml" />
@@ -109,8 +109,8 @@
     <Resource Include="Resources\icon_black_small.png" />
     <Resource Include="Resources\icon_builder.png" />
     <Resource Include="Resources\icon_builder_small.png" />
-    <Resource Include="Resources\icon_main.png" />
-    <Resource Include="Resources\icon_main_small.png" />
+    <Resource Include="Resources\icon_project.png" />
+    <Resource Include="Resources\icon_project_small.png" />
     <Resource Include="Resources\button_issue.png" />
   </ItemGroup>
 
