@@ -48,3 +48,95 @@ This repository houses the core applications we've developed in-house to facilit
 
 ## Get Started
 👉 [Quick Start Guide](./quick_start)
+
+## Calc Schema
+
+The Calc Schema is designed to capture calculation results as snapshots, facilitating data exchange within the Calc workflow.
+
+### Assembly Snapshot
+
+The Assembly Snapshot represents individual calculation results:
+```json
+{ 
+	"query_name":null,
+	"assembly_code":"DECK_SYST_STBE_DE11.001",
+	"assembly_group":"reasonable group",		
+	"assembly_name":"pretty assembly",
+	"assembly_unit":"m2",
+	"element_types":
+		[
+			{
+				"element_type_id":"789",
+				"element_ids":null,
+				"element_amount":null,
+				"materials":
+					[
+						{
+							"material_function": "Basement Retaining Walls",
+							"material_source_uuid": "06.003",
+							"material_source": "KBOB (2023) - German",
+							"material_name":"cool material",
+							"material_unit":"m3",
+							"material_amount":0.5,
+					    "material_carbon_a1a3": 6044.5,
+					    "material_grey_energy_fabrication_total": 26611.5,
+					    "calculated_carbon_a1a3": 524.8,
+					    "calculated_grey_energy_fabrication_total": 2310.48
+				    }
+				  ]
+			}
+		]
+}
+```
+
+### Project Snapshot
+
+The Project Snapshot bundles multiple Assembly Snapshots with metadata:
+
+```json
+{
+	"project_number":"123",
+	"project_name":"snazzy project",
+	"query_template":"smart template",
+	"location":"GER",
+	"lca_method":"somehow",
+	"area":432.1,
+	"life_span":50,
+	"stages":["A1A3"],
+	"impact_categories":["GWP","GE"]
+	"assemblies":
+	[
+		{
+			"query_name":"big tree",
+			"assembly_code": "DECK_SYST_STBE_DE11.001",
+			"assembly_group":"reasonable group",		
+			"assembly_name":"pretty assembly",					
+			"assembly_unit": "m2",
+			"element_types":
+				[
+					{
+						"element_type_id":null,
+						"element_ids":[1,2,3],
+						"element_amount": 13.566,
+						"materials":
+							[
+								{
+									"material_function": "Basement Retaining Walls",
+									"material_source_uuid": "06.003",
+									"material_source": "KBOB (2023) - German",
+									"material_name":"cool material",
+									"material_unit":"m3",
+									"material_amount":0.5,
+							    "material_carbon_a1a3": 6044.5,
+							    "material_grey_energy_fabrication_total": 26611.5,
+							    "calculated_carbon_a1a3": 524.8,
+							    "calculated_grey_energy_fabrication_total": 2310.48
+						    }
+					    ]
+					}
+				]		  
+    }
+	]
+}
+```
+
