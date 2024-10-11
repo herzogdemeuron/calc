@@ -46,3 +46,5 @@ This repository houses the core applications we've developed in-house to facilit
 <img src="./images/demo_calc_project.gif" width="1100"/>
 <br><br>
 
+## Get Started
+👉 [Quick Start Guide](./quick_start)
