@@ -6,28 +6,45 @@
 </div>
 <br clear="left">
 
-**Calc helps architects quickly estimate the environmental impact of their early designs.**
+## Calc Overview
+Calc is a tool for architects to rapidly assess the environmental impact of early design phases. Our open data approach leverages:
+- **Autodesk Revit** for design authoring
+- **Directus** for centralized database management
+- **Speckle** for geometry snapshot handling and 3D dashboard visuals
 
-**This repository contains the core in-house developed applications that support this workflow.**
-
-## Key Features
-1. Intuitive role-based data management powered by Directus UI.
-2. Customize assemblies using material data and detailed Revit model groups.
-3. Efficient Revit project model breakdown using query templates.
-4. Seamless assembly assignment to model query results.
-5. Real-time visualization in Revit for model branching and assembly assignment validation.
-6. Automated calculations uploaded to Directus via Calc schema.
-
-## How it works
-1. Setup the material library and query templates in Directus.
-2. (Calc Builder) Design assemblies in a Revit container file.
-3. (Calc Project) Assign assemblies to project query result, save calculation snapshots.
+This repository houses the core applications we've developed in-house to facilitate this workflow.
 
 ![overview](./images/overview.png)
 
+
+## Key Features
+👪 Role-based data management with Directus UI
+
+🧰 Custom assemblies using material data and Revit model groups
+
+🧱 Efficient Revit project breakdown via query templates
+
+🥅 Seamless assembly-to-model query result assignment
+
+🤩 Real-time Revit visualization for model branching and assembly validation
+
+👚 Automated calculations uploaded to Directus using Calc schema
+
+
+### Calc Builder:
 ![calc builder demo](./images/demo_calc_builder.gif)
 
+### Calc Project:
 ![calc project demo](./images/demo_calc_project.gif)
+
+## How it works
+1. Configure material library and query templates in Directus
+2. Use **Calc Builder** to design assemblies
+3. Use **Calc Project** to assign assemblies to project query results and save calculation snapshots
+
+
+
+
 
 ## Capabilities
 
