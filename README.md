@@ -1,15 +1,7 @@
 
 
 <p align="center">
-  <img width="180" height="180" src="./images/icon_calc_light.png">
-</p>
-<p align="center">
-   
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./images/icon_calc_light.png">
-  <source media="(prefers-color-scheme: light)" srcset="./images/icon_calc_dark.png">
-  <img alt="calc logo" src="./images/icon_calc_light.png" height="180">
-</picture>
+  <img src-dark="./images/icon_calc_light.png" width="180" height="180" src="./images/icon_calc_dark.png">
 </p>
 
 ## Calc Overview
