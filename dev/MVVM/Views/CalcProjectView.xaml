@@ -361,12 +361,12 @@
                                 ToolTip="Colorize Revit elements by assigned assemblies"
                                 Style="{StaticResource ButtonStyle}"/>
                         <Button x:Name="ColorByCO2Button"
-                                Content="CO²"
+                                Content="CO₂"
                                 Opacity="0.3"
                                 Tag="co2"
                                 Width="65"
                                 Click="ColorizeClicked"
-                                ToolTip="(coming soon) Colorize Revit elements by CO² benchmark"
+                                ToolTip="(coming soon) Colorize Revit elements by CO₂ benchmark"
                                 Style="{StaticResource ButtonStyle}"/>
 
                     </StackPanel>
@@ -485,7 +485,7 @@
                                                        FontWeight="Bold"
                                                        FontStyle="Italic"                                  
                                                        HorizontalAlignment="Center"/>
-                                            <TextBlock Text="GWP (kgCO²eg/yr)"
+                                            <TextBlock Text="GWP (kgCO₂eg/yr)"
                                                    FontStyle="Italic"
                                                    FontSize="10"
                                                    HorizontalAlignment="Center"/>
@@ -644,7 +644,7 @@
                     <TextBlock Grid.Column="1" Grid.Row="1"
                                TextAlignment="Center" Foreground="White"
                                FontStyle="Italic"  FontSize="10">
-                        <Run Text="Global Warming Potential"/> <LineBreak/> <Run Text="(kgCO²eg/m²/yr)"/>
+                        <Run Text="Global Warming Potential"/> <LineBreak/> <Run Text="(kgCO₂eg/m²/yr)"/>
                     </TextBlock>
 
                     <TextBlock Grid.Column="2"
