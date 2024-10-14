@@ -47,6 +47,8 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
         public Mapping CreatedItem { get; set; }
         [JsonProperty("update_calc_mappings_item")]
         public Mapping UpdatedItem { get; set; }
+        [JsonIgnore]
+        public string StorageType { get; set; }
 
         /// <summary>
         /// Provides creation variables.

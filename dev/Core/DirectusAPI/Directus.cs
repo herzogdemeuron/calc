@@ -32,6 +32,7 @@ namespace Calc.Core.DirectusAPI
         private GraphQLHttpClient graphQlClient;
         private GraphQLHttpClient graphQlSysClient;
         public bool Authenticated { get; private set; } = false;
+        public string StorageType { get => baseUrl.Contains("127.0.0.1") ? "local" : "cloud"; }
 
         private readonly AsyncRetryPolicy graphQlRetryPolicy = 
             Policy.Handle<GraphQLHttpRequestException>()

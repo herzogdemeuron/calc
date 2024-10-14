@@ -79,6 +79,9 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
         public Assembly CreatedItem { get; set; }
         [JsonProperty("update_calc_assemblies_item")]
         public Assembly UpdatedItem { get; set; }
+        [JsonIgnore]
+        public string StorageType { get; set; }
+
 
         /// <summary>
         /// Assigns materials from the store to the calculation components with their ids,
@@ -145,7 +148,7 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
                 inputDict.Add("image", new
                 {
                     id = SendItem.AssemblyImage.Id,
-                    storage = "cloud",
+                    storage = StorageType,
                     filename_download = $"{SendItem.Name}.png"
                 });
             }

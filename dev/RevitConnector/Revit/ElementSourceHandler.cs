@@ -75,6 +75,7 @@ namespace Calc.RevitConnector.Revit
         {
             var recordObject = assemblyRecord.SerializeRecord();
             var groupType = doc.GetElement(new ElementId(groupTypeId)) as GroupType;
+            if (groupType == null) return;
             try
             {
                 var transaction = new Transaction(doc, "Store assembly to group type: " + groupType.Name);

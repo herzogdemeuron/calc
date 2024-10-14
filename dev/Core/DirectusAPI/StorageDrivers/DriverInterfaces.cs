@@ -26,6 +26,7 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
         public T SendItem { get; set; }
         public string QueryCreateSingle { get; }
         public T CreatedItem { get; set; }
+        public string StorageType { get; set; }
         public Dictionary<string, object> GetVariables();
     }
 
@@ -34,6 +35,7 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
         public List<T> SendItems { get; set; }
         public string QueryCreateMany { get; }
         public List<T> CreatedManyItems { get; set; }
+        public string StorageType { get; set; }
         public Dictionary<string, object> GetVariables();
     }
 
@@ -42,6 +44,7 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
         public T SendItem { get; set; }
         public string QueryUpdateSingle { get; }
         public T UpdatedItem { get; set; }
+        public string StorageType { get; set; }
         public Dictionary<string, object> GetVariables();
     }
 }

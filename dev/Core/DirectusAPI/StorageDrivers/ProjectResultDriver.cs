@@ -1,8 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
+﻿using Calc.Core.Snapshots;
 using Newtonsoft.Json;
-using Calc.Core.Snapshots;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace Calc.Core.DirectusAPI.StorageDrivers
 {
@@ -23,6 +22,8 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
 
         [JsonProperty("create_calc_snapshots_item")]
         public ProjectResult CreatedItem { get; set; }
+        [JsonIgnore]
+        public string StorageType { get; set; }
 
         /// <summary>
         /// Provides creation variables.
@@ -41,7 +42,7 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
                 snapshot_file = new
                 {
                     id = SendItem.JsonUuid,
-                    storage = "cloud",
+                    storage = StorageType,
                     filename_download = $"{SendItem.Name}.json",
                     description = SendItem.Description
                 },
