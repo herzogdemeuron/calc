@@ -27,11 +27,16 @@
 
 ## Step 4: Install Calc for Revit
 
-- Run the **Revit Setup.bat** file
+- Run the **calc_revit_install.bat** file
 - Wait for the success message. Once received, the plugin is ready to use.
 
 ## Step 5: Login to Calc
 
 1. Open Revit and run the Calc App from the Add-In tab.
 2. Log in using the URL **http://localhost:8055** and the same credentials as in Step 3.
+
+## Uninstall
+
+1. Ensure Revit is closed.
+2. Run the **calc_revit_uninstall.bat** file
 
