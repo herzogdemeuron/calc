@@ -55,7 +55,7 @@
                         Opacity="0.8"
                         Margin="0,-1,0,0"/>
                 <TextBlock FontSize="9"
-                           ToolTip="Visit our github page.">
+                           ToolTip="Visit our github page">
                     <Hyperlink NavigateUri="https://github.com/herzogdemeuron/calc"
                                RequestNavigate="OpenHyperLink"
                                Foreground="#404040">

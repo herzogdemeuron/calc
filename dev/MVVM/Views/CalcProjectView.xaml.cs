@@ -199,7 +199,7 @@ namespace Calc.MVVM.Views
             string image = "pack://application:,,,/CalcMVVM;component/Resources/button_color.png";
             switch (tag)
             {
-                case "group":
+                case "query":
                     this.ColorByAssemblyButton.Opacity = 0.3;
                     this.ColorByAssemblyButton.Uid = "";
                     this.ColorByGroupButton.Opacity = 1;

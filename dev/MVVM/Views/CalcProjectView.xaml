@@ -55,7 +55,7 @@
                         Opacity="0.7"
                         Margin="0,-1,0,0"/>
                 <TextBlock FontSize="9"
-                           ToolTip="Visit our github page.">
+                           ToolTip="Visit our github page">
                     <Hyperlink NavigateUri="https://github.com/herzogdemeuron/calc"
                                RequestNavigate="OpenHyperLink"
                                Foreground="#404040">
@@ -343,11 +343,12 @@
                             HorizontalAlignment="Stretch">
 
                         <Button x:Name="ColorByGroupButton"                                
-                                Content="Group"
-                                Tag="group"
+                                Content="Queries"
+                                Tag="query"
                                 Opacity="0.3"
                                 Width="65"
                                 Click="ColorizeClicked"
+                                ToolTip="Colorize Revit elements by query results"
                                 Style="{StaticResource ButtonStyle}"/>
                         <Button x:Name="ColorByAssemblyButton"
                                 Content="Assemb." 
@@ -356,6 +357,7 @@
                                 Margin="15,0,15,0"
                                 Uid="pack://application:,,,/CalcMVVM;component/Resources/button_color.png"
                                 Click="ColorizeClicked"
+                                ToolTip="Colorize Revit elements by assigned assemblies"
                                 Style="{StaticResource ButtonStyle}"/>
                         <Button x:Name="ColorByCO2Button"
                                 Content="CO²"
@@ -363,6 +365,7 @@
                                 Tag="co2"
                                 Width="65"
                                 Click="ColorizeClicked"
+                                ToolTip="(coming soon) Colorize Revit elements by CO² benchmark"
                                 Style="{StaticResource ButtonStyle}"/>
 
                     </StackPanel>
