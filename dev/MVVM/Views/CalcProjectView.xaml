@@ -317,6 +317,7 @@
                     Grid.Row="4"
                     Width="65"
                     Click="UpdateRevitClicked"
+                    ToolTip="Reload all Revit elements"
                     VerticalAlignment="Bottom"
                     HorizontalAlignment="Left"/>
 
