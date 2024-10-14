@@ -1,10 +1,7 @@
-<div align="center">
-   <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="./images/icon_calc_light.png" width="180" height="180">
-      <img alt="calc logo" src="./images/icon_calc_dark.png" width="150" height="150">
-   </picture>
-</div>
-<br clear="left">
+
+![calc logo](./images/icon_calc_light.png#gh-dark-mode-only)
+
+![calc logo](./images/icon_calc_dark.png#gh-light-mode-only)
 
 ## Calc Overview
 Calc is a tool for architects to rapidly assess the environmental impact of early design phases. Our open data approach leverages:
