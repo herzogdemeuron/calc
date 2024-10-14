@@ -1,6 +1,6 @@
 # Calc Quick Start
 
-**This guide helps you quickly set up Calc with a local Directus instance. If you're using a self-hosted or cloud-based Directus, ensure it has the [Calc Directus Schema](./quick_start/calc_directus_schema.json) integrated. Calc requires this schema to function properly.**
+**This guide helps you quickly set up Calc with a local Directus instance. If you're using a self-hosted or cloud-based Directus, ensure it has the [Calc Directus Schema](./calc_directus_schema.json) integrated. Calc requires this schema to function properly.**
 
 ## Step 1: Clone the Repository
 
