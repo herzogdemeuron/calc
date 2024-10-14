@@ -2,7 +2,7 @@
 <RevitAddIns>
 	<AddIn Type="Application">
 		<Name>CalcRevit</Name>
-		<Assembly>C:\ProgramData\Autodesk\Revit\Addins\2023\CalcRevit\bin\CalcRevitApp.dll</Assembly>
+		<Assembly>C:\ProgramData\Autodesk\Revit\Addins\2023\CalcRevit\CalcRevitApp.dll</Assembly>
 		<AddInId>3a9676ee-816b-435b-b91c-142a2be86405</AddInId>
 		<FullClassName>Calc.RevitApp.App</FullClassName>
 		<Description>Enjoy calculation with calc.</Description>
