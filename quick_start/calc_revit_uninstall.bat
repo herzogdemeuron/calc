@@ -16,17 +16,17 @@ set "BASE_TARGET_DIR=C:\ProgramData\Autodesk\Revit\Addins"
 
 :: Prompt user to choose Revit version
 echo Choose Revit version to uninstall Calc from:
-echo a. 2022
-echo b. 2023
-echo c. 2024
+echo 2022
+echo 2023
+echo 2024
 set /p "choice=Enter your choice: "
 
 :: Set the chosen year based on user input
-if "%choice%"=="a" (
+if "%choice%"=="2022" (
     set "YEAR=2022"
-) else if "%choice%"=="b" (
+) else if "%choice%"=="2023" (
     set "YEAR=2023"
-) else if "%choice%"=="c" (
+) else if "%choice%"=="2024" (
     set "YEAR=2024"
 ) else (
     echo Invalid choice. Exiting...
