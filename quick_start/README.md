@@ -10,12 +10,13 @@
 ## Step 2: Set Up Directus with Docker
 
 1. Ensure Docker is installed on your machine. If not, [download and install Docker](https://docs.docker.com/get-started/get-docker/).
-2. Navigate to the **quick_start/directus** folder in File Explorer.
-3. Type `cmd` in the address bar and press Enter to open a command prompt.
-4. Run the command `docker compose up`.
-5. Wait for the message "**Server started at http://0.0.0.0:8055**" to appear.
-6. Keep this terminal open.
-7. If you have any questions, check out to the [Direcuts Official Guide](https://docs.directus.io/self-hosted/quickstart.html) 
+2. Navigate to the **quick_start/directus** of the cloned folder in File Explorer.
+3. Ensure docker is running in the background, consider add your account to the 'docker-users' group if docker doesn't boot.
+4. Type `cmd` in the address bar and press Enter to open a command prompt.
+5. Run the command `docker compose up`.
+6. Wait for the message "**Server started at http://0.0.0.0:8055**" to appear.
+7. Keep this terminal open.
+8. If you have any questions, check out to the [Direcuts Official Guide](https://docs.directus.io/self-hosted/quickstart.html) 
 
 ## Step 3: Access and Verify Directus
 
@@ -27,7 +28,7 @@
 
 ## Step 4: Install Calc for Revit
 
-- Run the **calc_revit_install.bat** file
+- Run the **calc_revit_install.bat** file in the quick_start folder
 - Wait for the success message. Once received, the plugin is ready to use.
 
 ## Step 5: Login to Calc
