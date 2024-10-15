@@ -351,7 +351,7 @@ namespace Calc.MVVM.ViewModels
         {
             if (AssemblyComponents.Count == 0)
             {
-                MainWarning = "Select elements to start.";
+                MainWarning = "Select elements (with Revit materials applied) to start.";
                 return;
             }
             var hasNormalizer = AssemblyComponents.Where(c => c.IsNormalizer).ToList().Count == 1;

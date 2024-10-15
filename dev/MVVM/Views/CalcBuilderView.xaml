@@ -266,7 +266,7 @@
                          MouseLeave="CaptureMouseLeave"
                          MouseMove="CaptureMouseMove"
                          CornerRadius="4">
-                    <Grid>
+                    <Grid ToolTip="Snaphot image from the current view (zoom all)">
                         <Image x:Name="ImagePreview" 
                                 Source="{Binding AssemblyCreationVM.CurrentImage}"/>
                         <TextBlock x:Name="CaptureTextBlock"
@@ -382,6 +382,7 @@
                                  Height="25"
                                  Tag="Ratio"
                                  KeyDown="RatioTextBoxKeyDown"
+                                 ToolTip="The ratio of the second material (0 to 1)"
                                  Text="{Binding SubMaterialRatio}"
                                  Style="{StaticResource TextBoxStyle}"/>
 
