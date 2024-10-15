@@ -6,15 +6,12 @@ set "BASE_TARGET_DIR=C:\ProgramData\Autodesk\Revit\Addins"
 
 :: Prompt user to choose Revit version
 echo Choose Revit version:
-echo 2022
 echo 2023
 echo 2024
 set /p "choice=Enter your choice: "
 
 :: Set the chosen year based on user input
-if "%choice%"=="2022" (
-    set "YEAR=2022"
-) else if "%choice%"=="2023" (
+if "%choice%"=="2023" (
     set "YEAR=2023"
 ) else if "%choice%"=="2024" (
     set "YEAR=2024"
