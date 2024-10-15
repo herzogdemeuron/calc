@@ -30,11 +30,12 @@ namespace SpeckleSender
         /// </summary>
         public ElementSender(Document doc, CalcConfig config)
         {
-            if (!config.IsValid())
+            if (!config.IsValid)
             {
                 IsValid = false;
                 return;
             }
+            IsValid = true;
             this.doc = doc;
             revitAppName = HostApplications.Revit.GetVersion(HostAppVersion.v2023);
             var speckleKit = KitManager.GetDefaultKit();
