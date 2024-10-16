@@ -106,9 +106,9 @@ namespace Calc.RevitConnector.Revit
             }
             catch (System.Exception e)
             {
-                // do nothing
+                throw new System.Exception("I don't understand the 'Type Comments' of this group.");
             }
-            return result ?? throw new System.Exception("I don't understand the 'Type Comments' of this group.");
+            return result;
         }
 
         private List<RevitBasicParamConfig> GetParamSettings(List<CustomParamSetting> customParamSettings)
