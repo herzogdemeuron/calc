@@ -10,8 +10,8 @@
 ## Step 2: Set Up Directus with Docker
 
 1. Ensure Docker is installed on your machine. If not, [download and install Docker](https://docs.docker.com/get-started/get-docker/).
-2. Navigate to the **quick_start/directus** of the cloned folder in File Explorer.
-3. Ensure docker is running in the background, consider add your account to the 'docker-users' group if docker doesn't boot.
+2. Ensure docker is running in the background, consider add your account to the 'docker-users' group if docker doesn't boot.
+3. Navigate to the **quick_start/directus** of the cloned folder in File Explorer.
 4. Type `cmd` in the address bar and press Enter to open a command prompt.
 5. Run the command `docker compose up`.
 6. Wait for the message "**Server started at http://0.0.0.0:8055**" to appear.
