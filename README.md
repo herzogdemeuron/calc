@@ -40,7 +40,7 @@ Use **Calc Project** to assign assemblies to project elements and generate calcu
 
 ## Get Started
 
-👉 [Quick Start Guide](./quick_start)
+👉 [Example Setup](./quick_start)
 
 ## Calc Schema
 
