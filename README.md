@@ -15,9 +15,9 @@ This repository houses the core applications we've developed in-house to facilit
 ## Key Features
 
 - 👪 Role-based data management with Directus UI
-- 🧰 Custom assemblies using material data and Revit model groups
-- 🧱 Efficient Revit project breakdown via query templates
-- 🥅 Seamless assembly-to-model assignment
+- 🧱 Custom assemblies using material data and Revit model groups
+- ⛑️ Efficient Revit project breakdown via query templates
+- 💞 Seamless assembly-to-model assignment
 - 🤩 Real-time Revit visualization for model branching and assembly validation
 - 🚀 Automated calculations uploaded to Directus using Calc schema
 
