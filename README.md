@@ -7,11 +7,12 @@ Calc is a tool for architects to rapidly assess the environmental impact of earl
 - **Directus** for centralized database management
 - **Speckle** for geometry snapshot handling and 3D dashboard visuals
 
-This repository houses the core applications we've developed in-house to facilitate this workflow.
+👉 [Watch our AU session on LCA workflow integration
+](https://www.autodesk.com/autodesk-university/class/LCA-at-Herzog-De-Meuron-Building-an-Integrated-Digital-Workflow-2024)
+
+**This repository houses the core applications we've developed in-house to facilitate this workflow.**
 
 ![overview](./images/overview.png)
-
-
 ## Key Features
 
 - 👪 Role-based data management with Directus UI
