@@ -4,6 +4,7 @@ using Calc.RevitConnector.Revit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Controls;
 
 namespace Calc.RevitConnector.Helpers
 {
@@ -73,10 +74,12 @@ namespace Calc.RevitConnector.Helpers
             if (selectedGroups.Count == 1)
             {
                 var group = selectedGroups.First();
-                selectionSet.RevitGroupTypeId = group.GetTypeId().IntegerValue;
+                selectionSet.RevitGroupType = uidoc.Document.GetElement(group.GetTypeId()) as GroupType;
                 var parameters = group.Parameters.Cast<Parameter>().ToList();
                 selectionSet.AddParameters(parameters);
                 selectionSet.RevitGroupName = group.Name;
+                selectionSet.RevitGroupDescription = selectionSet.RevitGroupType?.get_Parameter(BuiltInParameter.ALL_MODEL_DESCRIPTION)?.AsString();
+                selectionSet.RevitGroupModel = selectionSet.RevitGroupType?.get_Parameter(BuiltInParameter.ALL_MODEL_MODEL)?.AsString();
             }
 
             return selectionSet;

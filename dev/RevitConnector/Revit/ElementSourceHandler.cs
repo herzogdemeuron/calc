@@ -20,7 +20,7 @@ namespace Calc.RevitConnector.Revit
         private readonly UIDocument uidoc;
         private readonly Document doc;
         private readonly RevitExternalEventHandler eventHandler;
-        private int groupTypeId;
+        private GroupType groupType;
         private string newCode;
         private AssemblyRecord assemblyRecord;
         public AssemblyComponentCreator ComponentCreator { get; }
@@ -40,11 +40,13 @@ namespace Calc.RevitConnector.Revit
         {
             var basicParamConfigs = GetParamSettings(customParamSettings);
             var elementSelectionSet = SelectionHelper.SelectElements(uidoc);
-            groupTypeId = elementSelectionSet.RevitGroupTypeId;
+            groupType = elementSelectionSet.RevitGroupType;
             var components = ComponentCreator.CreateAssemblyComponents(elementSelectionSet.ElementIds, basicParamConfigs);
             return new ElementSourceSelectionResult()
             {
                 AssemblyCode = elementSelectionSet.RevitGroupName,
+                AssemblyName = elementSelectionSet.RevitGroupModel,
+                Description = elementSelectionSet.RevitGroupDescription,
                 Parameters = elementSelectionSet.Parameters,
                 AssemblyComponents = components
             };
@@ -59,10 +61,8 @@ namespace Calc.RevitConnector.Revit
             newCode = nCode;
             assemblyRecord = new AssemblyRecord()
             {
-                AssemblyName = newName,
                 AssemblyGroup = newAssemblyGroup,
                 AssemblyUnit = newAssemblyUnit,
-                Description = newDescription,
                 Components = newComponents
             };
             eventHandler.Raise(StoreAssemblyRecord);
@@ -74,7 +74,6 @@ namespace Calc.RevitConnector.Revit
         private void StoreAssemblyRecord()
         {
             var recordObject = assemblyRecord.SerializeRecord();
-            var groupType = doc.GetElement(new ElementId(groupTypeId)) as GroupType;
             if (groupType == null) return;
             try
             {
@@ -96,7 +95,6 @@ namespace Calc.RevitConnector.Revit
         /// </summary>
         public AssemblyRecord GetAssemblyRecord()
         {
-            var groupType = doc.GetElement(new ElementId(groupTypeId)) as GroupType;
             var recordString = groupType?.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_COMMENTS)?.AsString();
             if (recordString == null) return null;
             AssemblyRecord result = null;

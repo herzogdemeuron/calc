@@ -29,9 +29,6 @@ namespace Calc.Core.Objects.Elements
             try
             {
                 if (record == null) return;
-
-                AssemblyName = record.AssemblyName;
-                Description = record.Description;
                 AssemblyUnit = record.AssemblyUnit;
                 AssemblyGroup = store.AssemblyGroupsAll.Find(g => g.Id == record.AssemblyGroup.Id);
 
