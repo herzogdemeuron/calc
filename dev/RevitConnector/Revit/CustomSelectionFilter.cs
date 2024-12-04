@@ -6,19 +6,20 @@ namespace Calc.RevitConnector.Revit
 {
     /// <summary>
     /// The selection filter, excluding WallKind.Curtain.
+    /// For now only group selection allowed.
     /// </summary>
     public class CustomSelectionFilter : Autodesk.Revit.UI.Selection.ISelectionFilter
     {
         private List<Type> allowedTypes = new List<Type>()
         {
-            typeof(Wall),
-            typeof(Floor),
-            typeof(Ceiling),
-            typeof(RoofBase),
-            typeof(FamilyInstance),
-            typeof(Mullion),
-            typeof(Panel),
-            typeof(ModelCurve),
+            //typeof(Wall),
+            //typeof(Floor),
+            //typeof(Ceiling),
+            //typeof(RoofBase),
+            //typeof(FamilyInstance),
+            //typeof(Mullion),
+            //typeof(Panel),
+            //typeof(ModelCurve),
             typeof(Group)
         };
 
