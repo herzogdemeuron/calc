@@ -22,6 +22,8 @@ namespace Calc.RevitConnector.Revit
         private readonly RevitExternalEventHandler eventHandler;
         private GroupType groupType;
         private string newCode;
+        private string newName;
+        private string newDescription;
         private AssemblyRecord assemblyRecord;
         public AssemblyComponentCreator ComponentCreator { get; }
 
@@ -53,25 +55,28 @@ namespace Calc.RevitConnector.Revit
         }
 
         /// <summary>
+        /// Updates the assembly group data, including the assembly basic properties and the assembly record.
         /// Serializes the assembly record and store back to revit group type.
         /// Writes record to group type parameter 'Type Comments' in a transaction.
         /// </summary>
-        public void SaveAssemblyRecord(string nCode, string newName, Unit newAssemblyUnit,AssemblyGroup newAssemblyGroup, string newDescription, List<AssemblyComponent> newComponents)
+        public void UpdateAssemblyData(string nCode, string nName, string nDescription, Unit newAssemblyUnit,AssemblyGroup newAssemblyGroup, List<AssemblyComponent> newComponents)
         {
             newCode = nCode;
+            newName = nName;
+            newDescription = nDescription;
             assemblyRecord = new AssemblyRecord()
             {
                 AssemblyGroup = newAssemblyGroup,
                 AssemblyUnit = newAssemblyUnit,
                 Components = newComponents
             };
-            eventHandler.Raise(StoreAssemblyRecord);
+            eventHandler.Raise(StoreAssemblyData);
         }
 
         /// <summary>
         /// Write back the record to the type comments of the group in a transaction.
         /// </summary>
-        private void StoreAssemblyRecord()
+        private void StoreAssemblyData()
         {
             var recordObject = assemblyRecord.SerializeRecord();
             if (groupType == null) return;
@@ -80,6 +85,8 @@ namespace Calc.RevitConnector.Revit
                 var transaction = new Transaction(doc, "Store assembly to group type: " + groupType.Name);
                 transaction.Start();
                 groupType.Name = newCode;
+                groupType.get_Parameter(BuiltInParameter.ALL_MODEL_MODEL).Set(newName);
+                groupType.get_Parameter(BuiltInParameter.ALL_MODEL_DESCRIPTION).Set(newDescription);
                 var jsonString = JsonConvert.SerializeObject(recordObject);
                 groupType.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_COMMENTS).Set(jsonString);
                 transaction.Commit();

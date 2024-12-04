@@ -21,7 +21,7 @@ namespace Calc.Core
     public interface IElementSourceHandler
     {
         public ElementSourceSelectionResult SelectElements(List<CustomParamSetting> customParamSettings);
-        public void SaveAssemblyRecord(string assemblyCode, string assemblyName, Unit newAssemblyUnit, AssemblyGroup assemblyGroup, string description, List<AssemblyComponent> components);
+        public void UpdateAssemblyData(string assemblyCode, string assemblyName, string description, Unit newAssemblyUnit, AssemblyGroup assemblyGroup, List<AssemblyComponent> components);
         public AssemblyRecord GetAssemblyRecord();
     }
 

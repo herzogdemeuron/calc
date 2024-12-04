@@ -11,14 +11,10 @@ namespace Calc.Core.Objects.Assemblies
     /// </summary>
     public class AssemblyRecord
     {
-        [JsonProperty("assembly_name")]
-        public string AssemblyName { get; set; }
         [JsonProperty("assembly_group")]
         public AssemblyGroup AssemblyGroup { get; set; }
         [JsonProperty("assembly_unit")]
         public Unit AssemblyUnit { get; set; }
-        [JsonProperty("description")]
-        public string Description { get; set; }
         [JsonProperty("components")]
         public List<AssemblyComponent> Components { get; set; }
 
@@ -29,10 +25,8 @@ namespace Calc.Core.Objects.Assemblies
         {
             return new
             {
-                assembly_name = AssemblyName,
                 assembly_group = AssemblyGroup,
                 assembly_unit = AssemblyUnit,
-                description = Description,
                 components = Components.Select(c => c.SerializeRecord()).ToList()
             };
         }    

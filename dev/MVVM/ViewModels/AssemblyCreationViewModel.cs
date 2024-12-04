@@ -607,13 +607,13 @@ namespace Calc.MVVM.ViewModels
                     CheckSaveOrUpdate();
                 }
                 // store the assembly record
-                elementSourceHandler.SaveAssemblyRecord
+                elementSourceHandler.UpdateAssemblyData
                     (
                         newAssemblyCode, 
                         newAssemblyName, 
+                        newAssemblyDescription, 
                         SelectedAssemblyUnit.Value,
                         SelectedAssemblyGroup, 
-                        newAssemblyDescription, 
                         AssemblyComponents.ToList() 
                     );
             }
