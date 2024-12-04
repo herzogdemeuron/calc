@@ -64,7 +64,7 @@ namespace Calc.RevitConnector.Helpers
                     .GetDependentElements(elementFilter)
                     .Where
                     (x =>
-                    customSelectionFilter.AllowElement(uidoc.Document.GetElement(x))
+                    customSelectionFilter.AllowProcessElement(uidoc.Document.GetElement(x))
                     ).ToList();
 
                 selectionSet.AddIds(groupElementIds);

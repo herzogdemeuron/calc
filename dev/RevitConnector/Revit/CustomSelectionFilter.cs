@@ -6,21 +6,25 @@ namespace Calc.RevitConnector.Revit
 {
     /// <summary>
     /// The selection filter, excluding WallKind.Curtain.
-    /// For now only group selection allowed.
+    /// Only group selection allowed.
     /// </summary>
     public class CustomSelectionFilter : Autodesk.Revit.UI.Selection.ISelectionFilter
     {
-        private List<Type> allowedTypes = new List<Type>()
+        private readonly List<Type> allowedSelectionTypes = new List<Type>()
         {
-            //typeof(Wall),
-            //typeof(Floor),
-            //typeof(Ceiling),
-            //typeof(RoofBase),
-            //typeof(FamilyInstance),
-            //typeof(Mullion),
-            //typeof(Panel),
-            //typeof(ModelCurve),
             typeof(Group)
+        };
+
+        private readonly List<Type> allowedProcessTypes = new List<Type>()
+        {
+            typeof(Wall),
+            typeof(Floor),
+            typeof(Ceiling),
+            typeof(RoofBase),
+            typeof(FamilyInstance),
+            typeof(Mullion),
+            typeof(Panel),
+            typeof(ModelCurve),
         };
 
         public CustomSelectionFilter()
@@ -46,12 +50,21 @@ namespace Calc.RevitConnector.Revit
             {
                 return false;
             }
-            return allowedTypes.Contains(elem.GetType());
+            return allowedSelectionTypes.Contains(elem.GetType());
         }
 
         public bool AllowReference(Reference reference, XYZ position)
         {
             return false;
+        }
+
+        public bool AllowProcessElement(Element elem)
+        {
+            if (CheckCurtainWall(elem))
+            {
+                return false;
+            }
+            return allowedProcessTypes.Contains(elem.GetType());
         }
     }
 }
