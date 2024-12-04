@@ -400,10 +400,10 @@ namespace Calc.MVVM.ViewModels
 
                 AssemblyComponents = new ObservableCollection<AssemblyComponent>(result.AssemblyComponents);
                 DynamicProperties = result.Parameters;
-                if (result.AssemblyCode != null)  NewAssemblyCode = result.AssemblyCode;
-                if (result.AssemblyName != null) NewAssemblyName = result.AssemblyName;
-                if (result.AssemblyGroup != null) SelectedAssemblyGroup = result.AssemblyGroup;
-                if (result.Description != null) NewAssemblyDescription = result.Description;
+                NewAssemblyCode = result.AssemblyCode; 
+                NewAssemblyName = result.AssemblyName;
+                SelectedAssemblyGroup = result.AssemblyGroup;
+                NewAssemblyDescription = result.Description;
                 SelectedAssemblyUnit = result.AssemblyUnit;
 
                 UpdateLayerMaterialModels();
