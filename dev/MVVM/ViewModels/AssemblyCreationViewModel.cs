@@ -111,6 +111,7 @@ namespace Calc.MVVM.ViewModels
                 if (newAssemblyCode == value) return;
                 newAssemblyCode = value;
                 CheckIdToUpdate();
+                UpdateSaveText();
                 OnPropertyChanged(nameof(NewAssemblyCode));
                 OnPropertyChanged(nameof(CanSave));
             }
@@ -726,7 +727,7 @@ namespace Calc.MVVM.ViewModels
 
         private bool CheckCanSave()
         {
-            if (selectionResults.Count > 1) return true;
+            if (selectionResults.Count > 1) return IsNotSaving;
             return !string.IsNullOrEmpty(NewAssemblyCode) && !string.IsNullOrEmpty(NewAssemblyName) && SelectedAssemblyGroup != null && CurrentCalculationComponents.Count > 0 && IsNotSaving;
         }
 
