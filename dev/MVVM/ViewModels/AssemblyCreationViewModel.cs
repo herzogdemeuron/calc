@@ -97,7 +97,7 @@ namespace Calc.MVVM.ViewModels
             {
                 if (newAssemblyName == value) return;
                 newAssemblyName = value;
-                CheckSaveOrUpdate();
+                CheckIdToUpdate();
                 OnPropertyChanged(nameof(NewAssemblyName));
                 OnPropertyChanged(nameof(CanSave));
             }
@@ -110,7 +110,7 @@ namespace Calc.MVVM.ViewModels
             {
                 if (newAssemblyCode == value) return;
                 newAssemblyCode = value;
-                CheckSaveOrUpdate();
+                CheckIdToUpdate();
                 OnPropertyChanged(nameof(NewAssemblyCode));
                 OnPropertyChanged(nameof(CanSave));
             }
@@ -409,11 +409,13 @@ namespace Calc.MVVM.ViewModels
                 }
                 else
                 {
+                    ApplySelectionResult(null);
                     // if there are multiple groups selected, update all of them
                     var totalCount = selectionResults.Count;
                     SaveMessage = $"{totalCount} assemblies selected. Update all?";
-                    CheckSaveOrUpdate();
+                    SaveMessageColor = Brushes.Orange;
                 }
+                UpdateSaveText();
 
             }
             catch (Exception ex)
@@ -688,7 +690,7 @@ namespace Calc.MVVM.ViewModels
             {
                 await store.SaveSingleAssembly(assembly);
                 SaveMessage = "New Assembly saved.";
-                CheckSaveOrUpdate();
+                UpdateSaveText();
             }
             // write back the assembly data to revit from current view model
             elementSourceHandler.UpdateAssemblyData
@@ -724,27 +726,33 @@ namespace Calc.MVVM.ViewModels
 
         private bool CheckCanSave()
         {
+            if (selectionResults.Count > 1) return true;
             return !string.IsNullOrEmpty(NewAssemblyCode) && !string.IsNullOrEmpty(NewAssemblyName) && SelectedAssemblyGroup != null && CurrentCalculationComponents.Count > 0 && IsNotSaving;
         }
 
-        private void CheckSaveOrUpdate()
+        /// <summary>
+        /// Checks if already NewAssemblyCode exists in the store
+        /// </summary>
+        private void CheckIdToUpdate()
         {
+            idToUpdate = null;
             var allAssemblies = store.AssembliesAll;
-            // find the id with the same code
             var existingAssembly = allAssemblies.Find(b => b.Code != null && b.Code == NewAssemblyCode);
-            if (selectionResults.Count > 0)
+            if (existingAssembly != null) idToUpdate = existingAssembly.Id;            
+        }
+
+        private void UpdateSaveText()
+        {
+            if (selectionResults.Count > 1)
             {
-                idToUpdate = null;
                 SaveText = "Update selected";
             }
-            else if(existingAssembly != null)
+            else if (idToUpdate != null)
             {
-                idToUpdate = existingAssembly.Id;
                 SaveText = "Code exists, Update";
             }
             else
             {
-                idToUpdate = null;
                 SaveText = "Create";
             }
         }
