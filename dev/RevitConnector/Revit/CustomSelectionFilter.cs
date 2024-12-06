@@ -18,6 +18,7 @@ namespace Calc.RevitConnector.Revit
         private readonly List<Type> allowedProcessTypes = new List<Type>()
         {
             typeof(Wall),
+            typeof(WallSweep),
             typeof(Floor),
             typeof(Ceiling),
             typeof(RoofBase),
