@@ -36,22 +36,28 @@ namespace Calc.RevitConnector.Revit
         }
 
         /// <summary>
-        /// Selects elements in revit, creates the raw selection result.
+        /// Selects elements in revit, creates the raw selection results.
         /// </summary>
-        public ElementSourceSelectionResult SelectElements(List<CustomParamSetting> customParamSettings)
+        public List<ElementSourceSelectionResult> SelectElements(List<CustomParamSetting> customParamSettings)
         {
+            var results = new List<ElementSourceSelectionResult>();
             var basicParamConfigs = GetParamSettings(customParamSettings);
-            var elementSelectionSet = SelectionHelper.SelectElements(uidoc);
-            groupType = elementSelectionSet.RevitGroupType;
-            var components = ComponentCreator.CreateAssemblyComponents(elementSelectionSet.ElementIds, basicParamConfigs);
-            return new ElementSourceSelectionResult()
+            var elementSelectionSets = SelectionHelper.SelectElements(uidoc);
+            foreach(var elementSelectionSet in elementSelectionSets)
             {
-                AssemblyCode = elementSelectionSet.RevitGroupName,
-                AssemblyName = elementSelectionSet.RevitGroupModel,
-                Description = elementSelectionSet.RevitGroupDescription,
-                Parameters = elementSelectionSet.Parameters,
-                AssemblyComponents = components
-            };
+                groupType = elementSelectionSet.RevitGroupType;
+                var components = ComponentCreator.CreateAssemblyComponents(elementSelectionSet.ElementIds, basicParamConfigs);
+                var selectionResult = new ElementSourceSelectionResult()
+                {
+                    AssemblyCode = elementSelectionSet.RevitGroupName,
+                    AssemblyName = elementSelectionSet.RevitGroupModel,
+                    Description = elementSelectionSet.RevitGroupDescription,
+                    Parameters = elementSelectionSet.Parameters,
+                    AssemblyComponents = components
+                };
+                results.Add(selectionResult);
+            }
+            return results;
         }
 
         /// <summary>

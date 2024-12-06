@@ -3,6 +3,7 @@ using Calc.Core.Calculation;
 using Calc.Core.Color;
 using Calc.Core.Objects;
 using Calc.Core.Objects.Assemblies;
+using Calc.Core.Objects.Elements;
 using Calc.Core.Objects.Materials;
 using Calc.Core.Objects.Standards;
 using Calc.Core.Snapshots;
@@ -38,6 +39,7 @@ namespace Calc.MVVM.ViewModels
         public bool MaterialSelectionEnabled { get => SelectedComponent is LayerComponent; }
         public HslColor CurrentColor { get => SelectedComponent?.HslColor?? ItemPainter.DefaultColor; }
         private string mainWarning;
+        private List<ElementSourceSelectionResult> selectionResults = new List<ElementSourceSelectionResult>();
         public string MainWarning
         {
             get => mainWarning;
@@ -235,16 +237,16 @@ namespace Calc.MVVM.ViewModels
                 OnPropertyChanged(nameof(CanSave));
             }
         }
-        private int? updateId;
-        private bool saveOrUpdate = true;
-        public bool SaveOrUpdate
+        private int? idToUpdate;
+        private string saveText = "Create";
+        public string SaveText
         {
-            get => saveOrUpdate;
+            get => saveText;
             set
             {
-                if (saveOrUpdate == value) return;
-                saveOrUpdate = value;
-                OnPropertyChanged(nameof(SaveOrUpdate));
+                if (saveText == value) return;
+                saveText = value;
+                OnPropertyChanged(nameof(SaveText));
             }
         }
         private Visibility savingVisibility = Visibility.Collapsed;
@@ -394,33 +396,57 @@ namespace Calc.MVVM.ViewModels
             try
             {
                 // get the selection result from revit, including metadata and recorded materials
-                var result = elementSourceHandler.SelectElements(store.CustomParamSettingsAll);
-                var record = elementSourceHandler.GetAssemblyRecord();
-                if (record != null) result.ApplyAssemblyRecord(record, store);
+                selectionResults = elementSourceHandler.SelectElements(store.CustomParamSettingsAll);
+                foreach (var result in selectionResults)
+                {
+                    var record = elementSourceHandler.GetAssemblyRecord();
+                    if (record != null) result.ApplyAssemblyRecord(record, store);
 
-                AssemblyComponents = new ObservableCollection<AssemblyComponent>(result.AssemblyComponents);
-                DynamicProperties = result.Parameters;
-                NewAssemblyCode = result.AssemblyCode; 
-                NewAssemblyName = result.AssemblyName;
-                SelectedAssemblyGroup = result.AssemblyGroup;
-                NewAssemblyDescription = result.Description;
-                SelectedAssemblyUnit = result.AssemblyUnit;
+                }
+                if (selectionResults.Count == 1)
+                {
+                    ApplySelectionResult(selectionResults[0]);
+                }
+                else
+                {
+                    // if there are multiple groups selected, update all of them
+                    var totalCount = selectionResults.Count;
+                    SaveMessage = $"{totalCount} assemblies selected. Update all?";
+                    CheckSaveOrUpdate();
+                }
 
-                UpdateLayerMaterialModels();
-                UpdateLayerColors();
-                UpdateCalculationComponents();
-                UpadteMainWarning();
-                UpadteEmptyText();
-
-                CurrentImage = null;
-                CaptureText = "📷";
-                saveMessage = "";
             }
             catch (Exception ex)
             {
                 MainWarning = ex.Message;
             }
 
+        }
+
+        /// <summary>
+        /// Applies the selection result to the view model properties.
+        /// </summary>
+        internal void ApplySelectionResult(ElementSourceSelectionResult result)
+        {
+            if (result != null) AssemblyComponents = new ObservableCollection<AssemblyComponent>(result.AssemblyComponents);
+            else AssemblyComponents = new ObservableCollection<AssemblyComponent>();
+
+            DynamicProperties = result?.Parameters;
+            NewAssemblyCode = result?.AssemblyCode;
+            NewAssemblyName = result?.AssemblyName;
+            SelectedAssemblyGroup = result?.AssemblyGroup;
+            NewAssemblyDescription = result?.Description;
+            SelectedAssemblyUnit = result?.AssemblyUnit;
+
+            UpdateLayerMaterialModels();
+            UpdateLayerColors();
+            UpdateCalculationComponents();
+            UpadteMainWarning();
+            UpadteEmptyText();
+
+            CurrentImage = null;
+            CaptureText = "📷";
+            saveMessage = "";
         }
 
         /// <summary>
@@ -576,46 +602,61 @@ namespace Calc.MVVM.ViewModels
             }
             return assembly;
         }
-        
+
         /// <summary>
         /// Uploads the image snapshot and speckle model, 
-        /// creates the assembly and saves it.
-        /// Lastly takes care of the assembly record.
+        /// creates the assembly to save.
         /// </summary>
-        /// <returns></returns>
-        internal async Task<bool> HandleSaveAssembly()
+        internal async Task<Assembly> PrepareAssemblyToSave()
+        {
+            string imageUuid = await store.UploadImageAsync(currentImagePath, NewAssemblyName); // todo: make this more robust
+            var speckleModelId = await SendElementsToSpeckle();
+            var speckleProjectId = store.Config.SpeckleBuilderProjectId;
+            var assembly = CreateAssembly(imageUuid, speckleProjectId, speckleModelId);
+            return assembly;
+        }
+
+        /// <summary>
+        /// Update all selected assemblies.
+        /// </summary>
+        internal async Task BatchUpdateAssemblies()
+        {
+            var totalCount = selectionResults.Count;
+            var updateCount = 0;
+            foreach (var result in selectionResults)
+            {
+                ApplySelectionResult(result);
+                if (idToUpdate != null)
+                {
+                    var assembly = await PrepareAssemblyToSave();
+                    assembly.Id = idToUpdate.Value;
+                    await store.UpdateSingleAssembly(assembly);
+                    updateCount++;
+                }
+            }
+            ApplySelectionResult(null);
+            if (totalCount == updateCount)
+            {
+                SaveMessage = "All assemblies updated.";
+            }
+            else
+            {
+                SaveMessage = $"{updateCount} of {totalCount} assemblies updated.";
+            }
+        }
+
+        /// <summary>
+        /// Saves or updates the prepared assembly.
+        /// </summary>
+        internal async Task HandleSaveAssembly()
         {
             IsNotSaving = false;
             SavingVisibility = Visibility.Visible;
             SaveMessage = "";
             try
             {
-                string imageUuid = await store.UploadImageAsync(currentImagePath, NewAssemblyName); // todo: make this more robust
-                var speckleModelId = await SendElementsToSpeckle();
-                var speckleProjectId = store.Config.SpeckleBuilderProjectId;
-                var assembly = CreateAssembly(imageUuid, speckleProjectId, speckleModelId);
-                if (updateId != null)
-                {
-                    assembly.Id = updateId.Value;
-                    await store.UpdateSingleAssembly(assembly);
-                    SaveMessage = "Assembly updated.";
-                }
-                else
-                {
-                    await store.SaveSingleAssembly(assembly);
-                    SaveMessage = "New Assembly saved.";
-                    CheckSaveOrUpdate();
-                }
-                // store the assembly record
-                elementSourceHandler.UpdateAssemblyData
-                    (
-                        newAssemblyCode, 
-                        newAssemblyName, 
-                        newAssemblyDescription, 
-                        SelectedAssemblyUnit.Value,
-                        SelectedAssemblyGroup, 
-                        AssemblyComponents.ToList() 
-                    );
+                if (selectionResults.Count > 1) await BatchUpdateAssemblies();
+                else await SaveOrUpdateAssembly();
             }
             catch (Exception ex)
             {
@@ -623,12 +664,43 @@ namespace Calc.MVVM.ViewModels
                 SaveMessageColor = Brushes.Crimson;
                 SavingVisibility = Visibility.Collapsed;
                 IsNotSaving = true;
-                return false;
             }
             SaveMessageColor = Brushes.ForestGreen;
             SavingVisibility = Visibility.Collapsed;
             IsNotSaving = true;
-            return true;
+        }
+
+        /// <summary>
+        /// Saves or updates the prepared assembly.
+        /// Takes care of the assembly record.
+        /// </summary>
+        internal async Task SaveOrUpdateAssembly()
+        {
+
+            var assembly = await PrepareAssemblyToSave();
+            if (idToUpdate != null)
+            {
+                assembly.Id = idToUpdate.Value;
+                await store.UpdateSingleAssembly(assembly);
+                SaveMessage = "Assembly updated.";
+            }
+            else
+            {
+                await store.SaveSingleAssembly(assembly);
+                SaveMessage = "New Assembly saved.";
+                CheckSaveOrUpdate();
+            }
+            // write back the assembly data to revit from current view model
+            elementSourceHandler.UpdateAssemblyData
+                (
+                    newAssemblyCode, 
+                    newAssemblyName, 
+                    newAssemblyDescription, 
+                    SelectedAssemblyUnit.Value,
+                    SelectedAssemblyGroup, 
+                    AssemblyComponents.ToList() 
+                );
+
         }
 
         /// <summary>
@@ -660,15 +732,20 @@ namespace Calc.MVVM.ViewModels
             var allAssemblies = store.AssembliesAll;
             // find the id with the same code
             var existingAssembly = allAssemblies.Find(b => b.Code != null && b.Code == NewAssemblyCode);
-            if(existingAssembly != null)
+            if (selectionResults.Count > 0)
             {
-                updateId = existingAssembly.Id;
-                SaveOrUpdate = false;
+                idToUpdate = null;
+                SaveText = "Update selected";
+            }
+            else if(existingAssembly != null)
+            {
+                idToUpdate = existingAssembly.Id;
+                SaveText = "Code exists, Update";
             }
             else
             {
-                updateId = null;
-                SaveOrUpdate = true;
+                idToUpdate = null;
+                SaveText = "Create";
             }
         }
         internal void MoveAssemblyComponent(int oldIndex, int newIndex)

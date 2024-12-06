@@ -4,7 +4,6 @@ using Calc.RevitConnector.Revit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Controls;
 
 namespace Calc.RevitConnector.Helpers
 {
@@ -13,7 +12,7 @@ namespace Calc.RevitConnector.Helpers
     /// </summary>
     internal static class SelectionHelper
     {
-        public static ElementSelectionSet SelectElements(UIDocument uidoc)
+        public static List<ElementSelectionSet> SelectElements(UIDocument uidoc)
         {
             var selection = uidoc.Selection;
             var filter = new CustomSelectionFilter();
@@ -23,67 +22,62 @@ namespace Calc.RevitConnector.Helpers
                     Autodesk.Revit.UI.Selection.ObjectType.Element,
                     filter,
                     "Select Elements").ToList();
-                return GetElementSelectionSet(references, uidoc);
+                return GetElementSelectionSets(references, uidoc);
             }
             catch (Exception)
             {
-                return new ElementSelectionSet();
+                return new List<ElementSelectionSet>();
             }
         }
 
         /// <summary>
-        /// Filters elements, gets the element selection set.
-        /// The selected elements could be both inside and outside of a group.
-        /// If there is only one group selected, extract the parameters from it, store it into the element selection set.
+        /// Gets the element selection set from a group.
         /// </summary>
-        private static ElementSelectionSet GetElementSelectionSet(List<Reference> references, UIDocument uidoc)
+        private static ElementSelectionSet GetSelectionSetFromGroup(Group group, UIDocument uidoc)
         {
             var selectionSet = new ElementSelectionSet();
+            // add elements from the groups that pass customSelectionFilter to selectionSet
+            var customSelectionFilter = new CustomSelectionFilter();
+            var elementFilter = new ElementCategoryFilter(BuiltInCategory.OST_IOSModelGroups, true);
+            var groupElementIds = group
+                    .GetDependentElements(elementFilter)
+                    .Where
+                    (x =>
+                    customSelectionFilter.AllowProcessElement(uidoc.Document.GetElement(x))
+                    ).ToList();
+            selectionSet.AddIds(groupElementIds);
+            // extract parameters from the group            
+            selectionSet.RevitGroupType = uidoc.Document.GetElement(group.GetTypeId()) as GroupType;
+            var parameters = group.Parameters.Cast<Parameter>().ToList();
+            selectionSet.AddParameters(parameters);
+            selectionSet.RevitGroupName = group.Name;
+            selectionSet.RevitGroupDescription = selectionSet.RevitGroupType?.get_Parameter(BuiltInParameter.ALL_MODEL_DESCRIPTION)?.AsString();
+            selectionSet.RevitGroupModel = selectionSet.RevitGroupType?.get_Parameter(BuiltInParameter.ALL_MODEL_MODEL)?.AsString();            
+            return selectionSet;
+        }
+
+        /// <summary>
+        /// Filters elements, gets the element selection sets from groups.
+        /// </summary>
+        private static List<ElementSelectionSet> GetElementSelectionSets(List<Reference> references, UIDocument uidoc)
+        {
+            var selectionSets = new List<ElementSelectionSet>();
             var selectedGroups = new List<Element>();
-            // collect outsiders and groups
+            // collect only groups
             foreach (var reference in references)
             {
                 var element = uidoc.Document.GetElement(reference);
                 if (element is Group)
                 {
                     selectedGroups.Add(element);
-                }
-                else
-                {
-                    selectionSet.AddId(element.Id);
-                }
+                }                
             }
-
-            // add elements from the groups that pass customSelectionFilter to selectionSet
-            // use element filter to exclude model groups
-            var customSelectionFilter = new CustomSelectionFilter();
-            var elementFilter = new ElementCategoryFilter(BuiltInCategory.OST_IOSModelGroups, true);
+            // get selection sets from groups
             foreach (var group in selectedGroups)
             {
-                var groupElementIds = group
-                    .GetDependentElements(elementFilter)
-                    .Where
-                    (x =>
-                    customSelectionFilter.AllowProcessElement(uidoc.Document.GetElement(x))
-                    ).ToList();
-
-                selectionSet.AddIds(groupElementIds);
+                selectionSets.Add(GetSelectionSetFromGroup(group as Group, uidoc));
             }
-
-            // if there is only one group selected, extract the parameters from it
-            if (selectedGroups.Count == 1)
-            {
-                var group = selectedGroups.First();
-                selectionSet.RevitGroupType = uidoc.Document.GetElement(group.GetTypeId()) as GroupType;
-                var parameters = group.Parameters.Cast<Parameter>().ToList();
-                selectionSet.AddParameters(parameters);
-                selectionSet.RevitGroupName = group.Name;
-                selectionSet.RevitGroupDescription = selectionSet.RevitGroupType?.get_Parameter(BuiltInParameter.ALL_MODEL_DESCRIPTION)?.AsString();
-                selectionSet.RevitGroupModel = selectionSet.RevitGroupType?.get_Parameter(BuiltInParameter.ALL_MODEL_MODEL)?.AsString();
-            }
-
-            return selectionSet;
-
+            return selectionSets;
         }
         
     }

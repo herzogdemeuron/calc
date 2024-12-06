@@ -586,12 +586,7 @@
                         Margin="0,0,10,0">
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
-                            <Setter Property="Content" Value="Create" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding AssemblyCreationVM.SaveOrUpdate}" Value="False">
-                                    <Setter Property="Content" Value="Code exists, Update" />
-                                </DataTrigger>
-                            </Style.Triggers>
+                            <Setter Property="Content" Value="{Binding AssemblyCreationVM.SaveText}" />
                         </Style>
                     </Button.Style>
                 </Button>
