@@ -46,6 +46,7 @@ namespace Calc.RevitConnector.Revit
             foreach(var elementSelectionSet in elementSelectionSets)
             {
                 groupType = elementSelectionSet.RevitGroupType;
+                var record = GetAssemblyRecord(groupType);
                 var components = ComponentCreator.CreateAssemblyComponents(elementSelectionSet.ElementIds, basicParamConfigs);
                 var selectionResult = new ElementSourceSelectionResult()
                 {
@@ -53,7 +54,8 @@ namespace Calc.RevitConnector.Revit
                     AssemblyName = elementSelectionSet.RevitGroupModel,
                     Description = elementSelectionSet.RevitGroupDescription,
                     Parameters = elementSelectionSet.Parameters,
-                    AssemblyComponents = components
+                    AssemblyComponents = components,
+                    AssemblyRecord = record
                 };
                 results.Add(selectionResult);
             }
@@ -106,7 +108,7 @@ namespace Calc.RevitConnector.Revit
         /// <summary>
         /// Gets the assembly record from the group type parameter 'Type Comments'.
         /// </summary>
-        public AssemblyRecord GetAssemblyRecord()
+        private AssemblyRecord GetAssemblyRecord(GroupType groupType)
         {
             var recordString = groupType?.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_COMMENTS)?.AsString();
             if (recordString == null) return null;

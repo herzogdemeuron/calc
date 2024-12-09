@@ -17,6 +17,7 @@ namespace Calc.Core.Objects.Elements
         public string Description { get; set; }
         public Dictionary<string, string> Parameters { get; set; }
         public List<AssemblyComponent> AssemblyComponents { get; set; }
+        public AssemblyRecord AssemblyRecord { get; set; }
 
         /// <summary>
         /// Apply the assembly record to current assembly components, so that they are mapped with the same materials.
@@ -24,25 +25,25 @@ namespace Calc.Core.Objects.Elements
         /// matches the recorded components to the current components with the same name and same layers.
         /// duplicate component names would be ignored to avoid misunderstanding.
         /// </summary>
-        public void ApplyAssemblyRecord(AssemblyRecord record, CalcStore store)
+        public void ApplyAssemblyRecord(CalcStore store)
         {
             try
             {
-                if (record == null) return;
-                AssemblyUnit = record.AssemblyUnit;
-                AssemblyGroup = store.AssemblyGroupsAll.Find(g => g.Id == record.AssemblyGroup.Id);
+                if (AssemblyRecord == null) return;
+                AssemblyUnit = AssemblyRecord.AssemblyUnit;
+                AssemblyGroup = store.AssemblyGroupsAll.Find(g => g.Id == AssemblyRecord.AssemblyGroup.Id);
 
                 if (AssemblyComponents == null || AssemblyComponents.Count == 0) return;
 
                 // link materials to the record components
-                record.Components.ForEach(component => LinkMaterials(component, store));
+                AssemblyRecord.Components.ForEach(component => LinkMaterials(component, store));
 
                 foreach ( var currentComponent in AssemblyComponents) 
                 {
                     var currentName = currentComponent.Name;
                     if (AssemblyComponents.FindAll(c => c.Name == currentName).Count > 1) continue;
 
-                    var recordComponent = record.Components.Find(c => CheckComponentEquality(currentComponent, c));
+                    var recordComponent = AssemblyRecord.Components.Find(c => CheckComponentEquality(currentComponent, c));
                     if (recordComponent == null) continue;
                     FollowComponent(currentComponent, recordComponent);
                 }

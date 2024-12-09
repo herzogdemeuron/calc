@@ -22,7 +22,6 @@ namespace Calc.Core
     {
         public List<ElementSourceSelectionResult> SelectElements(List<CustomParamSetting> customParamSettings);
         public void UpdateAssemblyData(string assemblyCode, string assemblyName, string description, Unit newAssemblyUnit, AssemblyGroup assemblyGroup, List<AssemblyComponent> components);
-        public AssemblyRecord GetAssemblyRecord();
     }
 
     /// <summary>

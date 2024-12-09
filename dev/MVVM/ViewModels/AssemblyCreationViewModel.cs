@@ -400,8 +400,7 @@ namespace Calc.MVVM.ViewModels
                 selectionResults = elementSourceHandler.SelectElements(store.CustomParamSettingsAll);
                 foreach (var result in selectionResults)
                 {
-                    var record = elementSourceHandler.GetAssemblyRecord();
-                    if (record != null) result.ApplyAssemblyRecord(record, store);
+                    result.ApplyAssemblyRecord(store);
 
                 }
                 if (selectionResults.Count == 1)
