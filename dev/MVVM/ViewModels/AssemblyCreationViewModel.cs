@@ -409,8 +409,8 @@ namespace Calc.MVVM.ViewModels
                 }
                 else
                 {
-                    ApplySelectionResult(null);
                     // if there are multiple groups selected, update all of them
+                    ApplySelectionResult(null);
                     var totalCount = selectionResults.Count;
                     SaveMessage = $"{totalCount} assemblies selected. Update all?";
                     SaveMessageColor = Brushes.Orange;
@@ -422,7 +422,6 @@ namespace Calc.MVVM.ViewModels
             {
                 MainWarning = ex.Message;
             }
-
         }
 
         /// <summary>
@@ -690,6 +689,7 @@ namespace Calc.MVVM.ViewModels
             {
                 await store.SaveSingleAssembly(assembly);
                 SaveMessage = "New Assembly saved.";
+                CheckIdToUpdate();
                 UpdateSaveText();
             }
             // write back the assembly data to revit from current view model
@@ -735,10 +735,11 @@ namespace Calc.MVVM.ViewModels
         /// </summary>
         private void CheckIdToUpdate()
         {
-            idToUpdate = null;
+            //idToUpdate = null;
             var allAssemblies = store.AssembliesAll;
             var existingAssembly = allAssemblies.Find(b => b.Code != null && b.Code == NewAssemblyCode);
-            if (existingAssembly != null) idToUpdate = existingAssembly.Id;            
+            if (existingAssembly != null) idToUpdate = existingAssembly.Id;
+            else idToUpdate = null;
         }
 
         private void UpdateSaveText()
