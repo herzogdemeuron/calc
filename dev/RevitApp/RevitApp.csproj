@@ -7,6 +7,14 @@
     <BaseOutputPath>C:\source\calc\bin</BaseOutputPath>
   </PropertyGroup>
 
+<PropertyGroup Condition="'$(TargetFramework)'=='net48'">
+	<DefineConstants>LEGACY_FRAMEWORK</DefineConstants>
+</PropertyGroup>
+<PropertyGroup Condition="'$(TargetFramework)'=='net8.0-windows'">
+	<DefineConstants>NET8_WINDOWS</DefineConstants>
+	<UseWPF>true</UseWPF>
+</PropertyGroup>
+
 <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 	<OutputPath>C:\source\calc\bin\</OutputPath>
 </PropertyGroup>
