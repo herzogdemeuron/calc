@@ -12,6 +12,7 @@
 <PropertyGroup Condition="'$(TargetFramework)'=='net8.0-windows'">
 	<DefineConstants>NET8_WINDOWS</DefineConstants>
 	<UseWPF>true</UseWPF>
+	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 </PropertyGroup>
 
 <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

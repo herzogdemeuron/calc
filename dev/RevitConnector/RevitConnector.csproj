@@ -1,15 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
+	  <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
     <AssemblyName>CalcRevitConnector</AssemblyName>
     <RootNamespace>Calc.RevitConnector</RootNamespace>
     <BaseOutputPath></BaseOutputPath>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="ToggleButtonTemplate.xaml" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
@@ -29,25 +25,5 @@
     </Reference>
     <Reference Include="System.Xaml" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Properties\Settings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-
-<PropertyGroup>
-	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-	<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-</PropertyGroup>
 
 </Project>
