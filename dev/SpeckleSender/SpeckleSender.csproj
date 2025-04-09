@@ -1,8 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
+	  <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
   </PropertyGroup>
+
+<PropertyGroup Condition="'$(TargetFramework)'=='net48'">
+	<DefineConstants>NET48</DefineConstants>
+</PropertyGroup>
+
+<PropertyGroup Condition="'$(TargetFramework)'=='net8.0-windows'">
+	<DefineConstants>NET8</DefineConstants>
+</PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="RevitSharedResources2023" Version="2.20.1" />

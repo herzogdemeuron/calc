@@ -1,10 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
+	  <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
     <AssemblyName>CalcRevitApp</AssemblyName>
     <RootNamespace>Calc.RevitApp</RootNamespace>
-    <BaseOutputPath>C:\source\calc\bin</BaseOutputPath>
   </PropertyGroup>
 
 <PropertyGroup Condition="'$(TargetFramework)'=='net48'">
@@ -22,12 +21,6 @@
 <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
 	<OutputPath>C:\source\calc\bin\</OutputPath>
 </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Resources\tab_calc_builder_icon.png" />
-    <None Remove="Resources\tab_calc_project_icon.png" />
-    <None Remove="ToggleButtonTemplate.xaml" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SpeckleSender\SpeckleSender.csproj" />
@@ -71,10 +64,5 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-
-<PropertyGroup>
-	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-	<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-</PropertyGroup>
 
 </Project>
