@@ -1,56 +1,49 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-	  <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
+    <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
     <AssemblyName>CalcRevitApp</AssemblyName>
     <RootNamespace>Calc.RevitApp</RootNamespace>
   </PropertyGroup>
-
-<PropertyGroup Condition="'$(TargetFramework)'=='net48'">
-	<DefineConstants>LEGACY_FRAMEWORK</DefineConstants>
-</PropertyGroup>
-<PropertyGroup Condition="'$(TargetFramework)'=='net8.0-windows'">
-	<DefineConstants>NET8_WINDOWS</DefineConstants>
-	<UseWPF>true</UseWPF>
-	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-</PropertyGroup>
-
-<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-	<OutputPath>C:\source\calc\bin\</OutputPath>
-</PropertyGroup>
-
-<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-	<OutputPath>C:\source\calc\bin\</OutputPath>
-</PropertyGroup>
-
+  <PropertyGroup Condition="'$(TargetFramework)'=='net48'">
+    <DefineConstants>LEGACY_FRAMEWORK</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)'=='net8.0-windows'">
+    <DefineConstants>NET8_WINDOWS</DefineConstants>
+    <UseWPF>true</UseWPF>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>C:\source\calc\bin\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>C:\source\calc\bin\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\SpeckleSender\SpeckleSender.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\MVVM\MVVM.csproj" />
     <ProjectReference Include="..\RevitConnector\RevitConnector.csproj" />
   </ItemGroup>
-
   <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
+	  <Reference Include="PresentationCore" />
+	  <Reference Include="PresentationFramework" />
     <Reference Include="RevitAPI">
       <HintPath>..\..\..\..\..\Program Files\Autodesk\Revit 2023\RevitAPI.dll</HintPath>
       <Private>False</Private>
-      <EmbedInteropTypes></EmbedInteropTypes>
+      <EmbedInteropTypes>
+      </EmbedInteropTypes>
     </Reference>
     <Reference Include="RevitAPIUI">
       <HintPath>..\..\..\..\..\Program Files\Autodesk\Revit 2023\RevitAPIUI.dll</HintPath>
-      <EmbedInteropTypes></EmbedInteropTypes>
+      <EmbedInteropTypes>
+      </EmbedInteropTypes>
       <Private>False</Private>
     </Reference>
-    <Reference Include="System.Xaml" />
   </ItemGroup>
-
   <ItemGroup>
     <Resource Include="Resources\tab_calc_builder_icon.png" />
     <Resource Include="Resources\tab_calc_project_icon.png" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -58,12 +51,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-
 </Project>

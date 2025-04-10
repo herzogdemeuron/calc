@@ -46,6 +46,7 @@ namespace Calc.RevitApp.Revit
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
+                TaskDialog.Show("Error", ex.Message.ToString());
                 return Result.Failed;
             }
         }
@@ -60,7 +61,11 @@ namespace Calc.RevitApp.Revit
             string assemblyFolder = string.IsNullOrEmpty(assemblyLocation) ?
                 assemblyLocationHdM : Path.GetDirectoryName(assemblyLocation);
             string assemblyName = new AssemblyName(args.Name).Name;
-            string assemblyPath = Path.Combine(assemblyFolder, assemblyName + ".dll");
+            if (assemblyName.EndsWith(".Resources"))
+            {
+                assemblyName = assemblyName.Substring(0, assemblyName.Length - 10);
+            }
+            string assemblyPath = Path.Combine(assemblyLocationHdM, assemblyName + ".dll");
 
             if (File.Exists(assemblyPath))
             {
@@ -69,6 +74,7 @@ namespace Calc.RevitApp.Revit
             }
             else
             {
+                Debug.WriteLine($"Assembly {assemblyName} not found at {assemblyPath}!");
                 return null;
             }
         }
