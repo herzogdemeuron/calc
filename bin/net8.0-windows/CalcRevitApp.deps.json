@@ -159,19 +159,6 @@
           }
         }
       },
-      "Objects.ConverterDxf/2.21.3": {
-        "dependencies": {
-          "Speckle.Core": "2.21.3",
-          "Speckle.Objects": "2.21.3",
-          "Speckle.netDxf": "3.0.2"
-        },
-        "runtime": {
-          "lib/netstandard2.0/Objects.ConverterDxf.dll": {
-            "assemblyVersion": "2.21.3.16520",
-            "fileVersion": "2.21.3.16520"
-          }
-        }
-      },
       "Polly/8.4.2": {
         "dependencies": {
           "Polly.Core": "8.4.2"
@@ -218,12 +205,12 @@
           }
         }
       },
-      "RevitSharedResources2023/2.21.3": {
+      "RevitSharedResources2025/2.21.3": {
         "dependencies": {
           "Speckle.Core": "2.21.3"
         },
         "runtime": {
-          "lib/netstandard2.0/RevitSharedResources2023.dll": {
+          "lib/net8.0-windows7.0/RevitSharedResources2025.dll": {
             "assemblyVersion": "2.21.3.16520",
             "fileVersion": "2.21.3.16520"
           }
@@ -377,45 +364,11 @@
           }
         }
       },
-      "Speckle.netDxf/3.0.2": {
-        "runtime": {
-          "lib/net5.0/Speckle.netDxf.dll": {
-            "assemblyVersion": "3.0.2.0",
-            "fileVersion": "3.0.2.0"
-          }
-        }
-      },
       "Speckle.Newtonsoft.Json/13.0.2": {
         "runtime": {
           "lib/net6.0/Speckle.Newtonsoft.Json.dll": {
             "assemblyVersion": "11.0.0.0",
             "fileVersion": "11.0.1.0"
-          }
-        }
-      },
-      "Speckle.Objects/2.21.3": {
-        "dependencies": {
-          "Speckle.Core": "2.21.3"
-        },
-        "runtime": {
-          "lib/netstandard2.0/Objects.dll": {
-            "assemblyVersion": "2.21.3.16520",
-            "fileVersion": "2.21.3.16520"
-          }
-        }
-      },
-      "Speckle.Objects.Converter.Revit2023/2.21.3": {
-        "dependencies": {
-          "Objects.ConverterDxf": "2.21.3",
-          "RevitSharedResources2023": "2.21.3",
-          "Speckle.Core": "2.21.3",
-          "Speckle.Objects": "2.21.3",
-          "Speckle.Revit.API": "2023.0.0"
-        },
-        "runtime": {
-          "lib/netstandard2.0/Objects.Converter.Revit2023.dll": {
-            "assemblyVersion": "2.21.3.16520",
-            "fileVersion": "2.21.3.16520"
           }
         }
       },
@@ -1224,9 +1177,8 @@
       "SpeckleSender/1.0.0": {
         "dependencies": {
           "Calc.Core": "1.0.0",
-          "RevitSharedResources2023": "2.21.3",
+          "RevitSharedResources2025": "2.21.3",
           "Speckle.Core": "2.21.3",
-          "Speckle.Objects.Converter.Revit2023": "2.21.3",
           "Speckle.Revit.API": "2023.0.0"
         },
         "runtime": {
@@ -1366,13 +1318,6 @@
       "path": "newtonsoft.json/13.0.3",
       "hashPath": "newtonsoft.json.13.0.3.nupkg.sha512"
     },
-    "Objects.ConverterDxf/2.21.3": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-SnPyETx8ZAm2Rn+qUOCbYFSmrueulYPZGMNFFxct+PUJ0W5NOCFJh6q4jZ1pvcqTGnoxlSaej08Neuv+OXXE7Q==",
-      "path": "objects.converterdxf/2.21.3",
-      "hashPath": "objects.converterdxf.2.21.3.nupkg.sha512"
-    },
     "Polly/8.4.2": {
       "type": "package",
       "serviceable": true,
@@ -1408,12 +1353,12 @@
       "path": "restsharp/112.0.0",
       "hashPath": "restsharp.112.0.0.nupkg.sha512"
     },
-    "RevitSharedResources2023/2.21.3": {
+    "RevitSharedResources2025/2.21.3": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-w6Fzyfp0k/Vau6B0+4S32CRBO44ZioStVVFd8euUcsgsZWHZMyMYiqMCPBgGGSEWlAzsKF139u09mDUiwwIC7Q==",
-      "path": "revitsharedresources2023/2.21.3",
-      "hashPath": "revitsharedresources2023.2.21.3.nupkg.sha512"
+      "sha512": "sha512-+dUzS+Ln09lHP6nxJDgWkoR8XOKk1MHMrBkB0+pOQtV4K1Amh8BMkisxzfFm4Jp5PVstyi8Ejrf6bfzu16NKSA==",
+      "path": "revitsharedresources2025/2.21.3",
+      "hashPath": "revitsharedresources2025.2.21.3.nupkg.sha512"
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
       "type": "package",
@@ -1583,33 +1528,12 @@
       "path": "speckle.core/2.21.3",
       "hashPath": "speckle.core.2.21.3.nupkg.sha512"
     },
-    "Speckle.netDxf/3.0.2": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-wYeIxNSinOcicmcl8Uce3DuWTLB4T615wvAnUPSOXr+e5qXAxel5s9tfdB2GMP5XcwYU6O02q6xD4UbDx0R1lg==",
-      "path": "speckle.netdxf/3.0.2",
-      "hashPath": "speckle.netdxf.3.0.2.nupkg.sha512"
-    },
     "Speckle.Newtonsoft.Json/13.0.2": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-g1BejUZwax5PRfL6xHgLEK23sqHWOgOj9hE7RvfRRlN00AGt8GnPYt8HedSK7UB3HiRW8zCA9Pn0iiYxCK24BA==",
       "path": "speckle.newtonsoft.json/13.0.2",
       "hashPath": "speckle.newtonsoft.json.13.0.2.nupkg.sha512"
-    },
-    "Speckle.Objects/2.21.3": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-KCU2bky6uJ4OH1m8hJrkD/qkjJ+1lqER4hC/EzH3Xx6uetU2t1R4/q4VBfRJYN8ZgXF+/jylEX6jWUwDFAUexg==",
-      "path": "speckle.objects/2.21.3",
-      "hashPath": "speckle.objects.2.21.3.nupkg.sha512"
-    },
-    "Speckle.Objects.Converter.Revit2023/2.21.3": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-3ca/ys2CDqFKvFFyDCIfCxBx6skSipMPN0pCgNTQaru4mval9LtD7RldBFG82Om9VFx0eqtFW7J43QkOc0IG/Q==",
-      "path": "speckle.objects.converter.revit2023/2.21.3",
-      "hashPath": "speckle.objects.converter.revit2023.2.21.3.nupkg.sha512"
     },
     "Speckle.Revit.API/2023.0.0": {
       "type": "package",
