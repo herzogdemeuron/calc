@@ -28,7 +28,7 @@ namespace SpeckleSender
         /// or from the installed speckle app kit.
         /// see: https://speckle.community/t/how-to-run-revit-to-speckle-conversions-in-c/1548/6
         /// </summary>
-        public ElementSender(Document doc, CalcConfig config)
+        public ElementSender(Document doc, CalcConfig config, string revitVersion)
         {
             if (!config.IsValid)
             {
@@ -37,7 +37,8 @@ namespace SpeckleSender
             }
             IsValid = true;
             this.doc = doc;
-            revitAppName = HostApplications.Revit.GetVersion(HostAppVersion.v2023);
+            //revitAppName = HostApplications.Revit.GetVersion(HostAppVersion.v2023);
+            revitAppName = "Revit " + revitVersion;
             var speckleKit = KitManager.GetDefaultKit();
             speckleConverter = speckleKit.LoadConverter(revitAppName);
             speckleConverter.SetContextDocument(doc);

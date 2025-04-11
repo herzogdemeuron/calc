@@ -51,7 +51,16 @@ namespace Calc.RevitApp
 
             if (File.Exists(assemblyPath))
             {
-                return Assembly.LoadFrom(assemblyPath);
+                try
+                {
+                    return Assembly.LoadFrom(assemblyPath);
+                }
+                
+                catch (Exception ex)
+                {
+                    TaskDialog.Show("Error loading assembly", ex.Message);
+                    return null;
+                }
             }
             else
             {

@@ -75,56 +75,6 @@
           }
         }
       },
-      "Microsoft.AspNetCore.Http/2.2.2": {
-        "dependencies": {
-          "Microsoft.AspNetCore.Http.Abstractions": "2.2.0",
-          "Microsoft.AspNetCore.WebUtilities": "2.2.0",
-          "Microsoft.Extensions.ObjectPool": "2.2.0",
-          "Microsoft.Extensions.Options": "2.2.0",
-          "Microsoft.Net.Http.Headers": "2.2.0"
-        },
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.AspNetCore.Http.dll": {
-            "assemblyVersion": "2.2.2.0",
-            "fileVersion": "2.2.2.19024"
-          }
-        }
-      },
-      "Microsoft.AspNetCore.Http.Abstractions/2.2.0": {
-        "dependencies": {
-          "Microsoft.AspNetCore.Http.Features": "2.2.0",
-          "System.Text.Encodings.Web": "4.5.0"
-        },
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.AspNetCore.Http.Abstractions.dll": {
-            "assemblyVersion": "2.2.0.0",
-            "fileVersion": "2.2.0.18316"
-          }
-        }
-      },
-      "Microsoft.AspNetCore.Http.Features/2.2.0": {
-        "dependencies": {
-          "Microsoft.Extensions.Primitives": "2.2.0"
-        },
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.AspNetCore.Http.Features.dll": {
-            "assemblyVersion": "2.2.0.0",
-            "fileVersion": "2.2.0.18316"
-          }
-        }
-      },
-      "Microsoft.AspNetCore.WebUtilities/2.2.0": {
-        "dependencies": {
-          "Microsoft.Net.Http.Headers": "2.2.0",
-          "System.Text.Encodings.Web": "4.5.0"
-        },
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.AspNetCore.WebUtilities.dll": {
-            "assemblyVersion": "2.2.0.0",
-            "fileVersion": "2.2.0.18316"
-          }
-        }
-      },
       "Microsoft.CSharp/4.7.0": {},
       "Microsoft.Data.Sqlite/7.0.5": {
         "dependencies": {
@@ -140,59 +90,6 @@
           "lib/net6.0/Microsoft.Data.Sqlite.dll": {
             "assemblyVersion": "7.0.5.0",
             "fileVersion": "7.0.523.16503"
-          }
-        }
-      },
-      "Microsoft.Extensions.DependencyInjection.Abstractions/2.2.0": {
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
-            "assemblyVersion": "2.2.0.0",
-            "fileVersion": "2.2.0.18315"
-          }
-        }
-      },
-      "Microsoft.Extensions.ObjectPool/2.2.0": {
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.Extensions.ObjectPool.dll": {
-            "assemblyVersion": "2.2.0.0",
-            "fileVersion": "2.2.0.18315"
-          }
-        }
-      },
-      "Microsoft.Extensions.Options/2.2.0": {
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "2.2.0",
-          "Microsoft.Extensions.Primitives": "2.2.0",
-          "System.ComponentModel.Annotations": "4.5.0"
-        },
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.Extensions.Options.dll": {
-            "assemblyVersion": "2.2.0.0",
-            "fileVersion": "2.2.0.18315"
-          }
-        }
-      },
-      "Microsoft.Extensions.Primitives/2.2.0": {
-        "dependencies": {
-          "System.Memory": "4.5.3",
-          "System.Runtime.CompilerServices.Unsafe": "4.5.1"
-        },
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.Extensions.Primitives.dll": {
-            "assemblyVersion": "2.2.0.0",
-            "fileVersion": "2.2.0.18315"
-          }
-        }
-      },
-      "Microsoft.Net.Http.Headers/2.2.0": {
-        "dependencies": {
-          "Microsoft.Extensions.Primitives": "2.2.0",
-          "System.Buffers": "4.5.0"
-        },
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.Net.Http.Headers.dll": {
-            "assemblyVersion": "2.2.0.0",
-            "fileVersion": "2.2.0.18316"
           }
         }
       },
@@ -262,16 +159,16 @@
           }
         }
       },
-      "Objects.ConverterDxf/2.20.1": {
+      "Objects.ConverterDxf/2.21.3": {
         "dependencies": {
-          "Speckle.Core": "2.20.1",
-          "Speckle.Objects": "2.20.1",
+          "Speckle.Core": "2.21.3",
+          "Speckle.Objects": "2.21.3",
           "Speckle.netDxf": "3.0.2"
         },
         "runtime": {
           "lib/netstandard2.0/Objects.ConverterDxf.dll": {
-            "assemblyVersion": "2.20.1.16205",
-            "fileVersion": "2.20.1.16205"
+            "assemblyVersion": "2.21.3.16520",
+            "fileVersion": "2.21.3.16520"
           }
         }
       },
@@ -321,14 +218,14 @@
           }
         }
       },
-      "RevitSharedResources2023/2.20.1": {
+      "RevitSharedResources2023/2.21.3": {
         "dependencies": {
-          "Speckle.Core": "2.20.1"
+          "Speckle.Core": "2.21.3"
         },
         "runtime": {
           "lib/netstandard2.0/RevitSharedResources2023.dll": {
-            "assemblyVersion": "2.20.1.16205",
-            "fileVersion": "2.20.1.16205"
+            "assemblyVersion": "2.21.3.16520",
+            "fileVersion": "2.21.3.16520"
           }
         }
       },
@@ -385,41 +282,6 @@
           "lib/net6.0/Serilog.dll": {
             "assemblyVersion": "2.0.0.0",
             "fileVersion": "2.12.0.0"
-          }
-        }
-      },
-      "Serilog.Enrichers.ClientInfo/1.3.0": {
-        "dependencies": {
-          "Microsoft.AspNetCore.Http": "2.2.2",
-          "Serilog": "2.12.0"
-        },
-        "runtime": {
-          "lib/netstandard2.1/Serilog.Enrichers.ClientInfo.dll": {
-            "assemblyVersion": "0.0.0.0",
-            "fileVersion": "0.0.0.0"
-          }
-        }
-      },
-      "Serilog.Enrichers.GlobalLogContext/3.0.0": {
-        "dependencies": {
-          "Serilog": "2.12.0"
-        },
-        "runtime": {
-          "lib/net6.0/Serilog.Enrichers.GlobalLogContext.dll": {
-            "assemblyVersion": "3.0.0.0",
-            "fileVersion": "3.0.0.0"
-          }
-        }
-      },
-      "Serilog.Exceptions/8.4.0": {
-        "dependencies": {
-          "Serilog": "2.12.0",
-          "System.Reflection.TypeExtensions": "4.7.0"
-        },
-        "runtime": {
-          "lib/net6.0/Serilog.Exceptions.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.4.0.0"
           }
         }
       },
@@ -492,7 +354,7 @@
           }
         }
       },
-      "Speckle.Core/2.20.1": {
+      "Speckle.Core/2.21.3": {
         "dependencies": {
           "GraphQL.Client": "6.0.0",
           "Microsoft.CSharp": "4.7.0",
@@ -501,9 +363,6 @@
           "Polly.Contrib.WaitAndRetry": "1.1.1",
           "Polly.Extensions.Http": "3.0.0",
           "Serilog": "2.12.0",
-          "Serilog.Enrichers.ClientInfo": "1.3.0",
-          "Serilog.Enrichers.GlobalLogContext": "3.0.0",
-          "Serilog.Exceptions": "8.4.0",
           "Serilog.Sinks.Console": "4.1.0",
           "Serilog.Sinks.Seq": "5.2.2",
           "SerilogTimings": "3.0.1",
@@ -513,8 +372,8 @@
         },
         "runtime": {
           "lib/netstandard2.0/SpeckleCore2.dll": {
-            "assemblyVersion": "2.20.1.16205",
-            "fileVersion": "2.20.1.16205"
+            "assemblyVersion": "2.21.3.16520",
+            "fileVersion": "2.21.3.16520"
           }
         }
       },
@@ -534,29 +393,29 @@
           }
         }
       },
-      "Speckle.Objects/2.20.1": {
+      "Speckle.Objects/2.21.3": {
         "dependencies": {
-          "Speckle.Core": "2.20.1"
+          "Speckle.Core": "2.21.3"
         },
         "runtime": {
           "lib/netstandard2.0/Objects.dll": {
-            "assemblyVersion": "2.20.1.16205",
-            "fileVersion": "2.20.1.16205"
+            "assemblyVersion": "2.21.3.16520",
+            "fileVersion": "2.21.3.16520"
           }
         }
       },
-      "Speckle.Objects.Converter.Revit2023/2.20.1": {
+      "Speckle.Objects.Converter.Revit2023/2.21.3": {
         "dependencies": {
-          "Objects.ConverterDxf": "2.20.1",
-          "RevitSharedResources2023": "2.20.1",
-          "Speckle.Core": "2.20.1",
-          "Speckle.Objects": "2.20.1",
+          "Objects.ConverterDxf": "2.21.3",
+          "RevitSharedResources2023": "2.21.3",
+          "Speckle.Core": "2.21.3",
+          "Speckle.Objects": "2.21.3",
           "Speckle.Revit.API": "2023.0.0"
         },
         "runtime": {
           "lib/netstandard2.0/Objects.Converter.Revit2023.dll": {
-            "assemblyVersion": "2.20.1.16205",
-            "fileVersion": "2.20.1.16205"
+            "assemblyVersion": "2.21.3.16520",
+            "fileVersion": "2.21.3.16520"
           }
         }
       },
@@ -730,7 +589,15 @@
           "System.Runtime": "4.3.0"
         }
       },
-      "System.Buffers/4.5.0": {},
+      "System.Buffers/4.3.0": {
+        "dependencies": {
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Diagnostics.Tracing": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Threading": "4.3.0"
+        }
+      },
       "System.Collections/4.3.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.1.0",
@@ -752,7 +619,6 @@
           "System.Threading.Tasks": "4.3.0"
         }
       },
-      "System.ComponentModel.Annotations/4.5.0": {},
       "System.Console/4.3.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.1.0",
@@ -851,7 +717,7 @@
       "System.IO.Compression/4.3.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.1.0",
-          "System.Buffers": "4.5.0",
+          "System.Buffers": "4.3.0",
           "System.Collections": "4.3.0",
           "System.Diagnostics.Debug": "4.3.0",
           "System.IO": "4.3.0",
@@ -869,7 +735,7 @@
       },
       "System.IO.Compression.ZipFile/4.3.0": {
         "dependencies": {
-          "System.Buffers": "4.5.0",
+          "System.Buffers": "4.3.0",
           "System.IO": "4.3.0",
           "System.IO.Compression": "4.3.0",
           "System.IO.FileSystem": "4.3.0",
@@ -920,7 +786,7 @@
           "System.Reflection.Emit.Lightweight": "4.3.0",
           "System.Reflection.Extensions": "4.3.0",
           "System.Reflection.Primitives": "4.3.0",
-          "System.Reflection.TypeExtensions": "4.7.0",
+          "System.Reflection.TypeExtensions": "4.3.0",
           "System.Resources.ResourceManager": "4.3.0",
           "System.Runtime": "4.3.0",
           "System.Runtime.Extensions": "4.3.0",
@@ -1041,7 +907,12 @@
           "System.Runtime": "4.3.0"
         }
       },
-      "System.Reflection.TypeExtensions/4.7.0": {},
+      "System.Reflection.TypeExtensions/4.3.0": {
+        "dependencies": {
+          "System.Reflection": "4.3.0",
+          "System.Runtime": "4.3.0"
+        }
+      },
       "System.Resources.ResourceManager/4.3.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.1.0",
@@ -1057,7 +928,6 @@
           "Microsoft.NETCore.Targets": "1.1.0"
         }
       },
-      "System.Runtime.CompilerServices.Unsafe/4.5.1": {},
       "System.Runtime.Extensions/4.3.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.1.0",
@@ -1239,7 +1109,6 @@
           "System.Text.Encoding": "4.3.0"
         }
       },
-      "System.Text.Encodings.Web/4.5.0": {},
       "System.Text.Json/5.0.2": {},
       "System.Text.RegularExpressions/4.3.0": {
         "dependencies": {
@@ -1355,9 +1224,9 @@
       "SpeckleSender/1.0.0": {
         "dependencies": {
           "Calc.Core": "1.0.0",
-          "RevitSharedResources2023": "2.20.1",
-          "Speckle.Core": "2.20.1",
-          "Speckle.Objects.Converter.Revit2023": "2.20.1",
+          "RevitSharedResources2023": "2.21.3",
+          "Speckle.Core": "2.21.3",
+          "Speckle.Objects.Converter.Revit2023": "2.21.3",
           "Speckle.Revit.API": "2023.0.0"
         },
         "runtime": {
@@ -1434,34 +1303,6 @@
       "path": "graphql.primitives/6.0.0",
       "hashPath": "graphql.primitives.6.0.0.nupkg.sha512"
     },
-    "Microsoft.AspNetCore.Http/2.2.2": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-BAibpoItxI5puk7YJbIGj95arZueM8B8M5xT1fXBn3hb3L2G3ucrZcYXv1gXdaroLbntUs8qeV8iuBrpjQsrKw==",
-      "path": "microsoft.aspnetcore.http/2.2.2",
-      "hashPath": "microsoft.aspnetcore.http.2.2.2.nupkg.sha512"
-    },
-    "Microsoft.AspNetCore.Http.Abstractions/2.2.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-Nxs7Z1q3f1STfLYKJSVXCs1iBl+Ya6E8o4Oy1bCxJ/rNI44E/0f6tbsrVqAWfB7jlnJfyaAtIalBVxPKUPQb4Q==",
-      "path": "microsoft.aspnetcore.http.abstractions/2.2.0",
-      "hashPath": "microsoft.aspnetcore.http.abstractions.2.2.0.nupkg.sha512"
-    },
-    "Microsoft.AspNetCore.Http.Features/2.2.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-ziFz5zH8f33En4dX81LW84I6XrYXKf9jg6aM39cM+LffN9KJahViKZ61dGMSO2gd3e+qe5yBRwsesvyqlZaSMg==",
-      "path": "microsoft.aspnetcore.http.features/2.2.0",
-      "hashPath": "microsoft.aspnetcore.http.features.2.2.0.nupkg.sha512"
-    },
-    "Microsoft.AspNetCore.WebUtilities/2.2.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-9ErxAAKaDzxXASB/b5uLEkLgUWv1QbeVxyJYEHQwMaxXOeFFVkQxiq8RyfVcifLU7NR0QY0p3acqx4ZpYfhHDg==",
-      "path": "microsoft.aspnetcore.webutilities/2.2.0",
-      "hashPath": "microsoft.aspnetcore.webutilities.2.2.0.nupkg.sha512"
-    },
     "Microsoft.CSharp/4.7.0": {
       "type": "package",
       "serviceable": true,
@@ -1482,41 +1323,6 @@
       "sha512": "sha512-FTerRmQPqHrCrnoUzhBu+E+1DNGwyrAMLqHkAqOOOu5pGfyMOj8qQUBxI/gDtWtG11p49UxSfWmBzRNlwZqfUg==",
       "path": "microsoft.data.sqlite.core/7.0.5",
       "hashPath": "microsoft.data.sqlite.core.7.0.5.nupkg.sha512"
-    },
-    "Microsoft.Extensions.DependencyInjection.Abstractions/2.2.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-f9hstgjVmr6rmrfGSpfsVOl2irKAgr1QjrSi3FgnS7kulxband50f2brRLwySAQTADPZeTdow0mpSMcoAdadCw==",
-      "path": "microsoft.extensions.dependencyinjection.abstractions/2.2.0",
-      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.2.2.0.nupkg.sha512"
-    },
-    "Microsoft.Extensions.ObjectPool/2.2.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-gA8H7uQOnM5gb+L0uTNjViHYr+hRDqCdfugheGo/MxQnuHzmhhzCBTIPm19qL1z1Xe0NEMabfcOBGv9QghlZ8g==",
-      "path": "microsoft.extensions.objectpool/2.2.0",
-      "hashPath": "microsoft.extensions.objectpool.2.2.0.nupkg.sha512"
-    },
-    "Microsoft.Extensions.Options/2.2.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-UpZLNLBpIZ0GTebShui7xXYh6DmBHjWM8NxGxZbdQh/bPZ5e6YswqI+bru6BnEL5eWiOdodsXtEz3FROcgi/qg==",
-      "path": "microsoft.extensions.options/2.2.0",
-      "hashPath": "microsoft.extensions.options.2.2.0.nupkg.sha512"
-    },
-    "Microsoft.Extensions.Primitives/2.2.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-azyQtqbm4fSaDzZHD/J+V6oWMFaf2tWP4WEGIYePLCMw3+b2RQdj9ybgbQyjCshcitQKQ4lEDOZjmSlTTrHxUg==",
-      "path": "microsoft.extensions.primitives/2.2.0",
-      "hashPath": "microsoft.extensions.primitives.2.2.0.nupkg.sha512"
-    },
-    "Microsoft.Net.Http.Headers/2.2.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-iZNkjYqlo8sIOI0bQfpsSoMTmB/kyvmV2h225ihyZT33aTp48ZpF6qYnXxzSXmHt8DpBAwBTX+1s1UFLbYfZKg==",
-      "path": "microsoft.net.http.headers/2.2.0",
-      "hashPath": "microsoft.net.http.headers.2.2.0.nupkg.sha512"
     },
     "Microsoft.NETCore.Platforms/1.1.0": {
       "type": "package",
@@ -1560,12 +1366,12 @@
       "path": "newtonsoft.json/13.0.3",
       "hashPath": "newtonsoft.json.13.0.3.nupkg.sha512"
     },
-    "Objects.ConverterDxf/2.20.1": {
+    "Objects.ConverterDxf/2.21.3": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-OPXaWJnmRb0TWroby4qNaCAEglWKG7P3ksokxhcOJiZDSNPc32P1azEbq7WhxOUxZcWLyOh+wNgOl+Q8J8z9+g==",
-      "path": "objects.converterdxf/2.20.1",
-      "hashPath": "objects.converterdxf.2.20.1.nupkg.sha512"
+      "sha512": "sha512-SnPyETx8ZAm2Rn+qUOCbYFSmrueulYPZGMNFFxct+PUJ0W5NOCFJh6q4jZ1pvcqTGnoxlSaej08Neuv+OXXE7Q==",
+      "path": "objects.converterdxf/2.21.3",
+      "hashPath": "objects.converterdxf.2.21.3.nupkg.sha512"
     },
     "Polly/8.4.2": {
       "type": "package",
@@ -1602,12 +1408,12 @@
       "path": "restsharp/112.0.0",
       "hashPath": "restsharp.112.0.0.nupkg.sha512"
     },
-    "RevitSharedResources2023/2.20.1": {
+    "RevitSharedResources2023/2.21.3": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-ulaP9qKU/YdZtQo7ZxG23lJNvetBBQnhMMKvwhHAX9VkCSHYh4U/kO/NgqfH/Hrvu/Ax5WjRvbrC+/CNUysqNw==",
-      "path": "revitsharedresources2023/2.20.1",
-      "hashPath": "revitsharedresources2023.2.20.1.nupkg.sha512"
+      "sha512": "sha512-w6Fzyfp0k/Vau6B0+4S32CRBO44ZioStVVFd8euUcsgsZWHZMyMYiqMCPBgGGSEWlAzsKF139u09mDUiwwIC7Q==",
+      "path": "revitsharedresources2023/2.21.3",
+      "hashPath": "revitsharedresources2023.2.21.3.nupkg.sha512"
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
       "type": "package",
@@ -1728,27 +1534,6 @@
       "path": "serilog/2.12.0",
       "hashPath": "serilog.2.12.0.nupkg.sha512"
     },
-    "Serilog.Enrichers.ClientInfo/1.3.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-mTc7PM+wC9Hr7LWSwqt5mmnlAr7RJs+eTb3PGPRhwdOackk95MkhUZognuxXEdlW19HAFNmEBTSBY5DfLwM8jQ==",
-      "path": "serilog.enrichers.clientinfo/1.3.0",
-      "hashPath": "serilog.enrichers.clientinfo.1.3.0.nupkg.sha512"
-    },
-    "Serilog.Enrichers.GlobalLogContext/3.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-IIZcj5mAUVhIl/NTA+YI2KC+sPDzcwvs0ZMHH42jsPfl1a4LVX7ohVpw5UK+e3GxuV3Nv239Il5oM2peUIl44g==",
-      "path": "serilog.enrichers.globallogcontext/3.0.0",
-      "hashPath": "serilog.enrichers.globallogcontext.3.0.0.nupkg.sha512"
-    },
-    "Serilog.Exceptions/8.4.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-nc/+hUw3lsdo0zCj0KMIybAu7perMx79vu72w0za9Nsi6mWyNkGXxYxakAjWB7nEmYL6zdmhEQRB4oJ2ALUeug==",
-      "path": "serilog.exceptions/8.4.0",
-      "hashPath": "serilog.exceptions.8.4.0.nupkg.sha512"
-    },
     "Serilog.Formatting.Compact/1.1.0": {
       "type": "package",
       "serviceable": true,
@@ -1791,12 +1576,12 @@
       "path": "serilogtimings/3.0.1",
       "hashPath": "serilogtimings.3.0.1.nupkg.sha512"
     },
-    "Speckle.Core/2.20.1": {
+    "Speckle.Core/2.21.3": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-C3pPgczoddFU9SHnUQ3t7fX/SDN4+qRTuO2oKAav43MTfXYAGQDF3MFUH+esndsbDyC5qbtMwkQ60rWseOYR6Q==",
-      "path": "speckle.core/2.20.1",
-      "hashPath": "speckle.core.2.20.1.nupkg.sha512"
+      "sha512": "sha512-GtDQzqaNYKZu6ktWTSb1XKGfykB+4Uqcv5o2jmhnIj2pIYXhRC0RP5uJ7vn8Ofd7OjYPTLw4gQC2Q6bLQOK6ZQ==",
+      "path": "speckle.core/2.21.3",
+      "hashPath": "speckle.core.2.21.3.nupkg.sha512"
     },
     "Speckle.netDxf/3.0.2": {
       "type": "package",
@@ -1812,19 +1597,19 @@
       "path": "speckle.newtonsoft.json/13.0.2",
       "hashPath": "speckle.newtonsoft.json.13.0.2.nupkg.sha512"
     },
-    "Speckle.Objects/2.20.1": {
+    "Speckle.Objects/2.21.3": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-ekH8zeoZnvpkG/Mzb/rAH3uf5KPMAKRdt8I7QvpnuV5EqsE+5GWJk1UUrf9dujaKzJ5u0DiTZJeGIqo9kyxZ2g==",
-      "path": "speckle.objects/2.20.1",
-      "hashPath": "speckle.objects.2.20.1.nupkg.sha512"
+      "sha512": "sha512-KCU2bky6uJ4OH1m8hJrkD/qkjJ+1lqER4hC/EzH3Xx6uetU2t1R4/q4VBfRJYN8ZgXF+/jylEX6jWUwDFAUexg==",
+      "path": "speckle.objects/2.21.3",
+      "hashPath": "speckle.objects.2.21.3.nupkg.sha512"
     },
-    "Speckle.Objects.Converter.Revit2023/2.20.1": {
+    "Speckle.Objects.Converter.Revit2023/2.21.3": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-PHoA9hdTVJpIkewboeEZeGDvogZDlPBTnM2jgCGoEkJYkt7bHpa6QC6mG5rfjD4j6XxjsxaLoYHmWx1yr7avcQ==",
-      "path": "speckle.objects.converter.revit2023/2.20.1",
-      "hashPath": "speckle.objects.converter.revit2023.2.20.1.nupkg.sha512"
+      "sha512": "sha512-3ca/ys2CDqFKvFFyDCIfCxBx6skSipMPN0pCgNTQaru4mval9LtD7RldBFG82Om9VFx0eqtFW7J43QkOc0IG/Q==",
+      "path": "speckle.objects.converter.revit2023/2.21.3",
+      "hashPath": "speckle.objects.converter.revit2023.2.21.3.nupkg.sha512"
     },
     "Speckle.Revit.API/2023.0.0": {
       "type": "package",
@@ -1868,12 +1653,12 @@
       "path": "system.appcontext/4.3.0",
       "hashPath": "system.appcontext.4.3.0.nupkg.sha512"
     },
-    "System.Buffers/4.5.0": {
+    "System.Buffers/4.3.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-pL2ChpaRRWI/p4LXyy4RgeWlYF2sgfj/pnVMvBqwNFr5cXg7CXNnWZWxrOONLg8VGdFB8oB+EG2Qw4MLgTOe+A==",
-      "path": "system.buffers/4.5.0",
-      "hashPath": "system.buffers.4.5.0.nupkg.sha512"
+      "sha512": "sha512-ratu44uTIHgeBeI0dE8DWvmXVBSo4u7ozRZZHOMmK/JPpYyo0dAfgSiHlpiObMQ5lEtEyIXA40sKRYg5J6A8uQ==",
+      "path": "system.buffers/4.3.0",
+      "hashPath": "system.buffers.4.3.0.nupkg.sha512"
     },
     "System.Collections/4.3.0": {
       "type": "package",
@@ -1888,13 +1673,6 @@
       "sha512": "sha512-ztl69Xp0Y/UXCL+3v3tEU+lIy+bvjKNUmopn1wep/a291pVPK7dxBd6T7WnlQqRog+d1a/hSsgRsmFnIBKTPLQ==",
       "path": "system.collections.concurrent/4.3.0",
       "hashPath": "system.collections.concurrent.4.3.0.nupkg.sha512"
-    },
-    "System.ComponentModel.Annotations/4.5.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-UxYQ3FGUOtzJ7LfSdnYSFd7+oEv6M8NgUatatIN2HxNtDdlcvFAf+VIq4Of9cDMJEJC0aSRv/x898RYhB4Yppg==",
-      "path": "system.componentmodel.annotations/4.5.0",
-      "hashPath": "system.componentmodel.annotations.4.5.0.nupkg.sha512"
     },
     "System.Console/4.3.0": {
       "type": "package",
@@ -2099,12 +1877,12 @@
       "path": "system.reflection.primitives/4.3.0",
       "hashPath": "system.reflection.primitives.4.3.0.nupkg.sha512"
     },
-    "System.Reflection.TypeExtensions/4.7.0": {
+    "System.Reflection.TypeExtensions/4.3.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-VybpaOQQhqE6siHppMktjfGBw1GCwvCqiufqmP8F1nj7fTUNtW35LOEt3UZTEsECfo+ELAl/9o9nJx3U91i7vA==",
-      "path": "system.reflection.typeextensions/4.7.0",
-      "hashPath": "system.reflection.typeextensions.4.7.0.nupkg.sha512"
+      "sha512": "sha512-7u6ulLcZbyxB5Gq0nMkQttcdBTx57ibzw+4IOXEfR+sXYQoHvjW5LTLyNr8O22UIMrqYbchJQJnos4eooYzYJA==",
+      "path": "system.reflection.typeextensions/4.3.0",
+      "hashPath": "system.reflection.typeextensions.4.3.0.nupkg.sha512"
     },
     "System.Resources.ResourceManager/4.3.0": {
       "type": "package",
@@ -2119,13 +1897,6 @@
       "sha512": "sha512-JufQi0vPQ0xGnAczR13AUFglDyVYt4Kqnz1AZaiKZ5+GICq0/1MH/mO/eAJHt/mHW1zjKBJd7kV26SrxddAhiw==",
       "path": "system.runtime/4.3.0",
       "hashPath": "system.runtime.4.3.0.nupkg.sha512"
-    },
-    "System.Runtime.CompilerServices.Unsafe/4.5.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-Zh8t8oqolRaFa9vmOZfdQm/qKejdqz0J9kr7o2Fu0vPeoH3BL1EOXipKWwkWtLT1JPzjByrF19fGuFlNbmPpiw==",
-      "path": "system.runtime.compilerservices.unsafe/4.5.1",
-      "hashPath": "system.runtime.compilerservices.unsafe.4.5.1.nupkg.sha512"
     },
     "System.Runtime.Extensions/4.3.0": {
       "type": "package",
@@ -2224,13 +1995,6 @@
       "sha512": "sha512-YVMK0Bt/A43RmwizJoZ22ei2nmrhobgeiYwFzC4YAN+nue8RF6djXDMog0UCn+brerQoYVyaS+ghy9P/MUVcmw==",
       "path": "system.text.encoding.extensions/4.3.0",
       "hashPath": "system.text.encoding.extensions.4.3.0.nupkg.sha512"
-    },
-    "System.Text.Encodings.Web/4.5.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-Xg4G4Indi4dqP1iuAiMSwpiWS54ZghzR644OtsRCm/m/lBMG8dUBhLVN7hLm8NNrNTR+iGbshCPTwrvxZPlm4g==",
-      "path": "system.text.encodings.web/4.5.0",
-      "hashPath": "system.text.encodings.web.4.5.0.nupkg.sha512"
     },
     "System.Text.Json/5.0.2": {
       "type": "package",

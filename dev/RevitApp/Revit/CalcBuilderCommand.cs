@@ -19,7 +19,7 @@ namespace Calc.RevitApp.Revit
         {
             // dependencies are resolved at the point of command loading rather than command execution
             // so we implement the assembly resolve event here
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+            //AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
@@ -37,7 +37,7 @@ namespace Calc.RevitApp.Revit
 
                 ElementSourceHandler elementSourceHandler = new ElementSourceHandler(uidoc, new RevitExternalEventHandler());
                 RevitImageCreator imageCreator = new RevitImageCreator(doc);
-                ElementSender elementSender = new ElementSender(doc, loginVM.CalcStore.Config);
+                ElementSender elementSender = new ElementSender(doc, loginVM.CalcStore.Config, App.RevitVersion);
                 BuilderViewModel builderViewModel = new BuilderViewModel(loginVM.CalcStore, elementSourceHandler, imageCreator, elementSender);
                 CalcBuilderView builderView = new CalcBuilderView(builderViewModel);
 
