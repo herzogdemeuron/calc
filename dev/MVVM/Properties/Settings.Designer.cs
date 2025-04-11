@@ -61,6 +61,7 @@ namespace Calc.MVVM.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2024-10-12")]
         public global::System.DateTime LastTime {
             get {
                 return ((global::System.DateTime)(this["LastTime"]));

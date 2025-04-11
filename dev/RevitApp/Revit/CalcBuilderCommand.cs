@@ -58,8 +58,8 @@ namespace Calc.RevitApp.Revit
             // for general case
             string assemblyLocation = Assembly.GetExecutingAssembly().Location;
             // for pyrevit invoked case
-            string assemblyLocationHdM = "C:\\HdM-DT\\RevitCSharpExtensions\\calc-test-bin\\bin";
-
+            //string assemblyLocationHdM = "C:\\HdM-DT\\RevitCSharpExtensions\\calc-test-bin\\bin";
+            string assemblyLocationHdM = "C:\\source\\calc\\bin\\net8.0-windows";
             string assemblyFolder = string.IsNullOrEmpty(assemblyLocation) ?
                 assemblyLocationHdM : Path.GetDirectoryName(assemblyLocation);
             string assemblyName = new AssemblyName(args.Name).Name;

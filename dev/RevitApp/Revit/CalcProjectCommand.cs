@@ -19,14 +19,15 @@ namespace Calc.RevitApp.Revit
             // dependencies are resolved at the point of command loading rather than command execution
             // so we implement the assembly resolve event here
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+
         }
 
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             try
             {
+
                 App.RevitVersion = commandData.Application.Application.VersionNumber;
-                AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
                 Document doc = commandData.Application.ActiveUIDocument.Document;
 
                 LoginViewModel loginVM = new LoginViewModel(true, "Calc Project Login");
@@ -53,24 +54,21 @@ namespace Calc.RevitApp.Revit
 
         private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            // for general case
-            string assemblyLocation = Assembly.GetExecutingAssembly().Location;
-            // for pyrevit invoked case
-            string assemblyLocationHdM = "C:\\HdM-DT\\RevitCSharpExtensions\\calc-test-bin\\bin";
-
-            string assemblyFolder = string.IsNullOrEmpty(assemblyLocation) ?
-                assemblyLocationHdM : Path.GetDirectoryName(assemblyLocation);
-            string assemblyName = new AssemblyName(args.Name).Name;
-            if (assemblyName.EndsWith(".Resources"))
+            if (args.Name.Contains(".resources"))
             {
-                assemblyName = assemblyName.Substring(0, assemblyName.Length - 10);
+                Debug.WriteLine("Ignoring resource satellite assembly resolve for: " + args.Name);
+                return null;
             }
-            string assemblyPath = Path.Combine(assemblyLocationHdM, assemblyName + ".dll");
+            string baseDirectory = "C:\\source\\calc\\bin\\net8.0-windows";
+            string assemblyName = new AssemblyName(args.Name).Name;
+
+            string assemblyPath = Path.Combine(baseDirectory, assemblyName + ".dll");
+
+            Debug.WriteLine($"Attempting to resolve {assemblyName} at {assemblyPath}...");
 
             if (File.Exists(assemblyPath))
             {
                 return Assembly.LoadFrom(assemblyPath);
-
             }
             else
             {
