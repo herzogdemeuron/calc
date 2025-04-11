@@ -38,7 +38,7 @@ namespace SpeckleSender
             IsValid = true;
             this.doc = doc;
             //revitAppName = HostApplications.Revit.GetVersion(HostAppVersion.v2023);
-            revitAppName = "Revit " + revitVersion;
+            revitAppName = "Revit" + revitVersion;
             var speckleKit = KitManager.GetDefaultKit();
             speckleConverter = speckleKit.LoadConverter(revitAppName);
             speckleConverter.SetContextDocument(doc);
