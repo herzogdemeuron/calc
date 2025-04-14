@@ -8,13 +8,19 @@ set "BASE_TARGET_DIR=C:\ProgramData\Autodesk\Revit\Addins"
 echo Choose Revit version:
 echo 2023
 echo 2024
+echo 2025
 set /p "choice=Enter your choice: "
 
 :: Set the chosen year based on user input
 if "%choice%"=="2023" (
     set "YEAR=2023"
+    set "DLL_SUBFOLDER=net48"
 ) else if "%choice%"=="2024" (
     set "YEAR=2024"
+    set "DLL_SUBFOLDER=net48"
+) else if "%choice%"=="2025" (
+    set "YEAR=2025"
+    set "DLL_SUBFOLDER=net8.0-windows"
 ) else (
     echo Invalid choice. Exiting...
 	pause
@@ -23,6 +29,7 @@ if "%choice%"=="2023" (
 
 :: Set source and target directories
 set "BIN_SOURCE=..\bin"
+set "DLL_SOURCE=..\bin\%DLL_SUBFOLDER%"
 set "ADDIN_SOURCE=.\revit\RevitCalc%YEAR%.addin"
 set "TARGET_DIR=%BASE_TARGET_DIR%\%YEAR%"
 set "CALCREVIT_DIR=%TARGET_DIR%\CalcRevit"
@@ -30,6 +37,11 @@ set "CALCREVIT_DIR=%TARGET_DIR%\CalcRevit"
 :: Check if source directories and files exist
 if not exist "%BIN_SOURCE%" (
     echo Error: bin folder not found.
+    exit /b 1
+)
+
+if not exist "%DLL_SOURCE%" (
+    echo Error: %DLL_SOURCE% folder not found.
     exit /b 1
 )
 
@@ -42,12 +54,12 @@ if not exist "%ADDIN_SOURCE%" (
 if not exist "%TARGET_DIR%" mkdir "%TARGET_DIR%"
 if not exist "%CALCREVIT_DIR%" mkdir "%CALCREVIT_DIR%"
 
-:: Copy bin folder to CalcRevit directory
-echo Copying bin folder to CalcRevit directory...
+:: Copy the correct DLL subfolder to CalcRevit directory
+echo Copying %DLL_SUBFOLDER% folder to CalcRevit directory...
 if exist "%CALCREVIT_DIR%" (
     echo Overwriting existing files in CalcRevit directory...
 )
-xcopy "%BIN_SOURCE%" "%CALCREVIT_DIR%" /E /I /Y /Q
+xcopy "%DLL_SOURCE%" "%CALCREVIT_DIR%" /E /I /Y /Q
 
 :: Copy addin file to target directory
 echo Copying RevitCalc%YEAR%.addin file...
