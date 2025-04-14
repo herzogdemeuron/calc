@@ -26,8 +26,9 @@ namespace Calc.RevitApp.Revit
         {
             try
             {
+                string version = commandData.Application.Application.VersionNumber;
+                App.RevitVersion = int.Parse(version);
 
-                App.RevitVersion = commandData.Application.Application.VersionNumber;
                 Document doc = commandData.Application.ActiveUIDocument.Document;
 
                 LoginViewModel loginVM = new LoginViewModel(true, "Calc Project Login");
@@ -54,12 +55,14 @@ namespace Calc.RevitApp.Revit
 
         private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
+            // if revit version is greater than 2024, do not resolve
+            if (App.RevitVersion > 2024) return null;
             if (args.Name.Contains(".resources"))
             {
                 Debug.WriteLine("Ignoring resource satellite assembly resolve for: " + args.Name);
                 return null;
             }
-            string baseDirectory = "C:\\source\\calc\\bin\\net8.0-windows";
+            string baseDirectory = "C:\\HdM-DT\\RevitCSharpExtensions\\calc-test-bin\\bin\\net48";
             string assemblyName = new AssemblyName(args.Name).Name;
 
             string assemblyPath = Path.Combine(baseDirectory, assemblyName + ".dll");
