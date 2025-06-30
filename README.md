@@ -3,7 +3,7 @@
 
 ## Calc Overview
 Calc is a tool for architects to rapidly assess the environmental impact of early design phases. Our open data approach leverages:
-- **Autodesk Revit** for design authoring
+- **Autodesk Revit** for design authoring (2023-2025 supported)
 - **Directus** for centralized database management
 - **Speckle** for geometry snapshot handling and 3D dashboard visuals
 
