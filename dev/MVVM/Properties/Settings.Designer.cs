@@ -8,18 +8,15 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System;
-
 namespace Calc.MVVM.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.7.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.13.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-        internal DateTime LastTime;
-
+        
         public static Settings Default {
             get {
                 return defaultInstance;
@@ -61,6 +58,17 @@ namespace Calc.MVVM.Properties {
                 this["Password"] = value;
             }
         }
-
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2024-10-12")]
+        public global::System.DateTime LastTime {
+            get {
+                return ((global::System.DateTime)(this["LastTime"]));
+            }
+            set {
+                this["LastTime"] = value;
+            }
+        }
     }
 }

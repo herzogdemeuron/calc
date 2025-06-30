@@ -1,19 +1,34 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(TargetFramework)'=='net48'">
+		<DefineConstants>NET48</DefineConstants>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="RevitSharedResources2023" Version="2.20.1" />
-    <PackageReference Include="Speckle.Core" Version="2.20.1" />
-    <PackageReference Include="Speckle.Objects.Converter.Revit2023" Version="2.20.1" />
-    <PackageReference Include="Speckle.Revit.API" Version="2023.0.0" />
-  </ItemGroup>
+	<PropertyGroup Condition="'$(TargetFramework)'=='net8.0-windows'">
+		<DefineConstants>NET8</DefineConstants>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Calc\Core\Core.csproj" />
-    <ProjectReference Include="..\Core\Core.csproj" />
-  </ItemGroup>
+	<!-- Common references for all target frameworks -->
+	<ItemGroup>
+		<PackageReference Include="Speckle.Core" Version="2.21.3" />
+		<ProjectReference Include="..\Core\Core.csproj" />
+		<PackageReference Include="Speckle.Revit.API" Version="2023.0.0" />
+	</ItemGroup>
 
+	
+	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
+	  <PackageReference Include="RevitSharedResources2025">
+	    <Version>2.21.3</Version>
+	  </PackageReference>
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+		<PackageReference Include="RevitSharedResources2023">
+			<Version>2.21.3</Version>
+		</PackageReference>
+	</ItemGroup>
+	
 </Project>

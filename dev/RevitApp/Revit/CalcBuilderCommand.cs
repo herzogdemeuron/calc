@@ -25,7 +25,8 @@ namespace Calc.RevitApp.Revit
         {
             try
             {
-                App.RevitVersion = commandData.Application.Application.VersionNumber;
+                string version = commandData.Application.Application.VersionNumber;
+                App.RevitVersion = int.Parse(version);
                 UIDocument uidoc = commandData.Application.ActiveUIDocument;
                 Document doc = commandData.Application.ActiveUIDocument.Document;
 
@@ -37,7 +38,7 @@ namespace Calc.RevitApp.Revit
 
                 ElementSourceHandler elementSourceHandler = new ElementSourceHandler(uidoc, new RevitExternalEventHandler());
                 RevitImageCreator imageCreator = new RevitImageCreator(doc);
-                ElementSender elementSender = new ElementSender(doc, loginVM.CalcStore.Config);
+                ElementSender elementSender = new ElementSender(doc, loginVM.CalcStore.Config, App.RevitVersion);
                 BuilderViewModel builderViewModel = new BuilderViewModel(loginVM.CalcStore, elementSourceHandler, imageCreator, elementSender);
                 CalcBuilderView builderView = new CalcBuilderView(builderViewModel);
 
@@ -55,15 +56,22 @@ namespace Calc.RevitApp.Revit
 
         private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            // for general case
-            string assemblyLocation = Assembly.GetExecutingAssembly().Location;
-            // for pyrevit invoked case
-            string assemblyLocationHdM = "C:\\HdM-DT\\RevitCSharpExtensions\\calc-test-bin\\bin";
+            string baseDirectory = "C:\\HdM-DT\\RevitCSharpExtensions\\calc-test-bin\\bin\\net48";
+            // if revit version is greater than 2024, do not resolve
+            if (App.RevitVersion > 2024)
+            {
+                baseDirectory = "C:\\HdM-DT\\RevitCSharpExtensions\\calc-test-bin\\bin\\net8.0-windows";
+            }
+            if (args.Name.Contains(".resources"))
+            {
+                Debug.WriteLine("Ignoring resource satellite assembly resolve for: " + args.Name);
+                return null;
+            }
+           string assemblyName = new AssemblyName(args.Name).Name;
 
-            string assemblyFolder = string.IsNullOrEmpty(assemblyLocation) ?
-                assemblyLocationHdM : Path.GetDirectoryName(assemblyLocation);
-            string assemblyName = new AssemblyName(args.Name).Name;
-            string assemblyPath = Path.Combine(assemblyFolder, assemblyName + ".dll");
+            string assemblyPath = Path.Combine(baseDirectory, assemblyName + ".dll");
+
+            Debug.WriteLine($"Attempting to resolve {assemblyName} at {assemblyPath}...");
 
             if (File.Exists(assemblyPath))
             {
@@ -71,6 +79,7 @@ namespace Calc.RevitApp.Revit
             }
             else
             {
+                Debug.WriteLine($"Assembly {assemblyName} not found at {assemblyPath}!");
                 return null;
             }
         }

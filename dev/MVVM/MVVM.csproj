@@ -1,92 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
+	<TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
     <AssemblyName>CalcMVVM</AssemblyName>
     <RootNamespace>Calc.MVVM</RootNamespace>
-    <BaseOutputPath></BaseOutputPath>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Resources\button_add.png" />
-    <None Remove="Resources\button_back.png" />
-    <None Remove="Resources\button_color.png" />
-    <None Remove="Resources\button_cursor.png" />
-    <None Remove="Resources\button_delete.png" />
-    <None Remove="Resources\button_edit.png" />
-    <None Remove="Resources\button_error.png" />
-    <None Remove="Resources\button_filter.png" />
-    <None Remove="Resources\button_image.png" />
-    <None Remove="Resources\button_issue.png" />
-    <None Remove="Resources\button_reload.png" />
-    <None Remove="Resources\button_save.png" />
-    <None Remove="Resources\button_trash.png" />
-    <None Remove="Resources\DT_logo.gif" />
-    <None Remove="Resources\dt_logo_small.png" />
-    <None Remove="Resources\icon_black_small.png" />
-    <None Remove="Resources\icon_builder.png" />
-    <None Remove="Resources\icon_builder_small.png" />
-    <None Remove="Resources\icon_project.png" />
-    <None Remove="Resources\icon_project_small.png" />
-    <None Remove="ToggleButtonTemplate.xaml" />
-    <None Remove="Views\AssemblySelectionView.xaml" />
-    <None Remove="Views\ButtonResource.xaml" />
-    <None Remove="Views\CalcProjectView.xaml" />
-    <None Remove="Views\ComboBoxResource.xaml" />
-    <None Remove="Views\ListViewResource.xaml" />
-    <None Remove="Views\LoginView.xaml" />
-    <None Remove="Views\MainViewResources.xaml" />
-    <None Remove="Views\MaterialSelectionView.xaml" />
-  </ItemGroup>
+<PropertyGroup Condition="'$(TargetFramework)'=='net48'">
+	<DefineConstants>NET48</DefineConstants>
+	<UseWPF>true</UseWPF>
+</PropertyGroup>
+
+<PropertyGroup Condition="'$(TargetFramework)'=='net8.0-windows'">
+	<DefineConstants>NET8</DefineConstants>
+	<UseWPF>true</UseWPF>
+	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+</PropertyGroup>
+
 
   <ItemGroup>
     <PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Page Include="Views\ListViewResource.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\AssemblySelectionView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MaterialSelectionView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\LoginView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ComboBoxResource.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\CalcBuilderView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\CalcProjectView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainViewResources.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ButtonResource.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System.Xaml" />
+	  <Reference Include="PresentationCore" />
+	  <Reference Include="PresentationFramework" />
+	  <Reference Include="System.Xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -128,10 +72,5 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-
-<PropertyGroup>
-	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-	<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-</PropertyGroup>
 
 </Project>
