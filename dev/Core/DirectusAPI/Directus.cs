@@ -228,37 +228,41 @@ namespace Calc.Core.DirectusAPI
                 throw new FileNotFoundException("Image file not found.", filePath);
             }
 
-            // Prepare the multipart/form-data request
-            var content = new MultipartFormDataContent();
-            var fileContent = new StreamContent(File.OpenRead(filePath));
-
-            // Set content type based on the file type
-            switch (fileType.ToLower())
+            // Create a factory that creates NEW content each time it's called
+            var contentFactory = new Func<HttpContent>(() =>
             {
-                case "image":
-                    fileContent.Headers.ContentType = new MediaTypeHeaderValue("image/png");
-                    break;
-                case "json":
-                    fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                    break;
-                default:
-                    throw new ArgumentException("Unsupported file type", nameof(fileType));
-            }
+                var content = new MultipartFormDataContent();
+                var fileContent = new StreamContent(File.OpenRead(filePath));
 
-            // Specify the filename in the Content-Disposition header
-            fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
-            {
-                Name = "\"file\"",
-                FileName = $"\"{newFileName}\""
-            };
+                // Set content type based on the file type
+                switch (fileType.ToLower())
+                {
+                    case "image":
+                        fileContent.Headers.ContentType = new MediaTypeHeaderValue("image/png");
+                        break;
+                    case "json":
+                        fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                        break;
+                    default:
+                        throw new ArgumentException("Unsupported file type", nameof(fileType));
+                }
 
-            if (folderId != null)
-            {
-                content.Add(new StringContent(folderId), "folder");
-            }
-            content.Add(fileContent, "file", Path.GetFileName(filePath));
+                // Specify the filename in the Content-Disposition header
+                fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                {
+                    Name = "\"file\"",
+                    FileName = $"\"{newFileName}\""
+                };
 
-            var contentFactory = () => content;
+                if (folderId != null)
+                {
+                    content.Add(new StringContent(folderId), "folder");
+                }
+                content.Add(fileContent, "file", Path.GetFileName(filePath));
+
+                return content;
+            });
+
             HttpResponseMessage response = await RequestWithRetry($"{baseUrl}/files", contentFactory);
             var responseContent = await ReadResponseContent(response);
             var uploadResponse = JsonConvert.DeserializeObject<DirectusFileUploadResponse>(responseContent);
