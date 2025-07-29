@@ -175,6 +175,7 @@ namespace Calc.MVVM.ViewModels
             CurrentQueryTemplateItem.NotifyNodePropertyChange(); //better ways to do this?
             CurrentLeftoverQuerySetItem.NotifyNodePropertyChange(); // todo: check if this is needed
             var resetItems = CurrentQueryTemplateItem.SubNodeItems.Select(n => n.Host).ToList();
+            resetItems.AddRange(CurrentLeftoverQuerySetItem.SubNodeItems.Select(n => n.Host).ToList());
             visualizer.ResetView(resetItems);
         }
 

@@ -52,7 +52,7 @@ namespace Calc.MVVM.ViewModels
                 var queries = qryTemplate.Queries;
                 if (queries == null || queries.Count() == 0)
                     return null;
-                return queries.SelectMany(t => t.AssemblySnapshots).ToList();
+                return queries.SelectMany(q => q.AssemblySnapshots).ToList();
             }
         }
         public bool HasResults => (AssemblySnapshots != null && AssemblySnapshots.Count > 0);

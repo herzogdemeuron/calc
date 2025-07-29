@@ -22,10 +22,10 @@ namespace Calc.Core.Snapshots
             foreach (var element in branch.Elements)
             
                 foreach (var assembly in branch.Assemblies)
-                {               
+                {
                     var s = CreateAssemblySnapshots(assembly, element, branch.Query.Name);
-                    rawSnapshots.AddRange(s);                    
-                }            
+                    rawSnapshots.AddRange(s);
+                }
 
             branch.AssemblySnapshots = MergeAssemblySnapshots(rawSnapshots);
         }
