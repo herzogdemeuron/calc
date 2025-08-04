@@ -1,4 +1,5 @@
 ﻿using Calc.MVVM.Services;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Calc.MVVM.ViewModels
@@ -23,16 +24,13 @@ namespace Calc.MVVM.ViewModels
         /// </summary>
         internal void HandleSavingResults()
         {
-            int count = calculationVM.AssemblySnapshots?.Count??0;
+            int count = calculationVM.AssemblySnapshots?
+                .Sum(assembly => assembly.ElementTypes?
+                .Sum(elType => elType.ElementIds?.Count 
+                ?? 0)?? 0)?? 0;
+
             string message;
-            if (count>100)
-            {
-                message = $"{count} elements to save,\nthis may take a while.";
-            }
-            else
-            {
-                message = $"{count} elements to save.";
-            }
+            message = $"{count} elements to save.";            
             visibilityVM.ShowSavingOverlay(message);
         }
 

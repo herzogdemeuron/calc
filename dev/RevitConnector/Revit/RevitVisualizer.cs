@@ -39,7 +39,8 @@ namespace Calc.RevitConnector.Revit
             {
                 t.Start();
                 View currentView = doc.ActiveView;
-                currentView.TemporaryViewModes.DeactivateAllModes();
+
+                currentView.TemporaryViewModes?.DeactivateAllModes();
                 foreach (IGraphNode node in currentNodes)
                 {
                     List<ElementId> elementIds = StringsToElementIds(node.ElementIds);
@@ -83,7 +84,7 @@ namespace Calc.RevitConnector.Revit
 
         private void IsolateElements(IGraphNode node, View view)
         {
-            view.TemporaryViewModes.DeactivateMode(TemporaryViewMode.TemporaryHideIsolate);
+            view.TemporaryViewModes?.DeactivateMode(TemporaryViewMode.TemporaryHideIsolate);
             List<string> elementIds = node?.ElementIds ?? new List<string>();
             var sectionBoxId = GetSectionBoxId(view);
             if (sectionBoxId != null)

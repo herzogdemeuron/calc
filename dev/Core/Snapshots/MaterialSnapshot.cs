@@ -38,8 +38,9 @@ namespace Calc.Core.Snapshots
         internal void ApplyAmountRatio(double amountRatio)
         {
             MaterialAmount = MaterialAmount * amountRatio;
-            if (MaterialGwp.HasValue) CalculatedGwp = MaterialGwp * MaterialAmount;
-            if (MaterialGe.HasValue) CalculatedGe = MaterialGe * MaterialAmount;
+            // use calculated snapshot instead of material kpi
+            if (MaterialGwp.HasValue) CalculatedGwp = CalculatedGwp * amountRatio;
+            if (MaterialGe.HasValue) CalculatedGe = CalculatedGe * amountRatio;
         }
 
         /// <summary>
