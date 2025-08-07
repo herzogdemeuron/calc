@@ -19,7 +19,7 @@ graph TD
     subgraph ViewModel (C#)
         direction LR
         ProjectViewModel
-        SaveCommand[ICommand Save]
+        SaveCommand["ICommand Save"]
     end
 
     subgraph Model (Calc.Core)
@@ -28,10 +28,11 @@ graph TD
         CoreServices[SnapshotMaker, DirectusManager]
     end
 
-    Button -- Click Event --> ProjectViewModel(SaveCommand)
-    Window -- DataContext --> ProjectViewModel
-    ProjectViewModel -- Reads/Writes --> CoreObjects
-    ProjectViewModel -- Calls --> CoreServices
+    Button --"Click Event<br/>(Binds to Command)"--> SaveCommand
+    Window --"DataContext"--> ProjectViewModel
+    ProjectViewModel --"Has a"--> SaveCommand
+    ProjectViewModel --"Reads/Writes"--> CoreObjects
+    ProjectViewModel --"Calls"--> CoreServices
 
     style Button fill:#f9f,stroke:#333,stroke-width:2px
 ```
