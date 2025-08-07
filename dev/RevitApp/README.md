@@ -22,7 +22,7 @@ sequenceDiagram
     App->>RibbonMaker: Create()
     RibbonMaker-->>Revit: Creates Ribbon UI
 
-    User->>Revit: Clicks 'Calc Project' Button
+    User->>Revit: Clicks 'Calc Project/Builder' Button
     Revit->>Command: Execute()
 
     Command->>ViewModel: new(connectors, store)
