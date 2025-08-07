@@ -57,15 +57,15 @@ graph TD
 
 ### Modules
 
-*   **`Calc.Core`**: The central hub of the application. It contains the core business logic, data models, and services for communicating with the Directus backend. It is designed to be completely independent of any host application (like Revit).
+*   [Calc.Core](/dev/Core/README.md): The central hub of the application. It contains the core business logic, data models, and services for communicating with the Directus backend. It is designed to be completely independent of any host application (like Revit).
 
-*   **`Calc.RevitConnector`**: Acts as a bridge between the `Core` module and the Revit application. It implements the interfaces defined in `Core` to provide Revit-specific functionality, such as accessing model data and visualizing results.
+*   [Calc.RevitConnector](/dev/RevitConnector/README.md): Acts as a bridge between the `Core` module and the Revit application. It implements the interfaces defined in `Core` to provide Revit-specific functionality, such as accessing model data and visualizing results.
 
-*   **`Calc.SpeckleSender`**: A specialized connector responsible for sending geometry and data to Speckle. It implements the `IElementSender` interface from `Core` and handles the conversion of Revit elements to Speckle objects.
+*   [Calc.SpeckleSender](/dev/SpeckleSender/README.md): A specialized connector responsible for sending geometry and data to Speckle. It implements the `IElementSender` interface from `Core` and handles the conversion of Revit elements to Speckle objects.
 
-*   **`Calc.MVVM`**: The User Interface (UI) layer, built using the Model-View-ViewModel (MVVM) pattern with WPF. It provides the windows and controls that the user interacts with.
+*   [Calc.MVVM](/dev/MVVM/README.md): The User Interface (UI) layer, built using the Model-View-ViewModel (MVVM) pattern with WPF. It provides the windows and controls that the user interacts with.
 
-*   **`Calc.RevitApp`**: The entry point for the Revit add-in. It ties all the other modules together. It initializes the application, creates the Revit ribbon, and launches the UI.
+*   [Calc.RevitApp](/dev/RevitApp/README.md): The entry point for the Revit add-in. It ties all the other modules together. It initializes the application, creates the Revit ribbon, and launches the UI.
 
 ### Dependency Injection and Interfaces
 
