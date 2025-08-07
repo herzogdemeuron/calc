@@ -6,34 +6,46 @@ The `Calc.Core` module is the heart of the `Calc` application. It contains all t
 
 ## Architecture
 
-The diagram below shows the main components within the `Calc.Core` module and how they interact with external services and other modules.
+The diagram below shows the relationships between the main components (class groupings) within the `Calc.Core` module.
 
 ```mermaid
 graph TD
-    subgraph Calc.Core
-        Objects
-        DirectusAPI
+    subgraph Interfaces
+        IElementCreator
+        IVisualizer
+        IElementSender
+    end
+
+    subgraph Objects
+        direction LR
+        CalcElement
+        Assembly
+        Material
+        QueryTemplate
+    end
+
+    subgraph Services
+        direction LR
         Calculation
+        DirectusAPI
         Snapshots
-        Interfaces
     end
 
-    subgraph Connectors
-        RevitConnector
-        SpeckleSender
-    end
+    Calculation -- Uses --> Material
+    Calculation -- Uses --> Assembly
+    Calculation -- Creates --> Snapshots
 
-    subgraph External Services
-        Directus[Directus API]
-    end
+    DirectusAPI -- Provides --> QueryTemplate
+    DirectusAPI -- Provides --> Material
+    DirectusAPI -- Consumes --> Snapshots
 
-    DirectusAPI -- Fetches/Sends Data --> Directus
-    Calculation -- Uses --> Objects
-    Snapshots -- Uses --> Objects
-    Snapshots -- Uses --> Calculation
+    IElementCreator -- Creates --> CalcElement
+    IVisualizer -- Acts on --> CalcElement
+    IElementSender -- Sends --> Assembly
 
-    RevitConnector -- Implements --> Interfaces
-    SpeckleSender -- Implements --> Interfaces
+    style Interfaces fill:#D6EAF8,stroke:#5DADE2,stroke-width:2px
+    style Objects fill:#D5F5E3,stroke:#58D68D,stroke-width:2px
+    style Services fill:#FDEDEC,stroke:#F1948A,stroke-width:2px
 ```
 
 ## Key Sub-Modules and Classes
