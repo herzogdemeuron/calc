@@ -56,7 +56,7 @@ This is the most critical part of the Core module. It defines all the fundamenta
 #### `Assemblies`
 - **`Assembly`**: Represents a building assembly, containing a list of `AssemblyComponent`s and other metadata.
 - **`AssemblyComponent`**: A single component within an assembly, typically a layer of material.
-- **`AssemblyData`**: Holds the data for an assembly that is sent to Speckle.
+- **`AssemblyData`**: Wraps the data for an assembly that is sent to Speckle.
 - **`AssemblyRecord`**: A record of an assembly's composition, which gets serialized and stored in Revit.
 
 #### `Elements`
@@ -69,8 +69,8 @@ This is the most critical part of the Core module. It defines all the fundamenta
 - **`Branch`**: Represents a node in the query results tree structure.
 
 #### `Mappings`
-- **`Mapping`**: Defines a set of rules for mapping `CalcElement`s to `Assembly`s.
-- **`MappingItem`**: A single rule within a `Mapping`.
+- **`Mapping`**: Defines a set of rules for mapping `Branch`s to `Assembly`s.
+- **`MappingItem`**: A single rule within a `Mapping`, including the path of the mapping.
 
 #### `Materials`
 - **`Material`**: Represents a building material and its associated environmental data.
@@ -79,7 +79,7 @@ This is the most critical part of the Core module. It defines all the fundamenta
 ### 2. `DirectusAPI`
 This component handles all interactions with the Directus backend.
 - **`DirectusManager`**: The main class for managing the connection and data retrieval from Directus.
-- **`StorageDrivers`**: A set of classes, each responsible for fetching a specific type of data from Directus (e.g., `AssemblyDriver`, `MaterialDriver`, `QueryTemplateDriver`).
+- **`StorageDrivers`**: A set of classes, each responsible for fetching/updating a specific type of data from Directus (e.g., `AssemblyDriver`, `MaterialDriver`, `QueryTemplateDriver`).
 
 ### 3. `Calculation`
 This contains the logic for performing the environmental impact calculations.
