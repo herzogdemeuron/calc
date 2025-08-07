@@ -19,11 +19,6 @@ graph LR
         Implementations[RevitElementCreator, RevitVisualizer, etc.] -- Implements --> Interfaces
         Implementations -- Calls --> RevitAPI[Revit API]
     end
-
-    subgraph Autodesk Revit
-        direction LR
-        RevitAPI
-    end
 ```
 
 ## Key Classes and Responsibilities
