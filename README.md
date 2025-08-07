@@ -22,6 +22,8 @@ Calc is a tool for architects to rapidly assess the environmental impact of earl
 - 🤩 Real-time Revit visualization for model branching and assembly validation
 - 🚀 Automated calculations uploaded to Directus using Calc schema
 
+[Developer Documentation](dev/README.md)
+
 ## Workflow Steps
 
 ### 1. Configure Data in Directus
