@@ -10,20 +10,17 @@ The diagram below illustrates how the MVVM pattern is implemented in this projec
 
 ```mermaid
 graph TD
-    subgraph View (XAML)
-        direction LR
+    subgraph View ["View (XAML)"]
         Window[CalcProjectView.xaml]
-        Button
+        Button[Button]
     end
 
-    subgraph ViewModel (C#)
-        direction LR
-        ProjectViewModel
+    subgraph ViewModel ["ViewModel (C#)"]
+        ProjectViewModel[ProjectViewModel]
         SaveCommand["ICommand Save"]
     end
 
-    subgraph Model (Calc.Core)
-        direction LR
+    subgraph Model ["Model (Calc.Core)"]
         CoreObjects[Assembly, Material, etc.]
         CoreServices[SnapshotMaker, DirectusManager]
     end
