@@ -42,11 +42,11 @@ graph TD
 
 ### Views (`Views` folder)
 
--   **`CalcBuilderView.xaml`**: The main window for the "Calc Builder" feature.
--   **`CalcProjectView.xaml`**: The main window for the "Calc Project" feature.
+-   **`CalcBuilderView.xaml`**: The main window for the "Calc Builder".
+-   **`CalcProjectView.xaml`**: The main window for the "Calc Project".
 -   **`LoginView.xaml`**: A window for handling user login.
--   **`AssemblySelectionView.xaml`**: A reusable view for selecting an existing assembly.
--   **`MaterialSelectionView.xaml`**: A reusable view for selecting materials.
+-   **`AssemblySelectionView.xaml`**: A reusable view for selecting an existing assembly in Calc Project.
+-   **`MaterialSelectionView.xaml`**: A reusable view for selecting materials in Calc Builder.
 -   **Resource Dictionaries**: `.xaml` files that define common styles for UI elements.
 
 ### ViewModels (`ViewModels` folder)
