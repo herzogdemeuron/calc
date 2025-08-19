@@ -697,7 +697,7 @@
                          Text="{Binding MappingVM.NewName}"/>
 
                 <Label HorizontalAlignment="Center"
-                       Content="Dupliacate From?"
+                       Content="Duplicated From"
                        FontSize="18"
                        Margin="10"/>
 
