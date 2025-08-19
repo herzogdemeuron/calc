@@ -58,7 +58,7 @@ namespace Calc.MVVM.ViewModels
         {
             Store = calcStore;
             this.visualizer = visualizer;
-            BranchesSwitch = false;
+            BranchesSwitch = true; // set default visual mode to queries(branches)
             TreeViewVisibility = Visibility.Collapsed;
         }
 
