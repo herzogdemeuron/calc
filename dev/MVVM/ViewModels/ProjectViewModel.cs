@@ -176,11 +176,13 @@ namespace Calc.MVVM.ViewModels
         internal void HandleViewToggleToAssembly()
         {
             NodeTreeVM.ColorNodesToAssembly();
+            DeselectTreeView?.Invoke(this, EventArgs.Empty);
         }
 
         internal void HandleViewToggleToBranch()
         {
             NodeTreeVM.ColorNodesToBranch();
+            DeselectTreeView?.Invoke(this, EventArgs.Empty);
         }
 
         internal void HandleSavingResults()
