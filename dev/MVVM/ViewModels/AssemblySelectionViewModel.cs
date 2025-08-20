@@ -21,7 +21,7 @@ namespace Calc.MVVM.ViewModels
     {
         private readonly CalcStore calcStore;
         private string currentSearchText;
-        private readonly AssemblyGroup defaultGroup = new AssemblyGroup() { Name = "All Groups", Id = 0 };
+        private readonly AssemblyGroup defaultGroup = new AssemblyGroup() { Name = "All Groups", Id = 0, Sort = 0 };
         private AssemblyGroup selectedAssemblyGroup;
         public ICollectionView AllAssembliesView { get; }
         public List<StandardModel> AllStandards { get; }

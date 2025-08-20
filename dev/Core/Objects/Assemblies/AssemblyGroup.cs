@@ -13,6 +13,10 @@ namespace Calc.Core.Objects.Assemblies
         [JsonProperty("id")]
         public int Id { get; set; }
 
+        [JsonProperty("sort")]
+        public int Sort { get; set; }
+
+
 
         public override bool Equals(object obj)
         {
