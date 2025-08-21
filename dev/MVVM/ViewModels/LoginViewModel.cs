@@ -17,13 +17,14 @@ namespace Calc.MVVM.ViewModels
     /// </summary>
     public class LoginViewModel : INotifyPropertyChanged
     {
+        public bool IsLoggedIn { get; set; } = false;
         public bool MainOrBuilder { get; }
         public Directus DirectusInstance { get; set; }
         public CalcStore CalcStore { get; set; }
         public string Title { get; set; }
         public string Password { get; set; }
         private readonly CancellationTokenSource cTokenSource = new CancellationTokenSource();
-        public bool FullyPrepared => DirectusInstance.Authenticated && CalcStore.AllDataLoaded;
+        public bool FullyPrepared => DirectusInstance.Authenticated && CalcStore.AllDataLoaded && IsLoggedIn;
         private bool authenticated = false;
         private bool canOK = true;
         public bool CanOK
@@ -240,7 +241,11 @@ namespace Calc.MVVM.ViewModels
                     return false;
                 }
                 // for builder directly return true
-                if (!MainOrBuilder) return true;
+                if (!MainOrBuilder)
+                {
+                    IsLoggedIn = true;
+                    return true;
+                }
                 // for main prepare for project selection
                 CanOK = true;
                 SelectionList = CalcStore.ProjectsAll.OfType<IShowName>().ToList();
@@ -259,6 +264,7 @@ namespace Calc.MVVM.ViewModels
                     CalcStore.ProjectSelected = project;
                     Properties.Settings.Default.LastProjectId = project.Id.ToString();
                     Properties.Settings.Default.Save();
+                    IsLoggedIn = true;
                     return true;
                 }
                 else

@@ -24,7 +24,8 @@ namespace Calc.MVVM.Views
 
         private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            LoginVM.CancelLoad();        
+            LoginVM.CancelLoad();
+            LoginVM.IsLoggedIn = false;
         }
 
         private void PasswordChanged(object sender, RoutedEventArgs e)
