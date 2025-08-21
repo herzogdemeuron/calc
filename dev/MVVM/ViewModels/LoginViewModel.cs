@@ -182,6 +182,22 @@ namespace Calc.MVVM.ViewModels
         }
 
         /// <summary>
+        /// Select the last used project on ui.
+        /// </summary>
+        private void AutoSelectLastProject()
+        {
+            string lastProjectId = Properties.Settings.Default.LastProjectId;
+            if (lastProjectId != null && SelectionList != null)
+            {
+                var target = SelectionList.OfType<CalcProject>().FirstOrDefault(p => p.Id.ToString() == lastProjectId);
+                if (target != null)
+                {
+                    Selected = target;
+                }
+            }
+        }
+
+        /// <summary>
         /// If the current time is within 1 hour of the last time, auto login (only for the same session).
         /// </summary>
         internal async Task<bool> HandleAutoLogin()
@@ -229,6 +245,7 @@ namespace Calc.MVVM.ViewModels
                 CanOK = true;
                 SelectionList = CalcStore.ProjectsAll.OfType<IShowName>().ToList();
                 SelectionText = "Select Project:";
+                AutoSelectLastProject();
                 SelectionVisibility = Visibility.Visible;
                 LoginVisibility = Visibility.Collapsed;
                 return false;
@@ -240,6 +257,8 @@ namespace Calc.MVVM.ViewModels
                 {
                     var project = (CalcProject)Selected;
                     CalcStore.ProjectSelected = project;
+                    Properties.Settings.Default.LastProjectId = project.Id.ToString();
+                    Properties.Settings.Default.Save();
                     return true;
                 }
                 else

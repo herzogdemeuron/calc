@@ -14,5 +14,8 @@
     <Setting Name="LastTime" Type="System.DateTime" Scope="User">
       <Value Profile="(Default)">2024-10-12</Value>
     </Setting>
+    <Setting Name="LastProjectId" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>
