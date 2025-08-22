@@ -37,6 +37,7 @@ namespace Calc.MVVM.Views
         {
             bool c = await LoginVM.HandleOK();
             if (c) this.Close();
+            LoginVM.IsLoggedIn = true;
         }
     }
 }

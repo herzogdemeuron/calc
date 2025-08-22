@@ -8,8 +8,10 @@
         xmlns:views="clr-namespace:Calc.MVVM.Views"
         d:DataContext="{d:DesignInstance Type=local:LoginViewModel}"
         mc:Ignorable="d"
-        Height="290"
-        Width="320"
+        SizeToContent="Height"
+        Width="330"
+        MinHeight="290"
+        MaxHeight="400"
         WindowStartupLocation="CenterScreen"
         Icon="pack://application:,,,/CalcMVVM;component/Resources/icon_black_small.png"
         Title="Calc Login"
@@ -67,17 +69,20 @@
                 Click="OkClicked"/>
 
 
-        <TextBlock x:Name="MessageLabel"
+        <TextBox x:Name="MessageLabel"
+                 IsReadOnly="True"
          Text="{Binding Message}"
          Grid.Row="3"
          Grid.ColumnSpan="3"
-         Padding="0,10,0,0"
+         BorderBrush="Transparent"
+         Padding="5"
          HorizontalAlignment="Center"
-         VerticalAlignment="Bottom"
+         VerticalAlignment="Top"
          Foreground="Crimson"
-         Width="330"
+         Height="auto"
+         Width="auto"
          TextWrapping="Wrap"
-         d:Text="Error while login! Error while login! Error while login! Error while login!"/>
+         d:Text="Error while login!"/>
 
         <Grid x:Name="LoginGrid"
               Grid.Row="1"
