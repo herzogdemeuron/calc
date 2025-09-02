@@ -39,8 +39,8 @@ namespace Calc.Core.Color
         public static void ColorBranchesByCarbon(List<Branch> branches)
         {
             if (branches.Count == 0) { return; }
-            var gwpColorCalculator = new GwpColorCalculator();
-            gwpColorCalculator.AssignGwpBasedColorsToLevel(branches);
+            var gwpColorMaker = new GwpColorMaker();
+            gwpColorMaker.AssignGwpBasedColorsToLevel(branches);
             
             // Recursively color sub-branches
             foreach (var branch in branches)

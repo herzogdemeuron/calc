@@ -9,7 +9,7 @@ namespace Calc.Core.Color
     /// Colors range from dark purple (low GWP) to green (high GWP).
     /// Branches with null GWP (no assemblies) get default gray color.
     /// </summary>
-    public class GwpColorCalculator
+    public class GwpColorMaker
     {
         private readonly HslColor _defaultColor = ItemPainter.DefaultColor;
         private readonly int _purpleHue = 270; // Dark purple
@@ -65,7 +65,7 @@ namespace Calc.Core.Color
                     // Check if we already calculated color for this GWP value
                     if (!gwpToColorMap.ContainsKey(gwp))
                     {
-                        gwpToColorMap[gwp] = CalculateHslColorForGwp(gwp, minGwp, gwpRange);
+                        gwpToColorMap[gwp] = MakeHslColorForGwp(gwp, minGwp, gwpRange);
                     }
                     
                     branch.HslColor = gwpToColorMap[gwp];
@@ -77,7 +77,7 @@ namespace Calc.Core.Color
         /// <summary>
         /// Calculates HSL color for a specific GWP value within the given range.
         /// </summary>
-        private HslColor CalculateHslColorForGwp(double gwp, double minGwp, double gwpRange)
+        private HslColor MakeHslColorForGwp(double gwp, double minGwp, double gwpRange)
         {
             int hue;
             
