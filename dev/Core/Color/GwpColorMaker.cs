@@ -12,9 +12,9 @@ namespace Calc.Core.Color
     public class GwpColorMaker
     {
         private readonly HslColor _defaultColor = ItemPainter.DefaultColor;
-        private readonly int _purpleHue = 270; // Dark purple
-        private readonly int _greenHue = 120;  // Green
-        private readonly int _saturation = 70;
+        private readonly int _purpleHue = 280; // Purple (low GWP)
+        private readonly int _yellowGreenHue = 80; // Yellow-green (high GWP)
+        private readonly int _saturation = 80; // Higher saturation for vivid colors
         private readonly int _lightness = 50;
 
         /// <summary>
@@ -91,10 +91,10 @@ namespace Calc.Core.Color
                 // Calculate position in range (0 to 1)
                 var normalizedPosition = (gwp - minGwp) / gwpRange;
                 
-                // Interpolate hue from dark purple (270) to green (120)
-                // Going from purple -> blue -> cyan -> green (counter-clockwise on color wheel)
-                // This maps 270° -> 240° -> 180° -> 120°
-                hue = (int)(_purpleHue - normalizedPosition * (_purpleHue - _greenHue));
+                // Interpolate hue from purple (280) to yellow-green (80)
+                // Going from purple -> blue -> cyan -> green -> yellow-green
+                // This maps 280° -> ... -> 80°
+                hue = (int)(_purpleHue - normalizedPosition * (_purpleHue - _yellowGreenHue));
             }
             
             return new HslColor(hue, _saturation, _lightness);
