@@ -359,10 +359,10 @@
                                 Uid="pack://application:,,,/CalcMVVM;component/Resources/button_color.png"
                                 ToolTip="Colorize Revit elements by query results"
                                 Style="{StaticResource ButtonStyle}"/>
-                        <Button x:Name="ColorByCO2Button"
+                        <Button x:Name="ColorByCarbonButton"
                                 Content="CO₂"
                                 Opacity="0.3"
-                                Tag="co2"
+                                Tag="carbon"
                                 Width="65"
                                 Click="ColorizeClicked"
                                 ToolTip="(coming soon) Colorize Revit elements by CO₂ benchmark"

@@ -179,9 +179,15 @@ namespace Calc.MVVM.ViewModels
             DeselectTreeView?.Invoke(this, EventArgs.Empty);
         }
 
-        internal void HandleViewToggleToBranch()
+        internal void HandleViewToggleToQuery()
         {
-            NodeTreeVM.ColorNodesToBranch();
+            NodeTreeVM.ColorNodesToQuery();
+            DeselectTreeView?.Invoke(this, EventArgs.Empty);
+        }
+
+        internal void HandleViewToggleToCarbon()
+        {
+            NodeTreeVM.ColorNodesToCarbon();
             DeselectTreeView?.Invoke(this, EventArgs.Empty);
         }
 

@@ -36,6 +36,17 @@ namespace Calc.Core.Color
             SetByIdentifier(allBranches);
         }
 
+        public static void ColorBranchesByCarbon(List<Branch> branches)
+        {
+            if (branches.Count == 0) { return; }
+            var colorGradient = new ColorGradient(branches.Count);
+            for (int index = 0; index < branches.Count; index++)
+            {
+                branches[index].HslColor = colorGradient.HslColors[index];
+                ColorBranchesByBranch(branches[index].SubBranches);
+            }
+        }
+
         public static void ColorLayersByMaterial(ObservableCollection<AssemblyComponent> bcompos)
         {
             var allLayers = new List<IColorizable>();

@@ -200,20 +200,40 @@ namespace Calc.MVVM.Views
             switch (tag)
             {
                 case "query":
-                    this.ColorByAssemblyButton.Opacity = 0.3;
-                    this.ColorByAssemblyButton.Uid = "";
                     this.ColorByGroupButton.Opacity = 1;
                     this.ColorByGroupButton.Uid = image;
-                    ProjectVM.HandleViewToggleToBranch();
+
+                    this.ColorByAssemblyButton.Opacity = 0.3;
+                    this.ColorByAssemblyButton.Uid = "";
+
+                    this.ColorByCarbonButton.Opacity = 0.3;
+                    this.ColorByCarbonButton.Uid = "";
+
+                    ProjectVM.HandleViewToggleToQuery();
                     break;
                 case "assembly":
-                    this.ColorByAssemblyButton.Opacity = 1;
-                    this.ColorByAssemblyButton.Uid = image;
                     this.ColorByGroupButton.Opacity = 0.3;
                     this.ColorByGroupButton.Uid = "";
+
+                    this.ColorByAssemblyButton.Opacity = 1;
+                    this.ColorByAssemblyButton.Uid = image;
+
+                    this.ColorByCarbonButton.Opacity = 0.3;
+                    this.ColorByCarbonButton.Uid = "";
+
                     ProjectVM.HandleViewToggleToAssembly();
                     break;
-                case "co2":
+                case "carbon":
+                    this.ColorByGroupButton.Opacity = 0.3;
+                    this.ColorByGroupButton.Uid = "";
+
+                    this.ColorByAssemblyButton.Opacity = 0.3;
+                    this.ColorByAssemblyButton.Uid = "";
+
+                    this.ColorByCarbonButton.Opacity = 1;
+                    this.ColorByCarbonButton.Uid = image;
+
+                    ProjectVM.HandleViewToggleToCarbon();
                     break;
             }
         }

@@ -72,6 +72,9 @@ namespace Calc.Core.Objects.GraphNodes
                 case "assemblies":
                     ItemPainter.ColorBranchesByAssembly(branches);
                     break;
+                case "carbon":
+                    ItemPainter.ColorBranchesByCarbon(branches);
+                    break;
                 default:
                     break;
             }

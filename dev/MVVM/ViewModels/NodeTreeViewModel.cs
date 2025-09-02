@@ -18,7 +18,8 @@ namespace Calc.MVVM.ViewModels
         private NodeModel selectedNodeItem;
         private readonly IVisualizer visualizer;
         public CalcStore Store;
-        public bool BranchesSwitch { get; set; }
+        // 0: query mode, 1: assembly mode, 2: carbon mode
+        public int BranchesSwitch { get; set; }  // true -> query mode, false -> assembly momde
         public HslColor CurrentColor { get => SelectedNodeItem?.Host?.HslColor ?? ItemPainter.DefaultColor; }
         public NodeModel SelectedNodeItem
         {
@@ -58,7 +59,7 @@ namespace Calc.MVVM.ViewModels
         {
             Store = calcStore;
             this.visualizer = visualizer;
-            BranchesSwitch = true; // set default visual mode to queries(branches)
+            BranchesSwitch = 0; // set default visual mode to queries(branches)
             TreeViewVisibility = Visibility.Collapsed;
         }
 
@@ -89,13 +90,13 @@ namespace Calc.MVVM.ViewModels
         }
 
         /// <summary>
-        /// Resets all node label colors property according to the current branch/assembly switch,
+        /// Resets all node label colors property according to the current branch/assembly/carbon switch,
         /// feedbacks to the visualizer.
         /// </summary>
         internal void ReColorAllNodes(bool forceRecolorAll = false)
         {
             if (Store.QueryTemplateSelected == null) return;
-            if (BranchesSwitch == true)
+            if (BranchesSwitch == 0)
             {
                 if (forceRecolorAll)
                 {
@@ -103,12 +104,17 @@ namespace Calc.MVVM.ViewModels
                     visualizer.IsolateAndColorizeSubbranchElements(SelectedNodeItem?.Host);
                 }
             }
-            else
+            else if (BranchesSwitch == 1)
             {
                 Store.QueryTemplateSelected.SetBranchColorsBy("assemblies");
                 visualizer.IsolateAndColorizeBottomBranchElements(SelectedNodeItem?.Host);
             }
-            CurrentQueryTemplateItem.NotifyNodePropertyChange();
+            else
+            {
+                Store.QueryTemplateSelected.SetBranchColorsBy("carbon");
+                visualizer.IsolateAndColorizeBottomBranchElements(SelectedNodeItem?.Host);
+            }
+                CurrentQueryTemplateItem.NotifyNodePropertyChange();
             CurrentLeftoverQuerySetItem.NotifyNodePropertyChange(); // todo: check if this is needed
         }
 
@@ -124,7 +130,7 @@ namespace Calc.MVVM.ViewModels
             SelectedNodeItem = nodeItem;
             NodeHelper.HideAllLabelColor(CurrentQueryTemplateItem);
             NodeHelper.HideAllLabelColor(CurrentLeftoverQuerySetItem); // todo: check if this is needed
-            if (BranchesSwitch)
+            if (BranchesSwitch==0)
             {
                 NodeHelper.ShowSubLabelColor(nodeItem);
                 visualizer.IsolateAndColorizeSubbranchElements(SelectedNodeItem?.Host);
@@ -143,7 +149,7 @@ namespace Calc.MVVM.ViewModels
         /// </summary>
         internal void ColorNodesToAssembly()
         {
-            BranchesSwitch = false;
+            BranchesSwitch = 1;
             if (CurrentQueryTemplateItem?.Host == null) return;
             Store.QueryTemplateSelected.SetBranchColorsBy("assemblies");
             CurrentQueryTemplateItem.NotifyNodePropertyChange();
@@ -153,11 +159,23 @@ namespace Calc.MVVM.ViewModels
         /// <summary>
         /// Resets all node (branch) colors by branching.
         /// </summary>
-        internal void ColorNodesToBranch()
+        internal void ColorNodesToQuery()
         {
-            BranchesSwitch = true;
+            BranchesSwitch = 0;
             if (CurrentQueryTemplateItem?.Host == null) return;
             Store.QueryTemplateSelected.SetBranchColorsBy("branches");
+            CurrentQueryTemplateItem.NotifyNodePropertyChange();
+            DeselectNodes();
+        }
+
+        /// <summary>
+        /// Resets all node (branch) colors by branching.
+        /// </summary>
+        internal void ColorNodesToCarbon()
+        {
+            BranchesSwitch = 0;
+            if (CurrentQueryTemplateItem?.Host == null) return;
+            Store.QueryTemplateSelected.SetBranchColorsBy("carbon");
             CurrentQueryTemplateItem.NotifyNodePropertyChange();
             DeselectNodes();
         }
