@@ -169,11 +169,11 @@ namespace Calc.MVVM.ViewModels
         }
 
         /// <summary>
-        /// Resets all node (branch) colors by branching.
+        /// Resets all node (branch) colors by carbon (GWP values).
         /// </summary>
         internal void ColorNodesToCarbon()
         {
-            BranchesSwitch = 0;
+            BranchesSwitch = 2;
             if (CurrentQueryTemplateItem?.Host == null) return;
             Store.QueryTemplateSelected.SetBranchColorsBy("carbon");
             CurrentQueryTemplateItem.NotifyNodePropertyChange();

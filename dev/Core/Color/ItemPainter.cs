@@ -39,11 +39,13 @@ namespace Calc.Core.Color
         public static void ColorBranchesByCarbon(List<Branch> branches)
         {
             if (branches.Count == 0) { return; }
-            var colorGradient = new ColorGradient(branches.Count);
-            for (int index = 0; index < branches.Count; index++)
+            var gwpColorCalculator = new GwpColorCalculator();
+            gwpColorCalculator.AssignGwpBasedColorsToLevel(branches);
+            
+            // Recursively color sub-branches
+            foreach (var branch in branches)
             {
-                branches[index].HslColor = colorGradient.HslColors[index];
-                ColorBranchesByBranch(branches[index].SubBranches);
+                ColorBranchesByCarbon(branch.SubBranches);
             }
         }
 
