@@ -36,7 +36,7 @@ namespace Calc.Core.Color
             SetByIdentifier(allBranches);
         }
 
-        public static void ColorBranchesByCarbon(List<Branch> branches)
+        public static void ColorBranchesByGwp(List<Branch> branches)
         {
             if (branches.Count == 0) { return; }
             var gwpColorMaker = new GwpColorMaker();
@@ -45,7 +45,7 @@ namespace Calc.Core.Color
             // Recursively color sub-branches
             foreach (var branch in branches)
             {
-                ColorBranchesByCarbon(branch.SubBranches);
+                ColorBranchesByGwp(branch.SubBranches);
             }
         }
 

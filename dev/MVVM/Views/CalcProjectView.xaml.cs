@@ -206,8 +206,8 @@ namespace Calc.MVVM.Views
                     this.ColorByAssemblyButton.Opacity = 0.3;
                     this.ColorByAssemblyButton.Uid = "";
 
-                    this.ColorByCarbonButton.Opacity = 0.3;
-                    this.ColorByCarbonButton.Uid = "";
+                    this.ColorByGwpButton.Opacity = 0.3;
+                    this.ColorByGwpButton.Uid = "";
 
                     ProjectVM.HandleViewToggleToQuery();
                     break;
@@ -218,22 +218,22 @@ namespace Calc.MVVM.Views
                     this.ColorByAssemblyButton.Opacity = 1;
                     this.ColorByAssemblyButton.Uid = image;
 
-                    this.ColorByCarbonButton.Opacity = 0.3;
-                    this.ColorByCarbonButton.Uid = "";
+                    this.ColorByGwpButton.Opacity = 0.3;
+                    this.ColorByGwpButton.Uid = "";
 
                     ProjectVM.HandleViewToggleToAssembly();
                     break;
-                case "carbon":
+                case "gwp":
                     this.ColorByGroupButton.Opacity = 0.3;
                     this.ColorByGroupButton.Uid = "";
 
                     this.ColorByAssemblyButton.Opacity = 0.3;
                     this.ColorByAssemblyButton.Uid = "";
 
-                    this.ColorByCarbonButton.Opacity = 1;
-                    this.ColorByCarbonButton.Uid = image;
+                    this.ColorByGwpButton.Opacity = 1;
+                    this.ColorByGwpButton.Uid = image;
 
-                    ProjectVM.HandleViewToggleToCarbon();
+                    ProjectVM.HandleViewToggleToGwp();
                     break;
             }
         }

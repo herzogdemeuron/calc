@@ -18,7 +18,7 @@ namespace Calc.MVVM.ViewModels
         private NodeModel selectedNodeItem;
         private readonly IVisualizer visualizer;
         public CalcStore Store;
-        // 0: query mode, 1: assembly mode, 2: carbon mode
+        // 0: query mode, 1: assembly mode, 2: gwp mode
         public int BranchesSwitch { get; set; }  // true -> query mode, false -> assembly momde
         public HslColor CurrentColor { get => SelectedNodeItem?.Host?.HslColor ?? ItemPainter.DefaultColor; }
         public NodeModel SelectedNodeItem
@@ -90,7 +90,7 @@ namespace Calc.MVVM.ViewModels
         }
 
         /// <summary>
-        /// Resets all node label colors property according to the current branch/assembly/carbon switch,
+        /// Resets all node label colors property according to the current branch/assembly/gwp switch,
         /// feedbacks to the visualizer.
         /// </summary>
         internal void ReColorAllNodes(bool forceRecolorAll = false)
@@ -111,7 +111,7 @@ namespace Calc.MVVM.ViewModels
             }
             else
             {
-                Store.QueryTemplateSelected.SetBranchColorsBy("carbon");
+                Store.QueryTemplateSelected.SetBranchColorsBy("gwp");
                 visualizer.IsolateAndColorizeBottomBranchElements(SelectedNodeItem?.Host);
             }
                 CurrentQueryTemplateItem.NotifyNodePropertyChange();
@@ -169,13 +169,13 @@ namespace Calc.MVVM.ViewModels
         }
 
         /// <summary>
-        /// Resets all node (branch) colors by carbon (GWP values).
+        /// Resets all node (branch) colors by gwp values.
         /// </summary>
-        internal void ColorNodesToCarbon()
+        internal void ColorNodesToGwp()
         {
             BranchesSwitch = 2;
             if (CurrentQueryTemplateItem?.Host == null) return;
-            Store.QueryTemplateSelected.SetBranchColorsBy("carbon");
+            Store.QueryTemplateSelected.SetBranchColorsBy("gwp");
             CurrentQueryTemplateItem.NotifyNodePropertyChange();
             DeselectNodes();
         }

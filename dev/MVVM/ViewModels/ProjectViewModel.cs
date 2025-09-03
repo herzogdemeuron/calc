@@ -185,9 +185,9 @@ namespace Calc.MVVM.ViewModels
             DeselectTreeView?.Invoke(this, EventArgs.Empty);
         }
 
-        internal void HandleViewToggleToCarbon()
+        internal void HandleViewToggleToGwp()
         {
-            NodeTreeVM.ColorNodesToCarbon();
+            NodeTreeVM.ColorNodesToGwp();
             DeselectTreeView?.Invoke(this, EventArgs.Empty);
         }
 
