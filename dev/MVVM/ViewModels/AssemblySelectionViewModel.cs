@@ -43,7 +43,7 @@ namespace Calc.MVVM.ViewModels
             get => selectedAssembly;
             set
             {
-                CanOk = value != null;
+                CanOk = value != null && !value.HasNullMaterials;
                 if (value == selectedAssembly) return;
                 selectedAssembly = value;
                 OnPropertyChanged(nameof(SelectedAssembly));

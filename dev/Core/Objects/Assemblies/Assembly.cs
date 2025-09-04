@@ -42,6 +42,10 @@ namespace Calc.Core.Objects.Assemblies
         public List<CalculationComponent> CalculationComponents { get; set; }
         [JsonIgnore]
         public AssemblySnapshot AssemblySnapshot { get; set; }
+        
+        // UI helper: flag assemblies having any calculation component with null material
+        [JsonIgnore]
+        public bool HasNullMaterials => CalculationComponents != null && CalculationComponents.Any(c => c?.Material == null);
 
         public override string ToString()
         {
