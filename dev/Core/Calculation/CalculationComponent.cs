@@ -79,7 +79,7 @@ namespace Calc.Core.Calculation
                 Amount = Math.Round(layerAmount.Value, 5),
                 HasError = layerAmountParam.HasError,
                 Gwp = Math.Round(calculatedGwp.Value,5),
-                Ge = Math.Round(calculatedGe.Value,5),
+                Ge = calculatedGe.HasValue ? Math.Round(calculatedGe.Value, 5) : (double?)null,
                 ElementTypeId = layer.TypeIdentifier,
                 HslColor = layer.HslColor
             };

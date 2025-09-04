@@ -6,16 +6,14 @@ namespace Calc.Core.Color
 {
     /// <summary>
     /// Calculates HSL colors for branches based on their GWP values.
-    /// Colors range from dark purple (low GWP) to green (high GWP).
+    /// Colors range from light cyan #7BD5F5 (low GWP) to light purple #787FF6 (high GWP).
     /// Branches with null GWP (no assemblies) get default gray color.
     /// </summary>
     public class GwpColorMaker
     {
         private readonly HslColor _defaultColor = ItemPainter.DefaultColor;
-        private readonly int _purpleHue = 280; // Purple (low GWP)
-        private readonly int _yellowGreenHue = 80; // Yellow-green (high GWP)
-        private readonly int _saturation = 80; // Higher saturation for vivid colors
-        private readonly int _lightness = 50;
+        private readonly HslColor _lowGwpColor = new HslColor(194, 84, 73); // #7BD5F5 - light cyan
+        private readonly HslColor _highGwpColor = new HslColor(243, 87, 73); // #787FF6 - light purple
 
         /// <summary>
         /// Assigns HSL colors to branches based on their GWP values relative to the current branch group.
@@ -76,28 +74,28 @@ namespace Calc.Core.Color
 
         /// <summary>
         /// Calculates HSL color for a specific GWP value within the given range.
+        /// Interpolates between light cyan (low GWP) and light purple (high GWP).
         /// </summary>
         private HslColor MakeHslColorForGwp(double gwp, double minGwp, double gwpRange)
         {
-            int hue;
-            
             if (gwpRange == 0)
             {
-                // All GWP values are the same, use middle color (magenta - between purple and green)
-                hue = 300; // Magenta
-            }
-            else
-            {
-                // Calculate position in range (0 to 1)
-                var normalizedPosition = (gwp - minGwp) / gwpRange;
-                
-                // Interpolate hue from purple (280) to yellow-green (80)
-                // Going from purple -> blue -> cyan -> green -> yellow-green
-                // This maps 280° -> ... -> 80°
-                hue = (int)(_purpleHue - normalizedPosition * (_purpleHue - _yellowGreenHue));
+                // All GWP values are the same, use middle color between low and high
+                var midHue = (_lowGwpColor.H + _highGwpColor.H) / 2;
+                var midSaturation = (_lowGwpColor.S + _highGwpColor.S) / 2;
+                var midLightness = (_lowGwpColor.L + _highGwpColor.L) / 2;
+                return new HslColor(midHue, midSaturation, midLightness);
             }
             
-            return new HslColor(hue, _saturation, _lightness);
+            // Calculate position in range (0 to 1)
+            var normalizedPosition = (gwp - minGwp) / gwpRange;
+            
+            // Interpolate between low GWP color and high GWP color
+            var hue = (int)(_lowGwpColor.H + normalizedPosition * (_highGwpColor.H - _lowGwpColor.H));
+            var saturation = (int)(_lowGwpColor.S + normalizedPosition * (_highGwpColor.S - _lowGwpColor.S));
+            var lightness = (int)(_lowGwpColor.L + normalizedPosition * (_highGwpColor.L - _lowGwpColor.L));
+            
+            return new HslColor(hue, saturation, lightness);
         }
 
     }

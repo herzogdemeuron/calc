@@ -109,10 +109,10 @@ namespace Calc.MVVM.ViewModels
                 Store.QueryTemplateSelected.SetBranchColorsBy("assemblies");
                 visualizer.IsolateAndColorizeBottomBranchElements(SelectedNodeItem?.Host);
             }
-            else
+            else // gwp mode
             {
                 Store.QueryTemplateSelected.SetBranchColorsBy("gwp");
-                visualizer.IsolateAndColorizeBottomBranchElements(SelectedNodeItem?.Host);
+                visualizer.IsolateAndColorizeSubbranchElements(SelectedNodeItem?.Host);
             }
                 CurrentQueryTemplateItem.NotifyNodePropertyChange();
             CurrentLeftoverQuerySetItem.NotifyNodePropertyChange(); // todo: check if this is needed
@@ -130,12 +130,12 @@ namespace Calc.MVVM.ViewModels
             SelectedNodeItem = nodeItem;
             NodeHelper.HideAllLabelColor(CurrentQueryTemplateItem);
             NodeHelper.HideAllLabelColor(CurrentLeftoverQuerySetItem); // todo: check if this is needed
-            if (BranchesSwitch==0)
+            if (BranchesSwitch == 0 || BranchesSwitch == 2) // queries mode or gwp mode
             {
                 NodeHelper.ShowSubLabelColor(nodeItem);
                 visualizer.IsolateAndColorizeSubbranchElements(SelectedNodeItem?.Host);
             }
-            else
+            else // assembly mode
             {
                 NodeHelper.ShowAllSubLabelColor(nodeItem);
                 visualizer.IsolateAndColorizeBottomBranchElements(SelectedNodeItem?.Host);
