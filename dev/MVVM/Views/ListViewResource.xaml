@@ -263,10 +263,10 @@
                                                    Text="Missing materials"
                                                    Foreground="Crimson"
                                                    FontWeight="SemiBold"
-                                                   FontSize="10"
-                                                   Visibility="Collapsed">
+                                                   FontSize="10">
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding HasNullMaterials}" Value="True">
                                                             <Setter Property="Visibility" Value="Visible" />
