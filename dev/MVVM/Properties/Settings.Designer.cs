@@ -70,5 +70,17 @@ namespace Calc.MVVM.Properties {
                 this["LastTime"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastProjectId {
+            get {
+                return ((string)(this["LastProjectId"]));
+            }
+            set {
+                this["LastProjectId"] = value;
+            }
+        }
     }
 }

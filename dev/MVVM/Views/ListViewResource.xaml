@@ -257,6 +257,25 @@
                                                    LineStackingStrategy="BlockLineHeight"
                                                    TextWrapping="Wrap"/>
 
+                                        <!-- Warning tag for assemblies with null materials -->
+                                        <TextBlock Grid.Row="1"
+                                                   Grid.ColumnSpan="2"
+                                                   Text="Missing materials"
+                                                   Foreground="Crimson"
+                                                   FontWeight="SemiBold"
+                                                   FontSize="10">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding HasNullMaterials}" Value="True">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+
                                         <TextBlock Grid.Row="2" 
                                                    Grid.ColumnSpan="2" 
                                                    Text="{Binding Description}"
@@ -296,6 +315,11 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="Bd" Property="Background" Value="LightGray" />
                         </Trigger>
+                        <!-- Disable selection for assemblies with null materials -->
+                        <DataTrigger Binding="{Binding HasNullMaterials}" Value="True">
+                            <Setter Property="IsEnabled" Value="False" />
+                            <Setter Property="Opacity" Value="0.7" />
+                        </DataTrigger>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="Bd" Property="Background" Value="#404040" />
                             <Setter Property="Foreground" Value="White" />

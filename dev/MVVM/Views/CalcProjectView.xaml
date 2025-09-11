@@ -342,28 +342,27 @@
                             Orientation="Horizontal"
                             VerticalAlignment="Bottom"
                             HorizontalAlignment="Stretch">
-
-                        <Button x:Name="ColorByGroupButton"                                
-                                Content="Queries"
-                                Tag="query"
-                                Opacity="0.3"
-                                Width="65"
-                                Click="ColorizeClicked"
-                                ToolTip="Colorize Revit elements by query results"
-                                Style="{StaticResource ButtonStyle}"/>
                         <Button x:Name="ColorByAssemblyButton"
                                 Content="Assemb." 
                                 Tag="assembly"
+                                Opacity="0.3"
                                 Width="65"
-                                Margin="15,0,15,0"
-                                Uid="pack://application:,,,/CalcMVVM;component/Resources/button_color.png"
                                 Click="ColorizeClicked"
                                 ToolTip="Colorize Revit elements by assigned assemblies"
                                 Style="{StaticResource ButtonStyle}"/>
-                        <Button x:Name="ColorByCO2Button"
+                        <Button x:Name="ColorByGroupButton"                                
+                                Content="Queries"
+                                Tag="query"
+                                Width="65"
+                                Margin="15,0,15,0"
+                                Click="ColorizeClicked"
+                                Uid="pack://application:,,,/CalcMVVM;component/Resources/button_color.png"
+                                ToolTip="Colorize Revit elements by query results"
+                                Style="{StaticResource ButtonStyle}"/>
+                        <Button x:Name="ColorByGwpButton"
                                 Content="CO₂"
                                 Opacity="0.3"
-                                Tag="co2"
+                                Tag="gwp"
                                 Width="65"
                                 Click="ColorizeClicked"
                                 ToolTip="(coming soon) Colorize Revit elements by CO₂ benchmark"
@@ -698,7 +697,7 @@
                          Text="{Binding MappingVM.NewName}"/>
 
                 <Label HorizontalAlignment="Center"
-                       Content="Dupliacate From?"
+                       Content="Duplicated From"
                        FontSize="18"
                        Margin="10"/>
 

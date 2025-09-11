@@ -72,6 +72,9 @@ namespace Calc.Core.Objects.GraphNodes
                 case "assemblies":
                     ItemPainter.ColorBranchesByAssembly(branches);
                     break;
+                case "gwp":
+                    ItemPainter.ColorBranchesByGwp(branches);
+                    break;
                 default:
                     break;
             }

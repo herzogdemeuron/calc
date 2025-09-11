@@ -50,11 +50,15 @@ namespace Calc.MVVM.Models
                 }
             }
         }
+
+        /// <summary>
+        /// Show the underline only in assembly mode.
+        /// </summary>
         public Visibility UnderlineVisibility
         {
             get
             {
-                return ParentTreeView?.BranchesSwitch == false ? Visibility.Visible : Visibility.Collapsed;
+                return ParentTreeView?.BranchesSwitch == 1 ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 

@@ -14,6 +14,7 @@ namespace Calc.Core.DirectusAPI.StorageDrivers
                 calc_assembly_groups {
                     id
                     name
+                    sort
                 }
             }";
 

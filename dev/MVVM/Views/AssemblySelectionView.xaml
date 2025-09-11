@@ -46,7 +46,7 @@
                 Grid.Column="1"
                 Grid.Row="0"
                 Padding="0"
-               Margin="0,10,0,10"
+                Margin="0,10,0,0"
                 FontSize="18"/>
 
         <Grid x:Name="LeftGrid"

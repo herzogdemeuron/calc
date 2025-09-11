@@ -28,7 +28,7 @@ namespace Calc.Core
         public List<Unit> UnitsAll { get; set; }
         public List<CalcProject> ProjectsAll { get { return ProjectDriver?.GotManyItems; } }
         public List<LcaStandard> StandardsAll { get { return StandardDriver?.GotManyItems; } }
-        public List<AssemblyGroup> AssemblyGroupsAll { get { return AssemblyGroupDriver?.GotManyItems; } }
+        public List<AssemblyGroup> AssemblyGroupsAll { get { return AssemblyGroupDriver?.GotManyItems?.OrderBy(a => a.Sort).ToList(); } }
         public List<Assembly> AssembliesAll { get { return AssemblyDriver?.GotManyItems; } }
         public List<Mapping> MappingsAll { get { return MappingDriver?.GotManyItems; } }
         public List<CustomParamSetting> CustomParamSettingsAll { get { return CustomParamSettingDriver?.GotManyItems; } }

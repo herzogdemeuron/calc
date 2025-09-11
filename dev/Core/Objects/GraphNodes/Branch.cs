@@ -45,6 +45,17 @@ namespace Calc.Core.Objects.GraphNodes
                     ),
                 3); 
         }
+        public double? Gwp
+        {
+            get
+            {
+                if (AssemblySnapshots.Count > 0)
+                {
+                    return AssemblySnapshots.Sum(a => a.TotalGwp);
+                }
+                return null;
+            }
+        }
         public List<string> ElementIds => Elements.Select(e => e.Id).ToList();
         public string Parameter { get; set; }
         public string Value { get; set; }

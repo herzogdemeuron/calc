@@ -36,6 +36,19 @@ namespace Calc.Core.Color
             SetByIdentifier(allBranches);
         }
 
+        public static void ColorBranchesByGwp(List<Branch> branches)
+        {
+            if (branches.Count == 0) { return; }
+            var gwpColorMaker = new GwpColorMaker();
+            gwpColorMaker.AssignGwpBasedColorsToLevel(branches);
+            
+            // Recursively color sub-branches
+            foreach (var branch in branches)
+            {
+                ColorBranchesByGwp(branch.SubBranches);
+            }
+        }
+
         public static void ColorLayersByMaterial(ObservableCollection<AssemblyComponent> bcompos)
         {
             var allLayers = new List<IColorizable>();
